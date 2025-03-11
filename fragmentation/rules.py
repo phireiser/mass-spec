@@ -1,0 +1,5 @@
+include("rules/alpha.py")
+#include("rules/benzylAllyl.py")
+include("rules/benzylAllyl_enWiki.py")
+include("rules/dielsAlder.py")
+include("rules/mcLafferty.py")
