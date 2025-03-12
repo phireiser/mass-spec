@@ -13,3 +13,5 @@ macLafferty = graphGMLString("""graph [
 ]""", name="McLafferty Dummy Structure")
 
 butanl = smiles("CCCC=O")
+
+oleic_acid = smiles("CCCCCCCC/C=C\CCCCCCCC(=O)O")

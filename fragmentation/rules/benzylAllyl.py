@@ -1,50 +1,64 @@
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Benzyl-Allylspaltung
+# https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Benzyl-Allylspaltung
 
-benzylAlly_mz134_77 = Rule.fromDFS(
-	"[C]1[C]2[C]3[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" +  #somewhere positive radical +.
-	">>" +
-	"[C]1[C]2[C]3.[C]4{=}[C]5[c]6[c]7{=}[c]8[c]9{=}[c]10{-}5"
-)
-
-benzylAlly_mz134_91 = Rule.fromDFS(
-	"[C]1[C]2[C]3[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" + #somewhere positive radical +.
-	">>" +
-	"[C]1[C]2[C.]3.[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" #somewhere positive + and H.
-)
-
-benzylAlly_mz77_51 = Rule.fromDFS(
-	"[C]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +  #somewhere positive +
-	">>" +
-	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6"  #somewhere positive +
-)
+# first branch
 
 benzylAlly_mz91_91_charge = Rule.fromDFS(
-	"[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" #somewhere positive +
+    # from german wiki
+	"[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2" +
 	">>" +
-	"[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2"
+	"[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2"
 )
 
-benzylAlly_mz91_91_ring = Rule.fromDFS(
-	"[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" #ring positive +
+benzylAlly_mz91_91_charge_reverse = Rule.fromDFS(
+    # from german wiki
+    "[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" + #somewhere positive +
 	">>" +
-	"[c]1{=}[c]2{-}[c]3{=}[c]4{-}[c]5{=}[c]6{-}[c]7{-}1" #ring positive +
+    "[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2"
+)
+
+benzylAlly_mz91_91 = Rule.fromDFS( # to full ring
+    # from english wiki
+	"[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2" +
+	">>" +
+	"[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}1"
+)
+
+benzylAlly_mz91_91_reverse = Rule.fromDFS( # to full ring reverse
+    # from english wiki
+    "[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}1" +
+	">>" +
+	"[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2"
 )
 
 benzylAlly_mz91_65 = Rule.fromDFS(
-	"[c]1{=}[c]2{-}[c]3{=}[c]4{-}[c]5{=}[c]6{-}[c]7{-}1" #ring positive +
+    # from english wiki
+	"[C]1{-}[C]2{=}[C]3{-}[C]4{=}[C]5{-}[C]6{=}[C]7{-}1" +
 	">>" +
-	"[C]1{#}[C]2.[c]3{=}[c]4{-}[c]5{=}[c]6{-}[c]7{-}1" #ring positive +
+	"[C]1{#}[C]2.[C+]3{-}[C]4{=}[C]5{-}[C]6{=}[C]7{-}1"
 )
 
-benzylAlly_all = [
-    benzylAlly_mz134_77,
-    benzylAlly_mz134_91,
-    benzylAlly_mz77_51,
-    benzylAlly_mz91_91_charge,
-    benzylAlly_mz91_91_ring,
-    benzylAlly_mz91_65,
-]
+benzylAlly_mz65_39 = Rule.fromDFS( 
+    # from english wiki
+	# assumption: is https://en.wikipedia.org/wiki/Cyclopropenium_ion
+	# alternative would be https://en.wikipedia.org/wiki/Propargyl_group
+	"[C+]1{-}[C]2{=}[C]3{-}[C]4{=}[C]5{-}1" +
+	">>" +
+	"[C]1{#}[C]2.[c+]3{-}[c]4{-}[c]5{-}3"
+)
 
+# second branch
 
-#TODO: as no charges done: do charges
-#TODO: backedges
+benzylAlly_mz_92_77 = Rule.fromDFS( 
+    # from english wiki
+	"[H]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3" +
+	">>" +
+	"[H]1[C.]2.[C+]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3"
+)
+
+benzylAlly_mz77_51 = Rule.fromDFS(
+    # from english wiki
+	"[C+]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +
+	">>" +
+	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6"
+)
