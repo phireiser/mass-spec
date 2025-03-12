@@ -16,3 +16,8 @@ def chargeBound(derivations, minimum=0, maximum=3):
 			charges.append(charge)
 	r = any([((charge > minimum) and (charge < maximum)) for charge in charges])
 	return r
+
+
+def allylGroup(derivations):
+	for g in derivations.right:
+		

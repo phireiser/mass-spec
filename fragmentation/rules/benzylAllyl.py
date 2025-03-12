@@ -62,3 +62,4 @@ benzylAlly_mz77_51 = Rule.fromDFS(
 	">>" +
 	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6"
 )
+

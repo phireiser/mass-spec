@@ -7,19 +7,19 @@ benzylAlly_mz134_77 = Rule.fromDFS(
 )
 
 benzylAlly_mz134_91 = Rule.fromDFS(
-	"[C]1[C]2[C]3[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" + #somewhere positive radical +.
+	"[C]1[C]2[C]3[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" + # somewhere positive radical +.
 	">>" +
-	"[C]1[C]2[C.]3.[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" #somewhere positive + and H.
+	"[C]1[C]2[C.]3.[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" # somewhere positive + and H.
 )
 
 benzylAlly_mz77_51 = Rule.fromDFS(
-	"[C]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +  #somewhere positive +
+	"[C]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +  # somewhere positive +
 	">>" +
-	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6"  #somewhere positive +
+	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6"  # somewhere positive +
 )
 
 benzylAlly_mz91_91_charge = Rule.fromDFS(
-	"[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" + #somewhere positive +
+	"[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" + # somewhere positive +
 	">>" +
 	"[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2"
 )
