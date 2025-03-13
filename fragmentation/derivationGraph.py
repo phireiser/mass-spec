@@ -6,10 +6,8 @@ macLafferty.print()
 
 
 
-fragmentation = [rearrRule3, rearrRule2, rearrRule1]
-ionization = [HrebindRule]
-oxidation = [oxidRule]
-
+fragmentation = [benzylAllyl_fragmentation]
+oxidation = [benzylAllyl_oxidation]
 
 universe = [butanl]
 
@@ -18,12 +16,7 @@ universe = [butanl]
 
 strategy = (addSubset(universe) 
 	>> repeat[1](oxidation)
-	>> rightPredicate[
-		lambda d: chargeBound(d, minimum=-10)
-	](repeat[10](ionization))
-	>> rightPredicate[
-		lambda d: amuBound(d, minimum=10)
-	](repeat[10](fragmentation))
+	>> chargeBound(amuBound(repeat[10](fragmentation), minimum=10), minimum=-10)
 )
 
 ls = LabelSettings(LabelType.Term, LabelRelation.Unification)

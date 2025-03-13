@@ -1,4 +1,4 @@
-def amuBound(derivations, minimum=50, maximum=500):
+def amuBound(strategy, minimum=50, maximum=500):
 	def predicate(derivations):
 		masses = list()
 		for g in derivations.right:
@@ -6,7 +6,7 @@ def amuBound(derivations, minimum=50, maximum=500):
 				masses.append(g.exactMass)
 		r =  any([(mass > minimum) and (mass < maximum) for mass in masses])
 		return r
-	return rightPredicate[predicate](derivations)
+	return rightPredicate[predicate](strategy)
 
 #def chargeBound(derivations, minimum=0, maximum=3):
 #	charges = list()
@@ -20,7 +20,7 @@ def amuBound(derivations, minimum=50, maximum=500):
 #	return rightPredicate[lambda d: r]
 
 
-def chargeBound(derivations, minimum=0, maximum=3):
+def chargeBound(strategy, minimum=0, maximum=3):
     def predicate(d):
         for g in d.right:
             if g.isMolecule:
@@ -29,11 +29,11 @@ def chargeBound(derivations, minimum=0, maximum=3):
                     return True
         return False
 
-    return rightPredicate[predicate](derivations)
+    return rightPredicate[predicate](strategy)
 
 
 # OPTIMIZATION: (potential) append constraint
-def allylGroup(derivations):
+def allylGroup(strategy):
 	allyl_label = ['C', 'H']
 	ls = LabelSettings(LabelType.Term, LabelRelation.Unification)
 	def predicate(d):
@@ -48,4 +48,4 @@ def allylGroup(derivations):
 					return False  # not valid 
 			
 			return True  # at least one match
-	return rightPredicate[predicate]
+	return rightPredicate[predicate](strategy)

@@ -37,7 +37,7 @@ benzylAllyl_mz92_77 = Rule.fromDFS(
 benzylAllyl_mz77_51 = Rule.fromDFS( 
 	"[C+]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +
 	">>" +
-	"[C]1{=}[C]2[C]3{=}[C]4{-}" + "." + "[C]5{#}[C]6"
+	"[C]1{=}[C]2[C]3{=}[C]4{-}1" + "." + "[C]5{#}[C]6"
 )
 
 benzylAllyl_all = [
