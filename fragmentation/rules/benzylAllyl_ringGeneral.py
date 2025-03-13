@@ -1,51 +1,39 @@
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Benzyl-Allylspaltung
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Benzyl-Allylspaltung
 
+include("../commons.py")
+
 # first branch
 
 benzylAllyl_mz92_91 = Rule.fromDFS(
-	"[H]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3" +
+	"[_A]1[H]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8{=}[C]9{-}4" +
 	">>" +
-	"[H.]1" + "." + "[C+]2[C]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3"
+	"[_A]1[H.]2" + "." + "[C+]3[C]4{=}[C]5[C]6{=}[C]7[C]8{=}[C]9{-}4"
 )
 
-benzylAllyl_mz91_91_charge = Rule.fromDFS(
-    # from german wiki
-	"[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2" +
-	">>" +
-	"[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2"
+# add term constraint to rule
+benzylAllyl_mz92_91 = addConstraints(benzylAllyl_mz92_91, 
+# constraint for term variables
+"""
+constrainLabelAny [
+label "_A"
+labels [ label "H" label "C" ]
+]"""
 )
 
-benzylAllyl_mz91_91_charge_reverse = Rule.fromDFS(
-    # from german wiki
-    "[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" + #somewhere positive +
-	">>" +
-    "[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2"
-)
-
-benzylAllyl_mz91_91 = Rule.fromDFS( # to full ring
-    # from english wiki
+benzylAllyl_mz91_91 = Rule.fromDFS( #full ring
 	"[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2" +
 	">>" +
 	"[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}1"
 )
 
-benzylAllyl_mz91_91_reverse = Rule.fromDFS( # to full ring reverse
-    # from english wiki
-    "[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}1" +
-	">>" +
-	"[C]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2"
-)
-
 benzylAllyl_mz91_65 = Rule.fromDFS(
-    # from english wiki
 	"[C]1{-}[C]2{=}[C]3{-}[C]4{=}[C]5{-}[C]6{=}[C]7{-}1" +
 	">>" +
 	"[C]1{#}[C]2" + "." + "[C+]3{-}[C]4{=}[C]5{-}[C]6{=}[C]7{-}1"
 )
 
 benzylAllyl_mz65_39 = Rule.fromDFS( 
-    # from english wiki
 	# assumption: is https://en.wikipedia.org/wiki/Cyclopropenium_ion
 	# alternative would be https://en.wikipedia.org/wiki/Propargyl_group
 	"[C+]1{-}[C]2{=}[C]3{-}[C]4{=}[C]5{-}1" +
@@ -56,26 +44,31 @@ benzylAllyl_mz65_39 = Rule.fromDFS(
 # second branch
 
 benzylAllyl_mz92_77 = Rule.fromDFS( 
-    # from english wiki
-	"[H]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3" +
+	"[_A]1[H]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8{=}[C]9{-}4" +
 	">>" +
-	"[H]1[C.]2" + "." + "[C+]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3"
+	"[_A]1[H]2[C.]3" + "." + "[C+]4{=}[C]5[C]6{=}[C]7[C]8{=}[C]9{-}4"
 )
 
-benzylAllyl_mz77_51 = Rule.fromDFS(
-    # from english wiki
+# add term constraint to rule
+benzylAllyl_mz92_77 = addConstraints(benzylAllyl_mz92_77, 
+# constraint for term variables
+"""
+constrainLabelAny [
+label "_A"
+labels [ label "H" label "C" ]
+]"""
+)
+
+benzylAllyl_mz77_51 = Rule.fromDFS( 
 	"[C+]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +
 	">>" +
-	"[C]1{=}[C]2[C]3{=}[C]4{-}1" + "." + "[C]5{#}[C]6"
+	"[C]1{=}[C]2[C]3{=}[C]4{-}" + "." + "[C]5{#}[C]6"
 )
 
 
 benzylAllyl_all = [
     benzylAllyl_mz92_91,
-    benzylAllyl_mz91_91_charge,
-    benzylAllyl_mz91_91_charge_reverse,
     benzylAllyl_mz91_91,
-    benzylAllyl_mz91_91_reverse,
     benzylAllyl_mz91_65,
     benzylAllyl_mz65_39,
     benzylAllyl_mz92_77,
