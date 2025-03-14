@@ -5,23 +5,35 @@
 dielsAdler_1 = Rule.fromDFS(
 	"[C]1[C+]2[C.]3[C]4[C]5[C]6{-}1" +
 	">>" +
-	"[C.]5[C]6[C]1[C+]2[C]3{=}[C]4"
+	"[C.]5[C]6[C]1[C+]2[C]3{=}[C]4",
+	name = "Diels Adler 1 ionization"
 )
 
-dielsAdler_2a = Rule.fromDFS( # Homolyse
+dielsAdler_2a = Rule.fromDFS( # homolysis
 	"[C.]1[C]2[C]3[C+]4[C]5{=}[C]6" +
 	">>" +
-	"[C]1{=}[C]2.[C.]3[C+]4[C]5{=}[C]6"
+	"[C]1{=}[C]2.[C.]3[C+]4[C]5{=}[C]6",
+	name = "Diels Adler 2 homolysis"
 )
 
-dielsAdler_2b = Rule.fromDFS( # Hetrolyse
+dielsAdler_2b = Rule.fromDFS( # hetrolysis
 	"[C.]1[C]2[C]3[C+]4[C]5{=}[C]6" +
 	">>" +
-	"[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6"
+	"[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6",
+	name = "Diels Adler 3 hetrolysis"
 )
 
 dielsAdler_all = [
 	dielsAdler_1,
+	dielsAdler_2a,
+	dielsAdler_2b,
+]
+
+dielsAdler_ionization = [
+	dielsAdler_1,
+]
+
+dielsAdler_fragmentation = [
 	dielsAdler_2a,
 	dielsAdler_2b,
 ]

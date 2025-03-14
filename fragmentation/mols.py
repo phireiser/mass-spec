@@ -15,3 +15,4 @@ macLafferty = graphGMLString("""graph [
 butanl = smiles("CCCC=O")
 
 oleic_acid = smiles("CCCCCCCC/C=C\CCCCCCCC(=O)O")
+toluene = smiles("CC1=CC=CC=C1")

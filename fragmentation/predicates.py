@@ -20,7 +20,7 @@ def amuBound(strategy, minimum=50, maximum=500):
 #	return rightPredicate[lambda d: r]
 
 
-def chargeBound(strategy, minimum=0, maximum=3):
+def chargeBound(strategy, minimum=-1, maximum=3):
     def predicate(d):
         for g in d.right:
             if g.isMolecule:
