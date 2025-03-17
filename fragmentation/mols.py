@@ -16,3 +16,4 @@ butanl = smiles("CCCC=O")
 
 oleic_acid = smiles("CCCCCCCC/C=C\CCCCCCCC(=O)O")
 toluene = smiles("CC1=CC=CC=C1")
+butylbenzene = smiles("CCCCC1=CC=CC=C1")

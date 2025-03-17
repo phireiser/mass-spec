@@ -26,8 +26,7 @@ fragmentation = [benzylAllyl_fragmentation]
 
 #universe = [butanl]
 universe = [toluene]
-
-
+#universe = [butylbenzene]
 
 
 strategy = (addSubset(universe) 
@@ -41,9 +40,9 @@ strategy = (addSubset(universe)
 		)
 )
 
-#ls = LabelSettings(LabelType.Term, LabelRelation.Unification) # switch to term rewite
-#dg = DG(graphDatabase=inputGraphs, labelSettings=ls)
-dg = DG(graphDatabase=inputGraphs)
+ls = LabelSettings(LabelType.Term, LabelRelation.Unification) # switch to term rewite
+dg = DG(graphDatabase=inputGraphs, labelSettings=ls)
+#dg = DG(graphDatabase=inputGraphs)
 
 with dg.build() as b:
     b.execute(strategy)

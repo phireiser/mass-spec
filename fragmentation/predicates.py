@@ -8,18 +8,6 @@ def amuBound(strategy, minimum=50, maximum=500):
 		return r
 	return rightPredicate[predicate](strategy)
 
-#def chargeBound(derivations, minimum=0, maximum=3):
-#	charges = list()
-#	for g in derivations.right:
-#		if g.isMolecule:
-#			charge = 0
-#			charge += g.smiles.count('+')
-#			charge -= g.smiles.count('-')
-#			charges.append(charge)
-#	r = any([((charge > minimum) and (charge < maximum)) for charge in charges])
-#	return rightPredicate[lambda d: r]
-
-
 def chargeBound(strategy, minimum=-1, maximum=3):
     def predicate(d):
         for g in d.right:
