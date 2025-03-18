@@ -7,3 +7,5 @@ alpha = Rule.fromDFS(
 	name = "alpha")
 
 alpha_all = [alpha]
+
+alpha_fragmentation = [alpha]

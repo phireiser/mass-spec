@@ -52,7 +52,7 @@ graph [
 	edge [ source 4 target 1 label "-" ]
 	edge [ source 5 target 2 label "-" ]
 	edge [ source 0 target 1 label "-" ]
-	edge [ source 1 target 2 label "-" ]
+	edge [ source 1 target 2 label "=" ]
 	edge [ source 0 target 2 label "-" ]
 ]
 """

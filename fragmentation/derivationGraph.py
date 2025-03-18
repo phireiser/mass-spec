@@ -21,13 +21,14 @@ def printGrammar():
 
 printGrammar()
 
-ionization = [benzylAllyl_ionizaton]
-fragmentation = [benzylAllyl_fragmentation]
+ionization = [benzylAllyl_ionizaton, dielsAdler_ionization, mcLafferty_ionization]
+fragmentation = [benzylAllyl_fragmentation, dielsAdler_fragmentation, mcLafferty_fragmenation, alpha_fragmentation,]
 
 #universe = [butanl]
-universe = [toluene]
+#universe = [toluene]
 #universe = [butylbenzene]
-
+#universe = [phenylalanine]
+universe = [tyrosine]
 
 strategy = (addSubset(universe) 
 	>> repeat[1](ionization)
@@ -40,9 +41,9 @@ strategy = (addSubset(universe)
 		)
 )
 
-ls = LabelSettings(LabelType.Term, LabelRelation.Unification) # switch to term rewite
-dg = DG(graphDatabase=inputGraphs, labelSettings=ls)
-#dg = DG(graphDatabase=inputGraphs)
+#ls = LabelSettings(LabelType.Term, LabelRelation.Unification) # switch to term rewite
+#dg = DG(graphDatabase=inputGraphs, labelSettings=ls)
+dg = DG(graphDatabase=universe)
 
 with dg.build() as b:
     b.execute(strategy)

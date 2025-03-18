@@ -12,14 +12,10 @@ benzylAllyl_mz92_91 = Rule.fromDFS(
 	name = "BA 92-91"
 )
 
-# add term constraint to rule
-benzylAllyl_mz92_91 = addConstraints(benzylAllyl_mz92_91, 
-# constraint for term variables
-"""
-constrainLabelAny [
-label "_A"
-labels [label "H" label "C"]
-]"""
+benzylAllyl_mz92_91 = labelConstraints(benzylAllyl_mz92_91, 
+	{"_A": 
+		["H","C"]
+	}
 )
 
 benzylAllyl_mz91_91 = Rule.fromDFS( # full ring
@@ -55,19 +51,16 @@ benzylAllyl_mz92_77 = Rule.fromDFS(
 )
 
 # add term constraint to rule
-benzylAllyl_mz92_77 = addConstraints(benzylAllyl_mz92_77, 
-# constraint for term variables
-"""
-constrainLabelAny [
-label "_A"
-labels [ label "H" label "C" ]
-]"""
+benzylAllyl_mz92_77 = labelConstraints(benzylAllyl_mz92_77, 
+	{"_A": 
+		["H","C"]
+	}
 )
 
 benzylAllyl_mz77_51 = Rule.fromDFS( 
 	"[C+]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +
 	">>" +
-	"[C]1{=}[C]2[C]3{=}[C]4{-}1" + "." + "[C]5{#}[C]6",
+	"[C+]1{=}[C]2[C]3{=}[C]4{-}1" + "." + "[C]5{#}[C]6",
 	name = "BA 77-51"
 )
 
@@ -80,11 +73,13 @@ benzylAllyl_all = [
     benzylAllyl_mz92_77,
     benzylAllyl_mz77_51,
 ]
+benzylAllyl_all = flatten_list(benzylAllyl_all)
 
 benzylAllyl_ionizaton = [
 	benzylAllyl_mz92_91,
 	benzylAllyl_mz92_77,
 ]
+benzylAllyl_ionizaton = flatten_list(benzylAllyl_ionizaton)
 
 benzylAllyl_fragmentation = [
 	benzylAllyl_mz91_91,
@@ -92,3 +87,4 @@ benzylAllyl_fragmentation = [
     benzylAllyl_mz65_39,
 	benzylAllyl_mz77_51,
 ]
+benzylAllyl_fragmentation = flatten_list(benzylAllyl_fragmentation)

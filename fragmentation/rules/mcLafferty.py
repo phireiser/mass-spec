@@ -2,14 +2,14 @@
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#McLafferty-Umlagerung
 # https://doi.org/10.1021/ac60145a015
 
-oxidRule = Rule.fromDFS( 
+ml_ionization = Rule.fromDFS( 
 	# only english wiki
 	"[O]1" +
 	">>" +
 	"[O+.]1",
-	name="oxidation Rule")
+	name="McL ionization")
 
-HrebindRule = Rule.fromDFS( 
+ml_hRebind = Rule.fromDFS( 
 	# Educt: only english wiki
 	# Product: only german wiki
 	"[O+.]1{=}[C]2[C]3[C]4[C]5[H]6" +
@@ -17,31 +17,42 @@ HrebindRule = Rule.fromDFS(
 	"[O+]1([H]6){=}[C]2[C]3[C]4[C.]5",
 	name= "H rebind Rule" )
 
-rearrRule1 = Rule.fromDFS(
+ml_rearrRule1 = Rule.fromDFS(
 	# in german and english wiki
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
 	">>" +
 	"[O+]1{=}[C]2[C.]3.[C]4{=}[C]5",
 	name = "rearrangement Rule 1")
 
-rearrRule2 = Rule.fromDFS(
+ml_rearrRule2 = Rule.fromDFS(
 	# in german and english wiki
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
 	">>" +
 	"[O+.]1{-}[C]2{=}[C]3.[C]4{=}[C]5", 
 	name = "rearrangement Rule 2")
 
-rearrRule3 = Rule.fromDFS(
+ml_rearrRule3 = Rule.fromDFS(
 	# only in english wiki
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
 	">>" +
 	"[O]1[C+]2[C.]3.[C]4{=}[C]5", 
 	name = "rearrangment Rule 3")
 
-McLafferty_all = [
-	oxidRule,
-	HrebindRule,
-	rearrRule1,
-	rearrRule2,
-	rearrRule3,
+mcLafferty_all = [
+	ml_ionization,
+	ml_hRebind,
+	ml_rearrRule1,
+	ml_rearrRule2,
+	ml_rearrRule3,
+]
+
+mcLafferty_ionization = [
+	ml_ionization,
+]
+
+mcLafferty_fragmenation = [
+	ml_hRebind,
+	ml_rearrRule1,
+	ml_rearrRule2,
+	ml_rearrRule3,
 ]

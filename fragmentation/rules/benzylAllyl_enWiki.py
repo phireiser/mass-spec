@@ -26,7 +26,7 @@ benzylAllyl_mz65_39 = Rule.fromDFS(
 	# alternative would be https://en.wikipedia.org/wiki/Propargyl_group
 	"[C+]1{-}[C]2{=}[C]3{-}[C]4{=}[C]5{-}1" +
 	">>" +
-	"[C]1{#}[C]2" + "." + "[C+]3{-}[C]4{-}[C]5{-}3",
+	"[C]1{#}[C]2" + "." + "[C+]3{-}[C]4{=}[C]5{-}3",
 	name = "BA 65-39"
 )
 
