@@ -1,0 +1,11 @@
+from getSpectra import *
+
+
+spectra = getSpectraFromPubChem(
+    pubChemSmilesLookUp("C([C@@H](C(O)=O)N)C1=CC=C(O)C=C1")
+)
+print(spectra)
+
+
+
+# tomorrow create spectra form moel
