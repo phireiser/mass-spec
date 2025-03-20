@@ -11,7 +11,9 @@ def pubChemSmilesLookUp(smiles):
         warnings.warn("Expecting only one PubChem CID", UserWarning)
     return cid
 
-def getSpectraFromPubChem(cid):
+def getSpectraFromPubChem(smiles):
+
+    cid = pubChemSmilesLookUp(smiles)
 
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/"
     
@@ -65,6 +67,7 @@ def getSpectraFromPubChem(cid):
 
                                     if not extracted_value == None:
                                         mass_spec_data.append({
+                                            "smiles": smiles,
                                             "ReferenceNumber": reference_number,
                                             "Value": extracted_value
                                         })
