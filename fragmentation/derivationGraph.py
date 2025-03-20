@@ -53,14 +53,14 @@ with dg.build() as b:
 spectra = []
 for graph in dg.createdGraphs:
         if graph.isMolecule:
-                if '+' in graph.getGMLString():
-                        found = False
+                if '+' in graph.getGMLString(): # only charged fragments can be detected
+                        found = False # update spectra list if allready occuring
                         for i,(mass, occurence) in enumerate(spectra):
                                 if abs(mass - graph.exactMass) < 1e-3:
                                         spectra[i] = (graph.exactMass, occurence + 1)
                                         found = True
                                         break
-                        if not found:            
+                        if not found: # add to spectra list if not occuring
                                 spectra.append((graph.exactMass,1))
 
 print(spectra)
