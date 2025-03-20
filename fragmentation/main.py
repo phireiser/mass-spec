@@ -1,5 +1,24 @@
-from getSpectra import *
+include("tests/benzylAllyl_unified.py")
+include("mols.py")
 
+#universe = [butanl]
+#universe = [toluene]
+#universe = [butylbenzene]
+#universe = [phenylalanine]
 
-spectra = getSpectraFromPubChem("C([C@@H](C(O)=O)N)C1=CC=C(O)C=C1")
+universe = tyrosine
+include("derivationGraph.py")
+
+spectra = getSpectraFromPubChem(universe.smiles)
+print("pubmed spectra")
 print(spectra)
+
+spectra = getSpectraFRomMoelDerivationGraph(dg)
+print("mol spectra")
+print(spectra)
+
+
+#TODO compare spectra
+
+#printGrammar()
+#dg.print()

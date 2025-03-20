@@ -95,7 +95,7 @@ if (not assertation):
     for graph in dg.createdGraphs:
         print(graph.name + " " + graph.getGMLString())
 else:
-	print("Test Success")
+	print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
 	
 
 assert assertation, "benzyl Allyl Test NOT successful"
