@@ -15,8 +15,6 @@ strategy = (addSubset(universe)
 		)
 )
 
-#ls = LabelSettings(LabelType.Term, LabelRelation.Unification) # switch to term rewite
-#dg = DG(graphDatabase=inputGraphs, labelSettings=ls)
 dg = DG(graphDatabase=[universe])
 
 with dg.build() as b:

@@ -80,12 +80,13 @@ def getSpectraFromPubChem(smiles):
     data = response.json()
 
     mass_spec_data = []
-    fields_of_interest = {
+    fields_of_interest = [
     "Top 5 Peaks",
     "m/z Top Peak",
     "m/z 2nd Highest",
     "m/z 3rd Highest"
-    }
+    ]
+
     # Extract Sections related to Mass Spectrometry
     sections = data.get("Record", {}).get("Section", [])
     for section in sections:
@@ -114,7 +115,7 @@ def getSpectraFromPubChem(smiles):
                                                     pass
                                         extracted_value = top_peaks
                                     elif found_top_five:
-                                        if name in ("m/z Top Peak", "m/z 2nd Highest", "m/z 3rd Highest"):
+                                        if name in fields_of_interest[-3:]:
                                             number_list = val.get("Number", [])
                                             if len(number_list) == 1:
                                                 mz_value = float(number_list[0])
@@ -125,26 +126,56 @@ def getSpectraFromPubChem(smiles):
 
                                     if not extracted_value == None:
                                         mass_spec_data.append({
-                                            "smiles": smiles,
-                                            "ReferenceNumber": reference_number,
-                                            "Value": extracted_value
+                                            reference_number: extracted_value
                                         })
     if mass_spec_data:
         return mass_spec_data
     else:
         return "No mass spectrometry data found."
 
+
+def getParetRulesForGraph(derivationGraph, search_target_graph):
+    parentRules = list()
+
+
+    edges = derivationGraph.findVertex(search_target_graph).inEdges
+    for edge in edges:
+        try:
+            for rule in edge.rules:
+                parentRules.append(rule.id)
+        except:
+            #print("no rule in edge")
+            pass
+    return parentRules
+
+
+
 def getSpectraFRomMoelDerivationGraph(derivationGraph):
     spectra = []
+    sourceGraph = derivationGraph.graphDatabase[0]
+
     for graph in dg.createdGraphs:
             if graph.isMolecule:
                     if '+' in graph.getGMLString(): # only charged fragments can be detected
                             found = False # update spectra list if allready occuring
-                            for i,(mass, occurence) in enumerate(spectra):
-                                    if abs(mass - graph.exactMass) < 1e-3:
-                                            spectra[i] = (graph.exactMass, occurence + 1)
+
+                            rules = set(getParetRulesForGraph(derivationGraph,graph))
+                            
+                            for i, (mass, occurence, old_rules) in enumerate(spectra):
+                                    if abs(mass - graph.exactMass) < 1e-2:
+                                            spectra[i] = (graph.exactMass, occurence + 1, old_rules.union(rules))
                                             found = True
                                             break
                             if not found: # add to spectra list if not occuring
-                                    spectra.append((graph.exactMass,1))
+                                    spectra.append((graph.exactMass, 1, rules))
+            else:
+                print("there are some graphs that are not molecules")
     return spectra
+
+def dice_coefficient(a, b): # like F1 Socre
+    set_a, set_b = set(a), set(b)
+    return 2 * len(set_a & set_b) / (len(set_a) + len(set_b))
+
+def overlap_coefficient(a, b):
+    set_a, set_b = set(a), set(b)
+    return len(set_a & set_b) / min(len(set_a), len(set_b))

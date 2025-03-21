@@ -1,4 +1,4 @@
-include("../rules/benzylAllyl_enWiki.py")
+include("../rules/benzylAllyl_unified.py")
 include("../predicates.py")
 
 ionization = [benzylAllyl_ionizaton]
