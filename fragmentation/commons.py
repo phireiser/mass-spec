@@ -7,6 +7,7 @@ def addConstraints(rule, conStringGML):
     rule = ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
     return rule
 
+
 def printGrammar():
         post.summarySection("Molecule(s)")
         p = GraphPrinter()
@@ -22,6 +23,7 @@ def printGrammar():
         for r in inputRules:
                 r.print(p)
 
+
 def flatten_list(nested_list):
     """
     Flattens a nested list into a single list.
@@ -36,6 +38,7 @@ def flatten_list(nested_list):
         else:
             flat_list.append(item)
     return flat_list
+
 
 def labelConstraints(rule, rpl_dict, morphisms=None):
     """
@@ -58,6 +61,7 @@ def labelConstraints(rule, rpl_dict, morphisms=None):
 
     return rules
 
+
 def pubChemSmilesLookUp(smiles):
     pug_pre_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
     url = pug_pre_url + smiles + '/cids/JSON'
@@ -66,26 +70,60 @@ def pubChemSmilesLookUp(smiles):
     cids = response.json()['IdentifierList']['CID']
     cid = cids[0]
     if len(cids) > 1:
-        warnings.warn("Expecting only one PubChem CID", UserWarning)
+        raise RuntimeWarning("Expecting only one PubChem CID")
     return cid
 
-def getSpectraFromPubChem(smiles):
 
-    cid = pubChemSmilesLookUp(smiles)
+def getSpectraFromInformationSection(information):
 
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/"
-    
-    response = requests.get(url)
-    response.raise_for_status()
-    data = response.json()
-
-    mass_spec_data = []
     fields_of_interest = [
     "Top 5 Peaks",
     "m/z Top Peak",
     "m/z 2nd Highest",
     "m/z 3rd Highest"
     ]
+
+    mass_spec_data = list()
+    extracted_value = list()
+
+    for item in information:
+        name = item.get("Name", "")
+        reference_number = item.get("ReferenceNumber")
+        value = item.get("Value", [])
+        if name in fields_of_interest:
+            if name in fields_of_interest[0]: # top 5 peaks
+                for line in value["StringWithMarkup"]:
+                    text = line["String"]
+                    parts = text.split()
+                    if len(parts) == 2:
+                        try:
+                            mz = float(parts[0])
+                            intensity = float(parts[1])
+                            extracted_value.append((mz, intensity))
+                        except ValueError:
+                            raise RuntimeWarning("not a float")
+                            pass
+                mass_spec_data.append({reference_number: extracted_value})
+                extracted_value = list()
+            elif name in fields_of_interest[1:]: # top 3
+                number_list = value.get("Number", [])
+                if len(number_list) == 1:
+                    mz_value = float(number_list[0])
+                    # use arbitrary intensity = 1.0
+                    extracted_value.append((mz_value, 1.0))
+                    if name in fields_of_interest[3]:
+                        mass_spec_data.append({reference_number: extracted_value})
+                        extracted_value = list()
+    return mass_spec_data
+
+
+def getInformationSectionFromPubChem(cid):
+
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/"
+    
+    response = requests.get(url)
+    response.raise_for_status()
+    data = response.json()
 
     # Extract Sections related to Mass Spectrometry
     sections = data.get("Record", {}).get("Section", [])
@@ -95,63 +133,43 @@ def getSpectraFromPubChem(smiles):
                 if sub_section.get("TOCHeading") == "Mass Spectrometry":
                     for subsub in sub_section.get("Section", []):
                         if subsub.get("TOCHeading") == "GC-MS":
-                            for item in subsub["Information"]:
-                                name = item.get("Name", "")
-                                found_top_five = False
-                                if name in fields_of_interest:
-                                    reference_number = item.get("ReferenceNumber")
-                                    raw_value = item.get("Value", {})
-                                    if "StringWithMarkup" in raw_value:
-                                        top_peaks = []
-                                        for line in raw_value["StringWithMarkup"]:
-                                            text = line["String"]
-                                            parts = text.split()
-                                            if len(parts) == 2:
-                                                try:
-                                                    mz = float(parts[0])
-                                                    intensity = float(parts[1])
-                                                    top_peaks.append((mz, intensity))
-                                                except ValueError:
-                                                    pass
-                                        extracted_value = top_peaks
-                                    elif found_top_five:
-                                        if name in fields_of_interest[-3:]:
-                                            number_list = val.get("Number", [])
-                                            if len(number_list) == 1:
-                                                mz_value = float(number_list[0])
-                                                # use arbitrary intensity = 1.0
-                                                extracted_value.append((mz_value, 1.0))
-                                    else:
-                                        extracted_value = None
+                            return subsub["Information"]
+                        else:
+                            raise RuntimeError("no GC-MS in pubchem found for compound", cid)
+    return None
 
-                                    if not extracted_value == None:
-                                        mass_spec_data.append({
-                                            reference_number: extracted_value
-                                        })
-    if mass_spec_data:
-        return mass_spec_data
-    else:
-        return "No mass spectrometry data found."
+def getSpectraFromPubChem(smiles):
+    cid = pubChemSmilesLookUp(smiles)
+    info = getInformationSectionFromPubChem(cid)
+    spectra = getSpectraFromInformationSection(info)
+    return spectra
 
 
 def getParetRulesForGraph(derivationGraph, search_target_graph):
     parentRules = list()
-
-
+    parentGraph = list()
     edges = derivationGraph.findVertex(search_target_graph).inEdges
+    
     for edge in edges:
         try:
             for rule in edge.rules:
                 parentRules.append(rule.id)
         except:
-            #print("no rule in edge")
             pass
+
+    for e in edges:
+        try:
+            for s in e.sources:
+               parentRules.extend(getParetRulesForGraph(derivationGraph, s.graph))
+        except(mod.LogicError):
+            pass
+
     return parentRules
 
 
 
 def getSpectraFRomMoelDerivationGraph(derivationGraph):
-    spectra = []
+    spectra = list()
     sourceGraph = derivationGraph.graphDatabase[0]
 
     for graph in dg.createdGraphs:
@@ -169,13 +187,20 @@ def getSpectraFRomMoelDerivationGraph(derivationGraph):
                             if not found: # add to spectra list if not occuring
                                     spectra.append((graph.exactMass, 1, rules))
             else:
-                print("there are some graphs that are not molecules")
+                raise RuntimeWarning("there are some graphs that are not molecules")
     return spectra
+
 
 def dice_coefficient(a, b): # like F1 Socre
     set_a, set_b = set(a), set(b)
     return 2 * len(set_a & set_b) / (len(set_a) + len(set_b))
 
+
 def overlap_coefficient(a, b):
     set_a, set_b = set(a), set(b)
-    return len(set_a & set_b) / min(len(set_a), len(set_b))
+    res = 0
+    try:
+        res = len(set_a & set_b) / min(len(set_a), len(set_b))
+    except(ZeroDivisionError):
+        pass
+    return res
