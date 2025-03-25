@@ -7,7 +7,13 @@ ml_ionization = Rule.fromDFS(
 	"[O]1" +
 	">>" +
 	"[O+.]1",
-	name="McL ionization")
+	name="McL ionization O")
+
+ml_ionization = labelConstraints(ml_ionization, 
+	{"O": 
+		['B','C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I']
+	}
+)
 
 ml_hRebind = Rule.fromDFS( 
 	# Educt: only english wiki
@@ -45,10 +51,12 @@ mcLafferty_all = [
 	ml_rearrRule2,
 	ml_rearrRule3,
 ]
+mcLafferty_all = flatten_list(mcLafferty_all)
 
 mcLafferty_ionization = [
 	ml_ionization,
 ]
+mcLafferty_ionization = flatten_list(mcLafferty_ionization)
 
 mcLafferty_fragmenation = [
 	ml_hRebind,
@@ -56,3 +64,4 @@ mcLafferty_fragmenation = [
 	ml_rearrRule2,
 	ml_rearrRule3,
 ]
+mcLafferty_fragmenation = flatten_list(mcLafferty_fragmenation)

@@ -3,29 +3,17 @@ include("mols.py")
 include("strategy.py")
 include("rules.py")
 
+import pandas as pd
+
 ionization = [benzylAllyl_ionizaton, dielsAdler_ionization, mcLafferty_ionization]
 fragmentation = [benzylAllyl_fragmentation, dielsAdler_fragmentation, mcLafferty_fragmenation, alpha_fragmentation]
 
-import pandas as pd
-
-#from mols import *
-#from strategy import makeStrategy
-
-#universe = butanal
-#universe = toluene
-#universe = butylbenzene
-#universe = phenylalanine
-#universe = tyrosine
+allUsedRules_dict = dict()
+for i in ionization + fragmentation:
+    for e in i:
+        allUsedRules_dict[e.id] = e.name
 
 allActiveRules = set()
-allUsedRules = set()
-for i in ionization:
-    for e in i:
-        allUsedRules.add(e.id)
-
-for f in fragmentation:
-    for e in f:
-        allUsedRules.add(e.id)
 
 for m in common_ei_molecules:
     print("\n")
@@ -40,12 +28,13 @@ for m in common_ei_molecules:
 
 
     for pubchemSpectrum in pubchemSpectra:
+
         pubchem_masses = set([int(x[0]) for x in list(pubchemSpectrum.values())[0]])
         moel_masses = set([int(x[0]) for x in moelSpectrum_dict])
         commonMasses = pubchem_masses & moel_masses
-        print("pubchem", pubchem_masses, "moel", moel_masses)
-        print("intersection", commonMasses)
-        print('dice', dice_coefficient(pubchem_masses, moel_masses))
+        #print("masses:\t", "pubchem", pubchem_masses, "moel", moel_masses)
+        #print("intersection", commonMasses)
+        #print('dice', dice_coefficient(pubchem_masses, moel_masses))
         #print('overlap', overlap_coefficient(pubchem_masses, moel_masses))
         if len(moelSpectrum_df) > 0:
             rulesActiveHere = moelSpectrum_df[
@@ -57,9 +46,9 @@ for m in common_ei_molecules:
             for rule_group in rulesActiveHere:
                 allActiveRules.update(rule_group)
 
+print("allUsedRules", allUsedRules_dict)
 print("allActiveRules", allActiveRules)
-
-print("unusedRules", allUsedRules - allActiveRules)
+print("unusedRules", set(allUsedRules_dict.keys()) - allActiveRules)
 
 
 
