@@ -8,12 +8,12 @@ def amuBound(strategy, minimum=50, maximum=500):
 		return r
 	return rightPredicate[predicate](strategy)
 
-def chargeBound(strategy, minimum=-1, maximum=3):
+def chargeBound(strategy, minimum=0, maximum=1):
     def predicate(d):
         for g in d.right:
             if g.isMolecule:
                 charge = g.smiles.count('+') - g.smiles.count('-')
-                if minimum < charge < maximum:
+                if minimum <= charge <= maximum:
                     return True
         return False
 

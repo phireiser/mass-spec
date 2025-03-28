@@ -2,6 +2,10 @@
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#McLafferty-Umlagerung
 # https://doi.org/10.1021/ac60145a015
 
+# McLafferty rearrangement is also known as 
+# γ-hydrogen rearrangement
+# sigma hydrogen rearrangment
+
 ml_ionization = Rule.fromDFS( 
 	# only english wiki
 	"[O]1" +
