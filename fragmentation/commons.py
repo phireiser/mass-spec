@@ -53,9 +53,15 @@ def labelConstraints(rule, rpl_dict, morphisms=None):
     for old, new in rpl_dict.items():
         if isinstance(new, list):
             for new_i in new:
-                rules.append(Rule.fromGMLString(gmlString.replace(old, new_i)))
+                alteredStringObj = gmlString.replace(old, new_i)
+                alteredRuleObj = Rule.fromGMLString(alteredStringObj)
+                alteredRuleObj.name = rule.name + " " + new_i
+                rules.append(alteredRuleObj)
         elif isinstance(new, str):
-            rules.append(Rule.fromGMLString(gmlString.replace(old, new)))
+            alteredStringObj = gmlString.replace(old, new)
+            alteredRuleObj = Rule.fromGMLString(alteredStringObj)
+            alteredRuleObj.name = rule.name + " " + new
+            rules.append(alteredRuleObj)
         else:
             raise ValueError("new in rpl_dict is not of appropiate structure")
 

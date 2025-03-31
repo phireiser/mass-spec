@@ -10,5 +10,5 @@ include("rules/deprotonation.py")
 # TODO alpha cleavage
 # TODO sigma cleavage
 # TODO heterocyclic ring fission (HRF)
-# TODO benzofuran forming fission (BFF) 
+# TODO benzofuran forming fission (BFF)
 # TODO quinone methide (QM) fission

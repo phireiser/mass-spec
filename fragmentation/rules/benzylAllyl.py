@@ -38,7 +38,7 @@ benzylAlly_mz91_65 = Rule.fromDFS(
 	"[C]1{#}[C]2.[C+]3{-}[C]4{=}[C]5{-}[C]6{=}[C]7{-}1"
 )
 
-benzylAlly_mz65_39 = Rule.fromDFS( 
+benzylAlly_mz65_39 = Rule.fromDFS(
     # from english wiki
 	# assumption: is https://en.wikipedia.org/wiki/Cyclopropenium_ion
 	# alternative would be https://en.wikipedia.org/wiki/Propargyl_group
@@ -49,7 +49,7 @@ benzylAlly_mz65_39 = Rule.fromDFS(
 
 # second branch
 
-benzylAlly_mz_92_77 = Rule.fromDFS( 
+benzylAlly_mz_92_77 = Rule.fromDFS(
     # from english wiki
 	"[H]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7{=}[C]8{-}3" +
 	">>" +
@@ -62,4 +62,3 @@ benzylAlly_mz77_51 = Rule.fromDFS(
 	">>" +
 	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6"
 )
-
