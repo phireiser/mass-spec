@@ -40,32 +40,34 @@ def flatten_list(nested_list):
     return flat_list
 
 
-def labelConstraints(rule, rpl_dict, morphisms=None):
+def labelConstraints(input_rules, rpl_dict, morphisms=None):
     """
     every underscore single Letter combination should be replaced according to rpl dict
 
-    :param rule: a moel ruel
+    :param rule: a moel ruel or list of them
     :param rpl_dict: dictionary with key as lable to be replaced and a string or list of strings to substitue with
     :return: list of rules
     """
-    gmlString = rule.getGMLString()
-    rules = list()
-    for old, new in rpl_dict.items():
-        if isinstance(new, list):
-            for new_i in new:
-                alteredStringObj = gmlString.replace(old, new_i)
+    return_rules = list()
+    for rule in input_rules:
+        gmlString = rule.getGMLString()
+        rules = list()
+        for old_structure, new_structure in rpl_dict.items():
+            if isinstance(new_structure, list):
+                for new_i in new_structure:
+                    alteredStringObj = gmlString.replace(old_structure, new_i)
+                    alteredRuleObj = Rule.fromGMLString(alteredStringObj)
+                    alteredRuleObj.name = rule.name + " " + new_i
+                    rules.append(alteredRuleObj)
+            elif isinstance(new_structure, str):
+                alteredStringObj = gmlString.replace(old_structure, new_structure)
                 alteredRuleObj = Rule.fromGMLString(alteredStringObj)
-                alteredRuleObj.name = rule.name + " " + new_i
+                alteredRuleObj.name = rule.name + " " + new_structure
                 rules.append(alteredRuleObj)
-        elif isinstance(new, str):
-            alteredStringObj = gmlString.replace(old, new)
-            alteredRuleObj = Rule.fromGMLString(alteredStringObj)
-            alteredRuleObj.name = rule.name + " " + new
-            rules.append(alteredRuleObj)
-        else:
-            raise ValueError("new in rpl_dict is not of appropiate structure")
-
-    return rules
+            else:
+                raise ValueError("new structure in rpl_dict is not of appropiate structure")
+        return_rules.append(rules)
+    return return_rules
 
 
 def pubChemSmilesLookUp(smiles):
