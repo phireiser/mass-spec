@@ -13,9 +13,10 @@ ml_ionization = Rule.fromDFS(
 	"[O+.]1",
 	name="McL ionization O")
 
-ml_ionization = labelConstraints(ml_ionization, 
-	{"O": 
-		['B','C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I']
+ml_ionization = labelConstraints_gml(
+	input_rules = ml_ionization, 
+	rpl_dict = {
+		"O": ['B','C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I']
 	}
 )
 
@@ -47,15 +48,6 @@ ml_rearrRule3 = Rule.fromDFS(
 	">>" +
 	"[O]1[C+]2[C.]3.[C]4{=}[C]5", 
 	name = "rearrangment Rule 3")
-
-mcLafferty_all = [
-	ml_ionization,
-	ml_hRebind,
-	ml_rearrRule1,
-	ml_rearrRule2,
-	ml_rearrRule3,
-]
-mcLafferty_all = flatten_list(mcLafferty_all)
 
 mcLafferty_ionization = [
 	ml_ionization,

@@ -26,12 +26,6 @@ dielsAdler_2b = Rule.fromDFS( # hetrolysis
 	name = "Diels Adler 3 hetrolysis"
 )
 
-dielsAdler_all = [
-	dielsAdler_1,
-	dielsAdler_2a,
-	dielsAdler_2b,
-]
-
 dielsAdler_ionization = [
 	dielsAdler_1,
 ]

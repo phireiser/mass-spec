@@ -10,47 +10,96 @@ alpha = Rule.fromDFS(
 	name = "alpha")
 
 
-# TODO replace _Y_1, _R_1, _R_2
-# R Y are subgraphs
-
-
 # Interpreation von Massenspektren Springer, Seite Einband, gesaettigete stelle
-alpha_saturated_site_1 = Rule.fromDFS(
+alpha_saturated_site_1 = (
 	"[_R_1]1[C]2[_R_2]3([_R_3]4)[_Y_1+.]5[_R_4]6" +
 	">>" +
 	"[_R_1.]1.[C]2[_R_2]3([_R_3]4){=}[_Y_1+.]5[_R_4]6",
-	name = "radical induced (alpha-)clevage for a saturated site")
+	"radical induced (alpha-)clevage for a saturated site")
+
+alpha_saturated_site_1 = labelConstraints_dfs(
+	input_rules = alpha_saturated_site_1, 
+	rpl_dict = {
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_Y_1": heteroAtoms,
+	}
+)
+
 
 # Interpreation von Massenspektren Springer, Seite Einband, gesaettigete stelle
-alpha_saturated_site_2 = Rule.fromDFS(
+alpha_saturated_site_2 = (
 	"[_Y_1+]1[_R_1]2[C]3[C.]4" +
 	">>" +
 	"[_Y_1+.]1[_R_1]2.[C]3[C.]4",
-	name = "radical induced (alpha-)clevage for a saturated site")
+	"radical induced (alpha-)clevage for a saturated site")
+
+alpha_saturated_site_2 = labelConstraints_dfs(
+	input_rules = alpha_saturated_site_2, 
+	rpl_dict = {
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_Y_1": heteroAtoms,
+	}
+)
+
 
 # Interpreation von Massenspektren Springer, Seite Einband, ungesattigtes heteroatom
-alpha_unsaturated_hetroatom = Rule.fromDFS(
+alpha_unsaturated_hetroatom = (
 	"[_R_1]1[C]2[_R_2]3{=}[_Y_1+.]4" +
 	">>" +
 	"[_R_1.]1.[C]2[_R_2]3{#}[_Y_1+]4",
-	name = "radical induced (alpha-)clevage for a unsaturated heteroatom")
+	"radical induced (alpha-)clevage for a unsaturated heteroatom")
+
+alpha_unsaturated_hetroatom = labelConstraints_dfs(
+	input_rules = alpha_unsaturated_hetroatom, 
+	rpl_dict = {
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_Y_1": heteroAtoms,
+	}
+)
+
 
 # Interpreation von Massenspektren Springer, Seite Einband, Alkene
-alpha_alkene_1 = Rule.fromDFS(
+alpha_alkene_1 = (
 	"[_R_1]1[C]2[C]3[C+.]4" +
 	">>" +
 	"[_R_1.]1[C]2{=}[C]3[C+]4",
-	name = "radical induced (alpha-)clevage for a alkene variant 1")
+	"radical induced (alpha-)clevage for a alkene variant 1")
+
+alpha_alkene_1 = labelConstraints_dfs(
+	input_rules = alpha_alkene_1, 
+	rpl_dict = {
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_Y_1": heteroAtoms,
+	}
+)
+
 
 # Interpreation von Massenspektren Springer, Seite Einband, Alkene
-alpha_alkene_2 = Rule.fromDFS(
+alpha_alkene_2 = (
 	"[_R_1]1[C]2[C+.]3[C]4" +
 	">>" +
 	"[_R_1.]1[C]2{=}[C]3[C+]4",
-	name = "radical induced (alpha-)clevage for a alkene variant 2")
+	"radical induced (alpha-)clevage for a alkene variant 2")
+
+alpha_alkene_2 = labelConstraints_dfs(
+	input_rules = alpha_alkene_2, 
+	rpl_dict = {
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_Y_1": heteroAtoms,
+	}
+)
 
 
-
-alpha_fragmentation = [alpha]
-
-alpha_all = [alpha]
+alpha_fragmentation = [
+	alpha,
+	alpha_saturated_site_1,
+	alpha_saturated_site_2,
+	alpha_unsaturated_hetroatom,
+	alpha_alkene_1,
+	alpha_alkene_2,
+]
