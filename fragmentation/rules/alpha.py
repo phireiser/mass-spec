@@ -22,10 +22,18 @@ alpha_saturated_site_1 = labelConstraints_dfs(
 	rpl_dict = {
 		"_R_1": alkyl_stump_dfs,
 		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+#print("dfs", alpha_saturated_site_1[0].getGMLString())
+alpha_saturated_site_1 = labelConstraints_gml(
+	input_rules = alpha_saturated_site_1,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
-
+#print("gml", alpha_saturated_site_1[0][0].getGMLString())
 
 # Interpreation von Massenspektren Springer, Seite Einband, gesaettigete stelle
 alpha_saturated_site_2 = (
@@ -39,6 +47,14 @@ alpha_saturated_site_2 = labelConstraints_dfs(
 	rpl_dict = {
 		"_R_1": alkyl_stump_dfs,
 		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+alpha_saturated_site_2 = labelConstraints_gml(
+	input_rules = alpha_saturated_site_2,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -56,6 +72,14 @@ alpha_unsaturated_hetroatom = labelConstraints_dfs(
 	rpl_dict = {
 		"_R_1": alkyl_stump_dfs,
 		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+alpha_unsaturated_hetroatom = labelConstraints_gml(
+	input_rules = alpha_unsaturated_hetroatom,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -73,7 +97,8 @@ alpha_alkene_1 = labelConstraints_dfs(
 	rpl_dict = {
 		"_R_1": alkyl_stump_dfs,
 		"_R_2": alkyl_stump_dfs,
-		"_Y_1": heteroAtoms,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
 	}
 )
 
@@ -90,7 +115,8 @@ alpha_alkene_2 = labelConstraints_dfs(
 	rpl_dict = {
 		"_R_1": alkyl_stump_dfs,
 		"_R_2": alkyl_stump_dfs,
-		"_Y_1": heteroAtoms,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
 	}
 )
 
@@ -103,3 +129,5 @@ alpha_fragmentation = [
 	alpha_alkene_1,
 	alpha_alkene_2,
 ]
+
+alpha_fragmentation = flatten_list(alpha_fragmentation)

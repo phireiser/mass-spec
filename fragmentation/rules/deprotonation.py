@@ -24,7 +24,7 @@ deProtonation_proton = Rule.fromDFS(
 	name = "Deprotonation proton")
 
 deProtonation_proton = labelConstraints_gml(
-	input_rule = deProtonation_proton,
+	input_rules = deProtonation_proton,
 	rpl_dict = {
 		"_A" : ['N', 'O']
 	}

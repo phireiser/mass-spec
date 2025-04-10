@@ -12,7 +12,7 @@ benzylAllyl_mz92_91 = Rule.fromDFS(
 	name = "BA 92-91"
 )
 
-benzylAllyl_mz92_91 = labelConstraints(benzylAllyl_mz92_91, 
+benzylAllyl_mz92_91 = labelConstraints_gml(benzylAllyl_mz92_91, 
 	{"_A": 
 		["H","C"]
 	}
@@ -51,7 +51,7 @@ benzylAllyl_mz92_77 = Rule.fromDFS(
 )
 
 # add term constraint to rule
-benzylAllyl_mz92_77 = labelConstraints(benzylAllyl_mz92_77, 
+benzylAllyl_mz92_77 = labelConstraints_gml(benzylAllyl_mz92_77, 
 	{"_A": 
 		["H","C"]
 	}
@@ -64,16 +64,6 @@ benzylAllyl_mz77_51 = Rule.fromDFS(
 	name = "BA 77-51"
 )
 
-
-benzylAllyl_all = [
-    benzylAllyl_mz92_91,
-    benzylAllyl_mz91_91,
-    benzylAllyl_mz91_65,
-    benzylAllyl_mz65_39,
-    benzylAllyl_mz92_77,
-    benzylAllyl_mz77_51,
-]
-benzylAllyl_all = flatten_list(benzylAllyl_all)
 
 benzylAllyl_ionizaton = [
 	benzylAllyl_mz92_91,

@@ -30,6 +30,9 @@ sigma_lowIE = labelConstraints_dfs(
 	input_rules = sigma_lowIE, 
 	rpl_dict = {
 		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
 	}
 )
 
@@ -37,3 +40,5 @@ sigma_fragmentation = [
     sigma_alkane,
     sigma_lowIE,
 ]
+
+sigma_fragmentation = flatten_list(sigma_fragmentation)

@@ -1,37 +1,21 @@
-import requests, json, warnings
+import requests, json, warnings, re
 
 alkyl_stump_dfs = [
-    "[C]10[H]11([H]12)([H]13)",
-    "[C]10[C]11([H]12)([H]13)",
-    "[C]10[C]11([C]12)([H]13)",
-    "[C]10[C]11([C]12)([C]13)",
+    "[C]{a1}([H]{a2})([H]{a3})([H]{a4})",
+    "[C]{a1}([H]{a2})([H]{a3})([C]{a4})",
+    "[C]{a1}([H]{a2})([C]{a3})([C]{a4})",
+    "[C]{a1}([C]{a2})([C]{a3})([C]{a4})",
 ]
 
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
 # TODO ? functional group containing heteroAtom, this is only heteroAtoms itself
-heteroAtoms = ["He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"]
+
 
 def addConstraints(rule, conStringGML):
     gmlstr = rule.getGMLString()
     name = rule.name
     rule = ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
     return rule
-
-
-def printGrammar():
-        post.summarySection("Molecule(s)")
-        p = GraphPrinter()
-        p.setMolDefault()
-        #p.withIndex = True
-        for m in inputGraphs:
-                m.print(p)
-
-        post.summarySection("Rule(s)")
-        p = GraphPrinter()
-        p.setReactionDefault()
-        p.withIndex = True
-        for r in inputRules:
-                r.print(p)
 
 
 def flatten_list(nested_list):
@@ -49,6 +33,29 @@ def flatten_list(nested_list):
             flat_list.append(item)
     return flat_list
 
+def printRules(inRules):
+    post.summarySection("Rule(s)")
+    p = GraphPrinter()
+    p.setReactionDefault()
+    p.withIndex = True
+    inRules = flatten_list(inRules)
+    for r in inRules:
+            r.print(p)
+
+def printGraphs(inGraphs):
+    post.summarySection("Molecule(s)")
+    p = GraphPrinter()
+    p.setMolDefault()
+    #p.withIndex = True
+    for m in inGraphs:
+            m.print(p)
+
+def printGrammar(inGraphs = inputGraphs, inRules = inputRules):
+    printGraphs(inGraphs)
+    printRules(inRules)
+
+
+
 
 def labelConstraints_gml(input_rules, rpl_dict):
     """
@@ -58,6 +65,8 @@ def labelConstraints_gml(input_rules, rpl_dict):
     :param rpl_dict: dictionary with key as lable to be replaced and a string or list of strings to substitue with
     :return: list of rules
     """
+    if not isinstance(input_rules, list):
+        input_rules = [input_rules]
     return_rules = list()
     for rule in input_rules:
         gmlString = rule.getGMLString()
@@ -69,7 +78,7 @@ def labelConstraints_gml(input_rules, rpl_dict):
                 alteredStringObj = gmlString.replace(old_structure, new_i)
                 alteredRuleObj = Rule.fromGMLString(alteredStringObj)
                 alteredRuleObj.name = rule.name + " " + new_i
-                rules.append(alteredRuleObj) # TODO maybe tab outwards
+                rules.append(alteredRuleObj)
         return_rules.append(rules)
         
     return return_rules
@@ -83,25 +92,35 @@ def labelConstraints_dfs(input_rules, rpl_dict):
     :param rpl_dict: dictionary with key as lable to be replaced and a string or list of strings to substitue with
     :return: list of rules
     """
+    max_num_rules = 0
+    for _, new_structures in rpl_dict.items():
+        if not isinstance(new_structures, list):
+            new_structures = [new_structures]
+        if max_num_rules < len(new_structures):
+            max_num_rules = len(new_structures)
+    
     return_rules = list()
     if not isinstance(input_rules, list):
         input_rules = [input_rules]
     for rule, name in input_rules:
         rules = list()
-        altered_rule = rule
-        for old_structure, new_structure in rpl_dict.items():
-            if not isinstance(new_structure, list):
-                new_structure = list(new_structure)
-            for i, new_i in enumerate(new_structure):
-                pos = altered_rule.find(new_i) + len(new_i)
-                if altered_rule[pos+1] == "+" or altered_rule[pos+1] == ".":
-                    charge = altered_rule[pos+1] == "+" or altered_rule[pos+2] == "+"
-                    radical = altered_rule[pos+1] == "." or altered_rule[pos+2] == "."
-                    # TODO   
-                
-                altered_rule = altered_rule[:pos+2] + altered_rule[pos+3:]
-                altered_rule = altered_rule.replace('[' + old_structure + ']', new_i)
-        return_rules.append(Rule.fromDFS(altered_rule), name= name)
+        for t in range(max_num_rules): # for new_structue in new_structures
+            altered_rule = rule
+            for old_structure, new_structures in rpl_dict.items():
+                if not isinstance(new_structures, list):
+                    new_structures = [new_structures]
+                new_structure = new_structures[t] # for new_structue in new_structures
+                print(new_structure, t)
+                nums = [int(n) for n in re.findall(r'\d+', altered_rule)]
+                max_node_id = max(nums)
+                values = {'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4,}
+                new_structure = new_structure.format(**values)
+                for radIon in [ "", "+", ".", "+.", ".+"]:
+                    for i in range(1,10):
+                        altered_rule = altered_rule.replace('[' + old_structure + radIon + ']' + str(i), new_structure[:2] + radIon + new_structure[2:])
+                print("drinnen", altered_rule)        
+            print(altered_rule)
+            return_rules.append(Rule.fromDFS(altered_rule, name = name))
     return return_rules
 
 def pubChemSmilesLookUp(smiles):
@@ -119,10 +138,10 @@ def pubChemSmilesLookUp(smiles):
 def getSpectraFromInformationSection(information):
 
     fields_of_interest = [
-    "Top 5 Peaks",
-    "m/z Top Peak",
-    "m/z 2nd Highest",
-    "m/z 3rd Highest"
+        "Top 5 Peaks",
+        "m/z Top Peak",
+        "m/z 2nd Highest",
+        "m/z 3rd Highest"
     ]
 
     mass_spec_data = list()

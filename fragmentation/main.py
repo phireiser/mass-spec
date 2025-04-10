@@ -1,16 +1,49 @@
 #include("tests/benzylAllyl_unified.py")
 include("mols.py")
+
+heteroAtoms = [
+    "He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
+    "Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb",
+    "Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
+    "Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
+    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra",
+    "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
+]
+
+occuring_hetroAtoms = set()
+for m in common_ei_molecules:
+    for ha in heteroAtoms:
+        if m.vLabelCount(ha) > 0:
+            occuring_hetroAtoms.add(ha)
+
+heteroAtoms = occuring_hetroAtoms # only create rules for occuring hetroAtoms
+
+
 include("strategy.py")
 include("rules.py")
 
 import pandas as pd
+from pprint import pprint
 
-ionization = [benzylAllyl_ionizaton, dielsAdler_ionization, mcLafferty_ionization]
-fragmentation = [benzylAllyl_fragmentation, dielsAdler_fragmentation, mcLafferty_fragmenation, alpha_fragmentation]
+ionization = [
+    benzylAllyl_ionizaton, 
+    dielsAdler_ionization, 
+    mcLafferty_ionization,
+]
+
+fragmentation = [
+    benzylAllyl_fragmentation, 
+    dielsAdler_fragmentation, 
+    mcLafferty_fragmenation, 
+    alpha_fragmentation,
+]
+
+
 
 allLoadedRules_dict = dict()
-for i in ionization + fragmentation:
-    for e in i:
+for rulelist in ionization + fragmentation:
+    for e in rulelist:
+        print(e)
         allLoadedRules_dict[e.id] = e.name
 
 allActiveRules = set()
@@ -48,7 +81,8 @@ for m in common_ei_molecules:
                 allActiveRules.update(rule_group)
 
 print("\n\n")
-print("allUsedRules", allLoadedRules_dict)
+print("allUsedRules")
+pprint(allLoadedRules_dict)
 print("allActiveRules", allActiveRules)
 print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
 
@@ -58,5 +92,7 @@ print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
 
 
 
-#printGrammar()
+#printGrammar(inGraphs = common_ei_molecules, inRules = ionization + fragmentation)
 #dg.print()
+
+printRules(ionization + fragmentation)

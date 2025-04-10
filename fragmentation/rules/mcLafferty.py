@@ -8,15 +8,15 @@
 
 ml_ionization = Rule.fromDFS( 
 	# only english wiki
-	"[O]1" +
+	"[_A]1" +
 	">>" +
-	"[O+.]1",
-	name="McL ionization O")
+	"[_A+.]1",
+	name="McL ionization ")
 
 ml_ionization = labelConstraints_gml(
 	input_rules = ml_ionization, 
 	rpl_dict = {
-		"O": ['B','C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I']
+		"_A": ['B','C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I']
 	}
 )
 

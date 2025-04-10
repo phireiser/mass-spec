@@ -18,8 +18,16 @@ inductive_IMS_4_18 = (
 inductive_IMS_4_18 = labelConstraints_dfs(
 	input_rules = inductive_IMS_4_18, 
 	rpl_dict = {
-		"_R_1": alkyl_stump_gml,
-		"_R_2": alkyl_stump_gml,
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+inductive_IMS_4_18 = labelConstraints_gml(
+	input_rules = inductive_IMS_4_18,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -35,8 +43,16 @@ inductive_IMS_4_19_1 = (
 inductive_IMS_4_19_1 = labelConstraints_dfs(
 	input_rules = inductive_IMS_4_19_1,
 	rpl_dict = {
-		"_R_1": alkyl_stump_gml,
-		"_R_2": alkyl_stump_gml,
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+inductive_IMS_4_19_1 = labelConstraints_gml(
+	input_rules = inductive_IMS_4_19_1,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -52,8 +68,16 @@ inductive_IMS_4_19_2 = (# Y on left side has unpaired electron
 inductive_IMS_4_19_2 = labelConstraints_dfs(
 	input_rules = inductive_IMS_4_19_2,
 	rpl_dict = {
-		"_R_1": alkyl_stump_gml,
-		"_R_2": alkyl_stump_gml,
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+inductive_IMS_4_19_2 = labelConstraints_gml(
+	input_rules = inductive_IMS_4_19_2,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -69,8 +93,16 @@ inductive_IMS_4_20 = (
 inductive_IMS_4_20 = labelConstraints_dfs(
 	input_rules = inductive_IMS_4_20,
 	rpl_dict = {
-		"_R_1": alkyl_stump_gml,
-		"_R_2": alkyl_stump_gml,
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+inductive_IMS_4_20 = labelConstraints_gml(
+	input_rules = inductive_IMS_4_20,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -86,8 +118,16 @@ inductive_IMS_4_21 = (
 inductive_IMS_4_21 = labelConstraints_dfs(
 	input_rules = inductive_IMS_4_21,
 	rpl_dict = {
-		"_R_1": alkyl_stump_gml,
-		"_R_2": alkyl_stump_gml,
+		"_R_1": alkyl_stump_dfs,
+		"_R_2": alkyl_stump_dfs,
+		"_R_3": alkyl_stump_dfs,
+		"_R_4": alkyl_stump_dfs,
+	}
+)
+
+inductive_IMS_4_21 = labelConstraints_gml(
+	input_rules = inductive_IMS_4_21,
+	rpl_dict = {
 		"_Y_1": heteroAtoms,
 	}
 )
@@ -101,3 +141,4 @@ inductive_fragmentation = [
 	inductive_IMS_4_20,
 	inductive_IMS_4_21,
 ]
+inductive_fragmentation = flatten_list(inductive_fragmentation)
