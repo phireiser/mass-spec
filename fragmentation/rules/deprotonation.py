@@ -35,3 +35,5 @@ deProtonation_all = [
     deProtonation_radical,
     deProtonation_proton,
 ]
+
+deProtonation_all = flatten_list(deProtonation_all)

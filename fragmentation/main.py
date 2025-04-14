@@ -27,18 +27,19 @@ from pprint import pprint
 
 ionization = [
     benzylAllyl_ionizaton, 
-    dielsAdler_ionization, 
+#   deProtonation_all,
     mcLafferty_ionization,
+    retroDielsAdler_ionization, 
 ]
 
 fragmentation = [
-    benzylAllyl_fragmentation, 
-    dielsAdler_fragmentation, 
-    mcLafferty_fragmenation, 
     alpha_fragmentation,
+    benzylAllyl_fragmentation, 
+    inductive_fragmentation,
+    mcLafferty_fragmenation, 
+    retroDielsAdler_fragmentation, 
+    sigma_fragmentation,
 ]
-
-
 
 allLoadedRules_dict = dict()
 for rulelist in ionization + fragmentation:
@@ -96,3 +97,4 @@ print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
 #dg.print()
 
 printRules(ionization + fragmentation)
+

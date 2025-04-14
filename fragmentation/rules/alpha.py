@@ -19,12 +19,8 @@ alpha_saturated_site_1 = (
 
 alpha_saturated_site_1 = labelConstraints_dfs(
 	input_rules = alpha_saturated_site_1, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1", "_R_2", "_R_3", "_R_4"],
+	replacements = alkyl_stump_dfs
 )
 #print("dfs", alpha_saturated_site_1[0].getGMLString())
 alpha_saturated_site_1 = labelConstraints_gml(
@@ -44,12 +40,8 @@ alpha_saturated_site_2 = (
 
 alpha_saturated_site_2 = labelConstraints_dfs(
 	input_rules = alpha_saturated_site_2, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1"],
+	replacements = alkyl_stump_dfs
 )
 
 alpha_saturated_site_2 = labelConstraints_gml(
@@ -69,12 +61,8 @@ alpha_unsaturated_hetroatom = (
 
 alpha_unsaturated_hetroatom = labelConstraints_dfs(
 	input_rules = alpha_unsaturated_hetroatom, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1", "_R_2"],
+	replacements = alkyl_stump_dfs
 )
 
 alpha_unsaturated_hetroatom = labelConstraints_gml(
@@ -89,17 +77,13 @@ alpha_unsaturated_hetroatom = labelConstraints_gml(
 alpha_alkene_1 = (
 	"[_R_1]1[C]2[C]3[C+.]4" +
 	">>" +
-	"[_R_1.]1[C]2{=}[C]3[C+]4",
+	"[_R_1.]1.[C]2{=}[C]3[C+]4",
 	"radical induced (alpha-)clevage for a alkene variant 1")
 
 alpha_alkene_1 = labelConstraints_dfs(
 	input_rules = alpha_alkene_1, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1"],
+	replacements = alkyl_stump_dfs
 )
 
 
@@ -107,17 +91,13 @@ alpha_alkene_1 = labelConstraints_dfs(
 alpha_alkene_2 = (
 	"[_R_1]1[C]2[C+.]3[C]4" +
 	">>" +
-	"[_R_1.]1[C]2{=}[C]3[C+]4",
+	"[_R_1.]1.[C]2{=}[C]3[C+]4",
 	"radical induced (alpha-)clevage for a alkene variant 2")
 
 alpha_alkene_2 = labelConstraints_dfs(
 	input_rules = alpha_alkene_2, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1"],
+	replacements = alkyl_stump_dfs
 )
 
 

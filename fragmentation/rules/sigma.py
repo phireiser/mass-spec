@@ -10,12 +10,8 @@ sigma_alkane = (
 
 sigma_alkane = labelConstraints_dfs(
 	input_rules = sigma_alkane, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1", "_R_2", "_R_3", "_R_4"],
+	replacements = alkyl_stump_dfs
 )
 
 
@@ -28,12 +24,8 @@ sigma_lowIE = (
 
 sigma_lowIE = labelConstraints_dfs(
 	input_rules = sigma_lowIE, 
-	rpl_dict = {
-		"_R_1": alkyl_stump_dfs,
-		"_R_2": alkyl_stump_dfs,
-		"_R_3": alkyl_stump_dfs,
-		"_R_4": alkyl_stump_dfs,
-	}
+	to_replace = ["_R_1"],
+	replacements = alkyl_stump_dfs
 )
 
 sigma_fragmentation = [

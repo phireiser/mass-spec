@@ -1,10 +1,11 @@
-import requests, json, warnings, re
+import requests, json, warnings, re, itertools
 
 alkyl_stump_dfs = [
     "[C]{a1}([H]{a2})([H]{a3})([H]{a4})",
     "[C]{a1}([H]{a2})([H]{a3})([C]{a4})",
     "[C]{a1}([H]{a2})([C]{a3})([C]{a4})",
     "[C]{a1}([C]{a2})([C]{a3})([C]{a4})",
+    "[C]{a1}",
 ]
 
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
@@ -55,8 +56,6 @@ def printGrammar(inGraphs = inputGraphs, inRules = inputRules):
     printRules(inRules)
 
 
-
-
 def labelConstraints_gml(input_rules, rpl_dict):
     """
     every underscore single Letter combination should be replaced according to rpl dict
@@ -84,7 +83,7 @@ def labelConstraints_gml(input_rules, rpl_dict):
     return return_rules
 
 
-def labelConstraints_dfs(input_rules, rpl_dict):
+def labelConstraints_dfs(input_rules, to_replace, replacements):
     """
     every underscore single Letter combination should be replaced according to rpl dict
 
@@ -92,35 +91,35 @@ def labelConstraints_dfs(input_rules, rpl_dict):
     :param rpl_dict: dictionary with key as lable to be replaced and a string or list of strings to substitue with
     :return: list of rules
     """
-    max_num_rules = 0
-    for _, new_structures in rpl_dict.items():
-        if not isinstance(new_structures, list):
-            new_structures = [new_structures]
-        if max_num_rules < len(new_structures):
-            max_num_rules = len(new_structures)
-    
+
+    #https://www.mathsisfun.com/combinatorics/combinations-permutations.html
+    #https://docs.python.org/3/library/itertools.html
     return_rules = list()
+
     if not isinstance(input_rules, list):
         input_rules = [input_rules]
     for rule, name in input_rules:
-        rules = list()
-        for t in range(max_num_rules): # for new_structue in new_structures
-            altered_rule = rule
-            for old_structure, new_structures in rpl_dict.items():
-                if not isinstance(new_structures, list):
-                    new_structures = [new_structures]
-                new_structure = new_structures[t] # for new_structue in new_structures
-                print(new_structure, t)
-                nums = [int(n) for n in re.findall(r'\d+', altered_rule)]
+        for combo in itertools.product(replacements, repeat=len(to_replace)):
+            new_rule = rule
+            for target, repl in zip(to_replace, combo):
+                
+                # determine atom node id start from max occuring id and build it
+                nums = [int(n) for n in re.findall(r'\d+', new_rule)]
                 max_node_id = max(nums)
                 values = {'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4,}
-                new_structure = new_structure.format(**values)
+                repl = repl.format(**values)
+
                 for radIon in [ "", "+", ".", "+.", ".+"]:
-                    for i in range(1,10):
-                        altered_rule = altered_rule.replace('[' + old_structure + radIon + ']' + str(i), new_structure[:2] + radIon + new_structure[2:])
-                print("drinnen", altered_rule)        
-            print(altered_rule)
-            return_rules.append(Rule.fromDFS(altered_rule, name = name))
+                    for i in range(1, max_node_id+1):
+                        new_rule = new_rule.replace(
+                            '[' + target + radIon + ']' + str(i), 
+                            repl[:2] + radIon + repl[2:],
+                            -1)
+                            
+            return_rules.append((new_rule, name))
+
+    return_rules = [ Rule.fromDFS(rule, name= name) for rule, name in return_rules ]
+
     return return_rules
 
 def pubChemSmilesLookUp(smiles):
@@ -248,6 +247,7 @@ def getSpectraFRomMoelDerivationGraph(derivationGraph):
                             if not found: # add to spectra list if not occuring
                                     spectra.append((graph.exactMass, 1, rules))
             else:
+                print(graph.getGMLString())
                 raise RuntimeWarning("there are some graphs that are not molecules")
     return spectra
 
