@@ -8,6 +8,15 @@ alkyl_stump_dfs = [
     "[C]{a1}",
 ]
 
+saturation_stump_dfs = [
+    "[C]{a1}",
+    "[C]{a1}[C]{a2}",
+    "[C]{a1}[C]{a2}[C]{a3}",
+    "[C]{a1}[C]{a2}[C]{a3}[C]{a4}",
+    "[C]{a1}[C]{a2}[C]{a3}[C]{a4}[C]{a5}",
+    "[C]{a1}[C]{a2}[C]{a3}[C]{a4}[C]{a5}[C]{a6}",
+]
+
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
 # TODO ? functional group containing heteroAtom, this is only heteroAtoms itself
 
@@ -106,7 +115,9 @@ def labelConstraints_dfs(input_rules, to_replace, replacements):
                 # determine atom node id start from max occuring id and build it
                 nums = [int(n) for n in re.findall(r'\d+', new_rule)]
                 max_node_id = max(nums)
-                values = {'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4,}
+                values = {
+                            'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4, 
+                            'a5': max_node_id + 5, 'a6': max_node_id + 6,}
                 repl = repl.format(**values)
 
                 for radIon in [ "", "+", ".", "+.", ".+"]:
