@@ -1,6 +1,3 @@
-#from rules import *
-#from predicates import *
-
 include("predicates.py")
 
 def makeStrategy(universe, ionization, fragmentation):

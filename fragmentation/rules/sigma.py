@@ -14,6 +14,7 @@ sigma_alkane = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+sigma_alkane = convert2MoelRule(sigma_alkane)
 
 # Interpreation von Massenspektren Springer, Seite Einband, element with low IE
 sigma_lowIE = (
@@ -27,6 +28,8 @@ sigma_lowIE = labelConstraints_dfs(
 	to_replace = ["_R_1"],
 	replacements = alkyl_stump_dfs
 )
+
+sigma_lowIE = convert2MoelRule(sigma_lowIE)
 
 sigma_fragmentation = [
     sigma_alkane,

@@ -1,3 +1,6 @@
+import pandas as pd
+from pprint import pprint
+
 #include("tests/benzylAllyl_unified.py")
 include("mols.py")
 
@@ -18,16 +21,14 @@ for m in common_ei_molecules:
 
 heteroAtoms = occuring_hetroAtoms # only create rules for occuring hetroAtoms
 
-
+include("commons.py")
 include("strategy.py")
 include("rules.py")
 
-import pandas as pd
-from pprint import pprint
 
 ionization = [
     benzylAllyl_ionizaton, 
-#   deProtonation_all,
+    deProtonation_all,
     mcLafferty_ionization,
     retroDielsAdler_ionization, 
 ]
@@ -36,7 +37,8 @@ fragmentation = [
     alpha_fragmentation,
     benzylAllyl_fragmentation, 
     inductive_fragmentation,
-    mcLafferty_fragmenation, 
+    mcLafferty_fragmenation,
+    rearrangements,
     retroDielsAdler_fragmentation, 
     sigma_fragmentation,
 ]
@@ -96,5 +98,5 @@ print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
 #printGrammar(inGraphs = common_ei_molecules, inRules = ionization + fragmentation)
 #dg.print()
 
-printRules(ionization + fragmentation)
+#printRules(ionization + fragmentation)
 

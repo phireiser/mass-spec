@@ -27,6 +27,10 @@ def addConstraints(rule, conStringGML):
     rule = ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
     return rule
 
+def convert2MoelRule(tupel):
+    if isinstance(tupel, tuple):
+        tupel = [tupel]
+    return [ Rule.fromDFS(rule, name= name) for rule, name in tupel ]
 
 def flatten_list(nested_list):
     """
@@ -129,7 +133,7 @@ def labelConstraints_dfs(input_rules, to_replace, replacements):
                             
             return_rules.append((new_rule, name))
 
-    return_rules = [ Rule.fromDFS(rule, name= name) for rule, name in return_rules ]
+    #return_rules = [ Rule.fromDFS(rule, name= name) for rule, name in return_rules ]
 
     return return_rules
 

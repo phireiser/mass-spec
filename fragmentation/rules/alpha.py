@@ -25,6 +25,8 @@ alpha_saturated_site_1 = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+alpha_saturated_site_1  = convert2MoelRule(alpha_saturated_site_1)
+
 #print("dfs", alpha_saturated_site_1[0].getGMLString())
 alpha_saturated_site_1 = labelConstraints_gml(
 	input_rules = alpha_saturated_site_1,
@@ -45,6 +47,8 @@ alpha_saturated_site_2 = labelConstraints_dfs(
 	to_replace = ["_R_1"],
 	replacements = alkyl_stump_dfs
 )
+
+alpha_saturated_site_2  = convert2MoelRule(alpha_saturated_site_2)
 
 alpha_saturated_site_2 = labelConstraints_gml(
 	input_rules = alpha_saturated_site_2,
@@ -68,6 +72,8 @@ alpha_unsaturated_hetroatom = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+alpha_unsaturated_hetroatom = convert2MoelRule(alpha_unsaturated_hetroatom)
+
 alpha_unsaturated_hetroatom = labelConstraints_gml(
 	input_rules = alpha_unsaturated_hetroatom,
 	rpl_dict = {
@@ -90,6 +96,8 @@ alpha_alkene_1 = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+alpha_alkene_1 = convert2MoelRule(alpha_alkene_1)
+
 
 # Interpreation von Massenspektren Springer, Seite Einband, Alkene
 alpha_alkene_2 = (
@@ -105,6 +113,7 @@ alpha_alkene_2 = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+alpha_alkene_2 = convert2MoelRule(alpha_alkene_2)
 
 alpha_fragmentation = [
 	alpha,

@@ -21,6 +21,8 @@ inductive_IMS_4_18 = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+inductive_IMS_4_18 = convert2MoelRule(inductive_IMS_4_18)
+
 inductive_IMS_4_18 = labelConstraints_gml(
 	input_rules = inductive_IMS_4_18,
 	rpl_dict = {
@@ -41,6 +43,8 @@ inductive_IMS_4_19_1 = labelConstraints_dfs(
 	to_replace = ["_R_1", "_R_2"],
 	replacements = alkyl_stump_dfs
 )
+
+inductive_IMS_4_19_1 = convert2MoelRule(inductive_IMS_4_19_1)
 
 inductive_IMS_4_19_1 = labelConstraints_gml(
 	input_rules = inductive_IMS_4_19_1,
@@ -63,6 +67,8 @@ inductive_IMS_4_19_2 = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+inductive_IMS_4_19_2 = convert2MoelRule(inductive_IMS_4_19_2)
+
 inductive_IMS_4_19_2 = labelConstraints_gml(
 	input_rules = inductive_IMS_4_19_2,
 	rpl_dict = {
@@ -84,6 +90,8 @@ inductive_IMS_4_20 = labelConstraints_dfs(
 	replacements = alkyl_stump_dfs
 )
 
+inductive_IMS_4_20 = convert2MoelRule(inductive_IMS_4_20)
+
 inductive_IMS_4_20 = labelConstraints_gml(
 	input_rules = inductive_IMS_4_20,
 	rpl_dict = {
@@ -104,6 +112,8 @@ inductive_IMS_4_21 = labelConstraints_dfs(
 	to_replace = ["_R_1"],
 	replacements = alkyl_stump_dfs
 )
+
+inductive_IMS_4_21 = convert2MoelRule(inductive_IMS_4_21)
 
 inductive_IMS_4_21 = labelConstraints_gml(
 	input_rules = inductive_IMS_4_21,
