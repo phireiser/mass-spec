@@ -8,7 +8,7 @@ inductive_wiki = Rule.fromDFS(
 	name = "inductive cleavage f. wiki")
 
 
-# Interpreation von Massenspektren Springer, Seite 66, Gl. 4.18
+# Interpreation von Massenspektren Springer, Seite Einband, Seite 66, Gl. 4.18, 
 inductive_IMS_4_18 = (
 	"[_R_1]1[_Y_1+.]2[_R_2]3" +
 	">>" +
@@ -122,6 +122,57 @@ inductive_IMS_4_21 = labelConstraints_gml(
 	}
 )
 
+
+inductive_IMS_4_22 = (
+	"[C]1[C]2" +
+	"[O+.]3" +
+	"[C]4[C]5" +
+	">>" +
+	"[C+]1[C]2" +
+	"[O.]3" +
+	"[C]4[C]5",
+	"inductive cleavage odd electron 4.22"
+)
+
+inductive_IMS_4_22 = convert2MoelRule(inductive_IMS_4_22)
+
+
+inductive_IMS_4_23_1 = (
+	"[C]1[C]2[C]3[C]4([H]5)[Cl+.]6" +
+	">>" +
+	"[C+]1[C]2[C]3[C]4.[H]5[Cl+.]6",
+	"inductive cleavage odd electron 4.23 prod 1"
+)
+
+inductive_IMS_4_23_1 = convert2MoelRule(inductive_IMS_4_23_1)
+
+inductive_IMS_4_23_2 = (
+	"[C]1[C]2[C]3[C]4([H]5)[Cl+.]6" +
+	">>" +
+	"[C+]1[C]2[C]3.[C]4[H]5[Cl+.]6",
+	"inductive cleavage odd electron 4.23 prod 1"
+)
+
+inductive_IMS_4_23_2 = convert2MoelRule(inductive_IMS_4_23_2)
+
+
+inductive_IMS_4_24_1 = (
+	"[C]1([C]2)([C]3)[C]4([H]5)[Cl+.]6" +
+	">>" +
+	"[C+]1[C]2[C]3[C]4.[H]5[Cl+.]6",
+	"inductive cleavage odd electron 4.23 prod 1"
+)
+
+inductive_IMS_4_24_1 = convert2MoelRule(inductive_IMS_4_24_1)
+
+inductive_IMS_4_24_2 = (
+	"[C]1([C]2)([C]3)[C]4([H]5)[Cl+.]6" +
+	">>" +
+	"[C+]1([C]2)([C]3).[C]4[H]5[Cl+.]6",
+	"inductive cleavage odd electron 4.23 prod 1"
+)
+
+inductive_IMS_4_24_2 = convert2MoelRule(inductive_IMS_4_24_2)
 
 inductive_fragmentation = [
 	inductive_wiki,

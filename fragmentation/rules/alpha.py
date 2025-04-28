@@ -57,6 +57,100 @@ alpha_saturated_site_2 = labelConstraints_gml(
 	}
 )
 
+# Interpreation von Massenspektren Springer, Seite 60, 4.13
+alpha_saturated_site_4_13_1 = (
+	"[C]1([H]2)([H]3)([H]4)" +
+	"[C]5([H]6)([H]7)" +
+	"[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)" +
+	">>" +
+	"[C.]1([H]2)([H]3)([H]4)" + 
+	".[C]5([H]6)([H]7){=}" +
+	"[O+]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)"
+	"radical induced (alpha-)clevage for a saturated site 4.13_1")
+
+alpha_saturated_site_4_13_1 = convert2MoelRule(alpha_saturated_site_4_13_1)
+
+alpha_saturated_site_4_13_2 = (
+	"[C]1([H]2)([H]3)([H]4)" +
+	"[C]5([H]6)([H]7)" +
+	"[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)" +
+	">>" +
+	"[C.]1([H]2)([H]3)([H]4)" + 
+	".[C+]5([H]6)([H]7){-}" +
+	"[O]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)"
+	"radical induced (alpha-)clevage for a saturated site 4.13_2")
+
+alpha_saturated_site_4_13_2 = convert2MoelRule(alpha_saturated_site_4_13_2)
+
+
+# Interpreation von Massenspektren Springer, Seite 63, 4.17
+
+alpha_saturated_site_4_17_1 = (
+	"[C]1" +
+	"([C]2[C]3[C]4)" +
+	"([C]5[C]6)" +
+	"([C]7)" +
+	"([O+.]8)" +
+	">>" +
+	"[C]5[C]6" +
+	"[C]1" +
+	"([C]7)" +
+	"[O+.]8",
+	"radical induced (alpha-)clevage for a saturated site 4.17_1")
+
+alpha_saturated_site_4_17_1 = convert2MoelRule(alpha_saturated_site_4_17_1)
+
+
+alpha_saturated_site_4_17_1 = (
+	"[C]1" +
+	"([C]2[C]3[C]4)" +
+	"([C]5[C]6)" +
+	"([C]7)" +
+	"([O+.]8)" +
+	">>" +
+	"[C]5[C]6" +
+	"[C]1" +
+	"([C]7)" +
+	"[O+.]8" +
+	".[C]2[C]3[C]4",
+	"radical induced (alpha-)clevage for a saturated site 4.17_1")
+
+alpha_saturated_site_4_17_1 = convert2MoelRule(alpha_saturated_site_4_17_1)
+
+
+alpha_saturated_site_4_17_2 = (
+	"[C]1" +
+	"([C]2[C]3[C]4)" +
+	"([C]5[C]6)" +
+	"([C]7)" +
+	"([O+.]8)" +
+	">>" +
+	"[C]2[C]3[C]4" +
+	"[C]1" +
+	"([C]7)" +
+	"[O+.]8" +
+	".[C]5[C]6",
+	"radical induced (alpha-)clevage for a saturated site 4.17_2")
+
+alpha_saturated_site_4_17_2 = convert2MoelRule(alpha_saturated_site_4_17_2)
+
+
+alpha_saturated_site_4_17_3 = (
+	"[C]1" +
+	"([C]2[C]3[C]4)" +
+	"([C]5[C]6)" +
+	"([C]7)" +
+	"([O+.]8)" +
+	">>" +
+	"[C]2[C]3[C]4" +
+	"[C]1" +
+	"([C]5[C]6)" +
+	"[O+.]8" +
+	".",
+	"radical induced (alpha-)clevage for a saturated site 4.17_3")
+
+alpha_saturated_site_4_17_3 = convert2MoelRule(alpha_saturated_site_4_17_3)
+
 
 # Interpreation von Massenspektren Springer, Seite Einband, ungesattigtes heteroatom
 alpha_unsaturated_hetroatom = (
@@ -81,13 +175,26 @@ alpha_unsaturated_hetroatom = labelConstraints_gml(
 	}
 )
 
+# Interpreation von Massenspektren Springer, Seite 60, 4.14
+alpha_unsaturated_hetroatom_4_14 = (
+	"[C]1" +
+	"([C]2[C]3)" +
+	"([C]4[C]5)" +
+	"{=}[O+.]"
+	">>" +
+	"[C.]2[C]3" +
+	".[C]4[C]5" +
+	"[C]1{#}[O+]"
+	"radical induced (alpha-)clevage for a unsaturated heteroatom 4_14"
+)
+alpha_unsaturated_hetroatom_4_14 = convert2MoelRule(alpha_unsaturated_hetroatom_4_14)
 
 # Interpreation von Massenspektren Springer, Seite Einband, Alkene
 alpha_alkene_1 = (
 	"[_R_1]1[C]2[C]3[C+.]4" +
 	">>" +
 	"[_R_1.]1.[C]2{=}[C]3[C+]4",
-	"radical induced (alpha-)clevage for a alkene variant 1"
+	"radical induced (alpha-)clevage for a alkene charge left"
 )
 
 alpha_alkene_1 = labelConstraints_dfs(
@@ -104,7 +211,7 @@ alpha_alkene_2 = (
 	"[_R_1]1[C]2[C+.]3[C]4" +
 	">>" +
 	"[_R_1.]1.[C]2{=}[C]3[C+]4",
-	"radical induced (alpha-)clevage for a alkene variant 2"
+	"radical induced (alpha-)clevage for a alkene charge right"
 )
 
 alpha_alkene_2 = labelConstraints_dfs(
@@ -115,6 +222,64 @@ alpha_alkene_2 = labelConstraints_dfs(
 
 alpha_alkene_2 = convert2MoelRule(alpha_alkene_2)
 
+# Interpreation von Massenspektren Springer, Seite 62, 4.15
+alpha_alkene_4_15_1_1 = (
+	"[C]1[C]2[C+.]3[C]4" +
+	">>" +
+	"[C.]1.[C]2{=}[C]3[C+]4",
+	"radical induced (alpha-)clevage for a alkene 4.15 prod 1 left charge"
+)
+
+alpha_alkene_4_15_1_1 = convert2MoelRule(alpha_alkene_4_15_1_1)
+
+alpha_alkene_4_15_1_2 = (
+	"[C]1[C]2[C]3[C+.]4" +
+	">>" +
+	"[C.]1.[C]2{=}[C]3[C+]4",
+	"radical induced (alpha-)clevage for a alkene 4.15 prod 1 right charge"
+)
+
+alpha_alkene_4_15_1_2 = convert2MoelRule(alpha_alkene_4_15_1_2)
+
+
+alpha_alkene_4_15_2_1 = (
+	"[C]1[C]2[C+.]3[C]4" +
+	">>" +
+	"[C]1.[C+]2[C]3{=}[C]4",
+	"radical induced (alpha-)clevage for a alkene 4.15 prod 2 left charge"
+)
+
+alpha_alkene_4_15_2_1 = convert2MoelRule(alpha_alkene_4_15_2_1)
+
+alpha_alkene_4_15_2_2 = (
+	"[C]1[C]2[C]3[C+.]4" +
+	">>" +
+	"[C.]1.[C+]2[C]3{=}[C]4",
+	"radical induced (alpha-)clevage for a alkene 4.15 prod 2 right charge"
+)
+
+alpha_alkene_4_15_2_2 = convert2MoelRule(alpha_alkene_4_15_2_2)
+
+
+alpha_alkene_4_15_3_1 = (
+	"[C]1[C]2[C+.]3[C]4[C]5[C]6[C]7[C]8" +
+	">>" +
+	"[C]1.[C]2{=}[C+]3[C]4[C]5[C]6[C]7[C]8",
+	"radical induced (alpha-)clevage for a alkene 4.15 2nd prod 1"
+)
+
+alpha_alkene_4_15_3_1 = convert2MoelRule(alpha_alkene_4_15_3_1)
+
+
+alpha_alkene_4_15_3_2 = (
+	"[C]1[C]2[C]3[C+.]4[C]5[C]6[C]7[C]8" +
+	">>" +
+	"[C.]1.[C+]2[C]3[C]4[C]5[C]6[C]7[C]8",
+	"radical induced (alpha-)clevage for a alkene 4.15 2nd prod 2"
+)
+
+alpha_alkene_4_15_3_2 = convert2MoelRule(alpha_alkene_4_15_3_2)
+
 alpha_fragmentation = [
 	alpha,
 	alpha_saturated_site_1,
@@ -122,6 +287,23 @@ alpha_fragmentation = [
 	alpha_unsaturated_hetroatom,
 	alpha_alkene_1,
 	alpha_alkene_2,
+
+	# examples:
+	alpha_saturated_site_4_13_1,
+	alpha_saturated_site_4_13_2,
+
+	alpha_unsaturated_hetroatom_4_14,
+
+	alpha_alkene_4_15_1_1,
+	alpha_alkene_4_15_1_2,
+	alpha_alkene_4_15_2_1,
+	alpha_alkene_4_15_2_2,
+	alpha_alkene_4_15_3_1,
+	alpha_alkene_4_15_3_2,
+
+	alpha_saturated_site_4_17_1,
+	alpha_saturated_site_4_17_2,
+	alpha_saturated_site_4_17_3,
 ]
 
 alpha_fragmentation = flatten_list(alpha_fragmentation)
