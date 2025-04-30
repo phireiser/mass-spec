@@ -1,6 +1,6 @@
 import requests, json, warnings, re, itertools
 
-alkyl_stump_dfs = [
+alkyl_stump_dfs = [ # _R_#
     "[C]{a1}([H]{a2})([H]{a3})([H]{a4})",
     "[C]{a1}([H]{a2})([H]{a3})([C]{a4})",
     "[C]{a1}([H]{a2})([C]{a3})([C]{a4})",
@@ -8,7 +8,7 @@ alkyl_stump_dfs = [
     "[C]{a1}",
 ]
 
-saturation_stump_dfs = [
+saturation_stump_dfs = [ # _X_#
     "[C]{a1}",
     "[C]{a1}[C]{a2}",
     "[C]{a1}[C]{a2}[C]{a3}",

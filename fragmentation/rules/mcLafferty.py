@@ -8,35 +8,40 @@
 
 ml_ionization = Rule.fromDFS( 
 	# only english wiki
-	"[_A]1" +
+	s = 
+	"[O]1" +
 	">>" +
-	"[_A+.]1",
-	name="McL ionization ")
-
-ml_ionization = labelConstraints_gml(
-	input_rules = ml_ionization, 
-	rpl_dict = {
-		"_A": ['B','C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I']
-	}
+	"[O+.]1",
+	name="McL ionization " +
+	" ^Y1"
 )
 
 ml_hRebind = Rule.fromDFS( 
 	# Educt: only english wiki
 	# Product: only german wiki
+	s = 
 	"[O+.]1{=}[C]2[C]3[C]4[C]5[H]6" +
 	">>" +
 	"[O+]1([H]6){=}[C]2[C]3[C]4[C.]5",
-	name= "H rebind Rule" )
+	name= 
+	"H rebind Rule" +
+	""
+)
 
 ml_rearrRule1 = Rule.fromDFS(
 	# in german and english wiki
+	s = 
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
 	">>" +
 	"[O+]1{=}[C]2[C.]3.[C]4{=}[C]5",
-	name = "rearrangement Rule 1")
+	name = 
+	"rearrangement Rule 1" +
+	""
+)
 
 ml_rearrRule2 = Rule.fromDFS(
 	# in german and english wiki
+	s = 
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
 	">>" +
 	"[O+.]1{-}[C]2{=}[C]3.[C]4{=}[C]5", 
@@ -44,10 +49,14 @@ ml_rearrRule2 = Rule.fromDFS(
 
 ml_rearrRule3 = Rule.fromDFS(
 	# only in english wiki
+	s = 
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
 	">>" +
 	"[O]1[C+]2[C.]3.[C]4{=}[C]5", 
-	name = "rearrangment Rule 3")
+	name = 
+	"rearrangment Rule 3" +
+	""
+)
 
 mcLafferty_ionization = [
 	ml_ionization,

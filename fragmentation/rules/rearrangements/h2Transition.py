@@ -1,52 +1,29 @@
-h2Transiton_1 = ( # 2 H Wanderung rH
-	"[H]1[C]2([H]3)[C]4[_Y_1]5[C]6([C]7){=}[_Y_2+.]8" +
+h2Transiton_1 = Rule.fromDFS(# 2 H Wanderung rH
+	s=
+	"[H]1[C]2([H]3)[C]4[O]5[C]6([C]7){=}[O+.]8" +
 	">>" +
-	"[C.]2([H]3)[C]4[_Y_1]5[C]6([C]7){=}[_Y_2+]8[H]1",
-	"2 H transition rH1"
+	"[C.]2([H]3)[C]4[O]5[C]6([C]7){=}[O+]8[H]1", 
+	name= 
+	"2 H transition rH1" +
+	" ^Y5Y8"
 )
 
-h2Transiton_1 = convert2MoelRule(h2Transiton_1)
-
-h2Transiton_1 = labelConstraints_gml(
-	input_rules = h2Transiton_1,
-	rpl_dict = {
-		"_Y_1": heteroAtoms,
-		"_Y_2": heteroAtoms,
-	}
-)
-
-
-h2Transiton_2 = ( # 2 H Wanderung charge
-	"[C.]2([H]3)[C]4[_Y_1]5[C]6([C]7){=}[_Y_2+]8[H]1" +
+h2Transiton_2 = Rule.fromDFS(# 2 H Wanderung charge
+	s=
+	"[C.]2([H]3)[C]4[O]5[C]6([C]7){=}[O+]8[H]1" +
 	">>" +
-	"[C.]2([H]3)[C]4[_Y_1+]5{=}[C]6([C]7)[_Y_2]8[H]1",
-	"2 H transition charge"
+	"[C.]2([H]3)[C]4[O+]5{=}[C]6([C]7)[O]8[H]1",
+	name = 
+	"2 H transition charge" +
+	" ^Y5Y8"
 )
 
-h2Transiton_2 = convert2MoelRule(h2Transiton_2)
-
-h2Transiton_2 = labelConstraints_gml(
-	input_rules = h2Transiton_2,
-	rpl_dict = {
-		"_Y_1": heteroAtoms,
-		"_Y_2": heteroAtoms,
-	}
-)
-
-
-h2Transiton_3 = ( # 2 H Wanderung split
-	"[C.]2([H]3)[C]4[_Y_1]5[C]6([C]7){=}[_Y_2+]8[H]1" +
+h2Transiton_3 = Rule.fromDFS( # 2 H Wanderung split
+	s=
+	"[C.]2([H]3)[C]4[O]5[C]6([C]7){=}[O+]8[H]1" +
 	">>" +
-	"[C]2{=}[C]4.[H]3[_Y_1+]5{=}[C]6([C]7)[_Y_2]8[H]1",
-	"2 H transition rH2 split"
-)
-
-h2Transiton_3 = convert2MoelRule(h2Transiton_3)
-
-h2Transiton_3 = labelConstraints_gml(
-	input_rules = h2Transiton_3,
-	rpl_dict = {
-		"_Y_1": heteroAtoms,
-		"_Y_2": heteroAtoms,
-	}
+	"[C]2{=}[C]4.[H]3[O+]5{=}[C]6([C]7)[O]8[H]1",
+	name =
+	"2 H transition rH2 split" +
+	" ^Y5Y8 "
 )

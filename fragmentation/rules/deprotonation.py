@@ -4,30 +4,24 @@
 include("../commons.py")
 
 deProtonation_radical = Rule.fromDFS(
-	"[H]1[_A]2" +
+	s = 
+	"[H]1[O]2" +
 	">>" +
-	"[H.]1.[_A+]2", 
-	name = "Deprotonation radical")
-
-deProtonation_radical = labelConstraints_gml(
-	input_rules = deProtonation_radical,
-	rpl_dict = {
-		"_A" : ['N', 'O']
-	}
+	"[H.]1.[O+]2", 
+	name = 
+	"Deprotonation radical" +
+	" ^Y2"
 )
 
 
 deProtonation_proton = Rule.fromDFS(
-	"[H]1[_A]2" +
+	s = 
+	"[H]1[O]2" +
 	">>" +
-	"[H+]1.[_A.]2", 
-	name = "Deprotonation proton")
-
-deProtonation_proton = labelConstraints_gml(
-	input_rules = deProtonation_proton,
-	rpl_dict = {
-		"_A" : ['N', 'O']
-	}
+	"[H+]1.[O.]2", 
+	name = 
+	"Deprotonation proton" +
+	" Y2"
 )
 
 
