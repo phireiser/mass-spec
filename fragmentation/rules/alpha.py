@@ -108,7 +108,7 @@ alpha_saturated_site_4_17_2 = Rule.fromDFS(
 	">>" +
 	"[C]2[C]3[C]4" +
 	"[C]1" +
-	"()" +
+	"([C]7)" +
 	"[O+.]8" +
 	".[C]5[C]6",
 	name =
