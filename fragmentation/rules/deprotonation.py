@@ -21,7 +21,7 @@ deProtonation_proton = Rule.fromDFS(
 	"[H+]1.[O.]2", 
 	name = 
 	"Deprotonation proton" +
-	" Y2"
+	" ^Y2"
 )
 
 

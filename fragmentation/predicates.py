@@ -1,3 +1,5 @@
+import re
+
 def amuBound(strategy, minimum=50, maximum=500):
 	def predicate(derivations):
 		masses = list()
@@ -48,7 +50,37 @@ def subGroup(strategy):
     	"Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 	]
 
+	extention = ["R", "Y", "S"] 
+
 	ls = LabelSettings(LabelType.Term, LabelRelation.Unification)
 
-	# how can I access the rule name?
+	# how can I access the active rule name? d.rule.name
+
+	def predicate(derivation):
+		generalization_extention = ""
+		try:
+			generalization_extention = derivation.rule.name.split("^")[1]
+		except:
+			pass
+
+		alkylStructures = re.findall(r'R(\d+)', generalization_extention)
+		hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
+		saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
+
+		print("sat", saturatedStructures)
+
+
+
+		#for g in derivation.right:
+		#	match_found = False
+		#	for subgraph in allyl_label:
+		#		if subgraph.monomorphism(g, labelSettings=ls) > 0:
+		#			match_found = True
+		#			break  # found match
+		#	
+		#	if not match_found:
+		#		return False  # not valid 
+		
+		return True  # at least one match
+	return rightPredicate[predicate](strategy)
 
