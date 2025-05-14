@@ -6,13 +6,16 @@
 # γ-hydrogen rearrangement
 # sigma hydrogen rearrangment
 
+# also see MacLafferty book Seite 74 Gleichung 4.33 und 4.34
+
 ml_ionization = Rule.fromDFS( 
 	# only english wiki
 	s = 
 	"[O]1" +
 	">>" +
 	"[O+.]1",
-	name="McL ionization " +
+	name=
+	"McL ionization " +
 	" ^Y1"
 )
 

@@ -26,6 +26,7 @@ include("strategy.py")
 include("rules.py")
 
 
+
 ionization = [
     benzylAllyl_ionizaton, 
     deProtonation_all,
@@ -47,9 +48,11 @@ allLoadedRules_dict = dict()
 for rulelist in ionization + fragmentation:
     for e in rulelist:
         print(e)
+        print(e.getGMLString())
         allLoadedRules_dict[e.id] = e.name
 
 allActiveRules = set()
+fragmentation = flatten_list(fragmentation)
 
 for m in common_ei_molecules:
     print("\n")

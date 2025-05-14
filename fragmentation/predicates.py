@@ -50,9 +50,8 @@ def subGroup(strategy):
     	"Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 	]
 
-	extention = ["R", "Y", "S"] 
-
 	ls = LabelSettings(LabelType.Term, LabelRelation.Unification)
+
 
 	# how can I access the active rule name? d.rule.name
 
@@ -67,9 +66,22 @@ def subGroup(strategy):
 		hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
 		saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
 
-		print("sat", saturatedStructures)
+		# make it 0 based
+		alkylStructures = [x - 1 for x in alkylStructures]
+		hetroStructures = [x - 1 for x in hetroStructures]
+		saturatedStructures = [x - 1 for x in saturatedStructures]
 
+		#print("rule:", derivation.rule.getGMLString())
+		print("rule:", derivation.rule, derivation.rule.id)
+		#print("alkyl", alkylStructures)
+		#print("hetro", hetroStructures)
+		#print("sat", saturatedStructures)
 
+		print("Graphs left count", len(derivation.left))
+		#for g in derivation.left:
+		#	print("G:", g.graphDFSWithIds)
+			
+		#	G = GraphDFSWithIds2nx(g.graphDFSWithIds)
 
 		#for g in derivation.right:
 		#	match_found = False
@@ -82,5 +94,5 @@ def subGroup(strategy):
 		#		return False  # not valid 
 		
 		return True  # at least one match
-	return rightPredicate[predicate](strategy)
+	return leftPredicate[predicate](strategy)
 
