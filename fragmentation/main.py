@@ -29,14 +29,15 @@ include("rules.py")
 
 ionization = [
     benzylAllyl_ionizaton, 
-    deProtonation_all,
     mcLafferty_ionization,
     retroDielsAdler_ionization, 
 ]
 
 fragmentation = [
     alpha_fragmentation,
-    benzylAllyl_fragmentation, 
+    benzylAllyl_fragmentation,
+    deProtonation_all,
+    IMS_examples,
     inductive_fragmentation,
     mcLafferty_fragmenation,
     rearrangements,
@@ -98,8 +99,8 @@ print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
 
 
 
-#printGrammar(inGraphs = common_ei_molecules, inRules = ionization + fragmentation)
+printGrammar(inGraphs = common_ei_molecules, inRules = ionization + fragmentation)
 #dg.print()
 
-#printRules(ionization + fragmentation)
+printRules(ionization + fragmentation)
 

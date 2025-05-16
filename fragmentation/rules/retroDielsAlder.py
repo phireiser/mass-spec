@@ -26,15 +26,6 @@ dielsAdler_2b = Rule.fromDFS( # hetrolysis
 	name = "Diels Adler 3 hetrolysis"
 )
 
-# Interpreation von Massenspektren Springer, Seite 71, Gl. 4.30
-ring_4_30 = Rule.fromDFS(
-	"[C.]1[C]2[C]3[C+]4[C]5{=}[C]6" +
-	">>" +
-	"[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6",
-	name = "Ring spaltung generell"
-)
-
-
 retroDielsAdler_ionization = [
 	dielsAdler_1,
 ]

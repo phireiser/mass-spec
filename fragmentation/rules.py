@@ -1,6 +1,7 @@
 include("rules/alpha.py")
 include("rules/benzylAllyl_ringGeneral.py")
 include("rules/deprotonation.py")
+include("rules/IMS_examples.py")
 include("rules/inductive.py")
 include("rules/mcLafferty.py")
 include("rules/retroDielsAlder.py")
