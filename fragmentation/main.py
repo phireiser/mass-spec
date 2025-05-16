@@ -99,8 +99,7 @@ print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
 
 
 
-printGrammar(inGraphs = common_ei_molecules, inRules = ionization + fragmentation)
+#printGrammar(inGraphs = common_ei_molecules, inRules = ionization + fragmentation)
 #dg.print()
 
-printRules(ionization + fragmentation)
-
+#printRules(ionization + fragmentation)

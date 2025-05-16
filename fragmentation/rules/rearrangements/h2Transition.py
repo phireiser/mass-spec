@@ -25,5 +25,5 @@ h2Transiton_3 = Rule.fromDFS( # 2 H Wanderung split
 	"[C]2{=}[C]4.[H]3[O+]5{=}[C]6([C]7)[O]8[H]1",
 	name =
 	"2 H transition rH2 split" +
-	" ^Y5Y8 "
+	" ^Y5Y8"
 )

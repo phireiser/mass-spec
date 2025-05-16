@@ -1,6 +1,9 @@
 import requests, json, warnings, re, itertools
 import networkx as nx
 
+import sys
+sys.setrecursionlimit(5000)
+
 alkyl_stump_dfs = [ # _R_#
     "[C]{a1}([H]{a2})([H]{a3})([H]{a4})",
     "[C]{a1}([H]{a2})([H]{a3})([C]{a4})",
@@ -220,25 +223,37 @@ def getSpectraFromPubChem(smiles):
     spectra = getSpectraFromInformationSection(info)
     return spectra
 
+def getParentRulesForGraph(derivationGraph, search_target_graph):
+    parentRules = []
+    visited = set()
+    stack = [search_target_graph]
 
-def getParetRulesForGraph(derivationGraph, search_target_graph):
-    parentRules = list()
-    parentGraph = list()
-    edges = derivationGraph.findVertex(search_target_graph).inEdges
-    
-    for edge in edges:
+    while stack:
+        current_graph = stack.pop()
+
+        # Avoid reprocessing the same graph
+        if id(current_graph) in visited:
+            continue
+        visited.add(id(current_graph))
+
         try:
-            for rule in edge.rules:
-                parentRules.append(rule.id)
+            edges = derivationGraph.findVertex(current_graph).inEdges
         except:
-            pass
+            continue
 
-    for e in edges:
-        try:
-            for s in e.sources:
-               parentRules.extend(getParetRulesForGraph(derivationGraph, s.graph))
-        except(mod.LogicError):
-            pass
+        for edge in edges:
+            try:
+                for rule in edge.rules:
+                    parentRules.append(rule.id)
+            except:
+                continue
+
+            try:
+                for source in edge.sources:
+                    stack.append(source.graph)
+            except mod.LogicError:
+                print("mod logic Error")
+                continue
 
     return parentRules
 
@@ -253,7 +268,7 @@ def getSpectraFRomMoelDerivationGraph(derivationGraph):
                     if '+' in graph.getGMLString(): # only charged fragments can be detected
                             found = False # update spectra list if allready occuring
 
-                            rules = set(getParetRulesForGraph(derivationGraph,graph))
+                            rules = set(getParentRulesForGraph(derivationGraph,graph))
                             
                             for i, (mass, occurence, old_rules) in enumerate(spectra):
                                     if abs(mass - graph.exactMass) < 1e-2:

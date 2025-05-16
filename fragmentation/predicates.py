@@ -67,9 +67,9 @@ def subGroup(strategy):
 		saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
 
 		# make it 0 based
-		alkylStructures = [x - 1 for x in alkylStructures]
-		hetroStructures = [x - 1 for x in hetroStructures]
-		saturatedStructures = [x - 1 for x in saturatedStructures]
+		alkylStructures = [int(x) - 1 for x in alkylStructures]
+		hetroStructures = [int(x) - 1 for x in hetroStructures]
+		saturatedStructures = [int(x) - 1 for x in saturatedStructures]
 
 		#print("rule:", derivation.rule.getGMLString())
 		print("rule:", derivation.rule, derivation.rule.id)
