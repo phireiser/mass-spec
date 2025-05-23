@@ -3,7 +3,7 @@ include("predicates.py")
 def makeStrategy(universe, ionization, fragmentation):
 
 	strategy = (
-			addSubset(universe) 
+			addSubset(universe)
 		>> 	repeat[1](ionization)
 		#>> subGroup(repeat[5](fragmentation))
 		>> 	chargeBound(

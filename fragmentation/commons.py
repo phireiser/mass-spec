@@ -1,6 +1,9 @@
 import requests, json, warnings, re, itertools
 import networkx as nx
 
+from collections import deque
+from typing import List, Tuple
+
 import sys
 sys.setrecursionlimit(5000)
 
@@ -321,7 +324,7 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
         Undirected molecular graph.
     """
 
-    # 1.  Tokenisation  -------------------------------------------------------
+    # Tokenisation  -------------------------------------------------------
     atom_pat = re.compile(r"\[([A-Z][a-z]?)([+\-\.]*)\](\d+)")
     tokens = []
     i = 0
@@ -346,7 +349,7 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
         else:                                   # digits after ) or formatting
             i += 1
 
-    # 2.  Graph construction  -------------------------------------------------
+    # Graph construction  -------------------------------------------------
     G = nx.Graph()
 
     branch_stack = []        # [(parent_atom, pending_bond), …]
@@ -376,3 +379,122 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
                 current_atom, pending_bond = branch_stack.pop()
 
     return G
+
+def split_rule_dfs(rule: str) -> Tuple[List[str], List[str]]:
+    """
+    Split a ruleDFS of the form
+        graphs_left >> graphs_right
+    into two lists while ignoring dots that are inside any brackets.
+
+    Returns
+    -------
+    left_graphs  : list[str]
+    right_graphs : list[str]
+    """
+    # 1 ── separate left & right
+    if ">>" not in rule:
+        raise ValueError("ruleDFS must contain '>>'")
+    left_raw, right_raw = map(str.strip, rule.split(">>", 1))
+
+    # 2 ── helper: top-level dot splitter using ONE depth counter
+    def split_side(side: str) -> List[str]:
+        graphs, buf, depth = [], [], 0
+        for ch in side:
+            if ch in "[({":        # any opening bracket
+                depth += 1
+            elif ch in "])}":      # any closing bracket
+                depth -= 1
+
+            if ch == "." and depth == 0:   # separator only at top level
+                graph = "".join(buf).strip()
+                if graph:
+                    graphs.append(graph)
+                buf.clear()
+            else:
+                buf.append(ch)
+
+        last = "".join(buf).strip()
+        if last:
+            graphs.append(last)
+        return graphs
+
+    # 3 ── produce both lists
+    return split_side(left_raw), split_side(right_raw)
+
+def modGraph2netX(g_mod: mod.Graph):
+    g_nx = nx.Graph()
+
+    for v in g_mod.vertices:
+        g_nx.add_node(
+            v.id,
+            label = v.stringLabel,
+            charge = v.charge,
+            radical= v.radical,
+            isotope = v.isotope,
+            atomId = v.atomId
+        )
+
+    for e in g_mod.edges:
+        g_nx.add_edge(
+            e.source.id, 
+            e.target.id, 
+            label=e.stringLabel
+        )
+    
+    return g_nx
+
+
+def collect_bfs(graph, start_nodes, search_attr):
+    """
+    Traverse all nodes reachable from any node in start_nodes (excluding paths
+    through nodes with in_morphism=True), collect and return cleaned labels
+    of all visited neighbors
+    """
+    visited = set(start_nodes)
+    queue   = deque(start_nodes)
+    labels  = []
+    nbrs = []
+
+    while queue:
+        node = queue.popleft()
+        for nbr in graph.neighbors(node):
+            # skip already-visited or in-morphism nodes
+            if nbr in visited or graph.nodes[nbr].get(search_attr, False):
+                continue
+            else:
+                visited.add(nbr)
+                queue.append(nbr)
+
+            node_label = graph.nodes[nbr].get('label', '')
+            clean = node_label.replace("+", "").replace(".", "")
+            labels.append(clean)
+            nbrs.append(nbr)
+    return labels, nbrs
+
+
+def only_path_exists(graph, start_node, stop_node, forbidden_lables, search_attr):
+    if start_node == stop_node:
+        label = graph.nodes[start_node].get("label", "")
+        return label in forbidden_lables
+
+    stack = deque()
+    stack.append((start_node, [start_node]))  # (current_node, path_so_far)
+
+    while stack:
+        node, path = stack.pop()
+
+        for nbr in graph.neighbors(node):
+            if nbr in path or graph.nodes[nbr].get(search_attr, False):
+                continue
+
+            new_path = path + [nbr]
+
+            if nbr == stop_node:
+                # Check labels in the found path
+                labels = [graph.nodes[n].get("label", "").replace("+", "").replace(".", "") for n in new_path]
+                if all(l in forbidden_lables for l in labels):
+                    return True
+            else:
+                stack.append((nbr, new_path))
+
+    return False  # No path found or no CH-only path found

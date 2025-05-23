@@ -32,6 +32,7 @@ ionization = [
     mcLafferty_ionization,
     retroDielsAdler_ionization, 
 ]
+ionization = flatten_list(ionization)
 
 fragmentation = [
     alpha_fragmentation,
@@ -44,16 +45,16 @@ fragmentation = [
     retroDielsAdler_fragmentation, 
     sigma_fragmentation,
 ]
+fragmentation = flatten_list(fragmentation)
 
 allLoadedRules_dict = dict()
-for rulelist in ionization + fragmentation:
-    for e in rulelist:
-        print(e)
-        print(e.getGMLString())
-        allLoadedRules_dict[e.id] = e.name
+for rulelist in fragmentation: # +  ionization:
+    e = rulelist
+    print(e)
+    print(e.getGMLString())
+    allLoadedRules_dict[e.id] = e.name
 
 allActiveRules = set()
-fragmentation = flatten_list(fragmentation)
 
 for m in common_ei_molecules:
     print("\n")

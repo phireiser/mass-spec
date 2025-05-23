@@ -162,6 +162,7 @@ IMS_4_15_3_2 = Rule.fromDFS(
 	""
 )
 
+# 4.16 not included as it is a negative example (example cleavage impossible)
 
 # Interpreation von Massenspektren Springer, Seite 63, Gl. 4.17
 IMS_4_17 = Rule.fromDFS(
