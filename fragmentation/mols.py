@@ -55,7 +55,7 @@ cholesterol = smiles("C[C@H](CCCC(C)C)[C@H]1CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CC=C4[
 
 common_ei_molecules = [
 	butanal,
-	#oleic_acid,
+	oleic_acid,
 	toluene,
 	butylbenzene,
 	alanine,
