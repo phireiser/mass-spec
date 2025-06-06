@@ -62,7 +62,7 @@ def subGroup(strategy):
 
 		# if any extention
 		if generalization_extention:
-
+			print('.', end='')
 			alkylStructures = re.findall(r'R(\d+)', generalization_extention)
 			hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
 			saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
@@ -116,7 +116,7 @@ def subGroup(strategy):
 			#if iso:
 			match = getRule2MoleculeMap(derivation = derivation, graphs = dg.graphDatabase)
 			if match:
-
+				print("we have got a match!")
 				#saturatedPosInRule = [(GM.mapping[x[0]], GM.mapping[x[1]]) for x in saturatedStructures]
 				#alkylPosInRule = [GM.mapping[x] for x in alkylStructures]
 				#hetroPosInRule = [GM.mapping[x] for x in hetroStructures]
@@ -134,9 +134,9 @@ def subGroup(strategy):
 					]
 				hetroPosInRule = [match[vertexById(match.domain, x)] for x in hetroStructures]
 		
-				print("nx mapping", GM.mapping)
 
 				hetro_bool, alkyl_bool, sat_bool = True
+				
 				if saturatedPosInRule:
 					sat_bool = path_no_branches(
 						graph = derivation.left,
@@ -162,8 +162,8 @@ def subGroup(strategy):
 					hetro_bool = False
 					neighbor_labels, _ = collect_bfs(
 						graph = derivation.left, 
-						start_nodes = alkylPosInRule, 
-						blocked_nodes = set(match.values())
+						start_nodes = hetroPosInRule, 
+						match = match
 						)
 					diff = set(neighbor_labels) - set(alkyl_label)
 					print("that hetro", diff)

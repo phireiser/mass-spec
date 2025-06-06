@@ -21,7 +21,7 @@ IMS_4_3_var2 = Rule.fromDFS(
 	""
 )
 
-# for 4.7 see rules/sigma.py alkane: no example
+# for 4.7 see rules/sigma.py alkane
 
 # Interpreation von Massenspektren Springer, Seite 59, Gl. 4.8
 IMS_4_8 = Rule.fromDFS(
@@ -45,7 +45,7 @@ IMS_4_8 = Rule.fromDFS(
 	""
 )
 
-# for 4.9 to 4.12 see rules/alpha.py: no example
+# for 4.9 to 4.12 see rules/alpha.py
 
 # Interpreation von Massenspektren Springer, Seite 60, Gl. 4.13
 IMS_4_13_1 = Rule.fromDFS(

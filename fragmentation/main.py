@@ -50,8 +50,8 @@ fragmentation = flatten_list(fragmentation)
 allLoadedRules_dict = dict()
 for rulelist in fragmentation: # +  ionization:
     e = rulelist
-    print(e)
-    print(e.getGMLString())
+    #print(e)
+    #print(e.getGMLString())
     allLoadedRules_dict[e.id] = e.name
 
 allActiveRules = set()
