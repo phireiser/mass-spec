@@ -399,13 +399,13 @@ IMS_4_26_1 = Rule.fromDFS(
 
 IMS_4_26_2 = Rule.fromDFS(
 	s =
-	"[C]2([H]3)([H]4){=}[O+]5[C]6" +
+	"[C]1([H]2)([H]3){=}[O+]4[C]5" +
 	">>" +
-	"[C]2([H]3)([H]4)[O]5.[C+]6",
+	"[C]1([H]2)([H]3)[O]4.[C+]5",
 	name =
 	"inductive cleavage even electron" +
 	" 4.26 step 2 inductive" +
-	" ^R1R6"
+	" ^R5"
 )
 
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.27

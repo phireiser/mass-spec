@@ -533,32 +533,26 @@ def printNxGraph(G):
 def getRule2MoleculeMap(derivation, graphs):
     
     # instatiate a derivation graph to pass in the vertex map
-    dg_new = DG(graphDatabase = graphs) 
-    if len([d for d in derivation.left]) > 0 \
-       and len([d for d in derivation.left]) > 0 \
-       and len([d for d in derivation.right]) > 0:
+    dg_new = DG(graphDatabase = graphs)
 
-        with dg_new.build() as b:
-            d = Derivation()
-            
-            d.left = derivation.left
-            d.rule = derivation.rule
-            d.right = derivation.right
-            print("left", [d for d in d.left])
-            print("rigth", [d for d in d.right])
-            b.addDerivation(d)
+    with dg_new.build() as b:
+        d = Derivation()
         
-        e = next(edge for edge in dg_new.edges if derivation.rule in edge.rules)
-        vms = DGVertexMapper(e)
-        m = next(iter(vms), None)
+        d.left = derivation.left
+        d.rule = derivation.rule
+        d.right = derivation.right
+        b.addDerivation(d)
+    
+    e = next(edge for edge in dg_new.edges if derivation.rule in edge.rules)
+    vms = DGVertexMapper(e)
+    m = next(iter(vms), None)
 
-        return m.match
-    else:
-        return None
+    return m.match
 
 
 def vertexById(g, vid):
     return next(v for v in g.vertices if v.id == vid)
+
 
 
 #def _path_satisfies_branch_rule(
@@ -672,11 +666,13 @@ def mol_neighbors(g: "mod.Graph", v: "mod.Vertex") -> Iterable["mod.Vertex"]:
     The helper works for undirected molecular graphs where an edge is
     considered bidirectional.
     """
-    for e in g.edges:
-        if e.source is v:
-            yield e.target
-        elif e.target is v:
-            yield e.source
+
+    for gg in g:
+        for e in gg.edges:
+            if e.source is v:
+                yield e.target
+            elif e.target is v:
+                yield e.source
 
 def mol_cleaned_label(v: "mod.Vertex") -> str:
     """Return the vertex label stripped of ``+`` and ``.`` characters."""
@@ -685,7 +681,7 @@ def mol_cleaned_label(v: "mod.Vertex") -> str:
 def collect_bfs(
     graph: "mod.Graph",
     start_vertices: Iterable["mod.Vertex"],
-    match: Dict["mod.Vertex", "mod.Vertex"],
+    match,
 ) -> Tuple[List[str], List["mod.Vertex"]]:
     """Breadth-first traversal over a :class:`mod.Graph`.
 
@@ -713,7 +709,7 @@ def collect_bfs(
         The corresponding molecule vertices, parallel to *labels*.
     """
 
-    morphism_vertices: Set["mod.Vertex"] = set(match.values())
+    morphism_vertices: Set["mod.Vertex"] = set([ x for x in match.domain.vertices])
 
     visited: Set["mod.Vertex"] = set(start_vertices)
     queue: deque["mod.Vertex"] = deque(start_vertices)
@@ -764,7 +760,7 @@ def path_no_branches(
     start_vertex: "mod.Vertex",
     end_vertex: "mod.Vertex",
     allowed_labels: Set[str],
-    match: Dict["mod.Vertex", "mod.Vertex"],
+    match,
     branch_ok_label: str = "H",
 ) -> bool:
     """Return *True* iff there exists a simple path from *start_vertex* to
@@ -780,7 +776,7 @@ def path_no_branches(
     subgraph.
     """
 
-    morphism_vertices: Set["mod.Vertex"] = set(match.values())
+    morphism_vertices: Set["mod.Vertex"] = set(match.domain.vertices)
 
     # Early exits -----------------------------------------------------------
     if start_vertex not in morphism_vertices or end_vertex not in morphism_vertices:

@@ -85,7 +85,7 @@ hTransition_saturated_4 = Rule.fromDFS( # siehe 8.90
 	"[C.]2[C]3.[C]4([H]5)([H]1){=}[O+]6[C]7",
 	name =
 	"H transition receptor site saturated rH" +
-	" ^Y7S3-4R8"
+	" ^Y6S3-4R7"
 )
 
 hTransition_saturated_4_alpha = Rule.fromDFS( # siehe 8.90

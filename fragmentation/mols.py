@@ -55,43 +55,43 @@ cholesterol = smiles("C[C@H](CCCC(C)C)[C@H]1CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CC=C4[
 
 common_ei_molecules = [
 	butanal,
-	oleic_acid,
+#	oleic_acid, # needs a lot of memory
 	toluene,
-#	butylbenzene,
-#	alanine,
-#	phenylalanine,
-#	tyrosine,
-#
-#	hexane,
-#	octane,
-#	butene1,
-#	cyclohexene,
-#	benzene, 
-#	xylene, 
-#	methanol,
-#	ethanol,
-#	propanol,
-#	tetrahydrofuran, 
-#	acetone,
-#	benzaldehyde,
-#	butanone, 
-#	ethylAcetate,
-#	methylButanoate,
-#	benzoicAcid,
-#	chlorobenzene,
-#	chloroform,
-#	carbonTetrachloride,
-#	dichloromethane,
-#	aniline,
-#	methylamine,
-#	pyridine,
-#	hexamethyldisilazane,
-#	naphthalene,
-#	anthracene,
-#	phenanthrene,
-#	ddt, 
-#	lindane,
-#	polychlorinatedBiphenyls, 
-#	testosterone,
-#	cholesterol,
+	butylbenzene,
+	alanine,
+	phenylalanine,
+	tyrosine,
+
+#	hexane, # impractical
+#	octane, # impractical
+#	butene1, # impractical
+	cyclohexene,
+	benzene, 
+	xylene, 
+#	methanol, # impractical
+#	ethanol, # impractical
+#	propanol, # impractical
+	tetrahydrofuran,
+#	acetone, # impractical
+	benzaldehyde,
+	butanone, 
+	ethylAcetate, 
+	methylButanoate,
+	benzoicAcid,
+	chlorobenzene,
+#	chloroform, # impractical
+	carbonTetrachloride, # impractical
+#	dichloromethane, # impractical
+	aniline,
+#	methylamine, # impractical
+	pyridine,
+#	hexamethyldisilazane, # impractical
+	naphthalene,
+	anthracene,
+	phenanthrene,
+	ddt, 
+	lindane,
+	polychlorinatedBiphenyls, 
+#	testosterone, # needs a lot of memory
+	cholesterol,
 ]

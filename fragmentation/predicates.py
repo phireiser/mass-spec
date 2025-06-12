@@ -51,7 +51,7 @@ def subGroup(strategy):
     	"Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 	]
 	
-	alkyl_label = ["H", "C"]
+	alk_nes_lables = ["H", "C"] # alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
 
 	def predicate(derivation):
 		generalization_extention = ""
@@ -62,7 +62,7 @@ def subGroup(strategy):
 
 		# if any extention
 		if generalization_extention:
-			print('.', end='')
+			#print('.', end='') # is beeing called so many times see slurm job 8298630
 			alkylStructures = re.findall(r'R(\d+)', generalization_extention)
 			hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
 			saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
@@ -72,78 +72,32 @@ def subGroup(strategy):
 			hetroStructures = [int(x) - 1 for x in hetroStructures]
 			saturatedStructures = [(int(x[0])-1, int(x[1])-1)  for x in saturatedStructures]
 
-			#print("rule:", derivation.rule.getGMLString())
-			#print("rule:", derivation.rule, derivation.rule.id)
-			
-			#print("alkyl", alkylStructures)
-			#print("hetro", hetroStructures)
-			#print("sat", saturatedStructures)
-
-			#print("Graphs left count", len(derivation.left))
-
-			#print(derivation.rule)
-			#print(type(derivation.rule.left))
-
-			#nx_rule = modGraph2netX(derivation.rule.left)
-			#nx_graph = nx.Graph()
-			#for g in derivation.left:
-			#	nx_graph = nx.disjoint_union(modGraph2netX(g), nx_graph)
-
-			#print("rule left", derivation.rule.left)
-
-			#for g in derivation.right:
-			#	print("right G:", g.graphDFSWithIds)
-
-			#print("molecule")
-			#printNxGraph(G=nx_graph)
-			#print("\nrule")
-			#printNxGraph(G=nx_rule)
-
-			#if maps:
-			#	print("mol mapping", maps.vertices)
-			#else:
-			#	print("mol mapping None")
-
-			#GM = nx.algorithms.isomorphism.GraphMatcher(
-			#	nx_rule,
-			#	nx_graph,
-			#	node_match = node_matcher
-			#	) #TODO as not working
-			#
-			#iso = GM.subgraph_is_isomorphic()	
-			#print('sub iso', iso)
-
-			#if iso:
 			match = getRule2MoleculeMap(derivation = derivation, graphs = dg.graphDatabase)
 			if match:
-				print("we have got a match!")
-				#saturatedPosInRule = [(GM.mapping[x[0]], GM.mapping[x[1]]) for x in saturatedStructures]
-				#alkylPosInRule = [GM.mapping[x] for x in alkylStructures]
-				#hetroPosInRule = [GM.mapping[x] for x in hetroStructures]
-				#nx.set_node_attributes(nx_graph, False, 'in_morphism')
-				#for node in GM.mapping:
-				#	nx_graph.nodes[node]['in_morphism'] = True
-
-				alkylPosInRule = [match[vertexById(match.domain, x)] for x in alkylStructures]
+				try:
+					alkylPosInRule = [match[vertexById(match.domain, x)] for x in alkylStructures]
+				except StopIteration:
+					print("structures", alkylStructures)
+					print("rule", derivation.rule)
 				saturatedPosInRule = [
-					(
-						match[vertexById(match.domain, x[0])], 
-					 	match[vertexById(match.domain, x[1])]
-					) 
+					(match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])]) 
 					for x in saturatedStructures
 					]
 				hetroPosInRule = [match[vertexById(match.domain, x)] for x in hetroStructures]
 		
 
-				hetro_bool, alkyl_bool, sat_bool = True
-				
+				hetro_bool = True
+				alkyl_bool = True
+				sat_bool = True
+
+
 				if saturatedPosInRule:
 					sat_bool = path_no_branches(
 						graph = derivation.left,
-						start_node = saturatedPosInRule[0][0],
-						end_node = saturatedPosInRule[0][1], 
-						allowed_labels = alkyl_label,
-						blocked_nodes = set(match.values())
+						start_vertex = saturatedPosInRule[0][0],
+						end_vertex = saturatedPosInRule[0][1], 
+						allowed_labels = alk_nes_lables,
+						match = match
 						) #TODO could contain multiple matches
 
 
@@ -151,10 +105,10 @@ def subGroup(strategy):
 					alkyl_bool = False
 					neighbor_labels, _ = collect_bfs(
 						graph = derivation.left, 
-						start_nodes = alkylPosInRule, 
+						start_vertices = alkylPosInRule, 
 						match = match
 						)
-					if set(neighbor_labels).issubset(set(alkyl_label)):
+					if set(neighbor_labels).issubset(set(alk_nes_lables)):
 						alkyl_bool = True
 
 
@@ -162,19 +116,19 @@ def subGroup(strategy):
 					hetro_bool = False
 					neighbor_labels, _ = collect_bfs(
 						graph = derivation.left, 
-						start_nodes = hetroPosInRule, 
+						start_vertices = hetroPosInRule, 
 						match = match
-						)
-					diff = set(neighbor_labels) - set(alkyl_label)
-					print("that hetro", diff)
-					if len(diff) == 1:
+					)
+					diff = set(neighbor_labels) - set(alk_nes_lables)
+					if len(diff) <= 1: 
+						# not only hetro atoms strictly 
+						# as the defnition says but, also alkyl atoms
 						hetro_bool = True
 
-				print("sat alkyl hetr", sat_bool, alkyl_bool, hetro_bool)
 				return sat_bool & alkyl_bool & hetro_bool
 			# enif mapping exist
 		# endif extention exists
 		return True
 
-	return leftPredicate[predicate](strategy)
+	return rightPredicate[predicate](strategy)
 
