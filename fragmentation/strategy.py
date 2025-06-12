@@ -5,7 +5,6 @@ def makeStrategy(universe, ionization, fragmentation):
 	strategy = (
 			addSubset(universe)
 		>> 	repeat[1](ionization)
-		#>> subGroup(repeat[5](fragmentation))
 		>> 	chargeBound(
 				amuBound(
 					subGroup(

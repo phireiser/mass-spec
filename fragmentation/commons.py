@@ -325,7 +325,7 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
         Undirected molecular graph.
     """
 
-    # Tokenisation  -------------------------------------------------------
+    # Tokenisation
     atom_pat = re.compile(r"\[([A-Z][a-z]?)([+\-\.]*)\](\d+)")
     tokens = []
     i = 0
@@ -350,7 +350,7 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
         else:                                   # digits after ) or formatting
             i += 1
 
-    # Graph construction  -------------------------------------------------
+    # Graph construction
     G = nx.Graph()
 
     branch_stack = []        # [(parent_atom, pending_bond), …]
@@ -393,12 +393,12 @@ def split_rule_dfs(rule: str) -> Tuple[List[str], List[str]]:
     left_graphs  : list[str]
     right_graphs : list[str]
     """
-    # 1 ── separate left & right
+    # separate left & right
     if ">>" not in rule:
         raise ValueError("ruleDFS must contain '>>'")
     left_raw, right_raw = map(str.strip, rule.split(">>", 1))
 
-    # 2 ── helper: top-level dot splitter using ONE depth counter
+    # helper: top-level dot splitter using ONE depth counter
     def split_side(side: str) -> List[str]:
         graphs, buf, depth = [], [], 0
         for ch in side:
@@ -420,7 +420,6 @@ def split_rule_dfs(rule: str) -> Tuple[List[str], List[str]]:
             graphs.append(last)
         return graphs
 
-    # 3 ── produce both lists
     return split_side(left_raw), split_side(right_raw)
 
 
@@ -447,62 +446,6 @@ def modGraph2netX(g_mod: mod.Graph):
     return g_nx
 
 
-#def collect_bfs_withNewAttr(graph, start_nodes, search_attr):
-#    """
-#    Traverse all nodes reachable from any node in start_nodes (excluding paths
-#    through nodes with in_morphism=True), collect and return cleaned labels
-#    of all visited neighbors
-#    """
-#    visited = set(start_nodes)
-#    queue   = deque(start_nodes)
-#    labels  = []
-#    nbrs = []
-#
-#    while queue:
-#        node = queue.popleft()
-#        for nbr in graph.neighbors(node):
-#            # skip already-visited or in-morphism nodes
-#            if nbr in visited or graph.nodes[nbr].get(search_attr, False):
-#                continue
-#            else:
-#                visited.add(nbr)
-#                queue.append(nbr)
-#
-#            node_label = graph.nodes[nbr].get('label', '')
-#            clean = node_label.replace("+", "").replace(".", "")
-#            labels.append(clean)
-#            nbrs.append(nbr)
-#    return labels, nbrs
-#
-#
-#def only_path_exists(graph, start_node, stop_node, allowed_lables, search_attr):
-#    if start_node == stop_node:
-#        label = graph.nodes[start_node].get("label", "")
-#        return label in allowed_lables
-#
-#    stack = deque()
-#    stack.append((start_node, [start_node]))  # (current_node, path_so_far)
-#
-#    while stack:
-#        node, path = stack.pop()
-#
-#        for nbr in graph.neighbors(node):
-#            if nbr in path or graph.nodes[nbr].get(search_attr, False):
-#                continue
-#
-#            new_path = path + [nbr]
-#
-#            if nbr == stop_node:
-#                # Check labels in the found path
-#                labels = [graph.nodes[n].get("label", "").replace("+", "").replace(".", "") for n in new_path]
-#                if all(l in allowed_lables for l in labels):
-#                    return True
-#            else:
-#                stack.append((nbr, new_path))
-#
-#    return False  # No path found or no CH-only path found
-#
-#
 def printNxGraph(G):
     print("Nodes:")
     for node, data in G.nodes(data=True):
@@ -514,21 +457,6 @@ def printNxGraph(G):
     for u, v in G.edges():
         print(f"{u} -- {v}")
 
-
-#def node_matcher(n1, n2):
-#    #print("node matcher")
-#    #print('l', n1.get('label'), n2.get('label'))
-#    #print('c', n1.get('charge'), n2.get('charge'))
-#    #print('r', n1.get('radical'), n2.get('radical'))
-#    #print('i', n1.get('isotope'), n2.get('isotope'))
-#    #print('id', n1.get('atomId'), n2.get('atomId'))
-#    
-#    return (n1.get('label') == n2.get('label') and
-#            n1.get('charge') == n2.get('charge') and
-#            n1.get('radical') == n2.get('radical') and
-#            n1.get('isotope') == n2.get('isotope') and
-#            n1.get('atomId') == n2.get('atomId'))
-#
 
 def getRule2MoleculeMap(derivation, graphs):
     
@@ -553,112 +481,6 @@ def getRule2MoleculeMap(derivation, graphs):
 def vertexById(g, vid):
     return next(v for v in g.vertices if v.id == vid)
 
-
-
-#def _path_satisfies_branch_rule(
-#    graph, path, allowed_labels, search_attr,
-#    branch_ok_label, cleaned_label
-#) -> bool:
-#    """Extra pass to ensure the 'no-branches-but-H' condition."""
-#    path_set = set(path)
-#
-#    for n in path:
-#        # 1) on-path label check (cheap insurance)
-#        if cleaned_label(n) not in allowed_labels:
-#            return False
-#
-#        # 2) side-branch inspection
-#        for nbr in graph.neighbors(n):
-#            if nbr in path_set:
-#                continue
-#            if graph.nodes[nbr].get(search_attr, False):
-#                continue          # nodes hidden by search_attr are irrelevant
-#            if cleaned_label(nbr) != branch_ok_label:
-#                return False      # illegal branch encountered
-#
-#    return True
-#
-#
-#def path_no_branches(
-#    graph: nx.Graph,
-#    start_node,
-#    end_node,
-#    allowed_labels: set[str],
-#    search_attr: str,
-#    branch_ok_label: str = "H",
-#) -> bool:
-#    """
-#    Return True iff there exists a simple start-to-stop path that
-#      • contains only allowed_labels,
-#      • never touches a node where graph.nodes[n][search_attr] is True,
-#      • and has no side branches except to nodes labelled branch_ok_label.
-#    """
-#
-#    # Helper: compare labels the same way the original code did
-#    def cleaned_label(n):
-#        return graph.nodes[n].get("label", "").replace("+", "").replace(".", "")
-#
-#    # Early exits
-#    if graph.nodes[start_node].get(search_attr, False):
-#        return False
-#    if graph.nodes[end_node].get(search_attr, False):
-#        return False
-#    if start_node == end_node:
-#        return cleaned_label(start_node) in allowed_labels
-#
-#    stack = deque([(start_node, [start_node])])          # DFS stack
-#
-#    while stack:
-#        node, path = stack.pop()
-#
-#        for nbr in graph.neighbors(node):
-#            if nbr in path:                                   # simple path
-#                continue
-#            if graph.nodes[nbr].get(search_attr, False):      # blocked
-#                continue
-#            if cleaned_label(nbr) not in allowed_labels:      # label rule
-#                continue
-#
-#            new_path = path + [nbr]
-#
-#            if nbr == end_node:
-#                if _path_satisfies_branch_rule(
-#                    graph, new_path, allowed_labels,
-#                    search_attr, branch_ok_label, cleaned_label
-#                ):
-#                    return True
-#            else:
-#                stack.append((nbr, new_path))
-#
-#    return False
-#
-#
-#def _path_satisfies_branch_rule(
-#    graph: nx.Graph,
-#    path: list,
-#    allowed_labels: Set[str],
-#    blocked_nodes: Set,
-#    branch_ok_label: str,
-#    cleaned_label,
-#) -> bool:
-#    """Extra pass to ensure the `no-branches-but-H` condition."""
-#    path_set = set(path)
-#
-#    for n in path:
-#        # 1) on-path label check (cheap insurance)
-#        if cleaned_label(n) not in allowed_labels:
-#            return False
-#
-#        # 2) side-branch inspection
-#        for nbr in graph.neighbors(n):
-#            if nbr in path_set:
-#                continue
-#            if nbr in blocked_nodes:              # nodes to ignore
-#                continue
-#            if cleaned_label(nbr) != branch_ok_label:
-#                return False                      # illegal branch encountered
-#    return True
-#
 
 def mol_neighbors(g: "mod.Graph", v: "mod.Vertex") -> Iterable["mod.Vertex"]:
     """Yield neighbouring vertices of *v* in the *mod.Graph* *g*.

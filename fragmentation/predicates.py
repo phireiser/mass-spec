@@ -23,24 +23,6 @@ def chargeBound(strategy, minimum=0, maximum=1):
     return rightPredicate[predicate](strategy)
 
 
-## OPTIMIZATION: (potential) append constraint
-#def allylGroup(strategy):
-#	allyl_label = ['C', 'H']
-#	ls = LabelSettings(LabelType.Term, LabelRelation.Unification)
-#	def predicate(d):
-#			for g in d.right:
-#				match_found = False
-#				for subgraph in allyl_label:
-#					if subgraph.monomorphism(g, labelSettings=ls) > 0:
-#						match_found = True
-#						break  # found match
-#				
-#				if not match_found:
-#					return False  # not valid 
-#			
-#			return True  # at least one match
-#	return rightPredicate[predicate](strategy)
-
 def subGroup(strategy):
 	heteroAtoms = [
     	"He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
