@@ -10,7 +10,7 @@ def makeStrategy(universe, ionization, fragmentation):
 					subGroup(
 						repeat[5](fragmentation)
 					),
-					minimum = 35, #TODO Reaserch what is the actual pupchem-data minimum
+					minimum = 10, #TODO Research what is the actual pupchem-data minimum
 					maximum = universe[0].exactMass
 				)
 			)

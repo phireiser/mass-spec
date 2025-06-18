@@ -24,21 +24,10 @@ def chargeBound(strategy, minimum=0, maximum=1):
 
 
 def subGroup(strategy):
-	heteroAtoms = [
-    	"He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
-    	"Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb",
-    	"Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
-    	"Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
-    	"Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra",
-    	"Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
-	]
-	
-	alk_nes_lables = ["H", "C"] # alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
-
 	def predicate(derivation):
 		generalization_extention = ""
 		try:
-			generalization_extention = derivation.rule.name.split("^")[1]
+			generalization_extention = derivation.rule.name.split("§")[1]
 		except:
 			pass
 
@@ -67,14 +56,12 @@ def subGroup(strategy):
 					]
 				hetroPosInRule = [match[vertexById(match.domain, x)] for x in hetroStructures]
 		
-
 				hetro_bool = True
 				alkyl_bool = True
 				sat_bool = True
 
-
 				if saturatedPosInRule:
-					sat_bool = path_no_branches(
+					sat_bool = saturatedPath(
 						graph = derivation.left,
 						start_vertex = saturatedPosInRule[0][0],
 						end_vertex = saturatedPosInRule[0][1], 
@@ -102,14 +89,14 @@ def subGroup(strategy):
 						match = match
 					)
 					diff = set(neighbor_labels) - set(alk_nes_lables)
+					print("hetro diff", diff)
 					if len(diff) <= 1: 
 						# not only hetro atoms strictly 
-						# as the defnition says but, also alkyl atoms
+						# as the defnition says but, also carbon atoms
+						# as McLafferty book is using them as well
 						hetro_bool = True
 
 				return sat_bool & alkyl_bool & hetro_bool
-			# enif mapping exist
-		# endif extention exists
 		return True
 
 	return rightPredicate[predicate](strategy)

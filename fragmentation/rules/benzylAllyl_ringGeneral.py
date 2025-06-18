@@ -12,7 +12,7 @@ benzylAllyl_mz92_91 = Rule.fromDFS(
 	"[C+]1" + "." + "[C+]3[C]4{=}[C]5[C]6{=}[C]7[C]8{=}[C]9{-}4",
 	name = 
 	"BA 92-91" +
-	" ^R1"
+	" §R1"
 )
 
 benzylAllyl_mz91_91 = Rule.fromDFS( # full ring
@@ -56,7 +56,7 @@ benzylAllyl_mz92_77 = Rule.fromDFS(
 	"[C]1[C.]3" + "." + "[C+]4{=}[C]5[C]6{=}[C]7[C]8{=}[C]9{-}4",
 	name = 
 	"BA 92-77" +
-	" ^R1"
+	" §R1"
 )
 
 benzylAllyl_mz77_51 = Rule.fromDFS( 

@@ -2,65 +2,53 @@ import pandas as pd
 from pprint import pprint
 
 #include("tests/benzylAllyl_unified.py")
+
 include("mols.py")
+include("commons.py")
+include("strategy.py")
+include("rules.py")
 
-heteroAtoms = [
-    "He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
-    "Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb",
-    "Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
-    "Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
-    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra",
-    "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
-]
-
+ # only create rules for occuring hetroAtoms
 occuring_hetroAtoms = set()
 for m in common_ei_molecules:
     for ha in heteroAtoms:
         if m.vLabelCount(ha) > 0:
             occuring_hetroAtoms.add(ha)
-
-heteroAtoms = occuring_hetroAtoms # only create rules for occuring hetroAtoms
-
-include("commons.py")
-include("strategy.py")
-include("rules.py")
-
+heteroAtoms = occuring_hetroAtoms
 
 
 ionization = [
     benzylAllyl_ionizaton, 
-    mcLafferty_ionization,
-    retroDielsAdler_ionization, 
+    wiki_ionization,
 ]
 ionization = flatten_list(ionization)
 
 fragmentation = [
-    alpha_fragmentation,
+    #alpha_fragmentation,
     benzylAllyl_fragmentation,
+    cover_fragmentation,
     deProtonation_all,
     IMS_examples,
-    inductive_fragmentation,
-    mcLafferty_fragmenation,
+    #inductive_fragmentation,
+    #mcLafferty_fragmenation,
     rearrangements,
-    retroDielsAdler_fragmentation, 
-    sigma_fragmentation,
+    #retroDielsAdler_fragmentation, 
+    wiki_fragmentation,
 ]
 fragmentation = flatten_list(fragmentation)
 
-allLoadedRules_dict = dict()
-for rulelist in fragmentation: # +  ionization:
+for rulelist in fragmentation + ionization:
     e = rulelist
     #print(e)
-    #print(e.getGMLString())
-    allLoadedRules_dict[e.id] = e.name
 
 allActiveRules = set()
 
-for m in common_ei_molecules:
+for m in common_ei_molecules: #[linolenicAcid]:
     print("\n")
     print("mol spectrum of", m.name)
     strategy = makeStrategy(universe=[m], ionization=ionization, fragmentation=fragmentation)
-    dg = DG(graphDatabase=[m])
+    ls = LabelSettings(LabelType.Term, LabelRelation.Unification) # switch to term rewite
+    dg = DG(graphDatabase=[m], labelSettings=ls)
     dg.build().execute(strategy)
 
     pubchemSpectra = getSpectraFromPubChem(m.smiles)
@@ -88,13 +76,27 @@ for m in common_ei_molecules:
             for rule_group in rulesActiveHere:
                 allActiveRules.update(rule_group)
 
-print("\n\n")
-print("allUsedRules")
-pprint(allLoadedRules_dict)
-print("allActiveRules", allActiveRules)
-print("unusedRules", set(allLoadedRules_dict.keys()) - allActiveRules)
+rules_df = (
+    pd.DataFrame(
+        [(r.id, r.name) for r in inputRules],  # rows: (id, name)
+        columns=["id", "name"],
+    )
+    .drop_duplicates("id")        # if the two lists could overlap
+    .assign(active=False)
+    .set_index("id")
+)
 
+rules_df.loc[rules_df.index.isin(allActiveRules), "active"] = True
 
+rules_df = rules_df[[col for col in rules_df.columns if col != "name"] + ["name"]]
+
+with pd.option_context(
+    'display.max_rows', None,
+    'display.max_columns', None,
+    'display.width', None,
+    'display.max_colwidth', None
+):
+    print(rules_df)
 
 
 

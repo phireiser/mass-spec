@@ -4,24 +4,17 @@ import networkx as nx
 from collections import deque
 from typing import List, Tuple, Iterable, Set, Hashable, Dict, Optional
 
-sys.setrecursionlimit(5000)
-
-alkyl_stump_dfs = [ # _R_#
-    "[C]{a1}([H]{a2})([H]{a3})([H]{a4})",
-    "[C]{a1}([H]{a2})([H]{a3})([C]{a4})",
-    "[C]{a1}([H]{a2})([C]{a3})([C]{a4})",
-    "[C]{a1}([C]{a2})([C]{a3})([C]{a4})",
-    "[C]{a1}",
+heteroAtoms = [
+    "He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
+    "Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb",
+    "Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
+    "Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
+    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra",
+    "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 ]
 
-saturation_stump_dfs = [ # _X_#
-    "[C]{a1}",
-    "[C]{a1}[C]{a2}",
-    "[C]{a1}[C]{a2}[C]{a3}",
-    "[C]{a1}[C]{a2}[C]{a3}[C]{a4}",
-    "[C]{a1}[C]{a2}[C]{a3}[C]{a4}[C]{a5}",
-    "[C]{a1}[C]{a2}[C]{a3}[C]{a4}[C]{a5}[C]{a6}",
-]
+alk_nes_lables = ["H", "C"] # alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
+
 
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
 # TODO ? functional group containing heteroAtom, this is only heteroAtoms itself
@@ -530,19 +523,20 @@ def collect_bfs(
     vertices : list[mod.Vertex]
         The corresponding molecule vertices, parallel to *labels*.
     """
+    
+    # exclude start vertices from morphism vertices as they are part of subgroup
+    morphism_vertices: Set["mod.Vertex"] = set([ x for x in match.domain.vertices]) - set(start_vertices) 
 
-    morphism_vertices: Set["mod.Vertex"] = set([ x for x in match.domain.vertices])
-
-    visited: Set["mod.Vertex"] = set(start_vertices)
+    visited: Set["mod.Vertex"] = set()
     queue: deque["mod.Vertex"] = deque(start_vertices)
 
-    labels: List[str] = []
-    vertices: List["mod.Vertex"] = []
+    labels: List[str] = [] #[mol_cleaned_label(v) for v in start_vertices]
+    vertices: List["mod.Vertex"] = [] #list(start_vertices)
 
     while queue:
         v = queue.popleft()
         for vertex in mol_neighbors(graph, v):
-            if vertex in visited or vertex in morphism_vertices:
+            if vertex in visited:
                 continue
             else:
                 visited.add(vertex)
@@ -559,7 +553,8 @@ def _path_satisfies_branch_rule(
     morphism_vertices: Set["mod.Vertex"],
     branch_ok_label: str,
 ) -> bool:
-    """Return *True* iff every *side branch* off *path* (within the
+    """
+    Return *True* iff every *side branch* off *path* (within the
     morphism) ends at a vertex whose cleaned label equals
     *branch_ok_label*.
     """
@@ -567,17 +562,34 @@ def _path_satisfies_branch_rule(
     path_set = set(path)
 
     for v in path:
-        for nbr in _neighbors(graph, v):
-            if nbr in path_set:                       # on the path → ignore
+        for neighbor in mol_neighbors(graph, v):
+            if neighbor in path_set:                       # on the path -> ignore
                 continue
-            if nbr not in morphism_vertices:          # outside morphism → ignore
+            if neighbor not in morphism_vertices:          # outside morphism -> ignore
                 continue
-            if _cleaned_label(nbr) != branch_ok_label:
+            if mol_cleaned_label(neighbor) != branch_ok_label: #mol added 
                 return False
     return True
 
+def _is_single_bond(graph: "mod.Graph", u: "mod.Vertex", v: "mod.Vertex") -> bool:
+    """
+    Return True iff *every* edge between *u* and *v* is a single bond.
+    Works for both Graph and MultiGraph-like containers.
+    """
+    data = graph.get_edge_data(u, v)
 
-def path_no_branches(
+    if data is None:                          # no edge at all
+        return False
+
+    # MultiGraph -> `data` is a dict-of-dicts keyed by edge keys
+    if isinstance(data, dict) and any(isinstance(x, dict) for x in data.values()):
+        return all(attr.get("bond_type") == mod.BondType.Single
+                   for attr in data.values())
+
+    # Simple Graph -> `data` is the attribute-dict for that single edge
+    return data.get("bond_type") == mod.BondType.Single
+
+def saturatedPath(
     graph: "mod.Graph",
     start_vertex: "mod.Vertex",
     end_vertex: "mod.Vertex",
@@ -600,7 +612,7 @@ def path_no_branches(
 
     morphism_vertices: Set["mod.Vertex"] = set(match.domain.vertices)
 
-    # Early exits -----------------------------------------------------------
+    # Early exits
     if start_vertex not in morphism_vertices or end_vertex not in morphism_vertices:
         return False
     if mol_cleaned_label(start_vertex) not in allowed_labels or mol_cleaned_label(end_vertex) not in allowed_labels:
@@ -615,11 +627,13 @@ def path_no_branches(
         node, path = stack.pop()
 
         for vertex in mol_neighbors(graph, node):
-            if vertex not in morphism_vertices:                  # stay inside morphism
+            if vertex not in morphism_vertices:                     # stay inside morphism
                 continue
-            if vertex in path:                                   # simple path requirement
+            if vertex in path:                                      # simple path requirement
                 continue
             if mol_cleaned_label(vertex) not in allowed_labels:     # label filter
+                continue
+            if not _is_single_bond(graph, node, vertex):            # single bonds only
                 continue
 
             new_path = path + [vertex]

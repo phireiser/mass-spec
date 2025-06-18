@@ -5,23 +5,23 @@ include("../commons.py")
 
 deProtonation_radical = Rule.fromDFS(
 	s = 
-	"[H]1[O]2" +
+	"[H]1[*]2" +
 	">>" +
-	"[H.]1.[O+]2", 
+	"[H.]1.[*+]2", 
 	name = 
-	"Deprotonation radical" +
-	" ^Y2"
+	"deprotonation radical" +
+	" §Y2"
 )
 
 
 deProtonation_proton = Rule.fromDFS(
 	s = 
-	"[H]1[O]2" +
+	"[H]1[*]2" +
 	">>" +
-	"[H+]1.[O.]2", 
+	"[H+]1.[*.]2", 
 	name = 
-	"Deprotonation proton" +
-	" ^Y2"
+	"deprotonation proton" +
+	" §Y2"
 )
 
 

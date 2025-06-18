@@ -52,10 +52,11 @@ lindane = smiles("C1(C(C(C(C(C1Cl)Cl)Cl)Cl)Cl)Cl", name = "1,2,3,4,5,6-hexachlor
 polychlorinatedBiphenyls = smiles("C1=C(C(=CC(=C1Cl)Cl)Cl)C2=CC(=C(C=C2Cl)Cl)Cl", name = "1,2,4-trichloro-5-(2,4,5-trichlorophenyl)benzene") 
 testosterone = smiles("C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@@H]2O)CCC4=CC(=O)CC[C@]34C", name = "(8R,9S,10R,13S,14S,17S)-17-hydroxy-10,13-dimethyl-1,2,6,7,8,9,11,12,14,15,16,17-dodecahydrocyclopenta[a]phenanthren-3-one")
 cholesterol = smiles("C[C@H](CCCC(C)C)[C@H]1CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CC=C4[C@@]3(CC[C@@H](C4)O)C)C", name = "(3S,8S,9S,10R,13R,14S,17R)-10,13-dimethyl-17-[(2R)-6-methylheptan-2-yl]-2,3,4,7,8,9,11,12,14,15,16,17-dodecahydro-1H-cyclopenta[a]phenanthren-3-ol") 
+linolenicAcid = smiles("O=C(O)CCCCCCCC=CCC=CCC=CCC", "9,12,15-Octadecatrienoic acid, (9Z,12Z,15Z)")
 
 common_ei_molecules = [
 	butanal,
-#	oleic_acid, # needs a lot of memory
+#	oleic_acid, 
 	toluene,
 	butylbenzene,
 	alanine,
@@ -94,4 +95,5 @@ common_ei_molecules = [
 	polychlorinatedBiphenyls, 
 #	testosterone, # needs a lot of memory
 	cholesterol,
+#	linolenicAcid, # needs a lot of memory
 ]
