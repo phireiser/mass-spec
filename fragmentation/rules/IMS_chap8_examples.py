@@ -273,4 +273,49 @@ IMS_8_5_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 149, Gl. 8.6
+IMS_8_6_1 = Rule.fromDFS(
+    s =
+    "[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1" +
+    ">>" +
+    "[c]1[c+]2[c]3[C]4[C]5[c]6[c.]7[c]8",
+    name =
+    "stepwise symetric openchained intermediate product" +
+    " 8.6 var 1" +
+    ""
+)
+
+IMS_8_6_2 = Rule.fromDFS(
+    s =
+    "[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1" +
+    ">>" +
+    "[c]1[c.]2[c]3[C]4[C]5[c]6[c+]7[c]8",
+    name =
+    "stepwise symetric openchained intermediate product" +
+    " 8.6 var 2" +
+    ""
+)
+
+IMS_8_6_3 = Rule.fromDFS(
+    s =
+    "[c]1[c+]2[c]3[C]4[C]5[c]6[c.]7[c]8" +
+    ">>" +
+    "[C]1{=}[C+]2[C]3{=}[C]4.[C]5{=}[C]6[C.]7{=}[C]8",
+    name =
+    "stepwise symetric openchained intermediate product" +
+    " 8.6 var 1 alpha" +
+    ""
+)
+
+IMS_8_6_4 = Rule.fromDFS(
+    s =
+    "[c]1[c.]2[c]3[C]4[C]5[c]6[c+]7[c]8" +
+    ">>" +
+    "[C]1{=}[C.]2[C]3{=}[C]4.[C]5{=}[C]6[C+]7{=}[C]8",
+    name =
+    "stepwise symetric openchained intermediate product" +
+    " 8.6 var 2 alpha" +
+    ""
+)
+
+# Interpreation von Massenspektren Springer, Seite 150, Gl. 8.7
 

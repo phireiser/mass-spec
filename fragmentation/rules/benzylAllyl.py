@@ -1,5 +1,4 @@
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Benzyl-Allylspaltung
-# https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Benzyl-Allylspaltung
 
 # first branch
 
@@ -17,7 +16,7 @@ benzylAlly_mz91_91_charge = Rule.fromDFS(
 benzylAlly_mz91_91_charge_reverse = Rule.fromDFS(
     # from german wiki
 	s =
-    "[C]1{=}[C]2[c]3[c]4{=}[c]5[c]6{=}[c]7{-}2" + #somewhere positive +
+    "[C]1{=}[C]2[c+]3[c]4{=}[c]5[c]6{=}[c]7{-}2" + #somewhere positive +
 	">>" +
     "[C+]1[C]2{=}[C]3[C]4{=}[C]5[C]6{=}[C]7{-}2",
 	name = 

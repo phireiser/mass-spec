@@ -21,7 +21,118 @@ IMS_4_3_var2 = Rule.fromDFS(
 	""
 )
 
-# 4.4, 4.5, 4.6
+# Interpreation von Massenspektren Springer, Seite 56, Gl. 4.4
+IMS_4_4_row1 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)[C]4([H]5)[O+.]6([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13){-}1" +
+	">>" +
+	"[C]1([H]2)([H]3){=}[C]4([H]5)[O+.]6([H]7).[C]8([H]9)([H]10){=}[C]11([H]12)([H]13)",
+	name =
+	"charge conservation" +
+	" 4.4 row 1" +
+	""
+)
+
+IMS_4_4_row2 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)[C]4([H]5)[O+.]6([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13){-}1" +
+	">>" +
+	"[C]1([H]2)([H]3){=}[C]4([H]5)[O]6([H]7).[C]8([H]9)([H]10){=}[C+.]11([H]12)([H]13)",
+	name =
+	"charge transfer" +
+	" 4.4 row 2" +
+	""
+)
+
+IMS_4_4_row3 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8([H]9)" +
+	">>" +
+	"[C]1([H]2)([H]3){=}[C]5([H]6)([H]4).[H]7[O+.]8[H]9",
+	name =
+	"charge conseration var 2" +
+	" 4.4 row 3" +
+	""
+)
+
+IMS_4_4_row4 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8([H]9)" +
+	">>" +
+	"[C]1([H]2)([H]3){=}[C+.]5([H]6)([H]4).[H]7[O]8[H]9",
+	name =
+	"charge transfer var 2" +
+	" 4.4 row 4" +
+	""
+)
+
+# Interpreation von Massenspektren Springer, Seite 56, Gl. 4.5
+IMS_4_5 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[C+.]8([H]10)([H]11)[C]12([H]13)([H]14)([H]15)" + #charge radical somewhere
+	">>" +
+	"[C]1([H]2)([H]3)([H]4)[C.]5([H]6)([H]7).[C+]8([H]10)([H]11)[C]12([H]13).[H]14[H]15",
+	name =
+	"cleavage of 3 bonds" +
+	" 4.5" +
+	""
+)
+
+# Interpreation von Massenspektren Springer, Seite 56, Gl. 4.6
+IMS_4_6_row1 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)" +
+	">>" +
+	"[C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7).[O]8{=}[C]9([H]10)([H]11)",
+	name =
+	"rule of uneven elektron counts" +
+	" 4.6 row 1" +
+	""
+)
+
+IMS_4_6_row2 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)" +
+	">>" +
+	"[C]1([H]2)([H]3){=}[C+]5([H]6)([H]4).[H]7[O+]8{=}[C]9([H]10)([H]11)",
+	name =
+	"rule of uneven elektron counts" +
+	" 4.6 row 2" +
+	""
+)
+
+IMS_4_6_row3 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)" +
+	">>" +
+	"[C]1([H]2)([H]3)([H]4)[C.]5([H]6)([H]7).[O]8{=}[C+.]9([H]10)([H]11)",
+	name =
+	"rule of uneven elektron counts" +
+	" 4.6 row 3" +
+	""
+)
+
+IMS_4_6_row4 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)[C+]4([H]5)[C]6([H]7)([H]8)[C]9([H]10)([H]11){-}1" +
+	">>" +
+	"[C]1([H]2)([H]3){=}[C+]4([H]5).[C]6([H]7)([H]8){=}[C]9([H]10)([H]11)",
+	name =
+	"rule of uneven elektron counts" +
+	" 4.4 row 4" +
+	""
+)
+
+IMS_4_6_row5 = Rule.fromDFS(
+	s =
+	"[C]1([H]2)([H]3)[C]4([H]5)[C]6([H]7)([H]8)[C]9([H]10)([H]11){-}1" +
+	">>" +
+	"[C]1([H]2)([H]3)[C.]4([H]5)[C]6([H]7)([H]8)[C+.]9([H]10)([H]11)",
+	name =
+	"rule of uneven elektron counts" +
+	" 4.6 row 5" +
+	""
+)
 
 # Interpreation von Massenspektren Springer, Seite 58, Gl. 4.7 und Seite Einband
 IMS_4_7 = Rule.fromDFS(

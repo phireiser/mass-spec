@@ -1,9 +1,0 @@
-substituion = Rule.fromDFS( # siehe 4.45
-	s =
-	"[R]1[C]2[C]3[C]4[*+.]5[C]6" +
-	">>" +
-	"[R.]1.[C]2[C]3[C]4[*+.]5([C]6){-}2",
-	name=
-	"Substituion" +
-	" §R1S3Y5R6"
-)

@@ -64,11 +64,11 @@ dielsAdler_2b = Rule.fromDFS( # hetrolysis
 ml_ionization = Rule.fromDFS( 
 	# only english wiki
 	s = 
-	"[*]1" +
+	"[*]1[C]2({=}[O]3)[C]4[C]5[C]6" +
 	">>" +
-	"[*+.]1",
+	"[*]1[C]2({=}[O+.]3)[C]4[C]5[C]6",
 	name=
-	"McL ionization " +
+	"McL ionization" +
 	" §Y1"
 )
 

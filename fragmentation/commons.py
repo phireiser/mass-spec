@@ -1,7 +1,13 @@
-import requests, json, warnings, re, itertools, sys
+import requests
+import json
+import warnings
+import re
+import itertools
+import sys
 import networkx as nx
+import mod
 
-from collections import deque
+from collections import deque, Counter
 from typing import List, Tuple, Iterable, Set, Hashable, Dict, Optional
 
 heteroAtoms = [
@@ -19,6 +25,15 @@ alk_nes_lables = ["H", "C"] # alkanes (single bond), alkenes(>=1 double bond), a
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
 # TODO ? functional group containing heteroAtom, this is only heteroAtoms itself
 
+
+lables = " ".join('label ' + '"' + x + '"' for x in heteroAtoms)
+
+constraint = """
+constrainLabelAny [
+    label "_Y"
+    labels [ """ + lables + """ ]
+]
+"""
 
 def addConstraints(rule, conStringGML):
     gmlstr = rule.getGMLString()
@@ -252,32 +267,37 @@ def getParentRulesForGraph(derivationGraph, search_target_graph):
                     stack.append(source.graph)
             except mod.LogicError:
                 print("mod logic Error")
+                #TODO why?
                 continue
 
     return parentRules
 
 
-def getSpectraFRomMoelDerivationGraph(derivationGraph):
+def getSpectraFromMoelDerivationGraph(derivationGraph):
     spectra = list()
     sourceGraph = derivationGraph.graphDatabase[0]
+    print(derivationGraph.createdGraphs)
+    for g in derivationGraph.createdGraphs:
+        print(g.getGMLString())
+    print("...\n")
+    for graph in derivationGraph.createdGraphs:     
+        graph = graphFromTerm(graph)
+        if graph.isMolecule:
+                if '+' in graph.getGMLString(): # only charged fragments can be detected
+                        found = False # update spectra list if allready occuring
 
-    for graph in dg.createdGraphs:
-            if graph.isMolecule:
-                    if '+' in graph.getGMLString(): # only charged fragments can be detected
-                            found = False # update spectra list if allready occuring
-
-                            rules = set(getParentRulesForGraph(derivationGraph,graph))
-                            
-                            for i, (mass, occurence, old_rules) in enumerate(spectra):
-                                    if abs(mass - graph.exactMass) < 1e-2:
-                                            spectra[i] = (graph.exactMass, occurence + 1, old_rules.union(rules))
-                                            found = True
-                                            break
-                            if not found: # add to spectra list if not occuring
-                                    spectra.append((graph.exactMass, 1, rules))
-            else:
-                print(graph.getGMLString())
-                raise RuntimeWarning("there are some graphs that are not molecules")
+                        rules = set(getParentRulesForGraph(derivationGraph,graph))
+                        
+                        for i, (mass, occurence, old_rules) in enumerate(spectra):
+                                if abs(mass - graph.exactMass) < 1e-2:
+                                        spectra[i] = (graph.exactMass, occurence + 1, old_rules.union(rules))
+                                        found = True
+                                        break
+                        if not found: # add to spectra list if not occuring
+                                spectra.append((graph.exactMass, 1, rules))
+        else:
+            print(graph.getGMLString())
+            raise RuntimeWarning("there are some graphs that are not molecules")
     return spectra
 
 
@@ -451,10 +471,9 @@ def printNxGraph(G):
         print(f"{u} -- {v}")
 
 
-def getRule2MoleculeMap(derivation, graphs):
-    
+def getRule2MoleculeMap(derivation, graphs, labelSettings):
     # instatiate a derivation graph to pass in the vertex map
-    dg_new = DG(graphDatabase = graphs)
+    dg_new = DG(graphDatabase = graphs, labelSettings = labelSettings)
 
     with dg_new.build() as b:
         d = Derivation()
@@ -476,11 +495,7 @@ def vertexById(g, vid):
 
 
 def mol_neighbors(g: "mod.Graph", v: "mod.Vertex") -> Iterable["mod.Vertex"]:
-    """Yield neighbouring vertices of *v* in the *mod.Graph* *g*.
-
-    The helper works for undirected molecular graphs where an edge is
-    considered bidirectional.
-    """
+    """Yield neighbouring vertices of *v* in the *mod.Graph* *g*."""
 
     for gg in g:
         for e in gg.edges:
@@ -491,10 +506,26 @@ def mol_neighbors(g: "mod.Graph", v: "mod.Vertex") -> Iterable["mod.Vertex"]:
 
 def mol_cleaned_label(v: "mod.Vertex") -> str:
     """Return the vertex label stripped of ``+`` and ``.`` characters."""
-    return getattr(v, "stringLabel", "").replace("+", "").replace(".", "")
+
+    strlab = getattr(v, "stringLabel", "")
+
+    # Regex explanation:
+    # ^a\(             literal “a(” at start
+    #   ([^"(),\s]+)   1st group: one or more chars except quotes, commas, parentheses or whitespace
+    #   ,\s*           comma + optional space
+    #   (-?\d+)        2nd group: an integer (optional minus, then digits)
+    #   ,\s*           comma + optional space
+    #   (-?\d+)        3rd group: another integer
+    # \)$              literal “)” at end
+    pattern = re.compile(r'^a\(([^"(),\s]+),\s*(-?\d+),\s*(-?\d+)\)$')
+
+    if pattern.match(strlab):
+        strlab = decodeVertexLabel(strlab)
+    
+    return strlab.replace("+", "").replace("-", "").replace(".", "")
 
 def collect_bfs(
-    graph: "mod.Graph",
+    graphs: "mod.Graph",
     start_vertices: Iterable["mod.Vertex"],
     match,
 ) -> Tuple[List[str], List["mod.Vertex"]]:
@@ -507,7 +538,7 @@ def collect_bfs(
 
     Parameters
     ----------
-    graph : mod.Graph
+    graphs : List[mod.Graph]
     start_vertices : iterable of mod.Vertex
         Initial BFS frontier.
     match : dict
@@ -523,19 +554,25 @@ def collect_bfs(
     vertices : list[mod.Vertex]
         The corresponding molecule vertices, parallel to *labels*.
     """
+    graph = [] 
+    for g in graphs:
+        graph.append(graphFromTerm(g))
+    
+    #print(start_vertices)
     
     # exclude start vertices from morphism vertices as they are part of subgroup
     morphism_vertices: Set["mod.Vertex"] = set([ x for x in match.domain.vertices]) - set(start_vertices) 
 
-    visited: Set["mod.Vertex"] = set()
+    visited: Set["mod.Vertex"] = morphism_vertices
     queue: deque["mod.Vertex"] = deque(start_vertices)
 
-    labels: List[str] = [] #[mol_cleaned_label(v) for v in start_vertices]
-    vertices: List["mod.Vertex"] = [] #list(start_vertices)
-
+    labels: List[str] = [mol_cleaned_label(v) for v in start_vertices]
+    vertices: List["mod.Vertex"] = list(start_vertices)
     while queue:
         v = queue.popleft()
+        #print("v", v.stringLabel, v.id)
         for vertex in mol_neighbors(graph, v):
+            #print("vn", vertex) #not getting here but should have neigbours
             if vertex in visited:
                 continue
             else:
@@ -610,14 +647,29 @@ def saturatedPath(
     subgraph.
     """
 
-    morphism_vertices: Set["mod.Vertex"] = set(match.domain.vertices)
+    morphism_vertices: Set["mod.Vertex"] = set(match.codomain.vertices)
+
+    print("start", (start_vertex.id, start_vertex.stringLabel, start_vertex))
+    print("end", (end_vertex.id, end_vertex.stringLabel, start_vertex))
+    print("mor v", [(m.id, m.stringLabel, m) for m in morphism_vertices])
+
+    comp_morphism_vertices = [ComparableVertex(v) for v in morphism_vertices]
 
     # Early exits
-    if start_vertex not in morphism_vertices or end_vertex not in morphism_vertices:
+    if ComparableVertex(start_vertex) not in comp_morphism_vertices:
+        print("ee", "start not mapped")
         return False
-    if mol_cleaned_label(start_vertex) not in allowed_labels or mol_cleaned_label(end_vertex) not in allowed_labels:
+    if ComparableVertex(end_vertex) not in comp_morphism_vertices:
+        print("ee", "end not mapped")
+        return False
+    if mol_cleaned_label(start_vertex) not in allowed_labels:
+        print("ee", "start label bad")
+        return False
+    if mol_cleaned_label(end_vertex) not in allowed_labels:
+        print("ee", "end label bad")
         return False
     if start_vertex == end_vertex:
+        print("ee", "start equals end")
         return True  # covered by the checks above
 
     stack: deque[Tuple["mod.Vertex", List["mod.Vertex"]]] = deque()
@@ -650,3 +702,207 @@ def saturatedPath(
                 stack.append((vertex, new_path))
 
     return False
+
+
+
+termBondFromBondType = {
+    BondType.Invalid: "__error1",
+    BondType.Single: "p(0)",
+    BondType.Double: "p(p(0))",
+    BondType.Triple: "p(p(p(0)))",
+    BondType.Aromatic: "__error2"
+}
+
+#===
+def termFromGraph(g):
+    s = "graph [\n"
+    for v in g.vertices:
+        try:
+            s += 'node [ id %d label "a(%s, %d, %d)" ]' % (
+                v.id, 
+                v.atomId.symbol, 
+                v.charge, 
+                v.radical,
+            )
+        except mod.libpymod.LogicError as e:
+            s += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+
+    for e in g.edges:
+        s += 'edge [ source %d target %d label "e(%s)" ]' % (
+            e.source.id,  
+            e.target.id,
+            termBondFromBondType[e.bondType]
+        )
+    s +="]\n"
+    return graphGMLString(s, name=g.name + ", term", add=False)
+
+#===
+def decodeVertexLabel(l):
+    assert l.startswith("a(")
+    assert l.endswith(")")
+    l = l[2:-1].split(", ")
+    lab = l[0]
+    c = int(l[1])
+    r = int(l[2])
+    if c > 0:
+        lab += "+" * abs(c)
+    elif c < 0:
+        lab += "-" * abs(c)
+    if r > 0: # not elif otherwise vertex can't be charged radical
+        lab += "." * r
+    return lab
+
+#===
+def decodeEdgeLabel(l):
+    assert l.startswith("e(")
+    assert l.endswith(")")
+    l = l[2:-1]
+    if l == "0":
+        assert False
+    elif l == "p(0)":
+        bt = "-"
+    elif l == "p(p(0))":
+        bt = "="
+    elif l == "p(p(p(0)))":
+        bt = "#"
+    else:
+        raise ValueError("Can not convert edge term '%s' to a molecule." % l)
+    return bt
+
+#===
+def graphFromTerm(g):
+    s = "graph [\n"
+    for v in g.vertices:
+        s += 'node [ id %d label "%s" ]\n' % (
+            v.id, 
+            decodeVertexLabel(v.stringLabel)
+        )
+    for e in g.edges:
+        s += 'edge [ source %d target %d label "%s" ]\n' % (
+            e.target.id,  e.source.id, # I don't kown why I need to exchange them
+            decodeEdgeLabel(e.stringLabel)
+        )
+    s += "]\n"
+    return graphGMLString(s, name= g.name.replace(", term", ""), add=False)
+
+
+#===
+def termFromRule(r):
+    left = ""
+    right = ""
+    context = ""
+    
+    g = r.left
+    for v in g.vertices:
+        try:
+            left += 'node [ id %d label "a(%s, %d, %d)" ]' % (
+                v.id, 
+                v.atomId.symbol,
+                v.charge,
+                v.radical
+            )
+        except mod.libpymod.LogicError as e:
+            left += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+    
+    for e in g.edges:
+        left += 'edge [ source %d target %d label "e(%s)" ]' % (
+            e.source.id, 
+            e.target.id, 
+            termBondFromBondType[e.bondType]
+        )
+
+    g = r.context
+    for v in g.vertices:
+        if hasattr(v, "atomId"):
+            try:
+                context += 'node [ id %d label "a(%s, %d, %d)" ]' % (
+                    v.id, 
+                    v.atomId.symbol,
+                    v.charge,
+                    v.radical,
+                )
+            except mod.libpymod.LogicError as e:
+                context += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+    for e in g.edges:
+        if hasattr(v, "bondType"):
+            context += 'edge [ source %d target %d label "e(%s)" ]' % (
+                e.source.id, 
+                e.target.id, 
+                termBondFromBondType[e.bondType]
+            )
+
+    g = r.right
+    for v in g.vertices:
+        try:
+            right += 'node [ id %d label "a(%s, %d, %d)" ]' % (
+                v.id, 
+                v.atomId.symbol, 
+                v.charge, 
+                v.radical,
+            )
+        except mod.libpymod.LogicError as e:
+            right += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+    for e in g.edges:
+        right += 'edge [ source %d target %d label "e(%s)" ]' % (
+            e.source.id, 
+            e.target.id, 
+            termBondFromBondType[e.bondType]
+        )
+        
+    s = f"rule [\n\tleft [\n{left}\t]\n\tcontext [\n{context}\t]\n\tright [\n{right}\t]\n]\n"
+
+    return ruleGMLString(s, name=r.name + ", term", add=False)
+
+#===
+def ruleFromTerm(r):
+    left = ""
+    right = ""
+    
+    for v in r.left.vertices:
+        left += 'node [ id %d label "%s" ]\n' % (v.id, decodeVertexLabel(v.stringLabel))
+        #print("v", r.name, decodeVertexLabel(v.stringLabel), v.stringLabel)
+    for e in r.left.edges:
+        left += 'edge [ source %d target %d label "%s" ]\n' % (e.source.id, e.target.id, decodeEdgeLabel(e.stringLabel))
+    
+    for v in r.right.vertices:
+        right += 'node [ id %d label "%s" ]\n' % (v.id, decodeVertexLabel(v.stringLabel))
+    for e in r.right.edges:
+        right += 'edge [ source %d target %d label "%s" ]\n' % (e.source.id, e.target.id, decodeEdgeLabel(e.stringLabel))
+    
+    s = "rule [\n\tleft [\n%s\t]\n\tright [\n%s\t]\n]\n" % (left, right)
+    return ruleGMLString(s, name = r.name.replace(", term", ""), add=False)
+
+def multiline_equal(s1: str, s2: str) -> bool:
+    """
+    Return True if s1 and s2 are identical, or if you can swap
+    one pair of adjacent lines in s1 to get s2.
+    """
+    lines1 = s1.splitlines()
+    lines2 = s2.splitlines()
+    # Quick checks
+    if s1 == s2:
+        return True
+    if len(lines1) != len(lines2):
+        return False
+
+    return Counter(lines1) == Counter(lines2)
+
+
+class ComparableVertex:
+    def __init__(self, vertex, attrs=("id", )):#"stringLabel")):
+        self.vertex = vertex
+        self.attrs = attrs
+
+    def __eq__(self, other):
+        if not isinstance(other, ComparableVertex):
+            return NotImplemented
+        return all(
+            getattr(self.vertex, attr) == getattr(other.vertex, attr)
+            for attr in self.attrs
+        )
+
+    def __hash__(self):
+        return hash(tuple(getattr(self.vertex, attr) for attr in self.attrs))
+
+    def __repr__(self):
+        return f"ComparableVertex({', '.join(f'{a}={getattr(self.vertex, a)}' for a in self.attrs)})"

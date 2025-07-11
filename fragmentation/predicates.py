@@ -33,7 +33,6 @@ def subGroup(strategy):
 
 		# if any extention
 		if generalization_extention:
-			#print('.', end='') # is beeing called so many times see slurm job 8298630
 			alkylStructures = re.findall(r'R(\d+)', generalization_extention)
 			hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
 			saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
@@ -43,61 +42,60 @@ def subGroup(strategy):
 			hetroStructures = [int(x) - 1 for x in hetroStructures]
 			saturatedStructures = [(int(x[0])-1, int(x[1])-1)  for x in saturatedStructures]
 
-			match = getRule2MoleculeMap(derivation = derivation, graphs = dg.graphDatabase)
+			match = getRule2MoleculeMap(derivation = derivation, graphs = dg.graphDatabase, labelSettings = dg.labelSettings)
 			if match:
-				try:
-					alkylPosInRule = [match[vertexById(match.domain, x)] for x in alkylStructures]
-				except StopIteration:
-					print("structures", alkylStructures)
-					print("rule", derivation.rule)
-				saturatedPosInRule = [
+				alkylPosInGraph = [match[vertexById(match.domain, x)] for x in alkylStructures]
+				saturatedPosInGraph = [
 					(match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])]) 
 					for x in saturatedStructures
 					]
-				hetroPosInRule = [match[vertexById(match.domain, x)] for x in hetroStructures]
+				hetroPosInGraph = [match[vertexById(match.domain, x)] for x in hetroStructures]
 		
 				hetro_bool = True
 				alkyl_bool = True
 				sat_bool = True
 
-				if saturatedPosInRule:
+				if saturatedPosInGraph:
 					sat_bool = saturatedPath(
 						graph = derivation.left,
-						start_vertex = saturatedPosInRule[0][0],
-						end_vertex = saturatedPosInRule[0][1], 
+						start_vertex = saturatedPosInGraph[0][0],
+						end_vertex = saturatedPosInGraph[0][1], 
 						allowed_labels = alk_nes_lables,
 						match = match
 						) #TODO could contain multiple matches
 
-
-				if alkylPosInRule:
+				print("satbool", sat_bool)
+				if alkylPosInGraph:
 					alkyl_bool = False
 					neighbor_labels, _ = collect_bfs(
-						graph = derivation.left, 
-						start_vertices = alkylPosInRule, 
+						graphs = derivation.left, 
+						start_vertices = alkylPosInGraph, 
 						match = match
-						)
-					if set(neighbor_labels).issubset(set(alk_nes_lables)):
+					)
+					#print("ngi", derivation.rule.name, neighbor_labels)
+					if len(set(neighbor_labels)) > 0 & set(neighbor_labels).issubset(set(alk_nes_lables)):
 						alkyl_bool = True
 
 
-				if hetroPosInRule:
+				if hetroPosInGraph:
 					hetro_bool = False
 					neighbor_labels, _ = collect_bfs(
-						graph = derivation.left, 
-						start_vertices = hetroPosInRule, 
+						graphs = derivation.left, 
+						start_vertices = hetroPosInGraph, 
 						match = match
 					)
 					diff = set(neighbor_labels) - set(alk_nes_lables)
-					print("hetro diff", diff)
+					#if len(neighbor_labels) > 0:
+						#print("neighb", neighbor_labels) 
+						#print("hetro diff", diff)
 					if len(diff) <= 1: 
 						# not only hetro atoms strictly 
 						# as the defnition says but, also carbon atoms
 						# as McLafferty book is using them as well
 						hetro_bool = True
-
+				print("bool", derivation.rule.name, sat_bool & alkyl_bool & hetro_bool)
 				return sat_bool & alkyl_bool & hetro_bool
-		return True
+		return True # if there is no rule extention 
 
 	return rightPredicate[predicate](strategy)
 

@@ -1,49 +1,52 @@
 include("rules/benzylAllyl_ringGeneral.py")
-include("rules/bookCover.py")
 include("rules/deprotonation.py")
+include("rules/IMS_bookCover.py")
 include("rules/IMS_chap4_examples.py")
 include("rules/IMS_chap8_examples.py")
 include("rules/wikipedia.py")
 
-include("rules/rearrangements/hTransition_saturated.py")
-include("rules/rearrangements/hTransition_unsaturated.py")
-include("rules/rearrangements/h2Transition.py")
-include("rules/rearrangements/substituion.py")
-include("rules/rearrangements/elimination.py")
-
-rearrangements = [
-	hTransition_unsaturated,
-	hTransition_unsaturated_alpha,
-	hTransition_unsaturated_bidirect,
-	hTransition_unsaturated_inductive,
-
-	hTransition_saturated_1,
-	hTransition_saturated_1_alpha,
-	hTransition_saturated_1_inductive_1,
-	hTransition_saturated_1_inductive_2,
-
-	hTransition_saturated_2,
-	hTransition_saturated_2_alpha,
-
-	hTransition_saturated_3,
-	hTransition_saturated_3_alpha,
-
-	hTransition_saturated_4,
-	hTransition_saturated_4_alpha,
-
-	hTransition_saturated_5_inductive_1,
-	hTransition_saturated_5_inductive_2,
-	hTransition_saturated_5_inductive_3,
-
-	h2Transiton_1,
-	h2Transiton_2,
-	h2Transiton_3,
-	substituion,
-	elimination,
-]
-
-rearrangements = flatten_list(rearrangements)
 
 # TODO heterocyclic ring fission (HRF)
 # TODO benzofuran forming fission (BFF)
 # TODO quinone methide (QM) fission
+
+
+
+
+common_ei_mol_term = []
+for m in common_ei_molecules:
+    common_ei_mol_term.append(termFromGraph(m))
+
+#common_ei_molecules = common_ei_mol_term
+
+ # only create rules for occuring hetroAtoms
+occuring_hetroAtoms = set()
+for m in common_ei_molecules:
+    for ha in heteroAtoms:
+        if m.vLabelCount(ha) > 0:
+            occuring_hetroAtoms.add(ha)
+heteroAtoms = occuring_hetroAtoms
+
+
+ionization = [
+    benzylAllyl_ionizaton, 
+    wiki_ionization,
+]
+ionization = flatten_list(ionization)
+
+ionization_term =[]
+for r in ionization:
+    ionization_term.append(termFromRule(r))
+
+fragmentation = [
+    benzylAllyl_fragmentation,
+    deProtonation_all,
+    IMS_cover_fragmentation,
+    IMS_examples, 
+    wiki_fragmentation,
+]
+fragmentation = flatten_list(fragmentation)
+
+fragmentation_term =[]
+for r in fragmentation:
+    fragmentation_term.append(termFromRule(r))
