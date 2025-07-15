@@ -93,7 +93,7 @@ common_ei_molecules = [
 	ddt, 
 	lindane,
 	polychlorinatedBiphenyls, 
-#	testosterone, # needs a lot of memory
-	cholesterol,
-#	linolenicAcid, # needs a lot of memory
+	testosterone, # needs a lot of memory
+	#cholesterol, # for the saturation rule extention it needs more memory, I assume the mol is too big, stopt at 20GB mem
+	linolenicAcid, # needs a lot of memory
 ]

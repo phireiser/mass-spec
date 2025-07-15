@@ -5,6 +5,7 @@ def amuBound(strategy, minimum=50, maximum=500):
 	def predicate(derivations):
 		masses = list()
 		for g in derivations.right:
+			g = graphFromTerm(g)
 			if g.isMolecule:
 				masses.append(g.exactMass)
 		r =  any([(mass > minimum) and (mass < maximum) for mass in masses])
@@ -12,15 +13,17 @@ def amuBound(strategy, minimum=50, maximum=500):
 	return rightPredicate[predicate](strategy)
 
 def chargeBound(strategy, minimum=0, maximum=1):
-    def predicate(d):
-        for g in d.right:
-            if g.isMolecule:
-                charge = g.smiles.count('+') - g.smiles.count('-')
-                if minimum <= charge <= maximum:
-                    return True
-        return False
+	def predicate(d):
+		for g in d.right:
+			g = graphFromTerm(g)
+			if g.isMolecule:
+				charge = g.smiles.count('+') - g.smiles.count('-')
+				print("charge", charge)
+				if minimum <= charge <= maximum:
+					return True
+		return False
 
-    return rightPredicate[predicate](strategy)
+	return rightPredicate[predicate](strategy)
 
 
 def subGroup(strategy):
@@ -64,7 +67,7 @@ def subGroup(strategy):
 						match = match
 						) #TODO could contain multiple matches
 
-				print("satbool", sat_bool)
+
 				if alkylPosInGraph:
 					alkyl_bool = False
 					neighbor_labels, _ = collect_bfs(
@@ -86,14 +89,14 @@ def subGroup(strategy):
 					)
 					diff = set(neighbor_labels) - set(alk_nes_lables)
 					#if len(neighbor_labels) > 0:
-						#print("neighb", neighbor_labels) 
-						#print("hetro diff", diff)
+					#	print("neighb", neighbor_labels) 
+					#	print("hetro diff", diff)
 					if len(diff) <= 1: 
 						# not only hetro atoms strictly 
 						# as the defnition says but, also carbon atoms
 						# as McLafferty book is using them as well
 						hetro_bool = True
-				print("bool", derivation.rule.name, sat_bool & alkyl_bool & hetro_bool)
+				#print("extention applied", derivation.rule.name, sat_bool & alkyl_bool & hetro_bool)
 				return sat_bool & alkyl_bool & hetro_bool
 		return True # if there is no rule extention 
 

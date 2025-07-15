@@ -161,13 +161,13 @@ def _is_single_bond(graph: mod.Graph, u: mod.Graph.Vertex, v: mod.Graph.Vertex) 
     """
     Return True iff edge between *u* and *v* is a single bond.
     """
+
     edge = get_edge_between(graph, u, v)
-    print("single", edge)
 
     if edge is None:                          # no edge at all
         return False
 
-    return edge.bondType == mod.BondType.Single
+    return decodeEdgeLabel(edge.stringLabel) == '-'
 
 def saturatedPath(
     graph: mod.Graph,
@@ -192,27 +192,27 @@ def saturatedPath(
 
     morphism_vertices: Set["mod.Vertex"] = set(match.codomain.vertices)
 
-    print("start", (start_vertex.id, start_vertex.stringLabel))
-    print("end", (end_vertex.id, end_vertex.stringLabel))
+    #print("start", (start_vertex.id, start_vertex.stringLabel))
+    #print("end", (end_vertex.id, end_vertex.stringLabel))
     #print("mor v", [(m.id, m.stringLabel, m) for m in morphism_vertices])
 
     comp_morphism_vertices = ComparableVertexList(morphism_vertices)
 
     # Early exits
     if ComparableVertex(start_vertex) not in comp_morphism_vertices:
-        print("ee", "start not mapped")
+        #print("ee", "start not mapped")
         return False
     if ComparableVertex(end_vertex) not in comp_morphism_vertices:
-        print("ee", "end not mapped")
+        #print("ee", "end not mapped")
         return False
     if mol_cleaned_label(start_vertex) not in allowed_labels:
-        print("ee", "start label bad")
+        #print("ee", "start label bad")
         return False
     if mol_cleaned_label(end_vertex) not in allowed_labels:
-        print("ee", "end label bad")
+        #print("ee", "end label bad")
         return False
     if start_vertex == end_vertex:
-        print("ee", "start equals end")
+        #print("ee", "start equals end")
         return True  # covered by the checks above
 
     stack: deque[Tuple["mod.Vertex", List["mod.Vertex"]]] = deque()
@@ -221,11 +221,11 @@ def saturatedPath(
     while stack:
         node, path = stack.pop()
         for vertex in mol_neighbors(graph, node):
-            print("vn", vertex.id, vertex.stringLabel)
+
             #if ComparableVertex(vertex) not in comp_morphism_vertices:          # stay inside morphism
             #   continue
-            #if ComparableVertex(vertex) in ComparableVertexList(path):          # checks if the current vertex is already in the path
-            #    continue
+            if ComparableVertex(vertex) in ComparableVertexList(path):          # checks if the current vertex is already in the path, loop prevention
+               continue
             if mol_cleaned_label(vertex) != "C":                                # label filter
                 continue
             if not _is_single_bond(graph, node, vertex):                        # single bonds only
@@ -233,8 +233,7 @@ def saturatedPath(
 
             new_path = path + [vertex]
 
-            if CompareableVertex(vertex) == CompareableVertex(end_vertex):
-                print("hallo")
+            if ComparableVertex(vertex) == ComparableVertex(end_vertex):
                 if _path_satisfies_branch_rule(
                     graph,
                     new_path,

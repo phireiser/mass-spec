@@ -11,12 +11,12 @@ import mod
 from collections import deque, Counter
 from typing import List, Tuple, Iterable, Set, Hashable, Dict, Optional
 
-include("util_netX.py")
-include("util_rule_extention.py")
-include("util_spect_mol.py")
-include("util_spect_PubChem.py")
-include("util_term_transfers.py")
-include("util_constrain.py")
+include("util/util_netX.py")
+include("util/util_rule_extention.py")
+include("util/util_spect_mol.py")
+include("util/util_spect_PubChem.py")
+include("util/util_term_transfers.py")
+include("util/util_constrain.py")
 
 
 def dice_coefficient(a, b): # like F1 Socre
