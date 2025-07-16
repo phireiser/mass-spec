@@ -77,7 +77,7 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
     return G
 
 
-def modGraph2netX(g_mod: mod.Graph):
+def modGraph2netX(g_mod: mod.Graph) -> nx.Graph:
     g_nx = nx.Graph()
 
     for v in g_mod.vertices:
@@ -100,7 +100,7 @@ def modGraph2netX(g_mod: mod.Graph):
     return g_nx
 
 
-def printNxGraph(G):
+def printNxGraph(G: nx.Graph) -> None:
     print("Nodes:")
     for node, data in G.nodes(data=True):
         label = data.get("label", node)

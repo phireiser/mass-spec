@@ -1,72 +1,65 @@
-import re
-import networkx as nx
+import mod
 
-def amuBound(strategy, minimum=50, maximum=500):
+def amuBound(
+	strategy: mod.DGStrat, 
+	minimum: int = 50, 
+	maximum: int = 500
+	) -> mod.rightPredicate:
 	def predicate(derivations):
-		masses = list()
+		masses = []
 		for g in derivations.right:
 			g = graphFromTerm(g)
 			if g.isMolecule:
 				masses.append(g.exactMass)
-		r =  any([(mass > minimum) and (mass < maximum) for mass in masses])
-		return r
+		boundsckeck = any([(mass > minimum) and (mass < maximum) for mass in masses])
+		return boundsckeck
 	return rightPredicate[predicate](strategy)
 
-def chargeBound(strategy, minimum=0, maximum=1):
+def chargeBound(
+	strategy: mod.DGStrat, 
+	minimum: int = 0, 
+	maximum: int = 1
+	) -> mod.rightPredicate:
 	def predicate(d):
 		for g in d.right:
 			g = graphFromTerm(g)
 			if g.isMolecule:
 				charge = g.smiles.count('+') - g.smiles.count('-')
-				print("charge", charge)
 				if minimum <= charge <= maximum:
 					return True
 		return False
-
 	return rightPredicate[predicate](strategy)
 
 
-def subGroup(strategy):
+def subGroup(strategy: mod.DGStrat) -> mod.rightPredicate:
 	def predicate(derivation):
-		generalization_extention = ""
-		try:
-			generalization_extention = derivation.rule.name.split("§")[1]
-		except:
-			pass
+		
+		rule_parts = derivation.rule.name.split("§")
+		generalization_extention = rule_parts[1] if len(rule_parts) > 1 else None
 
 		# if any extention
 		if generalization_extention:
-			alkylStructures = re.findall(r'R(\d+)', generalization_extention)
-			hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
-			saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
-			
-			# make it 0 based
-			alkylStructures = [int(x) - 1 for x in alkylStructures]
-			hetroStructures = [int(x) - 1 for x in hetroStructures]
-			saturatedStructures = [(int(x[0])-1, int(x[1])-1)  for x in saturatedStructures]
-
 			match = getRule2MoleculeMap(derivation = derivation, graphs = dg.graphDatabase, labelSettings = dg.labelSettings)
 			if match:
-				alkylPosInGraph = [match[vertexById(match.domain, x)] for x in alkylStructures]
-				saturatedPosInGraph = [
-					(match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])]) 
-					for x in saturatedStructures
-					]
-				hetroPosInGraph = [match[vertexById(match.domain, x)] for x in hetroStructures]
+				alkylPosInGraph, hetroPosInGraph, saturatedPosInGraph = \
+					transferPositionsOfGeneralizationExtention(generalization_extention, match)
 		
 				hetro_bool = True
 				alkyl_bool = True
 				sat_bool = True
 
 				if saturatedPosInGraph:
-					sat_bool = saturatedPath(
-						graph = derivation.left,
-						start_vertex = saturatedPosInGraph[0][0],
-						end_vertex = saturatedPosInGraph[0][1], 
-						allowed_labels = alk_nes_lables,
-						match = match
-						) #TODO could contain multiple matches
-
+					for position in saturatedPosInGraph:
+						satpath = saturatedPath(
+							graph = derivation.left,
+							start_vertex = position[0],
+							end_vertex = position[1], 
+							allowed_labels = alk_nes_lables,
+							match = match
+							) #TODO could contain multiple matches, really? -> ask Flamm
+						if not satpath: #  set only false but stay false if true
+							sat_bool = False
+						
 
 				if alkylPosInGraph:
 					alkyl_bool = False
@@ -75,8 +68,7 @@ def subGroup(strategy):
 						start_vertices = alkylPosInGraph, 
 						match = match
 					)
-					#print("ngi", derivation.rule.name, neighbor_labels)
-					if len(set(neighbor_labels)) > 0 & set(neighbor_labels).issubset(set(alk_nes_lables)):
+					if len(set(neighbor_labels)) > 0 and set(neighbor_labels).issubset(set(alk_nes_lables)):
 						alkyl_bool = True
 
 
@@ -88,17 +80,13 @@ def subGroup(strategy):
 						match = match
 					)
 					diff = set(neighbor_labels) - set(alk_nes_lables)
-					#if len(neighbor_labels) > 0:
-					#	print("neighb", neighbor_labels) 
-					#	print("hetro diff", diff)
 					if len(diff) <= 1: 
 						# not only hetro atoms strictly 
 						# as the defnition says but, also carbon atoms
 						# as McLafferty book is using them as well
 						hetro_bool = True
-				#print("extention applied", derivation.rule.name, sat_bool & alkyl_bool & hetro_bool)
+
+
 				return sat_bool & alkyl_bool & hetro_bool
 		return True # if there is no rule extention 
-
 	return rightPredicate[predicate](strategy)
-

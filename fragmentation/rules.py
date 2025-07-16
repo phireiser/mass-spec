@@ -11,23 +11,6 @@ include("rules/wikipedia.py")
 # TODO quinone methide (QM) fission
 
 
-
-
-common_ei_mol_term = []
-for m in common_ei_molecules:
-    common_ei_mol_term.append(termFromGraph(m))
-
-#common_ei_molecules = common_ei_mol_term
-
- # only create rules for occuring hetroAtoms
-occuring_hetroAtoms = set()
-for m in common_ei_molecules:
-    for ha in heteroAtoms:
-        if m.vLabelCount(ha) > 0:
-            occuring_hetroAtoms.add(ha)
-heteroAtoms = occuring_hetroAtoms
-
-
 ionization = [
     benzylAllyl_ionizaton, 
     wiki_ionization,

@@ -23,20 +23,23 @@ constrainLabelAny [
 ]
 """
 
-def addConstraints(rule, conStringGML):
+def addConstraints(rule: mod.Rule, conStringGML: str) -> mod.Rule:
     gmlstr = rule.getGMLString()
     name = rule.name
     rule = ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
     return rule
 
 
-def convert2MoelRule(tupel):
+def convert2MoelRule(tupel: Iterable) -> List[mod.Rule]:
     if isinstance(tupel, tuple):
         tupel = [tupel]
     return [ Rule.fromDFS(rule, name= name) for rule, name in tupel ]
 
 
-def labelConstraints_gml(input_rules, rpl_dict):
+def labelConstraints_gml(
+    input_rules: mod.Rule | List[mod.Rule], 
+    rpl_dict: Dict[str, str | List[str]]
+    ) -> List[List[mod.Rule]]:
     """
     every underscore single Letter combination should be replaced according to rpl dict
 
@@ -62,7 +65,12 @@ def labelConstraints_gml(input_rules, rpl_dict):
     return return_rules
 
 
-def labelConstraints_dfs(input_rules, to_replace, replacements):
+def labelConstraints_dfs(
+    input_rules: mod.Rule | List[mod.Rule], 
+    to_replace: List[str], 
+    replacements #TODO
+    ) -> List[Tuple[str, str]]:
+
     """
     every underscore single Letter combination should be replaced according to rpl dict
 
@@ -71,8 +79,8 @@ def labelConstraints_dfs(input_rules, to_replace, replacements):
     :return: list of rules
     """
 
-    #https://www.mathsisfun.com/combinatorics/combinations-permutations.html
-    #https://docs.python.org/3/library/itertools.html
+    # https://www.mathsisfun.com/combinatorics/combinations-permutations.html
+    # https://docs.python.org/3/library/itertools.html
     return_rules = list()
 
     if not isinstance(input_rules, list):
@@ -93,9 +101,8 @@ def labelConstraints_dfs(input_rules, to_replace, replacements):
                 for radIon in [ "", "+", ".", "+.", ".+"]:
                     for i in range(1, max_node_id+1):
                         new_rule = new_rule.replace(
-                            '[' + target + radIon + ']' + str(i), 
-                            repl[:2] + radIon + repl[2:],
-                            -1)
+                            '[' + target + radIon + ']' + str(i), repl[:2] + radIon + repl[2:], -1
+                            )
                             
             return_rules.append((new_rule, name))
     return return_rules

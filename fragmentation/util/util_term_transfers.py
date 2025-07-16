@@ -7,7 +7,7 @@ termBondFromBondType = {
 }
 
 #===
-def termFromGraph(g):
+def termFromGraph(g: mod.Graph):
     s = "graph [\n"
     for v in g.vertices:
         try:
@@ -30,7 +30,7 @@ def termFromGraph(g):
     return graphGMLString(s, name=g.name + ", term", add=False)
 
 #===
-def decodeVertexLabel(l):
+def decodeVertexLabel(l: str) -> str:
     assert l.startswith("a(")
     assert l.endswith(")")
     l = l[2:-1].split(", ")
@@ -46,7 +46,7 @@ def decodeVertexLabel(l):
     return lab
 
 #===
-def decodeEdgeLabel(l):
+def decodeEdgeLabel(l: str) -> str:
     assert l.startswith("e(")
     assert l.endswith(")")
     l = l[2:-1]
@@ -63,7 +63,7 @@ def decodeEdgeLabel(l):
     return bt
 
 #===
-def graphFromTerm(g):
+def graphFromTerm(g: str) -> str:
     s = "graph [\n"
     for v in g.vertices:
         s += 'node [ id %d label "%s" ]\n' % (
@@ -80,7 +80,7 @@ def graphFromTerm(g):
 
 
 #===
-def termFromRule(r):
+def termFromRule(r: mod.Rule) -> mod.Rule:
     left = ""
     right = ""
     context = ""
@@ -147,7 +147,7 @@ def termFromRule(r):
     return ruleGMLString(s, name=r.name + ", term", add=False)
 
 #===
-def ruleFromTerm(r):
+def ruleFromTerm(r: mod.Rule) -> mod.Rule:
     left = ""
     right = ""
     

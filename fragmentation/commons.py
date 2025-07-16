@@ -9,7 +9,8 @@ import networkx as nx
 import mod
 
 from collections import deque, Counter
-from typing import List, Tuple, Iterable, Set, Hashable, Dict, Optional
+from typing import List, Tuple, Iterable, Set
+from typing import Hashable, Dict, Optional, Any, Union
 
 include("util/util_netX.py")
 include("util/util_rule_extention.py")
@@ -19,17 +20,19 @@ include("util/util_term_transfers.py")
 include("util/util_constrain.py")
 
 
-def dice_coefficient(a, b): # like F1 Socre
+def dice_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
+    """Calculates the Dice coefficient between two iterables."""
     set_a, set_b = set(a), set(b)
     return 2 * len(set_a & set_b) / (len(set_a) + len(set_b))
 
 
-def overlap_coefficient(a, b):
+def overlap_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
+    """Calculates the Overlap coefficient between two iterables."""
     set_a, set_b = set(a), set(b)
-    res = 0
+    res = 0.0
     try:
         res = len(set_a & set_b) / min(len(set_a), len(set_b))
-    except(ZeroDivisionError):
+    except ZeroDivisionError:
         res = 0.0
     return res
 
@@ -75,14 +78,14 @@ def split_rule_dfs(rule: str) -> Tuple[List[str], List[str]]:
     return split_side(left_raw), split_side(right_raw)
 
 
-def flatten_list(nested_list):
+def flatten_list(nested_list: List[Union[Any, List]]) -> List[Any]:
     """
     Flattens a nested list into a single list.
-    
+
     :param nested_list: A list which may contain other lists
     :return: A flattened list
     """
-    flat_list = []
+    flat_list: List[Any] = []
     for item in nested_list:
         if isinstance(item, list):
             flat_list.extend(flatten_list(item))
@@ -91,7 +94,8 @@ def flatten_list(nested_list):
     return flat_list
 
 
-def printRules(inRules):
+
+def printRules(inRules: List[mod.Rule]) -> None:
     post.summarySection("Rule(s)")
     p = GraphPrinter()
     p.setReactionDefault()
@@ -101,7 +105,7 @@ def printRules(inRules):
             r.print(p)
 
 
-def printGraphs(inGraphs):
+def printGraphs(inGraphs: List[mod.Graph]) -> None:
     post.summarySection("Molecule(s)")
     p = GraphPrinter()
     p.setMolDefault()
@@ -110,7 +114,10 @@ def printGraphs(inGraphs):
             m.print(p)
 
 
-def printGrammar(inGraphs = inputGraphs, inRules = inputRules):
+def printGrammar(
+    inGraphs: List[mod.Graph] = inputGraphs, 
+    inRules: List[mod.Rule] = inputRules
+    ) -> None:
     printGraphs(inGraphs)
     printRules(inRules)
 

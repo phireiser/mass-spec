@@ -10,7 +10,8 @@ include("strategy.py")
 
 allActiveRules = set()
 
-for m in [termFromGraph(toluene)]: #common_ei_mol_term:   #[linolenicAcid]: 
+
+for m in small_ei_mol_term: # common_ei_mol_term: #[termFromGraph(toluene)]: #[linolenicAcid]:
     print("\n")
     print("mol spectrum of", m.name)
     strategy = makeStrategy(universe=[m], ionization=ionization_term, fragmentation=fragmentation_term)
@@ -74,4 +75,4 @@ for m in [termFromGraph(toluene)]: #common_ei_mol_term:   #[linolenicAcid]:
 #
 dg.print()
 #
-#printRules(ionization + fragmentation)
+printRules(ionization + fragmentation)

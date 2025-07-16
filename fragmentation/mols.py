@@ -97,3 +97,29 @@ common_ei_molecules = [
 	#cholesterol, # for the saturation rule extention it needs more memory, I assume the mol is too big, stopt at 20GB mem
 	linolenicAcid, # needs a lot of memory
 ]
+
+common_ei_mol_term = []
+for m in common_ei_molecules:
+    common_ei_mol_term.append(termFromGraph(m))
+
+small_ei_mol_term = [
+    termFromGraph(x) for x in [
+        toluene, 
+        butanal,
+    	#butylbenzene,
+    	#phenylalanine,
+    	#tyrosine,
+        #benzoicAcid,
+    	#chlorobenzene,
+        polychlorinatedBiphenyls,
+        anthracene,
+    ]
+]
+
+ # only create rules for occuring hetroAtoms
+occuring_hetroAtoms = set()
+for m in common_ei_molecules:
+    for ha in heteroAtoms:
+        if m.vLabelCount(ha) > 0:
+            occuring_hetroAtoms.add(ha)
+heteroAtoms = occuring_hetroAtoms

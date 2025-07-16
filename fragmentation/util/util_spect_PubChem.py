@@ -1,16 +1,18 @@
-def pubChemSmilesLookUp(smiles):
+def pubChemSmilesLookUp(smiles: str) -> int:
     pug_pre_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
     url = pug_pre_url + smiles + '/cids/JSON'
     response = requests.get(url)
     response.raise_for_status()
     cids = response.json()['IdentifierList']['CID']
-    cid = cids[0]
+    cid = int(cids[0])
     if len(cids) > 1:
         raise RuntimeWarning("Expecting only one PubChem CID")
     return cid
 
 
-def getSpectraFromInformationSection(information):
+def getSpectraFromInformationSection(
+    information: List[Dict[str, Any]]
+    ) -> List[Dict[int, List[Tuple[float, float]]]]:
 
     fields_of_interest = [
         "Top 5 Peaks",
@@ -53,7 +55,7 @@ def getSpectraFromInformationSection(information):
     return mass_spec_data
 
 
-def getInformationSectionFromPubChem(cid):
+def getInformationSectionFromPubChem(cid: int) -> List[Dict[str, Any]] | None:
 
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/"
     
@@ -75,9 +77,10 @@ def getInformationSectionFromPubChem(cid):
     return None
 
 
-def getSpectraFromPubChem(smiles):
+def getSpectraFromPubChem(
+    smiles: str
+    ) -> List[Dict[int, List[Tuple[float, float]]]]:
     cid = pubChemSmilesLookUp(smiles)
     info = getInformationSectionFromPubChem(cid)
     spectra = getSpectraFromInformationSection(info)
     return spectra
-

@@ -1,4 +1,12 @@
-def getRule2MoleculeMap(derivation, graphs, labelSettings):
+import re
+import mod
+from typing import List, Tuple
+
+def getRule2MoleculeMap(
+    derivation: mod.Derivation, 
+    graphs: mod.Graph, 
+    labelSettings: mod.LabelSettings
+    ):# -> mod.VertexMapRuleLeftGraphUnionGraph:
     # instatiate a derivation graph to pass in the vertex map
     dg_new = DG(graphDatabase = graphs, labelSettings = labelSettings)
 
@@ -13,15 +21,43 @@ def getRule2MoleculeMap(derivation, graphs, labelSettings):
     e = next(edge for edge in dg_new.edges if derivation.rule in edge.rules)
     vms = DGVertexMapper(e)
     m = next(iter(vms), None)
-
+    if m is None:
+        # DGVertexMapper yielded no matches
+        return None
     return m.match
 
+def transferPositionsOfGeneralizationExtention(
+    generalization_extention: List[str], 
+    match#: mod.VertexMapRuleLeftGraphUnionGraph
+    ) -> Tuple[
+        List[mod.Graph.Vertex], 
+        List[Tuple[mod.Graph.Vertex, mod.Graph.Vertex]], 
+        List[mod.Graph.Vertex]
+    ]:
 
-def vertexById(g, vid):
+    alkylStructures = re.findall(r'R(\d+)', generalization_extention)
+    hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
+    saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
+    
+    # make it 0 based
+    alkylStructures = [int(x) - 1 for x in alkylStructures]
+    hetroStructures = [int(x) - 1 for x in hetroStructures]
+    saturatedStructures = [(int(x[0])-1, int(x[1])-1)  for x in saturatedStructures]
+
+    alkylPosInGraph = [match[vertexById(match.domain, x)] for x in alkylStructures]
+    hetroPosInGraph = [match[vertexById(match.domain, x)] for x in hetroStructures]
+    saturatedPosInGraph = [
+        (match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])]) 
+        for x in saturatedStructures
+        ]
+    
+    return alkylPosInGraph, hetroPosInGraph, saturatedPosInGraph
+
+def vertexById(g: mod.Graph, vid: int) -> Iterable[mod.Graph.Vertex]:
     return next(v for v in g.vertices if v.id == vid)
 
 
-def mol_neighbors(g: "mod.Graph", v: "mod.Vertex") -> Iterable["mod.Vertex"]:
+def mol_neighbors(g: mod.Graph, v: mod.Graph.Vertex) -> Iterable[mod.Graph.Vertex]:
     """Yield neighbouring vertices of *v* in the *mod.Graph* *g*."""
 
     for gg in g:
@@ -35,11 +71,12 @@ def mol_neighbors(g: "mod.Graph", v: "mod.Vertex") -> Iterable["mod.Vertex"]:
                 #print("nbr", e.source, e.source.id, e.source.stringLabel)
                 yield e.source
 
-def mol_cleaned_label(v: "mod.Vertex") -> str:
+def mol_cleaned_label(v: mod.Graph.Vertex) -> str:
     """Return the vertex label stripped of ``+`` and ``.`` characters."""
 
     strlab = getattr(v, "stringLabel", "")
 
+    # regex for term mode detection
     # Regex explanation:
     # ^a\(             literal “a(” at start
     #   ([^"(),\s]+)   1st group: one or more chars except quotes, commas, parentheses or whitespace
@@ -56,40 +93,21 @@ def mol_cleaned_label(v: "mod.Vertex") -> str:
     return strlab.replace("+", "").replace("-", "").replace(".", "")
 
 def collect_bfs(
-    graphs: "mod.Graph",
-    start_vertices: Iterable["mod.Vertex"],
+    graphs: mod.Graph,
+    start_vertices: Iterable[mod.Graph.Vertex],
     match,
-) -> Tuple[List[str], List["mod.Vertex"]]:
-    """Breadth-first traversal over a :class:`mod.Graph`.
+    ) -> Tuple[List[str], List[mod.Graph.Vertex]]:
 
-    The function walks the full molecular graph starting from
-    *start_vertices*.  During the walk it *records* the cleaned labels
-    (``+``/``.`` removed) **only for vertices that lie on the molecule
-    side of the *match* morphism**.
-
-    Parameters
-    ----------
-    graphs : List[mod.Graph]
-    start_vertices : iterable of mod.Vertex
-        Initial BFS frontier.
-    match : dict
-        Mapping *rule-vertex -> molecule-vertex* produced by
-        :class:`DGVertexMapper`.  The *values* identify which vertices
-        are “in morphism”.
-
-    Returns
-    -------
-    labels : list[str]
-        Cleaned labels for *morphism* vertices encountered in discovery
-        order.
-    vertices : list[mod.Vertex]
-        The corresponding molecule vertices, parallel to *labels*.
     """
+    collects neighbor lables & and vertex object 
+    in a BFS manner unless covered by morphism
+    """
+
+
     graph = [] 
     for g in graphs:
         graph.append(graphFromTerm(g))
     
-    #print(start_vertices)
     
     # exclude start vertices from morphism vertices as they are part of subgroup
     morphism_vertices: Set[mod.Graph.Vertex] = set([ x for x in match.domain.vertices]) - set(start_vertices) 
@@ -101,9 +119,7 @@ def collect_bfs(
     vertices: List[mod.Graph.Vertex] = list(start_vertices)
     while queue:
         v = queue.popleft()
-        #print("v", v.stringLabel, v.id)
         for vertex in mol_neighbors(graph, v):
-            #print("vn", vertex) #not getting here but should have neigbours
             if vertex in visited:
                 continue
             else:
@@ -119,8 +135,9 @@ def _path_satisfies_branch_rule(
     graph: mod.Graph,
     path: List[mod.Graph.Vertex],
     morphism_vertices: Set[mod.Graph.Vertex],
-    branch_ok_label: str,
-) -> bool:
+    branch_ok_label: List[str],
+    ) -> bool:
+
     """
     Return *True* iff every *side branch* off *path* (within the
     morphism) ends at a vertex whose cleaned label equals
@@ -128,18 +145,22 @@ def _path_satisfies_branch_rule(
     """
 
     path_set = set(path)
-
+    #TODO do I need a Compareable Vertex here?
     for v in path:
         for neighbor in mol_neighbors(graph, v):
-            if neighbor in path_set:                       # on the path -> ignore
+            if ComparableVertex(neighbor) in ComparableVertexList(path_set): # on given path -> ignore
                 continue
-            if neighbor not in morphism_vertices:          # outside morphism -> ignore
+            if ComparableVertex(neighbor) not in ComparableVertexList(morphism_vertices): # outside morphism -> ignore
                 continue
-            if mol_cleaned_label(neighbor) != branch_ok_label: #mol added 
+            if mol_cleaned_label(neighbor) not in branch_ok_label: # is it an OK Label
                 return False
     return True
 
-def get_edge_between(graph: mod.Graph, u: mod.Graph.Vertex, v: mod.Graph.Vertex) -> mod.Graph.Edge | None:
+def get_edge_between(
+    graph: mod.Graph, 
+    u: mod.Graph.Vertex, 
+    v: mod.Graph.Vertex
+    ) -> mod.Graph.Edge | None:
 
     if ComparableVertex(v) == ComparableVertex(u):
         return None
@@ -157,14 +178,19 @@ def get_edge_between(graph: mod.Graph, u: mod.Graph.Vertex, v: mod.Graph.Vertex)
     return None
 
 
-def _is_single_bond(graph: mod.Graph, u: mod.Graph.Vertex, v: mod.Graph.Vertex) -> bool:
+def _is_single_bond(
+    graph: mod.Graph, 
+    u: mod.Graph.Vertex, 
+    v: mod.Graph.Vertex
+    ) -> bool:
+
     """
     Return True iff edge between *u* and *v* is a single bond.
     """
 
     edge = get_edge_between(graph, u, v)
 
-    if edge is None:                          # no edge at all
+    if edge is None: # no edge at all
         return False
 
     return decodeEdgeLabel(edge.stringLabel) == '-'
@@ -174,55 +200,37 @@ def saturatedPath(
     start_vertex: mod.Graph.Vertex,
     end_vertex: mod.Graph.Vertex,
     allowed_labels: Set[str],
-    match,
+    match,#: mod.VertexMapRuleLeftGraphUnionGraph,
     branch_ok_label: str = "H",
-) -> bool:
-    """Return *True* iff there exists a simple path from *start_vertex* to
-    *end_vertex* such that
+    ) -> bool:
 
-    * every vertex on the path is **inside** the molecule-side of
-      *match* **and** its cleaned label is in *allowed_labels*;
-    * the path has **no side branches** inside the morphism except to
-      vertices whose cleaned label equals *branch_ok_label*.
-
-    The ``blocked_nodes`` parameter of the original networkx version has
-    been removed; the morphism itself implicitly defines the allowed
-    subgraph.
     """
 
-    morphism_vertices: Set["mod.Vertex"] = set(match.codomain.vertices)
+    """
 
-    #print("start", (start_vertex.id, start_vertex.stringLabel))
-    #print("end", (end_vertex.id, end_vertex.stringLabel))
-    #print("mor v", [(m.id, m.stringLabel, m) for m in morphism_vertices])
-
+    morphism_vertices: Set[mod.Graph.Vertex] = set(match.codomain.vertices)
     comp_morphism_vertices = ComparableVertexList(morphism_vertices)
 
     # Early exits
-    if ComparableVertex(start_vertex) not in comp_morphism_vertices:
-        #print("ee", "start not mapped")
+    if ComparableVertex(start_vertex) not in comp_morphism_vertices: # start not in map
         return False
-    if ComparableVertex(end_vertex) not in comp_morphism_vertices:
-        #print("ee", "end not mapped")
+    if ComparableVertex(end_vertex) not in comp_morphism_vertices: # end not in map
         return False
-    if mol_cleaned_label(start_vertex) not in allowed_labels:
-        #print("ee", "start label bad")
+    if mol_cleaned_label(start_vertex) not in allowed_labels: # start label not good
         return False
-    if mol_cleaned_label(end_vertex) not in allowed_labels:
-        #print("ee", "end label bad")
+    if mol_cleaned_label(end_vertex) not in allowed_labels: # end label not good
         return False
-    if start_vertex == end_vertex:
-        #print("ee", "start equals end")
-        return True  # covered by the checks above
+    if start_vertex == end_vertex: # start equals end
+        return True
 
-    stack: deque[Tuple["mod.Vertex", List["mod.Vertex"]]] = deque()
+    stack: deque[Tuple[mod.Graph.Vertex, List[mod.Graph.Vertex]]] = deque()
     stack.append((start_vertex, [start_vertex]))
 
     while stack:
         node, path = stack.pop()
         for vertex in mol_neighbors(graph, node):
 
-            #if ComparableVertex(vertex) not in comp_morphism_vertices:          # stay inside morphism
+            #if ComparableVertex(vertex) not in comp_morphism_vertices:          # stay inside morphism TODO: do I really need that check?
             #   continue
             if ComparableVertex(vertex) in ComparableVertexList(path):          # checks if the current vertex is already in the path, loop prevention
                continue

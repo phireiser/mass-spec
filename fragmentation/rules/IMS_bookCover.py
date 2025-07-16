@@ -78,42 +78,42 @@ hTransition_unsaturated_inductive = Rule.fromDFS(
 
 hTransition_saturated_1 = Rule.fromDFS(
 	s =
-	"[H]1[C]2[C]3.[C]4[*+.]5[*]6" +
+	"[H]1[C]2[C]3.[C]4[*+.]5" + #YRY "[H]1[C]2[C]3.[C]4[*+.]5[*]6" 
 	">>" +
-	"[C.]2[C]3.[C]4[*+]5([H]1)([*]6)",
+	"[C.]2[C]3.[C]4[*+]5([H]1)", #YRY "[C.]2[C]3.[C]4[*+]5([H]1)([*]6)"
 	name =
 	"H transition receptor site saturated" +
-	" §S3-4Y5R6"
+	" §S3-4Y5" #YRY " §S3-4Y5R6" 
 )
 
 hTransition_saturated_1_alpha = Rule.fromDFS(
 	s =
-	"[C.]1[C]2.[C]3[*+]4([H]5)([*]6)" +
+	"[C.]1[C]2.[C]3[*+]4([H]5)" + #YRY "[C.]1[C]2.[C]3[*+]4([H]5)([*]6)"
 	">>" +
-	"[C]1[C]2.[C]3{-}1.[*+.]4([H]5)([*]6)",
+	"[C]1[C]2.[C]3{-}1.[*+.]4([H]5)", #YRY "[C]1[C]2.[C]3{-}1.[*+.]4([H]5)([*]6)"
 	name =
 	"H transition receptor site saturated" +
-	" §S2-3Y4R6"
+	" §S2-3Y4" # YRY " §S2-3Y4R6"
 )
 
 hTransition_saturated_1_inductive_1 = Rule.fromDFS(
 	s =
-	"[C.]1[C]2.[C]3[*+]4([H]5)([*]6)" +
+	"[C.]1[C]2.[C]3[*+]4([H]5)" + #YRY "[C.]1[C]2.[C]3[*+]4([H]5)([*]6)"
 	">>" +
-	"[C.]1[C]2.[C+]3.[*+.]4([H]5)([*]6)",
+	"[C.]1[C]2.[C+]3.[*+.]4([H]5)", #YRY "[C.]1[C]2.[C+]3.[*+.]4([H]5)([*]6)"
 	name =
 	"H transition receptor site saturated" +
-	" §S2-3Y4R6"
+	" §S2-3Y4" #YRY " §S2-3Y4R6"
 )
 
 hTransition_saturated_1_inductive_2 = Rule.fromDFS(
 	s = 
-	"[C.]1[C]2.[C]3[*+]4([H]5)([*]6)" +
+	"[C.]1[C]2.[C]3[*+]4([H]5)" + #YRY "[C.]1[C]2.[C]3[*+]4([H]5)([*]6)"
 	">>" +
-	"[C]1[C]2.[C+.]3{-}1.[*+.]4([H]5)([*]6)",
+	"[C]1[C]2.[C+.]3{-}1.[*+.]4([H]5)", #YRY "[C]1[C]2.[C+.]3{-}1.[*+.]4([H]5)([*]6)"
 	name = 
 	"H transition receptor site saturated inductive" +
-	" §S2-3Y4R6"
+	" §S2-3Y4" #YRY " §S2-3Y4R6"
 )
 
 hTransition_saturated_2 = Rule.fromDFS( # siehe 8.53
@@ -158,12 +158,12 @@ hTransition_saturated_3_alpha = Rule.fromDFS( # siehe 4.44 & 4.46
 
 hTransition_saturated_4 = Rule.fromDFS( # siehe 8.90
 	s =
-	"[H]1[C]2[C]3.[C]4([H]5){=}[*+]6[*]7" +
+	"[H]1[C]2[C]3.[C]4([H]5){=}[*+]6" + #YRY "[H]1[C]2[C]3.[C]4([H]5){=}[*+]6[*]7"
 	">>" +
-	"[C.]2[C]3.[C]4([H]5)([H]1){=}[*+]6[*]7",
+	"[C.]2[C]3.[C]4([H]5)([H]1){=}[*+]6", #YRY "[C.]2[C]3.[C]4([H]5)([H]1){=}[*+]6[*]7"
 	name =
 	"H transition receptor site saturated rH" +
-	" §Y6S3-4R7"
+	" §Y6S3-4" #YRY " §Y6S3-4R7"
 )
 
 hTransition_saturated_4_alpha = Rule.fromDFS( # siehe 8.90
@@ -178,42 +178,42 @@ hTransition_saturated_4_alpha = Rule.fromDFS( # siehe 8.90
 
 hTransition_saturated_5 = Rule.fromDFS( # siehe 4.45
 	s = 
-	"[H]1[C]2([*+]3)[C]4[C]5[*..]6[*]7" +
+	"[H]1[C]2([*+]3)[C]4[C]5[*..]6" + #YRY "[H]1[C]2([*+]3)[C]4[C]5[*..]6[*]7"
 	">>" +
-	"[C]2([*+]3)[C]4[C]5[*..]6([H]1)[*]7",
+	"[C]2([*+]3)[C]4[C]5[*..]6([H]1)", #YRY "[C]2([*+]3)[C]4[C]5[*..]6([H]1)[*]7"
 	name =
 	"H transition receptor site saturated rH" +
-	" §Y6S2-4Y3R7"
+	" §Y6S2-4Y3" #YRY " §Y6S2-4Y3R7"
 )
 
 hTransition_saturated_5_inductive_1 = Rule.fromDFS( # siehe 4.45
 	s =
-	"[C]1([*+]2).[C]3[C]4[*..]5([H]6)[*]7" +
+	"[C]1([*+]2).[C]3[C]4[*..]5([H]6)" + #YRY "[C]1([*+]2).[C]3[C]4[*..]5([H]6)[*]7"
 	">>" +
-	"[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)[*]7",
+	"[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)", #YRY "[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)[*]7"
 	name =
 	"H transition receptor site saturated inductive" +
-	" §Y2S1-3Y5R7"
+	" §Y2S1-3Y5" #YRY " §Y2S1-3Y5R7"
 )
 
 hTransition_saturated_5_inductive_2 = Rule.fromDFS( # siehe 4.45
 	s = 
-	"[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)[*]7" +
+	"[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)" + #YRY "[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)[*]7"
 	">>" +
-	"[C.]1([*+]2).[C]3[C+]4.[*.]5([H]6)[*]7",
+	"[C.]1([*+]2).[C]3[C+]4.[*.]5([H]6)", #YRY "[C.]1([*+]2).[C]3[C+]4.[*.]5([H]6)[*]7"
 	name = 
 	"H transition receptor site saturated inductive" +
-	" §Y2S1-3Y5R7"
+	" §Y2S1-3Y5" #YRY " §Y2S1-3Y5R7"
 )
 
 hTransition_saturated_5_inductive_3 = Rule.fromDFS( # siehe 4.45
 	s =
-	"[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)[*]7" +
+	"[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)" + #YRY "[C.]1([*+]2).[C]3[C+]4[*+.]5([H]6)[*]7"
 	">>" +
-	"[C]1([*+]2).[C]3[C+.]4{-}1.[*.]5([H]6)[*]7",
+	"[C]1([*+]2).[C]3[C+.]4{-}1.[*.]5([H]6)", #YRY "[C]1([*+]2).[C]3[C+.]4{-}1.[*.]5([H]6)[*]7"
 	name = 
 	"H transition receptor site saturated inductive" +
-	" §Y2S1-3Y5R7"
+	" §Y2S1-3Y5" #YRY " §Y2S1-3Y5R7"
 )
 
 ####### h2Transiton
@@ -252,12 +252,12 @@ h2Transiton_3 = Rule.fromDFS( # 2 H-migr. split 4.46
 
 substituion = Rule.fromDFS( # siehe 4.42
 	s =
-	"[*]1[C]2.[C]3[*+.]4[*]5" +
+	"[*]1[C]2.[C]3[*+.]4" + #YRY "[*]1[C]2.[C]3[*+.]4[*]5"
 	">>" +
-	"[*.]1.[C]2.[C]3[*+]4([*]5){-}2",
+	"[*.]1.[C]2.[C]3[*+]4{-}2", #YRY "[*.]1.[C]2.[C]3[*+]4([*]5){-}2"
 	name=
 	"Substituion" +
-	" §R1S2-3Y4R5"
+	" §R1S2-3Y4" #YRY " §R1S2-3Y4R5"
 )
 
 ####### elimination
@@ -266,6 +266,7 @@ elimination = Rule.fromDFS( # siehe Tab. 8.4
 	"[*]1[C]2.[C]3[*+]4[*]5" +
 	">>" +
 	"[C]2.[C]3{-}2.[*]1[*]4[*+]5",
+	name = 
 	"Elimination" +
 	" §R1S2-3R4Y5"
 )

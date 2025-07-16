@@ -1,5 +1,10 @@
 
-def getParentRulesForGraph(derivationGraph, search_target_graph):
+from typing import Set, List, Tuple
+
+def getParentRulesForGraph(
+    derivationGraph: mod.DG, 
+    search_target_graph: mod.Graph
+    ) -> List[int]:
     parentRules = []
     visited = set()
     stack = [search_target_graph]
@@ -35,7 +40,9 @@ def getParentRulesForGraph(derivationGraph, search_target_graph):
     return parentRules
 
 
-def getSpectraFromMoelDerivationGraph(derivationGraph):
+def getSpectraFromMoelDerivationGraph(
+    derivationGraph: mod.DG
+    ) -> List[Tuple[float, int, Set[int]]]:
     spectra = list()
     sourceGraph = derivationGraph.graphDatabase[0]
     print(derivationGraph.createdGraphs)
