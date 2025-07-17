@@ -20,6 +20,7 @@ def getParentRulesForGraph(
         try:
             edges = derivationGraph.findVertex(current_graph).inEdges
         except:
+            print("Fragment does not exist in DG")
             continue
 
         for edge in edges:
@@ -27,6 +28,7 @@ def getParentRulesForGraph(
                 for rule in edge.rules:
                     parentRules.append(rule.id)
             except:
+                print("edge exeption in getPartenRulesFromGraph")
                 continue
 
             try:
@@ -45,18 +47,15 @@ def getSpectraFromMoelDerivationGraph(
     ) -> List[Tuple[float, int, Set[int]]]:
     spectra = list()
     sourceGraph = derivationGraph.graphDatabase[0]
-    print(derivationGraph.createdGraphs)
-    for g in derivationGraph.createdGraphs:
-        print(g.getGMLString())
-    print("...\n")
-    for graph in derivationGraph.createdGraphs:     
-        graph = graphFromTerm(graph)
+    
+    for graph_term in derivationGraph.createdGraphs:     
+        graph = graphFromTerm(graph_term)
         if graph.isMolecule:
                 if '+' in graph.getGMLString(): # only charged fragments can be detected
                         found = False # update spectra list if allready occuring
-
-                        rules = set(getParentRulesForGraph(derivationGraph,graph))
                         
+                        rules = set(getParentRulesForGraph(derivationGraph,graph_term))
+
                         for i, (mass, occurence, old_rules) in enumerate(spectra):
                                 if abs(mass - graph.exactMass) < 1e-2:
                                         spectra[i] = (graph.exactMass, occurence + 1, old_rules.union(rules))

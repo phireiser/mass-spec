@@ -18,7 +18,7 @@ def termFromGraph(g: mod.Graph):
                 v.radical,
             )
         except mod.libpymod.LogicError as e:
-            s += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+            s += 'node [ id %d label "a(_A, %d, %d)" ]' % (v.id, v.charge, v.radical)
 
     for e in g.edges:
         s += 'edge [ source %d target %d label "e(%s)" ]' % (
@@ -95,7 +95,7 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
                 v.radical
             )
         except mod.libpymod.LogicError as e:
-            left += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+            left += 'node [ id %d label "a(_A, %d, %d)" ]' % (v.id, v.charge, v.radical)
     
     for e in g.edges:
         left += 'edge [ source %d target %d label "e(%s)" ]' % (
@@ -115,7 +115,7 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
                     v.radical,
                 )
             except mod.libpymod.LogicError as e:
-                context += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+                context += 'node [ id %d label "a(_A, %d, %d)" ]' % (v.id, v.charge, v.radical)
     for e in g.edges:
         if hasattr(v, "bondType"):
             context += 'edge [ source %d target %d label "e(%s)" ]' % (
@@ -134,7 +134,7 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
                 v.radical,
             )
         except mod.libpymod.LogicError as e:
-            right += 'node [ id %d label "a(*, %d, %d)" ]' % (v.id, v.charge, v.radical)
+            right += 'node [ id %d label "a(_A, %d, %d)" ]' % (v.id, v.charge, v.radical)
     for e in g.edges:
         right += 'edge [ source %d target %d label "e(%s)" ]' % (
             e.source.id, 

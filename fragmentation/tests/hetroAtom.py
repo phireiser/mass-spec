@@ -25,7 +25,7 @@ fragmentation = flatten_list(fragmentation)
 
 
 universe = [
-    Graph.fromDFS("[C]1[*+.]2[H]3([H]4)"),
+    Graph.fromDFS("[C]1[_A+.]2[H]3([H]4)"),
     Graph.fromDFS("[C]1[N.]2[H]3([H]4)"),
     Graph.fromDFS("[C]1([C]2)[O+]3[H]4([H]5)"),
 ]

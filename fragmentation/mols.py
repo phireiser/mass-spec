@@ -95,7 +95,7 @@ common_ei_molecules = [
 	polychlorinatedBiphenyls, 
 	testosterone, # needs a lot of memory
 	#cholesterol, # for the saturation rule extention it needs more memory, I assume the mol is too big, stopt at 20GB mem
-	linolenicAcid, # needs a lot of memory
+	#linolenicAcid, # needs a lot of memory 30% local
 ]
 
 common_ei_mol_term = []
@@ -104,22 +104,17 @@ for m in common_ei_molecules:
 
 small_ei_mol_term = [
     termFromGraph(x) for x in [
-        toluene, 
+        #toluene, 
         butanal,
     	#butylbenzene,
     	#phenylalanine,
     	#tyrosine,
         #benzoicAcid,
     	#chlorobenzene,
-        polychlorinatedBiphenyls,
-        anthracene,
+      #  polychlorinatedBiphenyls,
+      #  anthracene,
     ]
 ]
 
- # only create rules for occuring hetroAtoms
-occuring_hetroAtoms = set()
-for m in common_ei_molecules:
-    for ha in heteroAtoms:
-        if m.vLabelCount(ha) > 0:
-            occuring_hetroAtoms.add(ha)
-heteroAtoms = occuring_hetroAtoms
+occuring_commonMol_allAtoms = allOccuring(common_ei_molecules, allAtoms)
+

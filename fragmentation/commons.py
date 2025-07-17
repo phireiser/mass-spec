@@ -5,8 +5,8 @@ import re
 import itertools
 import sys
 import os
-import networkx as nx
 import mod
+import networkx as nx
 
 from collections import deque, Counter
 from typing import List, Tuple, Iterable, Set

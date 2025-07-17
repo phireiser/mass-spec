@@ -17,19 +17,39 @@ ionization = [
 ]
 ionization = flatten_list(ionization)
 
-ionization_term =[]
-for r in ionization:
-    ionization_term.append(termFromRule(r))
-
 fragmentation = [
     benzylAllyl_fragmentation,
     deProtonation_all,
     IMS_cover_fragmentation,
-    IMS_examples, 
+    IMS_chap4_examples,
+    #IMS_chap8_examples,
     wiki_fragmentation,
 ]
 fragmentation = flatten_list(fragmentation)
 
-fragmentation_term =[]
-for r in fragmentation:
-    fragmentation_term.append(termFromRule(r))
+
+# contraints Label Any
+constraint_string = getConstraint(occuring_commonMol_allAtoms, "A")
+
+ionization_constrained = list()
+for rule in ionization:
+    ionization_constrained.append(
+        addConstraints(rule, constraint_string)
+    )
+
+fragmentation_constrained = list()
+for rule in fragmentation:
+    fragmentation_constrained.append(
+        addConstraints(rule, constraint_string)
+    )
+
+
+ionization_term = []
+for rule in ionization_constrained:
+    ionization_term.append(termFromRule(rule))
+
+fragmentation_term = []
+for rule in fragmentation_constrained:
+    fragmentation_term.append(termFromRule(rule))
+
+

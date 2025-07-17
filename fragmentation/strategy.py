@@ -1,6 +1,8 @@
 include("predicates.py")
 import mod
 
+from typing import List
+
 def makeStrategy(
 	universe: List[mod.Graph], 
 	ionization: List[mod.Rule], 

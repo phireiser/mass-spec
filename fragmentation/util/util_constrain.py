@@ -1,27 +1,48 @@
-heteroAtoms = [
-    "He","Li","Be","B","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
-    "Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb",
-    "Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
-    "Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
-    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra",
-    "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
+hetroAtoms = [
+    "He",
+    "Li","Be","B","N","O","F","Ne",
+    "Na","Mg","Al","Si","P","S","Cl","Ar",
+    "K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr",
+    "Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
+    "Cs","Ba", "La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
+    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn",
+    "Fr","Ra", "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 ]
 
-alk_nes_lables = ["H", "C"] # alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
+alk_nes_lables = ["H", "C"] # TODO alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
+
+allAtoms = hetroAtoms
+allAtoms.extend(alk_nes_lables)
 
 
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
 # TODO ? functional group containing heteroAtom, this is only heteroAtoms itself
 
 
-lables = " ".join('label ' + '"' + x + '"' for x in heteroAtoms)
+ # only create rules for occuring hetroAtoms
+occuring_hetroAtoms = set(hetroAtoms)
+occuring_allAtoms = set(allAtoms)
 
-constraint = """
-constrainLabelAny [
-    label "_Y"
-    labels [ """ + lables + """ ]
-]
-"""
+
+def getConstraint(atoms: List[str], repl_label: str) -> str:
+
+    labels = " ".join('label ' + '"' + x + '"' for x in atoms)
+
+    return f"""
+    constrainLabelAny [
+        label "_{repl_label}"
+        labels [ {labels} ]
+    ]
+    """
+
+def allOccuring(inMoleculeList: mod.Graph, elementList: Iterable[str]) -> Set[str]:
+    occuring = set()
+    for m in inMoleculeList:
+        for e in elementList:
+            if m.vLabelCount(e) > 0:
+                occuring.add(e)
+    return occuring
+
 
 def addConstraints(rule: mod.Rule, conStringGML: str) -> mod.Rule:
     gmlstr = rule.getGMLString()

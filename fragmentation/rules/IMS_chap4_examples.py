@@ -172,9 +172,9 @@ IMS_4_8 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.09; oder Seite Einband, Alkene
 IMS_4_9 = Rule.fromDFS(
 	s =
-	"[C]1[C]2[C]3([C]4)[*+.]5" + #YRY "[C]1[C]2[C]3([C]4)[*+.]5[*]6"
+	"[C]1[C]2[C]3([C]4)[_A+.]5" + #YRY "[C]1[C]2[C]3([C]4)[_A+.]5[_A]6"
 	">>" +
-	"[C.]1.[C]2[C]3([C]4){=}[*+.]5", #YRY "[C.]1.[C]2[C]3([C]4){=}[*+.]5[*]6"
+	"[C.]1.[C]2[C]3([C]4){=}[_A+.]5", #YRY "[C.]1.[C]2[C]3([C]4){=}[_A+.]5[_A]6"
 	name =
 	"radical induced (alpha-)clevage for a saturated site" +
 	" 4.9" +
@@ -184,9 +184,9 @@ IMS_4_9 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.10; oder Seite Einband, Alkene
 IMS_4_10 = Rule.fromDFS(
 	s =
-	"[*+]1[C]2[C.]3" + #YRY "[*+]1[C]2[C]3[C.]4"
+	"[_A+]1[C]2[C.]3" + #YRY "[_A+]1[C]2[C]3[C.]4"
 	">>" +
-	"[*+.]1.[C]2[C.]3", #YRY "[*+.]1[C]2.[C]3[C.]4"
+	"[_A+.]1.[C]2[C.]3", #YRY "[_A+.]1[C]2.[C]3[C.]4"
 	name =
 	"radical induced (alpha-)clevage for a saturated site" +
 	" 4.10" +
@@ -196,9 +196,9 @@ IMS_4_10 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.11; oder Seite Einband, Alkene
 IMS_4_11 = Rule.fromDFS(
 	s = 
-	"[C]1[C]2[C]3{=}[*+.]4" +
+	"[C]1[C]2[C]3{=}[_A+.]4" +
 	">>" +
-	"[C.]1.[C]2[C]3{#}[*+]4",
+	"[C.]1.[C]2[C]3{#}[_A+]4",
 	name =
 	"radical induced (alpha-)clevage for a unsaturated heteroatom" +
 	" 4.11" +
@@ -424,9 +424,9 @@ IMS_4_17_3 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.18; Seite Einband
 IMS_4_18 = Rule.fromDFS(
 	s =
-	"[*]1[*+.]2" + #YRY "[C]1[*+.]2[C]3"
+	"[_A]1[_A+.]2" + #YRY "[C]1[_A+.]2[C]3"
 	">>" +
-	"[*+]1.[*.]2", #YRY "[C+]1.[*.]2[C]3"
+	"[_A+]1.[_A.]2", #YRY "[C+]1.[_A.]2[C]3"
 	name =
 	"inductive cleavage odd electron 1" +
 	" 4.18"
@@ -436,9 +436,9 @@ IMS_4_18 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.19 with Information of 4.25 of R'
 IMS_4_19_1 = Rule.fromDFS(
 	s =
-	"[*]1([C]2)[*]3{=}[*+.]4" +
+	"[_A]1([C]2)[_A]3{=}[_A+.]4" +
 	">>" +
-	"[*+]1.[C]2[*.]3{=}[*]4", 
+	"[_A+]1.[C]2[_A.]3{=}[_A]4", 
 	name =
 	"inductive cleavage odd electron 2" +
 	" 4.19"
@@ -448,9 +448,9 @@ IMS_4_19_1 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.19 2te Variante
 IMS_4_19_2 = Rule.fromDFS(# Y on left side has unpaired electron
 	s =
-	"[*]1([*]3)[C+]4{=}[*.]2" +
+	"[_A]1([_A]3)[C+]4{=}[_A.]2" +
 	">>" +
-	"[*+]1.[*]3[C.]4{=}[*]2", 
+	"[_A+]1.[_A]3[C.]4{=}[_A]2", 
 	name =
 	"inductive cleavage odd electron 3" +
 	" 4.19" +
@@ -460,9 +460,9 @@ IMS_4_19_2 = Rule.fromDFS(# Y on left side has unpaired electron
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.20
 IMS_4_20 = Rule.fromDFS(
 	s =
-	"[*]1[*+]2[H]3([H]4)" +
+	"[_A]1[_A+]2[H]3([H]4)" +
 	">>" +
-	"[*+]1.[*]2[H]3([H]4)",
+	"[_A+]1.[_A]2[H]3([H]4)",
 	name =
 	"inductive cleavage even electron 1" +
 	" 4.20" +
@@ -472,9 +472,9 @@ IMS_4_20 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.21
 IMS_4_21 = Rule.fromDFS(
 	s =
-	"[*]1[*+]2{=}[C]3[H]4([H]5)" +
+	"[_A]1[_A+]2{=}[C]3[H]4([H]5)" +
 	">>" +
-	"[*+]1.[*]2{=}[C]3[H]4([H]5)",
+	"[_A+]1.[_A]2{=}[C]3[H]4([H]5)",
 	name =
 	"inductive cleavage even electron 2" +
 	" 4.21" +
@@ -485,11 +485,11 @@ IMS_4_21 = Rule.fromDFS(
 IMS_4_22 = Rule.fromDFS(
 	s =
 	"[C]1[C]2" +
-	"[*+.]3" +
+	"[_A+.]3" +
 	"[C]4[C]5" +
 	">>" +
 	"[C+]1[C]2" +
-	"[*.]3" +
+	"[_A.]3" +
 	"[C]4[C]5",
 	name =
 	"inductive cleavage odd electron" +
@@ -557,9 +557,9 @@ IMS_4_25_1 = Rule.fromDFS(
 
 IMS_4_25_2 = Rule.fromDFS(
 	s =
-	"[*]1[C+]2([*]3)[O.]4" +
+	"[_A]1[C+]2([_A]3)[O.]4" +
 	">>" +
-	"[*+]1.[*]3[C.]2{=}[O]4",
+	"[_A+]1.[_A]3[C.]2{=}[O]4",
 	name =
 	"inductive cleavage odd electron" +
 	" 4.25 reactant 2" +
@@ -569,9 +569,9 @@ IMS_4_25_2 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.26
 IMS_4_26_1 = Rule.fromDFS(
 	s =
-	"[*]1[C]2([H]3)([H]4)[O+.]5[*]6" +
+	"[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6" +
 	">>" +
-	"[*.]1.[C]2([H]3)([H]4){=}[O+]5[*]6",
+	"[_A.]1.[C]2([H]3)([H]4){=}[O+]5[_A]6",
 	name =
 	"inductive cleavage even electron" +
 	" 4.26 step 1 alpha" +
@@ -580,9 +580,9 @@ IMS_4_26_1 = Rule.fromDFS(
 
 IMS_4_26_2 = Rule.fromDFS(
 	s =
-	"[C]1([H]2)([H]3){=}[O+]4[*]5" +
+	"[C]1([H]2)([H]3){=}[O+]4[_A]5" +
 	">>" +
-	"[C]1([H]2)([H]3)[O]4.[*+]5",
+	"[C]1([H]2)([H]3)[O]4.[_A+]5",
 	name =
 	"inductive cleavage even electron" +
 	" 4.26 step 2 inductive" +
@@ -592,9 +592,9 @@ IMS_4_26_2 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.27
 IMS_4_27_1 = Rule.fromDFS(
 	s =
-	"[*]1[C]2([*]3){=}[O+.]4" +
+	"[_A]1[C]2([_A]3){=}[O+.]4" +
 	">>" +
-	"[*]1.[*]3[C]2{#}[O+]4",
+	"[_A]1.[_A]3[C]2{#}[O+]4",
 	name =
 	"inductive cleavage even electron" +
 	" 4.27 step 1 alpha" +
@@ -603,9 +603,9 @@ IMS_4_27_1 = Rule.fromDFS(
 
 IMS_4_27_2 = Rule.fromDFS(
 	s =
-	"[*]1[C]2{#}[O+]3" +
+	"[_A]1[C]2{#}[O+]3" +
 	">>" +
-	"[*+]1.[C]2[O]3",
+	"[_A+]1.[C]2[O]3",
 	name =
 	"inductive cleavage even electron" +
 	" 4.27 step 2 inductive" +
@@ -615,9 +615,9 @@ IMS_4_27_2 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.28
 IMS_4_28_1 = Rule.fromDFS(
 	s =
-	"[*]1[O]2[H]3.[H+]4" +
+	"[_A]1[O]2[H]3.[H+]4" +
 	">>" +
-	"[*]1[O+]2([H]3)([H]4)",
+	"[_A]1[O+]2([H]3)([H]4)",
 	name =
 	"inductive cleavage even electron" +
 	" 4.28 step 1 chemical ionization" +
@@ -626,9 +626,9 @@ IMS_4_28_1 = Rule.fromDFS(
 
 IMS_4_28_2 = Rule.fromDFS(
 	s =
-	"[*]1[O+]2([H]3)([H]4)" +
+	"[_A]1[O+]2([H]3)([H]4)" +
 	">>" +
-	"[*+]1.[O]2([H]3)([H]4)",
+	"[_A+]1.[O]2([H]3)([H]4)",
 	name =
 	"inductive cleavage even electron" +
 	" 4.28 step 2 inductive" +
@@ -638,12 +638,12 @@ IMS_4_28_2 = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 70, Gl. 4.29
 IMS_4_29 = Rule.fromDFS(
 	s =
-	"[*]1[C]2[C]3[C]4[C]5[C]6" +
+	"[_A]1[C]2[C]3[C]4[C]5[C]6" +
 	"[C]7([H]8)[O]9([H]10)" +
 	"[C]11([H]12)[C]13([H]14)([H]15)([H]16)" +
 	"[N+]17([H]18)([H]19)[C]20([H]21)([H]22)([H]23)" +
 	">>" +
-	"[*]1[C]2[C]3[C]4[C]5[C]6" +
+	"[_A]1[C]2[C]3[C]4[C]5[C]6" +
 	"[C]7([H]8)[O]9([H]10)" +
 	"[C+]11([H]12)[C]13([H]14)([H]15)([H]16)" +
 	".[N]17([H]18)([H]19)[C]20([H]21)([H]22)([H]23)",
@@ -910,9 +910,9 @@ IMS_4_40_ind = Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 80, Gl. 4.41
 IMS_4_41_rH = Rule.fromDFS(
     s =
-    "[H]1[*]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+.]11[C]12" +
+    "[H]1[_A]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+.]11[C]12" +
     ">>" +
-    "[*.]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+]11([H]1)[C]12",
+    "[_A.]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+]11([H]1)[C]12",
     name =
     "H-migr to unsat. hetrostructur and clevage of neighb. bond" +
     " 4.41 rH" +
@@ -921,9 +921,9 @@ IMS_4_41_rH = Rule.fromDFS(
 
 IMS_4_41_ind1 = Rule.fromDFS(
     s =
-    "[*.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12" +
+    "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12" +
     ">>" +
-    "[*.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8{#}[O+]9.[O]10([H]11)[C]12",
+    "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8{#}[O+]9.[O]10([H]11)[C]12",
     name =
     "H-migr to unsat. hetrostructur  and clevage of neighb. bond" +
     " 4.41 ind prod 1" +
@@ -932,9 +932,9 @@ IMS_4_41_ind1 = Rule.fromDFS(
 
 IMS_4_41_ind2 = Rule.fromDFS(
     s =
-    "[*.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12" +
+    "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12" +
     ">>" +
-    "[*]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({-}2){=}[C]8{=}[O+]9.[O]10([H]11)[C]12",
+    "[_A]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({-}2){=}[C]8{=}[O+]9.[O]10([H]11)[C]12",
     name =
     "H-migr to unsat. hetrostructur  and clevage of neighb. bond" +
     " 4.41 ind prod 2" +
@@ -1059,7 +1059,7 @@ IMS_4_46_rH_2_ = Rule.fromDFS(
 )
 
 
-IMS_examples = [
+IMS_chap4_examples = [
     IMS_4_3_var1,
     IMS_4_3_var2,
 
