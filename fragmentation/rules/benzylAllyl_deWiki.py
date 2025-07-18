@@ -5,7 +5,7 @@ benzylAllyl_mz134_77 = Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" +  #somewhere positive radical +.
 	">>" +
-	"[C]1[C]2[C]3.[C]4{=}[C]5[c]6[c]7{=}[c]8[c]9{=}[c]10{-}5",
+	"[C]1[C]2[C]3" "." "[C]4{=}[C]5[c]6[c]7{=}[c]8[c]9{=}[c]10{-}5",
 	name = 
 	"BA 134-77" +
 	""
@@ -15,7 +15,7 @@ benzylAllyl_mz134_91 = Rule.fromDFS(
 	s = 
 	"[C]1[C]2[C]3[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5" + # somewhere positive radical +.
 	">>" +
-	"[C]1[C]2[C.]3.[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5", # somewhere positive + and H.
+	"[C]1[C]2[C.]3" "." "[C]4[C]5{=}[C]6[C]7{=}[C]8[C]9{=}[C]10{-}5", # somewhere positive + and H.
 	name = 
 	"BA 134-91" +
 	""
@@ -25,7 +25,7 @@ benzylAllyl_mz77_51 = Rule.fromDFS(
 	s = 
 	"[C]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6{-}1" +  # somewhere positive +
 	">>" +
-	"[C]1{=}[C]2[C]3{=}[C]4{-}1.[C]5{#}[C]6",  # somewhere positive +
+	"[C]1{=}[C]2[C]3{=}[C]4{-}1" "." "[C]5{#}[C]6",  # somewhere positive +
 	name = 
 	"BA 77-51" +
 	""
@@ -56,7 +56,7 @@ benzylAllyl_mz91_65 = Rule.fromDFS(
 	s = 
 	"[c]1{=}[c]2{-}[c]3{=}[c]4{-}[c]5{=}[c]6{-}[c]7{-}1" + #ring positive +
 	">>" +
-	"[C]1{#}[C]2.[c]3{=}[c]4{-}[c]5{=}[c]6{-}[c]7{-}1", #ring positive +
+	"[C]1{#}[C]2" "." "[c]3{=}[c]4{-}[c]5{=}[c]6{-}[c]7{-}1", #ring positive +
 	name = 
 	"BA 91-65" +
 	""

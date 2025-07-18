@@ -11,7 +11,7 @@ include("strategy.py")
 allActiveRules = set()
 
 
-for m in common_ei_mol_term: #small_ei_mol_term: common_ei_mol_term:
+for m in small_ei_mol_term: #small_ei_mol_term: common_ei_mol_term:
     print("\n")
     print("mol spectrum of", m.name)
     strategy = makeStrategy(universe=[m], ionization=ionization_term, fragmentation=fragmentation_term)
