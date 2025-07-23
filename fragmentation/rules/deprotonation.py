@@ -1,9 +1,9 @@
+import mod
+
 # deProtonation (H. or H+) in homolytic cleavage
 # source Manuel Uhlir
 
-include("../commons.py")
-
-deProtonation_radical = Rule.fromDFS(
+deProtonation_radical = mod.Rule.fromDFS(
 	s = 
 	"[H]1[_A]2"
 	">>"
@@ -14,7 +14,7 @@ deProtonation_radical = Rule.fromDFS(
 )
 
 
-deProtonation_proton = Rule.fromDFS(
+deProtonation_proton = mod.Rule.fromDFS(
 	s = 
 	"[H]1[_A]2"
 	">>"
@@ -29,5 +29,3 @@ deProtonation_all = [
     deProtonation_radical,
     deProtonation_proton,
 ]
-
-deProtonation_all = flatten_list(deProtonation_all)

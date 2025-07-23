@@ -1,3 +1,7 @@
+from typing import List, Tuple, Iterable, Set, Dict, Any, Union
+import mod
+
+
 hetroAtoms = [
     "He",
     "Li","Be","B","N","O","F","Ne",
@@ -24,6 +28,22 @@ occuring_hetroAtoms = set(hetroAtoms)
 occuring_allAtoms = set(allAtoms)
 
 
+def applyConstraints(
+    rules: List[mod.Rule],
+    allOccuringAtoms: List[str],
+    placeholder: str = "A"
+    ) -> List[mod.Rule]:
+
+    # contraints Label Any
+    constraint_string = getConstraint(allOccuringAtoms, placeholder)
+
+    constraintRules = list()
+    for rule in rules:
+        constraintRules.append(
+            addConstraints(rule, constraint_string)
+        )
+    return constraintRules
+
 def getConstraint(atoms: List[str], repl_label: str) -> str:
 
     labels = " ".join('label ' + '"' + x + '"' for x in atoms)
@@ -47,7 +67,7 @@ def allOccuring(inMoleculeList: mod.Graph, elementList: Iterable[str]) -> Set[st
 def addConstraints(rule: mod.Rule, conStringGML: str) -> mod.Rule:
     gmlstr = rule.getGMLString()
     name = rule.name
-    rule = ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
+    rule = mod.ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
     return rule
 
 
@@ -127,3 +147,62 @@ def labelConstraints_dfs(
                             
             return_rules.append((new_rule, name))
     return return_rules
+
+def split_rule_dfs(rule: str) -> Tuple[List[str], List[str]]:
+    """
+    Split a ruleDFS of the form
+        graphs_left >> graphs_right
+    into two lists while ignoring dots that are inside any brackets.
+
+    Returns
+    -------
+    left_graphs  : list[str]
+    right_graphs : list[str]
+    """
+    # separate left & right
+    if ">>" not in rule:
+        raise ValueError("ruleDFS must contain '>>'")
+    left_raw, right_raw = map(str.strip, rule.split(">>", 1))
+
+    # helper: top-level dot splitter using ONE depth counter
+    def split_side(side: str) -> List[str]:
+        graphs, buf, depth = [], [], 0
+        for ch in side:
+            if ch in "[({":        # any opening bracket
+                depth += 1
+            elif ch in "])}":      # any closing bracket
+                depth -= 1
+
+            if ch == "." and depth == 0:   # separator only at top level
+                graph = "".join(buf).strip()
+                if graph:
+                    graphs.append(graph)
+                buf.clear()
+            else:
+                buf.append(ch)
+
+        last = "".join(buf).strip()
+        if last:
+            graphs.append(last)
+        return graphs
+
+    return split_side(left_raw), split_side(right_raw)
+
+
+def flatten_list(nested_list: List[Union[Any, List]]) -> List[Any]:
+    """
+    Flattens a nested list into a single list.
+
+    :param nested_list: A list which may contain other lists
+    :return: A flattened list
+    """
+    flat_list: List[Any] = []
+    for item in nested_list:
+        if isinstance(item, list):
+            flat_list.extend(flatten_list(item))
+        else:
+            flat_list.append(item)
+    return flat_list
+
+
+

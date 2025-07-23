@@ -1,9 +1,12 @@
+import mod
+
+
 # Interpreation von Massenspektren Springer, Einband Seiten
 
 #IMS_4_7
 
 # element with low IE
-sigma_lowIE = Rule.fromDFS( 
+sigma_lowIE = mod.Rule.fromDFS( 
 	s =
 	"[_A+.]1[I]2"
 	">>"
@@ -34,7 +37,7 @@ sigma_lowIE = Rule.fromDFS(
 
 ####### h Transtion unsaturated
 
-hTransition_unsaturated = Rule.fromDFS(
+hTransition_unsaturated = mod.Rule.fromDFS(
 	s =
 	"[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6"
 	">>"
@@ -44,7 +47,7 @@ hTransition_unsaturated = Rule.fromDFS(
 	" §Y6"
 )
 
-hTransition_unsaturated_alpha = Rule.fromDFS(
+hTransition_unsaturated_alpha = mod.Rule.fromDFS(
 	s =
 	"[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6"
 	">>"
@@ -54,7 +57,7 @@ hTransition_unsaturated_alpha = Rule.fromDFS(
 	" §Y5"
 )
 
-hTransition_unsaturated_bidirect = Rule.fromDFS(
+hTransition_unsaturated_bidirect = mod.Rule.fromDFS(
 	s =
 	"[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6"
 	">>"
@@ -64,7 +67,7 @@ hTransition_unsaturated_bidirect = Rule.fromDFS(
 	" §Y5"
 )
 
-hTransition_unsaturated_inductive = Rule.fromDFS(
+hTransition_unsaturated_inductive = mod.Rule.fromDFS(
 	s =
 	"[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6"
 	">>"
@@ -76,7 +79,7 @@ hTransition_unsaturated_inductive = Rule.fromDFS(
 
 ####### hTranstion saturated
 
-hTransition_saturated_1 = Rule.fromDFS(
+hTransition_saturated_1 = mod.Rule.fromDFS(
 	s =
 	"[H]1[C]2[C]3" "." "[C]4[_A+.]5" #YRY "[H]1[C]2[C]3.[C]4[_A+.]5[_A]6" 
 	">>"
@@ -86,7 +89,7 @@ hTransition_saturated_1 = Rule.fromDFS(
 	" §S3-4Y5" #YRY " §S3-4Y5R6" 
 )
 
-hTransition_saturated_1_alpha = Rule.fromDFS(
+hTransition_saturated_1_alpha = mod.Rule.fromDFS(
 	s =
 	"[C.]1[C]2" "." "[C]3[_A+]4([H]5)" #YRY "[C.]1[C]2.[C]3[_A+]4([H]5)([_A]6)"
 	">>"
@@ -96,7 +99,7 @@ hTransition_saturated_1_alpha = Rule.fromDFS(
 	" §S2-3Y4" # YRY " §S2-3Y4R6"
 )
 
-hTransition_saturated_1_inductive_1 = Rule.fromDFS(
+hTransition_saturated_1_inductive_1 = mod.Rule.fromDFS(
 	s =
 	"[C.]1[C]2" "." "[C]3[_A+]4([H]5)" #YRY "[C.]1[C]2.[C]3[_A+]4([H]5)([_A]6)"
 	">>"
@@ -106,7 +109,7 @@ hTransition_saturated_1_inductive_1 = Rule.fromDFS(
 	" §S2-3Y4" #YRY " §S2-3Y4R6"
 )
 
-hTransition_saturated_1_inductive_2 = Rule.fromDFS(
+hTransition_saturated_1_inductive_2 = mod.Rule.fromDFS(
 	s = 
 	"[C.]1[C]2.[C]3[_A+]4([H]5)" #YRY "[C.]1[C]2.[C]3[_A+]4([H]5)([_A]6)"
 	">>"
@@ -116,7 +119,7 @@ hTransition_saturated_1_inductive_2 = Rule.fromDFS(
 	" §S2-3Y4" #YRY " §S2-3Y4R6"
 )
 
-hTransition_saturated_2 = Rule.fromDFS( # siehe 8.53
+hTransition_saturated_2 = mod.Rule.fromDFS( # siehe 8.53
 	s = 
 	"[H]1[C]2[C]3([_A+]4)" "." "[C]5[C.]6"
 	">>"
@@ -126,7 +129,7 @@ hTransition_saturated_2 = Rule.fromDFS( # siehe 8.53
 	" §Y4S3-5"
 )
 
-hTransition_saturated_2_alpha = Rule.fromDFS( # siehe 8.53
+hTransition_saturated_2_alpha = mod.Rule.fromDFS( # siehe 8.53
 	s =
 	"[_A+]1[C.]2[C]3([H]4)" "." "[C]5"
 	">>"
@@ -136,7 +139,7 @@ hTransition_saturated_2_alpha = Rule.fromDFS( # siehe 8.53
 	" §Y1S3-5"
 )
 
-hTransition_saturated_3 = Rule.fromDFS( # siehe 4.44 & 4.46
+hTransition_saturated_3 = mod.Rule.fromDFS( # siehe 4.44 & 4.46
 	s = 
 	"[H]1[C]2[C]3" "." "[C]4[_A+]5{=}[C]6([H]7)([_A]8)"
 	">>"
@@ -146,7 +149,7 @@ hTransition_saturated_3 = Rule.fromDFS( # siehe 4.44 & 4.46
 	" §S3-4Y5R8"
 )
 
-hTransition_saturated_3_alpha = Rule.fromDFS( # siehe 4.44 & 4.46
+hTransition_saturated_3_alpha = mod.Rule.fromDFS( # siehe 4.44 & 4.46
 	s =
 	"[C.]1[C]2" "." "[C]3[_A+]4([H]5){=}[C]6([H]7)([_A]8)"
 	">>"
@@ -156,7 +159,7 @@ hTransition_saturated_3_alpha = Rule.fromDFS( # siehe 4.44 & 4.46
 	" §S2-3Y4R8"
 )
 
-hTransition_saturated_4 = Rule.fromDFS( # siehe 8.90
+hTransition_saturated_4 = mod.Rule.fromDFS( # siehe 8.90
 	s =
 	"[H]1[C]2[C]3" "." "[C]4([H]5){=}[_A+]6" #YRY "[H]1[C]2[C]3.[C]4([H]5){=}[_A+]6[_A]7"
 	">>"
@@ -166,7 +169,7 @@ hTransition_saturated_4 = Rule.fromDFS( # siehe 8.90
 	" §Y6S3-4" #YRY " §Y6S3-4R7"
 )
 
-hTransition_saturated_4_alpha = Rule.fromDFS( # siehe 8.90
+hTransition_saturated_4_alpha = mod.Rule.fromDFS( # siehe 8.90
 	s =
 	"[C.]1[C]2[C]3[C]4([H]5)([H]6){=}[O+]7[C]8"
 	">>"
@@ -176,7 +179,7 @@ hTransition_saturated_4_alpha = Rule.fromDFS( # siehe 8.90
 	"" #TODO no rule enhancemend?
 )
 
-hTransition_saturated_5 = Rule.fromDFS( # siehe 4.45
+hTransition_saturated_5 = mod.Rule.fromDFS( # siehe 4.45
 	s = 
 	"[H]1[C]2([_A+]3)[C]4[C]5[_A..]6" #YRY "[H]1[C]2([_A+]3)[C]4[C]5[_A..]6[_A]7"
 	">>"
@@ -186,7 +189,7 @@ hTransition_saturated_5 = Rule.fromDFS( # siehe 4.45
 	" §Y6S2-4Y3" #YRY " §Y6S2-4Y3R7"
 )
 
-hTransition_saturated_5_inductive_1 = Rule.fromDFS( # siehe 4.45
+hTransition_saturated_5_inductive_1 = mod.Rule.fromDFS( # siehe 4.45
 	s =
 	"[C]1([_A+]2)" "." "[C]3[C]4[_A..]5([H]6)" #YRY "[C]1([_A+]2).[C]3[C]4[_A..]5([H]6)[_A]7"
 	">>"
@@ -196,7 +199,7 @@ hTransition_saturated_5_inductive_1 = Rule.fromDFS( # siehe 4.45
 	" §Y2S1-3Y5" #YRY " §Y2S1-3Y5R7"
 )
 
-hTransition_saturated_5_inductive_2 = Rule.fromDFS( # siehe 4.45
+hTransition_saturated_5_inductive_2 = mod.Rule.fromDFS( # siehe 4.45
 	s = 
 	"[C.]1([_A+]2)" "." "[C]3[C+]4[_A+.]5([H]6)" #YRY "[C.]1([_A+]2).[C]3[C+]4[_A+.]5([H]6)[_A]7"
 	">>"
@@ -206,7 +209,7 @@ hTransition_saturated_5_inductive_2 = Rule.fromDFS( # siehe 4.45
 	" §Y2S1-3Y5" #YRY " §Y2S1-3Y5R7"
 )
 
-hTransition_saturated_5_inductive_3 = Rule.fromDFS( # siehe 4.45
+hTransition_saturated_5_inductive_3 = mod.Rule.fromDFS( # siehe 4.45
 	s =
 	"[C.]1([_A+]2)" "." "[C]3[C+]4[_A+.]5([H]6)" #YRY "[C.]1([_A+]2).[C]3[C+]4[_A+.]5([H]6)[_A]7"
 	">>"
@@ -222,7 +225,7 @@ hTransition_saturated_5_inductive_3 = Rule.fromDFS( # siehe 4.45
 
 ####### h2Transiton
 
-h2Transiton_1 = Rule.fromDFS(# 2 H-migr. rH 4.46
+h2Transiton_1 = mod.Rule.fromDFS(# 2 H-migr. rH 4.46
 	s=
 	"[H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8"
 	">>"
@@ -232,7 +235,7 @@ h2Transiton_1 = Rule.fromDFS(# 2 H-migr. rH 4.46
 	" §Y5Y8"
 )
 
-h2Transiton_2 = Rule.fromDFS(# 2 H-migr. charge 4.46
+h2Transiton_2 = mod.Rule.fromDFS(# 2 H-migr. charge 4.46
 	s=
 	"[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1"
 	">>"
@@ -242,7 +245,7 @@ h2Transiton_2 = Rule.fromDFS(# 2 H-migr. charge 4.46
 	" §Y5Y8"
 )
 
-h2Transiton_3 = Rule.fromDFS( # 2 H-migr. split 4.46
+h2Transiton_3 = mod.Rule.fromDFS( # 2 H-migr. split 4.46
 	s=
 	"[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1"
 	">>"
@@ -256,7 +259,7 @@ h2Transiton_3 = Rule.fromDFS( # 2 H-migr. split 4.46
 
 ####### substituion
 
-substituion = Rule.fromDFS( # siehe 4.42
+substituion = mod.Rule.fromDFS( # siehe 4.42
 	s =
 	"[_A]1[C]2.[C]3[_A+.]4" #YRY "[_A]1[C]2.[C]3[_A+.]4[_A]5"
 	">>"
@@ -270,7 +273,7 @@ substituion = Rule.fromDFS( # siehe 4.42
 
 ####### elimination
 
-elimination = Rule.fromDFS( # siehe Tab. 8.4
+elimination = mod.Rule.fromDFS( # siehe Tab. 8.4
 	"[_A]1[C]2.[C]3[_A+]4[_A]5"
 	">>"
 	"[C]2"
@@ -313,8 +316,6 @@ rearrangements = [
 	substituion,
 	elimination,
 ]
-
-rearrangements = flatten_list(rearrangements)
 
 
 IMS_cover_fragmentation = [

@@ -1,3 +1,9 @@
+from typing import List, Tuple, Iterable, Set
+from typing import Hashable, Dict, Optional, Any, Union
+
+import networkx as nx
+import mod
+
 def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
     """
     Convert an atom indexed graph string such as
@@ -110,3 +116,42 @@ def printNxGraph(G: nx.Graph) -> None:
     print("\nEdges:")
     for u, v in G.edges():
         print(f"{u} -- {v}")
+
+
+def modDerivationGraph2nx(
+    derivationGraph: mod.DG,
+    ) -> nx.MultiDiGraph:
+
+    G = nx.MultiDiGraph()
+
+    for v in dg.vertices:
+        G.add_node(v.id, graph = modGraph2netX(v.graph))
+
+    for e in dg.edges:
+
+        source_ids = [v.id for v in e.sources]
+        target_ids = [v.id for v in e.targets]
+        rule_names = [rule.name for rule in e.rules]
+        rule_ids = [rule.id for rule in e.rules]
+
+        src = source_ids[0] if source_ids else None
+        tgt = target_ids[0] if target_ids else None
+
+        if src is not None and tgt is not None:
+            G.add_edge(
+                src, tgt,
+                sources=source_ids,
+                targets=target_ids,
+                rule_ids=rule_ids,
+                rule_names=rule_names,
+                edge_id=e.id,
+            )
+        else:
+            # Handle dangling hyperedges (no sources or targets) explicitly
+            G.add_node(f"hyperedge_{e.id}", type="hyperedge", rules=rule_names)
+            for sid in source_ids:
+                G.add_edge(sid, f"hyperedge_{e.id}", role="source")
+            for tid in target_ids:
+                G.add_edge(f"hyperedge_{e.id}", tid, role="target")
+
+    return G

@@ -1,6 +1,11 @@
 import re
 import mod
-from typing import List, Tuple
+import collections
+from typing import List, Tuple, Iterable, Set
+from typing import Hashable, Dict, Optional, Any, Union
+
+from .util_term_transfers import *
+from .util_compareability import ComparableVertex, ComparableVertexList
 
 def getRule2MoleculeMap(
     derivation: mod.Derivation, 
@@ -8,10 +13,10 @@ def getRule2MoleculeMap(
     labelSettings: mod.LabelSettings
     ):# -> mod.VertexMapRuleLeftGraphUnionGraph:
     # instatiate a derivation graph to pass in the vertex map
-    dg_new = DG(graphDatabase = graphs, labelSettings = labelSettings)
+    dg_new = mod.DG(graphDatabase = graphs, labelSettings = labelSettings)
 
     with dg_new.build() as b:
-        d = Derivation()
+        d = mod.Derivation()
         
         d.left = derivation.left
         d.rule = derivation.rule
@@ -19,7 +24,7 @@ def getRule2MoleculeMap(
         b.addDerivation(d)
     
     e = next(edge for edge in dg_new.edges if derivation.rule in edge.rules)
-    vms = DGVertexMapper(e)
+    vms = mod.DGVertexMapper(e)
     m = next(iter(vms), None)
     if m is None:
         # DGVertexMapper yielded no matches
@@ -113,7 +118,7 @@ def collect_bfs(
     morphism_vertices: Set[mod.Graph.Vertex] = set([ x for x in match.domain.vertices]) - set(start_vertices) 
 
     visited: Set[mod.Graph.Vertex] = morphism_vertices
-    queue: deque[mod.Graph.Vertex] = deque(start_vertices)
+    queue: sdeque[mod.Graph.Vertex] = collections.deque(start_vertices)
 
     labels: List[str] = [mol_cleaned_label(v) for v in start_vertices]
     vertices: List[mod.Graph.Vertex] = list(start_vertices)
@@ -223,7 +228,7 @@ def saturatedPath(
     if start_vertex == end_vertex: # start equals end
         return True
 
-    stack: deque[Tuple[mod.Graph.Vertex, List[mod.Graph.Vertex]]] = deque()
+    stack: deque[Tuple[mod.Graph.Vertex, List[mod.Graph.Vertex]]] = collections.deque()
     stack.append((start_vertex, [start_vertex]))
 
     while stack:

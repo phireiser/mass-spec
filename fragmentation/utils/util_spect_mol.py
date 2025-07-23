@@ -1,5 +1,6 @@
 
 from typing import Set, List, Tuple
+import mod
 
 def getParentRulesForGraph(
     derivationGraph: mod.DG, 

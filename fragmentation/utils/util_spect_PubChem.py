@@ -1,3 +1,6 @@
+from typing import List, Tuple, Iterable, Set
+from typing import Hashable, Dict, Optional, Any, Union
+
 def pubChemSmilesLookUp(smiles: str) -> int:
     pug_pre_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
     url = pug_pre_url + smiles + '/cids/JSON'

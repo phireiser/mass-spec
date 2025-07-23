@@ -1,34 +1,46 @@
-include("predicates.py")
+"""
+strategy definition
+"""
+from typing import List
+import utils
+from predicates import sub_group, charge_bound, amu_bound
 import mod
 
-from typing import List
+def make_strategy(
+    derivation_graph: mod.DG,
+    universe: mod.Graph,
+    ionization: List[mod.Rule],
+    fragmentation: List[mod.Rule]
+    ) -> mod.DGStrat:
+    """
+    compile a strategy to perform the ionization and fragmentation
+    """
 
-def makeStrategy(
-	universe: List[mod.Graph], 
-	ionization: List[mod.Rule], 
-	fragmentation: List[mod.Rule]
-	) -> mod.DGStrat:
 
 #TODO we should not need this ckeck
 #	mass = None
 #	try:
-#		mass = graphFromTerm(universe[0]).exactMass
-#	except mod.libpymod.LogicError: # Can not get exact mass of a non-molecule. 
+#		mass = utils.graphFromTerm(universe[0]).exactMass
+#	except mod.libpymod.LogicError: # Can not get exact mass of a non-molecule.
 #		mass = None
 
-	mass = graphFromTerm(universe[0]).exactMass
+    mass = utils.graphFromTerm(universe).exactMass
 
-	strategy = (
-			addSubset(universe)
-		>> 	subGroup(repeat[1](ionization))
-		>> 	chargeBound(
-				amuBound(
-					subGroup(
-						repeat[5](fragmentation)
-					),
-					minimum = 10, #TODO Research what is the actual pupchem-data minimum
-					maximum = mass if mass is not None else 100 #TODO also here: we should not need this ckeck(if)
-				)
-			)
-	)
-	return strategy
+    strategy = (
+            mod.addSubset(universe)
+        >> 	sub_group(
+            mod.repeat[1](ionization),
+            derivation_graph
+            )
+        >>  charge_bound(
+                amu_bound(
+                    sub_group(
+                        mod.repeat[5](fragmentation),
+                        derivation_graph
+                    ),
+                    minimum = 10, #TODO Research what is the actual pupchem-data minimum
+                    maximum = mass if mass is not None else 100 #TODO also here: we should not need this ckeck(if)
+                )
+            )
+    )
+    return strategy

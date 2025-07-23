@@ -1,5 +1,7 @@
+import mod
+
 # Interpreation von Massenspektren Springer, Seite 56, Gl. 4.3
-IMS_4_3_var1 = Rule.fromDFS(
+IMS_4_3_var1 = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)([H]7)[C]8([H]9)([H]10)([H]11)"
     ">>"
@@ -12,7 +14,7 @@ IMS_4_3_var1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_3_var2 = Rule.fromDFS(
+IMS_4_3_var2 = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)([H]7)[C]8([H]9)([H]10)([H]11)"
     ">>"
@@ -26,7 +28,7 @@ IMS_4_3_var2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 56, Gl. 4.4
-IMS_4_4_row1 = Rule.fromDFS(
+IMS_4_4_row1 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)[C]4([H]5)[O+.]6([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13){-}1"
 	">>"
@@ -39,7 +41,7 @@ IMS_4_4_row1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_4_row2 = Rule.fromDFS(
+IMS_4_4_row2 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)[C]4([H]5)[O+.]6([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13){-}1"
 	">>"
@@ -52,7 +54,7 @@ IMS_4_4_row2 = Rule.fromDFS(
 	""
 )
 
-IMS_4_4_row3 = Rule.fromDFS(
+IMS_4_4_row3 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8([H]9)"
 	">>"
@@ -65,7 +67,7 @@ IMS_4_4_row3 = Rule.fromDFS(
 	""
 )
 
-IMS_4_4_row4 = Rule.fromDFS(
+IMS_4_4_row4 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8([H]9)"
 	">>"
@@ -79,7 +81,7 @@ IMS_4_4_row4 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 56, Gl. 4.5
-IMS_4_5 = Rule.fromDFS(
+IMS_4_5 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[C+.]8([H]10)([H]11)[C]12([H]13)([H]14)([H]15)" #charge radical somewhere
 	">>"
@@ -93,7 +95,7 @@ IMS_4_5 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 56, Gl. 4.6
-IMS_4_6_row1 = Rule.fromDFS(
+IMS_4_6_row1 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)"
 	">>"
@@ -106,7 +108,7 @@ IMS_4_6_row1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_6_row2 = Rule.fromDFS(
+IMS_4_6_row2 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)"
 	">>"
@@ -119,7 +121,7 @@ IMS_4_6_row2 = Rule.fromDFS(
 	""
 )
 
-IMS_4_6_row3 = Rule.fromDFS(
+IMS_4_6_row3 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)"
 	">>"
@@ -132,7 +134,7 @@ IMS_4_6_row3 = Rule.fromDFS(
 	""
 )
 
-IMS_4_6_row4 = Rule.fromDFS(
+IMS_4_6_row4 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)[C+]4([H]5)[C]6([H]7)([H]8)[C]9([H]10)([H]11){-}1"
 	">>"
@@ -145,7 +147,7 @@ IMS_4_6_row4 = Rule.fromDFS(
 	""
 )
 
-IMS_4_6_row5 = Rule.fromDFS(
+IMS_4_6_row5 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)[C]4([H]5)[C]6([H]7)([H]8)[C]9([H]10)([H]11){-}1"
 	">>"
@@ -157,7 +159,7 @@ IMS_4_6_row5 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 58, Gl. 4.7 und Seite Einband
-IMS_4_7 = Rule.fromDFS(
+IMS_4_7 = mod.Rule.fromDFS(
 	s = 
 	"[C+.]1[C]2[C]3[C]4[C]5"
 	">>"
@@ -170,7 +172,7 @@ IMS_4_7 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 59, Gl. 4.8
-IMS_4_8 = Rule.fromDFS(
+IMS_4_8 = mod.Rule.fromDFS(
 	s =
 	"[C+.]1"
 	"([C]2([H]3)([H]4)([H]5))"
@@ -193,7 +195,7 @@ IMS_4_8 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.09; oder Seite Einband, Alkene
-IMS_4_9 = Rule.fromDFS(
+IMS_4_9 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3([C]4)[_A+.]5" #YRY "[C]1[C]2[C]3([C]4)[_A+.]5[_A]6"
 	">>"
@@ -205,7 +207,7 @@ IMS_4_9 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.10; oder Seite Einband, Alkene
-IMS_4_10 = Rule.fromDFS(
+IMS_4_10 = mod.Rule.fromDFS(
 	s =
 	"[_A+]1[C]2[C.]3" #YRY "[_A+]1[C]2[C]3[C.]4"
 	">>"
@@ -217,7 +219,7 @@ IMS_4_10 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.11; oder Seite Einband, Alkene
-IMS_4_11 = Rule.fromDFS(
+IMS_4_11 = mod.Rule.fromDFS(
 	s = 
 	"[C]1[C]2[C]3{=}[_A+.]4"
 	">>"
@@ -229,7 +231,7 @@ IMS_4_11 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.12; oder Seite Einband, Alkene
-IMS_4_12_1 = Rule.fromDFS(
+IMS_4_12_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C+.]4"
 	">>"
@@ -240,7 +242,7 @@ IMS_4_12_1 = Rule.fromDFS(
 	" §R1"
 )
 
-IMS_4_12_2 = Rule.fromDFS( 
+IMS_4_12_2 = mod.Rule.fromDFS( 
 	s = 
 	"[C]1[C]2[C+.]3[C]4"
 	">>"
@@ -254,7 +256,7 @@ IMS_4_12_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 60, Gl. 4.13
-IMS_4_13_1 = Rule.fromDFS(
+IMS_4_13_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)"
 	"[C]5([H]6)([H]7)"
@@ -270,7 +272,7 @@ IMS_4_13_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_13_2 = Rule.fromDFS(
+IMS_4_13_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3)([H]4)"
 	"[C]5([H]6)([H]7)"
@@ -287,7 +289,7 @@ IMS_4_13_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 60, Gl. 4.14
-IMS_4_14 = Rule.fromDFS(
+IMS_4_14 = mod.Rule.fromDFS(
 	s =
 	"[C]1"
 	"([C]2[C]3)"
@@ -305,7 +307,7 @@ IMS_4_14 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 62, Gl. 4.15
-IMS_4_15_1_1 = Rule.fromDFS(
+IMS_4_15_1_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C+.]3[C]4"
 	">>"
@@ -316,7 +318,7 @@ IMS_4_15_1_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_15_1_2 = Rule.fromDFS(
+IMS_4_15_1_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C+.]4"
 	">>"
@@ -327,7 +329,7 @@ IMS_4_15_1_2 = Rule.fromDFS(
 	""
 )
 
-IMS_4_15_2_1 = Rule.fromDFS(
+IMS_4_15_2_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C+.]3[C]4"
 	">>"
@@ -338,7 +340,7 @@ IMS_4_15_2_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_15_2_2 = Rule.fromDFS(
+IMS_4_15_2_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C+.]4"
 	">>"
@@ -349,7 +351,7 @@ IMS_4_15_2_2 = Rule.fromDFS(
 	""
 )
 
-IMS_4_15_3_1 = Rule.fromDFS(
+IMS_4_15_3_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C+.]3[C]4[C]5[C]6[C]7[C]8"
 	">>"
@@ -360,7 +362,7 @@ IMS_4_15_3_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_15_3_2 = Rule.fromDFS(
+IMS_4_15_3_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C+.]4[C]5[C]6[C]7[C]8"
 	">>"
@@ -374,7 +376,7 @@ IMS_4_15_3_2 = Rule.fromDFS(
 # 4.16 not included as it is a negative example (example cleavage impossible)
 
 # Interpreation von Massenspektren Springer, Seite 63, Gl. 4.17
-IMS_4_17 = Rule.fromDFS(
+IMS_4_17 = mod.Rule.fromDFS(
 	s =
 	"[C]1"
 	"([C]2[C]3[C]4)"
@@ -392,7 +394,7 @@ IMS_4_17 = Rule.fromDFS(
 	""
 )
 
-IMS_4_17_1 = Rule.fromDFS(
+IMS_4_17_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1"
 	"([C]2[C]3[C]4)"
@@ -412,7 +414,7 @@ IMS_4_17_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_17_2 = Rule.fromDFS(
+IMS_4_17_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1"
 	"([C]2[C]3[C]4)"
@@ -432,7 +434,7 @@ IMS_4_17_2 = Rule.fromDFS(
 	""
 )
 
-IMS_4_17_3 = Rule.fromDFS(
+IMS_4_17_3 = mod.Rule.fromDFS(
 	s =
 	"[C]1"
 	"([C]2[C]3[C]4)"
@@ -453,7 +455,7 @@ IMS_4_17_3 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.18; Seite Einband
-IMS_4_18 = Rule.fromDFS(
+IMS_4_18 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[_A+.]2" #YRY "[C]1[_A+.]2[C]3"
 	">>"
@@ -465,7 +467,7 @@ IMS_4_18 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.19 with Information of 4.25 of R'
-IMS_4_19_1 = Rule.fromDFS(
+IMS_4_19_1 = mod.Rule.fromDFS(
 	s =
 	"[_A]1([C]2)[_A]3{=}[_A+.]4"
 	">>"
@@ -477,7 +479,7 @@ IMS_4_19_1 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.19 2te Variante
-IMS_4_19_2 = Rule.fromDFS(# Y on left side has unpaired electron
+IMS_4_19_2 = mod.Rule.fromDFS(# Y on left side has unpaired electron
 	s =
 	"[_A]1([_A]3)[C+]4{=}[_A.]2"
 	">>"
@@ -489,7 +491,7 @@ IMS_4_19_2 = Rule.fromDFS(# Y on left side has unpaired electron
 )
 
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.20
-IMS_4_20 = Rule.fromDFS(
+IMS_4_20 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[_A+]2[H]3([H]4)"
 	">>"
@@ -501,7 +503,7 @@ IMS_4_20 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.21
-IMS_4_21 = Rule.fromDFS(
+IMS_4_21 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[_A+]2{=}[C]3[H]4([H]5)"
 	">>"
@@ -513,7 +515,7 @@ IMS_4_21 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 67, Gl. 4.22
-IMS_4_22 = Rule.fromDFS(
+IMS_4_22 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2"
 	"[_A+.]3"
@@ -529,7 +531,7 @@ IMS_4_22 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 67, Gl. 4.23
-IMS_4_23_1 = Rule.fromDFS(
+IMS_4_23_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C]4([H]5)[Cl+.]6"
 	">>"
@@ -540,7 +542,7 @@ IMS_4_23_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_23_2 = Rule.fromDFS(
+IMS_4_23_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3[C]4([H]5)[Cl+.]6"
 	">>"
@@ -552,7 +554,7 @@ IMS_4_23_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 67, Gl. 4.24
-IMS_4_24_1 = Rule.fromDFS(
+IMS_4_24_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1([C]2)([C]3)[C]4([H]5)[Cl+.]6"
 	">>"
@@ -563,7 +565,7 @@ IMS_4_24_1 = Rule.fromDFS(
 	""
 )
 
-IMS_4_24_2 = Rule.fromDFS(
+IMS_4_24_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1([C]2)([C]3)[C]4([H]5)[Cl+.]6"
 	">>"
@@ -575,7 +577,7 @@ IMS_4_24_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 67, Gl. 4.25
-IMS_4_25_1 = Rule.fromDFS(
+IMS_4_25_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2([C]3){=}[O+.]4"
 	">>"
@@ -586,7 +588,7 @@ IMS_4_25_1 = Rule.fromDFS(
 	" §R1R3"
 )
 
-IMS_4_25_2 = Rule.fromDFS(
+IMS_4_25_2 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[C+]2([_A]3)[O.]4"
 	">>"
@@ -598,7 +600,7 @@ IMS_4_25_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.26
-IMS_4_26_1 = Rule.fromDFS(
+IMS_4_26_1 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6"
 	">>"
@@ -609,7 +611,7 @@ IMS_4_26_1 = Rule.fromDFS(
 	" §R1R6"
 )
 
-IMS_4_26_2 = Rule.fromDFS(
+IMS_4_26_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1([H]2)([H]3){=}[O+]4[_A]5"
 	">>"
@@ -621,7 +623,7 @@ IMS_4_26_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.27
-IMS_4_27_1 = Rule.fromDFS(
+IMS_4_27_1 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[C]2([_A]3){=}[O+.]4"
 	">>"
@@ -632,7 +634,7 @@ IMS_4_27_1 = Rule.fromDFS(
 	" §R1R3"
 )
 
-IMS_4_27_2 = Rule.fromDFS(
+IMS_4_27_2 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[C]2{#}[O+]3"
 	">>"
@@ -644,7 +646,7 @@ IMS_4_27_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 68, Gl. 4.28
-IMS_4_28_1 = Rule.fromDFS(
+IMS_4_28_1 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[O]2[H]3.[H+]4"
 	">>"
@@ -655,7 +657,7 @@ IMS_4_28_1 = Rule.fromDFS(
 	" §R1"
 )
 
-IMS_4_28_2 = Rule.fromDFS(
+IMS_4_28_2 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[O+]2([H]3)([H]4)"
 	">>"
@@ -667,7 +669,7 @@ IMS_4_28_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 70, Gl. 4.29
-IMS_4_29 = Rule.fromDFS(
+IMS_4_29 = mod.Rule.fromDFS(
 	s =
 	"[_A]1[C]2[C]3[C]4[C]5[C]6"
 	"[C]7([H]8)[O]9([H]10)"
@@ -686,7 +688,7 @@ IMS_4_29 = Rule.fromDFS(
 
 
 # Interpreation von Massenspektren Springer, Seite 71, Gl. 4.30
-IMS_4_30 = Rule.fromDFS(
+IMS_4_30 = mod.Rule.fromDFS(
     s =
 	"[C.]1[C]2[C]3[C+]4[C]5{=}[C]6"
 	">>"
@@ -698,7 +700,7 @@ IMS_4_30 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 72, Gl. 4.31
-IMS_4_31_alpha1 = Rule.fromDFS(
+IMS_4_31_alpha1 = mod.Rule.fromDFS(
     s =
 	"[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2"
 	">>"
@@ -709,7 +711,7 @@ IMS_4_31_alpha1 = Rule.fromDFS(
     " §R1"
 )
 
-IMS_4_31_alpha2 = Rule.fromDFS(
+IMS_4_31_alpha2 = mod.Rule.fromDFS(
     s =
 	"[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7"
 	">>"
@@ -721,7 +723,7 @@ IMS_4_31_alpha2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 72, Gl. 4.32
-IMS_4_32_alpha = Rule.fromDFS( #equivalten to 4.31 alpha1
+IMS_4_32_alpha = mod.Rule.fromDFS( #equivalten to 4.31 alpha1
     s =
 	"[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2"
 	">>"
@@ -732,7 +734,7 @@ IMS_4_32_alpha = Rule.fromDFS( #equivalten to 4.31 alpha1
     " §R1"
 )
 
-IMS_4_32_ind = Rule.fromDFS(
+IMS_4_32_ind = mod.Rule.fromDFS(
     s =
 	"[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7"
 	">>"
@@ -744,7 +746,7 @@ IMS_4_32_ind = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 74, Gl. 4.33
-IMS_4_33_rH = Rule.fromDFS(
+IMS_4_33_rH = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8"
 	">>"
@@ -755,7 +757,7 @@ IMS_4_33_rH = Rule.fromDFS(
 	" §R1"
 )
 
-IMS_4_33_alpha_1 = Rule.fromDFS(
+IMS_4_33_alpha_1 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8"
 	">>"
@@ -768,7 +770,7 @@ IMS_4_33_alpha_1 = Rule.fromDFS(
 	" §R1"
 )
 
-IMS_4_33_alpha_2 = Rule.fromDFS(
+IMS_4_33_alpha_2 = mod.Rule.fromDFS(
 	s =
 	"[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8"
 	">>"
@@ -782,7 +784,7 @@ IMS_4_33_alpha_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 74, Gl. 4.34
-IMS_4_34_rH = Rule.fromDFS(
+IMS_4_34_rH = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8"
 	">>"
@@ -793,7 +795,7 @@ IMS_4_34_rH = Rule.fromDFS(
 	" §R1"
 )
 
-IMS_4_34_ind = Rule.fromDFS(
+IMS_4_34_ind = mod.Rule.fromDFS(
 	s =
 	"[C]1[C.]2[C]3[C]4[C+]5([C]6)[O]7[H]8"
 	">>"
@@ -807,7 +809,7 @@ IMS_4_34_ind = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 75, Gl. 4.35
-IMS_4_35_rHalpha = Rule.fromDFS(
+IMS_4_35_rHalpha = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2([H]3)[C]4[C]5[C]6{=}[N+.]8[N]9([C]10)[C]11"
 	">>"
@@ -821,7 +823,7 @@ IMS_4_35_rHalpha = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 75, Gl. 4.36
-IMS_4_36_ = Rule.fromDFS(
+IMS_4_36_ = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3([H]4)[C]5[C]6[C]7{=}[C]8[C]9{=}[C]10[C]11{=}[C]12{-}7" # ring has somewhere.
 	">>"
@@ -833,7 +835,7 @@ IMS_4_36_ = Rule.fromDFS(
 	""
 )
 
-IMS_4_36__rHalpha = Rule.fromDFS(
+IMS_4_36__rHalpha = mod.Rule.fromDFS(
 	s =
 	"[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7"
 	">>"
@@ -847,7 +849,7 @@ IMS_4_36__rHalpha = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 78, Gl. 4.37
-IMS_4_37_rH = Rule.fromDFS(
+IMS_4_37_rH = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9"
     ">>"
@@ -858,7 +860,7 @@ IMS_4_37_rH = Rule.fromDFS(
     ""
 )
 
-IMS_4_37_rd = Rule.fromDFS(
+IMS_4_37_rd = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9"
     ">>"
@@ -872,7 +874,7 @@ IMS_4_37_rd = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 78, Gl. 4.38
-IMS_4_38_rH = Rule.fromDFS(
+IMS_4_38_rH = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9"
     ">>"
@@ -883,7 +885,7 @@ IMS_4_38_rH = Rule.fromDFS(
     ""
 )
 
-IMS_4_38_ind = Rule.fromDFS(
+IMS_4_38_ind = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9"
     ">>"
@@ -896,7 +898,7 @@ IMS_4_38_ind = Rule.fromDFS(
     ""
 )
 
-IMS_4_38_ind_2 = Rule.fromDFS(
+IMS_4_38_ind_2 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C+]6"
     ">>"
@@ -910,7 +912,7 @@ IMS_4_38_ind_2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 79, Gl. 4.39
-IMS_4_39_rH = Rule.fromDFS(
+IMS_4_39_rH = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)[C]3({=}[O]4)[N+.]5([H]6)[C]7[C]8[C]9[C]10"
     ">>"
@@ -921,7 +923,7 @@ IMS_4_39_rH = Rule.fromDFS(
     ""
 )
 
-IMS_4_39_alpha = Rule.fromDFS(
+IMS_4_39_alpha = mod.Rule.fromDFS(
     s =
     "[C.]1[C]2({=}[O]3)[N+]4([H]5)([H]6)[C]7[C]8[C]9[C]10"
     ">>"
@@ -935,7 +937,7 @@ IMS_4_39_alpha = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 79, Gl. 4.40
-IMS_4_40_rH = Rule.fromDFS(
+IMS_4_40_rH = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C]3([H]4)[C]5[C]6[Cl+.]7"
     ">>"
@@ -946,7 +948,7 @@ IMS_4_40_rH = Rule.fromDFS(
     ""
 )
 
-IMS_4_40_ind = Rule.fromDFS(
+IMS_4_40_ind = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[Cl+]6[H]7"
     ">>"
@@ -960,7 +962,7 @@ IMS_4_40_ind = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 80, Gl. 4.41
-IMS_4_41_rH = Rule.fromDFS(
+IMS_4_41_rH = mod.Rule.fromDFS(
     s =
     "[H]1[_A]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+.]11[C]12"
     ">>"
@@ -971,7 +973,7 @@ IMS_4_41_rH = Rule.fromDFS(
     " §Y2R12"
 )
 
-IMS_4_41_ind1 = Rule.fromDFS(
+IMS_4_41_ind1 = mod.Rule.fromDFS(
     s =
     "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12"
     ">>"
@@ -984,7 +986,7 @@ IMS_4_41_ind1 = Rule.fromDFS(
     " §Y1R12"
 )
 
-IMS_4_41_ind2 = Rule.fromDFS(
+IMS_4_41_ind2 = mod.Rule.fromDFS(
     s =
     "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12"
     ">>"
@@ -998,7 +1000,7 @@ IMS_4_41_ind2 = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 81, Gl. 4.42
-IMS_4_42_rd = Rule.fromDFS(
+IMS_4_42_rd = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C]3[C]4[C]5[Cl+.]6"
     ">>"
@@ -1010,7 +1012,7 @@ IMS_4_42_rd = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 82, Gl. 4.43
-IMS_4_43_ = Rule.fromDFS(
+IMS_4_43_ = mod.Rule.fromDFS(
     s =
 	"[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)"
 	"[N+.]8([H]9)[C]10([H]11)([H]12)[C]13([H]14)([H]15)[H]16"
@@ -1025,7 +1027,7 @@ IMS_4_43_ = Rule.fromDFS(
     ""
 )
 
-IMS_4_43_rH = Rule.fromDFS(
+IMS_4_43_rH = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+]8([H]9){=}[C]10([H]11)([H]12)"
     ">>"
@@ -1039,7 +1041,7 @@ IMS_4_43_rH = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 82, Gl. 4.44
-IMS_4_44_ind = Rule.fromDFS(
+IMS_4_44_ind = mod.Rule.fromDFS(
     s =
     "[Cl+.]1[C]2([C]3([H]4)([H]5)([H]6))([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[Cl]14"
     ">>"
@@ -1052,7 +1054,7 @@ IMS_4_44_ind = Rule.fromDFS(
     ""
 )
 
-IMS_4_44_rH = Rule.fromDFS(
+IMS_4_44_rH = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3)([H]4)[C+]5([H]6)[C]7([H]8)([H]9)[C]10([H]11)([H]12)[Cl..]13"
     ">>"
@@ -1064,7 +1066,7 @@ IMS_4_44_rH = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 84, Gl. 4.45
-IMS_4_45_rH = Rule.fromDFS(
+IMS_4_45_rH = mod.Rule.fromDFS(
     s =
     "[C]1[C]2([H]3)[C]4[O]5[C]6([C]7){=}[O+.]8"
     ">>"
@@ -1075,7 +1077,7 @@ IMS_4_45_rH = Rule.fromDFS(
     " §R1R7"
 )
 
-IMS_4_45_alpha = Rule.fromDFS(
+IMS_4_45_alpha = mod.Rule.fromDFS(
     s =
     "[C]1[C.]2[C]3[O]4[C]5([C]6){=}[O+]7[H]8"
     ">>"
@@ -1087,7 +1089,7 @@ IMS_4_45_alpha = Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 84, Gl. 4.46
-IMS_4_46_rH_1 = Rule.fromDFS(
+IMS_4_46_rH_1 = mod.Rule.fromDFS(
     s =
     "[H]1[C]2[C]3([H]4)[C]5[O]6[C]7([C]8){=}[O+.]9"
     ">>"
@@ -1098,7 +1100,7 @@ IMS_4_46_rH_1 = Rule.fromDFS(
     " §R2R8"
 )
 
-IMS_4_46_rH_2 = Rule.fromDFS(
+IMS_4_46_rH_2 = mod.Rule.fromDFS(
     s =
     "[H]1[C]2[C.]3[C]4[O]5[C]6([C]7){=}[O]8[H]9"
     ">>"
@@ -1109,7 +1111,7 @@ IMS_4_46_rH_2 = Rule.fromDFS(
     " §R2R7"
 )
 
-IMS_4_46_rH_2_ = Rule.fromDFS(
+IMS_4_46_rH_2_ = mod.Rule.fromDFS(
     s =
     "[H]1[C]2[C.]3[C]4[O]5[C]6([C]7){=}[O]8[H]9"
     ">>"

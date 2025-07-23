@@ -1,5 +1,9 @@
+
+import mod
+
+
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Alpha-Spaltung
-alpha = Rule.fromDFS(
+alpha = mod.Rule.fromDFS(
 	"[C]1[C]2({=}[O+.])[C]3[C]4" +
 	">>" +
 	"[C]1[C]2{#}[O+].[C.]3[C]4", 
@@ -9,7 +13,7 @@ alpha = Rule.fromDFS(
 ###############################################################################
 
 # https://en.wikipedia.org/wiki/Fragmentation_(mass_spectrometry)#Charge_site-initiated_cleavage
-inductive_wiki = Rule.fromDFS(
+inductive_wiki = mod.Rule.fromDFS(
 	s = 
 	"[C]1[C]2[O+.]3[C]4[C]5" +
 	">>" +
@@ -26,7 +30,7 @@ inductive_wiki = Rule.fromDFS(
 # https://en.wikipedia.org/wiki/Retro-Diels%E2%80%93Alder_reaction
 
 # https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Retro-Diels-Alder-Reaktion
-dielsAdler_1 = Rule.fromDFS(
+dielsAdler_1 = mod.Rule.fromDFS(
 	"[C]1[C+]2[C.]3[C]4[C]5[C]6{-}1" +
 	">>" +
 	"[C.]5[C]6[C]1[C+]2[C]3{=}[C]4",
@@ -34,7 +38,7 @@ dielsAdler_1 = Rule.fromDFS(
 )
 
 #https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Retro-Diels-Alder-Reaktion
-dielsAdler_2a = Rule.fromDFS( # homolysis
+dielsAdler_2a = mod.Rule.fromDFS( # homolysis
 	"[C.]1[C]2[C]3[C+]4[C]5{=}[C]6" +
 	">>" +
 	"[C]1{=}[C]2.[C.]3[C+]4[C]5{=}[C]6",
@@ -42,7 +46,7 @@ dielsAdler_2a = Rule.fromDFS( # homolysis
 )
 
 #https://de.wikipedia.org/wiki/Fragmentierung_(Massenspektrometrie)#Retro-Diels-Alder-Reaktion
-dielsAdler_2b = Rule.fromDFS( # hetrolysis
+dielsAdler_2b = mod.Rule.fromDFS( # hetrolysis
 	"[C.]1[C]2[C]3[C+]4[C]5{=}[C]6" +
 	">>" +
 	"[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6",
@@ -61,7 +65,7 @@ dielsAdler_2b = Rule.fromDFS( # hetrolysis
 
 # also see MacLafferty book Seite 74 Gleichung 4.33 und 4.34
 
-ml_ionization = Rule.fromDFS( 
+ml_ionization = mod.Rule.fromDFS( 
 	# only english wiki
 	s = 
 	"[_A]1[C]2({=}[O]3)[C]4[C]5[C]6" +
@@ -72,7 +76,7 @@ ml_ionization = Rule.fromDFS(
 	" §Y1"
 )
 
-ml_hRebind = Rule.fromDFS( 
+ml_hRebind = mod.Rule.fromDFS( 
 	# Educt: only english wiki
 	# Product: only german wiki
 	s = 
@@ -84,7 +88,7 @@ ml_hRebind = Rule.fromDFS(
 	""
 )
 
-ml_rearrRule1 = Rule.fromDFS(
+ml_rearrRule1 = mod.Rule.fromDFS(
 	# in german and english wiki
 	s = 
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
@@ -95,7 +99,7 @@ ml_rearrRule1 = Rule.fromDFS(
 	""
 )
 
-ml_rearrRule2 = Rule.fromDFS(
+ml_rearrRule2 = mod.Rule.fromDFS(
 	# in german and english wiki
 	s = 
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +
@@ -103,7 +107,7 @@ ml_rearrRule2 = Rule.fromDFS(
 	"[O+.]1{-}[C]2{=}[C]3.[C]4{=}[C]5", 
 	name = "rearrangement Rule 2")
 
-ml_rearrRule3 = Rule.fromDFS(
+ml_rearrRule3 = mod.Rule.fromDFS(
 	# only in english wiki
 	s = 
 	"[O+]1{=}[C]2[C]3[C]4[C.]5" +

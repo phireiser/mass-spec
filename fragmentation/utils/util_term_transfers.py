@@ -1,9 +1,11 @@
+import mod
+
 termBondFromBondType = {
-    BondType.Invalid: "__error1",
-    BondType.Single: "p(0)",
-    BondType.Double: "p(p(0))",
-    BondType.Triple: "p(p(p(0)))",
-    BondType.Aromatic: "__error2"
+    mod.BondType.Invalid: "__error1",
+    mod.BondType.Single: "p(0)",
+    mod.BondType.Double: "p(p(0))",
+    mod.BondType.Triple: "p(p(p(0)))",
+    mod.BondType.Aromatic: "__error2"
 }
 
 #===
@@ -27,7 +29,7 @@ def termFromGraph(g: mod.Graph):
             termBondFromBondType[e.bondType]
         )
     s +="]\n"
-    return graphGMLString(s, name=g.name + ", term", add=False)
+    return mod.graphGMLString(s, name=g.name + ", term", add=False)
 
 #===
 def decodeVertexLabel(l: str) -> str:
@@ -76,7 +78,7 @@ def graphFromTerm(g: str) -> str:
             decodeEdgeLabel(e.stringLabel)
         )
     s += "]\n"
-    return graphGMLString(s, name= g.name.replace(", term", ""), add=False)
+    return mod.graphGMLString(s, name= g.name.replace(", term", ""), add=False)
 
 
 #===
@@ -144,7 +146,7 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
         
     s = f"rule [\n\tleft [\n{left}\t]\n\tcontext [\n{context}\t]\n\tright [\n{right}\t]\n]\n"
 
-    return ruleGMLString(s, name=r.name + ", term", add=False)
+    return mod.ruleGMLString(s, name=r.name + ", term", add=False)
 
 #===
 def ruleFromTerm(r: mod.Rule) -> mod.Rule:
@@ -163,7 +165,7 @@ def ruleFromTerm(r: mod.Rule) -> mod.Rule:
         right += 'edge [ source %d target %d label "%s" ]\n' % (e.source.id, e.target.id, decodeEdgeLabel(e.stringLabel))
     
     s = "rule [\n\tleft [\n%s\t]\n\tright [\n%s\t]\n]\n" % (left, right)
-    return ruleGMLString(s, name = r.name.replace(", term", ""), add=False)
+    return mod.ruleGMLString(s, name = r.name.replace(", term", ""), add=False)
 
 def multiline_equal(s1: str, s2: str) -> bool:
     """
