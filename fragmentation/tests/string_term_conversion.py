@@ -2,7 +2,7 @@ include('../rules.py')
 include("../mols.py")
 
 ionization = [
-    benzylAllyl_ionizaton, 
+    benzylAllyl_ionizaton,
     wiki_ionization,
 ]
 ionization = flatten_list(ionization)
@@ -16,7 +16,7 @@ fragmentation = [
     #inductive_fragmentation,
     #mcLafferty_fragmenation,
     rearrangements,
-    #retroDielsAdler_fragmentation, 
+    #retroDielsAdler_fragmentation,
     wiki_fragmentation,
 ]
 fragmentation = flatten_list(fragmentation)
@@ -45,7 +45,7 @@ for r in ionization_term:
 
 common_ei_mol_back = []
 for m in common_ei_mol_term:
-    common_ei_mol_back.append(graphFromTerm(m))
+    common_ei_mol_back.append(graph_from_term(m))
 
 
 
@@ -54,7 +54,7 @@ for original, back in zip(fragmentation, fragmentation_back):
         assert multiline_equal(original.getGMLString(), back.getGMLString())
     except AssertionError:
         if ".." in original.getGMLString(): # dirty double radical test
-            print("double radical, mol can't handle this")        
+            print("double radical, mol can't handle this")
         else:
             print("something else must be going on")
             raise
@@ -64,7 +64,7 @@ for original, back in zip(ionization, ionization_back):
         assert multiline_equal(original.getGMLString(), back.getGMLString())
     except AssertionError:
         if ".." in original.getGMLString(): # dirty double radical test
-            print("double radical, mol can't handle this")        
+            print("double radical, mol can't handle this")
         else:
             print("something else must be going on")
             raise
@@ -74,7 +74,7 @@ for original, back in zip(common_ei_molecules, common_ei_mol_back):
         assert multiline_equal(original.getGMLString(), back.getGMLString())
     except AssertionError:
         if ".." in original.getGMLString(): # dirty double-radical test
-            print("double radical, mol can't handle this")        
+            print("double radical, mol can't handle this")
         else:
             print("something else must be going on")
             raise

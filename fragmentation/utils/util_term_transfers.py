@@ -14,9 +14,9 @@ def termFromGraph(g: mod.Graph):
     for v in g.vertices:
         try:
             s += 'node [ id %d label "a(%s, %d, %d)" ]' % (
-                v.id, 
-                v.atomId.symbol, 
-                v.charge, 
+                v.id,
+                v.atomId.symbol,
+                v.charge,
                 v.radical,
             )
         except mod.libpymod.LogicError as e:
@@ -24,7 +24,7 @@ def termFromGraph(g: mod.Graph):
 
     for e in g.edges:
         s += 'edge [ source %d target %d label "e(%s)" ]' % (
-            e.source.id,  
+            e.source.id,
             e.target.id,
             termBondFromBondType[e.bondType]
         )
@@ -65,11 +65,11 @@ def decodeEdgeLabel(l: str) -> str:
     return bt
 
 #===
-def graphFromTerm(g: str) -> str:
+def graph_from_term(g: str) -> str:
     s = "graph [\n"
     for v in g.vertices:
         s += 'node [ id %d label "%s" ]\n' % (
-            v.id, 
+            v.id,
             decodeVertexLabel(v.stringLabel)
         )
     for e in g.edges:
@@ -86,23 +86,23 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
     left = ""
     right = ""
     context = ""
-    
+
     g = r.left
     for v in g.vertices:
         try:
             left += 'node [ id %d label "a(%s, %d, %d)" ]' % (
-                v.id, 
+                v.id,
                 v.atomId.symbol,
                 v.charge,
                 v.radical
             )
         except mod.libpymod.LogicError as e:
             left += 'node [ id %d label "a(_A, %d, %d)" ]' % (v.id, v.charge, v.radical)
-    
+
     for e in g.edges:
         left += 'edge [ source %d target %d label "e(%s)" ]' % (
-            e.source.id, 
-            e.target.id, 
+            e.source.id,
+            e.target.id,
             termBondFromBondType[e.bondType]
         )
 
@@ -111,7 +111,7 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
         if hasattr(v, "atomId"):
             try:
                 context += 'node [ id %d label "a(%s, %d, %d)" ]' % (
-                    v.id, 
+                    v.id,
                     v.atomId.symbol,
                     v.charge,
                     v.radical,
@@ -121,8 +121,8 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
     for e in g.edges:
         if hasattr(v, "bondType"):
             context += 'edge [ source %d target %d label "e(%s)" ]' % (
-                e.source.id, 
-                e.target.id, 
+                e.source.id,
+                e.target.id,
                 termBondFromBondType[e.bondType]
             )
 
@@ -130,20 +130,20 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
     for v in g.vertices:
         try:
             right += 'node [ id %d label "a(%s, %d, %d)" ]' % (
-                v.id, 
-                v.atomId.symbol, 
-                v.charge, 
+                v.id,
+                v.atomId.symbol,
+                v.charge,
                 v.radical,
             )
         except mod.libpymod.LogicError as e:
             right += 'node [ id %d label "a(_A, %d, %d)" ]' % (v.id, v.charge, v.radical)
     for e in g.edges:
         right += 'edge [ source %d target %d label "e(%s)" ]' % (
-            e.source.id, 
-            e.target.id, 
+            e.source.id,
+            e.target.id,
             termBondFromBondType[e.bondType]
         )
-        
+
     s = f"rule [\n\tleft [\n{left}\t]\n\tcontext [\n{context}\t]\n\tright [\n{right}\t]\n]\n"
 
     return mod.ruleGMLString(s, name=r.name + ", term", add=False)
@@ -152,18 +152,18 @@ def termFromRule(r: mod.Rule) -> mod.Rule:
 def ruleFromTerm(r: mod.Rule) -> mod.Rule:
     left = ""
     right = ""
-    
+
     for v in r.left.vertices:
         left += 'node [ id %d label "%s" ]\n' % (v.id, decodeVertexLabel(v.stringLabel))
         #print("v", r.name, decodeVertexLabel(v.stringLabel), v.stringLabel)
     for e in r.left.edges:
         left += 'edge [ source %d target %d label "%s" ]\n' % (e.source.id, e.target.id, decodeEdgeLabel(e.stringLabel))
-    
+
     for v in r.right.vertices:
         right += 'node [ id %d label "%s" ]\n' % (v.id, decodeVertexLabel(v.stringLabel))
     for e in r.right.edges:
         right += 'edge [ source %d target %d label "%s" ]\n' % (e.source.id, e.target.id, decodeEdgeLabel(e.stringLabel))
-    
+
     s = "rule [\n\tleft [\n%s\t]\n\tright [\n%s\t]\n]\n" % (left, right)
     return mod.ruleGMLString(s, name = r.name.replace(", term", ""), add=False)
 

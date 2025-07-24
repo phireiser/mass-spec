@@ -61,7 +61,7 @@ def getSpectraFromInformationSection(
 def getInformationSectionFromPubChem(cid: int) -> List[Dict[str, Any]] | None:
 
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/"
-    
+
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()
@@ -80,7 +80,7 @@ def getInformationSectionFromPubChem(cid: int) -> List[Dict[str, Any]] | None:
     return None
 
 
-def getSpectraFromPubChem(
+def get_spectra_from_pubchem(
     smiles: str
     ) -> List[Dict[int, List[Tuple[float, float]]]]:
     cid = pubChemSmilesLookUp(smiles)

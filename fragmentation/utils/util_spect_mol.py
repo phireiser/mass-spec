@@ -3,7 +3,7 @@ from typing import Set, List, Tuple
 import mod
 
 def getParentRulesForGraph(
-    derivationGraph: mod.DG, 
+    derivationGraph: mod.DG,
     search_target_graph: mod.Graph
     ) -> List[int]:
     parentRules = []
@@ -43,18 +43,18 @@ def getParentRulesForGraph(
     return parentRules
 
 
-def getSpectraFromMoelDerivationGraph(
+def get_spectra_from_mod_derivation_graph(
     derivationGraph: mod.DG
     ) -> List[Tuple[float, int, Set[int]]]:
     spectra = list()
     sourceGraph = derivationGraph.graphDatabase[0]
-    
-    for graph_term in derivationGraph.createdGraphs:     
-        graph = graphFromTerm(graph_term)
+
+    for graph_term in derivationGraph.createdGraphs:
+        graph = graph_from_term(graph_term)
         if graph.isMolecule:
                 if '+' in graph.getGMLString(): # only charged fragments can be detected
                         found = False # update spectra list if allready occuring
-                        
+
                         rules = set(getParentRulesForGraph(derivationGraph,graph_term))
 
                         for i, (mass, occurence, old_rules) in enumerate(spectra):

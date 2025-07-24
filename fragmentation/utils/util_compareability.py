@@ -1,6 +1,13 @@
+"""
+class definition to make mod.objects form diferent derivation graphs compareable
+"""
+
 import mod
 
 class ComparableVertex:
+    """
+    inherets a mod.Graph.Vertex and makes the objects compareable (identity)
+    """
     def __init__(self, vertex, attrs=("id", "stringLabel")):
         if isinstance(vertex, ComparableVertex):  # unwrap if needed
             vertex = vertex.vertex
@@ -20,10 +27,15 @@ class ComparableVertex:
         return hash(tuple(getattr(self.vertex, attr) for attr in self.attrs))
 
     def __repr__(self):
-        return f"ComparableVertex({', '.join(f'{a}={getattr(self.vertex, a)}' for a in self.attrs)})"
+        return f"ComparableVertex({
+            ', '.join(f'{a}={getattr(self.vertex, a)}' for a in self.attrs)
+            })"
 
 
 class ComparableVertexList:
+    """
+    expands the ComparableVertex to wrap Iterables
+    """
     def __init__(self, vertices, attrs=("id", "stringLabel")):
         self.attrs = (attrs,) if isinstance(attrs, str) else tuple(attrs)
         self._wrapped = [
@@ -35,6 +47,9 @@ class ComparableVertexList:
         return ComparableVertex(vertex, self.attrs) in self._wrapped
 
     def add(self, vertex):
+        """
+        add elemtns to container
+        """
         wrapped = ComparableVertex(vertex, self.attrs)
         if wrapped not in self._wrapped:
             self._wrapped.append(wrapped)
@@ -49,12 +64,20 @@ class ComparableVertexList:
         return self._wrapped[index].vertex
 
     def __repr__(self):
-        return f"ComparableVertexList([\n  " + ",\n  ".join(repr(cv) for cv in self._wrapped) + "\n])"
+        return "ComparableVertexList([\n  " + \
+            ",\n  ".join(repr(cv) for cv in self._wrapped) + \
+            "\n])"
 
     def to_raw_list(self):
+        """
+        get all elemnts as list
+        """
         return [cv.vertex for cv in self._wrapped]
 
     def to_wrapped(self):
+        """
+        get a copy of the wrapped object
+        """
         return self._wrapped.copy()
 
     def __eq__(self, other):

@@ -8,8 +8,8 @@ from .util_term_transfers import *
 from .util_compareability import ComparableVertex, ComparableVertexList
 
 def getRule2MoleculeMap(
-    derivation: mod.Derivation, 
-    graphs: mod.Graph, 
+    derivation: mod.Derivation,
+    graphs: mod.Graph,
     labelSettings: mod.LabelSettings
     ):# -> mod.VertexMapRuleLeftGraphUnionGraph:
     # instatiate a derivation graph to pass in the vertex map
@@ -17,12 +17,12 @@ def getRule2MoleculeMap(
 
     with dg_new.build() as b:
         d = mod.Derivation()
-        
+
         d.left = derivation.left
         d.rule = derivation.rule
         d.right = derivation.right
         b.addDerivation(d)
-    
+
     e = next(edge for edge in dg_new.edges if derivation.rule in edge.rules)
     vms = mod.DGVertexMapper(e)
     m = next(iter(vms), None)
@@ -32,18 +32,18 @@ def getRule2MoleculeMap(
     return m.match
 
 def transferPositionsOfGeneralizationExtention(
-    generalization_extention: List[str], 
+    generalization_extention: List[str],
     match#: mod.VertexMapRuleLeftGraphUnionGraph
     ) -> Tuple[
-        List[mod.Graph.Vertex], 
-        List[Tuple[mod.Graph.Vertex, mod.Graph.Vertex]], 
+        List[mod.Graph.Vertex],
+        List[Tuple[mod.Graph.Vertex, mod.Graph.Vertex]],
         List[mod.Graph.Vertex]
     ]:
 
     alkylStructures = re.findall(r'R(\d+)', generalization_extention)
     hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
     saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
-    
+
     # make it 0 based
     alkylStructures = [int(x) - 1 for x in alkylStructures]
     hetroStructures = [int(x) - 1 for x in hetroStructures]
@@ -52,10 +52,10 @@ def transferPositionsOfGeneralizationExtention(
     alkylPosInGraph = [match[vertexById(match.domain, x)] for x in alkylStructures]
     hetroPosInGraph = [match[vertexById(match.domain, x)] for x in hetroStructures]
     saturatedPosInGraph = [
-        (match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])]) 
+        (match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])])
         for x in saturatedStructures
         ]
-    
+
     return alkylPosInGraph, hetroPosInGraph, saturatedPosInGraph
 
 def vertexById(g: mod.Graph, vid: int) -> Iterable[mod.Graph.Vertex]:
@@ -94,7 +94,7 @@ def mol_cleaned_label(v: mod.Graph.Vertex) -> str:
 
     if pattern.match(strlab):
         strlab = decodeVertexLabel(strlab)
-    
+
     return strlab.replace("+", "").replace("-", "").replace(".", "")
 
 def collect_bfs(
@@ -104,18 +104,18 @@ def collect_bfs(
     ) -> Tuple[List[str], List[mod.Graph.Vertex]]:
 
     """
-    collects neighbor lables & and vertex object 
+    collects neighbor lables & and vertex object
     in a BFS manner unless covered by morphism
     """
 
 
-    graph = [] 
+    graph = []
     for g in graphs:
-        graph.append(graphFromTerm(g))
-    
-    
+        graph.append(graph_from_term(g))
+
+
     # exclude start vertices from morphism vertices as they are part of subgroup
-    morphism_vertices: Set[mod.Graph.Vertex] = set([ x for x in match.domain.vertices]) - set(start_vertices) 
+    morphism_vertices: Set[mod.Graph.Vertex] = set([ x for x in match.domain.vertices]) - set(start_vertices)
 
     visited: Set[mod.Graph.Vertex] = morphism_vertices
     queue: sdeque[mod.Graph.Vertex] = collections.deque(start_vertices)
@@ -130,7 +130,7 @@ def collect_bfs(
             else:
                 visited.add(vertex)
                 queue.append(vertex)
-            
+
                 labels.append(mol_cleaned_label(vertex))
                 vertices.append(vertex)
 
@@ -162,8 +162,8 @@ def _path_satisfies_branch_rule(
     return True
 
 def get_edge_between(
-    graph: mod.Graph, 
-    u: mod.Graph.Vertex, 
+    graph: mod.Graph,
+    u: mod.Graph.Vertex,
     v: mod.Graph.Vertex
     ) -> mod.Graph.Edge | None:
 
@@ -184,8 +184,8 @@ def get_edge_between(
 
 
 def _is_single_bond(
-    graph: mod.Graph, 
-    u: mod.Graph.Vertex, 
+    graph: mod.Graph,
+    u: mod.Graph.Vertex,
     v: mod.Graph.Vertex
     ) -> bool:
 

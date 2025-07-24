@@ -1,3 +1,7 @@
+"""
+everything related to constraints in the term mode
+"""
+
 from typing import List, Tuple, Iterable, Set, Dict, Any, Union
 import mod
 
@@ -13,7 +17,8 @@ hetroAtoms = [
     "Fr","Ra", "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 ]
 
-alk_nes_lables = ["H", "C"] # TODO alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
+# TODO alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
+alk_nes_lables = ["H", "C"]
 
 allAtoms = hetroAtoms
 allAtoms.extend(alk_nes_lables)
@@ -28,21 +33,25 @@ occuring_hetroAtoms = set(hetroAtoms)
 occuring_allAtoms = set(allAtoms)
 
 
-def applyConstraints(
+def apply_constraints(
     rules: List[mod.Rule],
-    allOccuringAtoms: List[str],
+    all_occuring_atoms: List[str],
     placeholder: str = "A"
     ) -> List[mod.Rule]:
 
-    # contraints Label Any
-    constraint_string = getConstraint(allOccuringAtoms, placeholder)
+    """
+    takes the a list of atom lables and puts it in as a constraint for the rule
+    """
 
-    constraintRules = list()
+    # contraints Label Any
+    constraint_string = getConstraint(all_occuring_atoms, placeholder)
+
+    constraint_rules = list()
     for rule in rules:
-        constraintRules.append(
+        constraint_rules.append(
             addConstraints(rule, constraint_string)
         )
-    return constraintRules
+    return constraint_rules
 
 def getConstraint(atoms: List[str], repl_label: str) -> str:
 
@@ -78,7 +87,7 @@ def convert2MoelRule(tupel: Iterable) -> List[mod.Rule]:
 
 
 def labelConstraints_gml(
-    input_rules: mod.Rule | List[mod.Rule], 
+    input_rules: mod.Rule | List[mod.Rule],
     rpl_dict: Dict[str, str | List[str]]
     ) -> List[List[mod.Rule]]:
     """
@@ -102,13 +111,13 @@ def labelConstraints_gml(
                 alteredRuleObj = Rule.fromGMLString(alteredStringObj)
                 alteredRuleObj.name = rule.name + " " + new_i
                 rules.append(alteredRuleObj)
-        return_rules.append(rules) 
+        return_rules.append(rules)
     return return_rules
 
 
 def labelConstraints_dfs(
-    input_rules: mod.Rule | List[mod.Rule], 
-    to_replace: List[str], 
+    input_rules: mod.Rule | List[mod.Rule],
+    to_replace: List[str],
     replacements #TODO
     ) -> List[Tuple[str, str]]:
 
@@ -130,12 +139,12 @@ def labelConstraints_dfs(
         for combo in itertools.product(replacements, repeat=len(to_replace)):
             new_rule = rule
             for target, repl in zip(to_replace, combo):
-                
+
                 # determine atom node id start from max occuring id and build it
                 nums = [int(n) for n in re.findall(r'\d+', new_rule)]
                 max_node_id = max(nums)
                 values = {
-                            'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4, 
+                            'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4,
                             'a5': max_node_id + 5, 'a6': max_node_id + 6,}
                 repl = repl.format(**values)
 
@@ -144,7 +153,7 @@ def labelConstraints_dfs(
                         new_rule = new_rule.replace(
                             '[' + target + radIon + ']' + str(i), repl[:2] + radIon + repl[2:], -1
                             )
-                            
+
             return_rules.append((new_rule, name))
     return return_rules
 

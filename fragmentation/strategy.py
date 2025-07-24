@@ -20,11 +20,11 @@ def make_strategy(
 #TODO we should not need this ckeck
 #	mass = None
 #	try:
-#		mass = utils.graphFromTerm(universe[0]).exactMass
+#		mass = utils.graph_from_term(universe[0]).exactMass
 #	except mod.libpymod.LogicError: # Can not get exact mass of a non-molecule.
 #		mass = None
 
-    mass = utils.graphFromTerm(universe).exactMass
+    mass = utils.graph_from_term(universe).exactMass
 
     strategy = (
             mod.addSubset(universe)

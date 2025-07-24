@@ -14,9 +14,9 @@ fragmentation = [benzylAllyl_fragmentation, dielsAdler_fragmentation, mcLafferty
 
 universe = [toluene]
 
-printGrammar()
+print_grammar()
 
-#strategy = (addSubset(universe) 
+#strategy = (addSubset(universe)
 #	>> repeat[1](oxidation)
 #	>> rightPredicate[
 #		lambda d: chargeBound(d, minimum=-10)

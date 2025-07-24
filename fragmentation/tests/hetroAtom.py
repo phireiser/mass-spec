@@ -4,7 +4,7 @@ include("../predicates.py")
 include("../strategy.py")
 
 ionization = [
-    benzylAllyl_ionizaton, 
+    benzylAllyl_ionizaton,
     wiki_ionization,
 ]
 ionization = flatten_list(ionization)
@@ -18,7 +18,7 @@ fragmentation = [
     #inductive_fragmentation,
     #mcLafferty_fragmenation,
     rearrangements,
-    #retroDielsAdler_fragmentation, 
+    #retroDielsAdler_fragmentation,
     wiki_fragmentation,
 ]
 fragmentation = flatten_list(fragmentation)
@@ -44,11 +44,11 @@ for g in universe:
 
 universe_back = []
 for g in universe_term:
-    universe_back.append(graphFromTerm(g))
+    universe_back.append(graph_from_term(g))
 
 
 
-printGrammar()
+print_grammar()
 
 strategy = makeStrategy(universe_term, ionization_term, fragmentation_term)
 

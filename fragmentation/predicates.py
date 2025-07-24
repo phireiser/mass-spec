@@ -14,7 +14,7 @@ def amu_bound(
     def predicate(derivations):
         masses = []
         for g in derivations.right:
-            g = graphFromTerm(g)
+            g = graph_from_term(g)
             if g.isMolecule:
                 masses.append(g.exactMass)
         boundsckeck = any([(mass > minimum) and (mass < maximum) for mass in masses])
@@ -33,7 +33,7 @@ def charge_bound(
 
     def predicate(d):
         for g in d.right:
-            g = graphFromTerm(g)
+            g = graph_from_term(g)
             if g.isMolecule:
                 charge = g.smiles.count('+') - g.smiles.count('-')
                 if minimum <= charge <= maximum:

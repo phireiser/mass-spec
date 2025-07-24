@@ -4,6 +4,8 @@ utilies that are used to descibe
 
 from typing import Iterable, Any, Tuple
 import pandas as pd
+import numpy as np
+import utils
 import mod
 
 
@@ -34,25 +36,24 @@ def rule_usage(
     """
     all_active_rules = set()
 
-    pubchem_spectra = getSpectraFromPubChem(graphFromTerm(molecule).smiles)
-    mod_spectrum_dict = getSpectraFromMoelDerivationGraph(derivation_graph)
+    pubchem_spectra = utils.get_spectra_from_pubchem(utils.graph_from_term(molecule).smiles)
+    mod_spectrum_dict = utils.get_spectra_from_mod_derivation_graph(derivation_graph)
     mod_spectrum_df = pd.DataFrame(mod_spectrum_dict, columns=["mass", "intensity", "rules"])
 
-    for pubchem_spectrum in pubchem_spectra:
+    pubchem_masses = None
+    if pubchem_spectra:
+        # flatten all PubChem masses
+        pubchem_masses = np.unique([
+            int(p[0])
+            for spec in pubchem_spectra
+            for p in next(iter(spec.values()))
+        ]).astype(float)
 
-        pubchem_masses = set([int(x[0]) for x in list(pubchem_spectrum.values())[0]])
-        moel_masses = set([int(x[0]) for x in mod_spectrum_dict])
-
-        # collect rules that created matching masses threshold +/- 1
-        if len(mod_spectrum_df) > 0:
-            rules_active_here = mod_spectrum_df[
-                mod_spectrum_df["mass"].apply(
-                    lambda m: any(abs(m - cm) <= 1.0 for cm in pubchem_masses)
-                )
-            ]["rules"]
-
-            for rule_group in rules_active_here:
-                all_active_rules.update(rule_group)
+    if pubchem_masses.size:
+        # distance of every mod mass to the closest PubChem mass
+        diffs_min = np.abs(mod_spectrum_df["mass"].to_numpy()[:, None] - pubchem_masses).min(axis=1)
+        matched_rules = mod_spectrum_df.loc[diffs_min <= 1.1, "rules"]
+        all_active_rules = set().union(*matched_rules.tolist())
 
     # build a DataFrame of ALL Rules anywhere
     rules_df = (
@@ -79,14 +80,14 @@ def spectrum_statistic(
     spectrum description
     """
 
-    pubchem_spectra = getSpectraFromPubChem(graphFromTerm(molecule).smiles)
-    mod_spectrum_dict = getSpectraFromMoelDerivationGraph(derivation_graph)
+    pubchem_spectra = utils.get_spectra_from_pubchem(utils.graph_from_term(molecule).smiles)
+    mod_spectrum_dict = utils.get_spectra_from_mod_derivation_graph(derivation_graph)
 
     dice_max = -1.0
     tpr_max = -1.0
     for pubchem_spectrum in pubchem_spectra:
-        pubchem_masses = set([int(x[0]) for x in list(pubchem_spectrum.values())[0]])
-        moel_masses = set([int(x[0]) for x in mod_spectrum_dict])
+        pubchem_masses = set(int(x[0]) for x in list(pubchem_spectrum.values())[0])
+        moel_masses = set(int(x[0]) for x in mod_spectrum_dict)
 
         dice_max = max(dice_max, dice_coefficient(pubchem_masses, moel_masses))
         tpr_max = max(tpr_max, len(pubchem_masses & moel_masses) / len(pubchem_masses))

@@ -10,8 +10,7 @@ sys.path.append("/home/talax/xtof/local/Mod/lib64/")
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 
-
-from utils import *
+import utils
 from rules import fragmentation, ionization
 import strategy
 import mod
@@ -22,12 +21,12 @@ parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 args = parser.parse_args()
 
 molecule = mod.smiles(args.smiles, args.name)
-molecule_term = termFromGraph(molecule)
+molecule_term = utils.termFromGraph(molecule)
 
-aoc = allOccuring([molecule], allAtoms)
+aoc = utils.allOccuring([molecule], utils.allAtoms)
 
-ionization_term = list(map(termFromRule, applyConstraints(ionization, aoc)))
-fragmentation_term = list(map(termFromRule, applyConstraints(fragmentation, aoc)))
+ionization_term = list(map(utils.termFromRule, utils.apply_constraints(ionization, aoc)))
+fragmentation_term = list(map(utils.termFromRule, utils.apply_constraints(fragmentation, aoc)))
 
 print("mol spectrum of", molecule.name)
 
@@ -43,7 +42,7 @@ dg = mod.DG(
     )
 
 strat = strategy.make_strategy(
-    derivationGraph=dg,
+    derivation_graph=dg,
     universe=molecule_term,
     ionization=ionization_term,
     fragmentation=fragmentation_term
