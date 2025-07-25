@@ -3,6 +3,8 @@ everything related to constraints in the term mode
 """
 
 from typing import List, Tuple, Iterable, Set, Dict, Any, Union
+import itertools
+import re
 import mod
 
 
@@ -44,16 +46,19 @@ def apply_constraints(
     """
 
     # contraints Label Any
-    constraint_string = getConstraint(all_occuring_atoms, placeholder)
+    constraint_string = get_constraint(all_occuring_atoms, placeholder)
 
     constraint_rules = list()
     for rule in rules:
         constraint_rules.append(
-            addConstraints(rule, constraint_string)
+            add_constraints(rule, constraint_string)
         )
     return constraint_rules
 
-def getConstraint(atoms: List[str], repl_label: str) -> str:
+def get_constraint(atoms: List[str], repl_label: str) -> str:
+    """
+    creates a string to be splised into the GML definition
+    """
 
     labels = " ".join('label ' + '"' + x + '"' for x in atoms)
 
@@ -64,74 +69,85 @@ def getConstraint(atoms: List[str], repl_label: str) -> str:
     ]
     """
 
-def allOccuring(inMoleculeList: mod.Graph, elementList: Iterable[str]) -> Set[str]:
+def all_occuring(
+    in_molecule_list: mod.Graph,
+    element_list: Iterable[str]
+    ) -> Set[str]:
+
+    """
+    all lables that are in element list are collected if they are in the molecule graph
+    """
+
     occuring = set()
-    for m in inMoleculeList:
-        for e in elementList:
+    for m in in_molecule_list:
+        for e in element_list:
             if m.vLabelCount(e) > 0:
                 occuring.add(e)
+
     return occuring
 
 
-def addConstraints(rule: mod.Rule, conStringGML: str) -> mod.Rule:
+def add_constraints(rule: mod.Rule, con_string_gml: str) -> mod.Rule:
+    """
+    splices the constraint string into the rule
+    """
     gmlstr = rule.getGMLString()
     name = rule.name
-    rule = mod.ruleGMLString(gmlstr[:-1] + conStringGML + gmlstr[-1], name)
+    rule = mod.ruleGMLString(gmlstr[:-1] + con_string_gml + gmlstr[-1], name)
     return rule
 
 
-def convert2MoelRule(tupel: Iterable) -> List[mod.Rule]:
+def convert_to_moel_rule(tupel: Iterable) -> List[mod.Rule]:
+    """
+    converts a ruel defined as a tupel of name and DFS string to a mod ruel
+    """
     if isinstance(tupel, tuple):
         tupel = [tupel]
-    return [ Rule.fromDFS(rule, name= name) for rule, name in tupel ]
+    return [mod.Rule.fromDFS(rule, name= name) for rule, name in tupel ]
 
 
-def labelConstraints_gml(
+def label_constraints_gml(
     input_rules: mod.Rule | List[mod.Rule],
     rpl_dict: Dict[str, str | List[str]]
     ) -> List[List[mod.Rule]]:
+
     """
     every underscore single Letter combination should be replaced according to rpl dict
-
-    :param rule: a moel ruel or list of them
-    :param rpl_dict: dictionary with key as lable to be replaced and a string or list of strings to substitue with
-    :return: list of rules
     """
+
     if not isinstance(input_rules, list):
         input_rules = [input_rules]
-    return_rules = list()
+    return_rules = []
     for rule in input_rules:
-        gmlString = rule.getGMLString()
-        rules = list()
+        gml_string = rule.getGMLString()
+        rules = []
         for old_structure, new_structure in rpl_dict.items():
             if not isinstance(new_structure, list):
                 new_structure = list(new_structure)
             for new_i in new_structure:
-                alteredStringObj = gmlString.replace(old_structure, new_i)
-                alteredRuleObj = Rule.fromGMLString(alteredStringObj)
-                alteredRuleObj.name = rule.name + " " + new_i
-                rules.append(alteredRuleObj)
+                altered_string_obj = gml_string.replace(old_structure, new_i)
+                altered_rule_obj = mod.Rule.fromGMLString(altered_string_obj)
+                altered_rule_obj.name = rule.name + " " + new_i
+                rules.append(altered_rule_obj)
         return_rules.append(rules)
+
     return return_rules
 
 
-def labelConstraints_dfs(
+def label_constraints_dfs(
     input_rules: mod.Rule | List[mod.Rule],
     to_replace: List[str],
-    replacements #TODO
+    replacements: List
     ) -> List[Tuple[str, str]]:
 
     """
-    every underscore single Letter combination should be replaced according to rpl dict
-
-    :param rule: a moel ruel as a DFS string or list of them
-    :param rpl_dict: dictionary with key as lable to be replaced and a string or list of strings to substitue with
-    :return: list of rules
+    every element from to_replace should be replaced according to replacements
+    but with all possible combinations
     """
 
     # https://www.mathsisfun.com/combinatorics/combinations-permutations.html
     # https://docs.python.org/3/library/itertools.html
-    return_rules = list()
+    return_rules = []
 
     if not isinstance(input_rules, list):
         input_rules = [input_rules]
@@ -144,14 +160,16 @@ def labelConstraints_dfs(
                 nums = [int(n) for n in re.findall(r'\d+', new_rule)]
                 max_node_id = max(nums)
                 values = {
-                            'a1': max_node_id + 1, 'a2': max_node_id + 2, 'a3': max_node_id + 3, 'a4': max_node_id + 4,
+                            'a1': max_node_id + 1, 'a2': max_node_id + 2,
+                            'a3': max_node_id + 3, 'a4': max_node_id + 4,
                             'a5': max_node_id + 5, 'a6': max_node_id + 6,}
                 repl = repl.format(**values)
 
-                for radIon in [ "", "+", ".", "+.", ".+"]:
+                for radical_ion in [ "", "+", ".", "+.", ".+"]:
                     for i in range(1, max_node_id+1):
                         new_rule = new_rule.replace(
-                            '[' + target + radIon + ']' + str(i), repl[:2] + radIon + repl[2:], -1
+                            '[' + target + radical_ion + ']' +
+                            str(i), repl[:2] + radical_ion + repl[2:], -1
                             )
 
             return_rules.append((new_rule, name))
@@ -212,6 +230,3 @@ def flatten_list(nested_list: List[Union[Any, List]]) -> List[Any]:
         else:
             flat_list.append(item)
     return flat_list
-
-
-

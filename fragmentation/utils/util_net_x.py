@@ -1,24 +1,26 @@
-from typing import List, Tuple, Iterable, Set
-from typing import Hashable, Dict, Optional, Any, Union
+"""
+network X components
+"""
 
+import re
 import networkx as nx
 import mod
 
-def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
+def graph_dfs_with_ids_2_nx(dfs_str: str) -> nx.Graph:
     """
     Convert an atom indexed graph string such as
 
         [C]1([C]2([C]3([C]4(=[O+.]5)[H]13)([H]11)[H]12)([H]9)[H]10)
         ([H]6)([H]7)[H]8
 
-    into a networkx.Graph.  
+    into a networkx.Graph.
     Nodes get attributes   element=...,  decoration=... (e.g. '+.' or '.'),
     and edges get attribute bond='-', '=', '#', …
 
     Parameters
     ----------
-    repr_str : str
-        Graph string in the custom format.
+    dfs_str : str
+        Graph string in dfs format.
 
     Returns
     -------
@@ -30,10 +32,10 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
     atom_pat = re.compile(r"\[([A-Z][a-z]?)([+\-\.]*)\](\d+)")
     tokens = []
     i = 0
-    while i < len(repr_str):
-        ch = repr_str[i]
+    while i < len(dfs_str):
+        ch = dfs_str[i]
         if ch == "[":
-            m = atom_pat.match(repr_str, i)
+            m = atom_pat.match(dfs_str, i)
             if not m:
                 raise ValueError(f"Malformed atom at position {i}")
             elem, deco, idx = m.groups()
@@ -42,17 +44,17 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
                            "decoration": deco,      # '+', '.', '+.', '' …
                            "index": int(idx)})
             i = m.end()
-        elif ch in "= - #":                      # support more symbols if needed
+        elif ch in "= - #":      # support more symbols if needed
             tokens.append({"type": "bond", "bond": ch})
             i += 1
         elif ch in "()":
             tokens.append({"type": "paren", "char": ch})
             i += 1
-        else:                                   # digits after ) or formatting
+        else:                    # digits after ) or formatting
             i += 1
 
     # Graph construction
-    G = nx.Graph()
+    g = nx.Graph()
 
     branch_stack = []        # [(parent_atom, pending_bond), …]
     current_atom = None
@@ -63,11 +65,11 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
 
         if t == "atom":
             idx = tok["index"]
-            G.add_node(idx,
+            g.add_node(idx,
                        element=tok["element"],
                        decoration=tok["decoration"])
             if current_atom is not None:
-                G.add_edge(current_atom, idx, bond=pending_bond)
+                g.add_edge(current_atom, idx, bond=pending_bond)
             current_atom = idx
             pending_bond = '-'          # reset to default after use
 
@@ -80,10 +82,13 @@ def GraphDFSWithIds2nx(repr_str: str) -> nx.Graph:
             else:                       # ')'
                 current_atom, pending_bond = branch_stack.pop()
 
-    return G
+    return g
 
 
-def modGraph2netX(g_mod: mod.Graph) -> nx.Graph:
+def mod_graph_2_net_x(g_mod: mod.Graph) -> nx.Graph:
+    """
+    mod.Graph is converted to a network X representation
+    """
     g_nx = nx.Graph()
 
     for v in g_mod.vertices:
@@ -98,36 +103,43 @@ def modGraph2netX(g_mod: mod.Graph) -> nx.Graph:
 
     for e in g_mod.edges:
         g_nx.add_edge(
-            e.source.id, 
-            e.target.id, 
+            e.source.id,
+            e.target.id,
             label=e.stringLabel
         )
-    
+
     return g_nx
 
 
-def printNxGraph(G: nx.Graph) -> None:
+def print_nx_graph(g: nx.Graph) -> None:
+    """
+    prints onto the console graph data
+    """
     print("Nodes:")
-    for node, data in G.nodes(data=True):
+    for node, data in g.nodes(data=True):
         label = data.get("label", node)
         print(f"{node}: {label}")
 
     # Print edges
     print("\nEdges:")
-    for u, v in G.edges():
+    for u, v in g.edges():
         print(f"{u} -- {v}")
 
 
-def modDerivationGraph2nx(
-    derivationGraph: mod.DG,
+def mod_derivation_graph_2_nx(
+    derivation_graph: mod.DG,
     ) -> nx.MultiDiGraph:
 
-    G = nx.MultiDiGraph()
+    """
+    creates a repesentation of the derivation graph in network X
+    """
 
-    for v in dg.vertices:
-        G.add_node(v.id, graph = modGraph2netX(v.graph))
+    g = nx.MultiDiGraph()
 
-    for e in dg.edges:
+    for v in derivation_graph.vertices:
+        g.add_node(v.id, graph = mod_graph_2_net_x(v.graph))
+
+    for e in derivation_graph.edges:
 
         source_ids = [v.id for v in e.sources]
         target_ids = [v.id for v in e.targets]
@@ -138,7 +150,7 @@ def modDerivationGraph2nx(
         tgt = target_ids[0] if target_ids else None
 
         if src is not None and tgt is not None:
-            G.add_edge(
+            g.add_edge(
                 src, tgt,
                 sources=source_ids,
                 targets=target_ids,
@@ -148,10 +160,10 @@ def modDerivationGraph2nx(
             )
         else:
             # Handle dangling hyperedges (no sources or targets) explicitly
-            G.add_node(f"hyperedge_{e.id}", type="hyperedge", rules=rule_names)
+            g.add_node(f"hyperedge_{e.id}", type="hyperedge", rules=rule_names)
             for sid in source_ids:
-                G.add_edge(sid, f"hyperedge_{e.id}", role="source")
+                g.add_edge(sid, f"hyperedge_{e.id}", role="source")
             for tid in target_ids:
-                G.add_edge(f"hyperedge_{e.id}", tid, role="target")
+                g.add_edge(f"hyperedge_{e.id}", tid, role="target")
 
-    return G
+    return g

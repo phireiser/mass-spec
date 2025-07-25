@@ -32,15 +32,15 @@ universe = [
 
 ionization_term = []
 for r in ionization:
-    ionization_term.append(termFromRule(r))
+    ionization_term.append(term_from_rule(r))
 
 fragmentation_term = []
 for r in fragmentation:
-    fragmentation_term.append(termFromRule(r))
+    fragmentation_term.append(term_from_rule(r))
 
 universe_term = []
 for g in universe:
-    universe_term.append(termFromGraph(g))
+    universe_term.append(term_from_graph(g))
 
 universe_back = []
 for g in universe_term:

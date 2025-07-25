@@ -1,19 +1,26 @@
+"""
+rule extention helper functions
+"""
 import re
-import mod
+
 import collections
 from typing import List, Tuple, Iterable, Set
-from typing import Hashable, Dict, Optional, Any, Union
+import mod
 
-from .util_term_transfers import *
+from .util_term_transfers import decode_vertex_label, graph_from_term, decode_edge_label
 from .util_compareability import ComparableVertex, ComparableVertexList
 
-def getRule2MoleculeMap(
+def get_rule_2_molecule_map(
     derivation: mod.Derivation,
     graphs: mod.Graph,
-    labelSettings: mod.LabelSettings
+    label_settings: mod.LabelSettings
     ):# -> mod.VertexMapRuleLeftGraphUnionGraph:
+
+    """
+    see the positon where the rule gets applied
+    """
     # instatiate a derivation graph to pass in the vertex map
-    dg_new = mod.DG(graphDatabase = graphs, labelSettings = labelSettings)
+    dg_new = mod.DG(graphDatabase = graphs, labelSettings = label_settings)
 
     with dg_new.build() as b:
         d = mod.Derivation()
@@ -31,7 +38,7 @@ def getRule2MoleculeMap(
         return None
     return m.match
 
-def transferPositionsOfGeneralizationExtention(
+def transfer_positions_of_generalization_extention(
     generalization_extention: List[str],
     match#: mod.VertexMapRuleLeftGraphUnionGraph
     ) -> Tuple[
@@ -39,31 +46,39 @@ def transferPositionsOfGeneralizationExtention(
         List[Tuple[mod.Graph.Vertex, mod.Graph.Vertex]],
         List[mod.Graph.Vertex]
     ]:
+    """
+    convert the genearalization extentions 2 vertexes of the graph
+    """
 
-    alkylStructures = re.findall(r'R(\d+)', generalization_extention)
-    hetroStructures = re.findall(r'Y(\d+)', generalization_extention)
-    saturatedStructures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
+    alkyl_structures = re.findall(r'R(\d+)', generalization_extention)
+    hetro_structures = re.findall(r'Y(\d+)', generalization_extention)
+    saturated_structures = re.findall(r'S(\d+)-(\d+)', generalization_extention)
 
     # make it 0 based
-    alkylStructures = [int(x) - 1 for x in alkylStructures]
-    hetroStructures = [int(x) - 1 for x in hetroStructures]
-    saturatedStructures = [(int(x[0])-1, int(x[1])-1)  for x in saturatedStructures]
+    alkyl_structures = [int(x) - 1 for x in alkyl_structures]
+    hetro_structures = [int(x) - 1 for x in hetro_structures]
+    saturated_structures = [(int(x[0])-1, int(x[1])-1)  for x in saturated_structures]
 
-    alkylPosInGraph = [match[vertexById(match.domain, x)] for x in alkylStructures]
-    hetroPosInGraph = [match[vertexById(match.domain, x)] for x in hetroStructures]
-    saturatedPosInGraph = [
-        (match[vertexById(match.domain, x[0])], match[vertexById(match.domain, x[1])])
-        for x in saturatedStructures
+    alkyl_pos_in_graph = [match[vertex_by_id(match.domain, x)] for x in alkyl_structures]
+    alkyl_pos_in_graph = [match[vertex_by_id(match.domain, x)] for x in hetro_structures]
+    saturated_pos_in_graph = [
+        (match[vertex_by_id(match.domain, x[0])], match[vertex_by_id(match.domain, x[1])])
+        for x in saturated_structures
         ]
 
-    return alkylPosInGraph, hetroPosInGraph, saturatedPosInGraph
+    return alkyl_pos_in_graph, alkyl_pos_in_graph, saturated_pos_in_graph
 
-def vertexById(g: mod.Graph, vid: int) -> Iterable[mod.Graph.Vertex]:
+def vertex_by_id(g: mod.Graph, vid: int) -> Iterable[mod.Graph.Vertex]:
+    """
+    get the all vertex from one graph that have a spesific vertex id
+    """
     return next(v for v in g.vertices if v.id == vid)
 
 
 def mol_neighbors(g: mod.Graph, v: mod.Graph.Vertex) -> Iterable[mod.Graph.Vertex]:
-    """Yield neighbouring vertices of *v* in the *mod.Graph* *g*."""
+    """
+    Yield neighbouring vertices of *v* in the *mod.Graph* *g*.
+    """
 
     for gg in g:
         #print("gg", gg, g, v, v.id)
@@ -77,7 +92,9 @@ def mol_neighbors(g: mod.Graph, v: mod.Graph.Vertex) -> Iterable[mod.Graph.Verte
                 yield e.source
 
 def mol_cleaned_label(v: mod.Graph.Vertex) -> str:
-    """Return the vertex label stripped of ``+`` and ``.`` characters."""
+    """
+    Return the vertex label stripped of ``+`` and ``.`` characters.
+    """
 
     strlab = getattr(v, "stringLabel", "")
 
@@ -93,7 +110,7 @@ def mol_cleaned_label(v: mod.Graph.Vertex) -> str:
     pattern = re.compile(r'^a\(([^"(),\s]+),\s*(-?\d+),\s*(-?\d+)\)$')
 
     if pattern.match(strlab):
-        strlab = decodeVertexLabel(strlab)
+        strlab = decode_vertex_label(strlab)
 
     return strlab.replace("+", "").replace("-", "").replace(".", "")
 
@@ -115,22 +132,19 @@ def collect_bfs(
 
 
     # exclude start vertices from morphism vertices as they are part of subgroup
-    morphism_vertices: Set[mod.Graph.Vertex] = set([ x for x in match.domain.vertices]) - set(start_vertices)
+    morphism_vertices = set( x for x in match.domain.vertices) - set(start_vertices)
 
-    visited: Set[mod.Graph.Vertex] = morphism_vertices
-    queue: sdeque[mod.Graph.Vertex] = collections.deque(start_vertices)
+    visited = morphism_vertices
+    queue = collections.deque(start_vertices)
 
-    labels: List[str] = [mol_cleaned_label(v) for v in start_vertices]
-    vertices: List[mod.Graph.Vertex] = list(start_vertices)
+    labels = [mol_cleaned_label(v) for v in start_vertices]
+    vertices = list(start_vertices)
     while queue:
         v = queue.popleft()
         for vertex in mol_neighbors(graph, v):
-            if vertex in visited:
-                continue
-            else:
+            if vertex not in visited:
                 visited.add(vertex)
                 queue.append(vertex)
-
                 labels.append(mol_cleaned_label(vertex))
                 vertices.append(vertex)
 
@@ -166,7 +180,9 @@ def get_edge_between(
     u: mod.Graph.Vertex,
     v: mod.Graph.Vertex
     ) -> mod.Graph.Edge | None:
-
+    """
+    findes an edge between 2 points in a molecuel graph
+    """
     if ComparableVertex(v) == ComparableVertex(u):
         return None
 
@@ -198,9 +214,9 @@ def _is_single_bond(
     if edge is None: # no edge at all
         return False
 
-    return decodeEdgeLabel(edge.stringLabel) == '-'
+    return decode_edge_label(edge.stringLabel) == '-'
 
-def saturatedPath(
+def saturated_path(
     graph: mod.Graph,
     start_vertex: mod.Graph.Vertex,
     end_vertex: mod.Graph.Vertex,
@@ -210,10 +226,11 @@ def saturatedPath(
     ) -> bool:
 
     """
-
+    checks if there is path between start and end
+    that is saturated
     """
 
-    morphism_vertices: Set[mod.Graph.Vertex] = set(match.codomain.vertices)
+    morphism_vertices = set(match.codomain.vertices)
     comp_morphism_vertices = ComparableVertexList(morphism_vertices)
 
     # Early exits
@@ -228,20 +245,24 @@ def saturatedPath(
     if start_vertex == end_vertex: # start equals end
         return True
 
-    stack: deque[Tuple[mod.Graph.Vertex, List[mod.Graph.Vertex]]] = collections.deque()
+    stack = collections.deque()
     stack.append((start_vertex, [start_vertex]))
 
     while stack:
         node, path = stack.pop()
         for vertex in mol_neighbors(graph, node):
 
-            #if ComparableVertex(vertex) not in comp_morphism_vertices:          # stay inside morphism TODO: do I really need that check?
+            #if ComparableVertex(vertex) not in comp_morphism_vertices:
+                # stay inside morphism TODO: do I really need that check?
             #   continue
-            if ComparableVertex(vertex) in ComparableVertexList(path):          # checks if the current vertex is already in the path, loop prevention
-               continue
-            if mol_cleaned_label(vertex) != "C":                                # label filter
+            if ComparableVertex(vertex) in ComparableVertexList(path):
+                # checks if the current vertex is already in the path, loop prevention
                 continue
-            if not _is_single_bond(graph, node, vertex):                        # single bonds only
+            if mol_cleaned_label(vertex) != "C":
+                # label filter
+                continue
+            if not _is_single_bond(graph, node, vertex):
+                 # single bonds only
                 continue
 
             new_path = path + [vertex]
@@ -258,4 +279,3 @@ def saturatedPath(
                 stack.append((vertex, new_path))
 
     return False
-

@@ -1,7 +1,8 @@
 """
 predicate definions to be used in strategy
 """
-from utils import *
+
+import utils
 import mod
 
 
@@ -11,14 +12,18 @@ def amu_bound(
     maximum: int = 500
     ) -> mod.rightPredicate:
 
+    """
+    enforces that the fragments are not heaviner then max and have more mass than the minium
+    """
+
     def predicate(derivations):
         masses = []
         for g in derivations.right:
-            g = graph_from_term(g)
+            g = utils.graph_from_term(g)
             if g.isMolecule:
                 masses.append(g.exactMass)
-        boundsckeck = any([(mass > minimum) and (mass < maximum) for mass in masses])
-        return boundsckeck
+        bounds_ckeck = any((mass > minimum) and (mass < maximum) for mass in masses)
+        return bounds_ckeck
     return mod.rightPredicate[predicate](strategy)
 
 def charge_bound(
@@ -28,12 +33,12 @@ def charge_bound(
     ) -> mod.rightPredicate:
 
     """
-    enforces that the fragments are not heaviner then max and have more mass than the minium
+    enforces that the fragments are staty within a certain charge range
     """
 
     def predicate(d):
         for g in d.right:
-            g = graph_from_term(g)
+            g = utils.graph_from_term(g)
             if g.isMolecule:
                 charge = g.smiles.count('+') - g.smiles.count('-')
                 if minimum <= charge <= maximum:
@@ -56,14 +61,14 @@ def sub_group(
 
         # if any extention
         if generalization_extention:
-            match = getRule2MoleculeMap(
+            match = utils.get_rule_2_molecule_map(
                 derivation = derivation,
                 graphs = derivation_graph.graphDatabase,
-                labelSettings = derivation_graph.labelSettings
+                label_settings = derivation_graph.labelSettings
             )
             if match:
                 alkyl_position, hetro_position, saturated_position = \
-                    transferPositionsOfGeneralizationExtention(generalization_extention, match)
+                    utils.transfer_positions_of_generalization_extention(generalization_extention, match)
 
                 hetro_bool = True
                 alkyl_bool = True
@@ -71,11 +76,11 @@ def sub_group(
 
                 if saturated_position:
                     for position in saturated_position:
-                        satpath = saturatedPath(
+                        satpath = utils.saturated_path(
                             graph = derivation.left,
                             start_vertex = position[0],
                             end_vertex = position[1],
-                            allowed_labels = alk_nes_lables,
+                            allowed_labels = utils.alk_nes_lables,
                             match = match
                             ) #TODO could contain multiple matches, really? -> ask Flamm
                         if not satpath: #  set only false but stay false if true
@@ -84,24 +89,24 @@ def sub_group(
 
                 if alkyl_position:
                     alkyl_bool = False
-                    neighbor_labels, _ = collect_bfs(
+                    neighbor_labels, _ = utils.collect_bfs(
                         graphs = derivation.left,
                         start_vertices = alkyl_position,
                         match = match
                     )
-                    is_subset = set(neighbor_labels).issubset(set(alk_nes_lables))
+                    is_subset = set(neighbor_labels).issubset(set(utils.alk_nes_lables))
                     if len(set(neighbor_labels)) > 0 and is_subset:
                         alkyl_bool = True
 
 
                 if hetro_position:
                     hetro_bool = False
-                    neighbor_labels, _ = collect_bfs(
+                    neighbor_labels, _ = utils.collect_bfs(
                         graphs = derivation.left,
                         start_vertices = hetro_position,
                         match = match
                     )
-                    diff = set(neighbor_labels) - set(alk_nes_lables)
+                    diff = set(neighbor_labels) - set(utils.alk_nes_lables)
                     if len(diff) <= 1:
                         # not only hetro atoms strictly
                         # as the defnition says but, also carbon atoms

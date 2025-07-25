@@ -23,25 +23,25 @@ fragmentation = flatten_list(fragmentation)
 
 fragmentation_term =[]
 for r in fragmentation:
-    fragmentation_term.append(termFromRule(r))
+    fragmentation_term.append(term_from_rule(r))
 
 ionization_term =[]
 for r in ionization:
-    ionization_term.append(termFromRule(r))
+    ionization_term.append(term_from_rule(r))
 
 common_ei_mol_term = []
 for m in common_ei_molecules:
-    common_ei_mol_term.append(termFromGraph(m))
+    common_ei_mol_term.append(term_from_graph(m))
 
 
 
 fragmentation_back =[]
 for r in fragmentation_term:
-    fragmentation_back.append(ruleFromTerm(r))
+    fragmentation_back.append(rule_from_term(r))
 
 ionization_back =[]
 for r in ionization_term:
-    ionization_back.append(ruleFromTerm(r))
+    ionization_back.append(rule_from_term(r))
 
 common_ei_mol_back = []
 for m in common_ei_mol_term:

@@ -21,12 +21,12 @@ parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 args = parser.parse_args()
 
 molecule = mod.smiles(args.smiles, args.name)
-molecule_term = utils.termFromGraph(molecule)
+molecule_term = utils.term_from_graph(molecule)
 
-aoc = utils.allOccuring([molecule], utils.allAtoms)
+aoc = utils.all_occuring([molecule], utils.allAtoms)
 
-ionization_term = list(map(utils.termFromRule, utils.apply_constraints(ionization, aoc)))
-fragmentation_term = list(map(utils.termFromRule, utils.apply_constraints(fragmentation, aoc)))
+ionization_term = list(map(utils.term_from_rule, utils.apply_constraints(ionization, aoc)))
+fragmentation_term = list(map(utils.term_from_rule, utils.apply_constraints(fragmentation, aoc)))
 
 print("mol spectrum of", molecule.name)
 

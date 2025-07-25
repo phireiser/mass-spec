@@ -12,7 +12,7 @@ labels [ label "Nuc(C,N,#)" label "Nuc(S,C,-)" label "Nuc(N,H,-)" ]
 ]"""
 
 # add term constraint to rule
-r1 = addConstraints(r1, r1const)
+r1 = add_constraints(r1, r1const)
 
 print(r1.getGMLString())
 
