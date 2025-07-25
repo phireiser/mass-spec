@@ -1,4 +1,7 @@
-"""for and back transformations from term mode to string mode"""
+"""
+for and back transformations from term mode to string mode
+"""
+
 import collections
 import mod
 
@@ -15,6 +18,7 @@ def term_from_graph(g: mod.Graph):
     """
     convert a molecue in string mode into a molecule that can only be used in term mode
     """
+
     s = "graph [\n"
     for v in g.vertices:
         try:
@@ -33,14 +37,15 @@ def decode_vertex_label(l: str) -> str:
     """
     takes a term - bracked expression and returns a compact string representaito no that atom
     """
+
     assert l.startswith("a(")
     assert l.endswith(")")
     l = l[2:-1].split(", ")
     lab = l[0]
     c = int(l[1])
-    r = int(l[2])
+    r = int(bool(l[2]))
     if c > 0:
-        lab += "+" * abs(c)
+        lab += "+" * c
     elif c < 0:
         lab += "-" * abs(c)
     if r > 0: # not elif otherwise vertex can't be charged radical
@@ -52,6 +57,7 @@ def decode_edge_label(l: str) -> str:
     """
     takes a term - bracked expression and returns a compact string representation no that bond
     """
+
     assert l.startswith("e(")
     assert l.endswith(")")
     l = l[2:-1]
@@ -72,6 +78,7 @@ def graph_from_term(g: mod.Graph) -> mod.Graph:
     """
     takes a graph in of string mode and returns a graph for term mode
     """
+
     s = "graph [\n"
     for v in g.vertices:
         label = decode_vertex_label(v.stringLabel)
@@ -88,6 +95,7 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
     """
     takes a rule for term mode and returns a rule for string mode
     """
+
     left = ""
     right = ""
     context = ""
