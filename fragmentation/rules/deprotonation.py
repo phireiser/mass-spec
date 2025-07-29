@@ -1,25 +1,28 @@
+"""
+deProtonation (H. or H+) in homolytic cleavage
+source Manuel Uhlir
+"""
+
 import mod
 
-# deProtonation (H. or H+) in homolytic cleavage
-# source Manuel Uhlir
 
 deProtonation_radical = mod.Rule.fromDFS(
-	s = 
+	s =
 	"[H]1[_A]2"
 	">>"
-	"[H.]1" "." "[_A+]2", 
-	name = 
+	"[H.]1" "." "[_A+]2",
+	name =
 	"deprotonation radical"
 	" §Y2"
 )
 
 
 deProtonation_proton = mod.Rule.fromDFS(
-	s = 
+	s =
 	"[H]1[_A]2"
 	">>"
-	"[H+]1.[_A.]2", 
-	name = 
+	"[H+]1" "." "[_A.]2",
+	name =
 	"deprotonation proton"
 	" §Y2"
 )

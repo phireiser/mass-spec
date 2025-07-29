@@ -68,7 +68,10 @@ def sub_group(
             )
             if match:
                 alkyl_position, hetro_position, saturated_position = \
-                    utils.transfer_positions_of_generalization_extention(generalization_extention, match)
+                    utils.transfer_positions_of_generalization_extention(
+                        generalization_extention,
+                        match
+                    )
 
                 hetro_bool = True
                 alkyl_bool = True

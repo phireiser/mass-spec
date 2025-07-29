@@ -13,13 +13,12 @@ from .wikipedia import *
 # TODO quinone methide (QM) fission
 
 
-ionization = list()
+ionization = []
 ionization.extend(benzylAllyl_ionizaton)
 ionization.extend(wiki_ionization)
+ionization.extend(deProtonation_all)
 
-fragmentation = list()
-fragmentation.extend(benzylAllyl_fragmentation)
-fragmentation.extend(deProtonation_all)
+fragmentation = []
 fragmentation.extend(benzylAllyl_fragmentation)
 fragmentation.extend(deProtonation_all)
 fragmentation.extend(IMS_cover_fragmentation)

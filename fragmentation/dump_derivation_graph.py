@@ -50,4 +50,8 @@ strat = strategy.make_strategy(
 
 dg.build().execute(strat)
 
-dg.dump(f"./dump/{molecule.name}")
+utils.dump_derivation_graph(
+    dg = dg,
+    rule_list = ionization_term + fragmentation_term,
+    name = molecule.name
+)

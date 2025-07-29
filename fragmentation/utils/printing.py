@@ -1,12 +1,18 @@
+"""
+printing methods for latex
+"""
+
 from typing import List
 import mod
+from mod import post
+from .constrain import flatten_list
 
 def print_rules(in_rules: List[mod.Rule]) -> None:
     """
     prints rules in latex in post processing
     """
     post.summarySection("Rule(s)")
-    p = GraphPrinter()
+    p = mod.GraphPrinter()
     p.setReactionDefault()
     p.withIndex = True
     in_rules = flatten_list(in_rules)
@@ -21,7 +27,7 @@ def print_graphs(
     print graphs in latex in post processing
     """
     post.summarySection("Molecule(s)")
-    p = GraphPrinter()
+    p = mod.GraphPrinter()
     p.setMolDefault()
     #p.withIndex = True
     for m in in_graphs:

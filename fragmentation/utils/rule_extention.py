@@ -7,8 +7,9 @@ import collections
 from typing import List, Tuple, Iterable, Set
 import mod
 
-from .util_term_transfers import decode_vertex_label, graph_from_term, decode_edge_label
-from .util_compareability import ComparableVertex, ComparableVertexList
+from .compareability import ComparableVertex, ComparableVertexList
+from .term_transfers import decode_vertex_label, graph_from_term, decode_edge_label
+
 
 def get_rule_2_molecule_map(
     derivation: mod.Derivation,

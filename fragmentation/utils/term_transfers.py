@@ -22,9 +22,9 @@ def term_from_graph(g: mod.Graph):
     s = "graph [\n"
     for v in g.vertices:
         try:
-            s += f'node [ id {v.id} label "a({v.atomId.symbol}, {v.charge}, {v.radical})" ]'
+            s += f'node [ id {v.id} label "a({v.atomId.symbol}, {v.charge}, {int(v.radical)})" ]'
         except mod.libpymod.LogicError:
-            s += f'node [ id {v.id} label "a(_A, {v.charge}, {v.radical})" ]'
+            s += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
 
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
@@ -43,7 +43,7 @@ def decode_vertex_label(l: str) -> str:
     l = l[2:-1].split(", ")
     lab = l[0]
     c = int(l[1])
-    r = int(bool(l[2]))
+    r = int(l[2])
     if c > 0:
         lab += "+" * c
     elif c < 0:
@@ -103,9 +103,9 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
     g = r.left
     for v in g.vertices:
         try:
-            left += f'node [ id {v.id} label "a({v.atomId.symbol}, {v.charge}, {v.radical})" ]'
+            left += f'node [ id {v.id} label "a({v.atomId.symbol}, {v.charge}, {int(v.radical)})" ]'
         except mod.libpymod.LogicError:
-            left += f'node [ id {v.id} label "a(_A, {v.charge}, {v.radical})" ]'
+            left += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
 
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
@@ -115,9 +115,9 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
         if hasattr(v, "atomId"):
             try:
                 symbol = v.atomId.symbol
-                context += f'node [ id {v.id} label "a({symbol}, {v.charge}, {v.radical})" ]'
+                context += f'node [ id {v.id} label "a({symbol}, {v.charge}, {int(v.radical)})" ]'
             except mod.libpymod.LogicError:
-                context += f'node [ id {v.id} label "a(_A, {v.charge}, {v.radical})" ]'
+                context += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
     for e in g.edges:
         if hasattr(v, "bondType"):
             bond_type = term_bond_from_bond_type[e.bondType]
@@ -126,9 +126,9 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
     for v in g.vertices:
         try:
             symbol = v.atomId.symbol
-            right += f'node [ id {v.id} label "a({symbol}, {v.charge}, {v.radical})" ]'
+            right += f'node [ id {v.id} label "a({symbol}, {v.charge}, {int(v.radical)})" ]'
         except mod.libpymod.LogicError:
-            right += f'node [ id {v.id} label "a(_A, {v.charge}, {v.radical})" ]'
+            right += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
         right += f'edge [ source {e.source.id} target {e.target.id} label "e({bond_type})" ]'

@@ -12,17 +12,10 @@ def make_strategy(
     ionization: List[mod.Rule],
     fragmentation: List[mod.Rule]
     ) -> mod.DGStrat:
+
     """
     compile a strategy to perform the ionization and fragmentation
     """
-
-
-#TODO we should not need this ckeck
-#	mass = None
-#	try:
-#		mass = utils.graph_from_term(universe[0]).exactMass
-#	except mod.libpymod.LogicError: # Can not get exact mass of a non-molecule.
-#		mass = None
 
     mass = utils.graph_from_term(universe).exactMass
 

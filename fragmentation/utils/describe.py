@@ -80,7 +80,8 @@ def spectrum_statistic(
     spectrum description
     """
 
-    pubchem_spectra = utils.get_spectra_from_pubchem(utils.graph_from_term(molecule).smiles)
+    smiles = utils.graph_from_term(molecule).smiles
+    pubchem_spectra = utils.get_spectra_from_pubchem(smiles)
     mod_spectrum_dict = utils.get_spectra_from_mod_derivation_graph(derivation_graph)
 
     dice_max = -1.0

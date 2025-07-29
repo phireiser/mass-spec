@@ -1,7 +1,11 @@
 """
 pubchem specifitcs to get EI spectra
 """
+
 from typing import List, Tuple, Dict, Any
+from urllib.parse import quote
+#from rdkit import Chem # issue cant import after mod
+#import rdkit # good
 import requests
 
 def pubchem_smiles_lookup(smiles: str) -> int:
@@ -19,7 +23,8 @@ def pubchem_smiles_lookup(smiles: str) -> int:
         PubChem CID for the given SMILES.
     """
     pug_pre_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
-    url = f"{pug_pre_url}{smiles}/cids/JSON"
+    encoded_smiles = quote(smiles, safe='')  # fully encode special characters
+    url = f"{pug_pre_url}{encoded_smiles}/cids/JSON"
 
     try:
         response = requests.get(url, timeout= 8.0)
@@ -36,7 +41,6 @@ def pubchem_smiles_lookup(smiles: str) -> int:
     except requests.RequestException as e:
         print(f"Failed to fetch CID for {smiles}: {e}")
         raise e
-
 
 
 def get_spectra_from_information_section(
@@ -125,3 +129,7 @@ def get_spectra_from_pubchem(
     info = get_information_section_from_pubchem(cid)
     spectra = get_spectra_from_information_section(info)
     return spectra
+
+if __name__ == "__main__":
+    print("spect_pubchem.py is main")
+    print(pubchem_smiles_lookup("CCO"))
