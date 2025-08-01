@@ -98,23 +98,27 @@ def get_information_section_from_pubchem(cid: int) -> List[Dict[str, Any]] | Non
 
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/"
 
-    response = requests.get(url, timeout= 8.0)
+    response = requests.get(url, timeout=8.0)
     response.raise_for_status()
     data = response.json()
 
-    # Extract Sections related to Mass Spectrometry
-    sections = data.get("Record", {}).get("Section", [])
-    for section in sections:
-        if section.get("TOCHeading") == "Spectral Information":
-            for sub_section in section.get("Section", []):
-                if sub_section.get("TOCHeading") == "Mass Spectrometry":
-                    for subsub in sub_section.get("Section", []):
-                        if subsub.get("TOCHeading") == "GC-MS":
-                            return subsub["Information"]
-                        else:
-                            raise RuntimeError("no GC-MS in pubchem found for compound", cid)
-    return None
 
+    def find_gc_ms(sections):
+        for section in sections:
+            if section.get("TOCHeading") == "GC-MS":
+                return section.get("Information")
+            # Search deeper if nested
+            result = find_gc_ms(section.get("Section", []))
+            if result is not None:
+                return result
+        return None
+
+    gc_ms_info = find_gc_ms(data.get("Record", {}).get("Section", []))
+
+    if gc_ms_info:
+        return gc_ms_info
+
+    raise RuntimeError(f"No GC-MS data found for compound {cid}")
 
 def get_spectra_from_pubchem(
     smiles: str

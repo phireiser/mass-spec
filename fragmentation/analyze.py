@@ -6,6 +6,7 @@ import sys
 import os
 import argparse
 import pandas as pd
+from pprint import pprint
 
 sys.setdlopenflags(sys.getdlopenflags() | ctypes.RTLD_GLOBAL)
 sys.path.append("/home/talax/xtof/local/Mod/lib64/")
@@ -31,14 +32,18 @@ import mod
 #molecule = mod.smiles(args.smiles, args.name)
 smiles = "O=C(O)C(N)CC=1C=CC=CC1"
 name = "phenylalanine"
-print()
+
+smiles = "C[C@@H](C(=O)O)N"
+name = "alanine"
+
+
 molecule = mod.smiles(smiles, name)
 molecule_term = utils.term_from_graph(molecule)
 
 aoc = utils.all_occuring([molecule], utils.allAtoms)
 
-ionization_term = list(map(utils.term_from_rule, utils.apply_constraints(ionization, aoc)))
-fragmentation_term = list(map(utils.term_from_rule, utils.apply_constraints(fragmentation, aoc)))
+ionization_term = [map(utils.term_from_rule, utils.apply_constraints(ionization, aoc))]
+fragmentation_term = [map(utils.term_from_rule, utils.apply_constraints(fragmentation, aoc))]
 
 dg, rule_list  =  utils.load_derivation_graph(
     molecule.name,
@@ -54,7 +59,8 @@ with pd.option_context(
     'display.max_rows', None, 'display.max_columns', None,
     'display.width', None, 'display.max_colwidth', None
     ):
-    print(utils.rule_usage(dg, molecule_term, ionization_term + fragmentation_term))
+    print(utils.rule_usage(dg, molecule_term, mod.inputRules).query("active == True"))
 
+print("\n\n")
 print("spectrum coverage")
-print(utils.spectrum_statistic(dg, molecule_term))
+pprint(utils.spectrum_statistic(dg, molecule_term), width=120)

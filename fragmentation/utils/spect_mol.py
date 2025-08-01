@@ -9,9 +9,11 @@ def get_parent_rules_for_graph(
     derivation_graph: mod.DG,
     search_target_graph: mod.Graph
     ) -> List[int]:
+
     """
-    get all graphs that are used for pareten-products of that product
+    get all graphs that are used for parent-products of that product
     """
+
     parent_rules = []
     visited = set()
     stack = [search_target_graph]
@@ -20,9 +22,9 @@ def get_parent_rules_for_graph(
         current_graph = stack.pop()
 
         # Avoid reprocessing the same graph
-        if id(current_graph) in visited:
+        if current_graph in visited:
             continue
-        visited.add(id(current_graph))
+        visited.add(current_graph)
 
         edges = derivation_graph.findVertex(current_graph).inEdges
         for edge in edges:
@@ -32,28 +34,6 @@ def get_parent_rules_for_graph(
 
             for source in edge.sources:
                 stack.append(source.graph)
-
-#        try:
-#            edges = derivation_graph.findVertex(current_graph).inEdges
-#        except:
-#            print("Fragment does not exist in DG")
-#            continue
-
-#        for edge in edges:
-#            try:
-#                for rule in edge.rules:
-#                    parent_rules.append(rule.id)
-#            except:
-#                print("edge exeption in getPartenRulesFromGraph")
-#                continue
-
-#            try:
-#                for source in edge.sources:
-#                    stack.append(source.graph)
-#            except mod.LogicError:
-#                print("mod logic Error")
-#                #To do why?
-#                continue
 
     return parent_rules
 
@@ -65,11 +45,11 @@ def get_spectra_from_mod_derivation_graph(
     get spectra from mod derivation graph
     """
     spectra = []
-
-    for graph_term in derivation_graph.createdGraphs:
+    for graph_term in derivation_graph.graphDatabase: # when loading DG len(createdGraphs)=0
         graph = utils.graph_from_term(graph_term)
         if graph.isMolecule:
             if '+' in graph.getGMLString(): # only charged fragments can be detected
+
                 found = False # update spectra list if allready occuring
 
                 rules = set(get_parent_rules_for_graph(derivation_graph,graph_term))

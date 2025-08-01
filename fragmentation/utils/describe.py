@@ -5,6 +5,7 @@ utilies that are used to descibe
 from typing import Iterable, Any, Tuple
 import pandas as pd
 import numpy as np
+
 import utils
 import mod
 
@@ -84,13 +85,23 @@ def spectrum_statistic(
     pubchem_spectra = utils.get_spectra_from_pubchem(smiles)
     mod_spectrum_dict = utils.get_spectra_from_mod_derivation_graph(derivation_graph)
 
-    dice_max = -1.0
-    tpr_max = -1.0
+    dice_max, tpr_max = -1.0, -1.0
+    moel_masses_union, pubchem_masses_union = set(), set()
     for pubchem_spectrum in pubchem_spectra:
         pubchem_masses = set(int(x[0]) for x in list(pubchem_spectrum.values())[0])
         moel_masses = set(int(x[0]) for x in mod_spectrum_dict)
 
+        moel_masses_union.update(moel_masses)
+        pubchem_masses_union.update(pubchem_masses)
+
         dice_max = max(dice_max, dice_coefficient(pubchem_masses, moel_masses))
         tpr_max = max(tpr_max, len(pubchem_masses & moel_masses) / len(pubchem_masses))
 
-    return (dice_max, tpr_max)
+    return {
+            "Dice_max": dice_max,
+            "TPR_max": tpr_max,
+            "MØD masses": sorted(moel_masses_union),
+            "PubChem masses": sorted(pubchem_masses_union),
+            "MØD support": len(moel_masses_union),
+            "PubChem support": len(pubchem_masses_union),
+           }
