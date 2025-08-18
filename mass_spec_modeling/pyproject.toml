@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mass-spec-modeling"
+version = "0.0.1"
+description = "Mass spec modeling utilities and ML pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.1",
+  "pandas>=2.3",
+  "scipy",
+  "networkx>=3.3",
+  "tqdm",
+  "requests",
+  "typing-extensions",
+
+  "torch>=2.8",
+  "torchvision",
+  "torch-cluster",
+  "torch-geometric",
+  "torch-scatter",
+  "torch-sparse",
+  "pyg-lib",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --maxfail=1"
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+  "integration: marks tests that hit external systems or run slowly",
+]

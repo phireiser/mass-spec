@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: mass-spec-modeling
+Version: 0.0.1
+Summary: Mass spec modeling utilities and ML pipeline
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: torch-geometric
+Requires-Dist: torch-scatter
