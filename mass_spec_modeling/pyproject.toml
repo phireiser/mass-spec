@@ -18,6 +18,7 @@ dependencies = [
   "typing-extensions",
 
   "torch>=2.8",
+  "torch_geometric",
   "torchvision",
   "torch-cluster",
   "torch-geometric",

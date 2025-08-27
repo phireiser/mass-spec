@@ -1,19 +1,14 @@
 """
 main file to execute on slurm
 """
-import ctypes
-import sys
-import os
+
 import argparse
-sys.setdlopenflags(sys.getdlopenflags() | ctypes.RTLD_GLOBAL)
-sys.path.append("/home/talax/xtof/local/Mod/lib64/")
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-
-import utils
-from rules import fragmentation, ionization
-import strategy
 import mod
+
+import mass_spec_modeling.mod_fragmentation.utils as utils
+from mass_spec_modeling.mod_fragmentation.rules import fragmentation, ionization
+import mass_spec_modeling.mod_fragmentation.strategy as strategy
+
 
 parser = argparse.ArgumentParser(description="Using MØD as a MassSpec Fragmenter")
 parser.add_argument("--smiles", type=str, required=True, help="SMILES String of Molecule")

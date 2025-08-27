@@ -1,26 +1,14 @@
 """
 load analyse a derivation graph
 """
-import ctypes
-import sys
-import os
+from pprint import pprint
 import subprocess
 import argparse
 import pandas as pd
-from pprint import pprint
-
-sys.setdlopenflags(sys.getdlopenflags() | ctypes.RTLD_GLOBAL)
-sys.path.append("/home/talax/xtof/local/Mod/lib64/")
-sys.path.append(
-    "/home/mescalin/reiserp/Nextcloud/"
-    "studium/computationalScience/thesis/mol/fragmentation/"
-    )
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 import mod
-import mod_fragmentation.utils as utils
-from mod_fragmentation.rules import fragmentation, ionization
-import mod_fragmentation.strategy
+
+import mass_spec_modeling.mod_fragmentation.utils as utils
+from mass_spec_modeling.mod_fragmentation.rules import fragmentation, ionization
 
 
 
