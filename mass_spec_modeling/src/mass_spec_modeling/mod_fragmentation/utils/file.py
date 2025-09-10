@@ -3,13 +3,14 @@ dump & load the full (including ruleDB & graphDB) derivation graph
 """
 
 import pickle
-from typing import List
+from typing import List, Tuple
 import mod
 
 def dump_derivation_graph(
     dg: mod.DG,
     rule_list: List[mod.Rule],
     name: str,
+    spectrum: List[Tuple[int, float]],
     path: str = "./dump/"
 ) -> None:
 
@@ -26,7 +27,7 @@ def dump_derivation_graph(
         rule_database.append(obj.getGMLString())
 
     with open(path + name + ".pkl", 'wb') as f:
-        pickle.dump((graph_database, rule_database), f)
+        pickle.dump((graph_database, rule_database, spectrum), f)
 
 
 def load_derivation_graph(name: str, path: str = "./dump/") -> mod.DG:

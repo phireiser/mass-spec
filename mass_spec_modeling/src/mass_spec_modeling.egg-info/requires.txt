@@ -1,3 +1,14 @@
-torch
+numpy>=2.1
+pandas>=2.3
+scipy
+networkx>=3.3
+tqdm
+requests
+typing-extensions
+torch>=2.8
+torch_geometric
+torchvision
+torch-cluster
 torch-geometric
 torch-scatter
+torch-sparse

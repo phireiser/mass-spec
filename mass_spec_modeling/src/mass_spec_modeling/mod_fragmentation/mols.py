@@ -2,8 +2,10 @@
 definition of molecules
 """
 
-from . import utils
 import mod
+from .utils.term_transfers import term_from_graph
+from .utils.constrain import all_occuring, allAtoms
+
 
 macLafferty = mod.graphGMLString(
 """graph [
@@ -132,10 +134,10 @@ common_ei_molecules = [
 
 common_ei_mol_term = []
 for m in common_ei_molecules:
-    common_ei_mol_term.append(utils.term_from_graph(m))
+    common_ei_mol_term.append(term_from_graph(m))
 
 small_ei_mol_term = [
-    utils.term_from_graph(x) for x in [
+    term_from_graph(x) for x in [
         #toluene,
         butanal,
     	#butylbenzene,
@@ -148,4 +150,4 @@ small_ei_mol_term = [
     ]
 ]
 
-occuring_commonMol_allAtoms = utils.all_occuring(common_ei_molecules, utils.allAtoms)
+occuring_commonMol_allAtoms = all_occuring(common_ei_molecules, allAtoms)

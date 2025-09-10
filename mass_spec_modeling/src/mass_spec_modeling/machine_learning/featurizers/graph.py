@@ -12,7 +12,7 @@ BOND_STRENGTH = {
     mod.BondType.Single:   1.0,
     mod.BondType.Double:   2.0,
     mod.BondType.Triple:   3.0,
-    mod.BondType.Aromatic: 1.5,   # conventional choiced
+    mod.BondType.Aromatic: 1.5,   # conventional choice
 }
 
 

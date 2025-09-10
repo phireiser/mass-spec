@@ -22,6 +22,11 @@ class DGHypergraphFeaturizer:
       - edge_index: incidence matrix [2, M] with (vertex_id, hyperedge_id)
     """
 
+    mol_rep = None
+    edge_index = None
+    rule_rep = None
+    edge_names = None
+
     def __init__(
         self,
         cfg,
@@ -33,6 +38,7 @@ class DGHypergraphFeaturizer:
         eval_mode: bool = True,
         device: torch.device | str | None = None,
     ):
+
         self.cfg = cfg
         self.gf = GraphFeaturizerMOD()
         self.rf = RuleFeaturizerMOD()
@@ -195,6 +201,7 @@ class DGHypergraphFeaturizer:
             edge_attr=rule_rep,        # [num_hyperedges, dim_h]
         )
         hg.edge_name = edge_names
+        hg.mol_rep = mol_rep  # Explicitly add mol_rep to the HyperGraphData object
         return hg
 
     # ------------------------------- main -----------------------------------
@@ -212,14 +219,19 @@ class DGHypergraphFeaturizer:
         vtx_map, graphs = self._collect_graphs(dg)
         graph_datas = [self.gf(g) for g in graphs]
         self._validate_graph_datas(graph_datas)
-        mol_rep = self._encode_graphs(graph_datas)
+        self.mol_rep = self._encode_graphs(graph_datas)
 
         # Per-hyperedge rule featurization & encoding
         edges_list = self._materialize_edges(dg)
         rule_datas, rules_per_edge = self._prepare_rules(edges_list)
         rule_emb_all = self._encode_rules(rule_datas)
-        rule_rep = self._pool_rules(rule_emb_all, rules_per_edge)
+        self.rule_rep = self._pool_rules(rule_emb_all, rules_per_edge)
 
         # Incidence and packaging
-        edge_index, edge_names, _ = self._incidence_from_hyperedges(dg, vtx_map)
-        return self._assemble(mol_rep, edge_index, rule_rep, edge_names)
+        self.edge_index, self.edge_names, _ = self._incidence_from_hyperedges(dg, vtx_map)
+        return self._assemble(
+            self.mol_rep,
+            self.edge_index,
+            self.rule_rep,
+            self.edge_names
+            )

@@ -1,9 +1,13 @@
+"""layers"""
+from __future__ import annotations
 import torch
-import torch.nn as nn
+from torch import nn
 import torch.nn.functional as F
 from torch_geometric.utils import to_dense_batch
-from torch_geometric.nn import GENConv, GINEConv
+from torch_geometric.nn import GENConv, GINEConv, global_mean_pool
 from .convolution import DirectedHGConv
+
+
 
 class GraphGPSLayer(nn.Module):
     def __init__(self, cfg):
@@ -159,7 +163,7 @@ class HyperGraphLayer(nn.Module):
         self.layer_norm_attn = nn.LayerNorm(cfg.dim_h)
         self.layer_norm = nn.LayerNorm(cfg.dim_h)
 
-    def transform_hyperedge_index(hyperedge_index):
+    def transform_hyperedge_index(self, hyperedge_index):
         """
         transforms from boundary-marked sequence
         ->
@@ -177,7 +181,7 @@ class HyperGraphLayer(nn.Module):
         h_in = h
 
 
-        hyperedge_index = transform_hyperedge_index(hypergraph.edge_index)
+        hyperedge_index = self.transform_hyperedge_index(hypergraph.edge_index)
         # print(f"hyperedge_index after transform: {hyperedge_index}")
         hyperedge_head_tail = hypergraph.edge_index[1]
         h_local = self.hypergraph_conv(h,hyperedge_index,hyperedge_head_tail , hypergraph.edge_attr, hypergraph.batch)
@@ -233,3 +237,52 @@ class CrossAttention(nn.Module):
         # print(f"combined_representation shape in cross attention: {combined_representation.shape}")
 
         return combined_representation
+
+# ----------------------- Reinforcement Learning -----------------------------------------
+
+class MLP(nn.Module):
+    def __init__(self, dims, act=nn.ReLU, dropout=0.0):
+        super().__init__()
+        layers = []
+        for i in range(len(dims) - 1):
+            layers += [nn.Linear(dims[i], dims[i+1])]
+            if i < len(dims) - 2:
+                layers += [act(), nn.Dropout(dropout)]
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.net(x)
+
+class GINEBlock(nn.Module):
+    def __init__(self, in_dim: int, out_dim: int, edge_dim: int | None, dropout: float = 0.0):
+        super().__init__()
+        # MLP must start with Linear(in_dim, …):
+        mlp = nn.Sequential(
+            nn.Linear(in_dim, out_dim),
+            nn.ReLU(),
+            nn.Linear(out_dim, out_dim),
+        )
+        # edge_dim must be None if there are no edge features
+        edge_dim = edge_dim if (edge_dim is not None and edge_dim > 0) else None
+        self.conv = GINEConv(mlp, edge_dim=edge_dim)
+
+        # residual projection if widths differ
+        self.proj = nn.Identity() if in_dim == out_dim else nn.Linear(in_dim, out_dim)
+        self.act = nn.ReLU()
+        self.drop = nn.Dropout(dropout)
+
+    def forward(self, x, edge_index, edge_attr=None):
+        # pass None if there are no edge features
+        if edge_attr is not None and edge_attr.numel() == 0:
+            edge_attr = None
+        h = self.conv(x, edge_index, edge_attr)
+        h = self.proj(x) + h
+        h = self.act(h)
+        h = self.drop(h)
+        return h
+
+def graph_readout(x, batch, method: str = "mean"):
+    if method == "mean":
+        return global_mean_pool(x, batch)
+    raise ValueError(f"Unknown readout: {method}")
+

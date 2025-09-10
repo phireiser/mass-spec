@@ -1,8 +1,11 @@
 from .layers import GraphGPSLayer, HyperGraphLayer, CrossAttention
 from .convolution import DirectedHGConv
-from .encoder import GraphEncoder
+from .encoder import GraphEncoderTR, SpectrumEncoder, GraphEncoderRL
+from .forward import ForwardPredictor
+from .layers import MLP, GINEBlock
 
 __all__ = [
     "GraphGPSLayer", "HyperGraphLayer", "CrossAttention",
-    "DirectedHGConv", "GraphEncoder",
+    "DirectedHGConv", "GraphEncoderRL", "GraphEncoderTR",
+    "SpectrumEncoder", "ForwardPredictor", "MLP", "GINEBlock",
 ]

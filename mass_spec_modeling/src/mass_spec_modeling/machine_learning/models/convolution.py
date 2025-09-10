@@ -1,7 +1,8 @@
-
+import math
 from typing import Optional
 from torch import Tensor
 from torch.nn import Parameter
+import torch
 
 from torch_geometric.experimental import disable_dynamic_shapes
 from torch_geometric.nn import HeteroLinear, GraphNorm
@@ -9,9 +10,6 @@ from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.nn.dense.linear import Linear
 from torch_geometric.nn.inits import glorot, zeros
 from torch_geometric.utils import scatter, softmax
-
-
-import math
 
 
 

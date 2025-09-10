@@ -24,11 +24,12 @@ dependencies = [
   "torch-geometric",
   "torch-scatter",
   "torch-sparse",
-  "pyg-lib",
+
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["mass_spec_modeling*"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
