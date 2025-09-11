@@ -4,13 +4,13 @@ import mod
 
 from mass_spec_modeling.machine_learning.datasets import SpectraDataset
 from mass_spec_modeling.machine_learning.train_supervised import (
-    train_forward_supervised, normalize_feature_dims)
+    train_forward_supervised, normalize_feature_dims, train_backward_supervised)
 from mass_spec_modeling.machine_learning.rl.envs import ForwardFragEnv, BackwardMolEnv
 from mass_spec_modeling.machine_learning.rl.train_reinforce import (
     reinforce_forward_env, reinforce_backward_env)
 from mass_spec_modeling.machine_learning.rl.policy import ActionAwarePolicy
 from mass_spec_modeling.machine_learning.rl.mod_engine_adapter import (
-    ModEngineAdapter, DGState)
+    ModEngineAdapter, DGState, AssemblerAdapter)
 from mass_spec_modeling.machine_learning.config import FullConfig, Cfg
 from mass_spec_modeling.machine_learning.featurizers.dg_hypergraph import GraphFeaturizerMOD
 from mass_spec_modeling.machine_learning import utils_mod
@@ -87,36 +87,45 @@ dataset = SpectraDataset(
 node_dim, edge_dim = normalize_feature_dims(mol_graphs)
 
 # Supervised forward model (G -> S) pretrain
-model = train_forward_supervised(
+forward_model = train_forward_supervised(
     dataset=dataset,
     node_dim=node_dim,
     edge_dim=edge_dim,
     cfg=fcfg,
 )
 
-adapter = ModEngineAdapter(
+backward_model, catalog_mz = train_backward_supervised(
+    dataset=dataset,        # your SpectraDataset
+    catalog_mz=None,        # or pass a prebuilt catalog tensor [K]
+    ppm_merge=5.0,
+    epochs=10,
+    batch_size=32,
+    device=device,
+)
+
+fragmenter_adapter = ModEngineAdapter(
     list_out_edges = utils_mod.get_out_edges_by_vertex_id,
     edge_rule_id   = utils_mod.get_rule_ids_by_edge_id,
     edge_products  = utils_mod.get_fragment_ids_by_edge_id,
 )
 
 # Use the last loaded DG and mol from the loop
-last_name, last_smi = mols_definitions[-1]
-last_mol = mod.smiles(last_smi, name=last_name)
-last_dg, _ = utils.load_derivation_graph(last_mol.name, path=LOAD_PATH)
-
-# RL state points to root of the given hypergraph
-dg_state = DGState(dg=last_dg, node_id=ROOT_NODE_ID)
+sample_last_name, last_smi = mols_definitions[-1]
+sample_last_mol = mod.smiles(last_smi, name=sample_last_name)
+sample_last_dg, _ = utils.load_derivation_graph(sample_last_mol.name, path=LOAD_PATH)
 
 # Get/clean a target spectrum for RL (e.g., PubChem)
-pubchem = utils.get_spectra_from_pubchem(smiles=last_mol.smiles)
+pubchem = utils.get_spectra_from_pubchem(smiles=sample_last_mol.smiles)
 target_peaks_tensor = utils_mod.clean_spectra_tensor(pubchem, device=device)
+
+# dumy Assembler Adapter TODO
+assembler_adapter = AssemblerAdapter()
 
 policy = ActionAwarePolicy(n_bins=fcfg.data.n_bins).to(device)
 opt = torch.optim.Adam(policy.parameters(), lr=fcfg.rl.lr)
 
 env_fwd = ForwardFragEnv(
-    mod_engine=adapter,
+    mod_engine=fragmenter_adapter,
     featurizer=None, #dg_featurizer
     target_peaks=target_peaks_tensor,  # [N,2]
     n_bins=fcfg.data.n_bins,
@@ -126,30 +135,31 @@ env_fwd = ForwardFragEnv(
     max_depth=fcfg.rl.max_depth,
     device=device,
 )
-env_fwd.reset(dg=last_dg)
+env_fwd.reset(dg=sample_last_dg)
 
 
 reinforce_forward_env(
-    env_fwd, adapter, policy, opt,
+    env_fwd, fragmenter_adapter, policy, opt,
     gamma=fcfg.rl.gamma,
     episodes=1000,
     device=device
     )
 
-#env_bwd = BackwardMolEnv(
-#    assembler=None,                 # implements AssemblerAdapter TODO
-#    target_peaks=target_peaks_tensor,              # [N,2]
-#    n_bins=env_fwd.n_bins,
-#    mz_min=env_fwd.mz_min,
-#    mz_max=env_fwd.mz_max,
-#    max_steps=30,
-#    device=device
-#)
-#env_bwd.reset(seed=None)
-#
-#reinforce_backward_env(
-#    env_bwd, adapter, policy, opt,
-#    gamma=fcfg.rl.gamma,
-#    episodes=1000,
-#    device=device
-#    )
+
+env_bwd = BackwardMolEnv(
+    assembler=assembler_adapter,                 # implements AssemblerAdapter TODO
+    target_peaks=target_peaks_tensor,              # [N,2]
+    n_bins=env_fwd.n_bins,
+    mz_min=env_fwd.mz_min,
+    mz_max=env_fwd.mz_max,
+    max_steps=30,
+    device=device
+)
+env_bwd.reset(seed=None)
+
+reinforce_backward_env(
+    env_bwd, assembler_adapter, policy, opt,
+    gamma=fcfg.rl.gamma,
+    episodes=1000,
+    device=device
+    )

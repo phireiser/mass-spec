@@ -1,6 +1,5 @@
 from __future__ import annotations
 import torch
-
 from ..datasets.spectra_dataset import bin_spectrum
 
 def bin_masses(masses, n_bins, mz_min, mz_max, device):

@@ -9,6 +9,7 @@ import torch
 import mod
 from .target_peaks import clean_spectra, make_peaks_tensor
 
+
 def inspect_hg(hg):
     """display statistics of the torch Data"""
     print("\n=== HyperGraphData summary ===")

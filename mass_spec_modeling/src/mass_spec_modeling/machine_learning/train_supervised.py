@@ -1,23 +1,19 @@
-"""train supervised"""
+"""trainer supervised"""
 from __future__ import annotations
 from typing import Optional
 import torch
 from torch import nn
+from torch import Tensor
+import torch.nn.functional as F
 from torch_geometric.loader import DataLoader as PyGDataLoader
 from torch_geometric.data import Data
+
 from .config import FullConfig
 from .models import ForwardPredictor
+from .models import BackwardPredictorBins
 from .losses import spectral_losses
 from .utils_mod import build_fragment_catalog, peaks_to_mask_batch
 
-def collate_batch(batch):
-    """
-    Mix of PyG graphs & tensors: we expect outer DataLoader to be PyG's DataLoader
-    for graphs; we therefore pop tensors from dicts here.
-    """
-    # When using PyG's DataLoader, it collates Data automatically and returns Data.
-    # For simplicity, assume we iterate in parallel over dataset for non-graph tensors.
-    raise NotImplementedError("Use separate PyG DataLoader for graphs and keep tensors in dataset aligned.")
 
 def train_forward_supervised(
     dataset,
@@ -103,7 +99,7 @@ def train_forward_supervised(
 
             total += float(loss.item())
 
-        print(f"[SUP] epoch={epoch} loss={total / max(1, len(pyg_loader)):.4f}")
+        print(f"[FWD-SUP] epoch={epoch} loss={total / max(1, len(pyg_loader)):.4f}")
 
     return model
 
@@ -144,3 +140,71 @@ def normalize_feature_dims(graphs):
     if edge_dim == 0:
         edge_dim = 1
     return node_dim, edge_dim
+
+
+
+def train_backward_supervised(
+    dataset,                          # SpectraDataset (uses ex["binned"], ex["peaks"])
+    *,
+    catalog_mz: Optional[Tensor] = None,     # if None we build from peaks
+    ppm_merge: float = 5.0,                  # for catalog build
+    lr: float = 1e-3,
+    weight_decay: float = 1e-5,
+    epochs: int = 10,
+    batch_size: int = 32,
+    device: str = "cuda",
+    dropout: float = 0.1,
+):
+    """
+    Backward supervised: predict fragment catalog multi-labels from binned spectra.
+    Returns (model, catalog_mz) so you can reuse the same catalog at inference.
+    """
+    # Prepare X (binned) and raw peaks for label construction
+    binned_list = [torch.as_tensor(ex["binned"], dtype=torch.float32) for ex in dataset]
+    peaks_list  = [ex["peaks"] for ex in dataset]  # list of [N_i,2] tensors
+
+    X = torch.stack(binned_list, dim=0)  # [N, n_bins]
+    N, n_bins = X.size(0), X.size(1)
+
+    # Build or reuse catalog
+    if catalog_mz is None:
+        all_frag_lists = [[float(mz) for mz, _inten in ex["peaks"]] for ex in dataset]
+        catalog_mz = build_fragment_catalog(all_frag_lists, ppm_merge=ppm_merge)
+    catalog_mz = catalog_mz.to(torch.float32).to(device)
+    K = int(catalog_mz.numel())
+    if K == 0:
+        raise ValueError("Empty fragment catalog: cannot train backward predictor.")
+
+    # Build labels once: [N,K]
+    Y = peaks_to_mask_batch(peaks_list, catalog_mz, ppm_merge=ppm_merge)  # on device
+    # Move X to device lazily per batch (saves memory)
+    model = BackwardPredictorBins(n_bins=n_bins, out_dim=K, d=1024, dropout=dropout).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+
+    def bce_logits(logits, targets):
+        return F.binary_cross_entropy_with_logits(logits, targets)
+
+    # Training
+    for epoch in range(1, epochs + 1):
+        model.train()
+        perm = torch.randperm(N)
+        total = 0.0
+        for i in range(0, N, batch_size):
+            idx = perm[i:i+batch_size]
+            xb = X[idx].to(device)     # [B, n_bins]
+            yb = Y[idx]                # already on device [B, K]
+
+            logits = model(xb)         # [B, K]
+            loss = bce_logits(logits, yb)
+
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            opt.step()
+
+            total += float(loss.item())
+
+        avg = total / max(1, (N + batch_size - 1) // batch_size)
+        print(f"[BWD-SUP] epoch={epoch:03d} loss_bce={avg:.4f}")
+
+    return model, catalog_mz
