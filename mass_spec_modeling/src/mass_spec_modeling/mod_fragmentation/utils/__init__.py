@@ -9,6 +9,7 @@ from .file import *
 from .net_x import *
 from .printing import *
 from .rule_extention import *
+from .spect_jdx import *
 from .spect_mol import *
 from .spect_pubchem import *
 from .term_transfers import *

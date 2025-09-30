@@ -10,7 +10,8 @@ def dump_derivation_graph(
     dg: mod.DG,
     rule_list: List[mod.Rule],
     name: str,
-    spectrum: List[Tuple[int, float]],
+    smiles: str,
+    true_spectrum: List[Tuple[int, float]],
     path: str = "./dump/"
 ) -> None:
 
@@ -27,14 +28,14 @@ def dump_derivation_graph(
         rule_database.append(obj.getGMLString())
 
     with open(path + name + ".pkl", 'wb') as f:
-        pickle.dump((graph_database, rule_database, spectrum), f)
+        pickle.dump((smiles, graph_database, rule_database, true_spectrum), f)
 
 
 def load_derivation_graph(name: str, path: str = "./dump/") -> mod.DG:
     """load DG"""
 
     with open(path + name + ".pkl", 'rb') as f:
-        (graph_list, rule_list) = pickle.load(f)
+        (_smiles, graph_list, rule_list, _true_spectrum) = pickle.load(f)
 
     graph_database = []
     for gml in graph_list:

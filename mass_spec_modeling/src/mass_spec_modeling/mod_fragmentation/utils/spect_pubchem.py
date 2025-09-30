@@ -4,9 +4,10 @@ pubchem specifitcs to get EI spectra
 
 from typing import List, Tuple, Dict, Any
 from urllib.parse import quote
-import requests
 from collections import defaultdict
 from math import isfinite
+import requests
+
 
 def pubchem_smiles_lookup(smiles: str) -> int:
     """

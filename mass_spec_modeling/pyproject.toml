@@ -16,6 +16,7 @@ dependencies = [
   "tqdm",
   "requests",
   "typing-extensions",
+  "pytz",
 
   "torch>=2.8",
   "torch_geometric",

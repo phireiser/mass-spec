@@ -7,12 +7,12 @@ import argparse
 import pandas as pd
 import mod
 
-import mass_spec_modeling.mod_fragmentation.utils as utils
+from mass_spec_modeling.mod_fragmentation import utils
 from mass_spec_modeling.mod_fragmentation.rules import fragmentation, ionization
 
 
 
-parser = argparse.ArgumentParser(description="Using MØD as a MassSpec Analyzer")
+parser = argparse.ArgumentParser(description="Analyzer of MØD dumps generated with MassSpec rules")
 parser.add_argument("--smiles", type=str, required=True, help="SMILES String of Molecule")
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 args = parser.parse_args()
@@ -22,13 +22,16 @@ molecule_term = utils.term_from_graph(molecule)
 
 aoc = utils.all_occuring([molecule], utils.allAtoms)
 
-ionization_term = [map(utils.term_from_rule, utils.apply_constraints(ionization, aoc))]
-fragmentation_term = [map(utils.term_from_rule, utils.apply_constraints(fragmentation, aoc))]
+ionization_term = [utils.term_from_rule(rule) \
+    for rule in utils.apply_constraints(ionization, aoc)]
+fragmentation_term = [utils.term_from_rule(rule) \
+    for rule in utils.apply_constraints(fragmentation, aoc)]
 
-dg, rule_list  =  utils.load_derivation_graph(
+
+dg, rule_list =  utils.load_derivation_graph(
     molecule.name,
     path="/home/mescalin/reiserp/Nextcloud/"
-    "studium/computationalScience/thesis/mol/dump/"
+    "studium/computationalScience/thesis/mol/dump/fwd/"
     )
 
 print("\n")
@@ -36,8 +39,8 @@ print("dump loaded")
 print("\n\n")
 
 dg.print()
+utils.print_rules(ionization + fragmentation)
 
-#utils.print_rules(ionization_term + fragmentation_term)
 
 with pd.option_context(
     'display.max_rows', None, 'display.max_columns', None,

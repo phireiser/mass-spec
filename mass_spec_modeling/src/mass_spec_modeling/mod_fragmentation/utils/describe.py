@@ -43,14 +43,23 @@ def rule_usage(
     mod_spectrum_dict = get_spectra_from_mod_derivation_graph(derivation_graph)
     mod_spectrum_df = pd.DataFrame(mod_spectrum_dict, columns=["mass", "intensity", "rules"])
 
+    print(mod_spectrum_df)
+    df_long = (mod_spectrum_df.assign(rule=mod_spectrum_df['rules'].map(list))
+             .explode('rule')
+             .drop(columns='rules')
+             .rename(columns={'rule': 'rule_id'}))
+    df_long["mass"] = df_long["mass"].astype(int)
+
+    masses_per_rule = (df_long.groupby('rule_id')['mass']
+                   .apply(lambda s: sorted(set(s)))
+                   .reset_index(name='masses'))
+
+    print(masses_per_rule)
+
     pubchem_masses = None
     if pubchem_spectra:
         # flatten all PubChem masses
-        pubchem_masses = np.unique([
-            int(p[0])
-            for spec in pubchem_spectra
-            for p in next(iter(spec.values()))
-        ]).astype(float)
+        pubchem_masses = np.unique([int(peak[0]) for peak in pubchem_spectra] ).astype(float)
 
     if pubchem_masses.size:
         # distance of every mod mass to the closest PubChem mass
@@ -87,10 +96,10 @@ def spectrum_statistic(
     dice_max, tpr_max = -1.0, -1.0
     moel_masses_union, pubchem_masses_union = set(), set()
     for pubchem_spectrum in pubchem_spectra:
-        pubchem_masses = set(int(x[0]) for x in list(pubchem_spectrum.values())[0])
+        pubchem_masses = {pubchem_spectrum[0]}
         moel_masses = set(int(x[0]) for x in mod_spectrum_dict)
 
-        # filter out dimers/clusters
+        # filter out dimers/clusters (fragments that are bigger than the analyzed molectule)
         pubchem_masses = {n for n in pubchem_masses if n <= molecule.exactMass}
 
         moel_masses_union.update(moel_masses)

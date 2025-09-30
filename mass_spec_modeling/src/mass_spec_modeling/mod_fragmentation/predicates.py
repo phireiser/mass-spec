@@ -2,8 +2,8 @@
 predicate definions to be used in strategy
 """
 
-from . import utils
 import mod
+from . import utils
 
 
 def amu_bound(
@@ -33,7 +33,7 @@ def charge_bound(
     ) -> mod.rightPredicate:
 
     """
-    enforces that the fragments are staty within a certain charge range
+    enforces that the fragments are staying within a certain charge range
     """
 
     def predicate(d):
@@ -86,6 +86,7 @@ def sub_group(
                             allowed_labels = utils.alk_nes_lables,
                             match = match
                             ) #TODO could contain multiple matches, really? -> ask Flamm
+
                         if not satpath: #  set only false but stay false if true
                             sat_bool = False
 
