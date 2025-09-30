@@ -11,10 +11,10 @@ from mass_spec_modeling.mod_fragmentation import utils
 from mass_spec_modeling.mod_fragmentation.rules import fragmentation, ionization
 
 
-
 parser = argparse.ArgumentParser(description="Analyzer of MØD dumps generated with MassSpec rules")
 parser.add_argument("--smiles", type=str, required=True, help="SMILES String of Molecule")
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
+parser.add_argument("--dir", type=str, required=True, help="Directory of loading files")
 args = parser.parse_args()
 
 molecule = mod.smiles(args.smiles, args.name)

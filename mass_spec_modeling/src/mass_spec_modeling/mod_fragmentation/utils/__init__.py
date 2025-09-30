@@ -13,6 +13,7 @@ from .spect_jdx import *
 from .spect_mol import *
 from .spect_pubchem import *
 from .term_transfers import *
+from .traverse_derivaion_graph import *
 
 # Automatically define __all__ based on what's in the namespace
 __all__ = [name for name in globals() if not name.startswith("_")]

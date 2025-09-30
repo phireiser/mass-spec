@@ -72,8 +72,11 @@ print("\nbackward\n")
 
 spectra_jdx = utils.get_spectra_from_local_jdx(molecule.name)
 spectra_jdx = [x[0] for x in spectra_jdx]
-bwd_universe = [frag for frag in dg_fwd.createdGraphs \
+frags_in_spectra = [frag for frag in dg_fwd.createdGraphs \
     if int(utils.graph_from_term(frag).exactMass) in spectra_jdx]
+
+# filter fragments out ancerters of other fragments
+bwd_universe = utils.filter_ancestors_out(frags_in_spectra, dg_fwd)
 
 ionization_term_bwd=[r.makeInverse() for r in fragmentation_term_fwd]
 fragmentation_term_bwd=[r.makeInverse() for r in fragmentation_term_fwd]
