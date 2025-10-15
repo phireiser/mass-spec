@@ -14,8 +14,9 @@ from mass_spec_modeling.machine_learning.rl.policy import ActionAwarePolicy
 from mass_spec_modeling.machine_learning.rl.mod_engine_adapter import ModEngineAdapter
 from mass_spec_modeling.machine_learning.config import FullConfig, Cfg
 from mass_spec_modeling.machine_learning.featurizers.dg_hypergraph import GraphFeaturizerMOD
-
 from mass_spec_modeling.machine_learning import utils_mod
+
+
 from mass_spec_modeling.mod_fragmentation import utils
 
 
@@ -121,11 +122,8 @@ target_peaks_tensor = utils_mod.clean_spectra_tensor(pubchem, device=device)
 
 assembler_adapter = ModEngineAdapter()
 
-policy_fwd = ActionAwarePolicy(n_bins=fcfg.data.n_bins).to(device)
-policy_bwd = ActionAwarePolicy(n_bins=fcfg.data.n_bins).to(device)
-opt_fwd = torch.optim.Adam(policy_fwd.parameters(), lr=fcfg.rl.lr)
-opt_bwd = torch.optim.Adam(policy_bwd.parameters(), lr=fcfg.rl.lr)
-
+policy = ActionAwarePolicy(n_bins=fcfg.data.n_bins).to(device)
+opt = torch.optim.Adam(policy.parameters(), lr=fcfg.rl.lr)
 
 env_fwd = ForwardFragEnv(
     mod_engine=fragmenter_adapter,
@@ -142,7 +140,7 @@ env_fwd.reset(dg=sample_last_dg_fwd, mol_graph=sample_last_mol)
 
 
 reinforce_forward_env(
-    env_fwd, fragmenter_adapter, policy_fwd, opt_fwd,
+    env_fwd, fragmenter_adapter, policy, opt,
     gamma=fcfg.rl.gamma,
     episodes=1000,
     device=device
@@ -161,37 +159,8 @@ env_bwd = BackwardMolEnv(
 env_bwd.reset(dg=sample_last_dg_bwd, mol_graph=sample_last_mol)
 
 reinforce_backward_env(
-    env_bwd, assembler_adapter, policy_bwd, opt_bwd,
+    env_bwd, assembler_adapter, policy, opt,
     gamma=fcfg.rl.gamma,
     episodes=1000,
     device=device
 )
-
-num_episodes = 700
-for episode in range(num_episodes):
-    # Forward agent fragments molecule
-    env_fwd.reset(dg=sample_last_dg_fwd, mol_graph=sample_last_mol)
-    fwd_states, fwd_rewards = [], []
-    done = False
-    while not done:
-        action = policy_fwd.select_action(env_fwd.state)
-        state, reward, done, info = env_fwd.step(action)
-        fwd_states.append(state)
-        fwd_rewards.append(reward)
-
-    # Use forward fragments as target for backward agent
-    target_frags = env_fwd.frag_masses
-    env_bwd.target_peaks = torch.tensor([[m, 1.0] for m in target_frags], device=device)
-    env_bwd.target_bins = bin_spectrum(env_bwd.target_peaks, env_bwd.n_bins, env_bwd.mz_min, env_bwd.mz_max)
-    env_bwd.reset(dg=sample_last_dg_bwd, mol_graph=sample_last_mol)
-    bwd_states, bwd_rewards = [], []
-    done = False
-    while not done:
-        action = policy_bwd.select_action(env_bwd.state)
-        state, reward, done, info = env_bwd.step(action)
-        bwd_states.append(state)
-        bwd_rewards.append(reward)
-
-    # Optionally, update both policies based on rewards
-    update_policy(policy_fwd, fwd_states, fwd_rewards)
-    update_policy(policy_bwd, bwd_states, bwd_rewards)

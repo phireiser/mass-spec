@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Any, List, Tuple, Optional, Set, Callable, Dict
+from typing import  List, Tuple, Set, Optional
 import mod
 
 from mass_spec_modeling.mod_fragmentation import utils
@@ -18,8 +18,11 @@ class DGState:
     We also track which hyperedges were already 'used' to avoid duplicates.
     """
     dg: mod.DG
-    node_id: int = 0 # root node
+    mol_graph: mod.Graph
     used_edge_ids: Set[int] = field(default_factory=set)
+    node_id: Optional[int] = 0 # root node
+
+
 
 # ------------------------------
 # Adapter
@@ -32,24 +35,6 @@ class ModEngineAdapter:
     - edge_rule_id(dg, edge_id) -> int
     - edge_products(dg, edge_id) -> List[Any]    # product fragment objects
     """
-    def __init__(
-        self,
-        list_out_edges: Optional[Callable[[Any, int], List[int]]] = None,
-        edge_rule_id: Optional[Callable[[Any, int], int]] = None,
-        edge_products: Optional[Callable[[Any, int], List[Any]]] = None,
-    ):
-
-        self._list_out_edges  = list_out_edges
-        self._edge_rule_id    = edge_rule_id
-        self._edge_products   = edge_products
-
-        if any(
-            h is None for h in (
-                self._list_out_edges,
-                self._edge_rule_id,
-                self._edge_products)
-            ):
-            raise ValueError("requires callables")
 
     # ------------------------------
     # Public API expected by the RL env
@@ -63,7 +48,7 @@ class ModEngineAdapter:
 
         assert isinstance(state, DGState), "Expected DGState"
         dg, node_id = state.dg, state.node_id
-        edge_ids = self._list_out_edges(dg, node_id)  # all outgoing hyperedges
+        edge_ids = utils.get_out_edges_by_vertex_id(dg, node_id)  # all outgoing hyperedges
         # Filter out already used edges (prevents duplicates)
         edge_ids = [e for e in edge_ids if e not in state.used_edge_ids]
         # Actions are (edge, None) - RL doesn't need a separate site payload here
@@ -81,13 +66,14 @@ class ModEngineAdapter:
             return False, []
 
         # Extract products on that hyperedge and compute masses
-        prod_ids: List[int] = self._edge_products(state.dg, edgde_id)  #  fragment ids
+        prod_ids: List[int] = utils.get_fragment_ids_by_edge_id(state.dg, edgde_id)  #  fragment ids
         next_node = prod_ids[0]
         assert len([prod_ids])== 1, "should only be one molecule"
         prods = [v.graph for v in state.dg.vertices if v.id in prod_ids]
         if "a(" in prods[0].graphDFS:
             prods = [utils.graph_from_term(g) for g in prods]
         masses = [float(p.exactMass) for p in prods]
+        smi = next(p.smiles for p in prods)
 
         # Mark edge as used in this episode state
         state.used_edge_ids.add(edgde_id)
@@ -96,58 +82,21 @@ class ModEngineAdapter:
         # If your DG models fragmentation edges as node->set_of_products,
         # you can pick a canonical next node or keep the same node to allow multi-branch expansions.
         # Here we keep the same node_id; the RL reward is based on accumulating fragments anyway.
-        return True, masses, next_node
+        return True, masses, next_node, smi
 
 
-    def preview_masses(self, key: int, state: DGState) -> list[float]:
-        prod_ids = self._edge_products(state.dg, key)
+    def preview_masses(self, edge_id: int, state: DGState) -> List[float]:
+        """takes an edge_id & returns the masses"""
+        prod_ids = utils.get_fragment_ids_by_edge_id(state.dg, edge_id)
         prods = [v.graph for v in state.dg.vertices if v.id in prod_ids]
         if "a(" in prods[0].graphDFS:
             prods = [utils.graph_from_term(g) for g in prods]
         return [float(p.exactMass) for p in prods]
 
-
-######################## ---------- Backward (assembly) Adapter ----------
-
-
-@dataclass
-class AssemblyState:
-    """
-    Minimal state for backward molecule assembly.
-    G:    your current molecule/graph object being built
-    used_action_ids: optional tracking to prevent repeats (depends on adapter semantics)
-    steps: number of applied actions so far
-    """
-    G: Any
-    used_action_ids: Set[int] = field(default_factory=set)
-    steps: int = 0
-
-
-class AssemblerAdapter:
-    """
-    Adapter interface the BackwardMolEnv expects.
-    Implement these in your codebase and pass an instance to BackwardMolEnv.
-
-    Required:
-      build_initial_graph(seed) -> Any
-      enumerate_action_keys(state: AssemblyState) -> List[int]
-      preview_masses(action_key: int, state: AssemblyState) -> List[float]
-      apply(action_key: int, state: AssemblyState) -> Tuple[bool, List[float], Dict[str, Any]]
-          - returns (ok, new_fragment_masses, info)
-      is_terminal(state: AssemblyState) -> bool
-    """
-    def build_initial_graph(self, seed: Optional[Any]) -> Any:
-        raise NotImplementedError
-
-    def enumerate_action_keys(self, state: AssemblyState) -> List[int]:
-        raise NotImplementedError
-
-    def preview_masses(self, action_key: int, state: AssemblyState) -> List[float]:
-        raise NotImplementedError
-
-    def apply(self, action_key: int, state: AssemblyState) -> Tuple[bool, List[float], Dict[str, Any]]:
-        raise NotImplementedError
-
-    def is_terminal(self, state: AssemblyState) -> bool:
-        raise NotImplementedError
-
+    def preview_smiles(self, edge_id: int, state: DGState) -> str:
+        """takes an edge_id & returns the smile of that fragment"""
+        prod_ids = utils.get_fragment_ids_by_edge_id(state.dg, edge_id)
+        prods = [v.graph for v in state.dg.vertices if v.id in prod_ids]
+        if "a(" in prods[0].graphDFS:
+            prods = [utils.graph_from_term(g) for g in prods]
+        return next(p.smiles for p in prods)

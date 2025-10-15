@@ -2,6 +2,39 @@ from __future__ import annotations
 import torch
 from torch import Tensor
 import torch.nn.functional as F
+import re
+
+def tokenize_smiles(smi: str):
+    """
+    Split SMILES into meaningful tokens: atoms, digits, ring markers, bonds, parens.
+    Example: "CC(=O)O" -> ['C', 'C', '(', '=', 'O', ')', 'O']
+    """
+    token_pattern = re.compile(r"Cl|Br|\[.*?\]|Br|Cl|Si|Se|[A-Z][a-z]?|\d|=|#|-|\(|\)|\.|:")
+    return token_pattern.findall(smi)
+
+def tanimoto_smiles_token(smi1: str, smi2: str, ngram_range=(1, 3)) -> float:
+    """
+    Tanimoto similarity on token n-grams from SMILES strings.
+    Captures local structural motifs (atoms, branches, etc.).
+    """
+    def ngrams(tokens, n):
+        return {" ".join(tokens[i:i+n]) for i in range(len(tokens)-n+1)}
+
+    tokens1 = tokenize_smiles(smi1)
+    tokens2 = tokenize_smiles(smi2)
+
+    feats1, feats2 = set(), set()
+    for n in range(ngram_range[0], ngram_range[1] + 1):
+        feats1 |= ngrams(tokens1, n)
+        feats2 |= ngrams(tokens2, n)
+
+    if not feats1 and not feats2:
+        return 1.0
+    inter = len(feats1 & feats2)
+    union = len(feats1 | feats2)
+    return inter / union
+
+
 
 def cosine_loss(pred: Tensor, target: Tensor) -> Tensor:
     pred = F.normalize(pred, dim=-1)
@@ -51,20 +84,17 @@ def build_true_mask(true_frags_batch, catalog_mz: torch.Tensor, ppm_merge: float
     catalog_mz: Tensor[K], sorted ascending
     returns: Tensor[B, K] with 1.0 where catalog entries are present in the target
     """
-    device = catalog_mz.device
-    K = catalog_mz.numel()
-    B = len(true_frags_batch)
-    mask = torch.zeros((B, K), dtype=torch.float32, device=device)
+    mask = torch.zeros((len(true_frags_batch), catalog_mz.numel()), dtype=torch.float32, device=catalog_mz.device)
 
     # For fast windowing, keep catalog on device and use searchsorted
     for b, frags in enumerate(true_frags_batch):
         if frags is None:
             continue
-        frags = torch.as_tensor(frags, dtype=torch.float64, device=device).view(-1)
+        frags = torch.as_tensor(frags, dtype=torch.float64, device=catalog_mz.device).view(-1)
         if frags.numel() == 0:
             continue
 
-        # ppm window per fragment → [Fi, 1]
+        # ppm window per fragment -> [Fi, 1]
         tol = (ppm_merge * 1e-6) * frags
         left  = torch.searchsorted(catalog_mz, (frags - tol))
         right = torch.searchsorted(catalog_mz, (frags + tol), right=True)

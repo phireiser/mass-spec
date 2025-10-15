@@ -1,16 +1,10 @@
 name,smiles,category
 benzene,C1=CC=CC=C1,aromatic_hydrocarbon
-toluene,CC1=CC=CC=C1,aromatic_hydrocarbon
-ethylbenzene,CCC1=CC=CC=C1,aromatic_hydrocarbon
-p-xylene,CC1=CC=C(C=C1)C,aromatic_hydrocarbon
 naphthalene,C1=CC=C2C=CC=CC2=C1,polycyclic_aromatic
 anthracene,C1=CC=C2C=C3C=CC=CC3=CC2=C1,polycyclic_aromatic
-phenanthrene,C1=CC=C2C(=C1)C=CC3=CC=CC=C32,polycyclic_aromatic
-n-hexane,CCCCCC,alkane
 cyclohexane,C1CCCCC1,cycloalkane
 methanol,CO,alcohol
 ethanol,CCO,alcohol
-1-propanol,CCCO,alcohol
 2-propanol,CC(C)O,alcohol
 acetone,CC(=O)C,ketone
 2-butanone,CCC(=O)C,ketone

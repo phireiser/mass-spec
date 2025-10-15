@@ -1,4 +1,4 @@
-"""all hypergraph traversel functions"""
+"""basic mod utilies"""
 
 from typing import List, Set, Optional
 import mod
@@ -58,3 +58,26 @@ def filter_ancestors_out(
 
     # Keep fragments that are NOT ancestors of any other fragment
     return [f for f in fragments if f not in all_ancestors]
+
+def get_out_edges_by_vertex_id(dg: mod.DG, v_id: int):
+    """
+    returns the ids of the hyperedges
+    for a certain hyper vertex idenitfied by its mod id
+    """
+    return [e.id for e in next(v.outEdges for v in dg.vertices if v.id == v_id)]
+
+def get_rule_ids_by_edge_id(dg: mod.DG, eid: int):
+    """
+    gets the mod ids of the rules
+    of a specific edge identified by its mod id
+    """
+    edge = next(e for e in dg.edges if e.id == eid)
+    return [r.id for r in edge.rules]
+
+def get_fragment_ids_by_edge_id(dg: mod.DG, eid: int):
+    """
+    gets the mod ids of the edges
+    of a specific edge identified by its mod id
+    """
+    edge = next(e for e in dg.edges if e.id == eid)
+    return [t.id for t in edge.targets]

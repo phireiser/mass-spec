@@ -1,3 +1,4 @@
+"""train"""
 from __future__ import annotations
 import torch
 from ..datasets.spectra_dataset import bin_spectrum
@@ -133,7 +134,7 @@ def reinforce_backward_env(
     policy.train()
 
     for ep in range(1, episodes + 1):
-        state = env.reset(seed=None)
+        state = env.reset(dg=env.state.dg, mol_graph=env.state.mol_graph)
         logps, vals, rewards, entrs = [], [], [], []
         done = False
 

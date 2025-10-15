@@ -6,7 +6,6 @@ from pprint import pprint
 from typing import List, Tuple
 import pandas as pd
 import torch
-import mod
 from .target_peaks import clean_spectra, make_peaks_tensor
 
 
@@ -141,29 +140,6 @@ def frags_to_soft_mask(frag_mz_int, catalog, ppm_tol=10.0, p=1.0):
     if v.sum() > 0:
         v = v / v.sum()
     return v.to(torch.float32)
-
-def get_out_edges_by_vertex_id(dg: mod.DG, v_id: int):
-    """
-    returns the ids of the hyperedges
-    for a certain hyper vertex idenitfied by its mod id
-    """
-    return [e.id for e in next(v.outEdges for v in dg.vertices if v.id == v_id)]
-
-def get_rule_ids_by_edge_id(dg: mod.DG, eid: int):
-    """
-    gets the mod ids of the rules
-    of a specific edge identified by its mod id
-    """
-    edge = next(e for e in dg.edges if e.id == eid)
-    return [r.id for r in edge.rules]
-
-def get_fragment_ids_by_edge_id(dg: mod.DG, eid: int):
-    """
-    gets the mod ids of the edges
-    of a specific edge identified by its mod id
-    """
-    edge = next(e for e in dg.edges if e.id == eid)
-    return [t.id for t in edge.targets]
 
 def read_mols_csv(path: str):
     """read csv with name and smiles molecuel definitions"""

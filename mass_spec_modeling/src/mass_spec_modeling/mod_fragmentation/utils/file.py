@@ -17,7 +17,7 @@ def dump_derivation_graph(
 
     """dump DG"""
 
-    dg.dump(path + name + ".dmp")
+    dg.dump(path / (name + ".dmp"))
 
     graph_database = []
     for obj in dg.graphDatabase:
@@ -34,7 +34,7 @@ def dump_derivation_graph(
 def load_derivation_graph(name: str, path: str = "./dump/") -> mod.DG:
     """load DG"""
 
-    with open(path + name + ".pkl", 'rb') as f:
+    with open(path / (name + ".pkl"), 'rb') as f:
         (_smiles, graph_list, rule_list, _true_spectrum) = pickle.load(f)
 
     graph_database = []
@@ -48,7 +48,7 @@ def load_derivation_graph(name: str, path: str = "./dump/") -> mod.DG:
     dg = mod.DG.load(
         graphDatabase = graph_database,
         ruleDatabase = rule_database,
-        f = path + name + ".dmp"
+        f = str(path / (name + ".dmp"))
     )
 
     return dg, rule_database
