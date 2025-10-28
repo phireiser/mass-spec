@@ -83,6 +83,8 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
+import matplotlib.pyplot as plt
+
 
 from torch_geometric.nn import GCNConv
 from torch_geometric.data import Data as GeometricData
@@ -283,12 +285,21 @@ class EncFragGraph(nn.Module):
     frag_bag: [B, V] with V fragments as nodes.
     adjacency: [B, V, V] (preferred) or [V, V] (will be expanded).
     """
-    def __init__(self, fragment_vocab_size, d_latent=128, d_h=256, R=None):
+    def __init__(self, fragment_vocab_size, d_latent=128, d_h=256, R=None, mass_vocab: Optional[torch.Tensor]=None):
         super().__init__()
         self.fragment_vocab_size = fragment_vocab_size
-        self.lin0 = nn.Linear(1, d_h)          # per-node projection: 1 -> d_h
+        # Two-channel node features: [presence, normalized_mass]
+        self.lin0 = nn.Linear(2, d_h)          # per-node projection: 2 -> d_h
         self.lin1 = nn.Linear(d_h, d_latent)   # per-node -> latent
         self.rule_emb = nn.Embedding(R, d_h) if R is not None else None
+        # Register mass vocabulary (normalized) as a buffer so it moves with .to(device)
+        if mass_vocab is not None:
+            mass_vocab = mass_vocab.detach().clone().float()
+            if mass_vocab.dim() != 1 or mass_vocab.numel() != fragment_vocab_size:
+                raise ValueError("mass_vocab must be a 1D tensor of length fragment_vocab_size")
+            self.register_buffer('mass_vocab', mass_vocab)
+        else:
+            self.register_buffer('mass_vocab', None)
 
     def aggregate(self, x, edges=None, adjacency=None):
         """
@@ -315,13 +326,33 @@ class EncFragGraph(nn.Module):
 
         raise ValueError("Either adjacency or edges must be provided for aggregation.")
 
-    def forward(self, frag_bag, edges=None, adjacency=None):
+    def forward(self, frag_bag, edges=None, adjacency=None, mass: Optional[torch.Tensor]=None):
         """
         frag_bag: [B, V]
         returns: [B, d_latent]
         """
-        # [B, V, 1] -> [B, V, d_h]
-        x0 = torch.tanh(self.lin0(frag_bag.unsqueeze(-1)))
+        B, V = frag_bag.size(0), frag_bag.size(1)
+        # Prepare mass channel
+        if mass is not None:
+            m = mass
+            if m.dim() == 1:
+                m = m.unsqueeze(0)
+            if m.size(-1) != V:
+                raise ValueError("mass vector length must match frag_bag width")
+            if m.size(0) == 1 and B > 1:
+                m = m.expand(B, V)
+        elif self.mass_vocab is not None:
+            m = self.mass_vocab
+            if m.dim() == 1:
+                m = m.unsqueeze(0)
+            if m.size(0) == 1 and B > 1:
+                m = m.expand(B, V)
+        else:
+            m = torch.zeros_like(frag_bag)
+
+        # [B, V, 2] -> [B, V, d_h]
+        x_in = torch.stack([frag_bag, m], dim=-1)
+        x0 = torch.tanh(self.lin0(x_in))
         x_aggr = self.aggregate(x0, edges=edges, adjacency=adjacency)  # [B, V, d_h]
         z_nodes = self.lin1(x_aggr)                                    # [B, V, d_latent]
         return z_nodes.mean(dim=1)                                     # [B, d_latent]
@@ -397,7 +428,7 @@ def jaccard_binary(a, b, eps=1e-6):
 @dataclass
 class Sample:
     """Container for one dataset sample. So one molecule with its derivation graph"""
-    graph_feat: torch_geometric.data.Data
+    graph_feat: GeometricData
     frag_bag: torch.Tensor
     true_spectrum: torch.Tensor
     smiles: str
@@ -411,30 +442,39 @@ class Sample:
 
 # ---------- Fragment vocab ----------
 def build_fragment_vocab(
-    frag_coll: Dict[str, List[Tuple[str, Dict[int, List[str]], Dict[int, List[str]]]]],
+    frag_coll: Dict[
+        str,
+        Tuple[
+            List[Tuple[str, float, Dict[int, List[str]], Dict[int, List[str]]]],  # fwd
+            List[Tuple[str, float, Dict[int, List[str]], Dict[int, List[str]]]]   # bwd
+        ]
+    ],
     existing_frag_to_id: Optional[Dict[str, int]] = None
 ) -> Dict[str, int]:
-    """Build or extend a {fragment_smiles -> id} mapping for all fragments."""
+    """Build a {fragment_smiles -> id} mapping.
+
+    If an existing mapping is provided, return a copy WITHOUT extending it.
+    This guarantees a fixed fragment dimension across train/val/test so that
+    decoders initialized with train-time F remain compatible.
+    """
+    if existing_frag_to_id is not None:
+        return existing_frag_to_id.copy()
+
     ctr = Counter()
     for _smile_of_mol, (fwd, bwd) in frag_coll.items():
-        for frag_smi, _, _ in fwd:
-            ctr.update([frag_smi])  # one token per fragment
-        for frag_smi, _, _ in bwd:
+        for item in fwd:
+            frag_smi = item[0]
+            ctr.update([frag_smi])
+        for item in bwd:
+            frag_smi = item[0]
             ctr.update([frag_smi])
 
-    if existing_frag_to_id is not None:
-        # Start with the existing mapping
-        frag_to_id = existing_frag_to_id.copy()
-        idx = max(frag_to_id.values()) + 1
-    else:
-        frag_to_id = {}
-        idx = 0
-
+    frag_to_id: Dict[str, int] = {}
+    idx = 0
     for frag in ctr.keys():
         if frag not in frag_to_id:
             frag_to_id[frag] = idx
             idx += 1
-
     return frag_to_id
 
 def frag_bag_from_list(
@@ -486,7 +526,13 @@ class RealDataset(Dataset):
     """
     def __init__(
         self,
-        frag_coll: Dict[str, List[Tuple[str, Dict[int, List[str]], Dict[int, List[str]]]]],
+        frag_coll: Dict[
+            str,
+            Tuple[
+                List[Tuple[str, float, Dict[int, List[str]], Dict[int, List[str]]]],  # fwd
+                List[Tuple[str, float, Dict[int, List[str]], Dict[int, List[str]]]]   # bwd
+            ]
+        ],
         real_spectra_per_mol: List[List[Tuple[float, float]]],
         *,
         mz_min: float = 1.0,
@@ -517,6 +563,8 @@ class RealDataset(Dataset):
         self._cache = None
         if precompute:
             self._precompute_all()
+        # Build mass vocabulary aligned with frag_to_id and normalize by mz_max
+        self.mass_vocab_norm = self._build_mass_vocab()
 
     def __len__(self) -> int:
         return len(self.frag_coll.keys())
@@ -540,7 +588,7 @@ class RealDataset(Dataset):
 
     def _make_frag_adj(self, idx: int) -> List[torch.Tensor]:
         """
-        Build [fragment_vocab_size, fragment_vocab_size] adjacency from fwd_coll and bwd_coll for this molecule.
+    Build [fragment_vocab_size, fragment_vocab_size] adjacency from fwd_coll and bwd_coll for this molecule.
         """
         fragment_vocab_size = self.fragment_vocab_size
         fragment_adjacency_fwd = None
@@ -548,7 +596,7 @@ class RealDataset(Dataset):
         fwd, bwd = list(self.frag_coll.values())[idx]
         for derivation_graph in (fwd, bwd):
             adj = torch.zeros(fragment_vocab_size, fragment_vocab_size, dtype=torch.float32)
-            for src_smi, targets, _rules in derivation_graph:
+            for src_smi, _mass, targets, _rules in derivation_graph:
                 src_idx = self.frag_to_id.get(src_smi)
                 if src_idx is None:
                     continue
@@ -557,13 +605,37 @@ class RealDataset(Dataset):
                         dst_idx = self.frag_to_id.get(dst)
                         if dst_idx is not None:
                             adj[src_idx, dst_idx] = 1.0
-
             if derivation_graph is fwd:
                 fragment_adjacency_fwd = adj
             else:
                 fragment_adjacency_bwd = adj
 
         return fragment_adjacency_fwd, fragment_adjacency_bwd
+
+    def _build_mass_vocab(self) -> torch.Tensor:
+        """
+        Construct a [V] tensor of per-fragment exact masses aligned to frag_to_id.
+        If a fragment appears multiple times, the first observed mass is used.
+        Masses are normalized by mz_max to be ~[0,1]. Missing masses -> 0.
+        """
+        V = self.fragment_vocab_size
+        masses = torch.zeros(V, dtype=torch.float32)
+        seen = set()
+        for _mol_smi, (fwd, bwd) in self.frag_coll.items():
+            for frag_smi, exact_mass, _t, _r in fwd:
+                fid = self.frag_to_id.get(frag_smi)
+                if fid is not None and fid not in seen:
+                    masses[fid] = float(exact_mass)
+                    seen.add(fid)
+            for frag_smi, exact_mass, _t, _r in bwd:
+                fid = self.frag_to_id.get(frag_smi)
+                if fid is not None and fid not in seen:
+                    masses[fid] = float(exact_mass)
+                    seen.add(fid)
+        # Normalize by mz_max (avoid div by zero)
+        denom = torch.tensor(self.mz_max if self.mz_max > 0 else 1000.0, dtype=torch.float32)
+        masses = masses / denom
+        return masses
 
     def _make_frag_graph(self, idx: int, direction: str = 'fwd') -> torch.Tensor:
         """
@@ -674,8 +746,14 @@ def train_epoch_phase_a(loader, device, enc_mol, enc_frag, heads, dec_frag, dec_
     enc_mol.train(); enc_frag.train(); dec_frag.train(); dec_spec.train()
     total = 0.0
 
-    for x in loader:
-        graph_feats, frag_bag, true_spectrum, smiles, adj_fwd, adj_bwd = x
+    for graph_feats, frag_bag, true_spectrum, smiles, adj_fwd, adj_bwd in loader:
+        #TODO here
+        # check adj_fwd is empty or not
+        if adj_fwd.sum() > 0:
+            print("Adjacency matrix is not empty")
+        else:
+            print("Adjacency matrix is empty")
+
         frag_bag = frag_bag.to(device)
         true_spectrum = true_spectrum.to(device)
         adj_fwd = adj_fwd.to(device)  # use forward DG for Phase A
@@ -888,7 +966,7 @@ def infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec,
 
 
 
-def infer_spec_to_mol(spec, index, device, enc_spec, dec_spec, dec_frag, topk=10):
+def infer_spec_to_mol(spec, index, device, enc_spec, dec_spec, dec_frag, topk=10, tau=0.5):
     """
     Retrieves likely molecular structures from a given mass spectrum.
 
@@ -902,8 +980,176 @@ def infer_spec_to_mol(spec, index, device, enc_spec, dec_spec, dec_frag, topk=10
         z_q = enc_spec(spec.to(device).unsqueeze(0)).squeeze(0)
         z_q_n = F.normalize(z_q, dim=-1).cpu()
     cands = index.topk(z_q_n, k=topk)
-    ranked = rerank_candidates(spec, z_q, cands, device, enc_spec, dec_spec, dec_frag)
+    ranked = rerank_candidates(spec, z_q, cands, device, enc_spec, dec_spec, dec_frag, tau=tau)
     return ranked
+
+
+# ----------------------------- DEMOS ---------------------------------
+
+def demo_retrieval_metrics(index, loader, device, enc_spec, dec_spec, dec_frag, topk_list=(1,5,10), tau=0.5, max_batches=None):
+    """Compute Recall@K and MRR on a loader using a train-built index."""
+    enc_spec.eval()
+    hits = {k: 0 for k in topk_list}
+    mrr = 0.0
+    n = 0
+    with torch.no_grad():
+        for bi, (graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd) in enumerate(loader):
+            if max_batches is not None and bi >= max_batches:
+                break
+            B = len(smiles)
+            z_q = enc_spec(spec.to(device))  # [B, d]
+            for i in range(B):
+                ranked = infer_spec_to_mol(spec[i], index, device, enc_spec, dec_spec, dec_frag, topk=max(topk_list), tau=tau)
+                preds = [s for s, _ in ranked]
+                n += 1
+                for k in topk_list:
+                    if smiles[i] in preds[:k]:
+                        hits[k] += 1
+                # MRR
+                rank = next((ri + 1 for ri, s in enumerate(preds) if s == smiles[i]), None)
+                if rank is not None:
+                    mrr += 1.0 / rank
+    out = {f"R@{k}": (hits[k] / max(n, 1)) for k in topk_list}
+    out["MRR"] = mrr / max(n, 1)
+    out["N"] = n
+    return out
+
+
+def demo_tau_sweep(index, loader, device, enc_spec, dec_spec, dec_frag, taus=(0.2,0.4,0.6,0.8), topk_list=(1,5,10), max_batches=5):
+    """Evaluate retrieval metrics across tau thresholds; return per-tau metrics and best tau per K."""
+    results = {}
+    for t in taus:
+        metrics = demo_retrieval_metrics(index, loader, device, enc_spec, dec_spec, dec_frag, topk_list=topk_list, tau=t, max_batches=max_batches)
+        results[t] = metrics
+    # pick best per K by R@K, tie-breaker MRR
+    best = {}
+    for k in topk_list:
+        key = f"R@{k}"
+        best_tau = max(taus, key=lambda tau: (results[tau][key], results[tau]["MRR"]))
+        best[key] = {"tau": best_tau, "metric": results[best_tau][key]}
+    return results, best
+
+
+def demo_ablate_adjacency(graph_feat, frag_bag, adj, true_spec, device, enc_mol, enc_frag, dec_spec, dec_frag):
+    """Compare spectrum reconstruction with graph-aware adjacency vs bag-only (zero adjacency)."""
+    print("adjacency matrix:", adj)
+    if adj.sum() > 0:
+        print("adjacency matrix has edges")
+    else:
+        print("adjacency matrix is empty")
+    with torch.no_grad():
+        spec_hat_graph, _ = infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj)
+        spec_hat_bag, _ = infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=torch.zeros_like(adj))
+        cos_graph = F.cosine_similarity(F.normalize(spec_hat_graph, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+        cos_bag = F.cosine_similarity(F.normalize(spec_hat_bag, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+    return {"cos_graph": cos_graph, "cos_bag": cos_bag}
+
+
+def demo_heads_comparison(loader, device, enc_mol, heads, dec_spec, dec_frag, n_batches=3):
+    """Run DecSpec/DecFrag with z_fwd vs z_bwd to quantify head specialization (mol->spec reconstruction)."""
+    enc_mol.eval(); dec_spec.eval(); dec_frag.eval()
+    stats = {"cos_fwd": [], "cos_bwd": [], "bce_fwd": [], "bce_bwd": []}
+    with torch.no_grad():
+        for bi, (graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd) in enumerate(loader):
+            if bi >= n_batches:
+                break
+            frag_bag = frag_bag.to(device); spec = spec.to(device)
+            z_m = enc_mol(graph_feats)
+            z_fwd, z_bwd = heads(z_m)
+            spec_hat_fwd = dec_spec(z_fwd, frag_bag)
+            spec_hat_bwd = dec_spec(z_bwd, frag_bag)
+            p_frag_fwd = dec_frag(z_fwd)
+            p_frag_bwd = dec_frag(z_bwd)
+            stats["cos_fwd"].append(F.cosine_similarity(F.normalize(spec_hat_fwd, dim=-1), F.normalize(spec, dim=-1), dim=-1).mean().item())
+            stats["cos_bwd"].append(F.cosine_similarity(F.normalize(spec_hat_bwd, dim=-1), F.normalize(spec, dim=-1), dim=-1).mean().item())
+            stats["bce_fwd"].append(F.binary_cross_entropy(p_frag_fwd, frag_bag).item())
+            stats["bce_bwd"].append(F.binary_cross_entropy(p_frag_bwd, frag_bag).item())
+    # averages
+    return {k: float(np.mean(v)) if len(v) else float("nan") for k, v in stats.items()}
+
+
+def demo_fragment_perturbation(graph_feat, frag_bag, true_spec, device, enc_mol, enc_frag, dec_spec, dec_frag, index, adj=None, top_n=5):
+    """Add/drop top-N fragments (by predicted prob) and observe spectrum shift and retrieval rank change."""
+    with torch.no_grad():
+        spec_hat, p_frag = infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj)
+        base_cos = F.cosine_similarity(F.normalize(spec_hat, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+        probs = p_frag.clone()
+        top_idx = torch.topk(probs, k=min(top_n, probs.numel())).indices
+        # Drop: set selected fragments to 0
+        frag_drop = frag_bag.clone()
+        frag_drop[top_idx] = 0.0
+        spec_drop, _ = infer_mol_to_spec(graph_feat, frag_drop, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj)
+        cos_drop = F.cosine_similarity(F.normalize(spec_drop, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+        # Add: set selected fragments to 1
+        frag_add = frag_bag.clone()
+        frag_add[top_idx] = 1.0
+        spec_add, _ = infer_mol_to_spec(graph_feat, frag_add, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj)
+        cos_add = F.cosine_similarity(F.normalize(spec_add, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+    return {"base_cos": base_cos, "cos_drop": cos_drop, "cos_add": cos_add}
+
+
+def demo_noise_robustness(index, loader, device, enc_spec, dec_spec, dec_frag, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5):
+    """Add Gaussian noise to spectra and plot/return Recall@K vs noise level."""
+    results = {}
+    for s in noise_levels:
+        hits = {k: 0 for k in topk_list}
+        n = 0
+        with torch.no_grad():
+            for bi, (graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd) in enumerate(loader):
+                if bi >= max_batches:
+                    break
+                B = len(smiles)
+                spec_noisy = spec + s * torch.randn_like(spec)
+                # normalize
+                spec_noisy = F.normalize(spec_noisy, dim=-1)
+                for i in range(B):
+                    ranked = infer_spec_to_mol(spec_noisy[i], index, device, enc_spec, dec_spec, dec_frag, topk=max(topk_list))
+                    preds = [p for p, _ in ranked]
+                    n += 1
+                    for k in topk_list:
+                        if smiles[i] in preds[:k]:
+                            hits[k] += 1
+        results[s] = {f"R@{k}": hits[k] / max(n, 1) for k in topk_list}
+        results[s]["N"] = n
+    # optional plot
+    if plt is not None:
+        for k in topk_list:
+            xs = list(results.keys())
+            ys = [results[s][f"R@{k}"] for s in xs]
+            plt.plot(xs, ys, marker='o', label=f"R@{k}")
+        plt.xlabel("Noise sigma")
+        plt.ylabel("Recall@K")
+        plt.title("Noise robustness (VAL subset)")
+        plt.legend()
+        plt.tight_layout()
+        try:
+            plt.savefig("noise_robustness.png", dpi=150)
+        except Exception:
+            pass
+        plt.clf()
+    return results
+
+
+def demo_visualize_reconstructions(
+    graph_feats, frag_bag, true_spec, smiles, adj, device,
+    enc_mol, enc_frag, dec_spec, dec_frag, n_samples=3
+    ) -> bool: # success
+    """Plot true vs reconstructed spectra for n_samples molecules."""
+    n = min(n_samples, len(smiles))
+    for i in range(n):
+        spec_hat, _ = infer_mol_to_spec(graph_feats[i], frag_bag[i], device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj[i].unsqueeze(0))
+        plt.figure()
+        plt.plot(true_spec[i].cpu().numpy(), label="true")
+        plt.plot(spec_hat.cpu().numpy(), label="pred")
+        plt.title(f"Recon: {smiles[i]}")
+        plt.legend()
+        plt.tight_layout()
+        try:
+            plt.savefig(f"recon_{i}.png", dpi=150)
+        except Exception:
+            pass
+        plt.close()
+    return True
 
 
 
@@ -981,8 +1227,8 @@ def main():
     6. Save model checkpoint.
     """
     p = argparse.ArgumentParser()
-    p.add_argument("--epochs_fwd", type=int, default=10, help="Phase A epochs (mol+frag -> spec)")
-    p.add_argument("--epochs_bwd", type=int, default=10, help="Phase B epochs (align spec latent)")
+    p.add_argument("--epochs_fwd", type=int, default=100, help="Phase A epochs (mol+frag -> spec)")
+    p.add_argument("--epochs_bwd", type=int, default=100, help="Phase B epochs (align spec latent)")
     p.add_argument("--batch", type=int, default=128)
     p.add_argument("--latent", type=int, default=128)
     p.add_argument("--lr", type=float, default=2e-4)
@@ -1000,19 +1246,23 @@ def main():
 
     mols_definitions = utils_mod.read_mols_csv(MOL_DEF_PATH)
     frag_coll: Dict[
-        str, # molecule smiles
-        List[ # forward
-            Tuple[
-                str, # fragment smiles
-                Dict[int, List[str]], # internal edge_id, targets
-                Dict[int, List[str]]  # internal edge_id, rules
-                ]
-        ],
-        List[ # backward
-            Tuple[
-                str, # fragment smiles
-                Dict[int, List[str]], # internal edge_id, targets
-                Dict[int, List[str]]  # internal edge_id, rules
+        str,
+        Tuple[
+            List[  # forward
+                Tuple[
+                    str, # frag_smiles
+                    float, # exact mass
+                    Dict[int, List[str]], # targets
+                    Dict[int, List[str]]  # rules
+                    ]
+                ],
+            List[   # backward
+                Tuple[
+                    str, # frag_smiles
+                    float, # exact mass
+                    Dict[int, List[str]], # targets
+                    Dict[int, List[str]]  # rules
+                    ]
                 ]
         ]
     ] = {}
@@ -1033,7 +1283,7 @@ def main():
                 for edge in dg_v.outEdges:
                     targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
                     rules[edge.id] = [rule for rule in edge.rules]
-                fwd_coll.append((graph.smiles, targets, rules))
+                fwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
 
 
 
@@ -1048,7 +1298,7 @@ def main():
                     for edge in dg_v.outEdges:
                         targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
                         rules[edge.id] = [rule for rule in edge.rules]
-                    bwd_coll.append((graph.smiles, targets, rules))
+                    bwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
                 except mod.libpymod.LogicError:
                     #bwd_coll.append((graph.smiles, dict(), dict()))
                     print("empty edges for ", graph.smiles)
@@ -1111,9 +1361,22 @@ def main():
     val_loader   = DataLoader(vali_ds, batch_size=args.batch, shuffle=False, collate_fn=collate)
     test_loader  = DataLoader(test_ds, batch_size=args.batch, shuffle=False, collate_fn=collate)
 
+    # Add after DataLoader creation
+    # ...existing code...
+    def pct_non_empty(loader):
+        c = 0; n = 0
+        for _, _, _, _, adj_fwd, _ in loader:
+            s = (adj_fwd.sum(dim=(1,2)) > 0).float()
+            c += s.sum().item(); n += s.numel()
+        return 100.0 * c / max(n, 1)
+
+    print(f"Non-empty adj (train): {pct_non_empty(train_loader):.1f}%")
+    print(f"Non-empty adj (val):   {pct_non_empty(val_loader):.1f}%")
+    print(f"Non-empty adj (test):  {pct_non_empty(test_loader):.1f}%")
+
     # Models
     enc_mol  = EncMol(args.latent).to(device)
-    enc_frag = EncFragGraph(fragment_vocab_size, args.latent).to(device)
+    enc_frag = EncFragGraph(fragment_vocab_size, args.latent, mass_vocab=train_ds.mass_vocab_norm).to(device)
     enc_spec = EncSpec(spectrum_bins_size, args.latent).to(device)
     dec_frag = DecFrag(args.latent, fragment_vocab_size).to(device)
     dec_spec = DecSpec(args.latent, fragment_vocab_size, spectrum_bins_size).to(device)
@@ -1154,6 +1417,7 @@ def main():
 
     # ----------------- Demo: Structure - > Spectrum -----------------
     graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd = next(iter(val_loader))
+    # why are the adjacency matrices empty?
     i = 0
     spec_hat, frag_pred = infer_mol_to_spec(
         graph_feats[i], frag_bag[i], device,
@@ -1167,6 +1431,11 @@ def main():
     ).item()
     print(f"Mol- >Spec for {smiles[i]} | cosine={cos_sim:.3f} | frag_pred_mean={frag_pred.mean().item():.3f}")
 
+    for x in adj_bwd:
+        if x.sum() > 0:
+            print("adjacency matrix has edges")
+        else:
+            print("adjacency matrix is empty")
 
     # ----------------- Demo: Spectrum - > Structure -----------------
     print("== Demo: Spec -> Mol retrieval + re-ranking on the same VAL sample ==")
@@ -1176,6 +1445,44 @@ def main():
     print("-" * 50)
     for s, sc in ranked[:5]:
         print(f"{s:>40s} | {sc:8.3f}")
+
+    # ----------------- Demo: Retrieval metrics on VAL/TEST -----------------
+    print("== Retrieval metrics (VAL) ==")
+    val_metrics = demo_retrieval_metrics(index, val_loader, device, enc_spec, dec_spec, dec_frag, topk_list=(1,5,10), tau=0.5, max_batches=5)
+    print(val_metrics)
+    print("== Retrieval metrics (TEST) ==")
+    test_metrics = demo_retrieval_metrics(index, test_loader, device, enc_spec, dec_spec, dec_frag, topk_list=(1,5,10), tau=0.5, max_batches=5)
+    print(test_metrics)
+
+    # ----------------- Demo: Tau sweep for reranking -----------------
+    print("== Tau sweep on VAL (subset) ==")
+    tau_results, tau_best = demo_tau_sweep(index, val_loader, device, enc_spec, dec_spec, dec_frag, taus=(0.2,0.4,0.6,0.8), topk_list=(1,5,10), max_batches=5)
+    print("tau_results:", tau_results)
+    print("best per K:", tau_best)
+
+    # ----------------- Demo: Fragment graph ablation -----------------
+    print("== Graph ablation on one VAL sample ==")
+    ablation = demo_ablate_adjacency(graph_feats[i], frag_bag[i], adj_fwd[i].unsqueeze(0), spec[i], device, enc_mol, enc_frag, dec_spec, dec_frag)
+    print(ablation)
+
+    # ----------------- Demo: Head comparison (fwd vs bwd) -----------------
+    print("== Head comparison (forward vs backward) on VAL subset ==")
+    heads_stats = demo_heads_comparison(val_loader, device, enc_mol, heads, dec_spec, dec_frag, n_batches=3)
+    print(heads_stats)
+
+    # ----------------- Demo: Fragment perturbation sensitivity -----------------
+    print("== Fragment perturbation sensitivity on one VAL sample ==")
+    pert = demo_fragment_perturbation(graph_feats[i], frag_bag[i].clone(), spec[i], device, enc_mol, enc_frag, dec_spec, dec_frag, index, adj=adj_fwd[i].unsqueeze(0), top_n=5)
+    print(pert)
+
+    # ----------------- Demo: Spectrum noise robustness -----------------
+    print("== Spectrum noise robustness (VAL subset) ==")
+    noise_res = demo_noise_robustness(index, val_loader, device, enc_spec, dec_spec, dec_frag, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5)
+    print(noise_res)
+
+    # ----------------- Demo: Visualization of reconstructions -----------------
+    print("== Visualization: saving recon plots for a few VAL samples ==")
+    _ = demo_visualize_reconstructions(graph_feats, frag_bag, spec, smiles, adj_fwd, device, enc_mol, enc_frag, dec_spec, dec_frag, n_samples=3)
 
     # save checkpoint
     ckpt = {
