@@ -15,17 +15,7 @@ def graph_dfs_with_ids_2_nx(dfs_str: str) -> nx.Graph:
 
     into a networkx.Graph.
     Nodes get attributes   element=...,  decoration=... (e.g. '+.' or '.'),
-    and edges get attribute bond='-', '=', '#', …
-
-    Parameters
-    ----------
-    dfs_str : str
-        Graph string in dfs format.
-
-    Returns
-    -------
-    nx.Graph
-        Undirected molecular graph.
+    and edges get attribute bond='-', '=', '#', ...
     """
 
     # Tokenisation

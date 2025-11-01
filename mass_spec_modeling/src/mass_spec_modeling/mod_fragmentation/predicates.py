@@ -84,7 +84,8 @@ def sub_group(
                             start_vertex = position[0],
                             end_vertex = position[1],
                             allowed_labels = utils.alk_nes_lables,
-                            match = match
+                            match = match,
+                            max_expansions = 20000
                             ) #TODO could contain multiple matches, really? -> ask Flamm
 
                         if not satpath: #  set only false but stay false if true
@@ -96,7 +97,8 @@ def sub_group(
                     neighbor_labels, _ = utils.collect_bfs(
                         graphs = derivation.left,
                         start_vertices = alkyl_position,
-                        match = match
+                        match = match,
+                        max_visits = 5000
                     )
                     is_subset = set(neighbor_labels).issubset(set(utils.alk_nes_lables))
                     if len(set(neighbor_labels)) > 0 and is_subset:
@@ -108,7 +110,8 @@ def sub_group(
                     neighbor_labels, _ = utils.collect_bfs(
                         graphs = derivation.left,
                         start_vertices = hetro_position,
-                        match = match
+                        match = match,
+                        max_visits = 5000
                     )
                     diff = set(neighbor_labels) - set(utils.alk_nes_lables)
                     if len(diff) <= 1:

@@ -1,24 +1,63 @@
 """
-rule extention helper functions
+rule extension helper functions
 """
 import re
+import atexit
 
 import collections
-from typing import List, Tuple, Iterable, Set
+from typing import List, Tuple, Iterable, Set, Optional, Sequence
 import mod
 
 from .compareability import ComparableVertex, ComparableVertexList
 from .term_transfers import decode_vertex_label, graph_from_term, decode_edge_label
 
 
+# Diagnostics: simple in-process toggle with counters and atexit summary
+SUBGROUP_DIAG: bool = False
+_diag_counters = {
+    "collect_bfs_cap": 0,
+    "saturated_path_cap": 0,
+}
+
+def enable_subgroup_diag(enabled: bool) -> None:
+    """
+    Programmatically enable/disable subgroup diagnostics for this process.
+    """
+    global SUBGROUP_DIAG
+    SUBGROUP_DIAG = bool(enabled)
+
+
+def _diag_log(msg: str) -> None:
+    if SUBGROUP_DIAG:
+        print(msg)
+
+
+def _diag_inc(key: str) -> None:
+    if key in _diag_counters:
+        _diag_counters[key] += 1
+
+
+@atexit.register
+def _diag_summary() -> None:
+    if not SUBGROUP_DIAG:
+        return
+    total = sum(_diag_counters.values())
+    if total == 0:
+        return
+    print(
+        f"[subgroup-summary] caps hit: collect_bfs={_diag_counters['collect_bfs_cap']}, "
+        f"saturated_path={_diag_counters['saturated_path_cap']}"
+    )
+
+
 def get_rule_2_molecule_map(
     derivation: mod.Derivation,
     graphs: mod.Graph,
     label_settings: mod.LabelSettings
-    ):# -> mod.VertexMapRuleLeftGraphUnionGraph:
+    ) -> Optional[mod.DGVertexMapper.Result.match]:
 
     """
-    see the positon where the rule gets applied
+    See the position where the rule gets applied. Returns None if no match.
     """
     # instatiate a derivation graph to pass in the vertex map
     dg_new = mod.DG(graphDatabase = graphs, labelSettings = label_settings)
@@ -41,14 +80,14 @@ def get_rule_2_molecule_map(
 
 def transfer_positions_of_generalization_extention(
     generalization_extention: List[str],
-    match#: mod.VertexMapRuleLeftGraphUnionGraph
+    match: mod.DGVertexMapper.Result.match
     ) -> Tuple[
         List[mod.Graph.Vertex],
         List[Tuple[mod.Graph.Vertex, mod.Graph.Vertex]],
         List[mod.Graph.Vertex]
     ]:
     """
-    convert the genearalization extentions 2 vertexes of the graph
+    Convert the generalization extensions to vertices of the graph.
     """
 
     alkyl_structures = re.findall(r'R(\d+)', generalization_extention)
@@ -61,27 +100,27 @@ def transfer_positions_of_generalization_extention(
     saturated_structures = [(int(x[0])-1, int(x[1])-1)  for x in saturated_structures]
 
     alkyl_pos_in_graph = [match[vertex_by_id(match.domain, x)] for x in alkyl_structures]
-    alkyl_pos_in_graph = [match[vertex_by_id(match.domain, x)] for x in hetro_structures]
+    hetro_pos_in_graph = [match[vertex_by_id(match.domain, x)] for x in hetro_structures]
     saturated_pos_in_graph = [
         (match[vertex_by_id(match.domain, x[0])], match[vertex_by_id(match.domain, x[1])])
         for x in saturated_structures
         ]
 
-    return alkyl_pos_in_graph, alkyl_pos_in_graph, saturated_pos_in_graph
+    return alkyl_pos_in_graph, hetro_pos_in_graph, saturated_pos_in_graph
 
-def vertex_by_id(g: mod.Graph, vid: int) -> Iterable[mod.Graph.Vertex]:
+def vertex_by_id(g: mod.Graph, vid: int) -> mod.Graph.Vertex:
     """
-    get the all vertex from one graph that have a spesific vertex id
+    Get the vertex from one graph that has a specific vertex id.
     """
     return next(v for v in g.vertices if v.id == vid)
 
 
-def mol_neighbors(g: mod.Graph, v: mod.Graph.Vertex) -> Iterable[mod.Graph.Vertex]:
+def mol_neighbors(graphs: Iterable[mod.Graph], v: mod.Graph.Vertex) -> Iterable[mod.Graph.Vertex]:
     """
-    Yield neighbouring vertices of *v* in the *mod.Graph* *g*.
+    Yield neighbouring vertices of v across the provided graphs.
     """
 
-    for gg in g:
+    for gg in graphs:
         #print("gg", gg, g, v, v.id)
         for e in gg.edges:
             #print("nbr", e)
@@ -116,9 +155,10 @@ def mol_cleaned_label(v: mod.Graph.Vertex) -> str:
     return strlab.replace("+", "").replace("-", "").replace(".", "")
 
 def collect_bfs(
-    graphs: mod.Graph,
+    graphs: Iterable[mod.Graph],
     start_vertices: Iterable[mod.Graph.Vertex],
-    match,
+    match: mod.DGVertexMapper.Result.match,
+    max_visits: Optional[int] = None,
     ) -> Tuple[List[str], List[mod.Graph.Vertex]]:
 
     """
@@ -127,19 +167,18 @@ def collect_bfs(
     """
 
 
-    graph = []
-    for g in graphs:
-        graph.append(graph_from_term(g))
+    graph = [graph_from_term(g) for g in graphs]
 
 
     # exclude start vertices from morphism vertices as they are part of subgroup
     morphism_vertices = set( x for x in match.domain.vertices) - set(start_vertices)
 
-    visited = morphism_vertices
+    visited = set(morphism_vertices)
     queue = collections.deque(start_vertices)
 
     labels = [mol_cleaned_label(v) for v in start_vertices]
     vertices = list(start_vertices)
+    visits = 0
     while queue:
         v = queue.popleft()
         for vertex in mol_neighbors(graph, v):
@@ -148,6 +187,16 @@ def collect_bfs(
                 queue.append(vertex)
                 labels.append(mol_cleaned_label(vertex))
                 vertices.append(vertex)
+                visits += 1
+                if max_visits is not None and visits >= max_visits:
+                    # Reached cap; stop expanding further
+                    _diag_inc("collect_bfs_cap")
+                    _diag_log(
+                        f"[subgroup] collect_bfs cap hit: visits={visits}, cap={max_visits}, "
+                        f"start={[ (v.id, mol_cleaned_label(v)) for v in start_vertices ]}"
+                    )
+                    queue.clear()
+                    break
 
     return labels, vertices
 
@@ -155,7 +204,7 @@ def _path_satisfies_branch_rule(
     graph: mod.Graph,
     path: List[mod.Graph.Vertex],
     morphism_vertices: Set[mod.Graph.Vertex],
-    branch_ok_label: List[str],
+    branch_ok_labels: Set[str],
     ) -> bool:
 
     """
@@ -164,44 +213,45 @@ def _path_satisfies_branch_rule(
     *branch_ok_label*.
     """
 
-    path_set = set(path)
-    #TODO do I need a Compareable Vertex here?
+    comp_path = {ComparableVertex(x) for x in path}
+    comp_morphism = {ComparableVertex(x) for x in morphism_vertices}
     for v in path:
         for neighbor in mol_neighbors(graph, v):
-            if ComparableVertex(neighbor) in ComparableVertexList(path_set): # on given path -> ignore
+            cn = ComparableVertex(neighbor)
+            if cn in comp_path: # on given path -> ignore
                 continue
-            if ComparableVertex(neighbor) not in ComparableVertexList(morphism_vertices): # outside morphism -> ignore
+            if cn not in comp_morphism: # outside morphism -> ignore
                 continue
-            if mol_cleaned_label(neighbor) not in branch_ok_label: # is it an OK Label
+            if mol_cleaned_label(neighbor) not in branch_ok_labels: # is it an OK Label
                 return False
     return True
 
 def get_edge_between(
     graph: mod.Graph,
-    u: mod.Graph.Vertex,
-    v: mod.Graph.Vertex
+    u: mod.Graph.Vertex, # the first vertex
+    v: mod.Graph.Vertex # the second vertex
     ) -> mod.Graph.Edge | None:
     """
-    findes an edge between 2 points in a molecuel graph
+    Find an edge between 2 points in a molecule graph
     """
     if ComparableVertex(v) == ComparableVertex(u):
         return None
 
     for g in graph:
         for e in g.edges:
-            if ComparableVertex(u) == e.source and ComparableVertex(v) == e.target:
+            if ComparableVertex(u) == ComparableVertex(e.source) and ComparableVertex(v) == ComparableVertex(e.target):
                 return e
-            if ComparableVertex(v) == e.source and ComparableVertex(u) == e.target:
+            if ComparableVertex(v) == ComparableVertex(e.source) and ComparableVertex(u) == ComparableVertex(e.target):
                 return e
-            if ComparableVertex(u) == e.target and ComparableVertex(v) == e.source:
+            if ComparableVertex(u) == ComparableVertex(e.target) and ComparableVertex(v) == ComparableVertex(e.source):
                 return e
-            if ComparableVertex(v) == e.target and ComparableVertex(u) == e.source:
+            if ComparableVertex(v) == ComparableVertex(e.target) and ComparableVertex(u) == ComparableVertex(e.source):
                 return e
     return None
 
 
 def _is_single_bond(
-    graph: mod.Graph,
+    graphs: Iterable[mod.Graph],
     u: mod.Graph.Vertex,
     v: mod.Graph.Vertex
     ) -> bool:
@@ -210,7 +260,7 @@ def _is_single_bond(
     Return True iff edge between *u* and *v* is a single bond.
     """
 
-    edge = get_edge_between(graph, u, v)
+    edge = get_edge_between(graphs, u, v)
 
     if edge is None: # no edge at all
         return False
@@ -222,8 +272,9 @@ def saturated_path(
     start_vertex: mod.Graph.Vertex,
     end_vertex: mod.Graph.Vertex,
     allowed_labels: Set[str],
-    match,#: mod.VertexMapRuleLeftGraphUnionGraph,
-    branch_ok_label: str = "H",
+    match: mod.DGVertexMapper.Result.match,
+    branch_ok_label: Sequence[str] | str = ("H",),
+    max_expansions: Optional[int] = None,
     ) -> bool:
 
     """
@@ -246,8 +297,15 @@ def saturated_path(
     if start_vertex == end_vertex: # start equals end
         return True
 
+    # Normalize branch_ok_label to a set
+    if isinstance(branch_ok_label, str):
+        branch_ok_labels: Set[str] = {branch_ok_label}
+    else:
+        branch_ok_labels = set(branch_ok_label)
+
     stack = collections.deque()
     stack.append((start_vertex, [start_vertex]))
+    expansions = 0
 
     while stack:
         node, path = stack.pop()
@@ -273,10 +331,18 @@ def saturated_path(
                     graph,
                     new_path,
                     morphism_vertices,
-                    branch_ok_label,
+                    branch_ok_labels,
                 ):
                     return True
             else:
                 stack.append((vertex, new_path))
+                expansions += 1
+                if max_expansions is not None and expansions >= max_expansions:
+                    _diag_inc("saturated_path_cap")
+                    _diag_log(
+                        f"[subgroup] saturated_path cap hit: expansions={expansions}, cap={max_expansions}, "
+                        f"start={start_vertex.id}, end={end_vertex.id}, only_single_bond_C=True"
+                    )
+                    return False
 
     return False

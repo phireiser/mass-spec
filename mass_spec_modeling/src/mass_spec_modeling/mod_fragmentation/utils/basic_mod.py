@@ -1,4 +1,4 @@
-"""basic mod utilies"""
+"""Basic MØD utilities"""
 
 from typing import List, Set, Optional
 import mod
@@ -7,7 +7,9 @@ def get_parents(
     dg: mod.DG,
     frag: mod.Graph
     ) -> List[mod.Graph]:
-    """get parents of a fragment in the derivation graph"""
+    """
+    Get parents of a fragment in the derivation graph.
+    """
     dg_vert = dg.findVertex(frag)
     parents = []
     for in_edge in dg_vert.inEdges:
@@ -23,7 +25,7 @@ def filter_ancestors_out(
     """
     Keep only those fragments that are NOT an ancestor of any other fragment.
 
-    - fragments: gaphs molecules in the derivation graph
+    - fragments: graphs (molecules) in the derivation graph
     - dg: the derivation graph
     - max_depth: optional cap on parent-traversal depth (None = unlimited)
 
@@ -59,25 +61,22 @@ def filter_ancestors_out(
     # Keep fragments that are NOT ancestors of any other fragment
     return [f for f in fragments if f not in all_ancestors]
 
-def get_out_edges_by_vertex_id(dg: mod.DG, v_id: int):
+def get_out_edges_by_vertex_id(dg: mod.DG, v_id: int) -> List[int]:
     """
-    returns the ids of the hyperedges
-    for a certain hyper vertex idenitfied by its mod id
+    Return the IDs of outgoing hyperedges for a vertex identified by its mod ID.
     """
     return [e.id for e in next(v.outEdges for v in dg.vertices if v.id == v_id)]
 
-def get_rule_ids_by_edge_id(dg: mod.DG, eid: int):
+def get_rule_ids_by_edge_id(dg: mod.DG, eid: int) -> List[int]:
     """
-    gets the mod ids of the rules
-    of a specific edge identified by its mod id
+    Return the mod IDs of the rules of a specific edge identified by its mod ID.
     """
     edge = next(e for e in dg.edges if e.id == eid)
     return [r.id for r in edge.rules]
 
-def get_fragment_ids_by_edge_id(dg: mod.DG, eid: int):
+def get_fragment_ids_by_edge_id(dg: mod.DG, eid: int) -> List[int]:
     """
-    gets the mod ids of the edges
-    of a specific edge identified by its mod id
+    Return the mod IDs of the target graphs of a specific edge identified by its mod ID.
     """
     edge = next(e for e in dg.edges if e.id == eid)
     return [t.id for t in edge.targets]

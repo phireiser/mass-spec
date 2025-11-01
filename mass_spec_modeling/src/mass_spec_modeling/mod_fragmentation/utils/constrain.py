@@ -1,5 +1,5 @@
 """
-everything related to constraints in the term mode
+Everything related to constraints in the term mode.
 """
 
 from typing import List, Tuple, Iterable, Set, Dict, Any, Union
@@ -8,6 +8,7 @@ import re
 import mod
 
 
+# Hetero atoms
 hetroAtoms = [
     "He",
     "Li","Be","B","N","O","F","Ne",
@@ -19,11 +20,14 @@ hetroAtoms = [
     "Fr","Ra", "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
 ]
 
-# TODO alkanes (single bond), alkenes(>=1 double bond), alkynes (>=1 tripple bond)
-alk_nes_lables = ["H", "C"]
+# TODO: alkanes (single bond), alkenes (>=1 double bond), alkynes (>=1 triple bond)
+alk_nes_lables = ["H", "C"]  # kept for backward-compatibility (used elsewhere)
+# Preferred alias with correct spelling
+ALK_NES_LABELS = alk_nes_lables
 
-allAtoms = hetroAtoms
-allAtoms.extend(alk_nes_lables)
+# Build combined list without aliasing heteroAtoms
+allAtoms = list(hetroAtoms) + list(alk_nes_lables)
+ALL_ATOMS = allAtoms  # alias with conventional constant-style name
 
 
 # all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
@@ -42,7 +46,7 @@ def apply_constraints(
     ) -> List[mod.Rule]:
 
     """
-    takes the a list of atom lables and puts it in as a constraint for the rule
+    Take a list of atom labels and splice it in as a constraint for each rule.
     """
 
     # contraints Label Any
@@ -57,7 +61,7 @@ def apply_constraints(
 
 def get_constraint(atoms: List[str], repl_label: str) -> str:
     """
-    creates a string to be splised into the GML definition
+    Create a GML snippet for a constrainLabelAny block with the given labels.
     """
 
     labels = " ".join('label ' + '"' + x + '"' for x in atoms)
@@ -70,12 +74,12 @@ def get_constraint(atoms: List[str], repl_label: str) -> str:
     """
 
 def all_occuring(
-    in_molecule_list: mod.Graph,
-    element_list: Iterable[str]
+    in_molecule_list: Iterable[mod.Graph],
+    element_list: Iterable[str],
     ) -> Set[str]:
 
     """
-    all lables that are in element list are collected if they are in the molecule graph
+    Collect all labels from element_list that occur in any graph from in_molecule_list.
     """
 
     occuring = set()
@@ -89,17 +93,17 @@ def all_occuring(
 
 def add_constraints(rule: mod.Rule, con_string_gml: str) -> mod.Rule:
     """
-    splices the constraint string into the rule
+    Splice the constraint string into the rule's GML.
     """
     gmlstr = rule.getGMLString()
     name = rule.name
-    rule = mod.ruleGMLString(gmlstr[:-1] + con_string_gml + gmlstr[-1], name)
+    rule = mod.Rule.fromGMLString(gmlstr[:-1] + con_string_gml + gmlstr[-1], name)
     return rule
 
 
 def convert_to_moel_rule(tupel: Iterable) -> List[mod.Rule]:
     """
-    converts a ruel defined as a tupel of name and DFS string to a mod ruel
+    Convert a rule defined as a (dfs, name) tuple into mod.Rule objects.
     """
     if isinstance(tupel, tuple):
         tupel = [tupel]
@@ -112,7 +116,7 @@ def label_constraints_gml(
     ) -> List[List[mod.Rule]]:
 
     """
-    every underscore single Letter combination should be replaced according to rpl dict
+    Replace every underscore-single-letter token according to rpl_dict.
     """
 
     if not isinstance(input_rules, list):
@@ -135,14 +139,14 @@ def label_constraints_gml(
 
 
 def label_constraints_dfs(
-    input_rules: mod.Rule | List[mod.Rule],
+    input_rules: List[Tuple[str, str]] | Tuple[str, str],
     to_replace: List[str],
-    replacements: List
+    replacements: List[str]
     ) -> List[Tuple[str, str]]:
 
     """
-    every element from to_replace should be replaced according to replacements
-    but with all possible combinations
+    Replace each token in to_replace according to replacements, generating
+    all possible combinations. Input rules are DFS strings paired with names.
     """
 
     # https://www.mathsisfun.com/combinatorics/combinations-permutations.html

@@ -67,4 +67,5 @@ srun --cpu-bind=cores \
     --name "$NAME" \
     --output-dir "$OUTDIR" \
     --number-threads "$THREADS" \
+    --subgroup-diag \
   >"$OUTFILE" 2>&1

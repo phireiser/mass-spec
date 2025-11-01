@@ -9,19 +9,11 @@ from math import isfinite
 import requests
 
 
-def pubchem_smiles_lookup(smiles: str) -> int:
+def pubchem_smiles_lookup(
+    smiles: str
+    ) -> int:
     """
-    Get the through PubChem's PUG the compound ID (CID) by SMILES string
-
-    Parameters
-    ----------
-    smiles : str
-        The SMILES string for the compound.
-
-    Returns
-    -------
-    int
-        PubChem CID for the given SMILES.
+    Get the through PubChem's PUG the compound ID (CID) for a SMILES string
     """
     pug_pre_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
     encoded_smiles = quote(smiles, safe='')  # fully encode special characters
@@ -49,7 +41,7 @@ def get_spectra_from_information_section(
     ) -> List[Dict[int, List[Tuple[float, float]]]]:
 
     """
-    getting the spectra from a pubchem section
+    Getting the spectra from a pubchem section
     """
 
     fields_of_interest = [
@@ -75,7 +67,7 @@ def get_spectra_from_information_section(
                         intensity = float(parts[1])
                         extracted_value.append((mz, intensity))
                     except ValueError as e:
-                        print("expect a float")
+                        print("Expecting a float")
                         raise e
 
             mass_spec_data.append({reference_number: extracted_value})
@@ -84,7 +76,7 @@ def get_spectra_from_information_section(
             number_list = value.get("Number", [])
             if len(number_list) == 1:
                 mz_value = float(number_list[0])
-                # use arbitrary intensity = 1.0
+                # Use arbitrary intensity = 1.0
                 extracted_value.append((mz_value, 1.0))
                 if name in fields_of_interest[3]:
                     mass_spec_data.append({reference_number: extracted_value})
@@ -125,24 +117,13 @@ def clean_spectra(
     spectra: List[Dict[int, List[Tuple[float, float]]]]
     ) -> List[Tuple[int, float]]:
     """
-    Combine and clean PubChem GC-MS peak lists.
+    Combine and clean PubChem peak lists.
+    Flattens all reference spectra into one set of peaks.
 
-    - Flattens all reference spectra into one set of peaks.
     - Bins m/z to nearest integer (common for EI spectra tables).
     - Sums intensities for identical bins across references.
     - Normalizes intensities so the base peak is 100.0.
     - Returns peaks sorted by m/z.
-
-    Parameters
-    ----------
-    spectra : List[Dict[int, List[Tuple[float, float]]]]
-        Output of get_spectra_from_information_section:
-        a list of {reference_number: [(mz, intensity), ...]} dicts.
-
-    Returns
-    -------
-    List[Tuple[int, float]]
-        Cleaned spectrum as (m/z_int, rel_intensity_0_to_100).
     """
     bins: Dict[int, float] = defaultdict(float)
 
@@ -179,10 +160,8 @@ def get_spectra_from_pubchem(
     smiles: str
     ) -> List[Dict[int, List[Tuple[float, float]]]]:
     """
-    chaining of the pubchem functions to get spectra
+    Chaining of the PubChem functions to get spectra.
     """
-
-
     cid = pubchem_smiles_lookup(smiles)
     info = get_information_section_from_pubchem(cid)
     spectra = get_spectra_from_information_section(info)

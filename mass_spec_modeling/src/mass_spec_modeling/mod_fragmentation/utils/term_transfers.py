@@ -30,7 +30,7 @@ def term_from_graph(g: mod.Graph):
         bond_type = term_bond_from_bond_type[e.bondType]
         s += f'edge [ source {e.source.id} target {e.target.id} label "e({bond_type})" ]'
     s +="]\n"
-    return mod.graphGMLString(s, name=g.name + ", term", add=False)
+    return mod.Graph.fromGMLString(s, name=g.name + ", term", add=False)
 
 
 def decode_vertex_label(l: str) -> str:
@@ -90,7 +90,7 @@ def graph_from_term(g: mod.Graph) -> mod.Graph:
         # I don't kown why I need to exchange target and source
         s += f'edge [ source {e.target.id} target {e.source.id} label "{edge_label}" ]\n'
     s += "]\n"
-    return mod.graphGMLString(s, name= getattr(g, "name", "").replace(", term", ""), add=False)
+    return mod.Graph.fromGMLString(s, name= getattr(g, "name", "").replace(", term", ""), add=False)
 
 
 def term_from_rule(r: mod.Rule) -> mod.Rule:
@@ -137,7 +137,7 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
 
     s = f"rule [\n\tleft [\n{left}\t]\n\tcontext [\n{context}\t]\n\tright [\n{right}\t]\n]\n"
 
-    return mod.ruleGMLString(s, name=r.name + ", term", add=False)
+    return mod.Rule.fromGMLString(s, name=r.name + ", term", add=False)
 
 
 def rule_from_term(r: mod.Rule) -> mod.Rule:
@@ -163,7 +163,7 @@ def rule_from_term(r: mod.Rule) -> mod.Rule:
         right += f'edge [ source {e.source.id} target {e.target.id} label "{label}" ]\n'
 
     s = f"rule [\n\tleft [\n{left}\t]\n\tright [\n{right}\t]\n]\n"
-    return mod.ruleGMLString(s, name = r.name.replace(", term", ""), add=False)
+    return mod.Rule.fromGMLString(s, name = r.name.replace(", term", ""), add=False)
 
 
 def multiline_equal(s1: str, s2: str) -> bool:

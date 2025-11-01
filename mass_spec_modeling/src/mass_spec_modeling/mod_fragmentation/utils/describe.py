@@ -1,8 +1,8 @@
 """
-utilies that are used to descibe
+Utilities to describe spectra and rule usage.
 """
 
-from typing import Iterable, Any, Tuple
+from typing import Iterable, Any, Tuple, Dict, Optional
 import pandas as pd
 import numpy as np
 
@@ -13,13 +13,21 @@ from .term_transfers import graph_from_term
 
 
 def dice_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
-    """Calculates the Dice coefficient between two iterables."""
+    """
+    Compute Dice coefficient between two iterables.
+    Returns 0.0 when both are empty to avoid division by zero.
+    """
     set_a, set_b = set(a), set(b)
-    return 2 * len(set_a & set_b) / (len(set_a) + len(set_b))
+    denom = (len(set_a) + len(set_b))
+    if denom == 0:
+        return 0.0
+    return 2 * len(set_a & set_b) / denom
 
 
 def overlap_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
-    """Calculates the Overlap coefficient between two iterables."""
+    """
+    Compute the Overlap coefficient between two iterables.
+    """
     set_a, set_b = set(a), set(b)
     res = 0.0
     try:
@@ -35,7 +43,7 @@ def rule_usage(
     ) -> pd.DataFrame:
 
     """
-    how much each rule is used in respect to the resulting mass spec peaks
+    How much each rule is used in respect to the resulting mass spec peaks
     """
     all_active_rules = set()
 
@@ -43,7 +51,7 @@ def rule_usage(
     mod_spectrum_dict = get_spectra_from_mod_derivation_graph(derivation_graph)
     mod_spectrum_df = pd.DataFrame(mod_spectrum_dict, columns=["mass", "intensity", "rules"])
 
-    print(mod_spectrum_df)
+    # Long-form explode of rules per mass
     df_long = (mod_spectrum_df.assign(rule=mod_spectrum_df['rules'].map(list))
              .explode('rule')
              .drop(columns='rules')
@@ -54,14 +62,12 @@ def rule_usage(
                    .apply(lambda s: sorted(set(s)))
                    .reset_index(name='masses'))
 
-    print(masses_per_rule)
-
-    pubchem_masses = None
+    pubchem_masses: Optional[np.ndarray] = None
     if pubchem_spectra:
         # flatten all PubChem masses
         pubchem_masses = np.unique([int(peak[0]) for peak in pubchem_spectra] ).astype(float)
 
-    if pubchem_masses.size:
+    if pubchem_masses is not None and pubchem_masses.size > 0:
         # distance of every mod mass to the closest PubChem mass
         diffs_min = np.abs(mod_spectrum_df["mass"].to_numpy()[:, None] - pubchem_masses).min(axis=1)
         matched_rules = mod_spectrum_df.loc[diffs_min <= 1.1, "rules"]
@@ -78,7 +84,8 @@ def rule_usage(
         .set_index("id")
     )
 
-    rules_df.loc[rules_df.index.isin(all_active_rules), "active"] = True
+    if all_active_rules:
+        rules_df.loc[rules_df.index.isin(all_active_rules), "active"] = True
     rules_df = rules_df[[col for col in rules_df.columns if col != "name"] + ["name"]]
 
     return rules_df
@@ -86,8 +93,11 @@ def rule_usage(
 def spectrum_statistic(
     derivation_graph: mod.DG,
     molecule: mod.Graph
-    ) -> Tuple[float, float]:
-    """spectrum description"""
+    ) -> Dict[str, Any]:
+    """
+    Summarize spectral overlap and coverage metrics.
+    Returns a dictionary with Dice_max, TPR_max, and support/mass lists.
+    """
     molecule = graph_from_term(molecule)
     smiles = molecule.smiles
     pubchem_spectra = get_spectra_from_pubchem(smiles)
@@ -110,7 +120,6 @@ def spectrum_statistic(
             tpr_max = max(tpr_max, len(pubchem_masses & moel_masses) / len(pubchem_masses))
         except ZeroDivisionError:
             pass
-
 
     return {
             "Dice_max": dice_max,

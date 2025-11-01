@@ -49,7 +49,7 @@ mol_graphs, peaks_list, frags_per_sample = [], [], []
 
 # Forward
 for name, smi in mols_definitions:
-    mol = mod.smiles(smi, name=name)
+    mol = mod.Graph.fromSMILES(smi, name=name)
     dg, rdb = utils.load_derivation_graph(mol.name, path=LOAD_PATH / "fwd")
 
     # featurize graph -> PyG Data
@@ -112,7 +112,7 @@ fragmenter_adapter = ModEngineAdapter()
 
 # Use the last loaded DG and mol from the loop
 sample_last_name, last_smi = mols_definitions[-1]
-sample_last_mol = mod.smiles(last_smi, name=sample_last_name)
+sample_last_mol = mod.Graph.fromSMILES(last_smi, name=sample_last_name)
 sample_last_dg_fwd, _ = utils.load_derivation_graph(sample_last_mol.name, path=LOAD_PATH / "fwd" )
 sample_last_dg_bwd, _ = utils.load_derivation_graph(sample_last_mol.name, path=LOAD_PATH / "bwd" )
 

@@ -86,8 +86,10 @@ from torch.utils.data import Dataset, DataLoader
 import matplotlib.pyplot as plt
 
 
+from torch_geometric.nn import global_mean_pool
 from torch_geometric.nn import GCNConv
 from torch_geometric.data import Data as GeometricData
+from torch_geometric.data import Batch
 
 import mod
 from mass_spec_modeling.machine_learning import utils_mod
@@ -133,13 +135,11 @@ class EncMol(nn.Module):
     """
     def __init__(self, d_latent=128):
         super().__init__()
-        from torch_geometric.nn import GCNConv, global_mean_pool
         self.gnn1 = GCNConv(3, 64)
         self.gnn2 = GCNConv(64, d_latent)
         self.global_mean_pool = global_mean_pool
 
     def forward(self, batch_graphs):
-        from torch_geometric.data import Batch
         batch = Batch.from_data_list(batch_graphs)
         x = batch.x.float()
         edge_index = batch.edge_index
@@ -279,6 +279,70 @@ class TaskHeads(nn.Module):
     def forward(self, z):
         return self.fwd(z), self.bwd(z)
 
+class FragSetEncoderVocabless(nn.Module):
+    """
+    Encode a variable-size set of fragment graphs using EncMol as a backbone
+    and attention pooling; optionally smooth with local adjacency and inject
+    per-fragment normalized mass as a feature.
+    """
+    def __init__(self, enc_mol: "EncMol", d_latent: int):
+        super().__init__()
+        self.enc_mol = enc_mol
+        self.mass_mlp = nn.Sequential(nn.Linear(1, d_latent), nn.Tanh())
+        self.att = nn.Sequential(
+            nn.Linear(d_latent, d_latent // 2), nn.Tanh(),
+            nn.Linear(d_latent // 2, 1)
+        )
+
+    def _encode_fragments(self, frags: List[GeometricData]) -> torch.Tensor:
+        if len(frags) == 0:
+            # return a zero vector if no fragments
+            d = self.enc_mol.gnn2.out_channels
+            return torch.zeros(1, d, device=next(self.parameters()).device)
+        # enc_mol pools per graph, so on a list of fragment graphs we get one row per fragment
+        return self.enc_mol(frags)  # [n_frag, d_latent]
+
+    def forward(
+        self,
+        frag_graphs_batch: List[List[GeometricData]],
+        adj_batch: Optional[List[torch.Tensor]] = None,
+        mass_batch: Optional[List[torch.Tensor]] = None,
+    ) -> torch.Tensor:
+        device = next(self.parameters()).device
+        outs: List[torch.Tensor] = []
+        for i, frags in enumerate(frag_graphs_batch):
+            z_i = self._encode_fragments(frags).to(device)  # [n_i, d]
+            n_i = z_i.size(0)
+            # mass feature
+            if mass_batch is not None and i < len(mass_batch) and mass_batch[i] is not None:
+                m = mass_batch[i].to(device).view(-1, 1)
+                if m.size(0) != n_i:
+                    if m.size(0) < n_i:
+                        pad = n_i - m.size(0)
+                        m = torch.cat([m, torch.zeros(pad, 1, device=device)], dim=0)
+                    else:
+                        m = m[:n_i]
+                z_i = z_i + self.mass_mlp(m)
+            # adjacency smoothing
+            if adj_batch is not None and i < len(adj_batch) and adj_batch[i] is not None and adj_batch[i].numel() > 0:
+                A = adj_batch[i].to(device).float()
+                n = A.size(0)
+                if n != n_i:
+                    if n < n_i:
+                        pad = n_i - n
+                        A = F.pad(A, (0, pad, 0, pad))
+                    else:
+                        A = A[:n_i, :n_i]
+                I = torch.eye(z_i.size(0), device=device)
+                A_hat = A + I
+                Dinv = torch.diag(1.0 / A_hat.sum(-1).clamp_min(1.0))
+                z_i = Dinv @ (A_hat @ z_i)
+            # attention pooling
+            a = torch.softmax(self.att(z_i).squeeze(-1), dim=-1)  # [n_i]
+            z = (a.unsqueeze(-1) * z_i).sum(0, keepdim=True)      # [1, d]
+            outs.append(z)
+        return torch.cat(outs, dim=0)  # [B, d]
+
 class EncFragGraph(nn.Module):
     """
     Graph-aware fragment encoder.
@@ -301,10 +365,13 @@ class EncFragGraph(nn.Module):
         else:
             self.register_buffer('mass_vocab', None)
 
-    def aggregate(self, x, edges=None, adjacency=None):
+    def aggregate(
+        self: "EncFragGraph",
+        x: torch.Tensor, # [B, V, d_h]
+        edges: Optional[torch.Tensor] = None,
+        adjacency: Optional[torch.Tensor] = None
+        ) -> torch.Tensor: #  [B, V, d_h]
         """
-        x: [B, V, d_h]
-        returns: [B, V, d_h]
         """
         if adjacency is not None:
             # ensure 3D batch adjacency
@@ -358,6 +425,21 @@ class EncFragGraph(nn.Module):
         return z_nodes.mean(dim=1)                                     # [B, d_latent]
 
 
+class DecSpecLatent(nn.Module):
+    """
+    Decode a latent vector into a spectrum (no fragment bag input).
+    Typically fed with the forward head output of the combined latent.
+    """
+    def __init__(self, d_in: int, spectrum_bins_size: int):
+        super().__init__()
+        self.net = mlp(d_in, 512, spectrum_bins_size)
+
+    def forward(self, z: torch.Tensor) -> torch.Tensor:
+        if z.dim() == 1:
+            z = z.unsqueeze(0)
+        return F.relu(self.net(z))
+
+
 # ---------------------------------------------------------------------------
 # Loss and similarity utilities
 # ---------------------------------------------------------------------------
@@ -404,21 +486,37 @@ def info_nce(z_q, z_k, T=0.07):
     return F.cross_entropy(logits, labels)
 
 
+# --------------------------- Parent mass mask ---------------------------
+def make_parent_mass_mask_vec(precursor_mass: float, mz_min: float, mz_max: float, bin_width: float, device=None) -> torch.Tensor:
+    """Create a hard mask [bins] with 1.0 for bins at or below precursor mass, 0.0 above.
+
+    Bins are interpreted at their lower edges: mz_i = mz_min + i*bin_width.
+    """
+    n_bins = int((mz_max - mz_min) / bin_width)
+    if device is None:
+        device = torch.device('cpu')
+    edges = torch.arange(n_bins, device=device, dtype=torch.float32) * bin_width + float(mz_min)
+    mask = (edges <= float(precursor_mass) + 1e-6).float()
+    return mask
+
+
+def make_parent_mass_mask_batch(smiles_list: List[str], mz_min: float, mz_max: float, bin_width: float, device=None) -> torch.Tensor:
+    """Build a [B, bins] hard mask using exact mass from SMILES for each sample."""
+    if device is None:
+        device = torch.device('cpu')
+    masks: List[torch.Tensor] = []
+    for s in smiles_list:
+        try:
+            m = float(mod.Graph.fromSMILES(s).exactMass)
+        except Exception:
+            m = mz_max  # fallback: no masking
+        masks.append(make_parent_mass_mask_vec(m, mz_min, mz_max, bin_width, device=device))
+    return torch.stack(masks, dim=0)
+
+
 def jaccard_binary(a, b, eps=1e-6):
     """
     Computes Jaccard similarity between two binary fragment vectors.
-
-    Parameters
-    ----------
-    a, b : torch.Tensor
-        Binary fragment presence vectors [N, fragment_vocab_size].
-    eps : float
-        Numerical stability constant.
-
-    Returns
-    -------
-    torch.Tensor
-        Jaccard similarity score(s).
     """
     inter = (a * b).sum(dim=-1)
     union = (a + b - a * b).sum(dim=-1) + eps
@@ -434,6 +532,10 @@ class Sample:
     smiles: str
     fragment_adjacency_fwd: torch.Tensor  # forward
     fragment_adjacency_bwd: torch.Tensor  # backward
+    # Vocab-agnostic additions (may be None if not requested)
+    frag_graphs: Optional[List[GeometricData]] = None
+    frag_adj_local: Optional[torch.Tensor] = None
+    frag_masses: Optional[torch.Tensor] = None
 
 
 # ---------------------------------------------------------------------------
@@ -450,7 +552,7 @@ def build_fragment_vocab(
         ]
     ],
     existing_frag_to_id: Optional[Dict[str, int]] = None
-) -> Dict[str, int]:
+    ) -> Dict[str, int]:
     """Build a {fragment_smiles -> id} mapping.
 
     If an existing mapping is provided, return a copy WITHOUT extending it.
@@ -481,7 +583,7 @@ def frag_bag_from_list(
     frag_list: List[str], # list of fragment SMILES
     frag_to_id: Dict[str, int],
     fragment_vocab_size: int
-) -> torch.Tensor:
+    ) -> torch.Tensor:
     bag = torch.zeros(fragment_vocab_size, dtype=torch.float32)
     for f in frag_list:
         idx = frag_to_id.get(f)
@@ -501,7 +603,7 @@ def bin_spectrum(
     mz_max: float,
     bin_width: float,
     sqrt_and_l2: bool = True
-) -> torch.Tensor:
+    ) -> torch.Tensor:
     """
     Bin (mz, intensity) peaks into a fixed-length vector.
     spectrum_bins_size = floor((mz_max - mz_min) / bin_width)
@@ -573,22 +675,44 @@ class RealDataset(Dataset):
         if self._cache is not None:
             graph_feats, bags, specs, adjs_fwd, adjs_bwd = self._cache[idx]
         else:
-            mol = mod.smiles(list(self.frag_coll.keys())[idx])
+            mol = mod.Graph.fromSMILES(list(self.frag_coll.keys())[idx])
             graph_feats = self.graph_featurizer(mol)
-            spec_vec = self._make_spec(idx)
+            specs = self._make_spec(idx)
+            # build legacy features lazily
+            bags = self._make_frag_bag(idx)
+            adjs_fwd, adjs_bwd = self._make_frag_adj(idx)
+
+        # Vocab-agnostic extras
+        frag_smiles = self._frag_smiles_for_idx(idx)
+        frag_graphs = []
+        for smi in frag_smiles:
+            try:
+                frag_graphs.append(self.graph_featurizer(mod.Graph.fromSMILES(smi)))
+            except Exception:
+                # skip malformed fragments
+                print(f"Warning: mod could not parse fragment SMILES '{smi}'")
+                pass
+        frag_adj_local = self._local_adj_for_idx(idx)
+        frag_masses = self._frag_masses_for_idx(idx)
 
         return Sample(
             graph_feat=graph_feats,
-            frag_bag=bags,  # forward
+            frag_bag=bags,  # legacy bag (unused in vocab-less path)
             true_spectrum=specs,
             fragment_adjacency_bwd=adjs_bwd,
             fragment_adjacency_fwd=adjs_fwd,
-            smiles=list(self.frag_coll.keys())[idx]
+            smiles=list(self.frag_coll.keys())[idx],
+            frag_graphs=frag_graphs,
+            frag_adj_local=frag_adj_local,
+            frag_masses=frag_masses,
         )
 
-    def _make_frag_adj(self, idx: int) -> List[torch.Tensor]:
+    def _make_frag_adj(
+        self,
+        idx: int
+        ) -> List[torch.Tensor]:
         """
-    Build [fragment_vocab_size, fragment_vocab_size] adjacency from fwd_coll and bwd_coll for this molecule.
+        Build [fragment_vocab_size, fragment_vocab_size] adjacency from fwd_coll and bwd_coll for this molecule.
         """
         fragment_vocab_size = self.fragment_vocab_size
         fragment_adjacency_fwd = None
@@ -637,7 +761,11 @@ class RealDataset(Dataset):
         masses = masses / denom
         return masses
 
-    def _make_frag_graph(self, idx: int, direction: str = 'fwd') -> torch.Tensor:
+    def _make_frag_graph(
+        self,
+        idx: int,
+        direction: str = 'fwd'
+        ) -> torch.Tensor:
         """
         Generate graph-aware fragment representation for a molecule.
         """
@@ -656,7 +784,10 @@ class RealDataset(Dataset):
         frag_adj = self._make_frag_adj(idx)
         return self.graph_featurizer.aggregate(frag_bag, frag_adj)
 
-    def _make_frag_bag(self, idx: int) -> torch.Tensor:
+    def _make_frag_bag(
+        self,
+        idx: int
+        ) -> torch.Tensor:
         """
         Create a fragment bag tensor for a specific molecule.
         """
@@ -671,7 +802,10 @@ class RealDataset(Dataset):
             self.fragment_vocab_size
             )
 
-    def _make_spec(self, idx: int) -> torch.Tensor:
+    def _make_spec(
+        self,
+        idx: int
+        ) -> torch.Tensor:
         """
         Create a spectral representation for a specific molecule.
         """
@@ -682,6 +816,51 @@ class RealDataset(Dataset):
             self.bin_width
             )
 
+    # ------------------- Vocab-less helpers -------------------
+    def _frag_smiles_for_idx(
+        self,
+        idx: int
+        ) -> List[str]:
+        fwd_coll, _ = list(self.frag_coll.values())[idx]
+        return [t[0] for t in fwd_coll]
+
+    def _frag_masses_for_idx(
+        self,
+        idx: int
+        ) -> torch.Tensor:
+        fwd_coll, _ = list(self.frag_coll.values())[idx]
+        masses = []
+        for frag_smi, exact_mass, _t, _r in fwd_coll:
+            m = float(exact_mass)
+            if not (m > 0.0):
+                try:
+                    m = float(mod.Graph.fromSMILES(frag_smi).exactMass)
+                except Exception:
+                    m = 0.0
+            masses.append(m)
+        masses_t = torch.tensor(masses, dtype=torch.float32)
+        denom = torch.tensor(self.mz_max if self.mz_max > 0 else 1000.0, dtype=torch.float32)
+        return (masses_t / denom).clamp_min(0.0)
+
+    def _local_adj_for_idx(
+        self,
+        idx: int
+        ) -> torch.Tensor:
+        frag_smiles = self._frag_smiles_for_idx(idx)
+        m = {s: i for i, s in enumerate(frag_smiles)}
+        n = len(frag_smiles)
+        A = torch.zeros(n, n, dtype=torch.float32)
+        fwd, _ = list(self.frag_coll.values())[idx]
+        for src_smi, _mass, targets, _rules in fwd:
+            if src_smi not in m:
+                continue
+            si = m[src_smi]
+            for lst in targets.values():
+                for dst in lst:
+                    if dst in m:
+                        A[si, m[dst]] = 1.0
+        return A
+
     def _precompute_all(self):
         """Materialize tensors to speed up training."""
         graph_feats = []
@@ -690,7 +869,7 @@ class RealDataset(Dataset):
         adjs_fwd = []
         adjs_bwd = []
         for i in range(len(self)):
-            mol = mod.smiles(list(self.frag_coll.keys())[i])
+            mol = mod.Graph.fromSMILES(list(self.frag_coll.keys())[i])
             graph_feats.append(self.graph_featurizer(mol))
             bags.append(self._make_frag_bag(i))
             specs.append(self._make_spec(i))
@@ -703,7 +882,9 @@ class RealDataset(Dataset):
 
 
 
-def collate(batch: List[Sample]):
+def collate(
+    batch: List[Sample]
+    ) -> Tuple[List[GeometricData], torch.Tensor, torch.Tensor, List[str], torch.Tensor, torch.Tensor]:
     """
     Collate function for DataLoader batching.
     """
@@ -716,100 +897,97 @@ def collate(batch: List[Sample]):
     return graph_feats, fragments, true_spectrum, smiles, fragment_adjacency_fwd, fragment_adjacency_bwd
 
 
+def collate_vlex(batch: List[Sample]):
+    """
+    Collate function for the vocabulary-agnostic path.
+    Keeps variable-length fragment lists and returns per-sample adjacency/mass.
+    """
+    graph_feats = [b.graph_feat for b in batch]
+    true_spectrum = torch.stack([b.true_spectrum for b in batch])
+    smiles = [b.smiles for b in batch]
+    frag_graphs = [b.frag_graphs or [] for b in batch]
+    frag_adj_local = [b.frag_adj_local if b.frag_adj_local is not None else torch.zeros(0, 0) for b in batch]
+    frag_masses = [b.frag_masses if b.frag_masses is not None else torch.zeros(0) for b in batch]
+    return graph_feats, frag_graphs, frag_masses, true_spectrum, smiles, frag_adj_local
+
+
 # ---------------------------------------------------------------------------
 # Training loops
 # ---------------------------------------------------------------------------
 
-def train_epoch_phase_a(loader, device, enc_mol, enc_frag, heads, dec_frag, dec_spec,
-                        opt, alpha=1.0, beta=0.1):
+def train_epoch_phase_a(
+    loader: DataLoader,
+    device: torch.device,
+    enc_mol: EncMol,
+    frag_set_enc: FragSetEncoderVocabless,
+    heads: TaskHeads,
+    dec_spec: DecSpecLatent,
+    opt: torch.optim.Optimizer,
+    alpha: float = 1.0,
+    mz_min: float = 1.0,
+    mz_max: float = 1000.0,
+    bin_width: float = 1.0,
+    beta_forbidden: float = 0.1
+) -> float:
     """
-    Phase A: trains molecule + fragment - > spectrum reconstruction.
-
-    Parameters
-    ----------
-    loader : DataLoader
-        Training data loader.
-    device : torch.device
-        Target device (CPU/GPU).
-    enc_mol, enc_frag, dec_frag, dec_spec : nn.Module
-        Model components.
-    opt : torch.optim.Optimizer
-        Optimizer instance.
-    alpha, beta : float
-        Weighting for cosine and MSE losses.
-
-    Returns
-    -------
-    float
-        Average epoch loss.
+    Phase A (vocab-agnostic): molecule + fragment set -> spectrum reconstruction.
     """
-    enc_mol.train(); enc_frag.train(); dec_frag.train(); dec_spec.train()
+    enc_mol.train(); frag_set_enc.train(); dec_spec.train(); heads.train()
     total = 0.0
 
-    for graph_feats, frag_bag, true_spectrum, smiles, adj_fwd, adj_bwd in loader:
-        #TODO here
-        # check adj_fwd is empty or not
-        if adj_fwd.sum() > 0:
-            print("Adjacency matrix is not empty")
-        else:
-            print("Adjacency matrix is empty")
-
-        frag_bag = frag_bag.to(device)
+    for graph_feats, frag_graphs, frag_masses, true_spectrum, smiles, adj_local in loader:
         true_spectrum = true_spectrum.to(device)
-        adj_fwd = adj_fwd.to(device)  # use forward DG for Phase A
-
         opt.zero_grad()
-        z_m = enc_mol(graph_feats)
-        z_f = enc_frag(frag_bag, adjacency=adj_fwd)   # <-- uses [B,V,V]
+        z_m = enc_mol(graph_feats)  # [B, d]
+        z_f = frag_set_enc(frag_graphs, adj_batch=adj_local, mass_batch=frag_masses)  # [B, d]
         z = (z_m + z_f) / 2
         z_fwd, _ = heads(z)
-        p_frag = dec_frag(z_fwd)
-        spec_hat = dec_spec(z_fwd, frag_bag)
-        # losses
-        L_spec = cosine_loss(spec_hat, true_spectrum) + 0.0 * F.mse_loss(spec_hat, true_spectrum)
-        L_frag = F.binary_cross_entropy(p_frag, frag_bag)
-        # uncertainty weighting
-        s_spec = heads.logvar_spec
-        s_frag = heads.logvar_frag
-        loss = torch.exp(-s_spec) * L_spec + s_spec + torch.exp(-s_frag) * L_frag + s_frag
+        spec_hat = dec_spec(z_fwd)
+        # parent-mass mask (hard) and forbidden-region penalty
+        mask = make_parent_mass_mask_batch(smiles, mz_min, mz_max, bin_width, device=device)
+        spec_hat_masked = spec_hat * mask
+        L_spec = cosine_loss(spec_hat_masked, true_spectrum)
+        L_forb = (spec_hat * (1.0 - mask)).mean()
+        loss = L_spec + beta_forbidden * L_forb
         loss.backward()
         opt.step()
         total += loss.item() * len(graph_feats)
     return total / len(loader.dataset)
 
 
-def train_epoch_phase_b(loader, device, enc_spec, enc_mol, heads, dec_frag, dec_spec,
-                        opt, alpha=1.0, beta=0.1, lam=0.1, tau=0.5
-                        ) -> float: # average epoch loss
+def train_epoch_phase_b(
+        loader: DataLoader,
+        device: torch.device,
+        enc_spec: EncSpec,
+        enc_mol: EncMol,
+        heads: TaskHeads,
+        dec_spec: DecSpecLatent,
+        opt: torch.optim.Optimizer,
+        lam: float = 0.1,
+        mz_min: float = 1.0,
+        mz_max: float = 1000.0,
+        bin_width: float = 1.0,
+        beta_forbidden: float = 0.1
+        ) -> float:
     """
-    Phase B: trains spectrum latent alignment and inverse consistency.
-    Returns Average epoch loss.
+    Phase B (vocab-agnostic): align spectrum latent with molecular latent and
+    reconstruct spectra from the spectrum latent.
     """
-    enc_spec.train(); enc_mol.train(); dec_frag.train(); dec_spec.train()
+    enc_spec.train(); enc_mol.train(); dec_spec.train(); heads.train()
     total = 0.0
-    for graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd in loader:
-        frag_bag, spec = frag_bag.to(device), spec.to(device)
-        frag_adj = adj_bwd.to(device)
-         # spectrum-anchored learning
+    for graph_feats, _frag_graphs, _frag_masses, spec, smiles, _adj_local in loader:
+        spec = spec.to(device)
         opt.zero_grad()
         z_m = enc_mol(graph_feats)
         z_s = enc_spec(spec)
-        # use backward head for spec-anchored tasks
         _, z_bwd = heads(z_s)
-        l_con = info_nce(z_bwd, z_m)
-        p_frag = dec_frag(z_bwd)
-        spec_hat = dec_spec(z_bwd, (p_frag > tau).float())
-        # losses
-        L_spec = cosine_loss(spec_hat, spec) + 0.0 * F.mse_loss(spec_hat, spec)
-        L_frag = F.binary_cross_entropy(p_frag, frag_bag)
-        L_con = l_con
-        # uncertainty weighting
-        s_spec = heads.logvar_spec
-        s_frag = heads.logvar_frag
-        s_con = heads.logvar_con
-        loss = torch.exp(-s_spec) * L_spec + s_spec \
-               + torch.exp(-s_frag) * L_frag + s_frag \
-               + torch.exp(-s_con) * L_con + s_con
+        L_con = info_nce(z_bwd, z_m)
+        spec_hat = dec_spec(z_bwd)
+        mask = make_parent_mass_mask_batch(smiles, mz_min, mz_max, bin_width, device=device)
+        spec_hat_masked = spec_hat * mask
+        L_spec = cosine_loss(spec_hat_masked, spec)
+        L_forb = (spec_hat * (1.0 - mask)).mean()
+        loss = L_spec + lam * L_con + beta_forbidden * L_forb
         loss.backward()
         opt.step()
         total += loss.item() * len(graph_feats)
@@ -825,11 +1003,16 @@ class IndexItem:
     """Entry in the molecule latent index."""
     z: torch.Tensor
     smiles: str
-    frag_bag: torch.Tensor
-    graph_feat: torch.Tensor
-    fragment_adjacency_fwd: torch.Tensor
-    fragment_adjacency_bwd: torch.Tensor
+    graph_feat: GeometricData
     true_spectrum: torch.Tensor
+    # Vocab-agnostic fragment info (optional)
+    frag_graphs: Optional[List[GeometricData]] = None
+    frag_adj_local: Optional[torch.Tensor] = None
+    # Legacy fields (unused in vocab-less path)
+    frag_bag: Optional[torch.Tensor] = None
+    fragment_adjacency_fwd: Optional[torch.Tensor] = None
+    fragment_adjacency_bwd: Optional[torch.Tensor] = None
+
 
 class LatentIndex:
     """
@@ -843,20 +1026,20 @@ class LatentIndex:
     def build(self, dataset: Dataset, device, enc_mol: EncMol):
             self.embs.clear(); self.items.clear()
             enc_mol.eval()
-            loader = DataLoader(dataset, batch_size=256, shuffle=False, collate_fn=collate)
+            loader = DataLoader(dataset, batch_size=256, shuffle=False, collate_fn=collate_vlex)
             with torch.no_grad():
-                for graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd in loader:
+                for graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local in loader:
                     z = enc_mol(graph_feats)                     # [B, d]
                     z = F.normalize(z, dim=-1).cpu()
-                    for i in range(z.size(0)):
+                    B = z.size(0)
+                    for i in range(B):
                         self.embs.append(z[i])
                         self.items.append(IndexItem(
                             z=z[i],
                             smiles=smiles[i],
-                            frag_bag=frag_bag[i].cpu(),
                             graph_feat=graph_feats[i],
-                            fragment_adjacency_fwd=adj_fwd[i].cpu(),
-                            fragment_adjacency_bwd=adj_bwd[i].cpu(),
+                            frag_graphs=frag_graphs[i],
+                            frag_adj_local=(adj_local[i].cpu() if isinstance(adj_local[i], torch.Tensor) else None),
                             true_spectrum=spec[i].cpu(),
                         ))
             self.embs = torch.stack(self.embs, 0)
@@ -870,136 +1053,176 @@ class LatentIndex:
         return [self.items[i] for i in topi.tolist()]
 
 
-def rerank_candidates(spec_q, z_q, candidates, device,
-                      enc_spec, dec_spec, dec_frag, w_cos=0.6, w_jacc=0.4, tau=0.5):
+def rerank_candidates(spec_q: torch.Tensor,
+                      candidates: List[IndexItem],
+                      device,
+                      enc_mol: EncMol,
+                      frag_set_enc: FragSetEncoderVocabless,
+                      heads: TaskHeads,
+                      dec_spec: DecSpecLatent,
+                      mz_min: float,
+                      mz_max: float,
+                      bin_width: float) -> List[Tuple[str, float]]:
     """
-    Reranks retrieved molecules using forward-model cosine similarity
-    and fragment Jaccard agreement.
-
-    Returns
-    -------
-    List[Tuple[str, float]]
-        Candidate SMILES strings and composite scores.
+    Rerank by forward-model spectrum reconstruction cosine similarity.
     """
-    enc_spec.eval(); dec_spec.eval(); dec_frag.eval()
+    enc_mol.eval(); frag_set_enc.eval(); dec_spec.eval(); heads.eval()
+    scores: List[Tuple[str, float]] = []
     with torch.no_grad():
-        # z_q is spectrum latent; project to backward head if available
-        # assume caller passes z_q from enc_spec (pre-head); try to detect heads
-        try:
-            # if heads exist in closure (updated below), use them
-            fwd_h, bwd_h = rerank_candidates.__globals__.get('heads', (None, None))
-        except Exception:
-            fwd_h = bwd_h = None
-        if 'heads' in rerank_candidates.__globals__ and rerank_candidates.__globals__['heads'] is not None:
-            _, z_use = rerank_candidates.__globals__['heads'](z_q.to(device))
-        else:
-            z_use = z_q.to(device)
-        frag_pred = dec_frag(z_use).cpu()
-        frag_pred_bin = (frag_pred > tau).float()
-        scores = []
+        spec_q_n = F.normalize(spec_q.cpu(), dim=-1)
         for it in candidates:
-            z_c = it.z.to(device)
-            spec_hat = dec_spec(z_c.unsqueeze(0), it.frag_bag.unsqueeze(0).to(device)).cpu().squeeze(0)
-            cos = F.cosine_similarity(
-                F.normalize(spec_hat, dim=-1).unsqueeze(0),
-                F.normalize(spec_q.cpu(), dim=-1).unsqueeze(0),
-                dim=-1
-            ).item()
-            jacc = jaccard_binary(frag_pred_bin.unsqueeze(0), it.frag_bag.unsqueeze(0)).item()
-            score = w_cos * cos + w_jacc * jacc
-            scores.append((it.smiles, score))
-        scores.sort(key=lambda x: x[1], reverse=True)
-        return scores
+            # recompute candidate latent using stored graph + fragment set
+            z_m_c = enc_mol([it.graph_feat.to(device) if hasattr(it.graph_feat, 'to') else it.graph_feat]).squeeze(0)
+            frag_graphs_c = it.frag_graphs or []
+            adj_c = [it.frag_adj_local.to(device) if (it.frag_adj_local is not None) else torch.zeros(0,0, device=device)]
+            z_f_c = frag_set_enc([frag_graphs_c], adj_batch=adj_c)  # [1, d]
+            z_c = (z_m_c.unsqueeze(0) + z_f_c) / 2
+            z_fwd, _ = heads(z_c)
+            spec_hat = dec_spec(z_fwd).cpu().squeeze(0)
+            # apply hard parent-mass mask for the candidate before scoring
+            try:
+                pmass = float(mod.Graph.fromSMILES(it.smiles).exactMass)
+            except Exception:
+                pmass = mz_max
+            mask = make_parent_mass_mask_vec(pmass, mz_min, mz_max, bin_width, device=spec_hat.device)
+            spec_hat = spec_hat * mask
+            cos = F.cosine_similarity(F.normalize(spec_hat, dim=-1).unsqueeze(0),
+                                      spec_q_n.unsqueeze(0), dim=-1).item()
+            scores.append((it.smiles, cos))
+    scores.sort(key=lambda x: x[1], reverse=True)
+    return scores
 
 
-def infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=None):
-    enc_mol.eval(); enc_frag.eval(); dec_spec.eval(); dec_frag.eval()
+def infer_mol_to_spec(graph_feat: GeometricData,
+                      frag_graphs: List[GeometricData],
+                      frag_adj_local: Optional[torch.Tensor],
+                      frag_masses: Optional[torch.Tensor],
+                      device: torch.device,
+                      enc_mol: EncMol,
+                      frag_set_enc: FragSetEncoderVocabless,
+                      dec_spec: DecSpecLatent,
+                      heads: TaskHeads,
+                      smiles: Optional[str] = None,
+                      mz_min: Optional[float] = None,
+                      mz_max: Optional[float] = None,
+                      bin_width: Optional[float] = None):
+    enc_mol.eval(); frag_set_enc.eval(); dec_spec.eval(); heads.eval()
     with torch.no_grad():
-        # Encode molecule
         z_m = enc_mol([graph_feat])  # [1, d]
-
-        # Determine expected fragment dimension for the current dec_spec
-        # First layer of dec_spec takes [d_latent + F] features
-        expected_in = dec_spec.net[0].in_features
-        d_lat = z_m.size(-1)
-        expected_F = max(expected_in - d_lat, 0)
-
-        # Align fragment bag (and adjacency) to expected_F by padding/truncation
-        bag = frag_bag.to(device)
-        if bag.dim() == 1:
-            bag = bag.unsqueeze(0)
-        cur_F = bag.size(-1)
-        if cur_F != expected_F and expected_F > 0:
-            if cur_F < expected_F:
-                pad = expected_F - cur_F
-                bag_aligned = F.pad(bag, (0, pad))
-            else:
-                bag_aligned = bag[:, :expected_F]
-        else:
-            bag_aligned = bag
-
-        # Align adjacency if provided
-        adj_aligned = None
-        if frag_adj is not None:
-            adj = frag_adj.to(device)
-            if adj.dim() == 2:
-                adj = adj.unsqueeze(0)
-            F_src = adj.size(-1)
-            if F_src != expected_F and expected_F > 0:
-                if F_src < expected_F:
-                    pad_f = expected_F - F_src
-                    adj_aligned = F.pad(adj, (0, pad_f, 0, pad_f))
-                else:
-                    adj_aligned = adj[:, :expected_F, :expected_F]
-            else:
-                adj_aligned = adj
-
-        # Encode fragments graph-aware with aligned inputs
-        z_f = enc_frag(bag_aligned, adjacency=adj_aligned)
+        adj_batch = [frag_adj_local.to(device)] if (frag_adj_local is not None) else None
+        mass_batch = [frag_masses.to(device)] if (frag_masses is not None) else None
+        z_f = frag_set_enc([frag_graphs], adj_batch=adj_batch, mass_batch=mass_batch)  # [1, d]
         z = (z_m + z_f) / 2
-        z_fwd, _ = globals().get('heads')(z) if globals().get('heads') else (z, z)
+        z_fwd, _ = heads(z)
+        spec_hat = dec_spec(z_fwd).cpu().squeeze(0)
+        # optional hard masking at inference
+        if (smiles is not None) and (mz_min is not None) and (mz_max is not None) and (bin_width is not None):
+            try:
+                pmass = float(mod.Graph.fromSMILES(smiles).exactMass)
+            except Exception:
+                pmass = mz_max
+            mask = make_parent_mass_mask_vec(pmass, mz_min, mz_max, bin_width, device=spec_hat.device)
+            spec_hat = spec_hat * mask
+    return spec_hat
 
-        # Use the same aligned fragment vector for spectrum decoder
-        spec_hat = dec_spec(z_fwd, bag_aligned).cpu().squeeze(0)
-        frag_pred = dec_frag(z_fwd).cpu().squeeze(0)
-    return spec_hat, frag_pred
 
 
-
-def infer_spec_to_mol(spec, index, device, enc_spec, dec_spec, dec_frag, topk=10, tau=0.5):
-    """
-    Retrieves likely molecular structures from a given mass spectrum.
-
-    Returns
-    -------
-    List[Tuple[str, float]]
-        Top-K candidate SMILES strings and composite scores.
-    """
+def infer_spec_to_mol(spec: torch.Tensor,
+                      index: LatentIndex,
+                      device,
+                      enc_spec: "EncSpec",
+                      enc_mol: "EncMol",
+                      frag_set_enc: FragSetEncoderVocabless,
+                      heads: TaskHeads,
+                      dec_spec: "DecSpecLatent",
+                      mz_min: float,
+                      mz_max: float,
+                      bin_width: float,
+                      topk: int = 10) -> List[Tuple[str, float]]:
+    """Retrieve and rerank candidate molecules for a given spectrum."""
     enc_spec.eval()
     with torch.no_grad():
         z_q = enc_spec(spec.to(device).unsqueeze(0)).squeeze(0)
         z_q_n = F.normalize(z_q, dim=-1).cpu()
     cands = index.topk(z_q_n, k=topk)
-    ranked = rerank_candidates(spec, z_q, cands, device, enc_spec, dec_spec, dec_frag, tau=tau)
+    ranked = rerank_candidates(spec, cands, device, enc_mol, frag_set_enc, heads, dec_spec, mz_min, mz_max, bin_width)
     return ranked
 
 
 # ----------------------------- DEMOS ---------------------------------
 
-def demo_retrieval_metrics(index, loader, device, enc_spec, dec_spec, dec_frag, topk_list=(1,5,10), tau=0.5, max_batches=None):
-    """Compute Recall@K and MRR on a loader using a train-built index."""
+def vec_to_peaks(vec: torch.Tensor, mz_min: float, bin_width: float, top_k: int = 10) -> List[Tuple[float, float]]:
+    """Convert a binned spectrum vector into top-K (m/z, intensity) peaks."""
+    v = vec.detach().cpu().numpy()
+    top_idx = np.argsort(-v)[:max(1, min(top_k, v.shape[0]))]
+    peaks = [(mz_min + int(i) * bin_width, float(v[i])) for i in top_idx]
+    peaks.sort(key=lambda x: x[0])
+    return peaks
+
+def demo_compare_spectrum(graph_feat: GeometricData,
+                          frag_graphs: List[GeometricData],
+                          frag_masses: torch.Tensor,
+                          adj_local: torch.Tensor,
+                          true_spec: torch.Tensor,
+                          device,
+                          enc_mol: "EncMol",
+                          frag_set_enc: FragSetEncoderVocabless,
+                          dec_spec: "DecSpecLatent",
+                          heads: TaskHeads,
+                          mz_min: float,
+                          bin_width: float,
+                          smiles: Optional[str] = None,
+                          mz_max: Optional[float] = None,
+                          top_k: int = 10) -> Dict[str, Any]:
+    """
+    Predict spectrum and compare to ground truth:
+    - print top-K peaks for prediction and truth
+    - report cosine similarity and L1 error
+    """
+    spec_hat = infer_mol_to_spec(graph_feat, frag_graphs, adj_local, frag_masses, device, enc_mol, frag_set_enc, dec_spec, heads,
+                                 smiles=smiles, mz_min=mz_min, mz_max=(mz_max if mz_max is not None else mz_min + true_spec.numel()*bin_width), bin_width=bin_width)
+    true_spec = true_spec.detach().cpu()
+    cos = F.cosine_similarity(F.normalize(spec_hat, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+    l1 = torch.mean(torch.abs(spec_hat - true_spec)).item()
+
+    pred_peaks = vec_to_peaks(spec_hat, mz_min, bin_width, top_k=top_k)
+    true_peaks = vec_to_peaks(true_spec, mz_min, bin_width, top_k=top_k)
+
+    print("Ground truth top peaks (m/z, intensity):")
+    for mz, inten in true_peaks:
+        print(f"  {mz:8.1f}, {inten:.4f}")
+    print("Predicted   top peaks (m/z, intensity):")
+    for mz, inten in pred_peaks:
+        print(f"  {mz:8.1f}, {inten:.4f}")
+    print(f"Cosine similarity: {cos:.4f} | L1 error: {l1:.4f}")
+
+    return {"cosine": cos, "l1": l1, "true_peaks": true_peaks, "pred_peaks": pred_peaks}
+
+def demo_retrieval_metrics(index, loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, topk_list=(1,5,10), max_batches=None):
+    """Compute Recall@K and MRR on a loader using a train-built index (vocab-agnostic)."""
     enc_spec.eval()
     hits = {k: 0 for k in topk_list}
     mrr = 0.0
     n = 0
+    # Infer dataset binning parameters
+    try:
+        ds = loader.dataset
+        mz_min = float(ds.mz_min)
+        mz_max = float(ds.mz_max)
+        bin_width = float(ds.bin_width)
+    except Exception:
+        # Fallback guesses if dataset unavailable
+        mz_min, mz_max, bin_width = 1.0, 1000.0, 1.0
     with torch.no_grad():
-        for bi, (graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd) in enumerate(loader):
+        for bi, (graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local) in enumerate(loader):
             if max_batches is not None and bi >= max_batches:
                 break
             B = len(smiles)
-            z_q = enc_spec(spec.to(device))  # [B, d]
+            _ = enc_spec(spec.to(device))  # forward pass for completeness
             for i in range(B):
-                ranked = infer_spec_to_mol(spec[i], index, device, enc_spec, dec_spec, dec_frag, topk=max(topk_list), tau=tau)
+                ranked = infer_spec_to_mol(spec[i], index, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec,
+                                           mz_min=mz_min, mz_max=mz_max, bin_width=bin_width,
+                                           topk=max(topk_list))
                 preds = [s for s, _ in ranked]
                 n += 1
                 for k in topk_list:
@@ -1015,34 +1238,29 @@ def demo_retrieval_metrics(index, loader, device, enc_spec, dec_spec, dec_frag, 
     return out
 
 
-def demo_tau_sweep(index, loader, device, enc_spec, dec_spec, dec_frag, taus=(0.2,0.4,0.6,0.8), topk_list=(1,5,10), max_batches=5):
-    """Evaluate retrieval metrics across tau thresholds; return per-tau metrics and best tau per K."""
-    results = {}
-    for t in taus:
-        metrics = demo_retrieval_metrics(index, loader, device, enc_spec, dec_spec, dec_frag, topk_list=topk_list, tau=t, max_batches=max_batches)
-        results[t] = metrics
-    # pick best per K by R@K, tie-breaker MRR
-    best = {}
-    for k in topk_list:
-        key = f"R@{k}"
-        best_tau = max(taus, key=lambda tau: (results[tau][key], results[tau]["MRR"]))
-        best[key] = {"tau": best_tau, "metric": results[best_tau][key]}
-    return results, best
-
-
-def demo_ablate_adjacency(graph_feat, frag_bag, adj, true_spec, device, enc_mol, enc_frag, dec_spec, dec_frag):
-    """Compare spectrum reconstruction with graph-aware adjacency vs bag-only (zero adjacency)."""
-    print("adjacency matrix:", adj)
-    if adj.sum() > 0:
-        print("adjacency matrix has edges")
-    else:
-        print("adjacency matrix is empty")
+def demo_ablate_adjacency(graph_feat: GeometricData,
+                          frag_graphs: List[GeometricData],
+                          adj_local: torch.Tensor,
+                          frag_masses: torch.Tensor,
+                          true_spec: torch.Tensor,
+                          smiles: Optional[str],
+                          mz_min: float,
+                          mz_max: float,
+                          bin_width: float,
+                          device,
+                          enc_mol: "EncMol",
+                          frag_set_enc: FragSetEncoderVocabless,
+                          dec_spec: "DecSpecLatent",
+                          heads: TaskHeads):
+    """Compare spectrum reconstruction with local adjacency vs zero adjacency smoothing."""
     with torch.no_grad():
-        spec_hat_graph, _ = infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj)
-        spec_hat_bag, _ = infer_mol_to_spec(graph_feat, frag_bag, device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=torch.zeros_like(adj))
+        spec_hat_graph = infer_mol_to_spec(graph_feat, frag_graphs, adj_local, frag_masses, device, enc_mol, frag_set_enc, dec_spec, heads,
+                                           smiles=smiles, mz_min=mz_min, mz_max=mz_max, bin_width=bin_width)
+        spec_hat_none = infer_mol_to_spec(graph_feat, frag_graphs, torch.zeros_like(adj_local), frag_masses, device, enc_mol, frag_set_enc, dec_spec, heads,
+                                          smiles=smiles, mz_min=mz_min, mz_max=mz_max, bin_width=bin_width)
         cos_graph = F.cosine_similarity(F.normalize(spec_hat_graph, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
-        cos_bag = F.cosine_similarity(F.normalize(spec_hat_bag, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
-    return {"cos_graph": cos_graph, "cos_bag": cos_bag}
+        cos_none = F.cosine_similarity(F.normalize(spec_hat_none, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
+    return {"cos_with_adj": cos_graph, "cos_no_adj": cos_none, "diff": cos_graph - cos_none}
 
 
 def demo_heads_comparison(loader, device, enc_mol, heads, dec_spec, dec_frag, n_batches=3):
@@ -1088,14 +1306,22 @@ def demo_fragment_perturbation(graph_feat, frag_bag, true_spec, device, enc_mol,
     return {"base_cos": base_cos, "cos_drop": cos_drop, "cos_add": cos_add}
 
 
-def demo_noise_robustness(index, loader, device, enc_spec, dec_spec, dec_frag, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5):
+def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5):
     """Add Gaussian noise to spectra and plot/return Recall@K vs noise level."""
     results = {}
+    # Infer dataset binning parameters
+    try:
+        ds = loader.dataset
+        mz_min = float(ds.mz_min)
+        mz_max = float(ds.mz_max)
+        bin_width = float(ds.bin_width)
+    except Exception:
+        mz_min, mz_max, bin_width = 1.0, 1000.0, 1.0
     for s in noise_levels:
         hits = {k: 0 for k in topk_list}
         n = 0
         with torch.no_grad():
-            for bi, (graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd) in enumerate(loader):
+            for bi, (graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local) in enumerate(loader):
                 if bi >= max_batches:
                     break
                 B = len(smiles)
@@ -1103,7 +1329,9 @@ def demo_noise_robustness(index, loader, device, enc_spec, dec_spec, dec_frag, n
                 # normalize
                 spec_noisy = F.normalize(spec_noisy, dim=-1)
                 for i in range(B):
-                    ranked = infer_spec_to_mol(spec_noisy[i], index, device, enc_spec, dec_spec, dec_frag, topk=max(topk_list))
+                    ranked = infer_spec_to_mol(spec_noisy[i], index, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec,
+                                               mz_min=mz_min, mz_max=mz_max, bin_width=bin_width,
+                                               topk=max(topk_list))
                     preds = [p for p, _ in ranked]
                     n += 1
                     for k in topk_list:
@@ -1131,13 +1359,15 @@ def demo_noise_robustness(index, loader, device, enc_spec, dec_spec, dec_frag, n
 
 
 def demo_visualize_reconstructions(
-    graph_feats, frag_bag, true_spec, smiles, adj, device,
-    enc_mol, enc_frag, dec_spec, dec_frag, n_samples=3
-    ) -> bool: # success
+    graph_feats, frag_graphs, frag_masses, true_spec, smiles, adj_local, device,
+    enc_mol, frag_set_enc, dec_spec, heads, n_samples=3
+    ) -> bool:
     """Plot true vs reconstructed spectra for n_samples molecules."""
     n = min(n_samples, len(smiles))
     for i in range(n):
-        spec_hat, _ = infer_mol_to_spec(graph_feats[i], frag_bag[i], device, enc_mol, enc_frag, dec_spec, dec_frag, frag_adj=adj[i].unsqueeze(0))
+        # Try to infer dataset binning from vector length and assume mz_min=1.0, bin_width=1.0 if unavailable
+        # Call without mask to keep this lightweight visualization generic
+        spec_hat = infer_mol_to_spec(graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], device, enc_mol, frag_set_enc, dec_spec, heads)
         plt.figure()
         plt.plot(true_spec[i].cpu().numpy(), label="true")
         plt.plot(spec_hat.cpu().numpy(), label="pred")
@@ -1269,7 +1499,7 @@ def main():
     real_spectra_per_mol: List[List[Tuple[float, float]]] = []
 
     for name, smi in mols_definitions:
-        mol = mod.smiles(smi, name=name)
+        mol = mod.Graph.fromSMILES(smi, name=name)
         fwd_dg, _rule_db = utils.load_derivation_graph(name, path=LOAD_PATH / "fwd")
         bwd_dg, _rule_db = utils.load_derivation_graph(name, path=LOAD_PATH / "bwd")
 
@@ -1310,26 +1540,26 @@ def main():
 
     train_spect, test_spect = train_test_split(
         data= real_spectra_per_mol,
-        test_size=0.1,
+        test_size=0.2,
         random_state=42,
         shuffle=False
         )
     train_frags, test_frags = train_test_split(
         data = frag_coll,
-        test_size=0.1,
+        test_size=0.2,
         random_state=42,
         shuffle=False
     )
 
     train_spect, vali_spect = train_test_split(
         train_spect,
-        test_size=0.15,
+        test_size=.3,
         random_state=42,
         shuffle=False
     )
     train_frags, vali_frags = train_test_split(
         train_frags,
-        test_size=0.15,
+        test_size=0.3,
         random_state=42,
         shuffle=False
     )
@@ -1353,33 +1583,18 @@ def main():
         )
 
     # Use dataset to configure the model:
-    fragment_vocab_size = train_ds.fragment_vocab_size # number of fragments
     spectrum_bins_size = train_ds.spectrum_bins_size
 
 
-    train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=False, drop_last=False, collate_fn=collate)
-    val_loader   = DataLoader(vali_ds, batch_size=args.batch, shuffle=False, collate_fn=collate)
-    test_loader  = DataLoader(test_ds, batch_size=args.batch, shuffle=False, collate_fn=collate)
-
-    # Add after DataLoader creation
-    # ...existing code...
-    def pct_non_empty(loader):
-        c = 0; n = 0
-        for _, _, _, _, adj_fwd, _ in loader:
-            s = (adj_fwd.sum(dim=(1,2)) > 0).float()
-            c += s.sum().item(); n += s.numel()
-        return 100.0 * c / max(n, 1)
-
-    print(f"Non-empty adj (train): {pct_non_empty(train_loader):.1f}%")
-    print(f"Non-empty adj (val):   {pct_non_empty(val_loader):.1f}%")
-    print(f"Non-empty adj (test):  {pct_non_empty(test_loader):.1f}%")
+    train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=False, drop_last=False, collate_fn=collate_vlex)
+    val_loader   = DataLoader(vali_ds, batch_size=args.batch, shuffle=False, collate_fn=collate_vlex)
+    test_loader  = DataLoader(test_ds, batch_size=args.batch, shuffle=False, collate_fn=collate_vlex)
 
     # Models
     enc_mol  = EncMol(args.latent).to(device)
-    enc_frag = EncFragGraph(fragment_vocab_size, args.latent, mass_vocab=train_ds.mass_vocab_norm).to(device)
+    frag_set_enc = FragSetEncoderVocabless(enc_mol, d_latent=args.latent).to(device)
     enc_spec = EncSpec(spectrum_bins_size, args.latent).to(device)
-    dec_frag = DecFrag(args.latent, fragment_vocab_size).to(device)
-    dec_spec = DecSpec(args.latent, fragment_vocab_size, spectrum_bins_size).to(device)
+    dec_spec = DecSpecLatent(d_in=args.latent, spectrum_bins_size=spectrum_bins_size).to(device)
     # Task heads (shared trunk projections)
     heads = TaskHeads(d_latent=args.latent, d_task=args.latent).to(device)
     # expose for helper functions (script-level convenience)
@@ -1387,26 +1602,30 @@ def main():
 
     # Optimizers (separate per phase keeps it simple)
     opt_a = torch.optim.Adam(list(enc_mol.parameters()) +
-                             list(enc_frag.parameters()) +
-                             list(dec_frag.parameters()) +
+                             list(frag_set_enc.parameters()) +
                              list(dec_spec.parameters()) +
                              list(heads.parameters()), lr=args.lr)
     opt_b = torch.optim.Adam(list(enc_mol.parameters()) +
                              list(enc_spec.parameters()) +
-                             list(dec_frag.parameters()) +
                              list(dec_spec.parameters()) +
                              list(heads.parameters()), lr=args.lr)
 
     # ----------------- Phase A -----------------
-    print("== Phase A: train forward & fragments ==")
+    print("== Phase A: train forward (vocab-agnostic) ==")
     for epoch in range(1, args.epochs_fwd + 1):
-        loss = train_epoch_phase_a(train_loader, device, enc_mol, enc_frag, heads, dec_frag, dec_spec, opt_a)
+        loss = train_epoch_phase_a(
+            train_loader, device, enc_mol, frag_set_enc, heads, dec_spec, opt_a,
+            mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1
+        )
         print(f"[A] epoch {epoch:02d} loss {loss:.4f}")
 
     # ----------------- Phase B -----------------
-    print("== Phase B: align spec latent + spectrum-anchored recon ==")
+    print("== Phase B: align spec latent + spectrum recon (vocab-agnostic) ==")
     for epoch in range(1, args.epochs_bwd + 1):
-        loss = train_epoch_phase_b(train_loader, device, enc_spec, enc_mol, heads, dec_frag, dec_spec, opt_b)
+        loss = train_epoch_phase_b(
+            train_loader, device, enc_spec, enc_mol, heads, dec_spec, opt_b,
+            mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1
+        )
         print(f"[B] epoch {epoch:02d} loss {loss:.4f}")
 
     # ----------------- Build retrieval index -----------------
@@ -1416,30 +1635,32 @@ def main():
 
 
     # ----------------- Demo: Structure - > Spectrum -----------------
-    graph_feats, frag_bag, spec, smiles, adj_fwd, adj_bwd = next(iter(val_loader))
-    # why are the adjacency matrices empty?
+    graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local = next(iter(test_loader))
     i = 0
-    spec_hat, frag_pred = infer_mol_to_spec(
-        graph_feats[i], frag_bag[i], device,
-        enc_mol, enc_frag, dec_spec, dec_frag,
-        frag_adj=adj_fwd[i].unsqueeze(0)
+    spec_hat = infer_mol_to_spec(
+        graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], device,
+        enc_mol, frag_set_enc, dec_spec, heads,
+        smiles=smiles[i], mz_min=test_ds.mz_min, mz_max=test_ds.mz_max, bin_width=test_ds.bin_width
     )
     cos_sim = F.cosine_similarity(
         F.normalize(spec_hat, dim=-1).unsqueeze(0),
         F.normalize(spec[i], dim=-1).unsqueeze(0),
         dim=-1
     ).item()
-    print(f"Mol- >Spec for {smiles[i]} | cosine={cos_sim:.3f} | frag_pred_mean={frag_pred.mean().item():.3f}")
+    print(f"Mol->Spec for {smiles[i]} | cosine={cos_sim:.3f}")
 
-    for x in adj_bwd:
-        if x.sum() > 0:
-            print("adjacency matrix has edges")
-        else:
-            print("adjacency matrix is empty")
+    # ----------------- Demo: Compare to ground truth spectrum -----------------
+    print("== Demo: Compare predicted vs ground truth (TEST sample) ==")
+    _ = demo_compare_spectrum(
+        graph_feats[i], frag_graphs[i], frag_masses[i], adj_local[i], spec[i], device,
+        enc_mol, frag_set_enc, dec_spec, heads,
+        mz_min=test_ds.mz_min, bin_width=test_ds.bin_width, smiles=smiles[i], mz_max=test_ds.mz_max, top_k=10
+    )
 
     # ----------------- Demo: Spectrum - > Structure -----------------
     print("== Demo: Spec -> Mol retrieval + re-ranking on the same VAL sample ==")
-    ranked = infer_spec_to_mol(spec[i], index, device, enc_spec, dec_spec, dec_frag, topk=10)
+    ranked = infer_spec_to_mol(spec[i], index, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec,
+                               mz_min=test_ds.mz_min, mz_max=test_ds.mz_max, bin_width=test_ds.bin_width, topk=10)
     print("Top-5 candidates:")
     print(f"{'SMILES':>40s} | {'Score':>8s}")
     print("-" * 50)
@@ -1448,49 +1669,34 @@ def main():
 
     # ----------------- Demo: Retrieval metrics on VAL/TEST -----------------
     print("== Retrieval metrics (VAL) ==")
-    val_metrics = demo_retrieval_metrics(index, val_loader, device, enc_spec, dec_spec, dec_frag, topk_list=(1,5,10), tau=0.5, max_batches=5)
+    val_metrics = demo_retrieval_metrics(index, val_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, topk_list=(1,5,10), max_batches=5)
     print(val_metrics)
     print("== Retrieval metrics (TEST) ==")
-    test_metrics = demo_retrieval_metrics(index, test_loader, device, enc_spec, dec_spec, dec_frag, topk_list=(1,5,10), tau=0.5, max_batches=5)
+    test_metrics = demo_retrieval_metrics(index, test_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, topk_list=(1,5,10), max_batches=5)
     print(test_metrics)
-
-    # ----------------- Demo: Tau sweep for reranking -----------------
-    print("== Tau sweep on VAL (subset) ==")
-    tau_results, tau_best = demo_tau_sweep(index, val_loader, device, enc_spec, dec_spec, dec_frag, taus=(0.2,0.4,0.6,0.8), topk_list=(1,5,10), max_batches=5)
-    print("tau_results:", tau_results)
-    print("best per K:", tau_best)
-
     # ----------------- Demo: Fragment graph ablation -----------------
     print("== Graph ablation on one VAL sample ==")
-    ablation = demo_ablate_adjacency(graph_feats[i], frag_bag[i], adj_fwd[i].unsqueeze(0), spec[i], device, enc_mol, enc_frag, dec_spec, dec_frag)
+    ablation = demo_ablate_adjacency(graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], spec[i],
+                                     smiles[i], test_ds.mz_min, test_ds.mz_max, test_ds.bin_width,
+                                     device, enc_mol, frag_set_enc, dec_spec, heads)
     print(ablation)
-
-    # ----------------- Demo: Head comparison (fwd vs bwd) -----------------
-    print("== Head comparison (forward vs backward) on VAL subset ==")
-    heads_stats = demo_heads_comparison(val_loader, device, enc_mol, heads, dec_spec, dec_frag, n_batches=3)
-    print(heads_stats)
-
-    # ----------------- Demo: Fragment perturbation sensitivity -----------------
-    print("== Fragment perturbation sensitivity on one VAL sample ==")
-    pert = demo_fragment_perturbation(graph_feats[i], frag_bag[i].clone(), spec[i], device, enc_mol, enc_frag, dec_spec, dec_frag, index, adj=adj_fwd[i].unsqueeze(0), top_n=5)
-    print(pert)
 
     # ----------------- Demo: Spectrum noise robustness -----------------
     print("== Spectrum noise robustness (VAL subset) ==")
-    noise_res = demo_noise_robustness(index, val_loader, device, enc_spec, dec_spec, dec_frag, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5)
+    noise_res = demo_noise_robustness(index, val_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5)
     print(noise_res)
 
     # ----------------- Demo: Visualization of reconstructions -----------------
     print("== Visualization: saving recon plots for a few VAL samples ==")
-    _ = demo_visualize_reconstructions(graph_feats, frag_bag, spec, smiles, adj_fwd, device, enc_mol, enc_frag, dec_spec, dec_frag, n_samples=3)
+    _ = demo_visualize_reconstructions(graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local, device, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3)
 
     # save checkpoint
     ckpt = {
         "enc_mol": enc_mol.state_dict(),
-        "enc_frag": enc_frag.state_dict(),
+        "frag_set_enc": frag_set_enc.state_dict(),
         "enc_spec": enc_spec.state_dict(),
-        "dec_frag": dec_frag.state_dict(),
         "dec_spec": dec_spec.state_dict(),
+        "heads": heads.state_dict(),
         "args": vars(args),
     }
     torch.save(ckpt, "mini_frag_checkpoint.pt")

@@ -1,4 +1,4 @@
-"""importing Spectra from JDX Files"""
+"""Importing spectra from JDX files."""
 
 from pathlib import Path
 from typing import List, Tuple
@@ -9,8 +9,9 @@ def get_spectra_from_local_jdx(
         "studium/computationalScience/thesis/mol/" \
         "mass_spec_modeling/exec_scripts/ms_data/nist_spectra/")
     ) -> List[Tuple[float, float]]:
-    """Get spectra from local JDX file."""
-
+    """
+    Get spectrum peaks from a local JDX file.
+    """
     jdx_file = folder / f"{name.lower()}-Mass.jdx"
 
     if not jdx_file.exists():
@@ -20,13 +21,11 @@ def get_spectra_from_local_jdx(
         spectra = []
         parsing_peaks = False
         for line in f:
-
-            # only parse after the ##PEAK section
+            # Only parse after the ##PEAK section
             if line.startswith("##PEAK"):
                 parsing_peaks = True
             if line.startswith("##END"):
                 break
-
             if parsing_peaks:
                 try:
                     for xy in line.split():

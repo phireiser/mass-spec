@@ -1,8 +1,12 @@
 """
 main file to execute on slurm
+
+call with e.g.
+python mass_spec_modeling/exec_scripts/create_dg_dump.py --smiles C1=CC=CC=C1 --name benzene --output-dir dump
 """
 
 import argparse
+from pathlib import Path
 import mod
 
 from mass_spec_modeling.mod_fragmentation import utils
@@ -15,19 +19,25 @@ parser.add_argument("--smiles", type=str, required=True, help="SMILES String of 
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--output-dir", type=str, required=True, help="Directory for output files")
 parser.add_argument("--number-threads", type=int, default=64, help="number of threads for mod")
+parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 args = parser.parse_args()
+
+# Enable subgroup diagnostics
+if args.subgroup_diag:
+    utils.enable_subgroup_diag(True)
 
 mod.getConfig()
 mod.config.common.numThreads= args.number_threads
 
-molecule = mod.smiles(args.smiles, args.name)
+molecule = mod.Graph.fromSMILES(args.smiles, args.name)
 molecule_term= utils.term_from_graph(molecule)
 
 aoc = utils.all_occuring([molecule], utils.allAtoms)
 
 ls = mod.LabelSettings(
     mod.LabelType.Term,
-    mod.LabelRelation.Unification
+    #mod.LabelRelation.Unification # Error because of mod version change
+    mod.LabelRelation.Specialisation
 )
 
 # ------------------------------------------------------------ #
@@ -42,6 +52,9 @@ fragmentation_term_fwd = [
     utils.term_from_rule(r)
     for r in utils.apply_constraints(fragmentation, aoc)
 ]
+
+ionization_term_bwd=[r.makeInverse() for r in ionization_term_fwd]
+fragmentation_term_bwd=[r.makeInverse() for r in fragmentation_term_fwd]
 
 dg_fwd = mod.DG(
     graphDatabase = [molecule_term],
@@ -64,7 +77,7 @@ utils.dump_derivation_graph(
     name=molecule.name,
     smiles=args.smiles,
     true_spectrum=utils.get_spectra_from_pubchem(args.smiles),
-    path=args.output_dir + "/fwd/"
+    path=Path(args.output_dir) / "fwd/"
 )
 
 # ------------------------------------------------------------ #
@@ -77,9 +90,6 @@ frags_in_spectra = [frag for frag in dg_fwd.createdGraphs \
 
 # filter fragments out ancerters of other fragments
 bwd_universe = utils.filter_ancestors_out(frags_in_spectra, dg_fwd)
-
-ionization_term_bwd=[r.makeInverse() for r in fragmentation_term_fwd]
-fragmentation_term_bwd=[r.makeInverse() for r in fragmentation_term_fwd]
 
 dg_bwd = mod.DG(
     graphDatabase=dg_fwd.graphDatabase,
@@ -101,7 +111,7 @@ utils.dump_derivation_graph(
     name=molecule.name,
     smiles=args.smiles,
     true_spectrum=utils.get_spectra_from_pubchem(args.smiles),
-    path=args.output_dir + "/bwd/"
+    path=Path(args.output_dir) / "bwd/"
 )
 
 print("\n\n")

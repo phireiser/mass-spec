@@ -10,7 +10,7 @@ from mass_spec_modeling.mod_fragmentation import utils
 
 def main():
     """execute"""
-    molecule = mod.smiles("CCCC=O", "butanal")
+    molecule = mod.Graph.fromSMILES("CCCC=O", "butanal")
     dg, _ = utils.load_derivation_graph(
         molecule.name,
         path=("/home/mescalin/reiserp/Nextcloud/"
