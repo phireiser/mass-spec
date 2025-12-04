@@ -54,7 +54,7 @@ def get_rule_2_molecule_map(
     derivation: mod.Derivation,
     graphs: mod.Graph,
     label_settings: mod.LabelSettings
-    ) -> Optional[mod.DGVertexMapper.Result.match]:
+    ) -> Optional["mod.DGVertexMapper.Result.match"]:
 
     """
     See the position where the rule gets applied. Returns None if no match.

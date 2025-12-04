@@ -5,9 +5,7 @@ from typing import List, Tuple
 
 def get_spectra_from_local_jdx(
     name: str,
-    folder: Path = Path("/home/mescalin/reiserp/Nextcloud/" \
-        "studium/computationalScience/thesis/mol/" \
-        "mass_spec_modeling/exec_scripts/ms_data/nist_spectra/")
+    folder: Path = Path(__file__).resolve().parents[4] / "exec_scripts" / "ms_data" / "nist_spectra"
     ) -> List[Tuple[float, float]]:
     """
     Get spectrum peaks from a local JDX file.

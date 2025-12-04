@@ -1,14 +1,21 @@
 #!/bin/bash
 #SBATCH --job-name=mod_fragmenter
-#SBATCH --time=31-00:30:00
-#SBATCH --cpus-per-task=64
-#SBATCH --mem=64G
-#SBATCH --output=/home/mescalin/reiserp/Nextcloud/studium/computationalScience/thesis/mol/dump/logs/slurm/%A_%a.out
+#SBATCH --time=29-00:30:00
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=10G
+#SBATCH --output=dump/logs/slurm/%A_%a.out
+
+
+if [ -d /lisc/data ]; then # if execution happens on cluster
+  module load Conda
+  conda activate /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/env
+fi
+
 
 set -euo pipefail
 
 # Directories and files
-SCRIPT_DIR="/home/mescalin/reiserp/Nextcloud/studium/computationalScience/thesis/mol/"
+SCRIPT_DIR=~/Nextcloud/studium/computationalScience/thesis/mol/
 OUTDIR="${SCRIPT_DIR}/dump"
 DEFINITION_FILE="${SCRIPT_DIR}/mass_spec_modeling/exec_scripts/ms_data/compounds.csv"
 
@@ -53,7 +60,7 @@ slugify() {
 }
 NAME_SLUG="$(slugify "$NAME")"
 
-OUTFILE="${OUTDIR}/logs/${NAME_SLUG}_${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}.out"
+OUTFILE="${OUTDIR}/logs/${SLURM_ARRAY_TASK_ID}__${NAME_SLUG}.out"
 
 # Threads: match allocation
 THREADS="${SLURM_CPUS_PER_TASK:-1}"
@@ -61,11 +68,12 @@ export OMP_NUM_THREADS="$THREADS" MKL_NUM_THREADS="$THREADS" OPENBLAS_NUM_THREAD
 
 /usr/bin/time -v \
 srun --cpu-bind=cores \
-/usr/bin/python \
+python \
   "${SCRIPT_DIR}/mass_spec_modeling/exec_scripts/create_dg_dump.py" \
     --smiles "$SMILES" \
     --name "$NAME" \
     --output-dir "$OUTDIR" \
     --number-threads "$THREADS" \
     --subgroup-diag \
+    --avoid-reprocessing \
   >"$OUTFILE" 2>&1

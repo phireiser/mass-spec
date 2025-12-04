@@ -20,6 +20,7 @@ parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--output-dir", type=str, required=True, help="Directory for output files")
 parser.add_argument("--number-threads", type=int, default=64, help="number of threads for mod")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
+parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")
 args = parser.parse_args()
 
 # Enable subgroup diagnostics
@@ -27,7 +28,12 @@ if args.subgroup_diag:
     utils.enable_subgroup_diag(True)
 
 mod.getConfig()
-mod.config.common.numThreads= args.number_threads
+mod.config.common.numThreads = args.number_threads
+print(args.number_threads, "threads requested")
+print(f"Using {mod.config.common.numThreads} threads")
+
+output_path_fwd = Path(args.output_dir) / "fwd/" / (args.name + ".dmp")
+output_path_bwd = Path(args.output_dir) / "bwd/" / (args.name + ".dmp")
 
 molecule = mod.Graph.fromSMILES(args.smiles, args.name)
 molecule_term= utils.term_from_graph(molecule)
@@ -36,7 +42,6 @@ aoc = utils.all_occuring([molecule], utils.allAtoms)
 
 ls = mod.LabelSettings(
     mod.LabelType.Term,
-    #mod.LabelRelation.Unification # Error because of mod version change
     mod.LabelRelation.Specialisation
 )
 
@@ -69,23 +74,30 @@ strat_fwd = strategy.make_fwd_strategy(
     max_mass=molecule.exactMass
 )
 
-dg_fwd.build().execute(strat_fwd)
+if args.avoid_reprocessing and output_path_fwd.exists():
+    print(f"  Forward dump {output_path_fwd} exists, skipping...")
+    #get the dg loaded from file
+    dg_fwd = utils.load_derivation_graph(
+        name=molecule.name,
+        path=Path(args.output_dir) / "fwd/",
+    )
+else:
+    dg_fwd.build().execute(strat_fwd)
 
-utils.dump_derivation_graph(
-    dg=dg_fwd,
-    rule_list=ionization_term_fwd + fragmentation_term_fwd,
-    name=molecule.name,
-    smiles=args.smiles,
-    true_spectrum=utils.get_spectra_from_pubchem(args.smiles),
-    path=Path(args.output_dir) / "fwd/"
-)
+    utils.dump_derivation_graph(
+        dg=dg_fwd,
+        rule_list=ionization_term_fwd + fragmentation_term_fwd,
+        name=molecule.name,
+        smiles=args.smiles,
+        path=Path(args.output_dir) / "fwd/"
+    )
 
 # ------------------------------------------------------------ #
 print("\nbackward\n")
 
 spectra_jdx = utils.get_spectra_from_local_jdx(molecule.name)
 spectra_jdx = [x[0] for x in spectra_jdx]
-frags_in_spectra = [frag for frag in dg_fwd.createdGraphs \
+frags_in_spectra = [frag for frag in dg_fwd.graphDatabase \
     if int(utils.graph_from_term(frag).exactMass) in spectra_jdx]
 
 # filter fragments out ancerters of other fragments
@@ -103,15 +115,17 @@ strat_bwd = strategy.make_bwd_strategy(
     max_mass=molecule.exactMass
 )
 
-dg_bwd.build().execute(strat_bwd)
+if args.avoid_reprocessing and output_path_bwd.exists():
+    print(f"Backward dump {output_path_bwd} exists, skipping...")
+else:
+    dg_bwd.build().execute(strat_bwd)
 
-utils.dump_derivation_graph(
-    dg=dg_bwd,
-    rule_list=ionization_term_bwd + fragmentation_term_bwd,
-    name=molecule.name,
-    smiles=args.smiles,
-    true_spectrum=utils.get_spectra_from_pubchem(args.smiles),
-    path=Path(args.output_dir) / "bwd/"
-)
+    utils.dump_derivation_graph(
+        dg=dg_bwd,
+        rule_list=ionization_term_bwd + fragmentation_term_bwd,
+        name=molecule.name,
+        smiles=args.smiles,
+        path=Path(args.output_dir) / "bwd/"
+    )
 
 print("\n\n")

@@ -13,14 +13,13 @@ def dump_derivation_graph(
     rule_list: List[mod.Rule],
     name: str,
     smiles: str,
-    true_spectrum: List[Tuple[int, float]],
     path: Path | str = Path("./dump/")
 ) -> None:
     """
     Dump the derivation graph and minimal databases to files under path.
     Creates two files:
     - <name>.dmp: binary DG dump via mod.DG.dump
-    - <name>.pkl: pickle with (smiles, graph_database_gml, rule_database_gml, true_spectrum)
+    - <name>.pkl: pickle with (smiles, graph_database_gml, rule_database_gml)
     """
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
@@ -36,10 +35,13 @@ def dump_derivation_graph(
         rule_database.append(obj.getGMLString())
 
     with open(path / (name + ".pkl"), 'wb') as f:
-        pickle.dump((smiles, graph_database, rule_database, true_spectrum), f)
+        pickle.dump((smiles, graph_database, rule_database), f)
 
 
-def load_derivation_graph(name: str, path: Path | str = Path("./dump/")) -> Tuple[mod.DG, List[mod.Rule]]:
+def load_derivation_graph(
+    name: str,
+    path: Path | str = Path("./dump/")
+    ) -> Tuple[mod.DG, List[mod.Rule]]:
     """
     Load a derivation graph and its rule database from disk.
     Returns (dg, rule_database) where rule_database is a list of mod.Rule.
@@ -47,7 +49,13 @@ def load_derivation_graph(name: str, path: Path | str = Path("./dump/")) -> Tupl
     path = Path(path)
 
     with open(path / (name + ".pkl"), 'rb') as f:
-        (_smiles, graph_list, rule_list, _true_spectrum) = pickle.load(f)
+        data = pickle.load(f)
+    if len(data) == 3:
+        (_smiles, graph_list, rule_list) = data
+    elif len(data) == 4:
+        (_smiles, graph_list, rule_list, _true_spectrum) = data
+    else:
+        raise RuntimeError(f"Failed to load pickle file {path / (name + '.pkl')}: Unexpected data format (length {len(data)})")
 
     graph_database = []
     for gml in graph_list:
@@ -63,4 +71,4 @@ def load_derivation_graph(name: str, path: Path | str = Path("./dump/")) -> Tupl
         f = str(path / (name + ".dmp"))
     )
 
-    return dg, rule_database
+    return dg
