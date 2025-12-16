@@ -25,8 +25,8 @@ def make_fwd_strategy(
     compile a strategy to perform the ionization and fragmentation
     """
 
-    assert frag_repeat > 0, "Backward fragmentation repeat must be positive."
-    assert max_mass > min_mass, "Backward fragmentation max mass must be larger than min mass."
+    assert frag_repeat > 0, "fragmentation repeat must be positive."
+    assert max_mass > min_mass, "fragmentation max mass must be larger than min mass."
 
     strategy = (
             mod.addSubset(universe)
@@ -54,8 +54,8 @@ def make_bwd_strategy(
     """
     compile a strategy to perform the ionization and fragmentation
     """
-    assert frag_repeat > 0, "Backward fragmentation repeat must be positive."
-    assert max_mass > min_mass, "Backward fragmentation max mass must be larger than min mass."
+    assert frag_repeat > 0, "fragmentation repeat must be positive."
+    assert max_mass > min_mass, "fragmentation max mass must be larger than min mass."
 
     strategy = (
             mod.addSubset(universe)

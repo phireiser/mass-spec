@@ -2,7 +2,7 @@
 #SBATCH --job-name=mod_fragmenter
 #SBATCH --time=29-00:30:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=10G
+#SBATCH --mem=20G
 #SBATCH --output=dump/logs/slurm/%A_%a.out
 
 

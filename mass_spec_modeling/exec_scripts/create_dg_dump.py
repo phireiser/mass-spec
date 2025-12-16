@@ -1,7 +1,7 @@
 """
 main file to execute on slurm
 
-call with e.g.
+test call with e.g.
 python mass_spec_modeling/exec_scripts/create_dg_dump.py --smiles C1=CC=CC=C1 --name benzene --output-dir dump
 """
 
@@ -38,7 +38,7 @@ output_path_bwd = Path(args.output_dir) / "bwd/" / (args.name + ".dmp")
 molecule = mod.Graph.fromSMILES(args.smiles, args.name)
 molecule_term= utils.term_from_graph(molecule)
 
-aoc = utils.all_occuring([molecule], utils.allAtoms)
+aoc = utils.all_occuring([molecule], utils.ALL_ATOMS)
 
 ls = mod.LabelSettings(
     mod.LabelType.Term,

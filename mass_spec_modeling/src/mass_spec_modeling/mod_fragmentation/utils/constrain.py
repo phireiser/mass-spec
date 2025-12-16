@@ -7,36 +7,12 @@ import itertools
 import re
 import mod
 
+from .element_sets import HETERO_ATOMS, ALK_NES_LABELS, ALL_ATOMS
+from .constraint_templates import constrain_label_any
 
-# Hetero atoms
-hetroAtoms = [
-    "He",
-    "Li","Be","B","N","O","F","Ne",
-    "Na","Mg","Al","Si","P","S","Cl","Ar",
-    "K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr",
-    "Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
-    "Cs","Ba", "La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
-    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn",
-    "Fr","Ra", "Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es"
-]
-
-# TODO: alkanes (single bond), alkenes (>=1 double bond), alkynes (>=1 triple bond)
-alk_nes_lables = ["H", "C"]  # kept for backward-compatibility (used elsewhere)
-# Preferred alias with correct spelling
-ALK_NES_LABELS = alk_nes_lables
-
-# Build combined list without aliasing heteroAtoms
-allAtoms = list(hetroAtoms) + list(alk_nes_lables)
-ALL_ATOMS = allAtoms  # alias with conventional constant-style name
-
-
-# all Elements until Z = 99 as phase Z > 99 is unkown & origin = syntheic
-# TODO ? functional group containing heteroAtom, this is only heteroAtoms itself
-
-
- # only create rules for occuring hetroAtoms
-occuring_hetroAtoms = set(hetroAtoms)
-occuring_allAtoms = set(allAtoms)
+# only create rules for occurring atoms
+occuring_hetero_atoms = set(HETERO_ATOMS)
+occuring_all_atoms = set(ALL_ATOMS)
 
 
 def apply_constraints(
@@ -44,40 +20,29 @@ def apply_constraints(
     all_occuring_atoms: List[str],
     placeholder: str = "A"
     ) -> List[mod.Rule]:
-
     """
-    Take a list of atom labels and splice it in as a constraint for each rule.
+    Splice a constrainLabelAny block with selected labels into each rule.
     """
-
-    # contraints Label Any
-    constraint_string = get_constraint(all_occuring_atoms, placeholder)
-
-    constraint_rules = list()
+    constraint_string = constrain_label_any(all_occuring_atoms, placeholder)
+    constraint_rules = []
     for rule in rules:
-        constraint_rules.append(
-            add_constraints(rule, constraint_string)
-        )
+        constraint_rules.append(add_constraints(rule, constraint_string))
     return constraint_rules
 
-def get_constraint(atoms: List[str], repl_label: str) -> str:
-    """
-    Create a GML snippet for a constrainLabelAny block with the given labels.
-    """
 
-    labels = " ".join('label ' + '"' + x + '"' for x in atoms)
-
-    return f"""
-    constrainLabelAny [
-        label "_{repl_label}"
-        labels [ {labels} ]
-    ]
+def get_constraint(
+    atoms: List[str],
+    repl_label: str
+    ) -> str:
     """
+    Deprecated: use constrain_label_any() from constraint_templates.
+    """
+    return constrain_label_any(atoms, repl_label)
 
 def all_occuring(
     in_molecule_list: Iterable[mod.Graph],
     element_list: Iterable[str],
     ) -> Set[str]:
-
     """
     Collect all labels from element_list that occur in any graph from in_molecule_list.
     """
@@ -91,7 +56,10 @@ def all_occuring(
     return occuring
 
 
-def add_constraints(rule: mod.Rule, con_string_gml: str) -> mod.Rule:
+def add_constraints(
+    rule: mod.Rule,
+    con_string_gml: str
+    ) -> mod.Rule:
     """
     Splice the constraint string into the rule's GML.
     """

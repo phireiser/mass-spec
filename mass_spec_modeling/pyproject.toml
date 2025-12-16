@@ -19,6 +19,7 @@ dependencies = [
   "typing-extensions",
   "pytz",
 
+  "matplotlib",
   "torch",
   "torch_geometric",
   "torch-scatter",

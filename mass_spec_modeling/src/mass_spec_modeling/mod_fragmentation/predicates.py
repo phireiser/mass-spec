@@ -13,7 +13,7 @@ def amu_bound(
     ) -> mod.rightPredicate:
 
     """
-    enforces that the fragments are not heaviner then max and have more mass than the minium
+    enforces that the fragments are not heavier than max and have more mass than the minimum
     """
 
     def predicate(derivations):
@@ -22,8 +22,8 @@ def amu_bound(
             g = utils.graph_from_term(g)
             if g.isMolecule:
                 masses.append(g.exactMass)
-        bounds_ckeck = any((mass > minimum) and (mass < maximum) for mass in masses)
-        return bounds_ckeck
+        bounds_check = any((mass > minimum) and (mass < maximum) for mass in masses)
+        return bounds_check
     return mod.rightPredicate[predicate](strategy)
 
 def charge_bound(
@@ -83,7 +83,7 @@ def sub_group(
                             graph = derivation.left,
                             start_vertex = position[0],
                             end_vertex = position[1],
-                            allowed_labels = utils.alk_nes_lables,
+                            allowed_labels = utils.ALK_NES_LABELS,
                             match = match,
                             max_expansions = 20000
                             ) #TODO could contain multiple matches, really? -> ask Flamm
@@ -100,7 +100,7 @@ def sub_group(
                         match = match,
                         max_visits = 5000
                     )
-                    is_subset = set(neighbor_labels).issubset(set(utils.alk_nes_lables))
+                    is_subset = set(neighbor_labels).issubset(set(utils.ALK_NES_LABELS))
                     if len(set(neighbor_labels)) > 0 and is_subset:
                         alkyl_bool = True
 
@@ -113,7 +113,7 @@ def sub_group(
                         match = match,
                         max_visits = 5000
                     )
-                    diff = set(neighbor_labels) - set(utils.alk_nes_lables)
+                    diff = set(neighbor_labels) - set(utils.ALK_NES_LABELS)
                     if len(diff) <= 1:
                         # not only hetro atoms strictly
                         # as the defnition says but, also carbon atoms

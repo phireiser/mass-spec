@@ -1,4 +1,7 @@
-"""Basic MØD utilities"""
+"""
+Basic MØD utilities
+graph traversal, filtering
+"""
 
 from typing import List, Set, Optional
 import mod

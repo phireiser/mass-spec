@@ -1,4 +1,4 @@
-"""Reinforcment Learning Training"""
+"""Reinforcement Learning Training"""
 from pathlib import Path
 import torch
 import mod
@@ -20,9 +20,9 @@ from mass_spec_modeling.machine_learning import utils_mod
 from mass_spec_modeling.mod_fragmentation import utils
 
 
-MOL_DEF_PATH = "/home/mescalin/reiserp/Nextcloud/studium/computationalScience/thesis/mol/" \
+MOL_DEF_PATH = "~/Nextcloud/studium/computationalScience/thesis/mol/" \
             + "mass_spec_modeling/exec_scripts/ms_data/compounds.csv"
-LOAD_PATH = Path("/home/mescalin/reiserp/Nextcloud/studium/computationalScience/thesis/mol/dump/")
+LOAD_PATH = Path("~/Nextcloud/studium/computationalScience/thesis/mol/dump/")
 ROOT_NODE_ID = 0
 
 cfg = Cfg()
@@ -34,11 +34,9 @@ device = "cuda" if torch.cuda.is_available() and fcfg.train.device == "cuda" els
 mols_definitions = utils_mod.read_mols_csv(MOL_DEF_PATH)
 # testing dataset
 mols_definitions = [
-        #("alanine", "C[C@@H](C(=O)O)N"),
         ("aniline", "C1=CC=C(C=C1)N"),
         ("benzoic_acid", "C1=CC=C(C=C1)C(=O)O"),
         ("benzene", "C1=CC=CC=C1"),
-        #("toluene", "CC1=CC=CC=C1"),
     ]
 
 
@@ -50,7 +48,7 @@ mol_graphs, peaks_list, frags_per_sample = [], [], []
 # Forward
 for name, smi in mols_definitions:
     mol = mod.Graph.fromSMILES(smi, name=name)
-    dg, rdb = utils.load_derivation_graph(mol.name, path=LOAD_PATH / "fwd")
+    dg = utils.load_derivation_graph(mol.name, path=LOAD_PATH / "fwd")
 
     # featurize graph -> PyG Data
 #   hg = dg_featurizer(dg)
