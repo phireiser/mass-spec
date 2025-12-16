@@ -1,7 +1,0 @@
-[tool.pytest.ini_options]
-addopts = "-q --strict-markers --maxfail=1"
-testpaths = ["tests"]
-pythonpath = ["."]
-markers = [
-  "integration: marks tests that hit external systems or run slowly",
-]
