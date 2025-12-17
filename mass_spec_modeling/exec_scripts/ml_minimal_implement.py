@@ -10,53 +10,57 @@ graph-transformation pipeline.
 
 Overview
 --------
-The model learns three related mappings:
+The model learns two related mappings:
     * Molecule -> Spectrum  (forward prediction)
     * Spectrum -> Molecule  (inverse retrieval)
-    * Fragment prediction  (auxiliary interpretability task)
 
 Key ideas:
-    - Molecules are represented by graph-based embeddings.
-    - Fragments are represented as binary "bag-of-fragments" vectors.
+    - Molecules are represented by graph-based embeddings (GNN over atoms).
+    - Fragments are represented as variable-length sets of fragment graphs,
+      optionally enriched with local adjacency and normalized mass features.
     - Spectra are represented as binned intensity vectors.
     - All three views share a latent embedding space.
-    - Forward modeling predicts the spectrum from the latent + fragments.
+    - Forward modeling predicts the spectrum from combined molecule + fragment latents.
     - Inverse modeling retrieves candidate molecules via latent similarity
-      and fragment consistency, then re-ranks by forward-model reconstruction.
+      and re-ranks by forward-model spectrum reconstruction cosine similarity.
 
 Components
 ----------
 Encoders:
-    EncMol   - Encodes molecules into latent space.
-    EncFrag  - Encodes fragment bags into latent space.
-    EncSpec  - Encodes binned spectra into latent space.
+    EncMol                   - Encodes molecule graphs (MOD) into latent space via GNN.
+    FragSetEncoderVocabless  - Encodes variable-size fragment graph sets with attention pooling,
+                                optionally smoothed by local adjacency and per-fragment mass.
+    EncSpec                  - Encodes binned spectra into latent space.
 
 Decoders:
-    DecFrag  - Predicts fragment presence from latent vectors.
-    DecSpec  - Predicts full spectra given latent vectors and fragment info.
+    DecSpecLatent - Predicts spectra from latent vectors (no fragment bag input).
+
+Task Heads:
+    TaskHeads - Provides separate forward/backward projection heads and learned uncertainty weights.
 
 Training phases:
-    Phase A - Forward learning (molecule+fragment -> spectrum).
-    Phase B - Latent alignment (spectrum latent <-> molecule latent) and
-              contrastive training for inverse retrieval.
+    Phase A - Forward learning (vocab-agnostic): molecule + fragment set -> spectrum reconstruction.
+    Phase B - Latent alignment: spectrum latent <-> molecule latent via InfoNCE contrastive loss
+              and spectrum reconstruction from spectrum embeddings.
 
 Retrieval:
     LatentIndex builds an embedding index of training molecules.
     Given a query spectrum, the model retrieves top-K molecules by cosine
-    similarity and re-ranks them using fragment Jaccard and forward-model
-    cosine similarity.
+    similarity in latent space, then re-ranks candidates by forward-model
+    spectrum reconstruction quality (cosine similarity with query spectrum).
 
 Usage
 -----
 Example command line:
-    $ python minimal_implement.py --epochs_fwd 3 --epochs_bwd 3 --latent 128
+    $ python ml_minimal_implement.py --epochs_fwd 3 --epochs_bwd 3 --latent 128
 
 This will:
-    1. Train the forward and fragment models (Phase A).
-    2. Train spectrum embeddings with molecule embeddings (Phase B).
+    1. Train the forward model (Phase A): molecule + fragment set -> spectrum.
+    2. Train spectrum embeddings aligned with molecule embeddings (Phase B).
     3. Build a retrieval index over training molecules.
-    4. Demonstrate molecule- >spectrum prediction and spectrum- >molecule retrieval.
-    5. Save a checkpoint ``mini_frag_checkpoint.pt``.
+    4. Demonstrate molecule->spectrum prediction and spectrum->molecule retrieval.
+    5. Run evaluation demos (noise robustness, ablation, visualizations).
+    6. Save checkpoint to out/mini_frag_checkpoint.pt.
 
 Outputs:
     • Console logs with per-epoch losses.
@@ -95,6 +99,10 @@ import mod
 from mass_spec_modeling.machine_learning import utils_mod
 from mass_spec_modeling.mod_fragmentation import utils
 from mass_spec_modeling.machine_learning.featurizers import GraphFeaturizerMOD
+
+# Default output directory for generated artifacts
+OUT_DIR = Path("out")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
@@ -1351,7 +1359,7 @@ def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc
         plt.legend()
         plt.tight_layout()
         try:
-            plt.savefig("noise_robustness.png", dpi=150)
+            plt.savefig(OUT_DIR / "noise_robustness.png", dpi=150)
         except Exception:
             pass
         plt.clf()
@@ -1375,7 +1383,7 @@ def demo_visualize_reconstructions(
         plt.legend()
         plt.tight_layout()
         try:
-            plt.savefig(f"recon_{i}.png", dpi=150)
+            plt.savefig(OUT_DIR / f"recon_{i}.png", dpi=150)
         except Exception:
             pass
         plt.close()
@@ -1457,11 +1465,11 @@ def main():
     6. Save model checkpoint.
     """
     p = argparse.ArgumentParser()
-    p.add_argument("--epochs_fwd", type=int, default=100, help="Phase A epochs (mol+frag -> spec)")
-    p.add_argument("--epochs_bwd", type=int, default=100, help="Phase B epochs (align spec latent)")
+    p.add_argument("--epochs_fwd", type=int, default=1000, help="Phase A epochs (mol+frag -> spec)")
+    p.add_argument("--epochs_bwd", type=int, default=1000, help="Phase B epochs (align spec latent)")
     p.add_argument("--batch", type=int, default=128)
     p.add_argument("--latent", type=int, default=128)
-    p.add_argument("--lr", type=float, default=2e-4)
+    p.add_argument("--lr", type=float, default=2e-4, help="Learning rate for the optimizer")
     p.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--seed", type=int, default=0)
     args = p.parse_args()
@@ -1470,9 +1478,9 @@ def main():
     device = torch.device(args.device)
 
     # Load Data into mem
-    MOL_DEF_PATH = Path("/home/mescalin/reiserp/Nextcloud/studium/computationalScience/thesis/mol/" \
-            + "mass_spec_modeling/exec_scripts/ms_data/compounds.csv")
-    LOAD_PATH = Path("/home/mescalin/reiserp/Nextcloud/studium/computationalScience/thesis/mol/dump/")
+    MOL_DEF_PATH = Path("~/Nextcloud/studium/computationalScience/thesis/mol/" \
+            + "mass_spec_modeling/exec_scripts/ms_data/compounds.csv").expanduser()
+    LOAD_PATH = Path("~/Nextcloud/studium/computationalScience/thesis/mol/dump/").expanduser()
 
     mols_definitions = utils_mod.read_mols_csv(MOL_DEF_PATH)
     frag_coll: Dict[
@@ -1496,47 +1504,61 @@ def main():
                 ]
         ]
     ] = {}
-    real_spectra_per_mol: List[List[Tuple[float, float]]] = []
+    real_spectra_by_smiles: Dict[str, List[Tuple[float, float]]] = {}
+    mol_order: List[str] = []
 
     for name, smi in mols_definitions:
-        mol = mod.Graph.fromSMILES(smi, name=name)
-        fwd_dg, _rule_db = utils.load_derivation_graph(name, path=LOAD_PATH / "fwd")
-        bwd_dg, _rule_db = utils.load_derivation_graph(name, path=LOAD_PATH / "bwd")
-
-        fwd_coll = []
-        for graph_term in fwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
-            graph = utils.graph_from_term(graph_term)
-            if graph.isMolecule:
-                dg_v = fwd_dg.findVertex(graph_term)
-                targets = dict()
-                rules = dict()
-                for edge in dg_v.outEdges:
-                    targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
-                    rules[edge.id] = [rule for rule in edge.rules]
-                fwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
+        if (LOAD_PATH / "fwd" / f"{name}.dmp").exists() \
+        and (LOAD_PATH / "bwd" / f"{name}.dmp").exists():
+            mol = mod.Graph.fromSMILES(smi, name=name)
 
 
+            fwd_dg = utils.load_derivation_graph(name, path=LOAD_PATH / "fwd")
+            bwd_dg = utils.load_derivation_graph(name, path=LOAD_PATH / "bwd")
 
-        bwd_coll = []
-        for graph_term in bwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
-            graph = utils.graph_from_term(graph_term)
-            if graph.isMolecule:
-                dg_v = bwd_dg.findVertex(graph_term)
-                try:
+            fwd_coll = []
+            for graph_term in fwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
+                graph = utils.graph_from_term(graph_term)
+                if graph.isMolecule:
+                    dg_v = fwd_dg.findVertex(graph_term)
                     targets = dict()
                     rules = dict()
                     for edge in dg_v.outEdges:
                         targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
                         rules[edge.id] = [rule for rule in edge.rules]
-                    bwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
-                except mod.libpymod.LogicError:
-                    #bwd_coll.append((graph.smiles, dict(), dict()))
-                    print("empty edges for ", graph.smiles)
+                    fwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
 
-        frag_coll[smi] = (fwd_coll, bwd_coll)
 
-        real_spectra = utils.get_spectra_from_local_jdx(name)
-        real_spectra_per_mol.append(real_spectra)
+
+            bwd_coll = []
+            for graph_term in bwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
+                graph = utils.graph_from_term(graph_term)
+                if graph.isMolecule:
+                    dg_v = bwd_dg.findVertex(graph_term)
+                    try:
+                        targets = dict()
+                        rules = dict()
+                        for edge in dg_v.outEdges:
+                            targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
+                            rules[edge.id] = [rule for rule in edge.rules]
+                        bwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
+                    except mod.libpymod.LogicError:
+                        #bwd_coll.append((graph.smiles, dict(), dict()))
+                        print("empty edges for ", graph.smiles)
+
+            frag_coll[smi] = (fwd_coll, bwd_coll)
+            real_spectra_by_smiles[smi] = utils.get_spectra_from_local_jdx(name)
+            mol_order.append(smi)
+
+    # Align fragments and spectra by SMILES to avoid length mismatches from skipped files or overwrites
+    aligned_smiles = [s for s in mol_order if s in frag_coll and s in real_spectra_by_smiles]
+    dropped_frag = set(frag_coll.keys()) - set(aligned_smiles)
+    dropped_spec = set(real_spectra_by_smiles.keys()) - set(aligned_smiles)
+    if dropped_frag or dropped_spec:
+        print(f"Warning: dropping {len(dropped_frag)} frag-only and {len(dropped_spec)} spec-only entries to align datasets")
+    frag_coll = {s: frag_coll[s] for s in aligned_smiles}
+    real_spectra_per_mol: List[List[Tuple[float, float]]] = [real_spectra_by_smiles[s] for s in aligned_smiles]
+    print(f"Loaded {len(aligned_smiles)} molecules with paired fragments and spectra (from {len(mols_definitions)} definitions)")
 
     train_spect, test_spect = train_test_split(
         data= real_spectra_per_mol,
@@ -1699,8 +1721,8 @@ def main():
         "heads": heads.state_dict(),
         "args": vars(args),
     }
-    torch.save(ckpt, "mini_frag_checkpoint.pt")
-    print("Saved checkpoint to mini_frag_checkpoint.pt")
+    torch.save(ckpt, OUT_DIR / "mini_frag_checkpoint.pt")
+    print(f"Saved checkpoint to {OUT_DIR / 'mini_frag_checkpoint.pt'}")
 
 if __name__ == "__main__":
     main()

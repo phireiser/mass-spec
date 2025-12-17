@@ -10,16 +10,15 @@ elif [ -d /scratch/reiserp/ ]; then # if execution on mescalin
     home_dir="/home/mescalin/reiserp/"
 fi
 
-base_dir=$home_dir"Nextcloud/studium/computationalScience/thesis/mol/"
+base_dir=~/Nextcloud/studium/computationalScience/thesis/mol/"
 
 
 ln -s $pyenv_dir $base_dir/env
 conda create -p env/ python=3.10 --yes
 conda activate $base_dir/env
 pip install torch_geometric
-pip install torch torchvision
+pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128
 
-# Optional dependencies:
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.8.0+cu128.html
 
 conda install -c jakobandersen -c conda-forge mod --yes

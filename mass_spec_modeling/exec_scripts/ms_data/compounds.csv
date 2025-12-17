@@ -49,7 +49,7 @@ formic_acid,C(=O)O,carboxylic_acid
 propionic_acid,CCC(=O)O,carboxylic_acid
 butyric_acid,CCCC(=O)O,carboxylic_acid
 oxalic_acid,OC(=O)C(=O)O,dicarboxylic_acid
-succinic_acid,OC(=O)CCC(=O)O,dicarboxylic_acid
+succinic_acid,C(CC(=O)O)C(=O)O,dicarboxylic_acid
 maleic_acid,OC(=O)C=CC(=O)O,dicarboxylic_acid
 methyl_acetate,CC(=O)OC,ester
 ethyl_acetate,CC(=O)OCC,ester
@@ -67,7 +67,7 @@ formamide,NC=O,amide
 nitrobenzene,C1=CC=C(C=C1)[N+](=O)[O-],nitro_aromatic
 nitromethane,C[N+](=O)[O-],nitro_aliphatic
 phenol,C1=CC=C(C=C1)O,aromatic_alcohol
-catechol,C1=CC(=CC(=C1)O)O,aromatic_diol
+catechol,C1=CC=C(C(=C1)O)O,aromatic_diol
 resorcinol,C1=CC(=CC(=C1)O)O,aromatic_diol
 toluene,CC1=CC=CC=C1,aromatic_hydrocarbon
 styrene,C=CC1=CC=CC=C1,aromatic_alkene
@@ -85,11 +85,9 @@ dimethyl_sulfoxide,CS(=O)C,organosulfur_oxide
 silane,[SiH4],silicon_compound
 trimethylsilane,C[Si](C)C,silicon_compound
 hexamethylcyclotrisiloxane,C[Si](O[Si](C)(C)C)(C)C,silicon_oxygen_compound
-glycine,NCC(=O)O,amino_acid
+glycine,C(C(=O)O)N,amino_acid
 alanine,CC(N)C(=O)O,amino_acid
-valine,CC(C)C(N)C(=O)O,amino_acid
 leucine,CC(C)CC(N)C(=O)O,amino_acid
-isoleucine,CC(C)C(N)C(=O)O,amino_acid
 serine,NCC(O)C(=O)O,amino_acid
 threonine,CC(O)C(N)C(=O)O,amino_acid
 cysteine,CSCC(N)C(=O)O,amino_acid
@@ -118,7 +116,6 @@ stearic_acid,CCCCCCCCCCCCCCCCCC(=O)O,fatty_acid
 oleic_acid,CCCCCCC=CCCCCCCCC(=O)O,unsaturated_fatty_acid
 linoleic_acid,CCC=CCC=CCCCCCCCC(=O)O,polyunsaturated_fatty_acid
 lactate,CC(O)C(=O)[O-],metabolite
-succinate,OC(=O)CCC(=O)O,dicarboxylic_acid
 alpha_ketoglutarate,O=C(O)CCC(=O)C(=O)O,ketocarboxylic_acid
 nicotinamide,N1C=CC(=O)C=C1N,vitamin_derivative
 riboflavin,C1=CC(=O)N=C2N=C(N)C(=O)C=C2N1C1C(C(C(O1)CO)O)O,vitamin_derivative
@@ -138,11 +135,11 @@ taurine,NCCS(=O)(=O)O,amino_sulfonic_acid
 putrescine,NCCCCN,polyamine
 spermine,NCCCNCCCCNCCC(N)N,polyamine
 dopamine,NC1=CC(=CC=C1O)O,neurotransmitter
-histamine,CC1=CN=C(N)N1,neurotransmitter
-gamma_aminobutyric_acid,NCCC(=O)O,neurotransmitter
-glutamate,NCCC(=O)O,neurotransmitter
-aspartate,NCC(=O)O,neurotransmitter
-tryptamine,CC1=CN=C(N)N1,biogenic_amine
+histamine,C1=C(NC=N1)CCN,neurotransmitter
+gamma_aminobutyric_acid,C(CC(=O)O)CN,neurotransmitter
+glutamate,C(CC(=O)O)C(C(=O)O)N,neurotransmitter
+aspartate,NC(CC(O)=O)C(O)=O,neurotransmitter
+tryptamine,C1=CC=C2C(=C1)C(=CN2)CCN,biogenic_amine
 tyramine,CC1=CC=C(C=C1)O,biogenic_amine
 octopamine,CC(CO)C1=CC=CC=C1,biogenic_amine
 melatonin,CC(=O)NCCC1=CNc2cc(O)ccc12,hormone
