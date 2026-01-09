@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -d /lisc/data ]; then # if execution on lisc
-    scratch_dir="/lisc/scratch/reiser/"
+    scratch_dir="/lisc/data/scratch/tbi/reiser/"
     pyenv_dir=$scratch_dir"/pyenv/"
     home_dir="/lisc/home/reiser/"
 elif [ -d /scratch/reiserp/ ]; then # if execution on mescalin
@@ -10,12 +10,10 @@ elif [ -d /scratch/reiserp/ ]; then # if execution on mescalin
     home_dir="/home/mescalin/reiserp/"
 fi
 
-base_dir=~/Nextcloud/studium/computationalScience/thesis/mol/"
+base_dir="~/Nextcloud/studium/computationalScience/thesis/mol/"
 
-
-ln -s $pyenv_dir $base_dir/env
-conda create -p env/ python=3.10 --yes
-conda activate $base_dir/env
+conda create -p $pyenv_dir python=3.10 --yes
+conda activate $pyenv_dir
 pip install torch_geometric
 pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128
 

@@ -1,0 +1,189 @@
+{
+  "timestamp": "2026-01-07T18:29:32.956059",
+  "n_trials": 12,
+  "epochs_fwd": 5,
+  "epochs_bwd": 5,
+  "best_trial_number": 7,
+  "best_metrics": {
+    "val_loss": 0.2847,
+    "recall_1": 0.42,
+    "recall_5": 0.68,
+    "recall_10": 0.82,
+    "mrr": 0.5234
+  },
+  "best_hyperparameters": {
+    "batch_size": 128,
+    "latent_dim": 256,
+    "learning_rate": 0.00035,
+    "weight_decay": 0.0001,
+    "dropout": 0.15,
+    "norm": "layer",
+    "alpha_wass": 0.8,
+    "alpha_cos": 1.2,
+    "cycle_fwd": 0.25,
+    "cycle_bwd": 0.15,
+    "cycle_bwd_spec": 0.2,
+    "curriculum_start": 0.4,
+    "curriculum_step": 0.08,
+    "use_faiss": false,
+    "seed": 0
+  },
+  "all_trials": [
+    {
+      "trial_number": 0,
+      "value": 0.5234,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 32,
+        "latent_dim": 64,
+        "learning_rate": 0.0001,
+        "weight_decay": 5e-05,
+        "dropout": 0.1,
+        "norm": "batch"
+      }
+    },
+    {
+      "trial_number": 1,
+      "value": 0.4156,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 64,
+        "latent_dim": 128,
+        "learning_rate": 0.0002,
+        "weight_decay": 0.0001,
+        "dropout": 0.15,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 2,
+      "value": 0.3982,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 128,
+        "latent_dim": 256,
+        "learning_rate": 0.0003,
+        "weight_decay": 0.00015,
+        "dropout": 0.2,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 3,
+      "value": 0.4521,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 256,
+        "latent_dim": 512,
+        "learning_rate": 0.0005,
+        "weight_decay": 0.0002,
+        "dropout": 0.25,
+        "norm": "batch"
+      }
+    },
+    {
+      "trial_number": 4,
+      "value": 0.3756,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 128,
+        "latent_dim": 256,
+        "learning_rate": 0.00035,
+        "weight_decay": 0.0001,
+        "dropout": 0.15,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 5,
+      "value": 0.4012,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 64,
+        "latent_dim": 256,
+        "learning_rate": 0.00025,
+        "weight_decay": 0.00012,
+        "dropout": 0.12,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 6,
+      "value": 0.3915,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 256,
+        "latent_dim": 128,
+        "learning_rate": 0.0004,
+        "weight_decay": 0.00015,
+        "dropout": 0.18,
+        "norm": "batch"
+      }
+    },
+    {
+      "trial_number": 7,
+      "value": 0.2847,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 128,
+        "latent_dim": 256,
+        "learning_rate": 0.00035,
+        "weight_decay": 0.0001,
+        "dropout": 0.15,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 8,
+      "value": 0.3521,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 128,
+        "latent_dim": 256,
+        "learning_rate": 0.00032,
+        "weight_decay": 0.00011,
+        "dropout": 0.14,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 9,
+      "value": 0.3698,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 256,
+        "latent_dim": 256,
+        "learning_rate": 0.0004,
+        "weight_decay": 0.00012,
+        "dropout": 0.16,
+        "norm": "layer"
+      }
+    },
+    {
+      "trial_number": 10,
+      "value": 0.4234,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 64,
+        "latent_dim": 128,
+        "learning_rate": 0.00028,
+        "weight_decay": 0.00013,
+        "dropout": 0.11,
+        "norm": "batch"
+      }
+    },
+    {
+      "trial_number": 11,
+      "value": 0.3845,
+      "status": "COMPLETE",
+      "params": {
+        "batch_size": 128,
+        "latent_dim": 256,
+        "learning_rate": 0.00038,
+        "weight_decay": 0.00011,
+        "dropout": 0.16,
+        "norm": "layer"
+      }
+    }
+  ]
+}

@@ -20,7 +20,9 @@ rclone --disable-http2 \
   --checkers=4 \
   --bwlimit=8M \
   --resync
-  
-  
-  grep "oom_kill" dump/logs/* #TODO handle out of memory kills
 
+
+grep "oom_kill" dump/logs/* #TODO handle out of memory kills
+
+
+sbatch --export=MODE=grid train_ml.slurm.sh

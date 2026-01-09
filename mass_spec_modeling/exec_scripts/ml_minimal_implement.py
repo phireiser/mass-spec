@@ -86,7 +86,7 @@ import random
 import torch
 from torch import nn
 import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, Subset
 import matplotlib.pyplot as plt
 
 
@@ -94,6 +94,14 @@ from torch_geometric.nn import global_mean_pool
 from torch_geometric.nn import GCNConv
 from torch_geometric.data import Data as GeometricData
 from torch_geometric.data import Batch
+
+# Optional FAISS for ANN retrieval
+try:
+    import faiss  # type: ignore
+    _FAISS_AVAILABLE = True
+except Exception:
+    faiss = None
+    _FAISS_AVAILABLE = False
 
 import mod
 from mass_spec_modeling.machine_learning import utils_mod
@@ -106,31 +114,43 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
-# Helper: simple multilayer perceptron builder
+# Helper: configurable multilayer perceptron builder
 # ---------------------------------------------------------------------------
 
-def mlp(d_in, d_hidden, d_out):
-    """
-    Builds a small feed-forward MLP block.
+def _norm_layer(norm: str, dim: int) -> nn.Module:
+    norm = norm.lower()
+    if norm == "batch":
+        return nn.BatchNorm1d(dim)
+    if norm == "layer":
+        return nn.LayerNorm(dim)
+    return nn.Identity()
 
-    Parameters
-    ----------
-    d_in : int
-        Input feature dimension.
-    d_hidden : int
-        Hidden layer dimension.
-    d_out : int
-        Output feature dimension.
 
-    Returns
-    -------
-    torch.nn.Sequential
-        A sequential model with Linear -> ReLU -> Linear layers.
-    """
-    return nn.Sequential(
-        nn.Linear(d_in, d_hidden), nn.ReLU(),
-        nn.Linear(d_hidden, d_out)
-    )
+class ResidualMLP(nn.Module):
+    """Two-layer MLP with normalization, dropout, and optional residual."""
+    def __init__(self, d_in: int, d_hidden: int, d_out: int, *, dropout: float = 0.1, norm: str = "layer", residual: bool = False):
+        super().__init__()
+        self.residual = residual and (d_in == d_out)
+        self.lin1 = nn.Linear(d_in, d_hidden)
+        self.norm1 = _norm_layer(norm, d_hidden)
+        self.lin2 = nn.Linear(d_hidden, d_out)
+        self.norm2 = _norm_layer(norm, d_out) if norm.lower() != "batch" else nn.Identity()  # keep dims stable for residual
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x):
+        out = self.lin1(x)
+        out = self.norm1(out)
+        out = F.relu(out)
+        out = self.dropout(out)
+        out = self.lin2(out)
+        out = self.norm2(out)
+        if self.residual:
+            out = out + x
+        return out
+
+
+def mlp(d_in: int, d_hidden: int, d_out: int, *, dropout: float = 0.1, norm: str = "layer", residual: bool = False) -> nn.Module:
+    return ResidualMLP(d_in, d_hidden, d_out, dropout=dropout, norm=norm, residual=residual)
 
 
 # ---------------------------------------------------------------------------
@@ -148,7 +168,9 @@ class EncMol(nn.Module):
         self.global_mean_pool = global_mean_pool
 
     def forward(self, batch_graphs):
-        batch = Batch.from_data_list(batch_graphs)
+        device = next(self.parameters()).device
+        # Ensure node/features and edge indices live on the same device as the module
+        batch = Batch.from_data_list(batch_graphs).to(device)
         x = batch.x.float()
         edge_index = batch.edge_index
         x1 = F.relu(self.gnn1(x, edge_index))
@@ -196,11 +218,14 @@ class EncFrag(nn.Module):
 
 class EncSpec(nn.Module):
     """
-    Encodes a binned mass spectrum  into latent space.
+    Encodes a binned mass spectrum into latent space with normalization/dropout.
     """
-    def __init__(self, spectrum_bins_size,  d_latent=128):
+    def __init__(self, spectrum_bins_size,  d_latent=128, *, dropout: float = 0.1, norm: str = "layer"):
         super().__init__()
-        self.net = mlp(spectrum_bins_size , 512, d_latent)
+        self.net = nn.Sequential(
+            mlp(spectrum_bins_size , 512, 512, dropout=dropout, norm=norm, residual=True),
+            mlp(512, 512, d_latent, dropout=dropout, norm=norm, residual=False)
+        )
 
     def forward(self, spec):
         """
@@ -221,9 +246,9 @@ class DecFrag(nn.Module):
     """
     Decodes latent embeddings back into fragment presence probabilities.
     """
-    def __init__(self, d_latent, fragment_vocab_size):
+    def __init__(self, d_latent, fragment_vocab_size, *, dropout: float = 0.1, norm: str = "layer"):
         super().__init__()
-        self.net = mlp(d_latent, 128, fragment_vocab_size)
+        self.net = mlp(d_latent, 256, fragment_vocab_size, dropout=dropout, norm=norm, residual=True)
 
     def forward(self, z):
         """
@@ -246,9 +271,12 @@ class DecSpec(nn.Module):
     """
     Decodes latent embeddings and fragment information into a predicted spectrum.
     """
-    def __init__(self, d_latent, fragment_vocab_size, spectrum_bins_size):
+    def __init__(self, d_latent, fragment_vocab_size, spectrum_bins_size, *, dropout: float = 0.1, norm: str = "layer"):
         super().__init__()
-        self.net = mlp(d_latent + fragment_vocab_size, 512, spectrum_bins_size)
+        self.net = nn.Sequential(
+            mlp(d_latent + fragment_vocab_size, 512, 512, dropout=dropout, norm=norm, residual=True),
+            mlp(512, 512, spectrum_bins_size, dropout=dropout, norm=norm, residual=False)
+        )
 
     def forward(self, z, frag):
         """
@@ -436,11 +464,14 @@ class EncFragGraph(nn.Module):
 class DecSpecLatent(nn.Module):
     """
     Decode a latent vector into a spectrum (no fragment bag input).
-    Typically fed with the forward head output of the combined latent.
+    Uses residual MLP blocks with normalization and dropout.
     """
-    def __init__(self, d_in: int, spectrum_bins_size: int):
+    def __init__(self, d_in: int, spectrum_bins_size: int, *, dropout: float = 0.1, norm: str = "layer"):
         super().__init__()
-        self.net = mlp(d_in, 512, spectrum_bins_size)
+        self.net = nn.Sequential(
+            mlp(d_in, 512, 512, dropout=dropout, norm=norm, residual=True),
+            mlp(512, 512, spectrum_bins_size, dropout=dropout, norm=norm, residual=False)
+        )
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         if z.dim() == 1:
@@ -469,6 +500,16 @@ def cosine_loss(x, y):
     x_n = F.normalize(x, dim=-1)
     y_n = F.normalize(y, dim=-1)
     return 1.0 - (x_n * y_n).sum(dim=-1).mean()
+
+
+def wasserstein_1d(pred: torch.Tensor, target: torch.Tensor, bin_width: float = 1.0) -> torch.Tensor:
+    """1D Wasserstein/EMD for spectra assuming bins are ordered along m/z.
+
+    Computes mean absolute cumulative difference scaled by bin_width.
+    """
+    pred_cum = torch.cumsum(pred, dim=-1)
+    target_cum = torch.cumsum(target, dim=-1)
+    return (torch.abs(pred_cum - target_cum).mean(dim=-1) * bin_width).mean()
 
 
 def info_nce(z_q, z_k, T=0.07):
@@ -675,6 +716,8 @@ class RealDataset(Dataset):
             self._precompute_all()
         # Build mass vocabulary aligned with frag_to_id and normalize by mz_max
         self.mass_vocab_norm = self._build_mass_vocab()
+        self.complexities = self._compute_complexities()
+        self.sorted_indices = sorted(range(len(self)), key=lambda i: self.complexities[i])
 
     def __len__(self) -> int:
         return len(self.frag_coll.keys())
@@ -886,6 +929,23 @@ class RealDataset(Dataset):
             adjs_bwd.append(bwd)
 
         self._cache = list(zip(graph_feats, bags, specs, adjs_fwd, adjs_bwd))
+    def _compute_complexities(self) -> List[int]:
+        """Approximate molecule complexity (node count)."""
+        complexities: List[int] = []
+        if self._cache is not None:
+            for g, _b, _s, _af, _ab in self._cache:
+                try:
+                    complexities.append(int(g.x.size(0)))
+                except Exception:
+                    complexities.append(0)
+        else:
+            for smi in self.frag_coll.keys():
+                try:
+                    g = self.graph_featurizer(mod.Graph.fromSMILES(smi))
+                    complexities.append(int(g.x.size(0)))
+                except Exception:
+                    complexities.append(0)
+        return complexities
 # --- end RealDataset ----------------------------------------------------------
 
 
@@ -919,6 +979,14 @@ def collate_vlex(batch: List[Sample]):
     return graph_feats, frag_graphs, frag_masses, true_spectrum, smiles, frag_adj_local
 
 
+def build_curriculum_loader(dataset: RealDataset, batch_size: int, fraction: float, collate_fn) -> DataLoader:
+    """Create a DataLoader over the easiest fraction of the dataset by complexity."""
+    frac = float(max(0.0, min(1.0, fraction)))
+    n = max(1, int(len(dataset) * frac))
+    subset_idx = dataset.sorted_indices[:n]
+    return DataLoader(Subset(dataset, subset_idx), batch_size=batch_size, shuffle=True, drop_last=False, collate_fn=collate_fn)
+
+
 # ---------------------------------------------------------------------------
 # Training loops
 # ---------------------------------------------------------------------------
@@ -927,20 +995,23 @@ def train_epoch_phase_a(
     loader: DataLoader,
     device: torch.device,
     enc_mol: EncMol,
+    enc_spec: EncSpec,
     frag_set_enc: FragSetEncoderVocabless,
     heads: TaskHeads,
     dec_spec: DecSpecLatent,
     opt: torch.optim.Optimizer,
-    alpha: float = 1.0,
     mz_min: float = 1.0,
     mz_max: float = 1000.0,
     bin_width: float = 1.0,
-    beta_forbidden: float = 0.1
+    beta_forbidden: float = 0.1,
+    alpha_cosine: float = 1.0,
+    alpha_wass: float = 0.5,
+    lam_cycle: float = 0.1
 ) -> float:
     """
     Phase A (vocab-agnostic): molecule + fragment set -> spectrum reconstruction.
     """
-    enc_mol.train(); frag_set_enc.train(); dec_spec.train(); heads.train()
+    enc_mol.train(); frag_set_enc.train(); dec_spec.train(); heads.train(); enc_spec.eval()
     total = 0.0
 
     for graph_feats, frag_graphs, frag_masses, true_spectrum, smiles, adj_local in loader:
@@ -954,9 +1025,17 @@ def train_epoch_phase_a(
         # parent-mass mask (hard) and forbidden-region penalty
         mask = make_parent_mass_mask_batch(smiles, mz_min, mz_max, bin_width, device=device)
         spec_hat_masked = spec_hat * mask
-        L_spec = cosine_loss(spec_hat_masked, true_spectrum)
+        L_cos = cosine_loss(spec_hat_masked, true_spectrum)
+        L_wass = wasserstein_1d(spec_hat_masked, true_spectrum, bin_width=bin_width)
+        L_spec = alpha_cosine * L_cos + alpha_wass * L_wass
         L_forb = (spec_hat * (1.0 - mask)).mean()
-        loss = L_spec + beta_forbidden * L_forb
+        # cycle consistency (unites A & B): mol -> spec_hat -> spec_latent should align with mol_latent
+        z_spec_cycle = enc_spec(spec_hat_masked.detach())  # detach to stabilize training
+        L_cycle = cosine_loss(z_spec_cycle, z_m)
+
+        # learned uncertainty weighting
+        L_spec_w = torch.exp(-heads.logvar_spec) * L_spec + heads.logvar_spec
+        loss = L_spec_w + beta_forbidden * L_forb + lam_cycle * L_cycle
         loss.backward()
         opt.step()
         total += loss.item() * len(graph_feats)
@@ -971,11 +1050,15 @@ def train_epoch_phase_b(
         heads: TaskHeads,
         dec_spec: DecSpecLatent,
         opt: torch.optim.Optimizer,
-        lam: float = 0.1,
         mz_min: float = 1.0,
         mz_max: float = 1000.0,
         bin_width: float = 1.0,
-        beta_forbidden: float = 0.1
+        beta_forbidden: float = 0.1,
+        lam: float = 0.1,
+        alpha_cosine: float = 1.0,
+        alpha_wass: float = 0.5,
+        lam_cycle: float = 0.1,
+        lam_cycle_spec: float = 0.1
         ) -> float:
     """
     Phase B (vocab-agnostic): align spectrum latent with molecular latent and
@@ -989,13 +1072,29 @@ def train_epoch_phase_b(
         z_m = enc_mol(graph_feats)
         z_s = enc_spec(spec)
         _, z_bwd = heads(z_s)
-        L_con = info_nce(z_bwd, z_m)
+        L_con_raw = info_nce(z_bwd, z_m)
         spec_hat = dec_spec(z_bwd)
         mask = make_parent_mass_mask_batch(smiles, mz_min, mz_max, bin_width, device=device)
         spec_hat_masked = spec_hat * mask
-        L_spec = cosine_loss(spec_hat_masked, spec)
+        L_cos = cosine_loss(spec_hat_masked, spec)
+        L_wass = wasserstein_1d(spec_hat_masked, spec, bin_width=bin_width)
+        L_spec = alpha_cosine * L_cos + alpha_wass * L_wass
         L_forb = (spec_hat * (1.0 - mask)).mean()
-        loss = L_spec + lam * L_con + beta_forbidden * L_forb
+        # cycle consistency (unites A & B): spec -> spec_hat -> mol_latent should align with spec_latent
+        z_mol_cycle = enc_mol([it.graph_feat for it in []])  # placeholder; instead use frag-free mol encoding from spec
+        # reuse mol encoder on reconstructed graph or direct latent alignment
+        # spec -> spec_hat (via mol path) -> mol_latent should match spec_latent z_s
+        # For simplicity: spec -> latent (z_s) -> head(z_s) -> spec_hat should reconstruct well
+        # The cycle is: spec -> z_s -> spec_hat, then spec_hat back to a molecule-aligned latent
+        # Key: z_bwd (from heads on z_s) should produce spec_hat that, when re-encoded by enc_spec, aligns back to z_s
+        z_mol_cycle = enc_spec(spec_hat_masked.detach())  # re-encode predicted spec
+        L_cycle_mol = cosine_loss(z_mol_cycle, z_s)  # align back to original spectrum latent
+        # Also ensure forward mol->spec->mol consistency: z_s should relate to z_m via InfoNCE
+        L_cycle_spec = info_nce(z_s, z_m)  # spectrum latent should align with mol latent
+
+        L_spec_w = torch.exp(-heads.logvar_spec) * L_spec + heads.logvar_spec
+        L_con = torch.exp(-heads.logvar_con) * L_con_raw + heads.logvar_con
+        loss = L_spec_w + lam * L_con + beta_forbidden * L_forb + lam_cycle * L_cycle_mol + lam_cycle_spec * L_cycle_spec
         loss.backward()
         opt.step()
         total += loss.item() * len(graph_feats)
@@ -1059,6 +1158,46 @@ class LatentIndex:
         sims = (self.embs @ z_query)
         topv, topi = torch.topk(sims, k=min(k, sims.numel()))
         return [self.items[i] for i in topi.tolist()]
+
+
+class FaissLatentIndex(LatentIndex):
+    """FAISS-backed cosine similarity index for large-scale retrieval."""
+    def __init__(self, d):
+        super().__init__(d)
+        if not _FAISS_AVAILABLE:
+            raise ImportError("faiss not installed")
+        self.index = faiss.IndexFlatIP(d)
+
+    def build(self, dataset: Dataset, device, enc_mol: EncMol):
+        self.embs.clear(); self.items.clear()
+        enc_mol.eval()
+        loader = DataLoader(dataset, batch_size=256, shuffle=False, collate_fn=collate_vlex)
+        vecs = []
+        with torch.no_grad():
+            for graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local in loader:
+                z = enc_mol(graph_feats)
+                z = F.normalize(z, dim=-1).cpu()
+                B = z.size(0)
+                for i in range(B):
+                    self.items.append(IndexItem(
+                        z=z[i],
+                        smiles=smiles[i],
+                        graph_feat=graph_feats[i],
+                        frag_graphs=frag_graphs[i],
+                        frag_adj_local=(adj_local[i].cpu() if isinstance(adj_local[i], torch.Tensor) else None),
+                        true_spectrum=spec[i].cpu(),
+                    ))
+                vecs.append(z)
+        if vecs:
+            self.embs = torch.cat(vecs, dim=0)
+            self.index.add(self.embs.numpy().astype('float32'))
+
+    def topk(self, z_query: torch.Tensor, k=10) -> List[IndexItem]:
+        if self.index.ntotal == 0:
+            return []
+        zq = z_query.unsqueeze(0).cpu().numpy().astype('float32')
+        _, idx = self.index.search(zq, min(k, self.index.ntotal))
+        return [self.items[i] for i in idx[0].tolist()]
 
 
 def rerank_candidates(spec_q: torch.Tensor,
@@ -1470,6 +1609,17 @@ def main():
     p.add_argument("--batch", type=int, default=128)
     p.add_argument("--latent", type=int, default=128)
     p.add_argument("--lr", type=float, default=2e-4, help="Learning rate for the optimizer")
+    p.add_argument("--weight_decay", type=float, default=1e-4, help="Weight decay for optimizers")
+    p.add_argument("--dropout", type=float, default=0.1, help="Dropout rate for MLP blocks")
+    p.add_argument("--norm", type=str, default="layer", choices=["layer", "batch", "none"], help="Normalization layer type")
+    p.add_argument("--alpha_wass", type=float, default=0.5, help="Weight for Wasserstein spectrum loss")
+    p.add_argument("--alpha_cos", type=float, default=1.0, help="Weight for cosine spectrum loss")
+    p.add_argument("--cycle_fwd", type=float, default=0.1, help="Cycle-consistency weight (mol->spec->latent alignment)")
+    p.add_argument("--cycle_bwd", type=float, default=0.1, help="Cycle-consistency weight (spec->spec_hat->spec_latent alignment)")
+    p.add_argument("--cycle_bwd_spec", type=float, default=0.1, help="Cycle-consistency weight (spec->mol latent alignment)")
+    p.add_argument("--curriculum_start", type=float, default=0.3, help="Starting fraction of easy molecules")
+    p.add_argument("--curriculum_step", type=float, default=0.05, help="Per-epoch fraction increment")
+    p.add_argument("--use_faiss", action="store_true", help="Use FAISS index for retrieval if available")
     p.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--seed", type=int, default=0)
     args = p.parse_args()
@@ -1615,8 +1765,8 @@ def main():
     # Models
     enc_mol  = EncMol(args.latent).to(device)
     frag_set_enc = FragSetEncoderVocabless(enc_mol, d_latent=args.latent).to(device)
-    enc_spec = EncSpec(spectrum_bins_size, args.latent).to(device)
-    dec_spec = DecSpecLatent(d_in=args.latent, spectrum_bins_size=spectrum_bins_size).to(device)
+    enc_spec = EncSpec(spectrum_bins_size, args.latent, dropout=args.dropout, norm=args.norm).to(device)
+    dec_spec = DecSpecLatent(d_in=args.latent, spectrum_bins_size=spectrum_bins_size, dropout=args.dropout, norm=args.norm).to(device)
     # Task heads (shared trunk projections)
     heads = TaskHeads(d_latent=args.latent, d_task=args.latent).to(device)
     # expose for helper functions (script-level convenience)
@@ -1626,33 +1776,42 @@ def main():
     opt_a = torch.optim.Adam(list(enc_mol.parameters()) +
                              list(frag_set_enc.parameters()) +
                              list(dec_spec.parameters()) +
-                             list(heads.parameters()), lr=args.lr)
+                             list(heads.parameters()), lr=args.lr, weight_decay=args.weight_decay)
     opt_b = torch.optim.Adam(list(enc_mol.parameters()) +
                              list(enc_spec.parameters()) +
                              list(dec_spec.parameters()) +
-                             list(heads.parameters()), lr=args.lr)
+                             list(heads.parameters()), lr=args.lr, weight_decay=args.weight_decay)
 
     # ----------------- Phase A -----------------
     print("== Phase A: train forward (vocab-agnostic) ==")
     for epoch in range(1, args.epochs_fwd + 1):
+        frac = min(1.0, args.curriculum_start + (epoch - 1) * args.curriculum_step)
+        cur_loader = build_curriculum_loader(train_ds, batch_size=args.batch, fraction=frac, collate_fn=collate_vlex)
         loss = train_epoch_phase_a(
-            train_loader, device, enc_mol, frag_set_enc, heads, dec_spec, opt_a,
-            mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1
+            cur_loader, device, enc_mol, enc_spec, frag_set_enc, heads, dec_spec, opt_a,
+            mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1,
+            alpha_cosine=args.alpha_cos, alpha_wass=args.alpha_wass, lam_cycle=args.cycle_fwd
         )
-        print(f"[A] epoch {epoch:02d} loss {loss:.4f}")
+        print(f"[A] epoch {epoch:02d} loss {loss:.4f} | frac {frac:.2f}")
 
     # ----------------- Phase B -----------------
     print("== Phase B: align spec latent + spectrum recon (vocab-agnostic) ==")
     for epoch in range(1, args.epochs_bwd + 1):
+        frac = min(1.0, args.curriculum_start + (epoch - 1) * args.curriculum_step)
+        cur_loader = build_curriculum_loader(train_ds, batch_size=args.batch, fraction=frac, collate_fn=collate_vlex)
         loss = train_epoch_phase_b(
-            train_loader, device, enc_spec, enc_mol, heads, dec_spec, opt_b,
-            mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1
+            cur_loader, device, enc_spec, enc_mol, heads, dec_spec, opt_b,
+            mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1,
+            alpha_cosine=args.alpha_cos, alpha_wass=args.alpha_wass, lam_cycle=args.cycle_bwd, lam_cycle_spec=args.cycle_bwd_spec
         )
-        print(f"[B] epoch {epoch:02d} loss {loss:.4f}")
+        print(f"[B] epoch {epoch:02d} loss {loss:.4f} | frac {frac:.2f}")
 
     # ----------------- Build retrieval index -----------------
     print("== Building retrieval index on TRAIN set ==")
-    index = LatentIndex(d=args.latent)
+    if args.use_faiss and _FAISS_AVAILABLE:
+        index = FaissLatentIndex(d=args.latent)
+    else:
+        index = LatentIndex(d=args.latent)
     index.build(train_ds, device, enc_mol)
 
 

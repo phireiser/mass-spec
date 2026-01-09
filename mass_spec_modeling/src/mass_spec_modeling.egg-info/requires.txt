@@ -6,9 +6,9 @@ tqdm
 requests
 typing-extensions
 pytz
+matplotlib
 torch
 torch_geometric
 torch-scatter
 torch-sparse
 torch-cluster
-torchvision
