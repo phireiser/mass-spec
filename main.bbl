@@ -1,0 +1,1674 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Gross2006}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=9b55e2a27790ffcd9feee1713e5db72c}{%
+           family={Gross},
+           familyi={G\bibinitperiod},
+           given={Jürgen\bibnamedelima H.},
+           giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{fullhash}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{fullhashraw}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{bibnamehash}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{authorbibnamehash}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{authornamehash}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{authorfullhash}{9b55e2a27790ffcd9feee1713e5db72c}
+      \strng{authorfullhashraw}{9b55e2a27790ffcd9feee1713e5db72c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2. printing}
+      \field{isbn}{9783540407393}
+      \field{pagetotal}{518}
+      \field{subtitle}{A textbook}
+      \field{title}{Mass spectrometry}
+      \field{year}{2006}
+      \verb{file}
+      \verb :literature/mass_spectrometry__a_textbook.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Cramer2020}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=bbb612fb8552e685b0b1f03e54fb3930}{%
+           family={Cramer},
+           familyi={C\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier BV}%
+      }
+      \strng{namehash}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{fullhash}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{fullhashraw}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{bibnamehash}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{authorbibnamehash}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{authornamehash}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{authorfullhash}{bbb612fb8552e685b0b1f03e54fb3930}
+      \strng{authorfullhashraw}{bbb612fb8552e685b0b1f03e54fb3930}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1535-9476}
+      \field{journaltitle}{Molecular \& Cellular Proteomics}
+      \field{month}{11}
+      \field{number}{11}
+      \field{title}{High-speed Analysis of Large Sample Sets - How Can This Key Aspect of the Omics Be Achieved?}
+      \field{volume}{19}
+      \field{year}{2020}
+      \field{pages}{1760\bibrangedash 1766}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1074/mcp.p120.001997
+      \endverb
+      \verb{file}
+      \verb :literature/1-s2.0-S1535947620351550-main.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Stein2012}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=156ea94d1b364176b11f6bb347ab561f}{%
+           family={Stein},
+           familyi={S\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Chemical Society (ACS)}%
+      }
+      \strng{namehash}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{fullhash}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{fullhashraw}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{bibnamehash}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{authorbibnamehash}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{authornamehash}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{authorfullhash}{156ea94d1b364176b11f6bb347ab561f}
+      \strng{authorfullhashraw}{156ea94d1b364176b11f6bb347ab561f}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1520-6882}
+      \field{journaltitle}{Analytical Chemistry}
+      \field{month}{7}
+      \field{number}{17}
+      \field{title}{Mass Spectral Reference Libraries: An Ever-Expanding Resource for Chemical Identification}
+      \field{volume}{84}
+      \field{year}{2012}
+      \field{pages}{7274\bibrangedash 7282}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1021/ac301205z
+      \endverb
+      \verb{file}
+      \verb :literature/mass-spectral-reference-libraries-an-ever-expanding-resource-for-chemical-identification.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Blazenovic2018}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=0e021bb0bba2e0c1a4dd9574be820627}{%
+           family={Blaženović},
+           familyi={B\bibinitperiod},
+           given={Ivana},
+           giveni={I\bibinitperiod}}}%
+        {{hash=d249a2933d5892202606395642997406}{%
+           family={Kind},
+           familyi={K\bibinitperiod},
+           given={Tobias},
+           giveni={T\bibinitperiod}}}%
+        {{hash=3770f3589693e4169f843566fd8dd657}{%
+           family={Ji},
+           familyi={J\bibinitperiod},
+           given={Jian},
+           giveni={J\bibinitperiod}}}%
+        {{hash=e61fe5ec15e0f1341b85c8e6b6cee9f2}{%
+           family={Fiehn},
+           familyi={F\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI AG}%
+      }
+      \strng{namehash}{518973502f874f4dbbe69bcd6d552db2}
+      \strng{fullhash}{7c2386f259dd0729cc2dc15194b904e9}
+      \strng{fullhashraw}{7c2386f259dd0729cc2dc15194b904e9}
+      \strng{bibnamehash}{7c2386f259dd0729cc2dc15194b904e9}
+      \strng{authorbibnamehash}{7c2386f259dd0729cc2dc15194b904e9}
+      \strng{authornamehash}{518973502f874f4dbbe69bcd6d552db2}
+      \strng{authorfullhash}{7c2386f259dd0729cc2dc15194b904e9}
+      \strng{authorfullhashraw}{7c2386f259dd0729cc2dc15194b904e9}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2218-1989}
+      \field{journaltitle}{Metabolites}
+      \field{month}{5}
+      \field{number}{2}
+      \field{title}{Software Tools and Approaches for Compound Identification of LC-MS/MS Data in Metabolomics}
+      \field{volume}{8}
+      \field{year}{2018}
+      \field{pages}{31}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/metabo8020031
+      \endverb
+      \verb{file}
+      \verb :literature/metabolites-08-00031.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Young2024}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=8c2b0d38d9df601d83c3a797cf2157d0}{%
+           family={Young},
+           familyi={Y\bibinitperiod},
+           given={Adamo},
+           giveni={A\bibinitperiod}}}%
+        {{hash=926ace044735efa440a14ca0ef674c84}{%
+           family={Röst},
+           familyi={R\bibinitperiod},
+           given={Hannes},
+           giveni={H\bibinitperiod}}}%
+        {{hash=2938deb5048323c6e1bfdd80975d5b28}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media LLC}%
+      }
+      \strng{namehash}{d576690e0b02a286f1ca914e632fce61}
+      \strng{fullhash}{f125e7c1c07a16cbb96b688f44d584d2}
+      \strng{fullhashraw}{f125e7c1c07a16cbb96b688f44d584d2}
+      \strng{bibnamehash}{f125e7c1c07a16cbb96b688f44d584d2}
+      \strng{authorbibnamehash}{f125e7c1c07a16cbb96b688f44d584d2}
+      \strng{authornamehash}{d576690e0b02a286f1ca914e632fce61}
+      \strng{authorfullhash}{f125e7c1c07a16cbb96b688f44d584d2}
+      \strng{authorfullhashraw}{f125e7c1c07a16cbb96b688f44d584d2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2522-5839}
+      \field{journaltitle}{Nature Machine Intelligence}
+      \field{month}{4}
+      \field{number}{4}
+      \field{title}{Tandem mass spectrum prediction for small molecules using graph transformers}
+      \field{volume}{6}
+      \field{year}{2024}
+      \field{pages}{404\bibrangedash 416}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1038/s42256-024-00816-8
+      \endverb
+      \verb{file}
+      \verb :literature/10.1038-s42256-024-00816-8.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Schwaller2019}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=b1a2a4b3097315ec7c5752f1040fcb6b}{%
+           family={Schwaller},
+           familyi={S\bibinitperiod},
+           given={Philippe},
+           giveni={P\bibinitperiod}}}%
+        {{hash=2de1c3581c0e330b91b10ac8ce6bd337}{%
+           family={Laino},
+           familyi={L\bibinitperiod},
+           given={Teodoro},
+           giveni={T\bibinitperiod}}}%
+        {{hash=8003ea47a8fa777a4ad200354978f364}{%
+           family={Gaudin},
+           familyi={G\bibinitperiod},
+           given={Théophile},
+           giveni={T\bibinitperiod}}}%
+        {{hash=92d0199f8671abb096e912edf4214334}{%
+           family={Bolgar},
+           familyi={B\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=88f29ebb59ffcf5512fce0de93eb36f8}{%
+           family={Hunter},
+           familyi={H\bibinitperiod},
+           given={Christopher\bibnamedelima A.},
+           giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=ed5f598d8cc43f361f31d4e4ae3839df}{%
+           family={Bekas},
+           familyi={B\bibinitperiod},
+           given={Costas},
+           giveni={C\bibinitperiod}}}%
+        {{hash=3e899047e807016a090a6da71c167a50}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Alpha\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Chemical Society (ACS)}%
+      }
+      \strng{namehash}{bde077ceafdb3cf345e5d76c8696b6b5}
+      \strng{fullhash}{f750cad8f62ab08a0e0729193157e16c}
+      \strng{fullhashraw}{f750cad8f62ab08a0e0729193157e16c}
+      \strng{bibnamehash}{bde077ceafdb3cf345e5d76c8696b6b5}
+      \strng{authorbibnamehash}{bde077ceafdb3cf345e5d76c8696b6b5}
+      \strng{authornamehash}{bde077ceafdb3cf345e5d76c8696b6b5}
+      \strng{authorfullhash}{f750cad8f62ab08a0e0729193157e16c}
+      \strng{authorfullhashraw}{f750cad8f62ab08a0e0729193157e16c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2374-7951}
+      \field{journaltitle}{ACS Central Science}
+      \field{month}{8}
+      \field{number}{9}
+      \field{title}{Molecular Transformer: A Model for Uncertainty-Calibrated Chemical Reaction Prediction}
+      \field{volume}{5}
+      \field{year}{2019}
+      \field{pages}{1572\bibrangedash 1583}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1021/acscentsci.9b00576
+      \endverb
+      \verb{file}
+      \verb :literature/molecular-transformer-a-model-for-uncertainty-calibrated-chemical-reaction-prediction.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Nowatzky2025}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=58ceedb3574f5d2f4f0ea86f4b5e5072}{%
+           family={Nowatzky},
+           familyi={N\bibinitperiod},
+           given={Yannek},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=e9ffbdf7d7852e1de76ad6fc7ef87e4d}{%
+           family={Russo},
+           familyi={R\bibinitperiod},
+           given={Francesco\bibnamedelima Friedrich},
+           giveni={F\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=be032c81a116d251d3ffda1bbabce206}{%
+           family={Lisec},
+           familyi={L\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5b5ef6df966aa2b4bc9d4435917f02df}{%
+           family={Kister},
+           familyi={K\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=a58e01ce1c831db837ea5b6e3774fc9d}{%
+           family={Reinert},
+           familyi={R\bibinitperiod},
+           given={Knut},
+           giveni={K\bibinitperiod}}}%
+        {{hash=91273479053d58f6579d67504267f81f}{%
+           family={Muth},
+           familyi={M\bibinitperiod},
+           given={Thilo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=0a5d56330ae9bb354644d8f22c2e29fa}{%
+           family={Benner},
+           familyi={B\bibinitperiod},
+           given={Philipp},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media LLC}%
+      }
+      \strng{namehash}{f6ecc1f37320fdee2c56fb2c1667f28c}
+      \strng{fullhash}{c8b1c5a94c1f9ed0cc8fc763c64a633d}
+      \strng{fullhashraw}{c8b1c5a94c1f9ed0cc8fc763c64a633d}
+      \strng{bibnamehash}{f6ecc1f37320fdee2c56fb2c1667f28c}
+      \strng{authorbibnamehash}{f6ecc1f37320fdee2c56fb2c1667f28c}
+      \strng{authornamehash}{f6ecc1f37320fdee2c56fb2c1667f28c}
+      \strng{authorfullhash}{c8b1c5a94c1f9ed0cc8fc763c64a633d}
+      \strng{authorfullhashraw}{c8b1c5a94c1f9ed0cc8fc763c64a633d}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{FIORA: Local neighborhood-based prediction of compound mass spectra from single fragmentation events}
+      \field{volume}{16}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.1038/s41467-025-57422-4
+      \endverb
+      \verb{file}
+      \verb :literature/s41467-025-57422-4.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Goldman2023}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=b913ace70b2a48bec07a0c2e9ab8171d}{%
+           family={Goldman},
+           familyi={G\bibinitperiod},
+           given={Samuel},
+           giveni={S\bibinitperiod}}}%
+        {{hash=3620c7423337dbf14e78bafab641e7d0}{%
+           family={Wohlwend},
+           familyi={W\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6299cc46c37836005299b990f532a38e}{%
+           family={Stražar},
+           familyi={S\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ca27bb71ac58aa3919186d6a8cd06dc5}{%
+           family={Haroush},
+           familyi={H\bibinitperiod},
+           given={Guy},
+           giveni={G\bibinitperiod}}}%
+        {{hash=33fe65987e244639ad4d759473adeaea}{%
+           family={Xavier},
+           familyi={X\bibinitperiod},
+           given={Ramnik\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=85ad2ee11d862ab56d14ae9541c11677}{%
+           family={Coley},
+           familyi={C\bibinitperiod},
+           given={Connor\bibnamedelima W.},
+           giveni={C\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media LLC}%
+      }
+      \strng{namehash}{e38da2db974afa71a367074b8b17b5fa}
+      \strng{fullhash}{2db3f6510dcaa89d7064e139ea9f62b9}
+      \strng{fullhashraw}{2db3f6510dcaa89d7064e139ea9f62b9}
+      \strng{bibnamehash}{2db3f6510dcaa89d7064e139ea9f62b9}
+      \strng{authorbibnamehash}{2db3f6510dcaa89d7064e139ea9f62b9}
+      \strng{authornamehash}{e38da2db974afa71a367074b8b17b5fa}
+      \strng{authorfullhash}{2db3f6510dcaa89d7064e139ea9f62b9}
+      \strng{authorfullhashraw}{2db3f6510dcaa89d7064e139ea9f62b9}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2522-5839}
+      \field{journaltitle}{Nature Machine Intelligence}
+      \field{month}{8}
+      \field{number}{9}
+      \field{title}{Annotating metabolite mass spectra with domain-inspired chemical formula transformers}
+      \field{volume}{5}
+      \field{year}{2023}
+      \field{pages}{965\bibrangedash 979}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1038/s42256-023-00708-3
+      \endverb
+      \verb{file}
+      \verb :literature/Annotating_metabolite_mass_spe.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Russo2024}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=16a55f2f4753bc5626fa8d921842c205}{%
+           family={Russo},
+           familyi={R\bibinitperiod},
+           given={Francesco\bibnamedelima F.},
+           giveni={F\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=58ceedb3574f5d2f4f0ea86f4b5e5072}{%
+           family={Nowatzky},
+           familyi={N\bibinitperiod},
+           given={Yannek},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=cd58a607364b08047b3a8ab2556354ae}{%
+           family={Jaeger},
+           familyi={J\bibinitperiod},
+           given={Carsten},
+           giveni={C\bibinitperiod}}}%
+        {{hash=2b66e100b520e1b64f8fd4f47832303c}{%
+           family={Parr},
+           familyi={P\bibinitperiod},
+           given={Maria\bibnamedelima K.},
+           giveni={M\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=7760e69f3b55cc3cb1a43b36a679d210}{%
+           family={Benner},
+           familyi={B\bibinitperiod},
+           given={Phillipp},
+           giveni={P\bibinitperiod}}}%
+        {{hash=91273479053d58f6579d67504267f81f}{%
+           family={Muth},
+           familyi={M\bibinitperiod},
+           given={Thilo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=be032c81a116d251d3ffda1bbabce206}{%
+           family={Lisec},
+           familyi={L\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{83daaa3a21557a48c100a003de8a253d}
+      \strng{fullhash}{ca3f58afda46c46d3f1e78001c6d8525}
+      \strng{fullhashraw}{ca3f58afda46c46d3f1e78001c6d8525}
+      \strng{bibnamehash}{83daaa3a21557a48c100a003de8a253d}
+      \strng{authorbibnamehash}{83daaa3a21557a48c100a003de8a253d}
+      \strng{authornamehash}{83daaa3a21557a48c100a003de8a253d}
+      \strng{authorfullhash}{ca3f58afda46c46d3f1e78001c6d8525}
+      \strng{authorfullhashraw}{ca3f58afda46c46d3f1e78001c6d8525}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1097-0231}
+      \field{journaltitle}{Rapid Communications in Mass Spectrometry}
+      \field{month}{8}
+      \field{number}{20}
+      \field{title}{Machine learning methods for compound annotation in non‐targeted mass spectrometry—A brief overview of fingerprinting, in silico fragmentation and de novo methods}
+      \field{volume}{38}
+      \field{year}{2024}
+      \verb{doi}
+      \verb 10.1002/rcm.9876
+      \endverb
+      \verb{file}
+      \verb :literature/Rapid Comm Mass Spectrometry - 2024 - Russo - Machine learning methods for compound annotation in non‐targeted mass.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Goldman2024}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=b913ace70b2a48bec07a0c2e9ab8171d}{%
+           family={Goldman},
+           familyi={G\bibinitperiod},
+           given={Samuel},
+           giveni={S\bibinitperiod}}}%
+        {{hash=62e9c07d8f8df9cd82c6beeca7caf895}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Janet},
+           giveni={J\bibinitperiod}}}%
+        {{hash=85ad2ee11d862ab56d14ae9541c11677}{%
+           family={Coley},
+           familyi={C\bibinitperiod},
+           given={Connor\bibnamedelima W.},
+           giveni={C\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Chemical Society (ACS)}%
+      }
+      \strng{namehash}{e38da2db974afa71a367074b8b17b5fa}
+      \strng{fullhash}{665d4b41c7df7fcb313d9b753acb2632}
+      \strng{fullhashraw}{665d4b41c7df7fcb313d9b753acb2632}
+      \strng{bibnamehash}{665d4b41c7df7fcb313d9b753acb2632}
+      \strng{authorbibnamehash}{665d4b41c7df7fcb313d9b753acb2632}
+      \strng{authornamehash}{e38da2db974afa71a367074b8b17b5fa}
+      \strng{authorfullhash}{665d4b41c7df7fcb313d9b753acb2632}
+      \strng{authorfullhashraw}{665d4b41c7df7fcb313d9b753acb2632}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1520-6882}
+      \field{journaltitle}{Analytical Chemistry}
+      \field{month}{2}
+      \field{number}{8}
+      \field{title}{Generating Molecular Fragmentation Graphs with Autoregressive Neural Networks}
+      \field{volume}{96}
+      \field{year}{2024}
+      \field{pages}{3419\bibrangedash 3428}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1021/acs.analchem.3c04654
+      \endverb
+      \verb{file}
+      \verb :literature/generating-molecular-fragmentation-graphs-with-autoregressive-neural-networks.pdf:PDF
+      \endverb
+    \endentry
+    \entry{McLafferty1993}{text}{}{}
+      \name{author}{2}{}{%
+        {{hash=ef7fb20360c0bcb77f830e0d8164c463}{%
+           family={McLafferty},
+           familyi={M\bibinitperiod},
+           given={Fred\bibnamedelima W.},
+           giveni={F\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=98dba2d4356d56e28d47214fd6e06b53}{%
+           family={Tureček},
+           familyi={T\bibinitperiod},
+           given={František.},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \list{location}{1}{%
+        {cau, Mill Valley, Calif}%
+      }
+      \strng{namehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{fullhash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{fullhashraw}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{bibnamehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authorbibnamehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authornamehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authorfullhash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authorfullhashraw}{a29a977435b0a03fb8b47cba4c1a6405}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{4th ed.}
+      \field{isbn}{9780935702255}
+      \field{note}{F.W. McLafferty, František Tureček., Includes bibliographical references (p. 321-338) and index.}
+      \field{title}{Interpretation of mass spectra}
+      \field{year}{1993}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb :literature/McLaferttyInterpretationOfMassSpectral4ThEdition.pdf:PDF;:literature/Fred W. McLafferty, Frantisek Tureek - Interpretation of Mass Spectra-University Science Books (1993).pdf:PDF
+      \endverb
+      \keyw{Mass spectrometry}
+    \endentry
+    \entry{Andersen2013}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=5b003eec61572048178f55ff7d538bc8}{%
+           family={Andersen},
+           familyi={A\bibinitperiod},
+           given={Jakob\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=b55421f384dce57ae38e9e8bcf44850b}{%
+           family={Flamm},
+           familyi={F\bibinitperiod},
+           given={Christoph},
+           giveni={C\bibinitperiod}}}%
+        {{hash=5fd7dca2f8197d813cf980c556899438}{%
+           family={Merkle},
+           familyi={M\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=9982debdce05bebbf7a7f24842a44650}{%
+           family={Stadler},
+           familyi={S\bibinitperiod},
+           given={Peter\bibnamedelima F.},
+           giveni={P\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{1f4d893a8078049ded43c947f8436113}
+      \strng{fullhash}{cd4e39da8b82092977fa7887d1a406fc}
+      \strng{fullhashraw}{cd4e39da8b82092977fa7887d1a406fc}
+      \strng{bibnamehash}{cd4e39da8b82092977fa7887d1a406fc}
+      \strng{authorbibnamehash}{cd4e39da8b82092977fa7887d1a406fc}
+      \strng{authornamehash}{1f4d893a8078049ded43c947f8436113}
+      \strng{authorfullhash}{cd4e39da8b82092977fa7887d1a406fc}
+      \strng{authorfullhashraw}{cd4e39da8b82092977fa7887d1a406fc}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Generic Strategies for Chemical Space Exploration}
+      \field{year}{2013}
+      \verb{doi}
+      \verb 10.48550/ARXIV.1302.4006
+      \endverb
+      \verb{file}
+      \verb :literature/Andersen2013 - Generic Strategies for Chemical Space Exploration.html:URL;:literature/1302.4006v2.pdf:PDF
+      \endverb
+      \keyw{Formal Languages and Automata Theory (cs.FL),Biomolecules (q-bio.BM),FOS: Computer and information sciences,FOS: Computer and information sciences,FOS: Biological sciences,FOS: Biological sciences}
+    \endentry
+    \entry{Boecker2016}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=7b293fa7e7921b48e54f7e763f6e0e0c}{%
+           family={Böcker},
+           familyi={B\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c460e1dc63a8ce60dec74c70476470a0}{%
+           family={Dührkop},
+           familyi={D\bibinitperiod},
+           given={Kai},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media LLC}%
+      }
+      \strng{namehash}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{fullhash}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{fullhashraw}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{bibnamehash}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{authorbibnamehash}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{authornamehash}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{authorfullhash}{bcc6208e80e59d70e6cfc853a503539a}
+      \strng{authorfullhashraw}{bcc6208e80e59d70e6cfc853a503539a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1758-2946}
+      \field{journaltitle}{Journal of Cheminformatics}
+      \field{month}{2}
+      \field{number}{1}
+      \field{title}{Fragmentation trees reloaded}
+      \field{volume}{8}
+      \field{year}{2016}
+      \verb{doi}
+      \verb 10.1186/s13321-016-0116-8
+      \endverb
+      \verb{file}
+      \verb :literature/10.1186-s13321-016-0116-8.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Hoffmann2011}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=57520db31b6fa7e85760054c3f9c078b}{%
+           family={Hoffmann},
+           familyi={H\bibinitperiod},
+           given={Edmond\bibnamedelima De},
+           giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=554d6c8d46aac1ec47e3ad43adeec34a}{%
+           family={Stroobant},
+           familyi={S\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chichester}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{fullhash}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{fullhashraw}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{bibnamehash}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{authorbibnamehash}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{authornamehash}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{authorfullhash}{66c40b0232e6c3e5e53e16b86fef3561}
+      \strng{authorfullhashraw}{66c40b0232e6c3e5e53e16b86fef3561}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3. ed., reprinted}
+      \field{isbn}{9780470033104}
+      \field{note}{Includes bibliohraphical references and index}
+      \field{pagetotal}{489}
+      \field{subtitle}{Principles and applications}
+      \field{title}{Mass spectrometry}
+      \field{year}{2011}
+      \verb{file}
+      \verb :literature/L-0000574151-pdf.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Scheubert2013}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=b521d0262403453987dfa8d03747f9fd}{%
+           family={Scheubert},
+           familyi={S\bibinitperiod},
+           given={Kerstin},
+           giveni={K\bibinitperiod}}}%
+        {{hash=2d138e7bf5b74798ee852ef21d42423d}{%
+           family={Hufsky},
+           familyi={H\bibinitperiod},
+           given={Franziska},
+           giveni={F\bibinitperiod}}}%
+        {{hash=7b293fa7e7921b48e54f7e763f6e0e0c}{%
+           family={Böcker},
+           familyi={B\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media LLC}%
+      }
+      \strng{namehash}{3e6f61248132f6be98c357f9d4d11e7d}
+      \strng{fullhash}{c8e58af71594f63d3d6b083867e08819}
+      \strng{fullhashraw}{c8e58af71594f63d3d6b083867e08819}
+      \strng{bibnamehash}{c8e58af71594f63d3d6b083867e08819}
+      \strng{authorbibnamehash}{c8e58af71594f63d3d6b083867e08819}
+      \strng{authornamehash}{3e6f61248132f6be98c357f9d4d11e7d}
+      \strng{authorfullhash}{c8e58af71594f63d3d6b083867e08819}
+      \strng{authorfullhashraw}{c8e58af71594f63d3d6b083867e08819}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1758-2946}
+      \field{journaltitle}{Journal of Cheminformatics}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{Computational mass spectrometry for small molecules}
+      \field{volume}{5}
+      \field{year}{2013}
+      \verb{doi}
+      \verb 10.1186/1758-2946-5-12
+      \endverb
+      \verb{file}
+      \verb :literature/10.1186-1758-2946-5-12.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Boecker2008}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=7b293fa7e7921b48e54f7e763f6e0e0c}{%
+           family={Böcker},
+           familyi={B\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f160c228fbbda6dbc07d0ba05f203f34}{%
+           family={Rasche},
+           familyi={R\bibinitperiod},
+           given={Florian},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press (OUP)}%
+      }
+      \strng{namehash}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{fullhash}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{fullhashraw}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{bibnamehash}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{authorbibnamehash}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{authornamehash}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{authorfullhash}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \strng{authorfullhashraw}{7f5a75d7d7d9bb88a6a038c869a51f0b}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1367-4803}
+      \field{journaltitle}{Bioinformatics}
+      \field{month}{8}
+      \field{number}{16}
+      \field{title}{Towards de novo identification of metabolites by analyzing tandem mass spectra}
+      \field{volume}{24}
+      \field{year}{2008}
+      \field{pages}{i49\bibrangedash i55}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1093/bioinformatics/btn270
+      \endverb
+      \verb{file}
+      \verb :literature/bioinformatics_24_16_i49.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Vaniya2015}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=1e809cbd4b4223487193468a9c06b37c}{%
+           family={Vaniya},
+           familyi={V\bibinitperiod},
+           given={Arpana},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e61fe5ec15e0f1341b85c8e6b6cee9f2}{%
+           family={Fiehn},
+           familyi={F\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier BV}%
+      }
+      \strng{namehash}{d92cd7deefb50254c63a851792222880}
+      \strng{fullhash}{d92cd7deefb50254c63a851792222880}
+      \strng{fullhashraw}{d92cd7deefb50254c63a851792222880}
+      \strng{bibnamehash}{d92cd7deefb50254c63a851792222880}
+      \strng{authorbibnamehash}{d92cd7deefb50254c63a851792222880}
+      \strng{authornamehash}{d92cd7deefb50254c63a851792222880}
+      \strng{authorfullhash}{d92cd7deefb50254c63a851792222880}
+      \strng{authorfullhashraw}{d92cd7deefb50254c63a851792222880}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0165-9936}
+      \field{journaltitle}{TrAC Trends in Analytical Chemistry}
+      \field{month}{6}
+      \field{title}{Using fragmentation trees and mass spectral trees for identifying unknown compounds in metabolomics}
+      \field{volume}{69}
+      \field{year}{2015}
+      \field{pages}{52\bibrangedash 61}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.trac.2015.04.002
+      \endverb
+      \verb{file}
+      \verb :literature/1-s2.0-S0165993615000916-main.pdf:PDF
+      \endverb
+    \endentry
+    \entry{wikibooks-ms-flowchart}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=5680bbf27b83663e845c0a5fc5ef5a34}{%
+           family={Murray},
+           familyi={M\bibinitperiod},
+           given={Kermit},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{fullhash}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{fullhashraw}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{bibnamehash}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{authorbibnamehash}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{authornamehash}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{authorfullhash}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \strng{authorfullhashraw}{5680bbf27b83663e845c0a5fc5ef5a34}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{month}{5}
+      \field{year}{2006}
+      \verb{urlraw}
+      \verb https://commons.wikimedia.org/wiki/File:Ms_block_schematic.gif
+      \endverb
+      \verb{url}
+      \verb https://commons.wikimedia.org/wiki/File:Ms_block_schematic.gif
+      \endverb
+    \endentry
+    \entry{chemguide}{misc}{}{}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{howpublished}{web}
+      \verb{urlraw}
+      \verb https://www.chemguide.co.uk/analysis/masspec/masspec.GIF
+      \endverb
+      \verb{url}
+      \verb https://www.chemguide.co.uk/analysis/masspec/masspec.GIF
+      \endverb
+    \endentry
+    \entry{Murray2013}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=c60a7fb49ff248e860f1324ffc53bf2a}{%
+           family={Murray},
+           familyi={M\bibinitperiod},
+           given={Kermit\bibnamedelima K.},
+           giveni={K\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=cf46d62234dce351d02ec34cbca5b334}{%
+           family={Boyd},
+           familyi={B\bibinitperiod},
+           given={Robert\bibnamedelima K.},
+           giveni={R\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=5ce8643ec80a49576a586a19b92ce7b1}{%
+           family={Eberlin},
+           familyi={E\bibinitperiod},
+           given={Marcos\bibnamedelima N.},
+           giveni={M\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=a6ab71a8a4b0ef40f42cee321b9272c0}{%
+           family={Langley},
+           familyi={L\bibinitperiod},
+           given={G.\bibnamedelimi John},
+           giveni={G\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=d9acdfc178153ae66cc7cabcb735e635}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Liang},
+           giveni={L\bibinitperiod}}}%
+        {{hash=04ae5489ba0ea39aa242f1baabed3c6f}{%
+           family={Naito},
+           familyi={N\bibinitperiod},
+           given={Yasuhide},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Walter de Gruyter GmbH}%
+      }
+      \strng{namehash}{99b4ef16a67c25b800d7257c23720114}
+      \strng{fullhash}{7ba9620e2edd107c90ad20b137183b63}
+      \strng{fullhashraw}{7ba9620e2edd107c90ad20b137183b63}
+      \strng{bibnamehash}{7ba9620e2edd107c90ad20b137183b63}
+      \strng{authorbibnamehash}{7ba9620e2edd107c90ad20b137183b63}
+      \strng{authornamehash}{99b4ef16a67c25b800d7257c23720114}
+      \strng{authorfullhash}{7ba9620e2edd107c90ad20b137183b63}
+      \strng{authorfullhashraw}{7ba9620e2edd107c90ad20b137183b63}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0033-4545}
+      \field{journaltitle}{Pure and Applied Chemistry}
+      \field{month}{6}
+      \field{number}{7}
+      \field{title}{Definitions of terms relating to mass spectrometry (IUPAC Recommendations 2013)}
+      \field{volume}{85}
+      \field{year}{2013}
+      \field{pages}{1515\bibrangedash 1609}
+      \range{pages}{95}
+      \verb{doi}
+      \verb 10.1351/pac-rec-06-04-06
+      \endverb
+      \verb{file}
+      \verb :literature/Mass_Spectrometry_Definitions_and_Terms_IUPAC_2013.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Moorthy2023}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=77bef4bdda0d2c10d8da32e67d9f2aa0}{%
+           family={Moorthy},
+           familyi={M\bibinitperiod},
+           given={Arun\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=533606160b2f3e6726218ae18afeec00}{%
+           family={Kearsley},
+           familyi={K\bibinitperiod},
+           given={Anthony\bibnamedelima J.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=c99164fcb79aa6a0fe4d4ec85961a9d7}{%
+           family={Mallard},
+           familyi={M\bibinitperiod},
+           given={William\bibnamedelima G.},
+           giveni={W\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=165cafb9950d6cf092973a34004a409b}{%
+           family={Wallace},
+           familyi={W\bibinitperiod},
+           given={William\bibnamedelima E.},
+           giveni={W\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=ba00ab083cab4b7961d5ee84f368a664}{%
+           family={Stein},
+           familyi={S\bibinitperiod},
+           given={Stephen\bibnamedelima E.},
+           giveni={S\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Chemical Society (ACS)}%
+      }
+      \strng{namehash}{1a59d9c80462ca5789f76a1a1d52da5a}
+      \strng{fullhash}{16c990ba016a54954a2219bebb1b2485}
+      \strng{fullhashraw}{16c990ba016a54954a2219bebb1b2485}
+      \strng{bibnamehash}{16c990ba016a54954a2219bebb1b2485}
+      \strng{authorbibnamehash}{16c990ba016a54954a2219bebb1b2485}
+      \strng{authornamehash}{1a59d9c80462ca5789f76a1a1d52da5a}
+      \strng{authorfullhash}{16c990ba016a54954a2219bebb1b2485}
+      \strng{authorfullhashraw}{16c990ba016a54954a2219bebb1b2485}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1520-6882}
+      \field{journaltitle}{Analytical Chemistry}
+      \field{month}{8}
+      \field{number}{35}
+      \field{title}{Inferring the Nominal Molecular Mass of an Analyte from Its Electron Ionization Mass Spectrum}
+      \field{volume}{95}
+      \field{year}{2023}
+      \field{pages}{13132\bibrangedash 13139}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1021/acs.analchem.3c01815
+      \endverb
+      \verb{file}
+      \verb :literature/nihms-1930725.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Rockwood2018}{inbook}{}{}
+      \name{author}{3}{}{%
+        {{hash=4308bccf68bb1370a0fed3709b74590d}{%
+           family={Rockwood},
+           familyi={R\bibinitperiod},
+           given={Alan\bibnamedelima L.},
+           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=afc4093799903b85e48fe9ec3ac89c95}{%
+           family={Kushnir},
+           familyi={K\bibinitperiod},
+           given={Mark\bibnamedelima M.},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=569bf2727ca0f320b0b9ca997d7228ef}{%
+           family={Clarke},
+           familyi={C\bibinitperiod},
+           given={Nigel\bibnamedelima J.},
+           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{0c3a0cb602dd3692e7d928640dfe045d}
+      \strng{fullhash}{db14ce13370a1a4e881292c5028ac1c0}
+      \strng{fullhashraw}{db14ce13370a1a4e881292c5028ac1c0}
+      \strng{bibnamehash}{db14ce13370a1a4e881292c5028ac1c0}
+      \strng{authorbibnamehash}{db14ce13370a1a4e881292c5028ac1c0}
+      \strng{authornamehash}{0c3a0cb602dd3692e7d928640dfe045d}
+      \strng{authorfullhash}{db14ce13370a1a4e881292c5028ac1c0}
+      \strng{authorfullhashraw}{db14ce13370a1a4e881292c5028ac1c0}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Principles and Applications of Clinical Mass Spectrometry}
+      \field{isbn}{9780128160633}
+      \field{title}{Mass Spectrometry}
+      \field{year}{2018}
+      \field{pages}{33\bibrangedash 65}
+      \range{pages}{33}
+      \verb{doi}
+      \verb 10.1016/b978-0-12-816063-3.00002-5
+      \endverb
+      \verb{file}
+      \verb :literature/2018 rockwood2018 MS review BUONA.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Stoddard2016}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=8ebacbe7ef1551772f1d2d3eb8395965}{%
+           family={Stoddard},
+           familyi={S\bibinitperiod},
+           given={Rhonda\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=b66b3fda51582ee3e1baadd8de469b76}{%
+           family={Collins},
+           familyi={C\bibinitperiod},
+           given={Scott},
+           giveni={S\bibinitperiod}}}%
+        {{hash=dd026471e0066f3afac1e9361da23310}{%
+           family={McIndoe},
+           familyi={M\bibinitperiod},
+           given={J.\bibnamedelimi Scott},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{5bc7faf3b63c62f30e5813184d389ab6}
+      \strng{fullhash}{9d5cb7d1c803c582b35aa454181ceecc}
+      \strng{fullhashraw}{9d5cb7d1c803c582b35aa454181ceecc}
+      \strng{bibnamehash}{9d5cb7d1c803c582b35aa454181ceecc}
+      \strng{authorbibnamehash}{9d5cb7d1c803c582b35aa454181ceecc}
+      \strng{authornamehash}{5bc7faf3b63c62f30e5813184d389ab6}
+      \strng{authorfullhash}{9d5cb7d1c803c582b35aa454181ceecc}
+      \strng{authorfullhashraw}{9d5cb7d1c803c582b35aa454181ceecc}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780470682531}
+      \field{journaltitle}{Patai’s Chemistry of Functional Groups}
+      \field{month}{3}
+      \field{title}{Mass Spectrometry of Organoaluminum Derivatives}
+      \field{year}{2016}
+      \field{pages}{1\bibrangedash 15}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1002/9780470682531.pat0831
+      \endverb
+      \verb{file}
+      \verb :literature/L.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Ashyrmamatov2025}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=34c5aedf9b16d0b2c2cd917a4c24c986}{%
+           family={Ashyrmamatov},
+           familyi={A\bibinitperiod},
+           given={Islambek},
+           giveni={I\bibinitperiod}}}%
+        {{hash=f0b6b9853fd236401c62c400679e401d}{%
+           family={Ucak},
+           familyi={U\bibinitperiod},
+           given={Umit\bibnamedelima V.},
+           giveni={U\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=51b8af6feab8bf01077844a4a2441cd5}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Juyong},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media LLC}%
+      }
+      \strng{namehash}{d2078395bd6fb867f07eec3f542ff5fc}
+      \strng{fullhash}{aed90c0a448113c984cb3c27a63a2ab8}
+      \strng{fullhashraw}{aed90c0a448113c984cb3c27a63a2ab8}
+      \strng{bibnamehash}{aed90c0a448113c984cb3c27a63a2ab8}
+      \strng{authorbibnamehash}{aed90c0a448113c984cb3c27a63a2ab8}
+      \strng{authornamehash}{d2078395bd6fb867f07eec3f542ff5fc}
+      \strng{authorfullhash}{aed90c0a448113c984cb3c27a63a2ab8}
+      \strng{authorfullhashraw}{aed90c0a448113c984cb3c27a63a2ab8}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2399-3669}
+      \field{journaltitle}{Communications Chemistry}
+      \field{month}{11}
+      \field{number}{1}
+      \field{title}{Refining EI-MS library search results through atomic-level insights}
+      \field{volume}{8}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.1038/s42004-025-01706-9
+      \endverb
+      \verb{file}
+      \verb :literature/42004_2025_Article_1706.pdf:PDF
+      \endverb
+    \endentry
+    \entry{VargasMedina2023}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=e505ea8dd8979ed2a49c7109f1b3aaef}{%
+           family={Vargas\bibnamedelima Medina},
+           familyi={V\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Deyber\bibnamedelima Arley},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=fd2ac495741aaba6d3b2a6332cab3544}{%
+           family={Maciel},
+           familyi={M\bibinitperiod},
+           given={Edvaldo\bibnamedelimb Vasconcelos\bibnamedelima Soares},
+           giveni={E\bibinitperiod\bibinitdelim V\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=69223df941709b7afa5a55ab45100c10}{%
+           family={Pereira\bibnamedelimb dos\bibnamedelima Santos},
+           familyi={P\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Natalia\bibnamedelima Gabrielly},
+           giveni={N\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=62e64ef90f330bc0e446025dd7ef7351}{%
+           family={Lancas},
+           familyi={L\bibinitperiod},
+           given={Fernando\bibnamedelima Mauro},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier BV}%
+      }
+      \strng{namehash}{d2d4d23871400c775c6aa4775fbb0e67}
+      \strng{fullhash}{d1e98465b6bfc7750809c7d744e6a791}
+      \strng{fullhashraw}{d1e98465b6bfc7750809c7d744e6a791}
+      \strng{bibnamehash}{d1e98465b6bfc7750809c7d744e6a791}
+      \strng{authorbibnamehash}{d1e98465b6bfc7750809c7d744e6a791}
+      \strng{authornamehash}{d2d4d23871400c775c6aa4775fbb0e67}
+      \strng{authorfullhash}{d1e98465b6bfc7750809c7d744e6a791}
+      \strng{authorfullhashraw}{d1e98465b6bfc7750809c7d744e6a791}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0958-1669}
+      \field{journaltitle}{Current Opinion in Biotechnology}
+      \field{month}{8}
+      \field{title}{The overshadowed role of electron ionization–mass spectrometry in analytical biotechnology}
+      \field{volume}{82}
+      \field{year}{2023}
+      \field{pages}{102965}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.copbio.2023.102965
+      \endverb
+      \verb{file}
+      \verb :literature/1-s2.0-S0958166923000757-main.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Amirav2021}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=6c04021f84640d185f3e3e6f918a4391}{%
+           family={Amirav},
+           familyi={A\bibinitperiod},
+           given={Aviv},
+           giveni={A\bibinitperiod}}}%
+        {{hash=00390c85d9166a8898132d717f2bd926}{%
+           family={Fialkov},
+           familyi={F\bibinitperiod},
+           given={Alexander\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=25c885183635a0f45f534ef88f5ea9b8}{%
+           family={Gordin},
+           familyi={G\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1383a7131ddd828eeb7c8ce18bdea91d}{%
+           family={Elkabets},
+           familyi={E\bibinitperiod},
+           given={Oneg},
+           giveni={O\bibinitperiod}}}%
+        {{hash=db27288e582cdd090498c8c6b0f43dcb}{%
+           family={Margolin\bibnamedelima Eren},
+           familyi={M\bibinitperiod\bibinitdelim E\bibinitperiod},
+           given={Ksenia\bibnamedelima J.},
+           giveni={K\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Chemical Society (ACS)}%
+      }
+      \strng{namehash}{ad53b4a4adf6eecbe0e0566771338743}
+      \strng{fullhash}{f4a3512711d4edce6c8ad016ff1858bc}
+      \strng{fullhashraw}{f4a3512711d4edce6c8ad016ff1858bc}
+      \strng{bibnamehash}{f4a3512711d4edce6c8ad016ff1858bc}
+      \strng{authorbibnamehash}{f4a3512711d4edce6c8ad016ff1858bc}
+      \strng{authornamehash}{ad53b4a4adf6eecbe0e0566771338743}
+      \strng{authorfullhash}{f4a3512711d4edce6c8ad016ff1858bc}
+      \strng{authorfullhashraw}{f4a3512711d4edce6c8ad016ff1858bc}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1879-1123}
+      \field{journaltitle}{Journal of the American Society for Mass Spectrometry}
+      \field{month}{10}
+      \field{number}{11}
+      \field{title}{Cold Electron Ionization (EI) Is Not a Supplementary Ion Source to Standard EI. It is a Highly Superior Replacement Ion Source}
+      \field{volume}{32}
+      \field{year}{2021}
+      \field{pages}{2631\bibrangedash 2635}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1021/jasms.1c00241
+      \endverb
+      \verb{file}
+      \verb :literature/js1c00241.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Lin2024}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=fb72b03bb0004672eb40dd00cb76bdcd}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Lin},
+           giveni={L\bibinitperiod}}}%
+        {{hash=60d371aac2ada8072914bd1b06d041ee}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Shuang},
+           giveni={S\bibinitperiod}}}%
+        {{hash=fc3730e626271e0384114518eac712b8}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Quan},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier BV}%
+      }
+      \strng{namehash}{a814953c68ef19ef98af8121f8a651ad}
+      \strng{fullhash}{bec6ce85085e32417a90cce351c1a08e}
+      \strng{fullhashraw}{bec6ce85085e32417a90cce351c1a08e}
+      \strng{bibnamehash}{bec6ce85085e32417a90cce351c1a08e}
+      \strng{authorbibnamehash}{bec6ce85085e32417a90cce351c1a08e}
+      \strng{authornamehash}{a814953c68ef19ef98af8121f8a651ad}
+      \strng{authorfullhash}{bec6ce85085e32417a90cce351c1a08e}
+      \strng{authorfullhashraw}{bec6ce85085e32417a90cce351c1a08e}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0584-8547}
+      \field{journaltitle}{Spectrochimica Acta Part B: Atomic Spectroscopy}
+      \field{month}{7}
+      \field{title}{Explore the feasibility of electrospray ionization high-resolution mass spectrometry in elemental analysis}
+      \field{volume}{217}
+      \field{year}{2024}
+      \field{pages}{106959}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.sab.2024.106959
+      \endverb
+      \verb{file}
+      \verb :literature/1-s2.0-S0584854724001034-main.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Ganeev2016}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=a947b07eab386d5bc178948f79b756d8}{%
+           family={Ganeev},
+           familyi={G\bibinitperiod},
+           given={A\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=153dfe014aea9297002fb8a8c35e30e9}{%
+           family={Gubal},
+           familyi={G\bibinitperiod},
+           given={A\bibnamedelima R},
+           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=7784792b7590d01d5a56772754392644}{%
+           family={Potapov},
+           familyi={P\bibinitperiod},
+           given={S\bibnamedelima V},
+           giveni={S\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=4e10659c7be5a24fe1cd29e881212c36}{%
+           family={Agafonova},
+           familyi={A\bibinitperiod},
+           given={N\bibnamedelima N},
+           giveni={N\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=f6af9fab7e490415c7098e681a2de13a}{%
+           family={Nemets},
+           familyi={N\bibinitperiod},
+           given={V\bibnamedelima M},
+           giveni={V\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Autonomous Non-profit Organization Editorial Board of the journal Uspekhi Khimii}%
+      }
+      \strng{namehash}{3c5263f4db34a38cc2fb129be362e74e}
+      \strng{fullhash}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
+      \strng{fullhashraw}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
+      \strng{bibnamehash}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
+      \strng{authorbibnamehash}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
+      \strng{authornamehash}{3c5263f4db34a38cc2fb129be362e74e}
+      \strng{authorfullhash}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
+      \strng{authorfullhashraw}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1468-4837}
+      \field{journaltitle}{Russian Chemical Reviews}
+      \field{month}{4}
+      \field{number}{4}
+      \field{title}{Mass spectrometric methods for the direct elemental and isotopic analysis of solid material}
+      \field{volume}{85}
+      \field{year}{2016}
+      \field{pages}{427\bibrangedash 444}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1070/rcr4504
+      \endverb
+      \verb{file}
+      \verb :literature/4504.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Fenn1989}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=bb4b7b2dc2089df3c01073e32c524d20}{%
+           family={Fenn},
+           familyi={F\bibinitperiod},
+           given={John\bibnamedelima B.},
+           giveni={J\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=dc690b5ff4f7ac183fcfadcc49715b23}{%
+           family={Mann},
+           familyi={M\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6b589643df97328d990a05ed8c2a19ac}{%
+           family={Meng},
+           familyi={M\bibinitperiod},
+           given={Chin\bibnamedelima Kai},
+           giveni={C\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=094e0fcfe307f7a4b356ffb629f8d464}{%
+           family={Wong},
+           familyi={W\bibinitperiod},
+           given={Shek\bibnamedelima Fu},
+           giveni={S\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=e978fc4f5a9a207419ff196534c312c5}{%
+           family={Whitehouse},
+           familyi={W\bibinitperiod},
+           given={Craig\bibnamedelima M.},
+           giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Association for the Advancement of Science (AAAS)}%
+      }
+      \strng{namehash}{1ee72b1fe14ffcbfdb6d15f828df2030}
+      \strng{fullhash}{90e6996b90d61e00bb36f31f97aaafaf}
+      \strng{fullhashraw}{90e6996b90d61e00bb36f31f97aaafaf}
+      \strng{bibnamehash}{90e6996b90d61e00bb36f31f97aaafaf}
+      \strng{authorbibnamehash}{90e6996b90d61e00bb36f31f97aaafaf}
+      \strng{authornamehash}{1ee72b1fe14ffcbfdb6d15f828df2030}
+      \strng{authorfullhash}{90e6996b90d61e00bb36f31f97aaafaf}
+      \strng{authorfullhashraw}{90e6996b90d61e00bb36f31f97aaafaf}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1095-9203}
+      \field{journaltitle}{Science}
+      \field{month}{10}
+      \field{number}{4926}
+      \field{title}{Electrospray Ionization for Mass Spectrometry of Large Biomolecules}
+      \field{volume}{246}
+      \field{year}{1989}
+      \field{pages}{64\bibrangedash 71}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1126/science.2675315
+      \endverb
+      \verb{file}
+      \verb :literature/Electrospray_20ionization_20for_20mass_20spectrometry_20of_20large_20--_20Fenn_2C_20J__3B_20Mann_2C_20M_3B_20Meng_2C_20C__3B_20Wong_2C_20S__3B_20Whitehouse_2C_20C__20--_20Science_2C_20_234926_2C_20246_2C_20pages_2064-71_2C_20--_2010_1126_2Fscience_.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Banerjee2012}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=0d624127cb4519af5996823c819af5d5}{%
+           family={Banerjee},
+           familyi={B\bibinitperiod},
+           given={Shibdas},
+           giveni={S\bibinitperiod}}}%
+        {{hash=3a8b9982c00112d2fe4a3ee7b88d7df7}{%
+           family={Mazumdar},
+           familyi={M\bibinitperiod},
+           given={Shyamalava},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Hindawi Limited}%
+      }
+      \strng{namehash}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{fullhash}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{fullhashraw}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{bibnamehash}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{authorbibnamehash}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{authornamehash}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{authorfullhash}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \strng{authorfullhashraw}{01cd8e6fb99b21ab67a7ceb436fd7cd8}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1687-8779}
+      \field{journaltitle}{International Journal of Analytical Chemistry}
+      \field{title}{Electrospray Ionization Mass Spectrometry: A Technique to Access the Information beyond the Molecular Weight of the Analyte}
+      \field{volume}{2012}
+      \field{year}{2012}
+      \field{pages}{1\bibrangedash 40}
+      \range{pages}{40}
+      \verb{doi}
+      \verb 10.1155/2012/282574
+      \endverb
+      \verb{file}
+      \verb :literature/International Journal of Analytical Chemistry - 2012 - Banerjee - Electrospray Ionization Mass Spectrometry A Technique to.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Dass2007}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=4ce3939b79c1ad3d14c9a28716f2f01a}{%
+           family={Dass},
+           familyi={D\bibinitperiod},
+           given={Chhabil},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Hoboken, N.J.}%
+      }
+      \list{publisher}{1}{%
+        {Wiley-Interscience}%
+      }
+      \strng{namehash}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{fullhash}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{fullhashraw}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{bibnamehash}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{authorbibnamehash}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{authornamehash}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{authorfullhash}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \strng{authorfullhashraw}{4ce3939b79c1ad3d14c9a28716f2f01a}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780470118481}
+      \field{note}{Includes bibliographical references and index.}
+      \field{pagetotal}{585}
+      \field{series}{Wiley-Interscience series on mass spectrometry}
+      \field{title}{Fundamentals of contemporary mass spectrometry}
+      \field{year}{2007}
+      \verb{file}
+      \verb :literature/Fundamentals Of Contemporary Mass Spectrometry - Wiley (2007).pdf:PDF;:literature/(Wiley-Interscience Series on Mass Spectrometry) Chhabil Dass - Fundamentals of Contemporary Mass Spectrometry-Wiley-Interscience (2007).pdf:PDF
+      \endverb
+    \endentry
+    \entry{Karas1988}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=576235d7b84ca0d44c7fb23677294c93}{%
+           family={Karas},
+           familyi={K\bibinitperiod},
+           given={Michael.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=a211a17f60557a1acad0f1ce5a8848e1}{%
+           family={Hillenkamp},
+           familyi={H\bibinitperiod},
+           given={Franz.},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Chemical Society (ACS)}%
+      }
+      \strng{namehash}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{fullhash}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{fullhashraw}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{bibnamehash}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{authorbibnamehash}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{authornamehash}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{authorfullhash}{01bfb4fb6049fa992ea90cba339a77a5}
+      \strng{authorfullhashraw}{01bfb4fb6049fa992ea90cba339a77a5}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1520-6882}
+      \field{journaltitle}{Analytical Chemistry}
+      \field{month}{10}
+      \field{number}{20}
+      \field{title}{Laser desorption ionization of proteins with molecular masses exceeding 10,000 daltons}
+      \field{volume}{60}
+      \field{year}{1988}
+      \field{pages}{2299\bibrangedash 2301}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1021/ac00171a028
+      \endverb
+      \verb{file}
+      \verb :literature/laser-desorption-ionization-of-proteins-with-molecular-masses-exceeding-10-000-daltons.pdf:PDF
+      \endverb
+    \endentry
+    \entry{Lai2017}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=2432c6d98454d81b3e87da9312d2f93b}{%
+           family={Lai},
+           familyi={L\bibinitperiod},
+           given={Yin-Hung},
+           giveni={Y\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=e98ad4ae3116c48210d671afc913bdcc}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yi-Sheng},
+           giveni={Y\bibinithyphendelim S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {The Mass Spectrometry Society of Japan}%
+      }
+      \strng{namehash}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{fullhash}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{fullhashraw}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{bibnamehash}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{authorbibnamehash}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{authornamehash}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{authorfullhash}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \strng{authorfullhashraw}{476a0f0b38a2be191a5e0fc1c00126d0}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2187-137X}
+      \field{journaltitle}{Mass Spectrometry}
+      \field{number}{3}
+      \field{title}{Matrix-Assisted Laser Desorption/Ionization Mass Spectrometry: Mechanistic Studies and Methods for Improving the Structural Identification of Carbohydrates}
+      \field{volume}{6}
+      \field{year}{2017}
+      \field{pages}{S0072\bibrangedash S0072}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.5702/massspectrometry.s0072
+      \endverb
+      \verb{file}
+      \verb :literature/massspectrometry-6-Spec_Iss_2-S0072.pdf:PDF
+      \endverb
+    \endentry
+    \entry{McLafferty2013}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=ef7fb20360c0bcb77f830e0d8164c463}{%
+           family={McLafferty},
+           familyi={M\bibinitperiod},
+           given={Fred\bibnamedelima W.},
+           giveni={F\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=98dba2d4356d56e28d47214fd6e06b53}{%
+           family={Tureček},
+           familyi={T\bibinitperiod},
+           given={František},
+           giveni={F\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=14aea97ae56fb559fee865fca3185d54}{%
+           family={Schenk},
+           familyi={S\bibinitperiod},
+           given={Birgit},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {ger}%
+      }
+      \list{location}{1}{%
+        {Berlin [u.a.]}%
+      }
+      \list{publisher}{1}{%
+        {Spektrum Akad. Verl.}%
+      }
+      \strng{namehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{fullhash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{fullhashraw}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{bibnamehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authorbibnamehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authornamehash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authorfullhash}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{authorfullhashraw}{a29a977435b0a03fb8b47cba4c1a6405}
+      \strng{editorbibnamehash}{14aea97ae56fb559fee865fca3185d54}
+      \strng{editornamehash}{14aea97ae56fb559fee865fca3185d54}
+      \strng{editorfullhash}{14aea97ae56fb559fee865fca3185d54}
+      \strng{editorfullhashraw}{14aea97ae56fb559fee865fca3185d54}
+      \field{extraname}{2}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{Unveränd. Nachdruck}
+      \field{isbn}{9783642398483}
+      \field{pagetotal}{380}
+      \field{series}{Spektrum Lehrbuch}
+      \field{title}{Interpretation von Massenspektren}
+      \field{year}{2013}
+      \keyw{Massenspektrometrie}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
