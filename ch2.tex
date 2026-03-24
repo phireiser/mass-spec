@@ -15,7 +15,8 @@ Conceptually, an MS experiment comprises three main steps:
     \item \textbf{detection}, in which ion signals are recorded and assembled into a spectrum. \cite[p.~5]{Hoffmann2011}    
 \end{enumerate}
  
-Because many compounds form multiple ion species (e.g., adducts \cite[p.~21]{Hoffmann2011}, isotopologues \cite[p.~67]{Gross2006}, fragments), 
+Because many compounds form multiple ion species
+ (e.g., adducts \cite[p.~21]{Hoffmann2011}, isotopologues \cite[p.~67]{Gross2006}, fragments), 
 the measured spectrum is not a direct image of the neutral molecule 
 but a structured measurement that must be interpreted in the context of the ionization and fragmentation processes used.
 \cite[p.~16-18]{Hoffmann2011}
@@ -60,9 +61,10 @@ $\mathrm{H_2O}$, $\mathrm{NH_3}$, or $\mathrm{CO}$
 can indicate the presence of hydroxyl, amino, or carbonyl functionalities, 
 while specific fragment series can suggest 
 alkyl chain lengths or aromatic substitution patterns. \cite[p.~504]{Gross2006} 
-Importantly, structural elucidation from MS data is rarely a single-step deduction; 
+Importantly, structural elucidation from MS data is rarely strait forward; 
 rather, it is an inference problem in which multiple candidate structures 
 may explain the same spectral evidence, especially for isomers. \cite[p.~53]{Vaniya2015}
+
 As a result, modern workflows increasingly integrate MS measurements with computational 
 models that generate and rank candidate structures based on spectral consistency.
 
@@ -70,17 +72,17 @@ models that generate and rank candidate structures based on spectral consistency
 \section{Principles of Mass Spectrometry}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
-    \input{fig-tikz/ms-flowchart.tikz.tex}
+    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-flowchart.tikz.tex}}
     \caption{Flowchart of a mass spectrometer}
     \label{fig:ms-flow}
     \cite{wikibooks-ms-flowchart}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \input{fig-tikz/ms-schematic.tikz.tex}
+    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-schematic.tikz.tex}}
     \caption{Schematic of a mass spectrometer}
     \label{fig:ms-schematic}
     \cite{chemguide}
@@ -141,9 +143,12 @@ Because the internal energy of the molecular ion typically exceeds the activatio
 the $[M^{+\cdot}]$ ion spontaneously fragments into smaller product ions and neutral molecules. \cite[p.~3]{Stoddard2016}
 As a result, EI mass spectra are characterized by rich fragmentation patterns that reflect the molecular structure. \cite{Ashyrmamatov2025}
 
-The deterministic nature of EI fragmentation pathways makes electron ionization particularly valuable for structural elucidation. \cite{VargasMedina2023}
-Characteristic losses of small neutral species provide diagnostic clues about functional groups and connectivity. 
-EI is the dominant ionization method in gas chromatography-mass spectrometry (GC-MS) and remains widely used in small-molecule analysis. \cite[p.~1]{Amirav2021}
+The deterministic nature of EI fragmentation pathways 
+makes electron ionization particularly valuable for structural elucidation. \cite{VargasMedina2023}
+Characteristic losses of small neutral species 
+provide diagnostic clues about functional groups and connectivity. \cite{Bourcier2008}
+EI is the dominant ionization method in gas chromatography-mass spectrometry (GC-MS) 
+and remains widely used in small-molecule analysis. \cite[p.~1]{Amirav2021}
 
 \paragraph{Spark Ionization (SI)}, is a hard ionization technique \cite[p.~1]{Lin2024}, 
 that often utilized to detect trace elements at parts-per-billion (ppb) levels. \cite[p.~428]{Ganeev2016}
@@ -223,107 +228,112 @@ A general schematic of the MALDI process is shown in Figure~\ref{fig:maldi-schem
  
 \subsection{Mass Analyzers}
 
-After ions are generated in the ion source, they must be separated according 
-to their mass-to-charge ratio $m/z$ before detection. This task is performed 
-by the \textit{mass analyzer}. Mass analyzers exploit the motion of charged 
-particles in electric and magnetic fields to discriminate ions with different 
-$m/z$ values. The motion of an ion with mass $m$ and charge $q$ is described by 
-the Lorentz force equation
+After ionization, the generated ions must be separated according to their 
+mass-to-charge ratio $m/z$ before detection. 
+This separation is performed by the \textit{mass analyzer}. \cite[pp.~5-6]{Dass2007}
+Different analyzer designs exploit electric and magnetic fields to distinguish ions with different $m/z$ values. 
+Among the most widely used analyzers are magnetic sector instruments, 
+time-of-flight (TOF) analyzers, and quadrupole analyzers. \cite[pp.~108-109]{Dass2007}
+
+\subsubsection{Magnetic Sector Mass Analyzers}
+
+Magnetic sector analyzers separate ions according to their motion in a magnetic field. 
+The motion of a charged particle with mass $m$ and charge $q$ 
+in electric and magnetic fields is described by the Lorentz force equation
 
 \[
 \left(\frac{m}{q}\right)\mathbf{a} = \mathbf{E} + \mathbf{v} \times \mathbf{B},
 \]
 
 where $\mathbf{E}$ is the electric field, $\mathbf{B}$ the magnetic field, 
-$\mathbf{v}$ the ion velocity, and $\mathbf{a}$ the acceleration. 
-Because ions with identical mass-to-charge ratios experience identical forces, 
-they follow identical trajectories inside the analyzer. By controlling the 
-fields acting on the ions, species with different $m/z$ values can therefore be 
-separated before reaching the detector. \cite[p.~85]{Hoffmann2011}
+$\mathbf{v}$ the ion velocity, and $\mathbf{a}$ the acceleration.
+Ions with identical mass-to-charge ratios experience identical forces and 
+therefore follow identical trajectories inside the analyzer. 
 
-Several types of mass analyzers have been developed. Among the most widely used 
-are magnetic sector analyzers, time-of-flight analyzers, and quadrupole analyzers, 
-each exploiting different physical principles for separating ions.
-
-\subsubsection{Magnetic Sector Mass Analyzers}
-
-Magnetic sector analyzers separate ions based on their deflection in a magnetic 
-field. When ions enter a magnetic field perpendicular to their velocity, the 
-Lorentz force bends their trajectory into a circular path. The balance between 
-the magnetic force and the centripetal force yields
+When ions enter a magnetic field perpendicular to their velocity, the 
+Lorentz force bends their trajectory into a circular path. The balance 
+between the magnetic force and the centripetal force yields
 
 \[
 qvB = \frac{mv^{2}}{r},
 \]
 
-where $r$ is the radius of curvature of the ion trajectory. Rearranging gives
+with $r$ being the radius of the circular path, which leads to
 
 \[
 \frac{m}{q} = \frac{B^{2} r^{2}}{2V},
 \]
 
 assuming the ions were accelerated through a potential $V$. 
-Thus ions with different $m/z$ values follow trajectories with different radii. 
-By adjusting the magnetic field strength or the acceleration voltage, ions of 
-specific mass-to-charge ratios can be selectively focused onto the detector. 
-Magnetic sector instruments historically played a central role in early 
-high-resolution mass spectrometry. \cite[p.~143]{Hoffmann2011}
+Ions with different $m/z$ therefore follow trajectories with different 
+radii and can be spatially separated. \cite[pp.~1799-1800]{Bowen2016}
 
 \subsubsection{Time-of-Flight (TOF) Analyzers}
 
-Time-of-flight analyzers separate ions based on the time required for them to 
-travel a fixed distance after acceleration. When ions are accelerated through 
-a potential $V$, they acquire kinetic energy
+Time-of-flight analyzers separate ions according to the time required 
+to travel a fixed distance after acceleration. When ions are accelerated 
+through a potential $V$, they acquire kinetic energy
 
 \[
 \frac{1}{2}mv^{2} = qV.
 \]
 
-Solving for the velocity yields
+Solving for the velocity gives
 
 \[
 v = \sqrt{\frac{2qV}{m}}.
 \]
 
-Since ions travel through a field-free drift region of length $L$, their flight 
-time $t$ is
-
+In a field-free drift region of length $L$, the flight time is therefore
 \[
 t = \frac{L}{v} = L\sqrt{\frac{m}{2qV}}.
 \]
 
-Consequently, lighter ions reach the detector earlier than heavier ones. 
-Measuring the flight time therefore allows determination of the mass-to-charge 
-ratio. TOF analyzers are widely used due to their fast acquisition speed and 
-virtually unlimited mass range. \cite[p.~126]{Hoffmann2011}
+Consequently, lighter ions reach the detector earlier than heavier ions, 
+allowing determination of their $m/z$ values. \cite[p.~1152]{Wiley1955}
 
-\subsubsection{Quadrupole Analyzers}
+\subsubsection{Quadrupole Mass Filter (QMF)}
 
-Quadrupole analyzers consist of four parallel rods to which a combination of 
-radio-frequency (RF) and direct current (DC) voltages is applied. The resulting 
-oscillating electric field creates ion trajectories that are stable only for a 
-specific range of mass-to-charge ratios. Ions with stable trajectories pass 
-through the quadrupole and reach the detector, whereas ions with unstable 
-trajectories collide with the rods and are removed. By scanning the applied 
-voltages, the quadrupole sequentially transmits ions of increasing $m/z$, thereby 
-producing a mass spectrum. Quadrupole analyzers are widely used in routine 
-analytical instruments because of their robustness, compact design, and ability 
-to operate as mass filters or in tandem mass spectrometry configurations. 
-\cite[p.~88]{Hoffmann2011}
+Quadrupole analyzers consist of four parallel rods to which a combination 
+of radio-frequency (RF) and direct current (DC) voltages is applied. \cite[p.~2]{Li2021}
+The resulting oscillating electric field produces ion trajectories that 
+are stable only for ions within a specific range of mass-to-charge ratios. 
+Ions with stable trajectories pass through the quadrupole to the detector, 
+while ions with unstable trajectories collide with the rods and are removed. \cite[p.~1]{Jang2022}
+By scanning the applied voltages, ions of increasing $m/z$ can be transmitted 
+sequentially, generating a mass spectrum. \cite[p.~2]{Li2021}
 
-These three analyzer types illustrate the main strategies used in mass spectrometry: 
-spatial separation of ion trajectories (sector instruments), 
-temporal separation based on flight time (TOF), and 
-stability filtering in oscillating electric fields (quadrupoles).
+\subsubsection{Quadrupole Ion Trap (QIT)}
 
-
+The quadrupole ion trap operates on the 
+same fundamental principle as the linear quadrupole analyzer described above, 
+added with the ability of oscillating radiofrequency fields to 
+selectively confine ions according to their mass-to-charge ratio. \cite[p.~1156]{Raffaelli2021}
+The key distinction lies in the geometry of the electric field: 
+whereas the linear quadrupole uses four parallel rods to create 
+a two-dimensional confining potential that allows ions to pass 
+through along the axial direction, the ion trap employs a 
+three-dimensional quadrupolar field configuration that confines 
+ions in all spatial dimensions within a central cavity. \cite[p.~962]{March2009}
+This fundamental geometric difference enables the QIT to accumulate 
+and store ions over time \cite[p.~973]{March2009}, rather than merely filtering them during transit, 
+which has profound implications for sensitivity, scan modes, 
+and the ability to perform multiple stages of mass analysis within a single device.
+\cite[p.~984]{March2009}
 
 
 \subsection{Detection}
 
-The dominant detector in EI-MS: Electron Multiplier (EM)
+After ions have been separated by the mass analyzer, 
+they must be detected and converted into a measurable electrical signal. \cite[pp.~5-6]{Dass2007}
+The detector is transforming the arrival of individual ions into quantifiable data 
+that can be assembled into a mass spectrum. \cite[p.~103]{Dass2007}
 
-An electron multiplier converts a single incoming ion into a large cascade of electrons (Principle of operation):
+The dominant detector in Electron Ionization Mass Spectrometry is the Electron Multiplier (EM). 
+\cite[p.~103]{Dass2007}
+
+An electron multiplier operates by converting a single incoming ion into a large cascade of electrons 
+through the following sequence:
 
 \begin{enumerate}
     \item An ion hits the first dynode
@@ -333,78 +343,237 @@ An electron multiplier converts a single incoming ion into a large cascade of el
     \item Result: a measurable current pulse
 \end{enumerate}
 
+This cascade amplification principle is illustrated in Figure~\ref{fig:em-schematic}.
+
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/em-schematic.tex}}
+    \caption{Schematic of an electron multiplier detector}
+    \label{fig:em-schematic}
+    \cite[p.~50]{Rockwood2018}
+\end{figure}
+
+The amplification factor of an electron multiplier can reach $10^6$ to $10^8$, 
+enabling the detection of individual ions with high sensitivity.
+The resulting current pulses are digitized and recorded as a function of $m/z$, 
+producing the final mass spectrum that serves as the basis for subsequent data analysis. \cite[p.~104]{Dass2007}
+
 \subsection{Manual Interpretation of the MS Spectrum}
 
-\emph{Data analysis} transforms the raw spectrum into structural hypotheses: 
-isotope patterns constrain elemental composition, 
+Data analysis transforms the raw spectrum into structural hypotheses: 
+isotope patterns constrain elemental composition, \cite[p.~67]{Gross2006}
 while fragment ions and neutral-loss relationships constrain functional groups and connectivity. 
-Importantly, this inference is rarely a single-step deduction; 
-instead, multiple candidate structures can be compatible with the same spectral evidence, particularly for isomers.
+\cite{Bourcier2008}
+Note, multiple candidate structures can be compatible with the same spectral evidence, particularly for isomers under hard ionization methods like EI.
+\cite[p.~6996]{Wu2023}
 
-\noindent
-\hrule\vspace{0.5\baselineskip}
-\noindent
+The following summarize a typical manual workflow \cite[pp.~215-216]{Dass2007} 
+for interpreting EI mass spectra.
 
-Here we are looking at the manuell analysis of the mass spectrum
+\begin{enumerate}
+    \item Determine the molecular ion peak (M) and its isotopic pattern
+    \item find isotope patterns (e.g., Cl, Br, S)
+        \begin{table}[H]
+        \centering
+        \caption{sample isotope patterns}
+        \label{tab:placeholder_label}
+            \begin{tabular}{ll}
+                \hline
+                Element & Diagnostic pattern \\
+                \hline
+                Cl & 3:1 doublet (M, M+2) \\
+                Br & 1:1 doublet \\
+                S & small M+2 peak \\
+                C & $^{13}$C gives predictable M+1 \\
+                \hline
+            \end{tabular}
+        \end{table}
+    \item determine the base peak (100\%) which is the energetically favored fragmentation
+    \item analyze fragment differences and identify neutral losses
+    \item match fragmentation to chemical logic defined by reaction rules
+\end{enumerate}
 
-usually well working heuristics
-
-1. What to look for first Molecular ion peak for EI: \( [M^+ \cdot] \)
-
-2. look for characteric isotope patterns
-\begin{table}[H]
-    \centering
-    \caption{sample isotope patterns}
-    \label{tab:placeholder_label}
-    \begin{tabular}{ll}
-        \hline
-        Element & Diagnostic pattern \\
-        \hline
-        Cl & 3:1 doublet (M, M+2) \\
-        Br & 1:1 doublet \\
-        S & small M+2 peak \\
-        C & $^{13}$C gives predictable M+1 \\
-        \hline
-    \end{tabular}
-\end{table}
-
-3. look for base peak (100\%) which is the energetically favored fragmentation
-
-4. Analyze fragment differences -> look for neutral losses
-
-5. Match fragmentation to chemical logic (reaction rules)
-
-
-
-
+These practical heuristics are grounded in specific EI reaction mechanisms, 
+which are outlined in the following subsection.
 
 \subsection{Reactions in Electron Ionization}
 
-EI reactions are well known \cite{McLafferty2013}
+Fragmentation reactions in electron ionization mass spectrometry follow well-characterized patterns 
+that are not random but are reproducible pathways determined by \cite{Ashyrmamatov2025}
+the internal energy distribution and the intrinsic chemistry of the molecular ion. \cite[p.~846]{Dantus2024}
+Understanding these reaction mechanisms is essential for interpreting EI spectra 
+and for predicting fragmentation patterns from molecular structure. \cite[p.~846]{Dantus2024}
+
+They have been studied extensively by McLafferty and Tureček, see \cite{McLafferty1993}.
+The following subsections describe some of the most important mechanisms.
+
+\subsubsection{Homolytic single-bond cleavage}
+
+The most straightforward fragmentation pathway is \emph{simple bond cleavage}, 
+in which a single bond in the molecular ion breaks homolytically, 
+yielding a charged fragment and a neutral radical. 
+The probability of cleavage at a particular bond depends primarily on bond strength: 
+weaker bonds are more readily broken. \cite[p.~30]{Gross2006}
+For aliphatic hydrocarbons, C--C bonds adjacent to branching points 
+or heteroatoms are particularly susceptible to cleavage. \cite[p.~258]{Gross2006}
+
+\subsubsection{Alpha Cleavage} 
+
+\emph{Alpha cleavage} is a characteristic fragmentation mode in molecules containing functional groups 
+with heteroatoms. \cite[pp.~220--221]{Dass2007}
+In this process, the bond directly adjacent to the functional group is cleaved, 
+producing a resonance-stabilized cation. \cite[pp.~220--221]{Dass2007}
+For instance, in ketones and aldehydes, cleavage of the C--C bond next to the carbonyl group 
+generates an acylium ion $\mathrm{RCO}^+$, which is stabilized by the resonance structure 
+$\mathrm{R{-}C{\equiv}O}^+$. \cite[pp.~234--235]{Gross2006}
+This reaction pathway often produces intense peaks in the spectrum 
+and serves as a diagnostic indicator for carbonyl-containing compounds. \cite[pp.~234--235]{Gross2006}
+
+\subsubsection{McLafferty Rearrangement}
+
+The \emph{McLafferty rearrangement} is a hydrogen-transfer reaction 
+characteristic of carbonyl compounds and other systems with abstractable $\gamma$-hydrogens.\cite[p.~223]{Dass2007}
+In the commonly depicted mechanism, a six-membered transition state facilitates 
+the transfer of a hydrogen atom from the $\gamma$ position to the carbonyl oxygen, 
+accompanied by cleavage of the bond between the $\alpha$ and $\beta$ carbons. \cite[p.~265]{Gross2006}
+The result is an enol radical cation and a neutral alkene. \cite[p.~224]{Dass2007}
+This rearrangement is particularly valuable for structural elucidation 
+because it reveals connectivity information that would not be apparent from simple cleavage alone. 
+\cite[p.~224]{Dass2007}
+
+\subsubsection{Charge-Induced Fragmentations}
+
+Beyond the radical-site-driven cleavages described above, 
+fragmentation can also be initiated by the charge center itself.
+In such \emph{charge-directed fragmentations}, 
+the positive charge polarizes nearby bonds, 
+facilitating heterolytic cleavage and producing even-electron cations and neutral radicals. 
+\cite[pp.~281]{Hoffmann2011}
+
+
 \section{Computational Mass Spectrometry}
+
+Computational tools significantly enhance MS capabilities 
+for structure elucidation and compositional analysis. \cite[pp.~1--2]{Scheubert2013}
+Modern workflows integrate in silico fragmentation models, 
+spectral database searches, and machine-learning methods 
+to accelerate compound identification and enable high-throughput analysis. \cite[p.~1]{Ashyrmamatov2025} \cite[p.~2]{Scheubert2013}
+
+In this section, we outline the key computational strategies in mass spectrometry, 
+including library matching, in silico prediction, and de novo structure inference, 
+before turning to their mathematical and algorithmic foundations.
+
 \subsection{Library Search}
-is a spectrum-matching procedure used to identify an unknown compound by comparing 
-its measured spectrum against a reference database of known spectra.
+Library search is a spectrum-matching procedure used to identify an unknown compound
+by comparing its measured spectrum against a reference database of known spectra. \cite[p.~8]{Scheubert2013}
+Each entry in such a database typically stores a reference spectrum together with
+metadata such as molecular formula, structure, and acquisition conditions.
 
-one compares: m/z values, relative intensities
+The comparison operates on two observable quantities:
+the $m/z$ values of detected peaks and their relative intensities.
+A query spectrum is considered a match if a reference spectrum reproduces
+both the positions and the abundance pattern of its peaks sufficiently well.\cite[p.~35]{Rockwood2018}
 
-workflow: Pre-processing (Noise filtering, Peak picking, Intensity normalization, Optional deisotoping), 
-Candidate filtering (precursor $\pm$ 5ppm), scoring and ranking
+A typical library search workflow proceeds as follows: \cite[pp.~1, 5]{Scheubert2013}
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Pre-processing:} the query spectrum is converted 
+    into a form suitable for comparison, 
+    for example by peak selection, intensity scaling, or related preprocessing steps.
+    \item \textbf{Candidate filtering:} database entries may be restricted using precursor mass 
+    or precursor $m/z$ information within a tolerance window, 
+    reducing the number of candidates that must be evaluated. 
+    \cite[p.~14]{Young2024}
+    \item \textbf{Scoring and ranking:} each candidate reference spectrum is assigned 
+    a similarity score against the query, and candidates are ranked accordingly. 
+    \cite[p.~5]{Scheubert2013}
+\end{enumerate}
+
+The most widely used similarity metric is the \emph{cosine similarity},
+computed over the vector of peak intensities aligned by $m/z$: 
+\cite[p.~1]{Harwood2023}
+\begin{equation}
+    \cos(\mathbf{q}, \mathbf{r}) = \frac{\mathbf{q} \cdot \mathbf{r}}{\|\mathbf{q}\|\,\|\mathbf{r}\|},
+\end{equation}
+where $\mathbf{q}$ and $\mathbf{r}$ are the intensity vectors of the query
+and reference spectrum, respectively.
+A score of 1 indicates a perfect match; lower values indicate increasing dissimilarity.
+
 
 \subsection{In Silico Fragmentation}
-predicts how a molecule will fragment in a mass spectrometer and generates a theoretical spectrum
 
-workflow: Structure -> simulated fragments ->  predicted spectrum -> spectrum matching
+In silico fragmentation predicts how a molecule may dissociate in a mass spectrometer
+and generates a theoretical spectrum from these simulated fragment ions. \cite[p.~1]{Nowatzky2025}
+The standard workflow starts from a candidate molecular structure,
+applies computational fragmentation rules or learned models to produce plausible fragments,
+converts these fragments into a predicted spectrum,
+and finally compares the prediction against the measured spectrum using a similarity score. \cite[p.~2]{Nowatzky2025}
+This approach is particularly useful when no exact match is available in spectral libraries,
+because it enables structure-aware candidate ranking beyond pure reference lookup. 
+\cite[pp.~1--2]{Scheubert2013}\cite[p.~1]{Ashyrmamatov2025}
+At the same time, prediction quality depends strongly on how well the model captures real
+instrument conditions, ionization-dependent chemistry, and fragment intensities;
+consequently, performance can degrade for compounds or fragmentation pathways
+that are underrepresented in the training data or incompletely described by rule sets. 
+\cite[p.~1989]{Hamaneh2024}
+
+When these in silico predictions remain ambiguous, the workflow may shift to
+de novo inference directly from spectral constraints.
+
 \subsection{De Novo Structure Prediction}
-in general:
-from first principles, without relying on experimentally determined templates
-in MS:
-inferring the molecular structure directly from MS data, without using a reference database or known templates
-\section{Graph-Based Molecular Representations}
-\subsection{Molecular Graphs}
-Formal definition
 
-A molecular graph is typically defined as
+De novo structure prediction denotes the inference of molecular structure from scratch, 
+i.e., without relying on pre-existing templates or premade reference repositories
+\cite[p.~1]{Yasonik2020}.
+Importantly, \emph{de novo} characterizes the \emph{template-free} nature of the workflow and does not, 
+by itself, imply a specific modeling paradigm (e.g., physics-based versus data-driven).
+Accordingly, de novo approaches may incorporate empirical heuristics, statistical learning, 
+or mechanistic constraints, depending on the application. \cite[pp.~701--702]{Wei2019}
+
+\subsection{First Principles}
+In contrast, \emph{first-principles} modeling emphasizes deriving 
+predictions without empirical parameterization, i.e., without fitting to experimental data.
+\cite[p.~1]{Bhattacharyya2019} 
+In physics and chemistry, such first-principles treatments are often 
+realized via \emph{ab initio} electronic-structure methods.
+
+\subsubsection{Ab Initio MS Prediction}
+
+Ab initio MS prediction refers to computational modeling of mass spectra directly from molecular structure 
+using nonempirical quantum-mechanical methods that are, in principle, independent of experimental fitting
+\cite[p.~1921]{Minkin1999}.
+In this sense, ab initio approaches constitute first-principles modeling, 
+because they aim to predict fragmentation behavior and resulting spectra 
+from the underlying physics and chemistry of the molecule rather than from learned correlations.
+Operationally, ab initio MS prediction typically relies 
+on quantum-chemical calculations (to obtain energetics and feasible fragmentation channels) 
+combined with dynamical or statistical treatments to relate accessible pathways
+to predicted fragment distributions. 
+
+While ab initio methods can provide mechanistic insight and may achieve high accuracy for small molecules, 
+their computational cost often limits scalability to large molecular libraries and complex systems. \cite[p.~702]{Wei2019}
+
+
+\section{Computational Representations of Molecules and Reactions}
+
+The encoding of molecular structures and reactions in a machine-processable 
+form is essential for the feasibility of making algorithmic predictions. \cite[p.~518]{Wu2018}
+
+In computational chemistry, molecules can be represented as graphs. \cite[p.~521]{Wu2018}
+Reactions are modeled as graph transformations that break and form bonds. \cite[p.~18]{Mueller2022}
+
+
+\subsection{Molecular Graphs}
+
+To enable algorithmic processing of molecular structures, we represent them using 
+an abstract graph model that separates topology (which atoms are connected) 
+from optional geometric detail. \cite[p.~18]{Mueller2022}
+This abstraction enables precise operations such as matching and rule-based transformation. \cite[pp.~2--3]{Andersen2013}
+The formal definition used throughout this thesis is introduced next.
+
+\subsubsection{Formal definition}
+
+A molecular graph is typically defined as \cite[p.~2]{Ehrlich2012} \cite[p.~3]{Fujita2025}
 \begin{equation}
     G = (V, E)
 \end{equation}
@@ -414,48 +583,37 @@ where:
     \item E ... Edges represent chemical bonds between atoms
 \end{itemize}
 
-This structure captures which atoms are connected to which, but not their explicit 3D positions unless extended.
+In Representations each node may carry attributes such as element type (e.g., C, N, O), 
+formal charge, aromaticity, hybridization state, and isotope label.
+Likewise, each edge may encode bond order (single, double, or triple), aromatic character,
+and bond stereochemistry. \cite[pp.~4--5]{Wojtuch2023}
+By construction, this basic molecular graph does not include geometric or electronic detail,
+such as 3D coordinates, molecular conformation, or wavefunction-level
+information; these require augmented graph models or separate geometric and electronic representations.
+\cite[pp.~3--4]{Wojtuch2023} \cite[p.~595]{Kearnes2016}
 
 
-
-Each node may carry attributes such as:
-\begin{itemize}
-    \item Element type (C, N, O, ...)
-    \item Formal charge
-    \item Aromaticity
-    \item Hybridization
-    \item Isotope
-\end{itemize}
-
-
-Each edge may encode:
-\begin{itemize}
-    \item Bond order (single, double, triple)
-    \item Aromatic bond
-    \item Bond stereochemistry (E/Z)
-    \item Directionality (important for reactions)
-\end{itemize}
-
-
-By default, a molecular graph does not include:
-
-\begin{itemize}
-    \item 3D coordinates
-    \item Bond lengths or angles
-    \item Conformation
-    \item Electronic wavefunctions
-\end{itemize}
-These require augmented graphs or separate geometric representations.
 
 \subsection{Chemical Graph Transformation Systems}
-reaction center (moel, coloured edges and vertecies)
+To model chemical reactions algorithmically, 
+molecular graphs are combined with rewrite rules that encode local bond changes. \cite[p.~76]{2016}
+In this view, a reaction is not an arbitrary edit of a graph, 
+but a constrained transformation that preserves valid molecular structure 
+while modifying a specific reaction center. \cite[p.~2]{Andersen2013} \cite[p.~6]{Abel2026}
 
-\subsection{Double Pushout Graph Rewriting}
-
-%https://www.uibk.ac.at/mathematik/algebra/staff/fritz-tobias/ct2021_course_projects/handoutdpric_fertig.pdf
-
-morphisms
-
+\subsubsection{Double Pushout Graph Rewriting}
+A standard formalism is the double pushout (DPO) approach. \cite[p.~3]{Andersen2013} A rule is given by
+\[
+p = (L \xleftarrow{l} K \xrightarrow{r} R),
+\]
+where \(L\) is the left-hand side pattern to be matched, 
+\(R\) is the right-hand side pattern after rewriting, 
+and \(K\) is the interface that is preserved. \cite[p.~75]{2016}
+Given a match \(m:L\to G\) in a host graph \(G\), 
+DPO rewriting constructs an intermediate graph \(D\) (deletion pushout complement) \cite[p.~680]{HABEL2001}
+and then the product graph \(H\) (insertion pushout). 
+Intuitively, parts in \(L\setminus K\) are removed, 
+parts in \(R\setminus K\) are added, and \(K\) remains unchanged. \cite[p.~3]{Andersen2013} \cite[p.~4]{Flamm2025}
 
 \[
     \begin{tikzcd}
@@ -467,30 +625,196 @@ morphisms
     & H
     \end{tikzcd}
 \]
-Insertion pushout and deletion pushout
-\subsection{Derivation Graph}
-or Reaction Networks
 
-describe 
-\subsection{Term Mode}
-Term mode is a representation mode in which chemical structures and reactions are expressed as 
-formal terms (tree-like expressions) rather than as explicit graphs. 
-In this mode, molecules are handled as algebraic objects governed by rewrite rules.
+In chemistry, this provides a precise representation of a reaction center:
+atoms and bonds in the preserved interface \(K\) define shared context, 
+while changes between \(L\) and \(R\) encode bond breaking/forming events. \cite[p.~5]{Andersen2017}
 
-A term is a symbolic expression built from:
+\subsubsection{Derivation Graph}
+Building on the local rewrite step formalized above, 
+derivation graphs -- induced by repeated rule application --
+provide a global view that shows mechanistically plausible chemical states.
+\cite[pp.~2--3]{Andersen2013}
 
-\begin{itemize}
-    \item Function symbols (e.g., constructors such as C, O, bond, ring)
-    \item Arguments (subterms)
-\end{itemize}
+A derivation graph, often also called a reaction network, 
+is a higher-level graph that captures all transformation steps generated by a graph rewriting system. 
+\cite[Sec.~10]{MODDocDGStrat} \cite[p.~2]{Abel2026}
+Whereas a molecular graph represents the internal structure of a single molecule, 
+a derivation graph represents the \emph{space of possible reactions} between many molecular states. 
+\cite[pp.~2--3]{Andersen2013}
 
-Conceptually, this is similar to expressions in term-rewriting systems or functional programming.
+Formally, each node corresponds to an object state 
+(e.g., a molecule, multiset of molecules, or intermediate), 
+and each directed edge corresponds to an application 
+of a rewrite rule that transforms one state into another. 
+ \cite[p.~75]{2016}
+If a rule $p$ transforms state $G$ into state $H$, 
+this step is represented as
+\[
+G \stackrel{p}{\longrightarrow} H.
+\]
+By collecting many such derivations, one obtains a 
+directed graph whose topology encodes 
+reachable states, alternative pathways, and cycles.  
+
+In computational chemistry, derivation graphs are useful 
+for enumerating reaction pathways, identifying branching points, 
+analyzing network connectivity, and ranking plausible 
+mechanistic routes under additional constraints 
+(e.g., energy, rule priorities, or experimental evidence).
+They therefore provide a natural bridge between 
+rule-based chemistry models and downstream tasks such as 
+pathway search, and machine-learning-based scoring of candidate transformations. 
+\cite[p.~2]{Abel2026}
+
+%\subsubsection{Term Mode}
+%Term mode is a representation mode in which chemical structures and reactions are expressed as 
+%formal terms (tree-like expressions) rather than as explicit graphs. 
+%In this mode, molecules are handled as algebraic objects governed by rewrite rules.
+%
+%A term is a symbolic expression built from:
+%
+%\begin{itemize}
+%    \item Function symbols (e.g., constructors such as C, O, bond, ring)
+%    \item Arguments (subterms)
+%\end{itemize}
+%
+%Conceptually, this is similar to expressions in term-rewriting systems or functional programming.
+%
+
+
+
+
 
 \section{Machine Learning in Mass Spectrometry}
-\subsection{Deep Learning and Spectral Embedding}
-CGN GNN, featurizer vs encoder vs embedding, regularization, augmentation
+\subsection{Problem Formulations}
+% spectrum->structure, spectrum->property
+Two main problem formulations are common in the literature:
+\begin{itemize}
+    \item \textbf{Structure-to-Spectrum Prediction:}
+    Given a molecular structure, predict the corresponding mass spectrum.
+    This is a forward problem that can be approached using mechanistic models,
+    data-driven models, or hybrid approaches that combine both.
+    \item \textbf{Spectrum-to-Structure Prediction:} 
+    Given a mass spectrum, predict the corresponding molecular structure. 
+    As this is an inverse problem, it is often ill-posed, with multiple candidate structures 
+    potentially consistent with the same spectrum.
+\end{itemize}
+Both tasks are important for different applications:
+structure-to-spectrum prediction is useful for in silico fragmentation and library generation,
+while spectrum-to-structure prediction is essential for de novo identification of unknown compounds.
 
-MassGenie: A Transformer-Based Deep Learning Method for Identifying Small Molecules from Their Mass Spectra.
-https://doi.org/10.3390/biom11121793
+Bidirectional models that can perform both tasks are also possible,
+and may leverage shared representations to improve performance on both tasks.
+
+\subsection{Case Study: Generating Molecular Fragmentation Graphs with Autoregressive Neural Networks}
+
+A prominent example of integrating physical fragmentation 
+models with neural networks is the work of \cite{Goldman2023}, 
+which proposes an approach to predict tandem mass spectra
+by directly modeling fragmentation pathways as graphs. 
+Rather than treating spectrum prediction as a black-box prediction task, 
+this method learns to generate fragmentation graphs sequentially: 
+at each step, the model predicts which bonds are most likely to break in the molecular ion, 
+scores the resulting fragments, and iteratively builds a complete fragmentation landscape.
+
+This hybrid approach is particularly relevant to computational MS 
+because it bridges two historically separate paradigms: 
+rule-based in silico fragmentation, which is interpretable 
+but computationally expensive and relies on heuristic intensity prediction, 
+and purely data-driven neural networks, 
+which are fast but lack chemical interpretability. \cite[p.~3420]{Goldman2023}
+By grounding fragmentation prediction in explicit bond-breaking events, 
+the model maintains mechanistic transparency 
+while leveraging the expressiveness of neural networks for learning 
+complex fragmentation preferences from data.
+
+The method demonstrates several key strengths. Because predictions are generated 
+as explicit fragmentation pathways, the model enables human-interpretable explanations: 
+chemists can inspect why particular fragments appear 
+and evaluate whether predicted breakages are chemically plausible. 
+Also the approach shows particular utility for natural products and complex 
+scaffolds where fragmentation patterns deviate 
+from those captured by simple bond-breaking rules, 
+improving metabolite identification from candidate databases. \cite[p.~3427]{Goldman2023}
+
+However, limitations remain.
+Prediction quality still depends on the distribution of training data; 
+compounds or fragmentation pathways underrepresented in training tend to be mispredicted, 
+and the model may struggle with instrument-specific quirks or 
+unusual ionization regimes not seen during learning.
+
 
 \section{Interpretability in Chemical Machine Learning}
+\subsection{Why Interpretability Matters}
+% trust, scientific insight, hypothesis generation
+
+Interpretability in machine learning refers to the ability to understand and explain 
+why a model makes a particular prediction. \cite[p.~1]{Montavon2018}
+
+For structure elucidation from MS data, an uninterpretable model that ranks candidate structures 
+is of limited value if chemists cannot understand the reasoning. 
+Conversely, models that expose their decision-making process \cite[p.~2]{Montavon2018}
+---by highlighting which structural features drive spectral predictions or which fragmentation pathways are favored---
+enable hypothesis generation and accelerate scientific insight.
+
+Furthermore, interpretability serves as a diagnostic tool: 
+when model explanations reveal chemically implausible patterns 
+(e.g., incorrect fragmentation rules or unphysical feature importance), 
+this signals potential model failures or training-data biases 
+that numeric performance metrics alone might not expose.
+
+\subsection{Classic and General Interpretability Methods}
+
+\subsubsection{Saliency Maps and Gradient-Based Attribution}
+
+Saliency maps compute the gradient of the model output with respect to input features, 
+visualizing regions of input space where small changes produce large changes in prediction. 
+For molecular inputs, saliency can be backpropagated through graph neural networks 
+to identify atoms or bonds whose perturbation most affects the predicted spectrum. \cite[p.~4]{Simonyan2013}
+This approach is computationally efficient and provides local explanations for individual predictions. 
+However, gradients can be noisy, especially near decision boundaries, 
+and may not capture higher-order interactions or saturating effects. \cite{Bach2015}
+
+\subsubsection{SHAP and Permutation-Based Methods}
+
+SHAP (SHapley Additive exPlanations) provides a principled, game-theoretic framework 
+for feature attribution based on Shapley values from cooperative game theory. \cite[p.~3]{Lundberg2017}
+By computing the marginal contribution of each feature when iteratively included or excluded, 
+SHAP assigns consistent importance scores that sum to the difference between 
+the model prediction and a baseline. \cite[p.~2]{Lundberg2017}
+For molecular graphs, SHAP can be applied to atomic features or subgraph patterns, 
+revealing which structural motifs drive predictions.
+Permutation-based importance methods offer similar insights by repeatedly shuffling features 
+and measuring the resulting drop in model performance. \cite[p.~23]{Breiman2001}
+These methods are model-agnostic and theoretically grounded, but computationally expensive 
+for large molecules or high-dimensional representations.
+
+\subsubsection{Counterfactual Explanations}
+
+Counterfactual explanations identify minimal modifications to an input that would change the model output, 
+answering the question: ``What would need to change for a different prediction?'' \cite[p.~4]{Guidotti2018}
+In the chemical domain, counterfactuals correspond to structural modifications---
+the loss or gain of functional groups, changes in substitution patterns, or alternative regioisomers---
+that would yield different predicted spectra. \cite[pp.~2--3]{Wellawatte2022}
+These explanations are human-interpretable and actionable, but their discovery is computationally 
+challenging, especially in high-dimensional chemical spaces with complex constraints 
+(e.g., synthetic accessibility, valence rules).
+
+\subsection{Evaluation of Explanations}
+
+The quality of explanations must be evaluated in order to determine whether a method
+actually achieves its explainability objective and to enable comparison between
+alternative explanation methods. \cite[p.~1]{Zhou2021}
+Zhou et al. describe explanation quality in terms of \emph{interpretability} and
+\emph{fidelity}. Interpretability concerns human understandability and includes the
+properties of \emph{clarity}, \emph{parsimony}, and \emph{broadness}, whereas
+fidelity concerns how accurately the explanation reflects model behaviour and includes
+\emph{completeness} and \emph{soundness}. \cite[p.~3]{Zhou2021}
+
+Based on this view, explanation quality can be assessed through both human-centred
+and functionality-grounded evaluation. Human-centred evaluation includes
+application-grounded and human-grounded studies and often considers subjective
+measures such as trust and confidence together with task-related performance.
+Functionality-grounded evaluation instead relies on formal proxy metrics tied to
+specific explainability properties. \cite[p.~8]{Zhou2021} \cite[p.~10]{Zhou2021}
