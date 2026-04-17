@@ -1,0 +1,14 @@
+##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-h05/tmp/slurm-2600439
+1 threads requested
+Using 1 threads
+
+mol spectrum of camphor
+
+forward
+
+Repeat, limit = 1
+  Round 1:
+  Round 1: Result subset has 15 graphs.
+Repeat, limit = 5
+  Round 1:
+[2026-04-17T14:11:52.029] error: *** STEP 2600439.0 ON node-h05 CANCELLED AT 2026-04-17T14:11:52 DUE TO TIME LIMIT ***

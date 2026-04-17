@@ -1,0 +1,46 @@
+##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-h05/tmp/slurm-2600437
+1 threads requested
+Using 1 threads
+
+mol spectrum of hydrogen_sulfide
+
+forward
+
+  Forward dump /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/processed/fwd/hydrogen_sulfide.dmp exists, skipping...
+DG loading: loaded rule 'deprotonation radical §Y2, term' isomorphic to existing rule 'deprotonation radical §Y2, term'.
+DG loading: loaded rule 'deprotonation proton §Y2, term' isomorphic to existing rule 'deprotonation proton §Y2, term'.
+DG loading: loaded graph 'hydrogen_sulfide, term' isomorphic to existing graph 'g_{2}'.
+DG loading: loaded graph 'p_{0,0}' isomorphic to existing graph 'g_{3}'.
+DG loading: loaded graph 'p_{0,1}' isomorphic to existing graph 'g_{4}'.
+DG loading: loaded graph 'p_{0,2}' isomorphic to existing graph 'g_{5}'.
+DG loading: loaded graph 'p_{0,3}' isomorphic to existing graph 'g_{6}'.
+
+backward
+
+Backward dump /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/processed/bwd/hydrogen_sulfide.dmp exists, skipping...
+
+
+
+	Command being timed: "srun --cpu-bind=cores python /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/src/data_generation/main.py --smiles [H][S][H] --name hydrogen_sulfide --output-dir /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/processed/ --spectra-folder /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/nist_spectra --number-threads 1 --subgroup-diag --avoid-reprocessing"
+	User time (seconds): 0.00
+	System time (seconds): 0.01
+	Percent of CPU this job got: 0%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.10
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 10240
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1395
+	Voluntary context switches: 62
+	Involuntary context switches: 9
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

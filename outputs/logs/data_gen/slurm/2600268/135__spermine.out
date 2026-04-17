@@ -1,0 +1,39 @@
+##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-h01/tmp/slurm-2600405
+1 threads requested
+Using 1 threads
+
+mol spectrum of spermine
+
+forward
+
+Repeat, limit = 1
+  Round 1:
+  Round 1: Result subset has 30 graphs.
+Repeat, limit = 5
+  Round 1:
+[2026-04-17T12:46:02.204] error: Detected 1 oom_kill event in StepId=2600405.0. Some of the step tasks have been OOM Killed.
+srun: error: node-h01: task 0: Out Of Memory
+Command exited with non-zero status 1
+	Command being timed: "srun --cpu-bind=cores python /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/src/data_generation/main.py --smiles NCCCNCCCCNCCC(N)N --name spermine --output-dir /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/processed/ --spectra-folder /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/nist_spectra --number-threads 1 --subgroup-diag --avoid-reprocessing"
+	User time (seconds): 0.00
+	System time (seconds): 0.01
+	Percent of CPU this job got: 0%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:13.67
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 14020
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1391
+	Voluntary context switches: 62
+	Involuntary context switches: 8
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

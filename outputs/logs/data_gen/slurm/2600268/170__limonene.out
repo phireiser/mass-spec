@@ -1,0 +1,37 @@
+##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-h05/tmp/slurm-2600440
+1 threads requested
+Using 1 threads
+
+mol spectrum of limonene
+
+forward
+
+  Forward dump /lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol/data/processed/fwd/limonene.dmp exists, skipping...
+DG loading: loaded rule 'deprotonation radical §Y2, term' isomorphic to existing rule 'deprotonation radical §Y2, term'.
+DG loading: loaded rule 'deprotonation proton §Y2, term' isomorphic to existing rule 'deprotonation proton §Y2, term'.
+DG loading: loaded graph 'limonene, term' isomorphic to existing graph 'g_{2}'.
+DG loading: loaded graph 'p_{0,0}' isomorphic to existing graph 'g_{3}'.
+DG loading: loaded graph 'p_{0,1}' isomorphic to existing graph 'g_{4}'.
+DG loading: loaded graph 'p_{0,2}' isomorphic to existing graph 'g_{5}'.
+DG loading: loaded graph 'p_{0,3}' isomorphic to existing graph 'g_{6}'.
+DG loading: loaded graph 'p_{0,4}' isomorphic to existing graph 'g_{7}'.
+DG loading: loaded graph 'p_{0,5}' isomorphic to existing graph 'g_{8}'.
+DG loading: loaded graph 'p_{0,6}' isomorphic to existing graph 'g_{9}'.
+DG loading: loaded graph 'p_{0,7}' isomorphic to existing graph 'g_{10}'.
+DG loading: loaded graph 'p_{0,8}' isomorphic to existing graph 'g_{11}'.
+DG loading: loaded graph 'p_{0,9}' isomorphic to existing graph 'g_{12}'.
+DG loading: loaded graph 'p_{0,10}' isomorphic to existing graph 'g_{13}'.
+DG loading: loaded graph 'p_{0,11}' isomorphic to existing graph 'g_{14}'.
+DG loading: loaded graph 'p_{0,12}' isomorphic to existing graph 'g_{15}'.
+DG loading: loaded graph 'p_{0,13}' isomorphic to existing graph 'g_{16}'.
+DG loading: loaded graph 'p_{0,14}' isomorphic to existing graph 'g_{17}'.
+DG loading: loaded graph 'p_{0,15}' isomorphic to existing graph 'g_{18}'.
+DG loading: loaded graph 'p_{0,16}' isomorphic to existing graph 'g_{19}'.
+DG loading: loaded graph 'p_{0,17}' isomorphic to existing graph 'g_{20}'.
+
+backward
+
+Repeat, limit = 5
+  Round 1:
+[2026-04-17T14:11:52.027] error: *** STEP 2600440.0 ON node-h05 CANCELLED AT 2026-04-17T14:11:52 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
