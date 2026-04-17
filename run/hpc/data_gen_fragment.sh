@@ -10,15 +10,13 @@
 
 if [ -d /lisc/data ]; then # if execution happens @ LISC
   module load Conda
-  conda activate /lisc/data/scratch/tbi/reiser/pyenv
-  home_dir="/lisc/home/user/reiser/"
+  conda activate $CONDA_ENV_LISC
 elif [ -d /scratch/reiserp/ ]; then # if execution happens @ TBI
-  conda activate /scratch/reiserp/env
-  home_dir="/home/mescalin/reiserp/"
+  conda activate $CONDA_ENV_TBI
 fi
 
 
-PROJ_DIR="$home_dir""Nextcloud/studium/computationalScience/thesis/mol"
+PROJ_DIR="$HOME/$PROJ_DIR_REL"
 
 if [[ "$PWD" != "$PROJ_DIR" ]]; then
     echo "Run this script from $PROJ_DIR" >&2
@@ -27,20 +25,24 @@ fi
 
 
 # Ensure imports  resolve correctly
-export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH="$REPO_ROOT${PYTHONPATH:+:$PYTHONPATH}"
 
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$REPO_ROOT/run/config/paths.env"
+
 # Directories and files
-DATADIR="$PWD/data/processed/"
-DEFINITION_FILE="$PWD/data/compounds.csv"
+DATADIR="$REPO_ROOT/$PROCESSED_DIR_REL/"
+DEFINITION_FILE="$REPO_ROOT/$DATA_DIR_REL/compounds.csv"
 JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID-}"
 if [ -z "$JOB_GROUP_ID" ]; then
   JOB_GROUP_ID="${SLURM_JOB_ID-local}"
 fi
-LOG_DIR="$PWD/outputs/logs/data_gen/slurm/${JOB_GROUP_ID}"
-SCRIPT_DIR="$PWD/src/data_generation"
+LOG_DIR="$REPO_ROOT/$LOGS_DIR_REL/data_gen/slurm/${JOB_GROUP_ID}"
+SCRIPT_DIR="$REPO_ROOT/$SRC_DIR_REL/data_generation"
 
 mkdir -p "$LOG_DIR"
 mkdir -p "$DATADIR"
@@ -96,7 +98,7 @@ python \
     --smiles "$SMILES" \
     --name "$NAME" \
     --output-dir "$DATADIR" \
-    --spectra-folder "$PWD/data/nist_spectra" \
+    --spectra-folder "$REPO_ROOT/$NIST_SPECTRA_DIR_REL" \
     --number-threads "$THREADS" \
     --subgroup-diag \
     --avoid-reprocessing \

@@ -7,6 +7,8 @@ This script performs automated hyperparameter optimization using Optuna
 The optimization minimizes the validation loss while tracking retrieval
 metrics (Recall@K, MRR) as secondary objectives.
 
+It parses the training output to extract metrics
+
 Usage
 -----
     $ python hyperparameter_optimization.py --n_trials 30 --epochs_fwd 20 --epochs_bwd 20
@@ -24,6 +26,8 @@ from typing import Dict, Tuple, List, Any
 from datetime import datetime
 import subprocess
 
+from src.project_paths import shared_path
+
 try:
     import optuna
     from optuna.pruners import MedianPruner
@@ -39,7 +43,7 @@ def train_with_config(train: Path, config: Dict[str, Any], epochs_fwd: int, epoc
     Train the model with a specific hyperparameter configuration.
     Returns a dictionary with metrics (validation loss, recall@k, mrr).
     """
-    # Build command to run the ml_minimal_implement.py with the given config
+    # Build command to run the main training script with the given config
     cmd = [
         "python",
         str(train),
@@ -252,8 +256,8 @@ def run_optimization(runpath: Path, n_trials: int, epochs_fwd: int, epochs_bwd: 
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="Hyperparameter optimization for ML minimal implementation")
-    p.add_argument("--train_script", type=Path, default=Path("src/machine_learning/main.py"), help="Path to the training script")
-    p.add_argument("--output_dir", type=Path, default=Path("outputs/best_params"), help="Directory to save optimization results")
+    p.add_argument("--train_script", type=Path, default=shared_path("SRC_DIR_REL", "machine_learning", "main.py"), help="Path to the training script")
+    p.add_argument("--output_dir", type=Path, default=shared_path("BEST_PARAMS_DIR_REL"), help="Directory to save optimization results")
     p.add_argument("--n_trials", type=int, default=20, help="Number of optimization trials")
     p.add_argument("--epochs_fwd", type=int, default=10, help="Forward phase epochs (per trial)")
     p.add_argument("--epochs_bwd", type=int, default=10, help="Backward phase epochs (per trial)")

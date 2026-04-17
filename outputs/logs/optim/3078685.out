@@ -1,0 +1,17 @@
+##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-c04/tmp/slurm-3078685
+##LiSC GPU info: IDs 0 on node-c04
+======================================================================
+Hyperparameter Optimization Job with Optuna
+======================================================================
+Epochs (forward): 10000
+Epochs (backward): 10000
+Started: Wed Apr 29 10:18:42 AM CEST 2026
+======================================================================
+
+Intelligent exploration of high dimensional hyperparameter space
+
+
+Starting hyperparameter optimization with 20 trials...
+Epochs (forward): 10000, Epochs (backward): 10000
+Device: cuda
+

@@ -95,7 +95,3 @@ def get_spectra_from_pubchem(
     spectra = get_spectra_from_information_section(info)
     clean = clean_spectra(spectra)
     return clean
-
-if __name__ == "__main__":
-    print("spect_pubchem.py is main")
-    print(pubchem_smiles_lookup("CCO"))

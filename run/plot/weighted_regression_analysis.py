@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
-"""Compare unweighted vs weighted regression models."""
+"""
+Compare unweighted vs weighted regression models.
+"""
 import csv
 import math
 from pathlib import Path

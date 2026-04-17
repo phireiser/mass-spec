@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
-ROOT = Path(__file__).resolve().parent
-CSV_PATH = ROOT / "MolecuelProcessingTimeTableComplexety.csv"
+ROOT = Path(__file__).resolve().parents[2]
+CSV_PATH = ROOT / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
 
 
 def load_points(csv_path: Path) -> Tuple[np.ndarray, np.ndarray, List[str]]:

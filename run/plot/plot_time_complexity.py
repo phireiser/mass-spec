@@ -3,7 +3,7 @@
 
 - Reads MolecuelProcessingTimeTableComplexety.csv
 - Computes weighted linear and cubic regressions (weights inversely proportional to data density)
-- Saves scatter plot with fitted lines to plots/time_vs_complexity.png
+- Saves scatter plot with fitted lines to outputs/plots/time_vs_complexity.png
 - Accounts for varying uncertainty in sparse vs dense bond count regions
 """
 from __future__ import annotations
@@ -17,9 +17,9 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent
-CSV_PATH = ROOT / "MolecuelProcessingTimeTableComplexety.csv"
-PLOT_DIR = ROOT / "plots"
+ROOT = Path(__file__).resolve().parents[2]
+CSV_PATH = ROOT / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
+PLOT_DIR = ROOT / "outputs" / "plots"
 PLOT_PATH = PLOT_DIR / "time_vs_complexity.png"
 PLOT_PATH_OVER40 = PLOT_DIR / "time_vs_complexity_over40.png"
 PLOT_PATH_LOGY = PLOT_DIR / "time_vs_complexity_logy.png"
@@ -148,7 +148,7 @@ def main() -> None:
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
     plt.grid(True, alpha=0.3)
 
-    PLOT_DIR.mkdir(exist_ok=True)
+    PLOT_DIR.mkdir(parents=True, exist_ok=True)
     plt.tight_layout()
     plt.savefig(PLOT_PATH, dpi=150, bbox_inches="tight")
 
@@ -174,7 +174,7 @@ def main() -> None:
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
     plt.grid(True, which="both", alpha=0.3)
 
-    PLOT_DIR.mkdir(exist_ok=True)
+    PLOT_DIR.mkdir(parents=True, exist_ok=True)
     plt.tight_layout()
     plt.savefig(PLOT_PATH_LOGY, dpi=150, bbox_inches="tight")
 
@@ -208,7 +208,7 @@ def main() -> None:
         plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
         plt.grid(True, alpha=0.3)
 
-        PLOT_DIR.mkdir(exist_ok=True)
+        PLOT_DIR.mkdir(parents=True, exist_ok=True)
         plt.tight_layout()
         plt.savefig(PLOT_PATH_OVER40, dpi=150, bbox_inches="tight")
 
@@ -238,7 +238,7 @@ def main() -> None:
         plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
         plt.grid(True, which="both", alpha=0.3)
 
-        PLOT_DIR.mkdir(exist_ok=True)
+        PLOT_DIR.mkdir(parents=True, exist_ok=True)
         plt.tight_layout()
         plt.savefig(PLOT_PATH_LOGY_OVER40, dpi=150, bbox_inches="tight")
 

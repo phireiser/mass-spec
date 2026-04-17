@@ -12,13 +12,14 @@ import mod
 from src.data_generation import utils
 from src.data_generation.rules import fragmentation, ionization
 from src.data_generation.core import strategy
+from src.project_paths import shared_path
 
 
 parser = argparse.ArgumentParser(description="Using MØD as a MassSpec Fragmenter")
 parser.add_argument("--smiles", type=str, required=True, help="SMILES String of Molecule")
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--output-dir", type=str, required=True, help="Directory for output files")
-parser.add_argument("--spectra-folder", type=str, default=str(Path(__file__).resolve().parents[2] / "data" / "nist_spectra"), help="Directory containing NIST .jdx spectra")
+parser.add_argument("--spectra-folder", type=str, default=str(shared_path("NIST_SPECTRA_DIR_REL")), help="Directory containing NIST .jdx spectra")
 parser.add_argument("--number-threads", type=int, default=64, help="number of threads for mod")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")

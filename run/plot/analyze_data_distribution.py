@@ -8,8 +8,9 @@ from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parent
-CSV_PATH = ROOT / "MolecuelProcessingTimeTableComplexety.csv"
+ROOT = Path(__file__).resolve().parents[2]
+CSV_PATH = ROOT / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
+PLOT_PATH = ROOT / "outputs" / "plots" / "data_distribution_analysis.svg"
 
 # Load data
 xs, ys = [], []
@@ -81,5 +82,6 @@ axes[1].set_title('Sample count distribution (time >= 40s)')
 axes[1].grid(True, alpha=0.3, axis='y')
 
 plt.tight_layout()
-plt.savefig('data_distribution_analysis.png', dpi=150, bbox_inches='tight')
-print(f"\nSaved visualization to: data_distribution_analysis.png")
+PLOT_PATH.parent.mkdir(parents=True, exist_ok=True)
+plt.savefig(PLOT_PATH, dpi=150, bbox_inches='tight')
+print(f"\nSaved visualization to: {PLOT_PATH}")

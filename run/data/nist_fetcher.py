@@ -4,6 +4,7 @@ CLI tool to fetch NIST mass spectra using compound names from CSV files.
 Based on the bash script but adapted for Python with name-based lookup.
 
 Author Manuel Uhlir
+adapted from orignial by me
 """
 
 import time
@@ -13,6 +14,8 @@ import argparse
 from urllib.parse import quote
 import requests
 import pandas as pd
+
+from project_paths import shared_path
 
 def get_cas_from_pubchem(smiles):
     """
@@ -115,7 +118,7 @@ def fetch_nist_spectrum_simple(compound_name, compound_smiles, output_dir="spect
     cas_number = cas_nist if cas_nist else cas_pubchem
 
     if not cas_number:
-        print(f"✗ Could not find CAS number for {compound_name}")
+        print(f"Could not find CAS number for {compound_name}")
         return False
 
     # Step 2: Fetch spectrum using CAS number
@@ -132,17 +135,17 @@ def fetch_nist_spectrum_simple(compound_name, compound_smiles, output_dir="spect
         if "##TITLE=" in response.text or "##JCAMP-DX=" in response.text:
             with open(output_file, "w") as f:
                 f.write(response.text)
-            print(f"✓ Successfully saved spectrum to: {output_file}")
+            print(f"Successfully saved spectrum to: {output_file}")
             return True
         else:
-            print("✗ No spectral data found in response")
+            print("No spectral data found in response")
             return False
 
     except requests.exceptions.RequestException as e:
-        print(f"✗ Request failed: {e}")
+        print(f"Request failed: {e}")
         return False
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
         return False
 
 
@@ -215,8 +218,8 @@ Examples:
     parser.add_argument(
         "-o",
         "--output",
-        default="spectra",
-        help="Output directory for spectra (default: spectra)",
+        default=shared_path("NIST_SPECTRA_DIR_REL"),
+        help="Output directory for spectra",
     )
 
     args = parser.parse_args()

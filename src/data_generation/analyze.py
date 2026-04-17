@@ -7,8 +7,10 @@ import argparse
 import pandas as pd
 import mod
 
-from mass_spec_modeling.mod_fragmentation import utils
-from mass_spec_modeling.mod_fragmentation.rules import fragmentation, ionization
+from src.data_generation import utils
+from src.data_generation.rules import fragmentation, ionization
+from src.project_paths import shared_path
+
 
 
 parser = argparse.ArgumentParser(description="Analyzer of MØD dumps generated with MassSpec rules")
@@ -20,7 +22,7 @@ args = parser.parse_args()
 molecule = mod.Graph.fromSMILES(args.smiles, args.name)
 molecule_term = utils.term_from_graph(molecule)
 
-aoc = utils.all_occuring([molecule], utils.allAtoms)
+aoc = utils.all_occuring([molecule], utils.ALL_ATOMS)
 
 ionization_term = [utils.term_from_rule(rule) \
     for rule in utils.apply_constraints(ionization, aoc)]
@@ -28,10 +30,9 @@ fragmentation_term = [utils.term_from_rule(rule) \
     for rule in utils.apply_constraints(fragmentation, aoc)]
 
 
-dg, rule_list =  utils.load_derivation_graph(
+dg =  utils.load_derivation_graph(
     molecule.name,
-    path="/home/mescalin/reiserp/Nextcloud/"
-    "studium/computationalScience/thesis/mol/dump/fwd/"
+    path=args.dir,
     )
 
 print("\n")
@@ -58,7 +59,7 @@ print("mod post running ...")
 mod.post.flushCommands()
 
 process = subprocess.run(
-   ["stdbuf", "-oL", "-eL", "/home/talax/xtof/local/Mod/bin/mod_post"],
+   ["stdbuf", "-oL", "-eL", shared_path("MOD_POST_PATH_LISC")],
     check=False,
     text=True,
     stdout=subprocess.PIPE,

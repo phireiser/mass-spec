@@ -4,7 +4,9 @@ from pathlib import Path
 from typing import List, Tuple
 
 
-def parse_jdx(file: Path) -> List[Tuple[float, float]]:
+def parse_jdx(
+        file: Path
+    ) -> List[Tuple[float, float]]:
     """Parse a JDX Mass file defensively and return (mz, intensity) tuples."""
     if not file.exists():
         raise FileNotFoundError(f"JDX file not found: {file}")
@@ -35,7 +37,7 @@ def parse_jdx(file: Path) -> List[Tuple[float, float]]:
 def get_spectra_from_local_jdx(
     name: str,
     folder: Path,
-) -> List[Tuple[float, float]]:
+    ) -> List[Tuple[float, float]]:
     """Resolve file by name within the project spectra folder and parse via parse_jdx."""
     jdx_file = folder / f"{name.lower()}-Mass.jdx"
     return parse_jdx(jdx_file)

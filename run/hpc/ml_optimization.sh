@@ -7,19 +7,29 @@
 #SBATCH --output=outputs/logs/optim/%j.out
 #SBATCH --error=outputs/logs/optim/%j.err
 
+# run this script from the project root directory to ensure correct paths
+# Usage:
+# sbatch run/hpc/ml_optimization.sh
+# Optional: override default epochs with:
+# sbatch --export=EPOCHS_FWD=5000,EPOCHS_BWD=5000 run/hpc/ml_optimization.sh
+
 set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$REPO_ROOT/run/config/paths.env"
 
 # if execution @ LISC
 if [ -d /lisc/data ]; then
   module load Conda
-  conda activate /lisc/data/scratch/tbi/reiser/env
+  conda activate /lisc/data/scratch/tbi/reiser/pyenv
   home_dir="/lisc/home/user/reiser/"
 elif [ -d /scratch/reiserp/ ]; then # if execution happens @ TBI
   conda activate /scratch/reiserp/env
   home_dir="/home/mescalin/reiserp/"
 fi
 
-PROJ_DIR="$home_dir""Nextcloud/studium/computationalScience/thesis/mol"
+PROJ_DIR="$REPO_ROOT"
 
 if [[ "$PWD" != "$PROJ_DIR" ]]; then
     echo "Run this script from $PROJ_DIR" >&2
@@ -27,7 +37,7 @@ if [[ "$PWD" != "$PROJ_DIR" ]]; then
 fi
 
 # Ensure imports  resolve correctly
-export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH="$REPO_ROOT${PYTHONPATH:+:$PYTHONPATH}"
 
 # Default optimization mode (can be overridden with: sbatch --export=VARIABLE_NAME=value optimization_slurm.sh)
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"
@@ -53,24 +63,24 @@ if ! python -c "import optuna" 2>/dev/null; then
 fi
 
 # Allow caller to specify n_trials/epochs via EXTRA_ARGS
-python "$PWD/src/machine_learning/optimization/hyperparameter_optimization.py" \
+python "$REPO_ROOT/$SRC_DIR_REL/machine_learning/optimization/hyperparameter_optimization.py" \
   --epochs_fwd "$EPOCHS_FWD" \
   --epochs_bwd "$EPOCHS_BWD" \
-  --train_script "$PWD/src/machine_learning/main.py" \
-  --output_dir "$PWD/outputs/best_params"
+  --train_script "$REPO_ROOT/$SRC_DIR_REL/machine_learning/main.py" \
+  --output_dir "$REPO_ROOT/$BEST_PARAMS_DIR_REL"
 
 echo "Bayesian optimization complete!"
 echo "Results saved to: best_hyperparams.json"
 echo ""
 echo "Formatting Results:"
-python "$PWD/src/machine_learning/optimization/format_best_params.py" --input outputs/best_params/best_hyperparams.json --format txt
-python "$PWD/src/machine_learning/optimization/format_best_params.py" --input outputs/best_params/best_hyperparams.json --format sh
+python "$REPO_ROOT/$SRC_DIR_REL/machine_learning/optimization/format_best_params.py" --input "$REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams.json" --format txt
+python "$REPO_ROOT/$SRC_DIR_REL/machine_learning/optimization/format_best_params.py" --input "$REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams.json" --format sh
 
 echo "Best parameters formatted!"
 echo ""
 echo "Next Steps:"
-echo "1. Review text report: cat outputs/best_params/best_hyperparams.txt"
-echo "2. Run final training: ./outputs/best_params/best_hyperparams.sh --epochs_fwd 100 --epochs_bwd 100"
+echo "1. Review text report: cat $REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams.txt"
+echo "2. Run final training: $REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams.sh --epochs_fwd 100 --epochs_bwd 100"
 
 echo ""
 echo "======================================================================"
