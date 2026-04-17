@@ -1,28 +1,69 @@
 \relax 
+\providecommand{\transparent@use}[1]{}
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Data and Representation}{25}{chapter.3}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Methodology}{26}{chapter.3}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:3}{{3}{25}{Data and Representation}{chapter.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Datasets}{25}{section.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Public Databases}{25}{subsection.3.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Custom Dataset Construction}{25}{subsection.3.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Preprocessing - Generating the Synthetic Data}{25}{section.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}mod Strategy}{25}{subsection.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Forward strategy}{25}{section*.37}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Backward strategy}{25}{section*.38}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Regession of Computation time, filterd of molecules that took at least 40sec to compute}}{26}{figure.3.1}\protected@file@percent }
-\newlabel{fig:mod-time-regres}{{3.1}{26}{Regession of Computation time, filterd of molecules that took at least 40sec to compute}{figure.3.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}computation times}{26}{subsection.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Latend Representation Schemes}{27}{section.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Molecular Graph Encoding}{27}{subsection.3.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Fragment Graph Representation}{27}{subsection.3.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Spectral Vector and Embedding Representation}{27}{subsection.3.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.4}Fragment–Spectrum Mapping}{27}{subsection.3.3.4}\protected@file@percent }
+\newlabel{ch:3}{{3}{26}{Methodology}{chapter.3}{}}
+\newlabel{ch:3@cref}{{[chapter][3][]3}{[1][26][]26}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Datasets}{26}{section.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Public Databases}{26}{subsection.3.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Custom Dataset Construction}{26}{subsection.3.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Preprocessing - Generating the Synthetic Data}{26}{section.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Overview of the data generation process using \texttt  {mod} derivation graphs.}}{27}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:data-gen-overview}{{3.1}{27}{Overview of the data generation process using \texttt {mod} derivation graphs}{figure.caption.48}{}}
+\newlabel{fig:data-gen-overview@cref}{{[figure][1][3]3.1}{[1][27][]27}{}{}{}}
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Fragmentation Rule Application Strategies}{27}{subsection.3.2.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {listing}{\numberline {1}{\ignorespaces Sample Fragmentation Rule \blx@tocontentsinit {0}\cite [p.~59]{McLafferty2013}}}{28}{listing.1}\protected@file@percent }
+\newlabel{lst:sampelRule}{{1}{28}{Sample Fragmentation Rule \cite [p.~59]{McLafferty2013}}{listing.1}{}}
+\newlabel{lst:sampelRule@cref}{{[listing][1][]1}{[1][27][]28}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Flow diagram explaining predicate filter application at the fragmentation process.}}{28}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:predicate-filter}{{3.2}{28}{Flow diagram explaining predicate filter application at the fragmentation process}{figure.caption.49}{}}
+\newlabel{fig:predicate-filter@cref}{{[figure][2][3]3.2}{[1][27][]28}{}{}{}}
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {paragraph}{Heteroatom Check}{28}{section*.50}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Heteroatom check predicate: valid case with detected heteroatom (left) versus invalid C/H-only neighborhood (right).}}{29}{figure.caption.51}\protected@file@percent }
+\newlabel{fig:heteroatom-check}{{3.3}{29}{Heteroatom check predicate: valid case with detected heteroatom (left) versus invalid C/H-only neighborhood (right)}{figure.caption.51}{}}
+\newlabel{fig:heteroatom-check@cref}{{[figure][3][3]3.3}{[1][28][]29}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Saturation Check}{29}{section*.52}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Saturation check predicate as constrained path traversal: accepted carbon single-bond path (green) and rejected carbon side branch.}}{29}{figure.caption.53}\protected@file@percent }
+\newlabel{fig:saturation-check}{{3.4}{29}{Saturation check predicate as constrained path traversal: accepted carbon single-bond path (green) and rejected carbon side branch}{figure.caption.53}{}}
+\newlabel{fig:saturation-check@cref}{{[figure][4][3]3.4}{[1][29][]29}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Alkyl Check}{29}{section*.54}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Alkyl check predicate filtering fragmentation sites to alkyl groups.}}{30}{figure.caption.55}\protected@file@percent }
+\newlabel{fig:alkyl-check}{{3.5}{30}{Alkyl check predicate filtering fragmentation sites to alkyl groups}{figure.caption.55}{}}
+\newlabel{fig:alkyl-check@cref}{{[figure][5][3]3.5}{[1][30][]30}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Latent Representation Schemes}{30}{section.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Overview}{30}{section*.56}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Molecular Graph Encoding}{30}{subsection.3.3.1}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Two-Level Molecular Latent Representation}{31}{subsection.3.3.2}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Rule Representation and Hyperedge Annotation}{32}{subsection.3.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.4}Spectral Vector and Embedding Representation}{32}{subsection.3.3.4}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.5}Disadvantages}{33}{subsection.3.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Model Architecture}{33}{section.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Overview of the Learning Framework}{33}{subsection.3.4.1}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagram illustrating the overall architecture of the bidirectional translation framework, showing the flow from molecular graph encoding to spectral embedding and back.}}{34}{figure.caption.57}\protected@file@percent }
+\newlabel{fig:ml-architecture-diagram}{{3.6}{34}{Diagram illustrating the overall architecture of the bidirectional translation framework, showing the flow from molecular graph encoding to spectral embedding and back}{figure.caption.57}{}}
+\newlabel{fig:ml-architecture-diagram@cref}{{[figure][6][3]3.6}{[1][34][]34}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}Forward Model: Structure-to-Spectrum Prediction}{34}{subsection.3.4.2}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}Backward Model: Spectrum-to-Structure Reconstruction}{35}{subsection.3.4.3}\protected@file@percent }
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.4}Bidirectionllity}{36}{subsection.3.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.5}Loss shaping}{36}{subsection.3.4.5}\protected@file@percent }
+\def\@LN@column{1}
 \@setckpt{ch3}{
-\setcounter{page}{28}
+\setcounter{page}{38}
 \setcounter{equation}{0}
-\setcounter{enumi}{3}
+\setcounter{enumi}{2}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
 \setcounter{enumiv}{0}
@@ -30,19 +71,38 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{0}
 \setcounter{chapter}{3}
-\setcounter{section}{3}
-\setcounter{subsection}{4}
+\setcounter{section}{4}
+\setcounter{subsection}{5}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{1}
+\setcounter{figure}{6}
 \setcounter{table}{0}
-\setcounter{float@type}{4}
+\setcounter{float@type}{8}
 \setcounter{section@level}{2}
-\setcounter{Item}{23}
+\setcounter{Item}{21}
 \setcounter{Hfootnote}{0}
-\setcounter{bookmark@seq@number}{44}
+\setcounter{bookmark@seq@number}{51}
 \setcounter{parentequation}{0}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{svg@param@lastpage}{0}
+\setcounter{svg@param@currpage}{-1}
+\setcounter{FancyVerbLine}{10}
+\setcounter{linenumber}{1}
+\setcounter{LN@truepage}{48}
+\setcounter{FancyVerbWriteLine}{0}
+\setcounter{FancyVerbBufferLine}{10}
+\setcounter{FV@TrueTabGroupLevel}{0}
+\setcounter{FV@TrueTabCounter}{0}
+\setcounter{FV@HighlightLinesStart}{0}
+\setcounter{FV@HighlightLinesStop}{0}
+\setcounter{FancyVerbLineBreakLast}{0}
+\setcounter{FV@BreakBufferDepth}{0}
+\setcounter{minted@FancyVerbLineTemp}{0}
+\setcounter{listing}{1}
 \setcounter{tabx@nest}{0}
 \setcounter{listtotal}{0}
 \setcounter{listcount}{0}
@@ -52,7 +112,7 @@
 \setcounter{citetotal}{0}
 \setcounter{multicitecount}{0}
 \setcounter{multicitetotal}{0}
-\setcounter{instcount}{188}
+\setcounter{instcount}{198}
 \setcounter{maxnames}{2}
 \setcounter{minnames}{1}
 \setcounter{maxitems}{3}

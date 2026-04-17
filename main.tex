@@ -13,21 +13,33 @@
 \usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,headsep=10pt]{geometry}
 \usepackage[colorlinks,pdfusetitle,urlcolor=blue,citecolor=blue,linkcolor=blue,bookmarksnumbered,plainpages=false]{hyperref}
 \usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{xurl}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{tikz}
 \usepackage{tikz-cd}
+
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.multipart,shadows.blur, quotes}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{svg}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \usetikzlibrary{backgrounds}
 \usepackage{enumitem}
 \usepackage{soul}
+\usepackage{minted}
+
+\usepackage{cleveref}
 
 \usepackage{csquotes}
 \usepackage[backend=biber, style=ieee]{biblatex}
 \addbibresource{master.bib} % a .bib file
 \DeclareLanguageMapping{american}{american-apa}
 \renewcommand{\arraystretch}{1.4}
-\flushbottom
+\raggedbottom
+\setlength{\emergencystretch}{2em}
 
 \pagestyle{plain}
 
@@ -87,7 +99,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools''} % title
 	%\renewcommand*{\linespacing}{1}
 	\renewcommand\baselinestretch{1}
 	\small
-	\begin{tabular}{p{7cm} p{10cm}}
+	\begin{tabular}{p{6cm} p{9.5cm}}
 		Studienkennzahl lt. Studienblatt / \newline degree programme code as it appears on \newline the student record sheet: & UA 066 910 \\
 		Studienrichtung lt. Studienblatt / \newline degree programme as it appears on \newline the student record sheet:& Computational Science \\
 		Betreut von / Supervisor: & ao. Univ.-Prof. Mag. Dr. Christoph Flamm \\ % Insert your program/supervisor here
@@ -112,6 +124,8 @@ For tolerating my occasional slow grasp of concepts and for all the support I re
 
 Gratitude is also extended to the entire TBI working group 
 for their support and for creating a stimulating environment.
+Especial thanks to Manuel Uhlir for getting me started 
+and for the many helpful discussions and suggestions along the way.
 
 Heartfelt thanks are due to my mother and grandmother, 
 whose constant faith in me has carried me through many challenges. 
@@ -147,20 +161,20 @@ The work will offer a systematic method for integrating graph-based intermediate
 \clearpage
 \chapter*{Zusammenfassung}
 %min. 500 Zeichen inkl. Leerzeichen
-Massenspektrometrie ist eine grundlegende Technik in 
-der Analytischen Chemie, der Metabolomik, der pharmazeutischen Forschung und in vielen weiteren Bereichen. 
-Die Vorhersage einer Molekülstruktur aus einem gegebenen Spektrum --- und umgekehrt --- bleibt eine zentrale Herausforderung. 
+Massenspektrometrie ist eine grundlegende Technik. 
+Sie wird in der Analytischen Chemie, der Metabolomik, der pharma\-zeutischen Forschung und in vielen weiteren Bereichen eingesetzt. 
+Die Vorhersage einer Molekül\-struktur aus einem gegebenen Spektrum --- und umgekehrt --- bleibt eine zentrale Herausforderung. 
 Während die Vorhersage von Spektren aus bekannten Strukturen dank Methoden des maschinellen Lernens zunehmend präzise gelingt, ist das inverse Problem
---- also die Vorhersage möglicher Molekülstrukturen aus einem gegebenen Spektrum ---
+--- also die Vorhersage möglicher Molekül\-strukturen aus einem gegebenen Spektrum ---
 weiterhin schwierig, mehrdeutig und nur schwer interpretierbar.
 
-Die Arbeit schlägt vor, unterstützende Zwischenfragmente, 
+Die Arbeit schlägt vor, unterstützende Zwischen\-fragmente, 
 die durch graphbasierte Transformationstools erzeugt werden, 
 als Strategie zu integrieren, um das maschinelle Lernen für die bidirektionale Übersetzung zwischen Molekülen und Spektren zu verbessern. 
 Ziel ist es, die Interpretierbarkeit und Genauigkeit der Modelle zu steigern.
 
 Die Arbeit wird eine systematische Methode zur Integration graphbasierter Zwischenstufen in Machine-Learning-Pipelines bieten, 
-um potenziell die Interpretierbarkeit und Leistungsfähigkeit von Struktur $\leftrightarrow$ Spektrum-Übersetzungsmodellen zu verbessern.
+um potenziell die Interpretierbarkeit und Leistungsfähigkeit von Struktur $\leftrightarrow$ Spektrum-Übersetzungs\-modellen zu verbessern.
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Zusammenfassung}
@@ -181,7 +195,7 @@ um potenziell die Interpretierbarkeit und Leistungsfähigkeit von Struktur $\lef
 \include{ch3}
 \include{ch4}
 \include{ch5}
-\include{ch6}
+%\include{ch6}
 
 
 \clearpage

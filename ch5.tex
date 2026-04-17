@@ -1,35 +1,95 @@
-\chapter{Experiments and Evaluation}
+\chapter{Future Work}
+\label{ch:5}
+\noindent
 
 
-\section{Experimental Setup}
-\subsection{Data Splits and Training Protocols}
-\subsection{Evaluation Metrics}
-cosine
-jaccard index
-tanimoto
-edit-distances
+A central limitation of the present framework is that it does not learn fragmentation generation itself.
+In its current form, the model operates on \emph{precomputed} derivation graphs: 
+candidate fragments and their parent--child relations are generated upstream 
+by the rule-based graph-transformation pipeline and are then encoded by the neural model.
+In other words, the learning problem begins only \emph{after} a fragmentation space has already been constructed.
+The neural architecture therefore learns how to embed, combine, align, and score molecular, fragment, 
+and spectral information, but it does not yet learn which fragmentation events should be proposed in the first place.
+This design is appropriate for a first proof of concept, 
+since it makes the fragment-level representation explicit and keeps the learning problem tractable.
+At the same time, it also marks the clearest boundary of the current approach 
+and thus the most important direction for future work.
+\section{From Fragment Encoding to Fragment Generation}
 
-wasserstein metrics 
-%https://en.wikipedia.org/wiki/Earth_mover%27s_distance
-%Gromov–Wasserstein Distances and the Metric Approach to Object Matching
-%https://doi.org/10.1007/s10208-011-9093-5
+The present implementation is best understood as a \emph{fragment-aware encoder} 
+rather than a full fragmentation simulator.
+Its fragment branch consumes fragment graphs together with their derivation structure, 
+for example through the derivation-graph backend implemented in 
+\texttt{build\_derivation\_graph\_from\_collection} and \texttt{FragSetEncoderWrapper}.
+These components construct and encode a graph whose nodes are fragment graphs 
+and whose directed edges represent parent--child relations extracted from the precomputed derivation graph.
+This means that the model receives a structured fragmentation hypothesis as input 
+instead of having to infer it autonomously.
+A natural next step would therefore be to move from \emph{encoding} 
+fragmentation structures to \emph{generating} them.
+Conceptually, this would shift the current system from a hybrid model with symbolic 
+preprocessing and neural downstream learning toward a more integrated neuro-symbolic architecture.
+Rather than assuming that the relevant fragment space has already been enumerated, 
+the model could be trained to predict which bonds or substructures are most likely to fragment, 
+in which order, and under which contextual conditions.
+Such a development would make the system considerably 
+closer to a true mechanistic simulator of fragmentation pathways.
+\section{Toward a Generate--Score Architecture}
 
-%ablation
+An important source of inspiration for this transition is ICEBERG \cite{Goldman2024}, 
+which explicitly separates the task into two components: 
+a \emph{Generate} module that predicts likely fragmentation events 
+and a \emph{Score} module that assigns intensities to the resulting fragments.
+The key contribution of that formulation is that it does not treat the fragment graph as fixed input, 
+but as a latent object that must itself be predicted.
+ICEBERG is described as a two-part model in which one component generates molecular substructure candidates and a second component predicts intensities and hydrogen rearrangements for those generated fragments.
+It further trains the generative stage to reconstruct an estimated fragmentation DAG and uses a second module to score the resulting candidate fragments.
+Adapting this idea to the present framework would be highly promising.
+The current model already contains the main ingredients needed for the \emph{Score} side of such a system: 
+it embeds molecular graphs, fragment-level structures, 
+and spectra into a shared latent space; it predicts spectra from latent representations; 
+and it uses bidirectional training signals such as contrastive alignment and reconstruction losses.
+What is missing is an upstream neural module that decides which fragments should enter the fragment branch at all.
+In future work, the symbolic derivation graphs produced by the rule-based pipeline could serve as supervision for such a generator.
+Initially, this could be implemented as a learned pruning mechanism over the derivation graph, followed by a more ambitious autoregressive model that predicts fragmentation events directly.
+\section{Advantages of Learning Fragment Generation}
 
-\section{Forward Model Evaluation}
-\subsection{Spectral Similarity and Fragment Prediction}
+Learning fragmentation generation would offer several advantages over the present setup.
+First, it would reduce the model's dependence on exhaustive or semi-exhaustive preprocessing.
+At the moment, the symbolic pipeline must already generate a fragmentation space before learning begins.
+This introduces computational cost and also constrains the neural model to the candidate set produced upstream.
+A learned generator could instead prioritize only the most informative or probable fragmentation events, thereby reducing the combinatorial burden and potentially improving scalability.
+Second, a generative fragmentation stage would make the architecture more \emph{end-to-end}.
+Currently, the spectrum predictor is conditioned on a fragment representation that is treated as given.
+In a more integrated design, fragment proposals, fragment embeddings, and spectrum scoring could be optimized jointly.
+This would make it possible for the model to learn not only how to use fragments, but also which fragment structures are most helpful for downstream spectrum reconstruction and inverse retrieval.
+Third, explicit fragmentation generation may improve interpretability.
+The current framework is interpretable insofar as it operates on chemically meaningful fragment structures.
+However, because those structures are externally generated, the model cannot explain why one fragmentation path was preferred over another.
+A learned generative stage could provide atom-wise or bond-wise probabilities over fragmentation events and thereby yield a more direct account of the model's mechanistic assumptions.
+\section{Scientific and Technical Challenges}
 
-\section{Backward Model Evaluation}
-\subsection{Structure Reconstruction and Validity}
-\subsection{Reward Convergence and Exploration Efficiency}
+This transition is non-trivial and raises several challenges.
+The first is the need for supervision.
+Spectral libraries generally provide molecule--spectrum pairs, but not ground-truth fragmentation trees.
+ICEBERG addresses this by using a heuristic, combinatorially generated fragmentation DAG as a training target.
+A similar strategy would likely be required here: the current derivation graphs generated by the rule-based M\O D pipeline could serve as proxy labels for a learned generator.
+However, such labels are not guaranteed to be chemically unique or physically exact, and this ambiguity would need to be addressed carefully during training and evaluation.
+A second challenge concerns error propagation.
+In the current architecture, the fragment encoder assumes that the fragment graph is already available.
+Once generation becomes learned, mistakes made by the generative stage may propagate into the spectral scoring stage.
+This suggests that future work should not simply replace symbolic enumeration with a neural generator, but should consider staged training, beam search, uncertainty estimation, or latent-variable formulations that can maintain several plausible fragmentation hypotheses.
+A third challenge is chemical realism.
+A learned generator should ideally distinguish between fragments that are structurally possible and fragments that are spectrometrically plausible, including effects such as charge retention, neutral loss, and hydrogen rearrangements.
+This again argues in favor of a modular Generate--Score design rather than a single black-box network.
+\section{A Plausible Development Path}
 
-\section{Ablation Studies}
-without fragment parent awareness,
-or in other words not using the derivation graph
-
-\section{Comparison with Baseline Models}
-CFM-ID, 
-
-MSNovelist (https://doi.org/10.1038/s41592-022-01486-3), 
-
-MassGenie (https://doi.org/10.3390/biom11121793) ...
+A realistic path forward would proceed in stages.
+The first stage would keep the current derivation graphs but train a neural module to rank or prune candidate fragmentation steps.
+The second stage would learn to expand fragmentation trees autoregressively, conditioned on the precursor graph and the partial fragmentation history.
+The third stage would couple this generator tightly to the existing scoring model so that fragment generation, spectral prediction, and inverse retrieval are optimized jointly.
+In this way, the current system can be seen not as an alternative to Generate--Score approaches, but as an intermediate step toward them.
+In summary, the most important future extension of the present work is to shift the model from \emph{fragment-structure encoding} to \emph{fragmentation-process learning}.
+The current architecture already demonstrates that fragment-level intermediate representations can improve the connection between molecules and spectra.
+The next major advance will be to let the model learn which fragmentation structures to construct, rather than merely how to encode those supplied by an external pipeline.
+This would bring the framework closer to a fully trainable, mechanistically informed, and end-to-end bidirectional model for structure--spectrum translation. 

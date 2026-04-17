@@ -53,7 +53,7 @@ and systematically evaluate a fragment-augmented machine learning framework
 for improving the bidirectional translation 
 between molecular structures and mass spectra. 
 Specifically, the work investigates how the integration of graph-based reaction 
-and fragment derivation trees, generated through chemically valid graph transformation rules, 
+and fragment derivation graphs, generated through chemically valid graph transformation rules, 
 can serve as structured and interpretable intermediate representations 
 that enhance both predictive performance and model transparency.
 
@@ -86,7 +86,7 @@ This thesis is restricted to electron ionization (EI) mass spectrometry,
 as EI fragmentation reactions are comparatively 
 well understood and mechanistically characterized. \cite[ch.~4\&~8]{McLafferty1993}
 This allows the use of chemically informed rule-based graph transformations 
-to generate fragment derivation trees under consistent assumptions. 
+to generate fragment derivation graphs under consistent assumptions. 
 Other ionization techniques are excluded due to 
 their differing fragmentation behavior 
 and the additional modeling complexity they would introduce.
@@ -105,7 +105,7 @@ Consequently, the results should be interpreted as proof-of-concept validation
 rather than evidence of large-scale applicability.
 
 Also to be noted is that the reactions are in terms of graph symbols ambigously defined, and the transformation rules are not exhaustive of all possible fragmentation pathways. 
-This means that the generated fragment derivation trees may not capture all relevant chemical transformations, and the model's performance may be sensitive to the specific choice of transformation rules. 
+This means that the generated fragment derivation graphs may not capture all relevant chemical transformations, and the model's performance may be sensitive to the specific choice of transformation rules. 
 The interpretability analysis is therefore constrained by the assumptions embedded in the rule set, and may not generalize to fragmentation processes that deviate from these assumptions.
 
 %\section{Structure of the Thesis}

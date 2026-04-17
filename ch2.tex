@@ -4,7 +4,7 @@
 \section{Fundamentals and Capabilities of Mass Spectrometry}
 Mass spectrometry is a core analytical technique that characterizes chemical species by converting them into gas-phase ions 
 and measuring their mass-to-charge ratio ($m/z$). \cite[p.~5]{Hoffmann2011}
-A mass spectrometer therefore acts as a highly sensitive "molecular balance" whose output 
+A mass spectrometer therefore acts as a highly sensitive ``molecular balance'' whose output 
 -- a mass spectrum -- reports which ionic species are present and with what relative abundances. 
 
 Conceptually, an MS experiment comprises three main steps:
@@ -34,6 +34,15 @@ where a measured spectrum is matched against reference spectra or predicted frag
 \cite[p.~8]{Scheubert2013}
 For complex samples, chromatographic coupling (GC-MS or LC-MS) adds retention time as an additional dimension, \cite[p.~475]{Gross2006}
 improving selectivity and reducing confounding effects from co-eluting compounds. \cite[p.~233-237]{Hoffmann2011}
+
+
+Also in \emph{purity control and quality assurance} MS serves a critical role, particularly in pharmaceutical manufacturing. 
+By detecting the presence and abundance of impurities, degradation products, and unexpected byproducts, 
+MS ensures that manufactured compounds meet specification and quality standards. 
+The high selectivity and sensitivity of MS make it ideal for identifying trace contaminants 
+that would escape less discriminating analytical techniques. Combined with chromatographic separation, 
+MS provides definitive identification and quantification of both the target compound and potential impurities 
+in a single analytical run. \cite[p.~2]{Rambhad2025}
 
 MS is equally important for the \emph{quantification of known substances}, 
 where the goal is to estimate analyte concentration rather than molecular identity. \cite[p.~260]{Hoffmann2011}
@@ -568,6 +577,25 @@ Reactions are modeled as graph transformations that break and form bonds. \cite[
 To enable algorithmic processing of molecular structures, we represent them using 
 an abstract graph model that separates topology (which atoms are connected) 
 from optional geometric detail. \cite[p.~18]{Mueller2022}
+
+\Cref{fig:qm-graph-abstraction} illustrates the abstraction of a molecule as a graph, 
+where vertices represent atoms and edges represent chemical bonds.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \node (qm)
+            {\includegraphics[width=.5\textwidth]{fig-tikz/toluene-qm.png}};
+      \node [right = of qm] (gg)
+            {\resizebox{0.4\textwidth}{!}{\input{fig-tikz/qm-graph-abstraction.tikz.tex}}};
+      \draw[->,>=stealth,thick] (qm) to (gg);
+    \end{tikzpicture}
+
+    \caption{Toluene on the left depicted as a quantum-mechanical model with 3D coordinates and electron density,
+and on the right as a molecular graph abstraction.}
+    \label{fig:qm-graph-abstraction}
+\end{figure}
+
 This abstraction enables precise operations such as matching and rule-based transformation. \cite[pp.~2--3]{Andersen2013}
 The formal definition used throughout this thesis is introduced next.
 
@@ -615,7 +643,8 @@ and then the product graph \(H\) (insertion pushout).
 Intuitively, parts in \(L\setminus K\) are removed, 
 parts in \(R\setminus K\) are added, and \(K\) remains unchanged. \cite[p.~3]{Andersen2013} \cite[p.~4]{Flamm2025}
 
-\[
+\begin{figure}[H]
+    \centering
     \begin{tikzcd}
     L \arrow[d, "m"'] 
     & K \arrow[l, "l"'] \arrow[r, "r"] \arrow[d] 
@@ -624,7 +653,10 @@ parts in \(R\setminus K\) are added, and \(K\) remains unchanged. \cite[p.~3]{An
     & D \arrow[l, "l^{*}"] \arrow[r, "r^{*}"'] 
     & H
     \end{tikzcd}
-\]
+    \caption{Double pushout graph rewriting}
+    \label{fig:dpo-rewriting}
+\end{figure}
+
 
 In chemistry, this provides a precise representation of a reaction center:
 atoms and bonds in the preserved interface \(K\) define shared context, 
@@ -666,6 +698,19 @@ They therefore provide a natural bridge between
 rule-based chemistry models and downstream tasks such as 
 pathway search, and machine-learning-based scoring of candidate transformations. 
 \cite[p.~2]{Abel2026}
+
+One example derivation graph for the fragmentation rules applied is in \autoref{fig:derivation-graph}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig-tikz/dg_toluene.pdf}
+    \caption{Example derivation graph showing reaction pathways for toluene fragmentation.
+    Also illustrates the combinatorial explosion of possible pathways as rules are applied iteratively.}
+    \label{fig:derivation-graph}
+\end{figure}
+
+
+
 
 %\subsubsection{Term Mode}
 %Term mode is a representation mode in which chemical structures and reactions are expressed as 
@@ -818,3 +863,16 @@ application-grounded and human-grounded studies and often considers subjective
 measures such as trust and confidence together with task-related performance.
 Functionality-grounded evaluation instead relies on formal proxy metrics tied to
 specific explainability properties. \cite[p.~8]{Zhou2021} \cite[p.~10]{Zhou2021}
+
+\subsection{Evaluation Metrics of Prediction Performance}
+
+In computational mass spectrometry, evaluation metrics quantify how well predicted spectra 
+match experimental observations. 
+Cosine similarity measures spectral alignment by computing the dot product of normalized peak intensity vectors, 
+accounting for both peak positions and intensities. \cite[p.~4]{Wang2022}
+Edit-distance metrics quantify the minimum number of peak modifications needed to transform one spectrum into another, 
+reflecting the structural differences between molecules. \cite[pp.~1--2]{Maekinen2007}
+Wasserstein distances provide a framework for comparing peak distributions, 
+measuring the cost of optimally transporting one spectral peak distribution to another. \cite[pp.~1--8]{Ciach2020} \cite{Memoli2011}
+These metrics collectively enable rigorous assessment of model predictions against ground-truth spectra and facilitate 
+comparison of different spectral prediction methods in computational workflows.

@@ -1,0 +1,71 @@
+\begin{tikzpicture}[
+    font=\small,
+    atom/.style={circle, draw, thick, minimum size=0.6cm, fill=white},
+    carbon/.style={atom, fill=blue!20},
+    hydrogen/.style={atom, fill=gray!20, minimum size=0.4cm},
+    highlight/.style={very thick, green!70!black},
+    path/.style={line width=2pt, green!60},
+    bond/.style={thick, black!70}
+]
+
+% LEFT SIDE: Simplified explanation
+\node[anchor=north west, text width=6cm, align=left] at (0,3) {
+    \textbf{Goal:} Find saturated path\\[0.3em]
+    \textbf{Requirements:}\\
+    \checkmark\ Only carbon backbone\\
+    \checkmark\ Single bonds only (C—C)\\
+    \checkmark\ Only H side branches\\[0.5em]
+    
+    \textbf{Method:}\\
+    Search from \textcolor{green!60!black}{start} to \textcolor{red!70!black}{end}\\
+    following C-C single bonds
+};
+
+% RIGHT SIDE: Molecular graph example
+\begin{scope}[shift={(7,0)}]
+    % Carbon atoms arranged in a chain with a branch
+    \node[carbon, fill=green!30] (c1) at (0,2) {\small C};
+    \node[carbon] (c2) at (1.5,2) {\small C};
+    \node[carbon] (c3) at (3,2) {\small C};
+    \node[carbon, fill=red!30] (c4) at (4.5,2) {\small C};
+    \node[carbon, draw=red!70!black, line width=0.8pt] (c5) at (3,0.5) {\small C};
+    
+    % Hydrogen atoms
+    \node[hydrogen] (h1) at (-0.7,2.7) {\tiny H};
+    \node[hydrogen] (h2) at (-0.7,1.3) {\tiny H};
+    \node[hydrogen] (h3) at (1.5,3) {\tiny H};
+    \node[hydrogen] (h4) at (3,3) {\tiny H};
+    \node[hydrogen] (h5) at (5.2,2.7) {\tiny H};
+    \node[hydrogen] (h6) at (5.2,1.3) {\tiny H};
+    \node[hydrogen] (h7) at (2.3,0) {\tiny H};
+    \node[hydrogen] (h8) at (3.7,0) {\tiny H};
+    
+    % Carbon-carbon bonds (highlight the path)
+    \draw[path] (c1) -- (c2);
+    \draw[path] (c2) -- (c3);
+    \draw[path] (c3) -- (c4);
+    \draw[bond] (c3) -- (c5);
+    % Mark carbon side branch as not allowed
+    \draw[draw=red!70!black, fill=yellow!30, line width=0.8pt] (2.2,0.75) -- (2.0,0.4) -- (2.4,0.4) -- cycle;
+    \node[red!70!black, font=\scriptsize] at (2.2,0.52) {!};
+    
+    % C-H bonds
+    \draw[bond] (c1) -- (h1);
+    \draw[bond] (c1) -- (h2);
+    \draw[bond] (c2) -- (h3);
+    \draw[bond] (c3) -- (h4);
+    \draw[bond] (c4) -- (h5);
+    \draw[bond] (c4) -- (h6);
+    \draw[bond] (c5) -- (h7);
+    \draw[bond] (c5) -- (h8);
+    
+    % Labels
+    \node[below=5mm of c1, green!60!black, font=\bfseries] {START};
+    \node[below=5mm of c4, red!70!black, font=\bfseries] {END};
+    
+    % Path indicator
+    \node[above=1.2cm of c2, text width=3cm, align=center, font=\footnotesize] {
+        \textcolor{green!60!black}{\textbf{Saturated path}}
+    };
+\end{scope}
+\end{tikzpicture}

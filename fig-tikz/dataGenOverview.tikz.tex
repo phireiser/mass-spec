@@ -1,0 +1,62 @@
+\begin{tikzpicture}[
+      font=\sffamily,
+      node distance=12mm and 22mm,
+      >=Latex,
+      label/.style={align=center},
+      arrow/.style={->, thick},
+    ]
+    
+    % ---------------- Left: forward (fragmentation) ----------------
+    \node[label, anchor=west] (sampleTitle) at (0,3.2) {Sample\\ Molecule};
+    
+    % No box: fix the node size, then scale the SVG to fit that node (keeps your defined sizes)
+    \node[below=6mm of sampleTitle,
+          inner sep=0pt,
+          minimum width=20mm,
+          minimum height=15mm,
+          align=center] (sampleSVG) {%
+      \includesvg[width=20mm,height=15mm,keepaspectratio]{fig-tikz/molecule.svg}%
+    };
+    
+    \node[label, below=10mm of sampleSVG] (fragL) {Fragmentation};
+    \draw[arrow] (sampleSVG.south) -- (fragL.north);
+    
+    \node[label, below=25mm of fragL, anchor=south] (treeTitle) {Fragmentation Tree};
+    
+    \node[below=2mm of treeTitle, anchor=north,
+          inner sep=0pt,
+          minimum width=40mm,
+          minimum height=40mm,
+          align=center] (treeSVG) {%
+      \includesvg[width=40mm,height=40mm,keepaspectratio]{fig-tikz/fragmentation_tree.svg}
+    };
+    
+    \draw[arrow] (fragL.south) -- (treeTitle.north);
+    \node[label, right=15mm of fragL] (fragRules) {Fragmentation\\ Rules};
+    \draw[arrow] (fragRules.west) -- (fragL.east);
+    
+    % ---------------- Right: inverse (combining) ----------------
+    \node[label, right=70mm of sampleTitle, anchor=west] (candTitle) {Candidate\\ Molecules};
+    
+    \node[below=6mm of candTitle,
+          inner sep=0pt,
+          minimum width=40mm,
+          minimum height=15mm,
+          align=center] (candSVG) {%
+      \includesvg[width=20mm,height=15mm,keepaspectratio]{fig-tikz/molecule.svg}
+      \includesvg[width=20mm,height=15mm,keepaspectratio]{fig-tikz/molecule.svg}
+    };
+    
+    \node[label, below=10mm of candSVG] (comb) {Combining};
+    \draw[arrow] (comb.north) -- (candSVG.south) ;
+    
+    \node[label, below=18mm of comb] (frags) {Fragments [1 \dots n]};
+    \draw[arrow] (frags.north) -- (comb.south);
+    
+    \node[label, right=15mm of comb] (invRules) {Inverse\\ Rules};
+    \draw[arrow] (invRules.west) -- (comb.east);
+
+    % ---------------- Connect left <-> right ---------Candidate\\ Molecules-------
+    \draw[arrow] (treeSVG.east) -| (frags.south);
+    
+\end{tikzpicture}

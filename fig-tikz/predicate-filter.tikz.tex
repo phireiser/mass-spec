@@ -1,0 +1,63 @@
+\begin{tikzpicture}[
+    font=\small,
+    box/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, align=center, minimum width=2.5cm},
+    molecule/.style={circle, draw, thick, minimum size=1cm, fill=blue!20},
+    arrow/.style={-Stealth, very thick},
+    check/.style={circle, draw, thick, minimum size=0.8cm, fill=green!30},
+    cross/.style={circle, draw, thick, minimum size=0.8cm, fill=red!30},
+]
+
+% Stage 1: Candidate Fragments
+\node[box, fill=gray!20] (candidates) at (0,5) {Candidate\\Fragments};
+
+% Multiple fragments
+\node[molecule] (f1) at (0,3.5) {\tiny Frag 1};
+\node[molecule] (f2) at (0,2) {\tiny Frag 2};
+\node[molecule] (f3) at (0,0.5) {\tiny Frag 3};
+\node[below=0.05cm of f3, font=\small] {(from parent molecule)};
+
+% Arrows to predicate
+\draw[arrow] (f1) -- (3,3.5);
+\draw[arrow] (f2) -- (3,2);
+\draw[arrow] (f3) -- (3,0.5);
+
+% Stage 2: Predicate Check
+\node[box, fill=yellow!30, minimum height=3.5cm, minimum width=3cm] (predicate) at (4.5,2) {
+    \textbf{Predicate}\\[0.2cm]
+    {\scriptsize Check conditions:}\\[0.1cm]
+    {\tiny - Heteroatom?}\\
+    {\tiny - Saturated?}\\
+    {\tiny - Structure valid?}
+};
+
+% Results
+\node[check] (res1) at (6.2,3.5) {\textbf{PASS}};
+\node[check] (res3) at (6.2,2) {\textbf{PASS}};
+\node[cross] (res2) at (6.2,0.5) {\textbf{FAIL}};
+
+
+% Stage 3: Selected fragments
+\node[box, fill=green!20] (selected) at (9,5.2) {Pass};
+\node[molecule, fill=green!40] (s1) at (9,3.5) {\tiny Frag 1};
+\node[molecule, fill=green!40] (s3) at (9,2) {\tiny Frag 2};
+
+\draw[arrow, green!60!black] (res1.east) -- (s1.west);
+\draw[arrow, green!60!black] (res3.east) -- (s3.west);
+
+% Stage 4: Rejected fragment
+\node[box, fill=red!20] (rejected) at (9,-0.8) {Rejected};
+\node[molecule, fill=red!40] (r2) at (9,0.5) {\tiny Frag 3};
+
+\draw[arrow, red!60!black] (res2.east) -- (r2.west);
+
+% Stage 5: Transformation applied
+\node[box, fill=blue!30, minimum width=3cm] (transform) at (12,2.5) {
+    \vadjust{centering}
+    \textbf{Graph}\\
+    \textbf{Transformation}\\
+};
+
+\draw[arrow, green!60!black, line width=2pt] (s1.east) -- (transform.west);
+\draw[arrow, green!60!black, line width=2pt] (s3.east) -- (transform.west);
+
+\end{tikzpicture}
