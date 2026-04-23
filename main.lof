@@ -1,25 +1,25 @@
 \babel@toc {english}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Flowchart of a mass spectrometer}}{7}{figure.caption.13}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Schematic of a mass spectrometer}}{7}{figure.caption.14}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Schematic of the electrospray ionization process}}{10}{figure.caption.23}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Schematic of the atmospheric pressure chemical ionization process}}{10}{figure.caption.25}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces UV laser desorbs/ionizes co-crystallized matrix and analyte, creating an ion plume that is sent into the mass analyzer. }}{11}{figure.caption.27}%
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Schematic of an electron multiplier detector}}{14}{figure.caption.32}%
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Toluene on the left depicted as a quantum-mechanical model with 3D coordinates and electron density, and on the right as a molecular graph abstraction.}}{19}{figure.caption.39}%
-\contentsline {figure}{\numberline {2.8}{\ignorespaces Double pushout graph rewriting}}{20}{figure.caption.42}%
-\contentsline {figure}{\numberline {2.9}{\ignorespaces Example derivation graph showing reaction pathways for toluene fragmentation. Also illustrates the combinatorial explosion of possible pathways as rules are applied iteratively.}}{22}{figure.caption.44}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Simplified block diagram of a mass spectrometer}}{7}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Simplified schematic of MS measurement principle}}{7}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Schematic of ESI ionization}}{10}{figure.caption.23}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Schematic of APCI ionization}}{11}{figure.caption.25}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Schematic of MALDI ionization}}{12}{figure.caption.27}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Schematic of an electron multiplier detector}}{15}{figure.caption.32}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Abstraction of a molecule as a graph}}{20}{figure.caption.39}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Double pushout graph rewriting}}{21}{figure.caption.42}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Example derivation graph of a fragmentation}}{23}{figure.caption.44}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Overview of the data generation process using \texttt {mod} derivation graphs.}}{27}{figure.caption.48}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Flow diagram explaining predicate filter application at the fragmentation process.}}{28}{figure.caption.49}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Heteroatom check predicate: valid case with detected heteroatom (left) versus invalid C/H-only neighborhood (right).}}{29}{figure.caption.51}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Saturation check predicate as constrained path traversal: accepted carbon single-bond path (green) and rejected carbon side branch.}}{29}{figure.caption.53}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Alkyl check predicate filtering fragmentation sites to alkyl groups.}}{30}{figure.caption.55}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagram illustrating the overall architecture of the bidirectional translation framework, showing the flow from molecular graph encoding to spectral embedding and back.}}{34}{figure.caption.57}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Schematic of the bidirectional fragmentation workflow}}{28}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Flow diagram of predicate filter application}}{29}{figure.caption.49}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Heteroatom check predicate}}{30}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Saturation check predicate as constrained path traversal}}{31}{figure.caption.53}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Alkyl check predicate}}{32}{figure.caption.55}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Architecture}}{36}{figure.caption.57}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Regression of Computation time, excluding molecules that had trival expansions (time $< 40$s).}}{39}{figure.caption.58}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Evaluation metrics: cosine similarity and mean reciprocal rank (MRR).}}{41}{figure.caption.59}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Evaluation metrics: recall at k.}}{42}{figure.caption.60}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Fragmentation Computation Times}}{41}{figure.caption.58}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Cosine similarity and MRR for ablation variants}}{43}{figure.caption.59}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Recall@k for ablation variants}}{44}{figure.caption.60}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -70,7 +70,7 @@ $\mathrm{H_2O}$, $\mathrm{NH_3}$, or $\mathrm{CO}$
 can indicate the presence of hydroxyl, amino, or carbonyl functionalities, 
 while specific fragment series can suggest 
 alkyl chain lengths or aromatic substitution patterns. \cite[p.~504]{Gross2006} 
-Importantly, structural elucidation from MS data is rarely strait forward; 
+Importantly, structural elucidation from MS data is rarely straight forward; 
 rather, it is an inference problem in which multiple candidate structures 
 may explain the same spectral evidence, especially for isomers. \cite[p.~53]{Vaniya2015}
 
@@ -84,7 +84,12 @@ models that generate and rank candidate structures based on spectral consistency
 \begin{figure}[H]
     \centering
     \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-flowchart.tikz.tex}}
-    \caption{Flowchart of a mass spectrometer}
+    \caption[Simplified block diagram of a mass spectrometer]{
+        Simplified block diagram of a mass spectrometer. 
+        The sample is introduced into the ion source, where analyte molecules are ionized. 
+        The resulting ions are separated in the mass analyzer according to their mass-to-charge ratio (m/z), 
+        detected by the detector, and subsequently processed in the data analysis step.
+        }
     \label{fig:ms-flow}
     \cite{wikibooks-ms-flowchart}
 \end{figure}
@@ -92,7 +97,12 @@ models that generate and rank candidate structures based on spectral consistency
 \begin{figure}[H]
     \centering
     \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-schematic.tikz.tex}}
-    \caption{Schematic of a mass spectrometer}
+    \caption[Simplified schematic of MS measurement principle]{
+        Simplified schematic of the measurement principle in a magnetic-sector mass spectrometer. 
+        Following sample introduction, ionisation and acceleration generate an ion beam 
+        that is separated in the magnetic field by $m/z$-dependent deflection. 
+        The separated ions are then detected and transformed into an electrical signal for further processing.
+    }
     \label{fig:ms-schematic}
     \cite{chemguide}
 \end{figure}
@@ -116,9 +126,9 @@ Labeling with mass units such as \emph{daltons} (Da), amu, or unified atomic mas
 
 \subsubsection{Ion notation and precursor concepts}
 
-Ions observed in mass spectrometry are typically derived from a neutraly charged molecule $M$. 
+Ions observed in mass spectrometry are typically derived from a neutrally charged molecule $M$. 
 In electron ionization (EI) a hard ionization method, removal of an electron yields the molecular ion \cite[p.~1541]{Murray2013}
--- also called the parent ion -- denoted  $[M^{+\cdot}]$, \cite[p.~1582]{Murray2013}
+-- also called the parent ion -- denoted  $[M]^{+\cdot}$, \cite[p.~1582]{Murray2013}
 a radical cation carrying both a positive charge and an unpaired electron. 
 More generally, the term \emph{precursor ion} refers to the ion selected for fragmentation, \cite[p.~1578]{Murray2013}
 from which product ions are generated. 
@@ -129,7 +139,7 @@ producing a protonated molecule  $[M+H]^+$. \cite[p.~1580]{Murray2013}
 
 A measured spectrum contains several conceptually distinct peak types. 
 \emph{Isotope peaks} arise from naturally occurring heavier isotopes (e.g., $^{13}\mathrm{C}$, $^{37}\mathrm{Cl}$), 
-producing characteristic $M+1$, $M+2$, $\ldots$ patterns adjacent to the monoisotopic ion peak. 
+producing characteristic $M+1, M+2, \ldots$ patterns adjacent to the monoisotopic ion peak. 
 \emph{Fragment peaks} arise when precursor ions undergo dissociation, 
 yielding smaller product ions whose $m/z$ values and relative intensities encode structural information. 
 The \emph{base peak} is the most intense peak in the spectrum \cite[p.~1524]{Murray2013} and is used for normalization; \cite[p.~1550]{Murray2013}
@@ -187,7 +197,14 @@ The sequence from charged droplet formation to gas-phase ion release is shown in
 \begin{figure}[H]
     \centering
     \input{fig-tikz/esi-schematic.tex}
-    \caption{Schematic of the electrospray ionization process}
+    \caption[Schematic of ESI ionization]{
+        Schematic illustration of the electrospray ionization (ESI) process. 
+        A sample solution is dispersed by nebulizer gas and subjected to a high electric potential, producing a spray of charged droplets. 
+        Progressive solvent evaporation and droplet fission lead to the formation of gas-phase ions, 
+        which are transferred through the interface region into the mass detector. 
+        The figure highlights the transition from charged droplets to molecular ions, 
+        exemplified here by protonated species \((\mathrm{M+H})^{+}\).
+    }
     \label{fig:esi-schematic}
     \cite[p.39]{Rockwood2018}
 \end{figure}
@@ -211,7 +228,14 @@ but its higher source temperatures can induce thermal degradation. \cite[p.~39]{
 \begin{figure}[H]
     \centering
     \input{fig-tikz/apci-schematic.tex}
-    \caption{Schematic of the atmospheric pressure chemical ionization process}
+    \caption[Schematic of APCI ionization]{
+        Schematic illustration of atmospheric pressure chemical ionization (APCI). 
+        The sample solution is nebulized and vaporized, 
+        and a corona discharge operated at high voltage generates reagent ions from the solvent. 
+        In the example shown, protonated ions transfer a proton to the analyte molecule \(M\), 
+        forming the protonated molecular ion \((M+H)^{+}\), 
+        which is then introduced through the interface region into the mass detector.
+    }
     \label{fig:apci-schematic}
     \cite[p.39]{Rockwood2018}
 \end{figure}
@@ -227,10 +251,13 @@ A general schematic of the MALDI process is shown in Figure~\ref{fig:maldi-schem
 \begin{figure}[H]
     \centering
     \input{fig-tikz/maldi-schematic.tex}
-    \caption{
-        UV laser desorbs/ionizes co-crystallized matrix and analyte, 
-        creating an ion plume that is sent into the mass analyzer.
-        }
+    \caption[Schematic of MALDI ionization]{
+        Schematic illustration of matrix-assisted laser desorption/ionization (MALDI). 
+        A crystallized matrix containing embedded analyte molecules is irradiated with UV laser light at the sample stage, 
+        leading to desorption and ionization of matrix and analyte species. 
+        During plume formation, matrix ions and neutrals promote the formation of analyte ions, 
+        which are subsequently transferred into the mass analyzer.
+    }
     \label{fig:maldi-schematic}
     \cite[p.~42]{Rockwood2018}
 \end{figure}
@@ -358,7 +385,13 @@ This cascade amplification principle is illustrated in Figure~\ref{fig:em-schema
 \begin{figure}[H]
     \centering
     \resizebox{0.9\textwidth}{!}{\input{fig-tikz/em-schematic.tex}}
-    \caption{Schematic of an electron multiplier detector}
+    \caption[Schematic of an electron multiplier detector]{
+        Schematic illustration of an electron multiplier (EM) detector. 
+        An incoming ion strikes the first dynode, causing the emission of secondary electrons. 
+        These electrons are then accelerated to subsequent dynodes, where they generate additional electrons in a cascading effect. 
+        After multiple stages, this results in a significant amplification of the original ion signal, 
+        producing a measurable current pulse that can be digitized and recorded as part of the mass spectrum.
+    }
     \label{fig:em-schematic}
     \cite[p.~50]{Rockwood2018}
 \end{figure}
@@ -434,8 +467,8 @@ with heteroatoms. \cite[pp.~220--221]{Dass2007}
 In this process, the bond directly adjacent to the functional group is cleaved, 
 producing a resonance-stabilized cation. \cite[pp.~220--221]{Dass2007}
 For instance, in ketones and aldehydes, cleavage of the C--C bond next to the carbonyl group 
-generates an acylium ion $\mathrm{RCO}^+$, which is stabilized by the resonance structure 
-$\mathrm{R{-}C{\equiv}O}^+$. \cite[pp.~234--235]{Gross2006}
+generates an acylium ion $\mathrm{R{-}\overset{+}{C}{=}O}$, which is stabilized by the resonance structure 
+$\mathrm{R{-}C{\equiv}\overset{+}{O}}$. \cite[p.~230]{Gross2006}
 This reaction pathway often produces intense peaks in the spectrum 
 and serves as a diagnostic indicator for carbonyl-containing compounds. \cite[pp.~234--235]{Gross2006}
 
@@ -590,9 +623,12 @@ where vertices represent atoms and edges represent chemical bonds.
             {\resizebox{0.4\textwidth}{!}{\input{fig-tikz/qm-graph-abstraction.tikz.tex}}};
       \draw[->,>=stealth,thick] (qm) to (gg);
     \end{tikzpicture}
-
-    \caption{Toluene on the left depicted as a quantum-mechanical model with 3D coordinates and electron density,
-and on the right as a molecular graph abstraction.}
+    \caption[Abstraction of a molecule as a graph]{
+        Toluene on the left depicted as a quantum-mechanical model 
+        with 3D coordinates and electron density, and on the right as a molecular graph abstraction. 
+        The graph captures the connectivity of atoms (vertices) and bonds (edges) 
+        while abstracting away geometric and electronic details.
+}
     \label{fig:qm-graph-abstraction}
 \end{figure}
 
@@ -653,12 +689,19 @@ parts in \(R\setminus K\) are added, and \(K\) remains unchanged. \cite[p.~3]{An
     & D \arrow[l, "l^{*}"] \arrow[r, "r^{*}"'] 
     & H
     \end{tikzcd}
-    \caption{Double pushout graph rewriting}
+    \caption[Double pushout graph rewriting]{
+        Schematic of the double pushout (DPO) graph rewriting process. 
+        A rule \(p\) consists of a left-hand side \(L\), an interface \(K\), and a right-hand side \(R\). 
+        Given a match \(m: L \to G\) in the host graph \(G\), 
+        the DPO approach constructs an intermediate graph \(D\) by removing parts of \(G\) corresponding to \(L \setminus K\), 
+        and then constructs the product graph \(H\) by adding parts corresponding to \(R \setminus K\). 
+        The interface \(K\) is preserved throughout the transformation, ensuring that the resulting graph \(H\) maintains valid molecular structure.
+    }
     \label{fig:dpo-rewriting}
 \end{figure}
 
 
-In chemistry, this provides a precise representation of a reaction center:
+In chemistry, this provides a representation of a reaction center:
 atoms and bonds in the preserved interface \(K\) define shared context, 
 while changes between \(L\) and \(R\) encode bond breaking/forming events. \cite[p.~5]{Andersen2017}
 
@@ -704,8 +747,10 @@ One example derivation graph for the fragmentation rules applied is in \autoref{
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{fig-tikz/dg_toluene.pdf}
-    \caption{Example derivation graph showing reaction pathways for toluene fragmentation.
-    Also illustrates the combinatorial explosion of possible pathways as rules are applied iteratively.}
+    \caption[Example derivation graph of a fragmentation]{
+        Example derivation graph showing reaction pathways for toluene fragmentation.
+        Also illustrates the combinatorial explosion of possible pathways as rules are applied iteratively.
+    }
     \label{fig:derivation-graph}
 \end{figure}
 

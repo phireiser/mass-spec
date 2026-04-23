@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.6)  17 APR 2026 14:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.6)  23 APR 2026 17:19
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -1157,7 +1157,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
  [10
 
-] [11]
+]
 \openout2 = `ch1.aux'.
 
  (./ch1.tex
@@ -1176,24 +1176,24 @@ Chapter 2.
 
 
 
-] [6] (./fig-tikz/ms-flowchart.tikz.tex) (./fig-tikz/ms-schematic.tikz.tex) [7] [8] (./fig-tikz/esi-schematic.tex) [9] (./fig-tikz/apci-schematic.tex) [10] (./fig-tikz/maldi-schematic.tex) [11] [12] (./fig-tikz/em-schematic.tex) [13] [14] [15] [16] [17] [18]
-<fig-tikz/toluene-qm.png, id=814, 920.68968pt x 569.12625pt>
+] [6] (./fig-tikz/ms-flowchart.tikz.tex) (./fig-tikz/ms-schematic.tikz.tex) [7] [8] [9] (./fig-tikz/esi-schematic.tex) (./fig-tikz/apci-schematic.tex) [10] (./fig-tikz/maldi-schematic.tex) [11] [12] [13] (./fig-tikz/em-schematic.tex) [14] [15] [16] [17] [18] [19]
+<fig-tikz/toluene-qm.png, id=804, 920.68968pt x 569.12625pt>
 File: fig-tikz/toluene-qm.png Graphic file (type png)
 <use fig-tikz/toluene-qm.png>
-Package pdftex.def Info: fig-tikz/toluene-qm.png  used on input line 588.
+Package pdftex.def Info: fig-tikz/toluene-qm.png  used on input line 621.
 (pdftex.def)             Requested size: 227.62206pt x 140.7007pt.
- (./fig-tikz/qm-graph-abstraction.tikz.tex) [19 <./fig-tikz/toluene-qm.png>] [20]
-<fig-tikz/dg_toluene.pdf, id=863, 2256.05164pt x 1977.92148pt>
+ (./fig-tikz/qm-graph-abstraction.tikz.tex) [20 <./fig-tikz/toluene-qm.png>] [21]
+<fig-tikz/dg_toluene.pdf, id=852, 2256.05164pt x 1977.92148pt>
 File: fig-tikz/dg_toluene.pdf Graphic file (type pdf)
 <use fig-tikz/dg_toluene.pdf>
-Package pdftex.def Info: fig-tikz/dg_toluene.pdf  used on input line 706.
+Package pdftex.def Info: fig-tikz/dg_toluene.pdf  used on input line 749.
 (pdftex.def)             Requested size: 364.19667pt x 319.2807pt.
- [21] [22 <./fig-tikz/dg_toluene.pdf>] [23] [24]) [25]
+ [22] [23 <./fig-tikz/dg_toluene.pdf>] [24] [25]) [26]
 \openout2 = `ch3.aux'.
 
  (./ch3.tex
 Chapter 3.
-[26
+[27
 
 
 
@@ -1201,7 +1201,7 @@ Chapter 3.
 ] (./fig-tikz/dataGenOverview.tikz.tex
 Package svg Info: Last page of `./svg-inkscape/molecule_svg-tex.pdf' is 1 on input line 18.
  (./svg-inkscape/molecule_svg-tex.pdf_tex
-<./svg-inkscape/molecule_svg-tex.pdf, id=1068, page=1, 96.04796pt x 165.7584pt>
+<./svg-inkscape/molecule_svg-tex.pdf, id=1059, page=1, 96.04796pt x 165.7584pt>
 File: ./svg-inkscape/molecule_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/molecule_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/molecule_svg-tex.pdf , page1 used on input line 56.
@@ -1209,7 +1209,7 @@ Package pdftex.def Info: ./svg-inkscape/molecule_svg-tex.pdf , page1 used on inp
 )
 Package svg Info: Last page of `./svg-inkscape/fragmentation_tree_svg-tex.pdf' is 1 on input line 31.
  (./svg-inkscape/fragmentation_tree_svg-tex.pdf_tex
-<./svg-inkscape/fragmentation_tree_svg-tex.pdf, id=1070, page=1, 66.60448pt x 75.63979pt>
+<./svg-inkscape/fragmentation_tree_svg-tex.pdf, id=1061, page=1, 66.60448pt x 75.63979pt>
 File: ./svg-inkscape/fragmentation_tree_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/fragmentation_tree_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/fragmentation_tree_svg-tex.pdf , page1 used on input line 56.
@@ -1228,85 +1228,85 @@ File: ./svg-inkscape/molecule_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/molecule_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/molecule_svg-tex.pdf , page1 used on input line 56.
 (pdftex.def)             Requested size: 24.73117pt x 42.67883pt.
-))
+)) [28 <./svg-inkscape/molecule_svg-tex.pdf> <./svg-inkscape/fragmentation_tree_svg-tex.pdf
+
+pdfTeX warning: pdflatex (file ./svg-inkscape/fragmentation_tree_svg-tex.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>]
 \pydata@fh@0=\write10
 \openout10 = `_FAD58DE7366495DB4650CFEFAC2FCD61.data.minted'.
 
-runsystem(latexminted config  --timestamp 20260417141458 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
+runsystem(latexminted config  --timestamp 20260423171940 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
 
  (./_FAD58DE7366495DB4650CFEFAC2FCD61.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20260417141458 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
+runsystem(latexminted cleanconfig  --timestamp 20260423171940 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
 
  (./_minted/default.style.minted) (./_minted/A2F670813F554C1B6DFF3A85A83E29C6.highlight.minted)
-Package hyperref Info: bookmark level for unknown listing defaults to 0 on input line 77.
- (./fig-tikz/predicate-filter.tikz.tex) [27 <./svg-inkscape/molecule_svg-tex.pdf> <./svg-inkscape/fragmentation_tree_svg-tex.pdf
-
-pdfTeX warning: pdflatex (file ./svg-inkscape/fragmentation_tree_svg-tex.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] (./fig-tikz/predicate-heteroatom.tikz.tex
+Package hyperref Info: bookmark level for unknown listing defaults to 0 on input line 84.
+ (./fig-tikz/predicate-filter.tikz.tex) [29] (./fig-tikz/predicate-heteroatom.tikz.tex
 LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 43.
  (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2024/11/19 v2.5n Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 43.
-) [28] (./fig-tikz/predicate-saturation.tikz.tex) [29] (./fig-tikz/predicate-alkyl.tikz.tex) [30] [31] [32] [33] (./fig-tikz/architecture_diagram.tikz.tex) [34] [35] [36]) [37]
+) (./fig-tikz/predicate-saturation.tikz.tex) [30] (./fig-tikz/predicate-alkyl.tikz.tex) [31] [32] [33] [34] [35] (./fig-tikz/architecture_diagram.tikz.tex) [36] [37] [38]) [39]
 \openout2 = `ch4.aux'.
 
  (./ch4.tex
 Chapter 4.
-<time_vs_complexity_logy_over40.png, id=1161, 569.9694pt x 422.0568pt>
+<time_vs_complexity_logy_over40.png, id=1158, 569.9694pt x 422.0568pt>
 File: time_vs_complexity_logy_over40.png Graphic file (type png)
 <use time_vs_complexity_logy_over40.png>
 Package pdftex.def Info: time_vs_complexity_logy_over40.png  used on input line 34.
 (pdftex.def)             Requested size: 364.19667pt x 269.69681pt.
-[38
+[40
 
 
 
 
-] [39 <./time_vs_complexity_logy_over40.png>]
-Package svg Info: Last page of `./svg-inkscape/cosine_mrr_svg-tex.pdf' is 1 on input line 101.
+] [41 <./time_vs_complexity_logy_over40.png>]
+Package svg Info: Last page of `./svg-inkscape/cosine_mrr_svg-tex.pdf' is 1 on input line 111.
  (./svg-inkscape/cosine_mrr_svg-tex.pdf_tex
-<./svg-inkscape/cosine_mrr_svg-tex.pdf, id=1173, page=1, 570.59297pt x 425.02414pt>
+<./svg-inkscape/cosine_mrr_svg-tex.pdf, id=1169, page=1, 570.59297pt x 425.02414pt>
 File: ./svg-inkscape/cosine_mrr_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/cosine_mrr_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/cosine_mrr_svg-tex.pdf , page1 used on input line 56.
 (pdftex.def)             Requested size: 364.19667pt x 271.29465pt.
-) [40]
-Package svg Info: Last page of `./svg-inkscape/recall_at_k_svg-tex.pdf' is 1 on input line 125.
+) [42] [43 <./svg-inkscape/cosine_mrr_svg-tex.pdf>]
+Package svg Info: Last page of `./svg-inkscape/recall_at_k_svg-tex.pdf' is 1 on input line 147.
  (./svg-inkscape/recall_at_k_svg-tex.pdf_tex
-<./svg-inkscape/recall_at_k_svg-tex.pdf, id=1181, page=1, 715.13297pt x 424.62074pt>
+<./svg-inkscape/recall_at_k_svg-tex.pdf, id=1313, page=1, 715.13297pt x 424.62074pt>
 File: ./svg-inkscape/recall_at_k_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/recall_at_k_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/recall_at_k_svg-tex.pdf , page1 used on input line 56.
 (pdftex.def)             Requested size: 364.19667pt x 216.2427pt.
-) [41 <./svg-inkscape/cosine_mrr_svg-tex.pdf>] [42 <./svg-inkscape/recall_at_k_svg-tex.pdf>]) [43]
+) [44 <./svg-inkscape/recall_at_k_svg-tex.pdf>]) [45]
 \openout2 = `ch5.aux'.
 
  (./ch5.tex
 Chapter 5.
-[44
+[46
 
 
 
 
-] [45]) [46] [47] [48
+] [47]) [48] [49] [50
 \def\@LN@column{1}
 
 
 
 
-] [49] [50] [51] [52] [53] [54]
+] [51] [52] [53] [54] [55] [56]
 Underfull \hbox (badness 1418) in paragraph at lines 206--206
 []\OT1/cmr/m/n/10.95 F. W. McLaf-ferty and F. Ture^^Tcek, \OT1/cmr/m/it/10.95 In-ter-pre-ta-tion von Massen-spek-tren \OT1/cmr/m/n/10.95 (Spek-trum
  []
 
-[55]
+[57]
 \openout2 = `appendix.aux'.
 
  (./appendix.tex
 Appendix A.
-) [56
+) [58
 
 
 ] (./main.aux (./ch1.aux) (./ch2.aux) (./ch3.aux) (./ch4.aux) (./ch5.aux) (./appendix.aux))
@@ -1315,24 +1315,24 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: F6AA3042741F47725DE7262FF8C20130;14923.
+(rerunfilecheck)             Checksum: D765270B59D42C81DA9F1E61BD49C3C3;14923.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 44926 strings out of 469462
- 912962 string characters out of 5468615
- 1857568 words of memory out of 5000000
- 72561 multiletter control sequences out of 15000+600000
+ 44936 strings out of 469462
+ 913089 string characters out of 5468615
+ 1858704 words of memory out of 5000000
+ 72570 multiletter control sequences out of 15000+600000
  642603 words of font info for 95 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  94i,16n,104p,756b,2316s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb>
-Output written on main.pdf (67 pages, 880987 bytes).
+Output written on main.pdf (68 pages, 907731 bytes).
 PDF statistics:
- 1753 PDF objects out of 2073 (max. 8388607)
- 1454 compressed objects within 15 object streams
- 291 named destinations out of 1000 (max. 500000)
+ 1761 PDF objects out of 2073 (max. 8388607)
+ 1457 compressed objects within 15 object streams
+ 292 named destinations out of 1000 (max. 500000)
  725 words of extra memory for PDF output out of 10000 (max. 10000000)
 

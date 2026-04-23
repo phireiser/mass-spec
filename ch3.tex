@@ -35,7 +35,14 @@ This information is later used to validate predicted fragment assignments agains
 \begin{figure}
     \centering
     \input{fig-tikz/dataGenOverview.tikz.tex}
-    \caption{Overview of the data generation process using \texttt{mod} derivation graphs.}
+    \caption[Schematic of the bidirectional fragmentation workflow]{
+        Schematic overview of the bidirectional fragmentation workflow. 
+        Starting from a sample molecule, fragmentation rules are applied to generate a fragmentation tree 
+        that represents possible fragment formation pathways (left). 
+        The resulting fragments are then used as inputs for the inverse direction, 
+        where candidate molecules are reconstructed by combining fragments according to inverse rules (right). 
+        This links forward molecular fragmentation with inverse molecular assembly in a single interpretable framework.
+    }
     \label{fig:data-gen-overview}
 \end{figure}
 
@@ -88,7 +95,11 @@ The decision flow of this filtering step is summarized in \Cref{fig:predicate-fi
 \begin{figure}
     \centering
     \input{fig-tikz/predicate-filter.tikz.tex}
-    \caption{Flow diagram explaining predicate filter application at the fragmentation process.}
+    \caption[Flow diagram of predicate filter application]{
+        Flow diagram explaining predicate filter application at the fragmentation process.
+        During rule application, candidate sites are generated based on the rule's extension pattern.
+        Each candidate is then evaluated by a series of predicate checks (heteroatom, saturation, alkyl)
+    }
     \label{fig:predicate-filter}
 \end{figure}
 
@@ -98,6 +109,12 @@ To operationalize these chemical constraints in the filtering stage, three predi
 In order to ensure chemical plausibility during the application of the rule, 
 the heteroatom check retains exclusively those candidate sites 
 which contain at least one non-carbon, non-hydrogen atom within their local neighborhood.
+
+It shall be noted that McLafferty's original \cite[p.~85]{McLafferty2013} rule definition 
+does not explicitly specify the heteroatoms, but one should assume that 
+only the organic elements B, C, N, O, P, S, F, Cl, Br, and I are considered valid hetroatoms in this context. 
+That is not implmented in code, but it is a reasonable assumption 
+given the typical scope of organic mass spectrometry and the nature of fragmentation rules. 
 
 The heteroatom check evaluates the neighborhood of the rule-extension location via local graph traversal.
 A candidate is accepted only if at least one non-carbon, non-hydrogen atom is found,
@@ -110,8 +127,10 @@ and an invalid neighborhood without one.
 \begin{figure}[H]
     \centering
     \input{fig-tikz/predicate-heteroatom.tikz.tex}
-    \caption{Heteroatom check predicate: 
-    valid case with detected heteroatom (left) versus invalid C/H-only neighborhood (right).}
+    \caption[Heteroatom check predicate]{
+        Heteroatom check predicate: 
+        valid case with detected heteroatom (left) versus invalid C/H-only neighborhood (right).
+    }
     \label{fig:heteroatom-check}
 \end{figure}
 
@@ -127,8 +146,12 @@ and marks a rejected carbon branch.
 \begin{figure}[H]
     \centering
     \input{fig-tikz/predicate-saturation.tikz.tex}
-    \caption{Saturation check predicate as constrained path traversal: 
-    accepted carbon single-bond path (green) and rejected carbon side branch.}
+    \caption[Saturation check predicate as constrained path traversal]{
+        Illustration of the concept of a saturated path in a molecular graph. 
+        A valid saturated path connects the start and end atoms through a carbon backbone 
+        consisting exclusively of single C--C bonds, with only hydrogen atoms as side branches (top). 
+        In contrast, a path is not considered saturated if additional carbon side branches are attached to the backbone (bottom).
+    }
     \label{fig:saturation-check}
 \end{figure}
 
@@ -147,11 +170,15 @@ however, the carbon branch, which is marked, is rejected.
 \begin{figure}[H]
     \centering
     \input{fig-tikz/predicate-alkyl.tikz.tex}
-    \caption{Alkyl check predicate filtering fragmentation sites to alkyl groups.}
+    \caption[Alkyl check predicate]{
+        Alkyl check predicate formulated as a constrained path traversal. 
+        Starting from the rule extension location, a breadth-first search (BFS) is performed over the local molecular graph 
+        to verify that all reachable neighboring atoms belong to the set \(\{ \mathrm{C}, \mathrm{H} \}\). 
+        A matched substructure is accepted as an alkyl group if only carbon and hydrogen atoms are encountered (left), 
+        whereas the presence of a heteroatom such as nitrogen causes the predicate to fail (right).
+    }
     \label{fig:alkyl-check}
 \end{figure}
-
-
 
 \section{Latent Representation Schemes}
 \subsubsection{Overview}
@@ -188,9 +215,9 @@ and edge features (bond information).
 Node features are deliberately minimal and chemistry-focused.
 For each atom, the feature vector contains:
 \begin{itemize}
-    \item atom identity (\texttt{atom\_id})
-    \item formal charge
-    \item radical state
+    \item atom identity (\texttt{atom\_id}), the atomic number $Z$ (number of protons) 
+    \item formal charge (\texttt{charge}), the atom's formal charge
+    \item radical state (\texttt{radical}), whether the atom carries an unpaired electron
 \end{itemize}
 Hence, the node representation is
 \[
@@ -198,7 +225,7 @@ x_i = [\texttt{atom\_id},\; \texttt{charge},\; \texttt{radical}].
 \]
 
 Edge features encode bond type as one scalar value,
-with single, double, triple, and aromatic bonds mapped to $1.0$, $2.0$, $3.0$, and $1.5$, respectively.
+with single, double, triple, and aromatic bonds mapped to $1.0, \, 2.0, \, 3.0, \, \text{and} \, 1.5$, respectively.
 Connectivity is stored in \texttt{edge\_index} in COO format.
 
 Before featurization, preprocessing attempts to detect term-graph inputs 
@@ -296,7 +323,6 @@ also introduces several methodological and practical limitations:
 \end{itemize}
 
 
-
 \section{Model Architecture}
 
 \subsection{Overview of the Learning Framework}
@@ -334,8 +360,10 @@ but as a retrieval-oriented inverse path that aligns spectral embeddings with mo
     \resizebox{\textwidth}{!}{
         \input{fig-tikz/architecture_diagram.tikz.tex}
     }
-    \caption{Diagram illustrating the overall architecture of the bidirectional translation framework, 
-    showing the flow from molecular graph encoding to spectral embedding and back.}
+    \caption[Architecture]{
+        Diagram illustrating the overall architecture of the bidirectional translation framework, 
+        showing the flow from molecular graph encoding to spectral embedding and back.
+    }
     \label{fig:ml-architecture-diagram}
 \end{figure}
 
@@ -399,7 +427,7 @@ Consequently, the ``reconstruction'' in this subsection should be interpreted as
 a process of structure retrieval guided by shared embeddings and forward-model consistency, 
 rather than as the explicit generation of a graph.
 
-\subsection{Bidirectionllity}
+\subsection{Bidirectionality}
 
 The bidirectional nature of the framework arises from the fact that molecular graphs 
 and spectra are not learned independently. 
