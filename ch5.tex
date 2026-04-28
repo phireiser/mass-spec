@@ -58,6 +58,20 @@ Initially, this could be implemented as a learned pruning mechanism over the der
 followed by a more ambitious autoregressive model that predicts fragmentation events directly.
 
 
+\begin{figure}[htbp]
+    \centering
+    \resizebox{0.9\textwidth}{!}{%
+        \input{fig-tikz/generative-future.tikz.tex}%
+    }
+    \caption[Future extension toward a Generate -- Score architecture]{
+        A future extension of the present work would be to shift from fragment-structure encoding to fragmentation-process learning.
+        The next major advance will be to let the model learn which fragmentation structures to construct, 
+        rather than only how to encode those supplied by an external pipeline.
+    }
+    \label{fig:generative-future}
+\end{figure}
+
+
 \section{Advantages of Learning Fragment Generation}
 Learning fragmentation generation would offer several advantages over the present setup.
 First, it would reduce the model's dependence on exhaustive or semi-exhaustive preprocessing.
@@ -75,20 +89,6 @@ The current framework is interpretable insofar as it operates on chemically mean
 However, because those structures are externally generated, the model cannot explain why one fragmentation path was preferred over another.
 A learned generative stage could provide atom-wise or bond-wise probabilities over fragmentation events and 
 thereby yield a more direct account of the model's mechanistic assumptions.
-
-
-\begin{figure}[H]
-    \centering
-    \resizebox{0.9\textwidth}{!}{%
-        \input{fig-tikz/generative-future.tikz.tex}%
-    }
-    \caption[Future extension toward a Generate -- Score architecture]{
-        A future extension of the present work would be to shift from fragment-structure encoding to fragmentation-process learning.
-        The next major advance will be to let the model learn which fragmentation structures to construct, 
-        rather than only how to encode those supplied by an external pipeline.
-    }
-    \label{fig:generative-future}
-\end{figure}
 
 
 \section{Scientific and Technical Challenges}
