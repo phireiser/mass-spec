@@ -80,6 +80,8 @@ models that generate and rank candidate structures based on spectral consistency
 
 \section{Principles of Mass Spectrometry}
 
+\sloppy
+
 
 \begin{figure}[H]
     \centering
@@ -99,7 +101,7 @@ models that generate and rank candidate structures based on spectral consistency
     \caption[Simplified schematic of MS measurement principle]{
         Simplified schematic of the measurement principle in a magnetic sector mass spectrometer. 
         Following sample introduction, ionisation and acceleration generate an ion beam 
-        that is separated in the magnetic field by $m/z$-dependent deflection. 
+        that is separated in the magnetic field by deflection that depends on $m/z$. 
         The separated ions are then detected and transformed into an electrical signal for further processing. \cite{chemguide}
     }
     \label{fig:ms-schematic}
@@ -111,14 +113,14 @@ models that generate and rank candidate structures based on spectral consistency
 
 Figure \ref{fig:ms-flow} shows steps in a mass spectrometer: 
 a \emph{sample} is introduced, converted into gas-phase ions in the ion source, 
-separated according to their mass-dependent motion in the \emph{mass analyzer}, 
+separated according to motion in the \emph{mass analyzer} that depends on mass, 
 detected in the \emph{detector}, and finally interpreted during \emph{data analysis}. 
-The central observable is the mass-to-charge ratio $m/z$. 
+The central observable is the mass to charge ratio $m/z$. 
 A mass spectrum is therefore a distribution of signal intensity as a function of $m/z$, 
 where the signal reflects the abundance of ions reaching the detector. \cite[p.~1566]{Murray2013}
 In most practical contexts, intensities are reported as relative intensity, 
 normalized such that the most intense peak equals 100\% of the base peak.  \cite[p.~1550]{Murray2013}
-The x-axis is conventionally labeled with $m/z$ (mass-to-charge ratio), a dimensionless quantity.
+The x-axis is conventionally labeled with $m/z$ (mass to charge ratio), a dimensionless quantity.
 Labeling with mass units such as \emph{daltons} (Da), amu, or unified atomic mass unit (u) is discouraged 
 -- although common in practice -- as it causes confusion with multiple charged ions. \cite[p.~1516]{Murray2013}
 
@@ -142,6 +144,8 @@ producing characteristic $M+1, M+2, \ldots$ patterns adjacent to the monoisotopi
 yielding smaller product ions whose $m/z$ values and relative intensities encode structural information. 
 The \emph{base peak} is the most intense peak in the spectrum \cite[p.~1524]{Murray2013} and is used for normalization; \cite[p.~1550]{Murray2013}
 it is not necessarily the molecular ion and often corresponds to a particularly stable fragment. \cite[p.~2]{Moorthy2023} \cite[p.~263]{Gross2006}
+
+\fussy
 
 \subsection{Ionization and Fragmentation}
 
@@ -757,7 +761,7 @@ pathway search, and machine-learning-based scoring of candidate transformations.
 
 One example derivation graph for the fragmentation rules applied is in \autoref{fig:derivation-graph}.
 
-\begin{figure}[ht]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=0.8\textwidth]{fig-tikz/dg_toluene.pdf}
     \caption[Example derivation graph of a fragmentation]{
@@ -798,7 +802,7 @@ while being suitable for downstream neural-network training.
 For a visual overview of this workflow, see \autoref{fig:gnn-encoding-workflow}.
 
 
-\begin{figure}[H]
+\begin{figure}[ht]
     \centering
     \resizebox{0.9\textwidth}{!}{%
         \input{fig-tikz/gnn_pipeline.tikz.tex}%

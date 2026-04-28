@@ -14,83 +14,83 @@
 \contentsline {subsubsection}{Ion notation and precursor concepts}{8}{section*.16}%
 \contentsline {subsubsection}{Peak types: isotope, fragment, and base peaks}{8}{section*.17}%
 \contentsline {subsection}{\numberline {2.2.1}Ionization and Fragmentation}{8}{subsection.2.2.1}%
-\contentsline {subsubsection}{Hard Ionization methods}{9}{section*.18}%
-\contentsline {paragraph}{Electron Ionization (EI)}{9}{section*.19}%
-\contentsline {paragraph}{Spark Ionization (SI)}{10}{section*.21}%
+\contentsline {subsubsection}{Hard Ionization methods}{8}{section*.18}%
+\contentsline {paragraph}{Electron Ionization (EI)}{8}{section*.19}%
+\contentsline {paragraph}{Spark Ionization (SI)}{9}{section*.21}%
 \contentsline {subsubsection}{Soft Ionization methods}{10}{section*.22}%
 \contentsline {paragraph}{Electrospray Ionization (ESI)}{10}{section*.23}%
 \contentsline {paragraph}{Atmospheric Pressure Chemical Ionization (APCI)}{11}{section*.25}%
-\contentsline {paragraph}{MALDI}{12}{section*.27}%
-\contentsline {subsection}{\numberline {2.2.2}Mass Analyzers}{13}{subsection.2.2.2}%
-\contentsline {subsubsection}{Magnetic Sector Mass Analyzers}{13}{section*.29}%
-\contentsline {subsubsection}{Time-of-Flight (TOF) Analyzers}{14}{section*.30}%
-\contentsline {subsubsection}{Quadrupole Mass Filter (QMF)}{14}{section*.31}%
-\contentsline {subsubsection}{Quadrupole Ion Trap (QIT)}{15}{section*.32}%
-\contentsline {subsection}{\numberline {2.2.3}Detection}{15}{subsection.2.2.3}%
-\contentsline {subsection}{\numberline {2.2.4}Manual Interpretation of the MS Spectrum}{16}{subsection.2.2.4}%
-\contentsline {subsection}{\numberline {2.2.5}Reactions in Electron Ionization}{17}{subsection.2.2.5}%
-\contentsline {subsubsection}{Homolytic single-bond cleavage}{17}{section*.35}%
-\contentsline {subsubsection}{Alpha Cleavage}{18}{section*.36}%
-\contentsline {subsubsection}{McLafferty Rearrangement}{18}{section*.37}%
-\contentsline {subsubsection}{Charge-Induced Fragmentations}{18}{section*.38}%
-\contentsline {section}{\numberline {2.3}Computational Mass Spectrometry}{18}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Library Search}{19}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}In Silico Fragmentation}{19}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}De Novo Structure Prediction}{20}{subsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.3.4}First Principles}{20}{subsection.2.3.4}%
-\contentsline {subsubsection}{Ab Initio MS Prediction}{20}{section*.39}%
-\contentsline {section}{\numberline {2.4}Computational Representations of Molecules and Reactions}{21}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Molecular Graphs}{21}{subsection.2.4.1}%
-\contentsline {subsubsection}{Formal definition}{21}{section*.41}%
-\contentsline {subsection}{\numberline {2.4.2}Chemical Graph Transformation Systems}{22}{subsection.2.4.2}%
-\contentsline {subsubsection}{Double Pushout Graph Rewriting}{22}{section*.42}%
-\contentsline {subsubsection}{Derivation Graph}{23}{section*.44}%
-\contentsline {subsection}{\numberline {2.4.3}Graph Neural Networks for Molecular Representation Learning}{23}{subsection.2.4.3}%
-\contentsline {section}{\numberline {2.5}Machine Learning in Mass Spectrometry}{25}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Problem Formulations}{25}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}Case Study: Generating Molecular Fragmentation Graphs with Autoregressive Neural Networks}{26}{subsection.2.5.2}%
-\contentsline {section}{\numberline {2.6}Interpretability in Chemical Machine Learning}{27}{section.2.6}%
-\contentsline {subsection}{\numberline {2.6.1}Why Interpretability Matters}{27}{subsection.2.6.1}%
-\contentsline {subsection}{\numberline {2.6.2}Classic and General Interpretability Methods}{27}{subsection.2.6.2}%
-\contentsline {subsubsection}{Saliency Maps and Gradient-Based Attribution}{27}{section*.47}%
-\contentsline {subsubsection}{SHAP and Permutation-Based Methods}{27}{section*.48}%
-\contentsline {subsubsection}{Counterfactual Explanations}{28}{section*.49}%
-\contentsline {subsection}{\numberline {2.6.3}Evaluation of Explanations}{28}{subsection.2.6.3}%
-\contentsline {subsection}{\numberline {2.6.4}Evaluation Metrics of Prediction Performance}{28}{subsection.2.6.4}%
-\contentsline {chapter}{\numberline {3}Methodology}{30}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Datasets}{30}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Public Databases}{30}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Custom Dataset Construction}{30}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Preprocessing - Generating the Synthetic Data}{30}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Fragmentation Rule Application Strategies}{32}{subsection.3.2.1}%
-\contentsline {paragraph}{Heteroatom Check}{33}{section*.52}%
-\contentsline {paragraph}{Saturation Check}{33}{section*.54}%
-\contentsline {paragraph}{Alkyl Check}{34}{section*.56}%
-\contentsline {section}{\numberline {3.3}Latent Representation Schemes}{35}{section.3.3}%
-\contentsline {subsubsection}{Overview}{35}{section*.58}%
-\contentsline {subsection}{\numberline {3.3.1}Molecular Graph Encoding}{36}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Two-Level Molecular Latent Representation}{36}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Rule Representation and Hyperedge Annotation}{37}{subsection.3.3.3}%
-\contentsline {subsection}{\numberline {3.3.4}Spectral Vector and Embedding Representation}{38}{subsection.3.3.4}%
-\contentsline {subsection}{\numberline {3.3.5}Disadvantages}{38}{subsection.3.3.5}%
-\contentsline {section}{\numberline {3.4}Model Architecture}{38}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Overview of the Learning Framework}{38}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Forward Model: Structure-to-Spectrum Prediction}{40}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Backward Model: Spectrum-to-Structure Reconstruction}{40}{subsection.3.4.3}%
-\contentsline {subsection}{\numberline {3.4.4}Bidirectionality}{41}{subsection.3.4.4}%
-\contentsline {subsection}{\numberline {3.4.5}Loss shaping}{42}{subsection.3.4.5}%
-\contentsline {chapter}{\numberline {4}Results and Discussion}{43}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Computation Times of Fragmentation Expansion}{43}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Visualization of Computation Times}{43}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Data Splits}{44}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Evaluation of Fragment Prediction}{45}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Challenges}{48}{section.4.3}%
-\contentsline {chapter}{\numberline {5}Future Work}{49}{chapter.5}%
-\contentsline {section}{\numberline {5.1}From Fragment Encoding to Fragment Generation}{49}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Toward a Generate--Score Architecture}{50}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Advantages of Learning Fragment Generation}{50}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Scientific and Technical Challenges}{52}{section.5.4}%
-\contentsline {section}{\numberline {5.5}A Plausible Development Path}{53}{section.5.5}%
-\contentsline {chapter}{Bibliography}{54}{section*.64}%
-\contentsline {chapter}{\numberline {A}Source Code Appendix}{62}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Github Repository}{62}{section.A.1}%
+\contentsline {paragraph}{MALDI}{11}{section*.27}%
+\contentsline {subsection}{\numberline {2.2.2}Mass Analyzers}{12}{subsection.2.2.2}%
+\contentsline {subsubsection}{Magnetic Sector Mass Analyzers}{12}{section*.29}%
+\contentsline {subsubsection}{Time-of-Flight (TOF) Analyzers}{13}{section*.30}%
+\contentsline {subsubsection}{Quadrupole Mass Filter (QMF)}{13}{section*.31}%
+\contentsline {subsubsection}{Quadrupole Ion Trap (QIT)}{14}{section*.32}%
+\contentsline {subsection}{\numberline {2.2.3}Detection}{14}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Manual Interpretation of the MS Spectrum}{15}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Reactions in Electron Ionization}{16}{subsection.2.2.5}%
+\contentsline {subsubsection}{Homolytic single-bond cleavage}{16}{section*.35}%
+\contentsline {subsubsection}{Alpha Cleavage}{17}{section*.36}%
+\contentsline {subsubsection}{McLafferty Rearrangement}{17}{section*.37}%
+\contentsline {subsubsection}{Charge-Induced Fragmentations}{17}{section*.38}%
+\contentsline {section}{\numberline {2.3}Computational Mass Spectrometry}{17}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Library Search}{18}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}In Silico Fragmentation}{18}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}De Novo Structure Prediction}{19}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}First Principles}{19}{subsection.2.3.4}%
+\contentsline {subsubsection}{Ab Initio MS Prediction}{19}{section*.39}%
+\contentsline {section}{\numberline {2.4}Computational Representations of Molecules and Reactions}{20}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Molecular Graphs}{20}{subsection.2.4.1}%
+\contentsline {subsubsection}{Formal definition}{20}{section*.41}%
+\contentsline {subsection}{\numberline {2.4.2}Chemical Graph Transformation Systems}{21}{subsection.2.4.2}%
+\contentsline {subsubsection}{Double Pushout Graph Rewriting}{21}{section*.42}%
+\contentsline {subsubsection}{Derivation Graph}{22}{section*.44}%
+\contentsline {subsection}{\numberline {2.4.3}Graph Neural Networks for Molecular Representation Learning}{22}{subsection.2.4.3}%
+\contentsline {section}{\numberline {2.5}Machine Learning in Mass Spectrometry}{24}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Problem Formulations}{24}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Case Study: Generating Molecular Fragmentation Graphs with Autoregressive Neural Networks}{25}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}Interpretability in Chemical Machine Learning}{26}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Why Interpretability Matters}{26}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Classic and General Interpretability Methods}{26}{subsection.2.6.2}%
+\contentsline {subsubsection}{Saliency Maps and Gradient-Based Attribution}{26}{section*.47}%
+\contentsline {subsubsection}{SHAP and Permutation-Based Methods}{26}{section*.48}%
+\contentsline {subsubsection}{Counterfactual Explanations}{27}{section*.49}%
+\contentsline {subsection}{\numberline {2.6.3}Evaluation of Explanations}{27}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Evaluation Metrics of Prediction Performance}{27}{subsection.2.6.4}%
+\contentsline {chapter}{\numberline {3}Methodology}{29}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Datasets}{29}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Public Databases}{29}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Custom Dataset Construction}{29}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Preprocessing - Generating the Synthetic Data}{29}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Fragmentation Rule Application Strategies}{31}{subsection.3.2.1}%
+\contentsline {paragraph}{Heteroatom Check}{32}{section*.52}%
+\contentsline {paragraph}{Saturation Check}{32}{section*.54}%
+\contentsline {paragraph}{Alkyl Check}{33}{section*.56}%
+\contentsline {section}{\numberline {3.3}Latent Representation Schemes}{34}{section.3.3}%
+\contentsline {subsubsection}{Overview}{34}{section*.58}%
+\contentsline {subsection}{\numberline {3.3.1}Molecular Graph Encoding}{35}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Two-Level Molecular Latent Representation}{35}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Rule Representation and Hyperedge Annotation}{36}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Spectral Vector and Embedding Representation}{37}{subsection.3.3.4}%
+\contentsline {subsection}{\numberline {3.3.5}Disadvantages}{37}{subsection.3.3.5}%
+\contentsline {section}{\numberline {3.4}Model Architecture}{37}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Overview of the Learning Framework}{37}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Forward Model: Structure-to-Spectrum Prediction}{39}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Backward Model: Spectrum-to-Structure Reconstruction}{39}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}Bidirectionality}{40}{subsection.3.4.4}%
+\contentsline {subsection}{\numberline {3.4.5}Loss shaping}{41}{subsection.3.4.5}%
+\contentsline {chapter}{\numberline {4}Results and Discussion}{42}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Computation Times of Fragmentation Expansion}{42}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Visualization of Computation Times}{42}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Data Splits}{43}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Evaluation of Fragment Prediction}{44}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Challenges}{47}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Future Work}{48}{chapter.5}%
+\contentsline {section}{\numberline {5.1}From Fragment Encoding to Fragment Generation}{48}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Toward a Generate--Score Architecture}{49}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Advantages of Learning Fragment Generation}{49}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Scientific and Technical Challenges}{51}{section.5.4}%
+\contentsline {section}{\numberline {5.5}A Plausible Development Path}{52}{section.5.5}%
+\contentsline {chapter}{Bibliography}{53}{section*.64}%
+\contentsline {chapter}{\numberline {A}Source Code Appendix}{61}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Github Repository}{61}{section.A.1}%

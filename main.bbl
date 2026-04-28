@@ -1102,8 +1102,8 @@
       \strng{authornamehash}{0c3a0cb602dd3692e7d928640dfe045d}
       \strng{authorfullhash}{db14ce13370a1a4e881292c5028ac1c0}
       \strng{authorfullhashraw}{db14ce13370a1a4e881292c5028ac1c0}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Principles and Applications of Clinical Mass Spectrometry}
@@ -1386,8 +1386,8 @@
       \strng{authornamehash}{ad53b4a4adf6eecbe0e0566771338743}
       \strng{authorfullhash}{f4a3512711d4edce6c8ad016ff1858bc}
       \strng{authorfullhashraw}{f4a3512711d4edce6c8ad016ff1858bc}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1879-1123}
@@ -1435,8 +1435,8 @@
       \strng{authornamehash}{a814953c68ef19ef98af8121f8a651ad}
       \strng{authorfullhash}{bec6ce85085e32417a90cce351c1a08e}
       \strng{authorfullhashraw}{bec6ce85085e32417a90cce351c1a08e}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{0584-8547}
@@ -1493,8 +1493,8 @@
       \strng{authornamehash}{3c5263f4db34a38cc2fb129be362e74e}
       \strng{authorfullhash}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
       \strng{authorfullhashraw}{02a3b0c187b7fec3f6e3befd3cf1c0bb}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1468-4837}
@@ -1638,8 +1638,8 @@
       \strng{authornamehash}{01bfb4fb6049fa992ea90cba339a77a5}
       \strng{authorfullhash}{01bfb4fb6049fa992ea90cba339a77a5}
       \strng{authorfullhashraw}{01bfb4fb6049fa992ea90cba339a77a5}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1520-6882}
@@ -1733,8 +1733,8 @@
       \strng{authornamehash}{0ddf7774b79adbae81665d53df429213}
       \strng{authorfullhash}{0650da93477a7f53daec6e46637578e0}
       \strng{authorfullhashraw}{0650da93477a7f53daec6e46637578e0}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Proceedings of the 7th Int. Particle Accelerator Conf.}
@@ -1775,8 +1775,8 @@
       \strng{authornamehash}{79459899dc4ca256d00d0cdffbc2498b}
       \strng{authorfullhash}{79459899dc4ca256d00d0cdffbc2498b}
       \strng{authorfullhashraw}{79459899dc4ca256d00d0cdffbc2498b}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1089-7623}
@@ -3683,8 +3683,8 @@
       \strng{editorfullhash}{14aea97ae56fb559fee865fca3185d54}
       \strng{editorfullhashraw}{14aea97ae56fb559fee865fca3185d54}
       \field{extraname}{2}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{Unveränd. Nachdruck}
