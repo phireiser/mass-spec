@@ -88,23 +88,21 @@ models that generate and rank candidate structures based on spectral consistency
         Simplified block diagram of a mass spectrometer. 
         The sample is introduced into the ion source, where analyte molecules are ionized. 
         The resulting ions are separated in the mass analyzer according to their mass-to-charge ratio (m/z), 
-        detected by the detector, and subsequently processed in the data analysis step.
+        detected by the detector, and subsequently processed in the data analysis step. \cite{wikibooks-ms-flowchart}
         }
     \label{fig:ms-flow}
-    \cite{wikibooks-ms-flowchart}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-schematic.tikz.tex}}
     \caption[Simplified schematic of MS measurement principle]{
-        Simplified schematic of the measurement principle in a magnetic-sector mass spectrometer. 
+        Simplified schematic of the measurement principle in a magnetic sector mass spectrometer. 
         Following sample introduction, ionisation and acceleration generate an ion beam 
         that is separated in the magnetic field by $m/z$-dependent deflection. 
-        The separated ions are then detected and transformed into an electrical signal for further processing.
+        The separated ions are then detected and transformed into an electrical signal for further processing. \cite{chemguide}
     }
     \label{fig:ms-schematic}
-    \cite{chemguide}
 \end{figure}
 
 
@@ -161,6 +159,21 @@ of a radical cation $[M^{+\cdot}]$ with both a positive charge and an unpaired e
 Because the internal energy of the molecular ion typically exceeds the activation barriers for bond cleavage, 
 the $[M^{+\cdot}]$ ion spontaneously fragments into smaller product ions and neutral molecules. \cite[p.~3]{Stoddard2016}
 As a result, EI mass spectra are characterized by rich fragmentation patterns that reflect the molecular structure. \cite{Ashyrmamatov2025}
+
+\begin{figure}[H]
+    \centering
+    \input{fig-tikz/ei-schematic.tikz.tex}
+    \caption[Schematic of EI ionization]{
+        Schematic illustration of the electron ionization (EI) process. 
+        A sample solution is dispersed by nebulizer gas and subjected to a high electric potential, producing a spray of charged droplets. 
+        Progressive solvent evaporation and droplet fission lead to the formation of gas-phase ions, 
+        which are transferred through the interface region into the mass detector. 
+        The figure highlights the transition from charged droplets to molecular ions, 
+        exemplified here by protonated species \((\mathrm{M+H})^{+}\). \cite[p.18]{Dass2007}
+    }
+    \label{fig:ei-schematic}
+\end{figure}
+
 
 The deterministic nature of EI fragmentation pathways 
 makes electron ionization particularly valuable for structural elucidation. \cite{VargasMedina2023}
@@ -772,6 +785,38 @@ One example derivation graph for the fragmentation rules applied is in \autoref{
 %Conceptually, this is similar to expressions in term-rewriting systems or functional programming.
 %
 
+
+\subsection{Graph Neural Networks for Molecular Representation Learning}
+The molecular encoder represents each molecule as a graph 
+whose nodes correspond to atoms and whose edges correspond to chemical bonds. 
+Initial atom features are updated through graph-convolutional message passing, 
+allowing each atom representation to incorporate information from its local molecular environment. 
+The resulting atom embeddings are pooled into a fixed-length graph-level representation, 
+which is subsequently projected into the shared latent space used for comparison with spectral embeddings. 
+This produces a continuous molecular vector that preserves structural information 
+while being suitable for downstream neural-network training.
+For a visual overview of this workflow, see \autoref{fig:gnn-encoding-workflow}.
+
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.9\textwidth}{!}{%
+        \input{fig-tikz/gnn_pipeline.tikz.tex}%
+    }
+    \caption[Graph-convolutional molecular encoding workflow]{
+        Starting from the molecular graph $G=(V,E)$ in \textbf{column 1}, where atoms form the nodes and bonds form the edges, 
+        each atom is initialized with a feature vector in \textbf{column 2} that encodes local chemical properties 
+        such as atom type, degree, formal charge, and aromaticity. 
+        Through repeated graph-convolution/message-passing layers in \textbf{column 3}, 
+        these atom representations are updated by aggregating information from neighboring atoms, 
+        yielding the context-aware atom embeddings shown in \textbf{column 4}. 
+        These embeddings are then pooled over all atoms in \textbf{column 5} to obtain a fixed-length molecular representation, 
+        which is projected in \textbf{column 6} into the shared latent space as the molecular embedding $z_{\mathrm{mol}}$. 
+        As indicated in \textbf{column 7}, this vector can subsequently be compared with 
+        spectral embeddings for molecule--spectrum alignment.
+    }
+    \label{fig:gnn-encoding-workflow}
+\end{figure}
 
 
 

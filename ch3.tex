@@ -28,9 +28,9 @@ Alternative databases such as MassBank, PubChem, HMDB, and MoNa were considered 
 Synthetic training data are generated with \texttt{mod} derivation graphs (\Cref{fig:data-gen-overview}).
 In this representation, nodes correspond to molecular states (fragments),
 while edges represent individual fragmentation transformations.
-The resulting graph captures the reaction network and preserves fragment genealogy,
-which allows us to trace parent-child relationships and identify reachable fragments.
-This information is later used to validate predicted fragment assignments against chemically plausible pathways.
+The resulting graph captures the reaction network and preserves fragment genealogy.
+This enables the tracing of parent-child relationships and the identification of reachable fragments.
+Subsequently, this information is utilised to validate predicted fragment assignments against chemically realistic pathways.
 
 \begin{figure}
     \centering
@@ -50,8 +50,8 @@ The \texttt{mod} strategy framework provides a systematic approach to explore ch
 by guiding fragmentation pathways through both physico-chemical properties 
 and experimental data, such as mass spectra. 
 A key advantage of this framework is its automatic generation of hypergraphs (reaction networks).
-This automation enables the construction of detailed atom flow networks for complex fragmentation patterns, 
-making it feasible to track chemical transformations and validate fragmentation predictions at scale.
+This automation facilitates the construction of detailed atom flow networks for complex fragmentation patterns, 
+thereby rendering it feasible to track chemical transformations and validate fragmentation predictions on a large scale.
 \cite[p.~7]{Andersen2017}
 
 \subsection{Fragmentation Rule Application Strategies}
@@ -416,7 +416,7 @@ This head serves two purposes. First, it provides a task-specific projection
 for latent alignment with molecular embeddings during training. 
 Second, it defines the representation that is used at test time for inverse retrieval. 
 The projected spectrum embedding is compared to a latent index of molecular embeddings, 
-allowing the model to retrieve the most similar candidate structures in embedding space.
+thus enabling the model to retrieve the most similar candidate structures in embedding space.
 
 It is worth emphasizing that the backward model is not a direct structure decoder in the generative sense. 
 Instead, it is a spectrum-to-latent-to-candidate pipeline. 
@@ -453,21 +453,21 @@ fully generative cycle from spectrum directly back to a reconstructed molecular 
 
 \subsection{Loss shaping}
 
-The training objective is deliberately multi-component and is best understood 
-as a form of loss shaping that stabilizes learning and injects chemically meaningful constraints. 
-For the forward branch, the primary reconstruction objective combines cosine similarity 
-with a one-dimensional Wasserstein distance between predicted and true spectra. 
+The training objective is deliberately multi-component in nature and can be most effectively understood 
+as a form of loss shaping that stabilises learning and introduces chemically meaningful constraints. 
+In the context of the forward branch, the reconstruction objective is primarily concerned with the combination of 
+cosine similarity and a one-dimensional Wasserstein distance between the predicted and true spectra. 
 The cosine term emphasizes agreement in spectral shape, 
-while the Wasserstein term additionally penalizes positional mismatch along the ordered m/z axis. 
+while the Wasserstein term additionally penalizes positional mismatch along the ordered $m/z$ axis. 
 The combination is more informative than cosine similarity alone 
 and aligns well with the loss panel outlined in \Cref{fig:ml-architecture-diagram}.
 
 A second important component is the precursor-mass constraint. 
 This forbidden-region penalty acts as a chemically motivated regularizer 
 that penalizes predicted intensity above the precursor mass and suppresses implausible peaks. 
-The forward phase also includes a cycle-style consistency term: 
-a predicted spectrum is re-encoded by the spectrum encoder 
-and encouraged to remain close to the molecular latent representation. 
+The forward phase incorporates a cycle-style consistency term. 
+This involves the re-encoding of a predicted spectrum by the spectrum encoder, 
+with the objective of aligning it closely with the molecular latent representation. 
 In addition, a diversity loss discourages collapse toward overly similar spectral predictions within a batch.
 
 For the backward branch, latent alignment is driven by an InfoNCE contrastive objective 

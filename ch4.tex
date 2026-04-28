@@ -42,7 +42,8 @@ Note that the threshold of 40 seconds was chosen arbitrarily to exclude trivial 
 
 So while there is a general trend of increasing computation time with molecular complexity,
 the large variance suggests that other factors, 
-such as specific structural features or the particular fragmentation pathways available, also play a significant role in determining computation time. 
+such as specific structural features or the particular fragmentation pathways available, 
+also play a significant role in determining computation time. 
 This highlights the need for further optimization.
 
 % model size 
@@ -57,9 +58,7 @@ and 20\% test data relative to the original dataset.
 
 These ratios were chosen as a pragmatic trade-off between model development and robust evaluation. 
 The $80/20$ split keeps a sufficiently large hold-out test set for a meaningful final performance estimate, 
-while still reserving most samples for development. Splitting the development portion into $70/30$ then 
-provides enough training data for parameter learning and enough validation data for stable model selection 
-and hyperparameter tuning.
+while still reserving most samples for development. 
 
 This splitting strategy serves two purposes. 
 First, it preserves a dedicated hold-out test set that is never used during model development 
@@ -72,11 +71,6 @@ while the test set remains an unbiased reference for the final assessment.
 All splits are generated with a fixed random seed (\texttt{random\_state=42}) to ensure reproducibility. 
 At the same time, the implementation uses \texttt{shuffle=False}, so the split is deterministic and 
 preserves the original order of the dataset rather than randomly permuting the samples beforehand. 
-This design choice has to be interpreted carefully. 
-On the one hand, it guarantees that repeated runs use exactly the same partitioning. 
-On the other hand, if the original ordering of molecules is not random, 
-the resulting subsets may differ systematically in composition. 
-The reported results should therefore be understood with this deterministic split procedure in mind.
 
 An additional technical constraint concerns the fragment representation. 
 The fragment vocabulary is constructed only from the training set 
@@ -86,11 +80,6 @@ remains fixed across all stages of training and evaluation.
 It also prevents information leakage from validation or test data into the feature space used during training. 
 In practical terms, this means that fragment identifiers available during evaluation are restricted to 
 those observed in the training data, which is consistent with a realistic supervised learning setting.
-
-Overall, the chosen split strategy provides a clear separation between model fitting, model selection, 
-and final evaluation, while maintaining a consistent fragment representation across all subsets. 
-At the same time, the use of a deterministic non-shuffled split should be considered 
-when interpreting the generality of the reported results.
 
 
 \section{Evaluation of Fragment Prediction}
@@ -133,7 +122,7 @@ These differences are extremely small and indicate that the forward reconstructi
 largely insensitive to the inclusion or removal of the current fragment-aware branch. 
 In practical terms, the molecular encoder appears to capture most of the predictive signal required 
 for the structure-to-spectrum task, while the fragment representation 
-does not yet provide an additional measurable benefit.
+does not yet provide an additional significant benefit.
 
 The retrieval results are more informative. As shown in Figure \ref{fig:recall-at-k}, for the full model, 
 Recall@1 is $0.091$, Recall@5 is $0.318$, Recall@10 is $0.500$, and Recall@20 is $0.864$, 
@@ -165,14 +154,15 @@ the framework arises from combining latent-space retrieval with forward-model-ba
 In this sense, the present implementation benefits more from the interaction between the forward 
 and backward branches than from the fragment-aware representation itself.
 
-By contrast, the fragment-related ablations do not support a strong performance claim. 
-The no-fragments variant performs slightly better than the full model on cosine similarity and Recall@5, 
-but slightly worse on Recall@10, Recall@20, and MRR. Similarly, the no-derivation-tree variant is 
-highly competitive and even slightly exceeds the full model on Recall@5 and MRR. 
-These results suggest that the fragment branch, in its current form, 
-is not yet contributing a robust and clearly positive signal. 
-At present, it appears to be largely redundant with the molecular representation, 
-and may in some cases introduce noise rather than useful structure.
+In contrast, the fragment-related ablations do not support the claim of strong performance. 
+The no-fragments variant demonstrates a marginal improvement in performance when evaluated 
+against the full model in terms of cosine similarity and Recall@5. 
+However, it exhibits a slight decline in performance when assessed against Recall@10, Recall@20, and MRR. 
+In a similar vein, the no-derivation-tree variant has been shown to be highly competitive, 
+with results that are marginally superior to those of the full model on both Recall@5 and MRR. 
+The findings indicate that the fragment branch, in its present state, 
+is not yet demonstrating a substantial and unambiguously favourable signal. 
+It is evident that, at this juncture, the molecular representation is largely redundant. 
 
 This conclusion should, however, be interpreted cautiously. 
 The test set contains only $22$ queries, so recall values change in increments of approximately $0.045$. 
