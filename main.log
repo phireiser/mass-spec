@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.6)  28 APR 2026 15:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.6)  8 MAY 2026 13:24
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -970,7 +970,40 @@ Package biblatex Info: ... and expl3
 Package: xparse 2025-10-09 L3 Experimental document command parser
 )
 Package: blx-case-expl3 2025/07/10 v3.21 expl3 case changing code for biblatex
-)) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfit.code.tex
+)) (/usr/share/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2025/07/23 v0.6g Insert pages of external PDF documents (AM)
+ (/usr/share/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
+\calc@Acount=\count517
+\calc@Bcount=\count518
+\calc@Adimen=\dimen322
+\calc@Bdimen=\dimen323
+\calc@Askip=\skip82
+\calc@Bskip=\skip83
+LaTeX Info: Redefining \setlength on input line 86.
+LaTeX Info: Redefining \addtolength on input line 87.
+\calc@Ccount=\count519
+\calc@Cskip=\skip84
+) (/usr/share/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2025/12/10 v3.0d eso-pic (RN)
+\ESO@tempdima=\dimen324
+\ESO@tempdimb=\dimen325
+)
+\AM@pagewidth=\dimen326
+\AM@pageheight=\dimen327
+\AM@fboxrule=\dimen328
+ (/usr/share/texmf-dist/tex/latex/pdfpages/pppdftex.def
+File: pppdftex.def 2025/07/23 v0.6g Pdfpages driver for pdfTeX (AM)
+)
+\pdfpages@includegraphics@status=\count520
+\AM@pagebox=\box80
+\AM@global@opts=\toks54
+\AM@pagecnt=\count521
+\AM@toc@title=\toks55
+\AM@lof@heading=\toks56
+\c@AM@survey=\count522
+\AM@templatesizebox=\box81
+) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfit.code.tex
 File: tikzlibraryfit.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 ) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
@@ -978,8 +1011,8 @@ File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 ) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarybackgrounds.code.tex
 File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@layerbox@background=\box80
-\pgf@layerboxsaved@background=\box81
+\pgf@layerbox@background=\box82
+\pgf@layerboxsaved@background=\box83
 ) (/usr/share/texmf-dist/tex/latex/pgf-blur/tikzlibraryshadows.blur.code.tex  v1.02, 2012/12/09 (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshadows.code.tex
 File: tikzlibraryshadows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
  (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfadings.code.tex
@@ -987,7 +1020,7 @@ File: tikzlibraryfadings.code.tex 2025-08-29 v3.1.11a (3.1.11a)
  (/usr/share/texmf-dist/tex/generic/pgf/libraries/pgflibraryfadings.code.tex
 File: pgflibraryfadings.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
-\pgfbs@fading@count=\count517
+\pgfbs@fading@count=\count523
 ) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex
 File: tikzlibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
  (/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geometric.code.tex
@@ -1000,37 +1033,37 @@ File: pgflibraryshapes.symbols.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 File: tikzlibraryshapes.multipart.code.tex 2025-08-29 v3.1.11a (3.1.11a)
  (/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multipart.code.tex
 File: pgflibraryshapes.multipart.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfnodepartlowerbox=\box82
-\pgfnodeparttwobox=\box83
-\pgfnodepartthreebox=\box84
-\pgfnodepartfourbox=\box85
-\pgfnodeparttwentybox=\box86
-\pgfnodepartnineteenbox=\box87
-\pgfnodeparteighteenbox=\box88
-\pgfnodepartseventeenbox=\box89
-\pgfnodepartsixteenbox=\box90
-\pgfnodepartfifteenbox=\box91
-\pgfnodepartfourteenbox=\box92
-\pgfnodepartthirteenbox=\box93
-\pgfnodeparttwelvebox=\box94
-\pgfnodepartelevenbox=\box95
-\pgfnodeparttenbox=\box96
-\pgfnodepartninebox=\box97
-\pgfnodeparteightbox=\box98
-\pgfnodepartsevenbox=\box99
-\pgfnodepartsixbox=\box100
-\pgfnodepartfivebox=\box101
+\pgfnodepartlowerbox=\box84
+\pgfnodeparttwobox=\box85
+\pgfnodepartthreebox=\box86
+\pgfnodepartfourbox=\box87
+\pgfnodeparttwentybox=\box88
+\pgfnodepartnineteenbox=\box89
+\pgfnodeparteighteenbox=\box90
+\pgfnodepartseventeenbox=\box91
+\pgfnodepartsixteenbox=\box92
+\pgfnodepartfifteenbox=\box93
+\pgfnodepartfourteenbox=\box94
+\pgfnodepartthirteenbox=\box95
+\pgfnodeparttwelvebox=\box96
+\pgfnodepartelevenbox=\box97
+\pgfnodeparttenbox=\box98
+\pgfnodepartninebox=\box99
+\pgfnodeparteightbox=\box100
+\pgfnodepartsevenbox=\box101
+\pgfnodepartsixbox=\box102
+\pgfnodepartfivebox=\box103
 )) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.pathreplacing.code.tex (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.code.tex (/usr/share/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
-\pgfdecoratedcompleteddistance=\dimen322
-\pgfdecoratedremainingdistance=\dimen323
-\pgfdecoratedinputsegmentcompleteddistance=\dimen324
-\pgfdecoratedinputsegmentremainingdistance=\dimen325
-\pgf@decorate@distancetomove=\dimen326
-\pgf@decorate@repeatstate=\count518
-\pgfdecorationsegmentamplitude=\dimen327
-\pgfdecorationsegmentlength=\dimen328
+\pgfdecoratedcompleteddistance=\dimen329
+\pgfdecoratedremainingdistance=\dimen330
+\pgfdecoratedinputsegmentcompleteddistance=\dimen331
+\pgfdecoratedinputsegmentremainingdistance=\dimen332
+\pgf@decorate@distancetomove=\dimen333
+\pgf@decorate@repeatstate=\count524
+\pgfdecorationsegmentamplitude=\dimen334
+\pgfdecorationsegmentlength=\dimen335
 )
-\tikz@lib@dec@box=\box102
+\tikz@lib@dec@box=\box104
 ) (/usr/share/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathreplacing.code.tex)) (/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.pathmorphing.code.tex (/usr/share/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathmorphing.code.tex))
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
@@ -1039,37 +1072,37 @@ Package csquotes Info: Redefining alias 'default' -> 'english'.
  (./main.aux (./ch1.aux) (./ch2.aux) (./ch3.aux) (./ch4.aux) (./ch5.aux) (./appendix.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 65.
-LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count519
-\scratchdimen=\dimen329
-\scratchbox=\box103
-\nofMPsegments=\count520
-\nofMParguments=\count521
-\everyMPshowfont=\toks54
-\MPscratchCnt=\count522
-\MPscratchDim=\dimen330
-\MPnumerator=\count523
-\makeMPintoPDFobject=\count524
-\everyMPtoPDFconversion=\toks55
+\scratchcounter=\count525
+\scratchdimen=\dimen336
+\scratchbox=\box105
+\nofMPsegments=\count526
+\nofMParguments=\count527
+\everyMPshowfont=\toks57
+\MPscratchCnt=\count528
+\MPscratchDim=\dimen337
+\MPnumerator=\count529
+\makeMPintoPDFobject=\count530
+\everyMPtoPDFconversion=\toks58
 )
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1105,7 +1138,7 @@ LaTeX Font Info:    ... okay on input line 65.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring ON on input line 65.
+Package hyperref Info: Link coloring ON on input line 54.
 (./main.out) (./main.out)
 \@outlinefile=\write6
 \openout6 = `main.out'.
@@ -1125,27 +1158,31 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 65.
-Package biblatex Info: Reference segment=0 on input line 65.
-<uni1-eps-converted-to.pdf, id=300, 211.79124pt x 58.2175pt>
-File: uni1-eps-converted-to.pdf Graphic file (type pdf)
-<use uni1-eps-converted-to.pdf>
-Package pdftex.def Info: uni1-eps-converted-to.pdf  used on input line 72.
-(pdftex.def)             Requested size: 199.16928pt x 54.7502pt.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 109.
- (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+Package biblatex Info: Reference section=0 on input line 54.
+Package biblatex Info: Reference segment=0 on input line 54.
+ (/usr/share/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2025-06-23 v0.14 Display of landscape pages in PDF
+ (/usr/share/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty
+Package: pdflscape-nometadata 2025-06-23 v0.14 Display of landscape pages in PDF (HO)
+ (/usr/share/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 109.
- (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./uni1-eps-converted-to.pdf>] [2
+] [2
 
 ] [3
 
-] (./main.toc [4
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc
+LaTeX Font Info:    Trying to load font information for U+msa on input line 7.
+ (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 7.
+ (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [4
 
 ] [5])
 \tf@toc=\write7
@@ -1182,7 +1219,7 @@ Chapter 1.
 
  (./ch2.tex
 Chapter 2.
-\c@mssteps=\count525
+\c@mssteps=\count531
 [5
 
 
@@ -1194,13 +1231,13 @@ Overfull \hbox (8.14609pt too wide) in paragraph at lines 101--177
  []
 
 [9] (./fig-tikz/esi-schematic.tex) [10] (./fig-tikz/apci-schematic.tex) (./fig-tikz/maldi-schematic.tex) [11] [12] [13] (./fig-tikz/em-schematic.tex) [14] [15] [16] [17] [18] [19]
-<fig-tikz/toluene-qm.png, id=823, 920.68968pt x 569.12625pt>
+<fig-tikz/toluene-qm.png, id=814, 920.68968pt x 569.12625pt>
 File: fig-tikz/toluene-qm.png Graphic file (type png)
 <use fig-tikz/toluene-qm.png>
 Package pdftex.def Info: fig-tikz/toluene-qm.png  used on input line 638.
 (pdftex.def)             Requested size: 227.62206pt x 140.7007pt.
  (./fig-tikz/qm-graph-abstraction.tikz.tex) [20 <./fig-tikz/toluene-qm.png>] [21]
-<fig-tikz/dg_toluene.pdf, id=871, 2256.05164pt x 1977.92148pt>
+<fig-tikz/dg_toluene.pdf, id=862, 2256.05164pt x 1977.92148pt>
 File: fig-tikz/dg_toluene.pdf Graphic file (type pdf)
 <use fig-tikz/dg_toluene.pdf>
 Package pdftex.def Info: fig-tikz/dg_toluene.pdf  used on input line 766.
@@ -1218,7 +1255,7 @@ Chapter 3.
 ] (./fig-tikz/dataGenOverview.tikz.tex
 Package svg Info: Last page of `./svg-inkscape/molecule_svg-tex.pdf' is 1 on input line 18.
  (./svg-inkscape/molecule_svg-tex.pdf_tex
-<./svg-inkscape/molecule_svg-tex.pdf, id=1096, page=1, 96.04796pt x 165.7584pt>
+<./svg-inkscape/molecule_svg-tex.pdf, id=1087, page=1, 96.04796pt x 165.7584pt>
 File: ./svg-inkscape/molecule_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/molecule_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/molecule_svg-tex.pdf , page1 used on input line 56.
@@ -1226,7 +1263,7 @@ Package pdftex.def Info: ./svg-inkscape/molecule_svg-tex.pdf , page1 used on inp
 )
 Package svg Info: Last page of `./svg-inkscape/fragmentation_tree_svg-tex.pdf' is 1 on input line 31.
  (./svg-inkscape/fragmentation_tree_svg-tex.pdf_tex
-<./svg-inkscape/fragmentation_tree_svg-tex.pdf, id=1098, page=1, 66.60448pt x 75.63979pt>
+<./svg-inkscape/fragmentation_tree_svg-tex.pdf, id=1089, page=1, 66.60448pt x 75.63979pt>
 File: ./svg-inkscape/fragmentation_tree_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/fragmentation_tree_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/fragmentation_tree_svg-tex.pdf , page1 used on input line 56.
@@ -1252,10 +1289,10 @@ pdfTeX warning: pdflatex (file ./svg-inkscape/fragmentation_tree_svg-tex.pdf): P
 \pydata@fh@0=\write10
 \openout10 = `_FAD58DE7366495DB4650CFEFAC2FCD61.data.minted'.
 
-runsystem(latexminted config  --timestamp 20260428150058 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
+runsystem(latexminted config  --timestamp 20260508132438 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
 
  (./_FAD58DE7366495DB4650CFEFAC2FCD61.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20260428150058 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
+runsystem(latexminted cleanconfig  --timestamp 20260508132438 FAD58DE7366495DB4650CFEFAC2FCD61)...executed.
 
  (./_minted/default.style.minted) (./_minted/A2F670813F554C1B6DFF3A85A83E29C6.highlight.minted)
 Package hyperref Info: bookmark level for unknown listing defaults to 0 on input line 84.
@@ -1271,20 +1308,20 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
 
  (./ch4.tex
 Chapter 4.
-<time_vs_complexity_logy_over40.png, id=1193, 569.9694pt x 422.0568pt>
-File: time_vs_complexity_logy_over40.png Graphic file (type png)
-<use time_vs_complexity_logy_over40.png>
-Package pdftex.def Info: time_vs_complexity_logy_over40.png  used on input line 34.
+<fig-tikz/time_vs_complexity_logy_over40.png, id=1184, 569.9694pt x 422.0568pt>
+File: fig-tikz/time_vs_complexity_logy_over40.png Graphic file (type png)
+<use fig-tikz/time_vs_complexity_logy_over40.png>
+Package pdftex.def Info: fig-tikz/time_vs_complexity_logy_over40.png  used on input line 34.
 (pdftex.def)             Requested size: 364.19667pt x 269.69681pt.
 [42
 
 
 
 
-] [43 <./time_vs_complexity_logy_over40.png>]
+] [43 <./fig-tikz/time_vs_complexity_logy_over40.png>]
 Package svg Info: Last page of `./svg-inkscape/cosine_mrr_svg-tex.pdf' is 1 on input line 100.
  (./svg-inkscape/cosine_mrr_svg-tex.pdf_tex
-<./svg-inkscape/cosine_mrr_svg-tex.pdf, id=1204, page=1, 570.59297pt x 425.02414pt>
+<./svg-inkscape/cosine_mrr_svg-tex.pdf, id=1195, page=1, 570.59297pt x 425.02414pt>
 File: ./svg-inkscape/cosine_mrr_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/cosine_mrr_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/cosine_mrr_svg-tex.pdf , page1 used on input line 56.
@@ -1292,7 +1329,7 @@ Package pdftex.def Info: ./svg-inkscape/cosine_mrr_svg-tex.pdf , page1 used on i
 ) [44] [45 <./svg-inkscape/cosine_mrr_svg-tex.pdf>]
 Package svg Info: Last page of `./svg-inkscape/recall_at_k_svg-tex.pdf' is 1 on input line 136.
  (./svg-inkscape/recall_at_k_svg-tex.pdf_tex
-<./svg-inkscape/recall_at_k_svg-tex.pdf, id=1349, page=1, 715.13297pt x 424.62074pt>
+<./svg-inkscape/recall_at_k_svg-tex.pdf, id=1340, page=1, 715.13297pt x 424.62074pt>
 File: ./svg-inkscape/recall_at_k_svg-tex.pdf Graphic file (type pdf)
 <use ./svg-inkscape/recall_at_k_svg-tex.pdf, page 1>
 Package pdftex.def Info: ./svg-inkscape/recall_at_k_svg-tex.pdf , page1 used on input line 56.
@@ -1327,24 +1364,24 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8877DC8371193C2CD23E34191CBF63E7;15331.
+(rerunfilecheck)             Checksum: 8687945B829C7CB1BAEDDF40240D516E;15330.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 47962 strings out of 469462
- 980123 string characters out of 5468615
- 1979603 words of memory out of 5000000
- 75549 multiletter control sequences out of 15000+600000
+ 48762 strings out of 469462
+ 994021 string characters out of 5468615
+ 1993925 words of memory out of 5000000
+ 76326 multiletter control sequences out of 15000+600000
  647653 words of font info for 114 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 94i,16n,97p,756b,2341s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,16n,97p,756b,2343s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb>
-Output written on main.pdf (71 pages, 1055760 bytes).
+Output written on main.pdf (71 pages, 1029797 bytes).
 PDF statistics:
- 1846 PDF objects out of 2073 (max. 8388607)
- 1513 compressed objects within 16 object streams
- 299 named destinations out of 1000 (max. 500000)
- 733 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1837 PDF objects out of 2073 (max. 8388607)
+ 1505 compressed objects within 16 object streams
+ 298 named destinations out of 1000 (max. 500000)
+ 728 words of extra memory for PDF output out of 10000 (max. 10000000)
 
