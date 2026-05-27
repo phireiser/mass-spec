@@ -1,23 +1,8 @@
 #!/usr/bin/env bash
 
-# if execution @ LISC
-if [ -d /lisc/data ]; then
-    scratch_dir="/lisc/data/scratch/tbi/reiser/"
-    pyenv_dir=$scratch_dir"/pyenv/"
-    home_dir="/lisc/home/user/reiser/"
-# if execution @ TBI
-elif [ -d /scratch/reiserp/ ]; then
-    scratch_dir="/scratch/reiserp/"
-    pyenv_dir=$scratch_dir"/env/"
-    home_dir="/home/mescalin/reiserp/"
-fi
+# This script sets up a Python environment with all necessary dependencies for the project.
 
-PROJ_DIR="$home_dir""Nextcloud/studium/computationalScience/thesis/mol"
-
-if [[ "$PWD" != "$PROJ_DIR" ]]; then
-    echo "Run this script from $PROJ_DIR" >&2
-    exit 1
-fi
+scource "$(dirname "$0")/../config/setup.sh"
 
 conda create -p $pyenv_dir python=3.10 --yes
 conda activate $pyenv_dir

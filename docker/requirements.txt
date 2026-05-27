@@ -1,0 +1,21 @@
+# Core machine learning & scientific computing
+torch>=2.0.0,<3.0.0
+torch-geometric>=2.3.0,<3.0.0
+numpy>=1.21.0,<2.0.0
+scipy>=1.7.0,<2.0.0
+pandas>=1.3.0,<3.0.0
+networkx>=2.6.0,<4.0.0
+matplotlib>=3.4.0,<4.0.0
+faiss-gpu
+
+# Utilities
+pyyaml>=5.4.0,<7.0.0
+requests>=2.26.0,<3.0.0
+
+# Development tools
+pytest>=7.0.0
+pytest-cov>=3.0.0
+black>=22.0.0
+flake8>=3.9.0
+isort>=5.10.0
+mypy>=0.950

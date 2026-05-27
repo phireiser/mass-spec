@@ -13,31 +13,7 @@
 # Optional: override default epochs with:
 # sbatch --export=EPOCHS_FWD=5000,EPOCHS_BWD=5000 run/hpc/ml_optimization.sh
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$REPO_ROOT/run/config/paths.env"
-
-# if execution @ LISC
-if [ -d /lisc/data ]; then
-  module load Conda
-  conda activate /lisc/data/scratch/tbi/reiser/pyenv
-  home_dir="/lisc/home/user/reiser/"
-elif [ -d /scratch/reiserp/ ]; then # if execution happens @ TBI
-  conda activate /scratch/reiserp/env
-  home_dir="/home/mescalin/reiserp/"
-fi
-
-PROJ_DIR="$REPO_ROOT"
-
-if [[ "$PWD" != "$PROJ_DIR" ]]; then
-    echo "Run this script from $PROJ_DIR" >&2
-    exit 1
-fi
-
-# Ensure imports  resolve correctly
-export PYTHONPATH="$REPO_ROOT${PYTHONPATH:+:$PYTHONPATH}"
+source "$(dirname "$0")/../config/setup.sh"
 
 # Default optimization mode (can be overridden with: sbatch --export=VARIABLE_NAME=value optimization_slurm.sh)
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"

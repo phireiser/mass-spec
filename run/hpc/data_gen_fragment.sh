@@ -4,39 +4,13 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=20G
 #SBATCH --output=outputs/logs/data_gen/slurm/%A/%j.out
-
-
 ###SBATCH --time=29-00:30:00
 
-if [ -d /lisc/data ]; then # if execution happens @ LISC
-  module load Conda
-  conda activate $CONDA_ENV_LISC
-elif [ -d /scratch/reiserp/ ]; then # if execution happens @ TBI
-  conda activate $CONDA_ENV_TBI
-fi
-
-
-PROJ_DIR="$HOME/$PROJ_DIR_REL"
-
-if [[ "$PWD" != "$PROJ_DIR" ]]; then
-    echo "Run this script from $PROJ_DIR" >&2
-    exit 1
-fi
-
-
-# Ensure imports  resolve correctly
-export PYTHONPATH="$REPO_ROOT${PYTHONPATH:+:$PYTHONPATH}"
-
-
-set -euo pipefail
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$REPO_ROOT/run/config/paths.env"
+source "$(dirname "$0")/../config/setup.sh"
 
 # Directories and files
 DATADIR="$REPO_ROOT/$PROCESSED_DIR_REL/"
-DEFINITION_FILE="$REPO_ROOT/$DATA_DIR_REL/compounds.csv"
+DEFINITION_FILE="$REPO_ROOT/$CSV_PATH_REL"
 JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID-}"
 if [ -z "$JOB_GROUP_ID" ]; then
   JOB_GROUP_ID="${SLURM_JOB_ID-local}"

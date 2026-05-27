@@ -1,0 +1,7 @@
+##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-g08/tmp/slurm-3317412
+/var/spool/slurm/slurmd/job3317412/slurm_script: line 9: /var/spool/slurm/slurmd/job3317412/../config/setup.sh: No such file or directory
+mkdir: cannot create directory ‘//data_gen’: Permission denied
+mkdir: cannot create directory ‘///fwd’: Permission denied
+mkdir: cannot create directory ‘///bwd’: Permission denied
+wc: 'standard input': Is a directory
+No data lines in /

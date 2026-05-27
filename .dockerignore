@@ -1,0 +1,72 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Python cache and virtual environments
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv
+venv/
+env/
+ENV/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE and editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-project
+.sublime-workspace
+
+# Testing and coverage
+.pytest_cache
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter and notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Large data files (mounted as volumes)
+data/nist_spectra/*.jdx
+data/processed/
+outputs/logs/
+outputs/metrics/
+outputs/plots/
+outputs/checkpoints/
+outputs/best_params/
+
+# Documentation build
+docs/_build/
+
+# OS-specific
+Thumbs.db
+.fseventsd
+.Trashes
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+*.out
+.env.local
+.env.*.local
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Keep README but exclude other project docs
+!README.md
