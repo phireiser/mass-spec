@@ -15,7 +15,14 @@ making further optimization necessary to ensure the feasibility of this approach
 
 \subsection{Visualization of Computation Times}
 
-A regression analysis was performed to model the relationship between molecular complexity and computation time.
+A regression analysis was performed to model the relationship between molecular complexity and computation time. 
+
+Here, molecular complexity refers to Boettcher's complexity measure \cite{Boettcher2016}, which summarizes
+structural intricacy from the molecular graph. It provides a single scalar descriptor that allows molecules
+of different sizes and connectivities to be compared on a common scale. In this analysis, it is used as a
+proxy for fragmentation difficulty, although runtime is still influenced by additional factors such as the
+specific structure of the molecule and the available fragmentation pathways.
+
 The analysis assumes:
 \begin{itemize}[noitemsep,topsep=0pt]
     %\item Linearity of the relationship
@@ -43,8 +50,7 @@ Note that the threshold of 40 seconds was chosen arbitrarily to exclude trivial 
 So while there is a general trend of increasing computation time with molecular complexity,
 the large variance suggests that other factors, 
 such as specific structural features or the particular fragmentation pathways available, 
-also play a significant role in determining computation time. 
-This highlights the need for further optimization.
+also play a significant role in determining computation time. This highlights the need for further optimization.
 
 % model size 
 \subsection{Data Splits}
