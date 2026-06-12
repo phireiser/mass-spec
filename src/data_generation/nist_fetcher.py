@@ -3,8 +3,8 @@
 CLI tool to fetch NIST mass spectra using compound names from CSV files.
 Based on the bash script but adapted for Python with name-based lookup.
 
-Author Manuel Uhlir
-adapted from orignial by me
+Original Author Manuel Uhlir
+adapted from orignial by Philipp
 """
 
 import time
@@ -218,7 +218,7 @@ Examples:
     parser.add_argument(
         "-o",
         "--output",
-        default=shared_path("NIST_SPECTRA_DIR_REL"),
+        default=shared_path("C_NIST"),
         help="Output directory for spectra",
     )
 
