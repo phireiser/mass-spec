@@ -164,19 +164,3 @@ def rule_from_term(r: mod.Rule) -> mod.Rule:
 
     s = f"rule [\n\tleft [\n{left}\t]\n\tright [\n{right}\t]\n]\n"
     return mod.Rule.fromGMLString(s, name = r.name.replace(", term", ""), add=False)
-
-
-def multiline_equal(s1: str, s2: str) -> bool:
-    """
-    Return True if s1 and s2 are identical, or if you can swap
-    one pair of adjacent lines in s1 to get s2.
-    """
-    lines1 = s1.splitlines()
-    lines2 = s2.splitlines()
-    # Quick checks
-    if s1 == s2:
-        return True
-    if len(lines1) != len(lines2):
-        return False
-
-    return collections.Counter(lines1) == collections.Counter(lines2)
