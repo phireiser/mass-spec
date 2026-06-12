@@ -3,7 +3,7 @@ Helpers to make mod.* objects from different derivation graphs comparable.
 """
 
 import mod
-from typing import Iterable, Sequence, Tuple
+from typing import Iterable, Tuple
 
 class ComparableVertex:
     """
@@ -76,18 +76,6 @@ class ComparableVertexList:
         return "ComparableVertexList([\n  " + \
             ",\n  ".join(repr(cv) for cv in self._wrapped_list) + \
             "\n])"
-
-    def to_raw_list(self):
-        """
-        Get all elements as a list of raw vertices.
-        """
-        return [cv.vertex for cv in self._wrapped_list]
-
-    def to_wrapped(self):
-        """
-        Get a shallow copy of the wrapped ComparableVertex objects (list).
-        """
-        return self._wrapped_list.copy()
 
     def __eq__(self, other):
         if isinstance(other, ComparableVertexList):
