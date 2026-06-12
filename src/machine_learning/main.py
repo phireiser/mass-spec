@@ -29,7 +29,6 @@ from typing import List, Optional, Dict, Tuple, Union, Any
 from collections import Counter
 from pathlib import Path
 import numpy as np
-import random
 
 
 import torch
@@ -67,10 +66,6 @@ from src.machine_learning.fragments import FragSetEncoderVocabless, EncFragGraph
 from src.machine_learning.training import train_epoch_phase_a, train_epoch_phase_b
 from src.machine_learning.demos import demo_heads_comparison, demo_fragment_perturbation
 
-# Default output directory for generated artifacts
-OUT_DIR = shared_path("CHECKPOINT_DIR_REL")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
 
 def main():
     """
@@ -82,7 +77,7 @@ def main():
     2. Train forward & fragment models (Phase A).
     3. Train spectrum alignment (Phase B).
     4. Build latent retrieval index.
-    5. Demonstrate molecule- >spectrum and spectrum- >molecule examples.
+    5. Demonstrate molecule -> spectrum and spectrum -> molecule examples.
     6. Save model checkpoint.
     """
     p = argparse.ArgumentParser()
@@ -113,6 +108,7 @@ def main():
     p.add_argument("--mol_def_path", type=str, default=shared_path("DATA_DIR_REL", "compounds.csv"), help="Path to CSV file with molecule definitions (name, SMILES)")
     p.add_argument("--spectra_dir", type=str, default=shared_path("NIST_SPECTRA_DIR_REL"), help="Directory containing .jdx spectrum files named by molecule name")
     p.add_argument("--load_path", type=str, default=shared_path("PROCESSED_DIR_REL"), help="Directory containing derivation trees")
+    p.add_argument("--output_dir", type=str, default=shared_path("CHECKPOINT_DIR_REL"), help="Directory to save checkpoints and outputs")
     args = p.parse_args()
 
     torch.manual_seed(args.seed)
@@ -380,8 +376,8 @@ def main():
         "heads": heads.state_dict(),
         "args": vars(args),
     }
-    torch.save(ckpt, OUT_DIR / "ml_checkpoint.pt")
-    print(f"Saved checkpoint to {OUT_DIR / 'ml_checkpoint.pt'}")
+    torch.save(ckpt, args.output_dir / "ml_checkpoint.pt")
+    print(f"Saved checkpoint to {args.output_dir / 'ml_checkpoint.pt'}")
 
 if __name__ == "__main__":
     main()
