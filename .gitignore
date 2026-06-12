@@ -1,4 +1,4 @@
-outputs/checkpoints/
-out/
+outputs/**
 *.pyc
-src/__pycache__/
+**/__pycache__/
+mol-spectro.sif
