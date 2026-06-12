@@ -8,11 +8,6 @@ from pathlib import Path
 import mod
 
 
-class DerivationGraphStore(Protocol):
-    def dump(self, dg: mod.DG, rule_list: List[mod.Rule], name: str, smiles: str, path: Path) -> None: ...
-    def load(self, name: str, path: Path) -> mod.DG: ...
-
-
 class DefaultDGStore:
     def dump(self, dg: mod.DG, rule_list: List[mod.Rule], name: str, smiles: str, path: Path) -> None:
         path.mkdir(parents=True, exist_ok=True)
