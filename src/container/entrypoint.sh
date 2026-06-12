@@ -72,7 +72,7 @@ case "${COMMAND}" in
         echo -e "${GREEN}[Data Generation]${NC} Starting molecule fragmentation & spectrum generation..."
         cd "${REPO_ROOT}"
         # Allow passing arguments to the Python script
-        python src/data_generation/generate.py "${@:2}"
+        python src/data_generation/main.py "${@:2}"
         ;;
 
     train)
@@ -113,10 +113,6 @@ case "${COMMAND}" in
     shell)
         echo -e "${GREEN}[Shell]${NC} Opening interactive bash session..."
         /bin/bash
-        ;;
-
-    help|--help|-h)
-        print_help
         ;;
 
     *)

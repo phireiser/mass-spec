@@ -98,13 +98,12 @@ RUN git clone \
         https://github.com/jakobandersen/mod.git /opt/mod \
     && cd /opt/mod \
     && git submodule update --init --recursive  \
-    # TODO do we need this?
     # bootstrap.sh generates CMakeFiles.txt and other files that cmake needs.
     # MOD's own error message explicitly requires this step.
     && ./bootstrap.sh
 
 WORKDIR /opt/mod
-RUN pip3 install --root-user-action -r requirements.txt \
+RUN pip3 install -r requirements.txt \
     && bindep -b testing | tr '\n' ' ' | xargs apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -125,22 +124,19 @@ RUN cmake ../ \
     && ctest -j $j --output-on-failure -E cmake_ \
     && rm -rf /opt/mod   # safe to delete: install prefix is /usr/local, not /opt/mod
 
-# ── Application setup ────────────────────────────────────────────────────────
+RUN pip3 install --no-cache-dir  openbabel
+RUN git clone https://github.com/forlilab/bottchscore.git /opt/bottchscore
+ENV PYTHONPATH=/opt/bottchscore:${PYTHONPATH}
+
+# --- Application setup --------------------------------------------------------------
 
 WORKDIR /app
 
-# Copy only the requirements file first so pip install is cached independently
-# of source/data changes.
-COPY docker/requirements.txt .
-
-
-RUN pip install --no-cache-dir --root-user-action --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir --root-user-action -r requirements.txt
-
-# Copy application source (after pip install to preserve the cache layer)
+# Copy application source
 COPY src/ src/
-COPY run/ run/
-COPY README.md .
+
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r src/container/requirements.txt
 
 # Set Python path for module resolution
 ENV PYTHONPATH=/app:/usr/local/lib/python3.10/site-packages:${PYTHONPATH}
@@ -148,9 +144,7 @@ ENV PYTHONPATH=/app:/usr/local/lib/python3.10/site-packages:${PYTHONPATH}
 # Create necessary output directories
 RUN mkdir -p /app/outputs/{logs,metrics,plots,checkpoints,best_params}
 
-# Copy entrypoint script
-COPY docker/entrypoint.sh /app/docker/entrypoint.sh
-RUN chmod +x /app/docker/entrypoint.sh
+RUN chmod +x /app/src/container/entrypoint.sh
 
 # Create a dedicated user and hand over ownership of the app directory.
 RUN groupadd --gid 1001 appgroup && \
@@ -159,5 +153,5 @@ RUN groupadd --gid 1001 appgroup && \
 USER appuser
 
 
-ENTRYPOINT ["/app/docker/entrypoint.sh"]
+ENTRYPOINT ["/app/src/container/entrypoint.sh"]
 CMD ["help"]
