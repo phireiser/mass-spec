@@ -1,5 +1,7 @@
 """
 Diagnostics toggles and counters extracted from rule_extention.
+E.g. is the saturated path cap being hit,
+    how often is the BFS collection cap being hit
 """
 import atexit
 
