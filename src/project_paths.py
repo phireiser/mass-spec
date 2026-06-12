@@ -8,7 +8,7 @@ from typing import Dict
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-PATHS_FILE = REPO_ROOT / "run" / "config" / "paths.env"
+PATHS_FILE = REPO_ROOT / "src" / "paths.env"
 
 
 @lru_cache(maxsize=1)
