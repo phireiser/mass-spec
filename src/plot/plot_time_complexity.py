@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Plot computation time vs. molecule bond count with weighted regression.
+"""Plot computation time vs. ForliLab bottchscore with weighted regression.
 
 - Reads MolecuelProcessingTimeTableComplexety.csv
+- Derives the x-axis from SMILES using ForliLab bottchscore
 - Computes weighted linear and cubic regressions (weights inversely proportional to data density)
 - Saves scatter plot with fitted lines to outputs/plots/time_vs_complexity.png
 - Accounts for varying uncertainty in sparse vs dense bond count regions
@@ -9,13 +10,16 @@
 from __future__ import annotations
 
 import csv
+import importlib
 import math
+from collections import defaultdict
 from pathlib import Path
 from typing import List, Tuple
-from collections import defaultdict
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+from bottchscore3 import calculate_bottchscore_from_smiles
 
 ROOT = Path(__file__).resolve().parents[2]
 CSV_PATH = ROOT / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
@@ -34,12 +38,12 @@ def load_points(csv_path: Path) -> Tuple[np.ndarray, np.ndarray, List[str]]:
         reader = csv.DictReader(f)
         for row in reader:
             try:
-                x_raw = row.get("MoleculeComplexety", "").strip()
+                smiles = row.get("SMILES", "").strip()
                 y_raw = row.get(" Time (seconds)", "").strip()
                 name = row.get("MoleculeName", "").strip()
-                if not x_raw or not y_raw:
+                if not smiles or not y_raw:
                     continue
-                x = float(x_raw)
+                x = float(calculate_bottchscore_from_smiles(smiles))
                 y = float(y_raw)
             except Exception:
                 continue
@@ -59,14 +63,14 @@ def filter_over_threshold(xs: np.ndarray, ys: np.ndarray, names: List[str], thre
 def compute_weights(xs: np.ndarray) -> np.ndarray:
     """Compute weights inversely proportional to data density.
 
-    Points at bond counts with few measurements get higher weight,
+    Points at similar complexity scores with few measurements get higher weight,
     while points in dense regions get lower weight.
     """
     counts = defaultdict(int)
     for x in xs:
-        counts[int(x)] += 1
-    weights = np.array([1.0 / np.sqrt(counts[int(x)]) for x in xs])
-    # Normalize so sum equals length (for fair R² comparison)
+        counts[int(round(float(x)))] += 1
+    weights = np.array([1.0 / np.sqrt(counts[int(round(float(x)))]) for x in xs])
+    # Normalize so sum equals length (for fair R**2 comparison)
     weights = weights / np.sum(weights) * len(weights)
     return weights
 
@@ -115,11 +119,11 @@ def explain_datapoints(xs: np.ndarray, ys: np.ndarray, names: List[str]) -> str:
     return (
         f"Datapoints: {n}\n"
         f"Time range: min={ys.min():.2f}s, median={median_y:.2f}s, max={ys.max():.2f}s\n"
-        f"Bond count range: min={xs.min():.0f}, max={xs.max():.0f}\n"
-        "Top 5 slowest (name, bonds, seconds): "
-        + ", ".join(f"{nm} ({bx:.0f}, {ty:.0f}s)" for nm, bx, ty in top5)
-        + "\nTop 5 fastest (name, bonds, seconds): "
-        + ", ".join(f"{nm} ({bx:.0f}, {ty:.2f}s)" for nm, bx, ty in bottom5)
+        f"Complexity score range: min={xs.min():.2f}, max={xs.max():.2f}\n"
+        "Top 5 slowest (name, complexity, seconds): "
+        + ", ".join(f"{nm} ({cx:.2f}, {ty:.0f}s)" for nm, cx, ty in top5)
+        + "\nTop 5 fastest (name, complexity, seconds): "
+        + ", ".join(f"{nm} ({cx:.2f}, {ty:.2f}s)" for nm, cx, ty in bottom5)
     )
 
 
@@ -142,9 +146,9 @@ def main() -> None:
     plt.plot(x_plot, 10 ** (a_logy + b_logy * x_plot), color="purple",
              label=f"log(y) (R²={r2_logy:.3f})")
 
-    plt.xlabel("MoleculeComplexety (number of bonds)")
+    plt.xlabel("ForliLab bottchscore")
     plt.ylabel("Computation time (seconds)")
-    plt.title("Computation time vs. bond count")
+    plt.title("Computation time vs. molecular complexity")
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
     plt.grid(True, alpha=0.3)
 
@@ -167,9 +171,9 @@ def main() -> None:
     plt.plot(x_plot, 10 ** (a_logy + b_logy * x_plot), color="purple",
              label=f"log(y) (R²={r2_logy:.3f})")
 
-    plt.xlabel("MoleculeComplexety (number of bonds)")
+    plt.xlabel("ForliLab bottchscore")
     plt.ylabel("Computation time (seconds, log scale)")
-    plt.title("Computation time vs. bond count (log time axis)")
+    plt.title("Computation time vs. molecular complexity (log time axis)")
     plt.yscale("log")
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
     plt.grid(True, which="both", alpha=0.3)
@@ -202,9 +206,9 @@ def main() -> None:
                  color="green", linewidth=2, label=f"cubic (R²={r2_cub:.3f})")
 
 
-        plt.xlabel("MoleculeComplexety (number of bonds)")
+        plt.xlabel("ForliLab bottchscore")
         plt.ylabel("Computation time (seconds)")
-        plt.title("Computation time vs. bond count (>= 40s)")
+        plt.title("Computation time vs. molecular complexity (>= 40s)")
         plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
         plt.grid(True, alpha=0.3)
 
@@ -231,9 +235,9 @@ def main() -> None:
                  color="green", linewidth=2, label=f"cubic (R²={r2_cub:.3f})")
 
 
-        plt.xlabel("MoleculeComplexety (number of bonds)")
+        plt.xlabel("ForliLab bottchscore")
         plt.ylabel("Computation time (seconds, log scale)")
-        plt.title("Computation time vs. bond count (>= 40s, log time axis)")
+        plt.title("Computation time vs. molecular complexity (>= 40s, log time axis)")
         plt.yscale("log")
         plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
         plt.grid(True, which="both", alpha=0.3)
