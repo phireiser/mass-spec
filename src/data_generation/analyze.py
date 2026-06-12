@@ -30,7 +30,7 @@ fragmentation_term = [utils.term_from_rule(rule) \
     for rule in utils.apply_constraints(fragmentation, aoc)]
 
 
-dg =  utils.load_derivation_graph(
+dg = utils.load_derivation_graph(
     molecule.name,
     path=args.dir,
     )
@@ -40,12 +40,14 @@ print("dump loaded")
 print("\n\n")
 
 dg.print()
-utils.print_rules(ionization + fragmentation)
+utils.print_grammar(molecule, ionization + fragmentation)
 
 
 with pd.option_context(
-    'display.max_rows', None, 'display.max_columns', None,
-    'display.width', None, 'display.max_colwidth', None
+    'display.max_rows', None,
+    'display.max_columns', None,
+    'display.width', None,
+    'display.max_colwidth', None
     ):
     print(utils.rule_usage(dg, molecule_term, mod.inputRules).query("active == True"))
 
@@ -59,10 +61,10 @@ print("mod post running ...")
 mod.post.flushCommands()
 
 process = subprocess.run(
-   ["stdbuf", "-oL", "-eL", shared_path("MOD_POST_PATH_LISC")],
+   ["stdbuf", "-oL", "-eL", "mod_post"],
     check=False,
     text=True,
     stdout=subprocess.PIPE,
     stderr=subprocess.PIPE,
-    bufsize=1
+    bufsize=1,
 )
