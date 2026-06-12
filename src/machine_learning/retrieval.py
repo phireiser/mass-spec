@@ -8,19 +8,12 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data import Data as GeometricData
-
+import faiss
 import mod
 
 from src.machine_learning.data import collate_vlex
 from src.machine_learning.models import EncMol, EncSpec, DecSpecLatent, TaskHeads
 from src.machine_learning.spectrum import make_parent_mass_mask_vec
-
-try:
-    import faiss  # type: ignore
-    _FAISS_AVAILABLE = True
-except Exception:
-    faiss = None
-    _FAISS_AVAILABLE = False
 
 
 @dataclass
@@ -96,8 +89,6 @@ class FaissLatentIndex(LatentIndex):
 
     def __init__(self, d):
         super().__init__(d)
-        if not _FAISS_AVAILABLE:
-            raise ImportError("faiss not installed")
         self.index = faiss.IndexFlatIP(d)
 
     def build(self, dataset: Dataset, device, enc_mol: EncMol):
@@ -159,6 +150,7 @@ def rerank_candidates(spec_q: torch.Tensor,
                       graph_backend: str = "adjacency") -> List[Tuple[str, float]]:
     enc_mol.eval(); frag_set_enc.eval(); dec_spec.eval(); heads.eval()
     scores: List[Tuple[str, float]] = []
+
     with torch.no_grad():
         spec_q_n = F.normalize(spec_q.cpu(), dim=-1)
         for it in candidates:
@@ -195,7 +187,9 @@ def infer_mol_to_spec(graph_feat: GeometricData,
                       mz_max: Optional[float] = None,
                       bin_width: Optional[float] = None,
                       frag_deriv_tree: Optional[GeometricData] = None):
+
     enc_mol.eval(); frag_set_enc.eval(); dec_spec.eval(); heads.eval()
+
     with torch.no_grad():
         z_m = enc_mol([graph_feat])
         z_f = frag_set_enc([frag_graphs], deriv_tree_batch=[frag_deriv_tree])
