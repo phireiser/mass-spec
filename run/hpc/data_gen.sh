@@ -1,0 +1,92 @@
+#!/bin/bash
+#SBATCH --job-name=data_gen_fragment
+#SBATCH --time=0-00:30:00
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=16G
+#SBATCH --output=outputs/logs/data_gen/slurm/%A/%j.out
+###SBATCH --time=29-00:30:00
+
+# Usage:
+# sbatch run/hpc/data_gen.sh
+
+
+# Use SLURM_SUBMIT_DIR to find original location (works when SLURM copies script to compute node)
+SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
+source "$(dirname "$0")/src/path_setup.sh"
+
+# Directories and files
+DATADIR="$REPO_ROOT/$PROCESSED_DIR_REL"
+DEFINITION_FILE="$REPO_ROOT/$CSV_PATH_REL"
+JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID:-}"
+if [ -z "$JOB_GROUP_ID" ]; then
+  JOB_GROUP_ID="${SLURM_JOB_ID:-local}"
+fi
+LOG_DIR="$REPO_ROOT/$LOGS_DIR_REL/data_gen/slurm/${JOB_GROUP_ID}"
+
+mkdir -p "$LOG_DIR"
+mkdir -p "$DATADIR/fwd"
+mkdir -p "$DATADIR/bwd"
+# Bind-mount targets must exist on host before apptainer mounts them
+mkdir -p "$REPO_ROOT/$NIST_SPECTRA_DIR_REL"
+mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
+
+# Count lines
+TOTAL_LINES="$(wc -l < "$DEFINITION_FILE")"
+DATA_LINES="$(( TOTAL_LINES - 1 ))"
+if [ "$DATA_LINES" -le 0 ]; then
+  echo "No data lines in $DEFINITION_FILE" >&2
+  exit 1
+fi
+
+# Self-resubmit as array
+if [ -z "${SLURM_ARRAY_TASK_ID:-}" ]; then
+  echo "Submitting as array 1..${DATA_LINES}"
+  sbatch --array=1-"${DATA_LINES}" "$0"
+  exit 0
+fi
+
+# Parse CSV line for this task
+LINE="$(sed -n "$((SLURM_ARRAY_TASK_ID + 1))p" "$DEFINITION_FILE" | tr -d '\r')"
+if [ -z "$LINE" ]; then
+  echo "Empty line for task ${SLURM_ARRAY_TASK_ID}; skipping." >&2
+  exit 0
+fi
+
+IFS=, read -r NAME SMILES CATEGORY <<< "$LINE"
+if [ -z "${NAME:-}" ] || [ -z "${SMILES:-}" ]; then
+  echo "Missing NAME or SMILES on line: $LINE" >&2
+  exit 1
+fi
+
+slugify() {
+  echo "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/_/g; s/^_+|_+$//g'
+}
+NAME_SLUG="$(slugify "$NAME")"
+OUTFILE="${LOG_DIR}/${SLURM_ARRAY_TASK_ID}__${NAME_SLUG}.out"
+
+# Thread binding
+THREADS="${SLURM_CPUS_PER_TASK:-1}"
+
+/usr/bin/time -v \
+srun --cpu-bind=cores \
+apptainer exec \
+    --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
+    --bind "$REPO_ROOT/$PROCESSED_DIR_REL:$C_PROCESSED" \
+    --bind "$REPO_ROOT/$NIST_SPECTRA_DIR_REL:$C_NIST" \
+    --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
+    --bind "$REPO_ROOT/$CSV_PATH_REL:$C_CSV:ro" \
+    --env PYTHONPATH="$C_APP" \
+    --env OMP_NUM_THREADS="$THREADS" \
+    --env MKL_NUM_THREADS="$THREADS" \
+    --env OPENBLAS_NUM_THREADS="$THREADS" \
+    --env NUMEXPR_NUM_THREADS="$THREADS" \
+    "$SIF" \
+    python "$C_SRC/data_generation/main.py" \
+      --smiles "$SMILES" \
+      --name "$NAME" \
+      --output-dir "$C_PROCESSED" \
+      --spectra-folder "$C_NIST" \
+      --number-threads "$THREADS" \
+      --subgroup-diag \
+      --avoid-reprocessing \
+  >"$OUTFILE" 2>&1
