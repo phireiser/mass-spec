@@ -2,14 +2,15 @@
   node distance = 10mm and 14mm,
   >=stealth,
   inputNode/.style    ={rectangle, rounded corners, draw=black, thick, minimum width=2.2cm, minimum height=1.2cm, text centered, align=center, font=\small},
-  encoderNode/.style  ={rectangle, rounded corners, draw=black, thick, minimum width=2.6cm, minimum height=1.4cm, text centered, align=center, font=\small},
+  encoderNode/.style  ={rectangle, rounded corners, draw=black, thick, minimum width=2.6cm, minimum height=1.7cm, text centered, align=center, font=\small},
   latentNode/.style   ={circle, draw=black, thick, minimum width=1.5cm, text centered, align=center, font=\small},
-  headsNode/.style    ={rectangle, rounded corners, draw=black, thick, minimum width=2.4cm, minimum height=1.2cm, text centered, align=center, font=\small},
-  decoderNode/.style  ={rectangle, rounded corners, draw=black, thick, minimum width=2.4cm, minimum height=1.4cm, text centered, align=center, font=\small},
+  headsNode/.style    ={rectangle, rounded corners, draw=black, thick, minimum width=3.0cm, minimum height=1.2cm, text centered, align=center, font=\small},
+  decoderNode/.style  ={rectangle, rounded corners, draw=black, thick, minimum width=3.0cm, minimum height=1.4cm, text centered, align=center, font=\small},
   lossNode/.style     ={rectangle, rounded corners, draw=black, thick, minimum width=2.2cm, minimum height=0.9cm, text centered, align=center, font=\small},
-  outputNode/.style   ={rectangle, rounded corners, draw=black, thick, minimum width=2.4cm, minimum height=1.2cm, text centered, align=center, font=\small},
+  outputNode/.style   ={rectangle, rounded corners, draw=black, thick, minimum width=3.0cm, minimum height=1.2cm, text centered, align=center, font=\small},
   arrow/.style        ={->, thick},
   dashedArrow/.style  ={dashed, ->, thick},
+  syncArrow/.style    ={<->, densely dashed, thick, gray},
   groupLabel/.style   ={font=\bfseries\small, anchor=west}
 ]
 \usetikzlibrary{positioning, calc}
@@ -59,6 +60,7 @@
 
 \draw[arrow] (ZFUSED) -- (HdFwd);
 \draw[arrow] (ZS) -- (HdBwd);
+\draw[syncArrow] (HdFwd) -- (HdBwd) node[midway, above, font=\tiny, gray] {synced};
 
 % ================== DECODER ROW ==================
 \node[decoderNode, below=of HdFwd] (DecFrag) {DecFrag\\$d_L \to V_{frag}$};
@@ -68,6 +70,7 @@
 % connect to different anchors so arrows don't overlap
 \draw[arrow] (HdFwd) -- (DecFrag);
 \draw[arrow] (HdBwd) -- (DecSpec);
+\draw[syncArrow] (DecFrag) -- (DecSpec) node[midway, above, font=\tiny, gray] {synced};
 
 % ================== OUTPUT ROW (Spectrum + Fragments only) ==================
 \node[outputNode, below=of DecFrag] (FRAG_HAT) {$\hat{f}_{probs}$\\Fragments};

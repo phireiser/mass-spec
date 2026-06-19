@@ -1,0 +1,42 @@
+\definecolor{Pred}{RGB}{210,55,40}
+\definecolor{Qblue}{RGB}{40,120,200}
+\definecolor{Wamber}{RGB}{180,120,20}
+\definecolor{gridgray}{RGB}{150,150,150}
+\definecolor{paneltitle}{RGB}{60,60,60}
+
+\providecommand{\stemUP}[3]{% x, height(0..100), color
+  \draw[#3,line width=2.4pt] (#1,0) -- (#1,{#2/100*2.6});}
+\providecommand{\stemDN}[3]{% x, height(0..100), color
+  \draw[#3,line width=2.4pt] (#1,0) -- (#1,{-#2/100*2.6});}
+
+\begin{tikzpicture}
+
+% =====================================================================
+% PANEL A — aligned (shift 0): perfect match
+% =====================================================================
+\begin{scope}[shift={(0,0)}]
+  \node[anchor=west,paneltitle,font=\bfseries] at (0,3.5)
+    {(a) Aligned spectra \;—\; identical, $\theta=0$};
+  % axis: x from 80..190 mapped to 0..9 ; use raw m/z with xscale
+  \begin{scope}[xscale=9/110, xshift=-80*9/110 cm]
+    % zero baseline
+    \draw[gridgray,line width=0.8pt] (80,0) -- (192,0);
+    \draw[-{Stealth[length=2mm]},gridgray] (80,0) -- (194,0);
+    % A up (red), B down (blue) at same positions
+    \stemUP{91}{35}{Pred}\stemDN{91}{35}{Qblue}
+    \stemUP{105}{100}{Pred}\stemDN{105}{100}{Qblue}
+    \stemUP{122}{62}{Pred}\stemDN{122}{62}{Qblue}
+    \stemUP{150}{18}{Pred}\stemDN{150}{18}{Qblue}
+    \stemUP{178}{48}{Pred}\stemDN{178}{48}{Qblue}
+    % m/z ticks
+    \foreach \m in {91,105,122,150,178}{
+      \node[gridgray,font=\scriptsize] at (\m,-3.05) {\m};}
+    \node[gridgray,font=\scriptsize] at (193,-0.35) {$m/z$};
+  \end{scope}
+  \node[Pred,font=\small] at (8.4,2.7) {A};
+  \node[Qblue,font=\small] at (8.4,-2.7) {B};
+  \node[anchor=west,font=\small] at (0.1,-3.55)
+    {cosine $=\mathbf{1.00}$ \qquad Wasserstein $=\mathbf{0.0}$};
+\end{scope}
+
+\end{tikzpicture}

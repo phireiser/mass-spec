@@ -1,40 +1,67 @@
 \documentclass[a4paper,11pt]{report}
 
+% Encoding & language
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Fonts & typography
+\usepackage{lmodern}
 \usepackage{fontawesome}
+\usepackage{bm}
+\usepackage{soul}
+
+% Page layout & lists
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,headsep=10pt]{geometry}
 \usepackage{array}
 \usepackage{arydshln}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Graphics, color & images
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{color}
-\usepackage{epstopdf}
-\usepackage{float}
-\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,headsep=10pt]{geometry}
-\usepackage[colorlinks,pdfusetitle,urlcolor=blue,citecolor=blue,linkcolor=blue,bookmarksnumbered,plainpages=false]{hyperref}
-\usepackage{xurl}
-\usepackage[english]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{tikz}
-\usepackage{tikz-cd}
-\usepackage{bm}
-\usepackage{subcaption}
 \usepackage{svg}
-\usepackage{enumitem}
-\usepackage{soul}
-\usepackage{minted}
-\usepackage{cleveref}
-\usepackage{csquotes}
-\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{epstopdf}
 \usepackage{pdfpages}
 
+% Math
+\usepackage{amsmath}
+\usepackage{amssymb}
 
-\usetikzlibrary{arrows.meta, fit, positioning, calc}
-\usetikzlibrary{backgrounds, shadows.blur}
+% TikZ & plotting
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{shadows.blur}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{shapes.geometric, shapes.symbols, shapes.multipart}
-\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, decorations.markings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{angles}
+\usetikzlibrary{quotes}
 %\usetikzlibrary{quotesm}
+
+% Code & algorithms
+\usepackage{minted}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Citations & quotes
+\usepackage{csquotes}
+\usepackage[backend=biber, style=ieee]{biblatex}
+
+% Cross-referencing & hyperlinks
+\usepackage[colorlinks,pdfusetitle,urlcolor=blue,citecolor=blue,linkcolor=blue,bookmarksnumbered,plainpages=false]{hyperref}
+\usepackage{cleveref}
+\usepackage{xurl}
 
 
 

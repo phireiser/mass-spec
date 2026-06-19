@@ -1,0 +1,96 @@
+\definecolor{Pred}{RGB}{210,55,40}
+\definecolor{Predfill}{RGB}{250,235,233}
+\definecolor{Qblue}{RGB}{30,120,200}
+\definecolor{Qbluefill}{RGB}{230,241,251}
+\definecolor{Wamber}{RGB}{170,110,15}
+\definecolor{Wamberfill}{RGB}{250,243,220}
+\definecolor{Green}{RGB}{40,120,60}
+\definecolor{Greenfill}{RGB}{233,243,222}
+\definecolor{gridgray}{RGB}{150,150,150}
+
+
+\begin{tikzpicture}[
+  font=\small,
+  pblk/.style={draw=Pred,fill=Predfill,line width=0.5pt,minimum width=0.95cm,minimum height=0.7cm,inner sep=0pt},
+  qblk/.style={draw=Qblue,fill=Qbluefill,line width=0.5pt,minimum width=0.95cm,minimum height=0.7cm,inner sep=0pt},
+  pdot/.style={draw=Pred,fill=Predfill,line width=0.7pt,circle,minimum size=0.55cm,inner sep=0pt,font=\small},
+  qdot/.style={draw=Qblue,fill=Qbluefill,line width=0.7pt,circle,minimum size=0.55cm,inner sep=0pt,font=\small},
+  badge/.style={draw=Wamber,fill=Wamberfill,line width=0.5pt,circle,minimum size=0.42cm,inner sep=0pt,font=\footnotesize\bfseries,text=Wamber},
+]
+
+  % ============ TOP: original P and Q on a number line ============
+  % x value v -> position v (1 unit = 1cm). points at 1,3,4,5
+  \begin{scope}[xshift=2.8cm]
+    \def\yP{2.5}\def\yQ{1.7}
+    \foreach \v/\lab in {1/1,3/3,4/4,5/5}{ \node[pdot] (P\v) at (\v,\yP) {\lab}; }
+    \foreach \v/\lab in {1/1,3/3,5/5}{ \node[qdot] (Q\v) at (\v,\yQ) {\lab}; }
+    \node[Pred,left=2pt] at (0.4,\yP) {$P$};
+    \node[Qblue,left=2pt] at (0.4,\yQ) {$Q$};
+    \node[Pred,right=2pt,font=\footnotesize] at (5.6,\yP) {$n=4$};
+    \node[Qblue,right=2pt,font=\footnotesize] at (5.6,\yQ) {$m=3$};
+    % number line axis
+    \draw[-{Stealth[length=2.5mm]},line width=0.5pt] (0.4,1.1) -- (5.9,1.1);
+    \foreach \v in {1,2,3,4,5}{
+      \draw[line width=0.4pt,gridgray] (\v,1.16) -- (\v,1.04);
+      \node[below,font=\footnotesize,gridgray] at (\v,1.04) {\v};
+    }
+  \end{scope}
+
+  \begin{scope}[yshift=-0.9cm]
+  % ============ LCM banner ============
+  \node[draw=Green,fill=Greenfill,line width=0.5pt,rounded corners=3pt,
+        text width=11.2cm,align=center,minimum height=1.05cm] (banner) at (6,0.0)
+    {\textcolor{Green}{\textbf{LCM(4, 3) = 12 — upsample to equal length}}\\[1pt]
+     \footnotesize\textcolor{Green}{repeat each $P$ element $\times3$ \;·\; repeat each $Q$ element $\times4$}};
+
+  % ============ BLOCKS: 12 aligned cells ============
+  % cell i centered at x = 0.55 + i*0.97 , i=1..12
+  \def\bw{0.97}\def\x0{0.07}
+  \def\yPp{-1.4}\def\yQp{-2.6}
+  \node[left=2pt,Pred] at (\x0+0.4,\yPp) {$P'$};
+  \node[left=2pt,Qblue] at (\x0+0.4,\yQp) {$Q'$};
+  \node[anchor=west,font=\footnotesize,gridgray] at (\x0+0.4,-0.85) {After upsampling ($n'=12$):};
+
+  % P' = 1,1,1,3,3,3,4,4,4,5,5,5
+  \foreach \i/\val in {1/1,2/1,3/1,4/3,5/3,6/3,7/4,8/4,9/4,10/5,11/5,12/5}{
+    \node[pblk] (PP\i) at ({\x0+\i*\bw},\yPp) {\textcolor{Pred}{\val}};
+  }
+  % Q' = 1,1,1,1,3,3,3,3,5,5,5,5
+  \foreach \i/\val in {1/1,2/1,3/1,4/1,5/3,6/3,7/3,8/3,9/5,10/5,11/5,12/5}{
+    \node[qblk] (QQ\i) at ({\x0+\i*\bw},\yQp) {\textcolor{Qblue}{\val}};
+  }
+
+  % difference badges between rows at columns 4,7,8,9
+  \foreach \i/\d in {4/2,7/1,8/1,9/1}{
+    \draw[Wamber,line width=1pt] ({\x0+\i*\bw},\yPp-0.35) -- ({\x0+\i*\bw},\yQp+0.35);
+    \node[badge] at ({\x0+\i*\bw},{(\yPp+\yQp)/2}) {\d};
+  }
+
+  % ============ braces: P repeats (x3) below Q' row in red ============
+  \def\ybr{-3.25}
+  \foreach \start/\stop/\lab in {1/3/{1 ($\times3$)}, 4/6/{3 ($\times3$)}, 7/9/{4 ($\times3$)}, 10/12/{5 ($\times3$)}}{
+    \draw[Pred,decorate,decoration={brace,amplitude=4pt,mirror},line width=0.5pt]
+      ({\x0+\start*\bw-0.45},\ybr) -- ({\x0+\stop*\bw+0.45},\ybr);
+    \node[Pred,font=\footnotesize,below=4pt] at
+      ({\x0+(\start+\stop)/2*\bw},\ybr) {\lab};
+  }
+  % Q repeats (x4) further below in blue
+  \def\ybq{-4.15}
+  \foreach \start/\stop/\lab in {1/4/{1 ($\times4$)}, 5/8/{3 ($\times4$)}, 9/12/{5 ($\times4$)}}{
+    \draw[Qblue,decorate,decoration={brace,amplitude=4pt,mirror},line width=0.5pt]
+      ({\x0+\start*\bw-0.45},\ybq) -- ({\x0+\stop*\bw+0.45},\ybq);
+    \node[Qblue,font=\footnotesize,below=4pt] at
+      ({\x0+(\start+\stop)/2*\bw},\ybq) {\lab};
+  }
+
+  %% ============ result box ============
+  %\node[draw=Green,fill=Greenfill,line width=0.5pt,rounded corners=3pt,
+  %      text width=11.4cm,align=center] at (6,-5.9)
+  %  {\footnotesize $P' = [1,1,1,\,3,3,3,\,4,4,4,\,5,5,5]$\quad
+  %     $Q' = [1,1,1,1,\,3,3,3,3,\,5,5,5,5]$\\[3pt]
+  %   \footnotesize $\mathrm{WD} = \tfrac{1}{12}\cdot(0{+}0{+}0{+}\textcolor{Wamber}{2}{+}0{+}0{+}\textcolor{Wamber}{1}{+}\textcolor{Wamber}{1}{+}\textcolor{Wamber}{1}{+}0{+}0{+}0) = \tfrac{5}{12}$\\[5pt]
+  %   \large\textcolor{Green}{$\mathbf{WD = 5/12 \approx 0.417}$}};
+  %  
+  \end{scope}
+
+\end{tikzpicture}
