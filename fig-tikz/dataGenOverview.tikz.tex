@@ -1,3 +1,5 @@
+\input{fig-tikz/fragmentationTree.tikz.tex}  % \fragmentationTree (TikZ)
+
 \begin{tikzpicture}[
       font=\sffamily,
       node distance=12mm and 22mm,
@@ -14,8 +16,8 @@
           inner sep=0pt,
           minimum width=20mm,
           minimum height=15mm,
-          align=center] (sampleSVG) {%
-      \includesvg[width=20mm,height=15mm,keepaspectratio]{fig-tikz/molecule.svg}%
+          align=center] (sampleSVG) {
+      \resizebox{!}{5mm}{\chemfig{C(-[2]H)(-[4]H)(-[0]H)-[6]*6(=-=-=-)}}
     };
     
     \node[label, below=10mm of sampleSVG] (fragL) {Fragmentation};
@@ -27,8 +29,8 @@
           inner sep=0pt,
           minimum width=40mm,
           minimum height=40mm,
-          align=center] (treeSVG) {%
-      \includesvg[width=40mm,height=40mm,keepaspectratio]{fig-tikz/fragmentation_tree.svg}
+          align=center] (treeSVG) {
+      \fragmentationTree
     };
     
     \draw[arrow] (fragL.south) -- (treeTitle.north);
@@ -42,9 +44,9 @@
           inner sep=0pt,
           minimum width=40mm,
           minimum height=15mm,
-          align=center] (candSVG) {%
-      \includesvg[width=20mm,height=15mm,keepaspectratio]{fig-tikz/molecule.svg}
-      \includesvg[width=20mm,height=15mm,keepaspectratio]{fig-tikz/molecule.svg}
+          align=center] (candSVG) {
+      \resizebox{!}{5mm}{\chemfig{C(-[2]H)(-[4]H)(-[0]H)-[6]*6(=-=-=-)}}\hspace{4mm}
+      \resizebox{!}{5mm}{\chemfig{C(-[2]H)(-[4]H)(-[0]H)-[6]*6(=-=-=-)}}
     };
     
     \node[label, below=10mm of candSVG] (comb) {Combining};
