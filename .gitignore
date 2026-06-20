@@ -14,7 +14,7 @@ svg-inkscape/
 
 *.run.xml
 *.synctex.gz
-*.bbl-SAVE-ERROR
+*-SAVE-ERROR
 *.fdb_latexmk
 
 notes.tex
