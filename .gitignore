@@ -1,6 +1,7 @@
 literature/
 _minted/
 svg-inkscape/
+
 *.aux
 *.bbl
 *.blg
@@ -16,5 +17,6 @@ svg-inkscape/
 *.synctex.gz
 *-SAVE-ERROR
 *.fdb_latexmk
+main.synctex(busy)
 
 notes.tex
