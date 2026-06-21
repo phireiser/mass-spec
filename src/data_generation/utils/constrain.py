@@ -202,3 +202,19 @@ def flatten_list(nested_list: List[Union[Any, List]]) -> List[Any]:
         else:
             flat_list.append(item)
     return flat_list
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "apply_constraints",
+    "get_constraint",
+    "all_occuring",
+    "add_constraints",
+    "convert_to_moel_rule",
+    "label_constraints_gml",
+    "label_constraints_dfs",
+    "split_rule_dfs",
+    "flatten_list",
+    "ALL_ATOMS",
+    "ALK_NES_LABELS",
+]

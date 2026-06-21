@@ -95,3 +95,9 @@ def get_spectra_from_pubchem(
     spectra = get_spectra_from_information_section(info)
     clean = clean_spectra(spectra)
     return clean
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "get_spectra_from_pubchem",
+]

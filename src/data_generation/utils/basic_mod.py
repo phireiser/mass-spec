@@ -83,3 +83,13 @@ def get_fragment_ids_by_edge_id(dg: mod.DG, eid: int) -> List[int]:
     """
     edge = next(e for e in dg.edges if e.id == eid)
     return [t.id for t in edge.targets]
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "get_parents",
+    "filter_ancestors_out",
+    "get_out_edges_by_vertex_id",
+    "get_rule_ids_by_edge_id",
+    "get_fragment_ids_by_edge_id",
+]

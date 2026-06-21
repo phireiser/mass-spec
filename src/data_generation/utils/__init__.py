@@ -1,135 +1,45 @@
 """
-Utilities for the fragmenter project
+Utilities for the fragmenter project.
+
+This package is a thin facade: each submodule declares its own ``__all__``
+(its public surface) and is re-exported here via ``from .module import *``.
+The package ``__all__`` is aggregated automatically, so adding a public name
+only requires updating the owning submodule's ``__all__`` -- no edit here.
 """
 
-# Core graph operations
-from .basic_mod import (
-    get_parents,
-    filter_ancestors_out,
-    get_out_edges_by_vertex_id,
-    get_rule_ids_by_edge_id,
-    get_fragment_ids_by_edge_id,
+import importlib
+
+# Submodules whose public API (their own ``__all__``) is exposed at package
+# level. Internal helpers (e.g. element_sets, metrics, pubchem_client) are
+# deliberately omitted; import them directly where needed.
+_PUBLIC_SUBMODULES = (
+    "basic_mod",       # Core graph operations
+    "constrain",       # Constraint and rule utilities
+    "file",            # Persistence
+    "spect_jdx",       # Spectrum I/O
+    "spect_mol",
+    "spect_pubchem",
+    "term_transfers",  # Term transfers (mod integration)
+    "printing",        # Printing and visualization
+    "compareability",  # Comparison utilities
+    "describe",        # Description utilities
+    "rule_extention",  # Rule extensions
+    "mapping",
+    "traversal",
+    "diag",            # Diagnostics
 )
 
-# Constraint and rule utilities
-from .constrain import (
-    apply_constraints,
-    get_constraint,
-    all_occuring,
-    add_constraints,
-    convert_to_moel_rule,
-    label_constraints_gml,
-    label_constraints_dfs,
-    split_rule_dfs,
-    flatten_list,
-    ALL_ATOMS,
-    ALK_NES_LABELS,
-)
+__all__: list[str] = []
 
-# Persistence
-from .file import (
-    dump_derivation_graph,
-    load_derivation_graph,
-)
+for _name in _PUBLIC_SUBMODULES:
+    _module = importlib.import_module(f".{_name}", __name__)
+    _exported = getattr(_module, "__all__", None)
+    if _exported is None:
+        raise ImportError(
+            f"data_generation.utils submodule '{_name}' must define __all__"
+        )
+    for _symbol in _exported:
+        globals()[_symbol] = getattr(_module, _symbol)
+    __all__.extend(_exported)
 
-# Spectrum I/O
-from .spect_jdx import get_spectra_from_local_jdx
-from .spect_mol import (
-    get_parent_rules_for_graph,
-    get_spectra_from_mod_derivation_graph,
-)
-from .spect_pubchem import get_spectra_from_pubchem
-
-# Term transfers (mod integration)
-from .term_transfers import (
-    term_from_graph,
-    term_from_rule,
-    graph_from_term,
-    rule_from_term,
-)
-
-# Printing and visualization
-from .printing import (
-    print_rules,
-    print_graphs,
-)
-
-# NetworkX integration
-from .net_x import (
-    mod_derivation_graph_2_nx,
-)
-
-# Comparison utilities
-from .compareability import ComparableVertex, ComparableVertexList
-
-# Description utilities
-from .describe import (
-    spectrum_statistic,
-    rule_usage,
-    overlap_coefficient,
-    dice_coefficient,
-)
-
-# Rule extensions / traversal
-from .rule_extention import transfer_positions_of_generalization_extention
-from .mapping import get_rule_2_molecule_map
-from .traversal import (
-    vertex_by_id,
-    mol_neighbors,
-    mol_cleaned_label,
-    collect_bfs,
-    get_edge_between,
-    saturated_path,
-)
-
-from .diag import (
-    enable_subgroup_diag,
-)
-
-__all__ = [
-    # Core graph operations
-    "get_parents",
-    "filter_ancestors_out",
-    "get_out_edges_by_vertex_id",
-    "get_rule_ids_by_edge_id",
-    "get_fragment_ids_by_edge_id",
-    # Constraints
-    "apply_constraints",
-    "get_constraint",
-    "all_occuring",
-    "add_constraints",
-    "convert_to_moel_rule",
-    "label_constraints_gml",
-    "label_constraints_dfs",
-    "split_rule_dfs",
-    "flatten_list",
-    "ALL_ATOMS",
-    "ALK_NES_LABELS",
-    "ALKALENES_LABELS",
-    # Persistence
-    "dump_derivation_graph",
-    "load_derivation_graph",
-    # Spectrum I/O
-    "get_spectra_from_local_jdx",
-    "get_parent_rules_for_graph",
-    "get_spectra_from_mod_derivation_graph",
-    "get_spectra_from_pubchem",
-    # Term transfers
-    "term_from_graph",
-    "term_from_rule",
-    "graph_from_term",
-    "rule_from_term",
-    # Printing
-    "print_rules",
-    "print_graphs",
-    # NetworkX
-    "derivation_graph_to_networkx",
-    "filter_networkx",
-    # Comparison
-    "enable_subgroup_diag",
-    # Description
-    "describe_rule",
-    "describe_graph",
-    # Rule extensions
-    "extend_rule",
-]
+del importlib, _name, _module, _exported, _symbol

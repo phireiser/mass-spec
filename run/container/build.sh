@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-source "$(dirname "$0")/src/path_setup.sh"
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+source "$REPO_ROOT/src/paths.env"
 
 podman build -f src/container/Dockerfile -t mol-spectro:latest .
 TMP_DIR=$(mktemp -d)

@@ -1,2 +1,0 @@
-##LiSC job info: the temporary directory of your job is also available read-only until 3 days after job end on the login nodes (login01/login02) under this path: /lisc/slurm/node-g05/tmp/slurm-2600104
-[2026-04-17T13:55:21.006] error: *** JOB 2600104 ON node-g05 CANCELLED AT 2026-04-17T13:55:21 DUE TO TIME LIMIT ***

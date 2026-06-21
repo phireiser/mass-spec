@@ -41,3 +41,9 @@ def get_spectra_from_local_jdx(
     """Resolve file by name within the project spectra folder and parse via parse_jdx."""
     jdx_file = folder / f"{name.lower()}-Mass.jdx"
     return parse_jdx(jdx_file)
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "get_spectra_from_local_jdx",
+]

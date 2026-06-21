@@ -109,3 +109,12 @@ def summarize_spectrum_overlap(
         "MØD support": len(moel_masses_union),
         "ground_truth support": len(ground_truth_masses_union),
     }
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "spectrum_statistic",
+    "rule_usage",
+    "overlap_coefficient",
+    "dice_coefficient",
+]

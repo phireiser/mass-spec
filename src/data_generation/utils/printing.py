@@ -43,3 +43,11 @@ def print_grammar(
     """
     print_graphs(in_graphs)
     print_rules(in_rules)
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "print_rules",
+    "print_graphs",
+    "print_grammar",
+]

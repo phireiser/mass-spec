@@ -58,3 +58,10 @@ def get_spectra_from_mod_derivation_graph(
             print(graph.getGMLString())
             raise RuntimeWarning("There are graphs that are not molecules.")
     return spectra
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "get_parent_rules_for_graph",
+    "get_spectra_from_mod_derivation_graph",
+]

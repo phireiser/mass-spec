@@ -1,5 +1,8 @@
 #!/bin/bash
-source "$(dirname "$0")/src/path_setup.sh"
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+source "$REPO_ROOT/src/paths.env"
 
 apptainer exec \
   --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \

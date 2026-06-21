@@ -12,8 +12,11 @@
 # Optional: override default epochs with:
 # sbatch --export=EPOCHS_FWD=5000,EPOCHS_BWD=5000 run/hpc/ml_optimization.sh
 
+set -euo pipefail
+
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
-source "$(dirname "$0")/src/path_setup.sh"
+REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
+source "$REPO_ROOT/src/paths.env"
 
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"
 EPOCHS_BWD="${EPOCHS_BWD:-10000}"

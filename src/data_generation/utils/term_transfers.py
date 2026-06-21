@@ -164,3 +164,12 @@ def rule_from_term(r: mod.Rule) -> mod.Rule:
 
     s = f"rule [\n\tleft [\n{left}\t]\n\tright [\n{right}\t]\n]\n"
     return mod.Rule.fromGMLString(s, name = r.name.replace(", term", ""), add=False)
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "term_from_graph",
+    "term_from_rule",
+    "graph_from_term",
+    "rule_from_term",
+]

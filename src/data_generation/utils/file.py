@@ -40,3 +40,10 @@ def dump_derivation_graph(dg: mod.DG, rule_list: List[mod.Rule], name: str, smil
 def load_derivation_graph(name: str, path: Path | str = Path("./dump/")) -> mod.DG:
     store = DefaultDGStore()
     return store.load(name, Path(path))
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "dump_derivation_graph",
+    "load_derivation_graph",
+]

@@ -6,7 +6,6 @@ import re
 from typing import List, Tuple
 import mod
 
-from .mapping import get_rule_2_molecule_map
 from .traversal import vertex_by_id
 
 
@@ -35,3 +34,9 @@ def transfer_positions_of_generalization_extention(
         ]
 
     return alkyl_pos_in_graph, hetro_pos_in_graph, saturated_pos_in_graph
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "transfer_positions_of_generalization_extention",
+]

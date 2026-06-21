@@ -37,3 +37,9 @@ def _diag_summary() -> None:
         f"[subgroup-summary] caps hit: collect_bfs={_diag_counters['collect_bfs_cap']}, "
         f"saturated_path={_diag_counters['saturated_path_cap']}"
     )
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "enable_subgroup_diag",
+]

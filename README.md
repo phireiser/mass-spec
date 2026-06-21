@@ -58,7 +58,7 @@ bash generated_fwd_dg.sh
 │   ├── data_generation/       # Spectrum generation
 │   ├── machine_learning/      # ML models and training
 │   └── project_paths.py       # Path utilities
-├── docker/                    # Docker configuration
+├── container/                 # container configuration
 ├── run/                       # Configuration and scripts
 │   ├── config/                # Config files
 │   ├── data/                  # Data processing scripts

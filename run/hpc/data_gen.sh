@@ -10,9 +10,12 @@
 # sbatch run/hpc/data_gen.sh
 
 
+set -euo pipefail
+
 # Use SLURM_SUBMIT_DIR to find original location (works when SLURM copies script to compute node)
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
-source "$(dirname "$0")/src/path_setup.sh"
+REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
+source "$REPO_ROOT/src/paths.env"
 
 # Directories and files
 DATADIR="$REPO_ROOT/$PROCESSED_DIR_REL"

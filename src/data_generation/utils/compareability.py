@@ -85,3 +85,10 @@ class ComparableVertexList:
         elif isinstance(other, mod.Graph.Vertex):
             return ComparableVertex(other, self.attrs) in self._wrapped_set
         return NotImplemented
+
+
+# Public API re-exported by ``data_generation.utils``.
+__all__ = [
+    "ComparableVertex",
+    "ComparableVertexList",
+]

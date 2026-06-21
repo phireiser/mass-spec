@@ -7,7 +7,7 @@ from .benzylAllyl_ringGeneral import (
     benzylAllyl_ionizaton,
     benzylAllyl_fragmentation,
 )
-from .deprotonation import deProtonation_all
+from .deprotonation import deProtonation_all, ei_molecular_ion
 from .IMS_bookCover import (
     IMS_cover_fragmentation,
     rearrangements,
@@ -25,6 +25,7 @@ from .wikipedia import (
 
 # Curated rule collections for common usage
 ionization = []
+ionization.append(ei_molecular_ion)
 ionization.extend(benzylAllyl_ionizaton)
 ionization.extend(wiki_ionization)
 ionization.extend(deProtonation_all)
@@ -44,6 +45,7 @@ __all__ = [
     "benzylAllyl_ionizaton",
     "benzylAllyl_fragmentation",
     "deProtonation_all",
+    "ei_molecular_ion",
     "IMS_cover_fragmentation",
     "IMS_chap4_examples",
     "IMS_chap8_examples",
