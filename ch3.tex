@@ -259,11 +259,11 @@ The objective of the normalization step is to ensure the encoder receives a cons
 
 The library handles common challenges in graph processing, such as varying graph sizes and irregular connectivity patterns, through batching mechanisms that stack multiple graphs into a single tensor representation.
 
-%PyG's core strength lies in its message-passing framework, which enables efficient computation of graph convolutions.
-%In each layer, nodes aggregate information from their neighbors through learned transformations, 
-%allowing the network to capture hierarchical structural patterns relevant to fragmentation behavior.
-%Additionally, PyG provides pre-implemented layers for various GNN architectures (GraphConvolution, GraphAttention, etc.) 
-%and inherent permutation invariance, ensuring that the model is robust to different node orderings.
+PyG's core strength lies in its message-passing framework, which enables efficient computation of graph convolutions.
+In each layer, nodes aggregate information from their neighbors through learned transformations, 
+allowing the network to capture hierarchical structural patterns relevant to fragmentation behavior.
+Additionally, PyG provides pre-implemented layers for various GNN architectures (GraphConvolution, GraphAttention, etc.) 
+and inherent permutation invariance, ensuring that the model is robust to different node orderings.
 
 For this work, we utilize PyG's graph convolutional layers to embed molecular structures into a latent space that captures chemical properties while remaining efficient to compute.
 The flexibility of PyG's API allows seamless integration with standard PyTorch components for downstream prediction tasks.
@@ -375,12 +375,11 @@ Despite these representational advantages, the proposed encoding pipeline also i
 
 \section{Model Architecture}
 
-This section first states the learning problem in compact form, then lays out the shared three-modality architecture, and finally walks through the forward (structure-to-spectrum) and backward (spectrum-to-structure) branches in turn, before explaining how the two directions are coupled into a single bidirectional system.
+This section states the learning problem, then describes the shared three-modality architecture and its forward (structure-to-spectrum) and backward (spectrum-to-structure) branches.
 
 \subsection{Problem Formulation}
 \label{sec:problem-formulation}
 
-Before the individual components are described, the learning problem is stated in compact form.
 Each training example couples three views of the same molecule:
 \begin{itemize}
     \item a \emph{molecular graph} $G$ representing the precursor structure, with atoms as nodes and bonds as edges;
@@ -404,7 +403,7 @@ The model is then trained in two coupled directions:
 \end{description}
 
 Both directions are optimised jointly under a single composite objective $\mathcal{L}_{\mathrm{total}}$ (\Cref{sec:loss-function}); structure-to-spectrum prediction and spectrum-to-structure retrieval therefore share---and mutually constrain---the same latent space.
-\Cref{tab:notation} collects the symbols used throughout this section, and the remainder expands each encoder, the fusion and decoding steps, and the loss terms in turn.
+\Cref{tab:notation} collects the symbols used throughout this section.
 
 \begin{table}[H]
     \centering
@@ -496,22 +495,13 @@ This head serves two purposes. First, it provides a task-specific projection for
 Second, it defines the representation that is used at test time for inverse retrieval. 
 The projected spectrum embedding is compared to a latent index of molecular embeddings, thus enabling the model to retrieve the most similar candidate structures in embedding space.
 
-Consistent with the retrieval-oriented framing established above, this is a spectrum-to-latent-to-candidate pipeline rather than a generative decoder: the model first retrieves candidate molecules by cosine similarity in latent space, then optionally re-ranks them by passing each candidate through the forward branch and comparing its reconstructed spectrum with the query spectrum.
+At test time this is a spectrum-to-latent-to-candidate pipeline: the model first retrieves candidate molecules by cosine similarity in latent space, then optionally re-ranks them by passing each candidate through the forward branch and comparing its reconstructed spectrum with the query spectrum.
 
 \subsection{Bidirectionality}
 
-The bidirectional nature of the framework arises from the fact that molecular graphs and spectra are not learned independently. 
-As shown in \Cref{fig:ml-architecture-diagram}, both modalities are mapped into related latent spaces and are connected by shared components. 
-The most important of these are the task heads and the spectrum decoder. 
-The forward pathway employs a combination of molecular and fragment representations to predict spectra. 
-In contrast, the backward pathway utilizes spectral embeddings to align against molecular embeddings and to facilitate retrieval.
-Because both directions are trained jointly within the same architecture, information learned in one direction constrains the other.
-
-This bidirectionality is also strengthened by the retrieval strategy. 
-The molecular encoder is used to build an index over known candidate structures, while the spectrum encoder provides the query representation. 
-The result is that forward prediction and inverse retrieval are coupled tasks of the two views of the same embedding problem. 
-In addition, the inverse direction can benefit from the forward model through reranking, since candidate molecules are rescored according to how well their forward-predicted spectra match the observed spectrum. 
-In this sense, the model closes the loop between both directions even though it does not implement a fully generative cycle from spectrum directly back to a reconstructed molecular graph.
+The two directions are not learned independently: as shown in \Cref{fig:ml-architecture-diagram}, they share the task heads and the spectrum decoder, and because both are trained jointly within the same architecture, information learned in one direction constrains the other.
+At test time the molecular encoder builds an index over known candidate structures while the spectrum encoder provides the query, so forward prediction and inverse retrieval become two views of the same embedding problem.
+The forward model further feeds back into retrieval through reranking, where candidates are rescored by how well their forward-predicted spectra match the observed spectrum.
 
 \subsection{Loss Function}
 \label{sec:loss-function}
