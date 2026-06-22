@@ -14,7 +14,10 @@ def vertex_by_id(g: mod.Graph, vid: int) -> mod.Graph.Vertex:
     return next(v for v in g.vertices if v.id == vid)
 
 
-def mol_neighbors(graphs: Iterable[mod.Graph], v: mod.Graph.Vertex) -> Iterable[mod.Graph.Vertex]:
+def mol_neighbors(
+        graphs: Iterable[mod.Graph],
+        v: mod.Graph.Vertex
+        ) -> Iterable[mod.Graph.Vertex]:
     graph = [graph_from_term(g) for g in graphs]
     for gg in graph:
         for e in gg.edges:
@@ -34,17 +37,34 @@ def collect_bfs(
         match: mod.DGVertexMapper.Result.match,
         max_visits: Optional[int] = None
         ):
-    morphism_vertices = set(x for x in match.domain.vertices) - set(start_vertices)
-    visited = set(morphism_vertices)
-    queue = collections.deque(start_vertices)
-    labels = [mol_cleaned_label(v) for v in start_vertices]
-    vertices = list(start_vertices)
+    # Convert the term graphs to string mode *once* and index their adjacency,
+    # instead of rebuilding every graph inside `mol_neighbors` on every dequeue
+    # (the old hot path: a single small molecule reconverted its graph hundreds
+    # of thousands of times). `ComparableVertex` gives vertices a real, stable
+    # hash and cross-build value equality -- raw mod vertices all hash to 0 and
+    # compare unequal across rebuilt graphs, so the old `visited` set degenerated
+    # to an O(n^2) scan that never actually deduplicated and churned until the
+    # `max_visits` cap. With a proper visited-set the BFS now terminates once the
+    # reachable component is covered, yielding the same set of neighbour labels.
+    built = [graph_from_term(g) for g in graphs]
+    neighbor_adj: dict = {}
+    for gg in built:
+        for e in gg.edges:
+            neighbor_adj.setdefault(ComparableVertex(e.source), []).append(e.target)
+            neighbor_adj.setdefault(ComparableVertex(e.target), []).append(e.source)
+
+    start = list(start_vertices)
+    visited = {ComparableVertex(v) for v in start}
+    queue = collections.deque(start)
+    labels = [mol_cleaned_label(v) for v in start]
+    vertices = list(start)
     visits = 0
     while queue:
         v = queue.popleft()
-        for vertex in mol_neighbors(graphs, v):
-            if vertex not in visited:
-                visited.add(vertex)
+        for vertex in neighbor_adj.get(ComparableVertex(v), ()):
+            cv = ComparableVertex(vertex)
+            if cv not in visited:
+                visited.add(cv)
                 queue.append(vertex)
                 labels.append(mol_cleaned_label(vertex))
                 vertices.append(vertex)
@@ -57,7 +77,11 @@ def collect_bfs(
     return labels, vertices
 
 
-def get_edge_between(graphs: Iterable[mod.Graph], u: mod.Graph.Vertex, v: mod.Graph.Vertex) -> mod.Graph.Edge | None:
+def get_edge_between(
+        graphs: Iterable[mod.Graph],
+        u: mod.Graph.Vertex,
+        v: mod.Graph.Vertex
+        ) -> mod.Graph.Edge | None:
     if ComparableVertex(v) == ComparableVertex(u):
         return None
     for g in graphs:
@@ -73,36 +97,19 @@ def get_edge_between(graphs: Iterable[mod.Graph], u: mod.Graph.Vertex, v: mod.Gr
     return None
 
 
-def _is_single_bond(graphs: Iterable[mod.Graph], u: mod.Graph.Vertex, v: mod.Graph.Vertex) -> bool:
-    edge = get_edge_between(graphs, u, v)
-    if edge is None:
-        return False
-    return decode_edge_label(edge.stringLabel) == '-'
-
-
-# Lower bound (total vertices across the reactant graphs) above which
-# saturated_path precomputes a neighbor/single-bond index. Below it the search
-# space is small enough that the per-call helpers are cheaper than the index, so
-# its initialization is skipped.
-SATURATED_PATH_INDEX_MIN_VERTICES = 20
-
-
-def _graph_size(built_graphs: Iterable[mod.Graph]) -> int:
-    return sum(1 for gg in built_graphs for _ in gg.vertices)
-
-
 def _build_traversal_index(
         built_graphs: List[mod.Graph],
         term_graphs: Iterable[mod.Graph]
         ) -> tuple[dict, dict]:
     """Precompute, once per call, what the DFS would otherwise recompute per step.
 
-    ``neighbor_adj`` mirrors :func:`mol_neighbors` (neighbors taken from the
-    term-mode graphs) and ``single_bond_map`` mirrors :func:`_is_single_bond`
-    (bond type decoded from the raw term graphs). An indexed traversal therefore
-    yields the same result as the per-call helpers -- without rebuilding the
-    graphs and rescanning every edge on each step, which is what made large
-    molecules (e.g. fused steroid rings) churn until the job was killed.
+    ``neighbor_adj`` maps each vertex to its molecular neighbours (taken from the
+    built graphs) and ``single_bond_map`` records, per vertex pair, whether the
+    connecting bond is single (decoded from the raw term graphs, first edge
+    winning). An indexed traversal therefore yields the same result as a per-step
+    neighbour/bond scan -- without rebuilding the graphs and rescanning every edge
+    on each step, which is what made large molecules (e.g. fused steroid rings)
+    churn until the job was killed.
     """
     neighbor_adj: dict = {}
     for gg in built_graphs:
@@ -168,25 +175,19 @@ def saturated_path(
     else:
         branch_ok_labels = set(branch_ok_label)
 
-    # Build the term-mode graphs once instead of rebuilding them on every
-    # neighbor lookup (the original hot path). For large molecules also
-    # precompute a neighbor/single-bond index; for small ones fall back to the
-    # per-call helpers and skip the index initialization.
+    # Build the term-mode graphs once and precompute a neighbor/single-bond
+    # index, instead of rebuilding every graph and rescanning every edge on each
+    # DFS step (the original hot path). Profiling showed the per-step fallback
+    # dominated runtime even for small molecules, so the index is now always
+    # used; `_build_traversal_index` is documented to yield identical results.
     built = [graph_from_term(g) for g in graph]
-    if _graph_size(built) >= SATURATED_PATH_INDEX_MIN_VERTICES:
-        neighbor_adj, single_bond_map = _build_traversal_index(built, graph)
+    neighbor_adj, single_bond_map = _build_traversal_index(built, graph)
 
-        def neighbors_of(v):
-            return neighbor_adj.get(ComparableVertex(v), ())
+    def neighbors_of(v):
+        return neighbor_adj.get(ComparableVertex(v), ())
 
-        def is_single_bond(u, v):
-            return single_bond_map.get((ComparableVertex(u), ComparableVertex(v)), False)
-    else:
-        def neighbors_of(v):
-            return mol_neighbors(graph, v)
-
-        def is_single_bond(u, v):
-            return _is_single_bond(graph, u, v)
+    def is_single_bond(u, v):
+        return single_bond_map.get((ComparableVertex(u), ComparableVertex(v)), False)
 
     comp_morphism = {ComparableVertex(x) for x in morphism_vertices}
     comp_end = ComparableVertex(end_vertex)
@@ -206,7 +207,12 @@ def saturated_path(
                 continue
             new_path = path + [vertex]
             if cv == comp_end:
-                if _path_satisfies_branch_rule(neighbors_of, new_path, comp_morphism, branch_ok_labels):
+                if _path_satisfies_branch_rule(
+                    neighbors_of,
+                    new_path,
+                    comp_morphism,
+                    branch_ok_labels
+                    ):
                     return True
             else:
                 stack.append((vertex, new_path, path_set | {cv}))
