@@ -19,7 +19,16 @@ def get_rule_2_molecule_maps(
     per-match outcomes instead of silently relying on whichever match ``mod``
     happens to produce first (see ``sub_group``).
     """
-    dg_new = mod.DG(graphDatabase = graphs, labelSettings = label_settings)
+    # The embeddings depend only on this single derivation's left/right graphs
+    # and its rule, not on the rest of the database. Seeding the scratch DG with
+    # the whole `graphs` database (as this used to) made every call rebuild a DG
+    # over all species discovered so far -- quadratic over a run, since this is
+    # invoked per derivation from the `sub_group` predicate. Restrict it to the
+    # two graphs actually involved.
+    dg_new = mod.DG(
+        graphDatabase=[*derivation.left, *derivation.right],
+        labelSettings=label_settings,
+    )
     with dg_new.build() as b:
         d = mod.Derivation()
         d.left = derivation.left
