@@ -1,5 +1,5 @@
 """
-PubChem utilities reworked to use a client and parser for SOLID compliance.
+PubChem utilities useing a client and parser.
 """
 from typing import List, Tuple, Dict, Any
 from collections import defaultdict
@@ -23,18 +23,18 @@ def get_information_section_from_pubchem(cid: int) -> List[Dict[str, Any]] | Non
         return None
 
     # First GC-MS section containing Information
-    for s in sections:
-        for info in s.get("Information", []) or []:
+    for section in sections:
+        for info in section.get("Information", []) or []:
             return info
         if section.get("TOCHeading") == "GC-MS":
             return section.get("Information")
         # Search deeper if nested
-        result = find_gc_ms(section.get("Section", []))
+        result = find_gc_ms_sections(section.get("Section", []))
         if result is not None:
             return result
         return None
 
-    gc_ms_info = find_gc_ms(data.get("Record", {}).get("Section", []))
+    gc_ms_info = find_gc_ms_sections(data.get("Record", {}).get("Section", []))
 
     if gc_ms_info:
         return gc_ms_info
