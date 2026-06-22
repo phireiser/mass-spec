@@ -146,3 +146,4 @@ data/                       - Data source
 
 - Setup guide: [GETTING_STARTED.md](./GETTING_STARTED.md)
 - Complete reference: [USER_GUIDE.md](./USER_GUIDE.md)
+- Data-gen performance (bottleneck & what helps): [DATA_GEN_PERFORMANCE.md](./DATA_GEN_PERFORMANCE.md)
