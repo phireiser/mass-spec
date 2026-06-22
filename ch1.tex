@@ -45,7 +45,7 @@ By explicitly modeling fragment lineage and transformation pathways,
 it becomes possible to align molecular substructures with spectral evidence in a mechanistically meaningful manner.
 
 
-This thesis is motivated by the hypothesis that integrating chemically structured derivation graphs into a machine learning framework can introduce chemical inductive bias and yield a fragmentation layer that is interpretable by construction, while supporting bidirectional structure-spectrum modeling. By combining fragment-aware representations with data-driven learning, the aim is to bridge the gap between high-throughput spectral acquisition and scalable, chemically grounded interpretation.
+This thesis is motivated by the hypothesis that integrating chemically structured derivation graphs into a machine learning framework can introduce chemical inductive bias and yield an explicit fragmentation layer, while supporting bidirectional structure-spectrum modeling. By combining fragment-aware representations with data-driven learning, the aim is to bridge the gap between high-throughput spectral acquisition and scalable, chemically grounded interpretation.
 
 \section{Objectives}
 The objective of this thesis is to design, implement, 
@@ -54,8 +54,8 @@ for improving the bidirectional translation
 between molecular structures and mass spectra. 
 Specifically, the work investigates whether the integration of graph-based reaction
 and fragment derivation graphs, generated through chemically valid graph transformation rules,
-can serve as structured and interpretable intermediate representations,
-and to what extent they affect predictive performance and model transparency.
+can serve as structured intermediate representations,
+and to what extent they affect predictive performance.
 
 Mass spectrometry-based structure elucidation represents an inherently ill-posed inverse problem: 
 structurally distinct molecules may yield partially overlapping spectral signatures, 
@@ -71,7 +71,7 @@ enabling aligned embeddings across the domains.
 
 Ultimately, this thesis assesses to what extent incorporating chemically
 valid graph-based fragment derivations into neural learning pipelines
-affects the predictive power and interpretability
+affects the predictive power
 of bidirectional structure-spectrum modeling in mass spectrometry,
 and outlines how such a framework could enable de novo molecular generation from spectral data.
 
@@ -95,7 +95,7 @@ further increases computational demands. \cite[pp.~2-3]{Boecker2016}
 
 Due to this scalability constraint, the experimental evaluation is 
 limited to order of magnitude of 100 compounds. 
-While sufficient for demonstrating methodological feasibility and analyzing interpretability, this restricted dataset 
+While sufficient for demonstrating methodological feasibility, this restricted dataset
 limits chemical diversity and does not allow for generalization. 
 Consequently, the results should be interpreted as proof-of-concept validation 
 rather than evidence of large-scale applicability.
@@ -104,5 +104,5 @@ It is also important to note that the reactions are defined in terms of graph sy
 Furthermore, the transformation rules are not exhaustive of all possible fragmentation pathways, and some may even be incorrect.
 This means that the generated fragment derivation graphs may not capture all relevant chemical transformations, 
 and the model's performance may be sensitive to the specific choice of transformation rules. 
-Therefore, the interpretability analysis is constrained by the assumptions embedded in the rule set.
+Therefore, the generated fragment derivations are constrained by the assumptions embedded in the rule set.
 Consequently, it may not generalize to fragmentation processes that deviate from these assumptions.
