@@ -164,6 +164,41 @@ The presence of any heteroatom---such as the nitrogen marked on the right of \Cr
     \label{fig:alkyl-check}
 \end{figure}
 
+\subsection{Data Splits}
+
+The dataset was partitioned in two stages into training, validation, and test subsets.
+In the first stage, the full set of molecule--spectrum pairs was divided into
+an 80\% training portion and a 20\% test portion.
+In the second stage, the initial training portion was further split into 70\% training and 30\% validation.
+This results in a final distribution of 56\% training data, 24\% validation data,
+and 20\% test data relative to the original dataset.
+
+These ratios were chosen as a pragmatic trade-off between model development and robust evaluation.
+The $80/20$ split keeps a sufficiently large hold-out test set for a meaningful final performance estimate,
+while still reserving most samples for development.
+
+This splitting strategy serves two purposes.
+First, it preserves a dedicated hold-out test set that is never used during model development
+and is therefore reserved for the final evaluation.
+Second, it provides a separate validation set for model selection, hyperparameter tuning,
+and intermediate performance monitoring.
+In this way, the validation set supports iterative model development,
+while the test set remains an unbiased reference for the final assessment.
+
+All splits are generated with a fixed random seed (\texttt{random\_state=42}) to ensure reproducibility.
+At the same time, the implementation uses \texttt{shuffle=False}, so the split is deterministic and
+preserves the original order of the dataset rather than randomly permuting the samples beforehand.
+
+An additional technical constraint concerns the fragment representation.
+The fragment vocabulary is constructed only from the training set
+and then reused unchanged for the validation and test sets.
+This ensures that the dimensionality of fragment-based model components
+remains fixed across all stages of training and evaluation.
+It also prevents information leakage from validation or test data into the feature space used during training.
+In practical terms, this means that fragment identifiers available during evaluation are restricted to
+those observed in the training data, which is consistent with a realistic supervised learning setting.
+
+
 \section{Latent Representation Schemes}
 
 In this work, we encode molecular fragmentation data through three tightly coupled representation streams:
