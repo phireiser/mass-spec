@@ -27,7 +27,9 @@ This work investigates the integration of auxiliary intermediate fragments gener
 These graph-based intermediate representations provide an explicit fragmentation layer between molecules and spectra, making the prediction process more interpretable than purely black-box approaches.
 
 The proposed framework systematically incorporates graph-based fragmentation intermediates into structure $\leftrightarrow$ spectrum translation models.
-By combining molecular representations, spectral information, and fragment-level graph structures, the work aims to improve both interpretability and predictive performance in machine learning-based mass spectrometry modeling.
+By combining molecular representations, spectral information, and fragment-level graph structures, it establishes a functional bidirectional pipeline that is interpretable by construction.
+In a proof-of-concept evaluation, a forward-model reranking stage substantially improves retrieval, whereas the fragment-aware components do not yet yield a measurable gain over ablated variants under the small-sample setting.
+The principal contribution is therefore the framework itself, together with a systematic analysis of its strengths, limitations, and failure modes, providing a concrete basis for future work on learned fragment generation.
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Abstract}
@@ -42,7 +44,9 @@ Diese Arbeit untersucht die Integration zusätzlicher Zwischenfragmente, die dur
 Diese graphbasierten Zwischenrepräsentationen bilden eine explizite Fragmentierungsschicht zwischen Molekülen und Spektren und machen den Vorhersageprozess dadurch besser interpretierbar als rein Black-Box-basierte Ansätze.
 
 Das vorgeschlagene Framework integriert graphbasierte Fragmentierungszwischenstufen systematisch in Modelle zur Struktur $\leftrightarrow$ Spektrum-Übersetzung.
-Durch die Kombination molekularer Repräsentationen, spektraler Information und fragmentbasierter Graphstrukturen zielt die Arbeit darauf ab, sowohl die Interpretierbarkeit als auch die Vorhersageleistung von Machine-Learning-basierten Modellen für die Massenspektrometrie zu verbessern.
+Durch die Kombination molekularer Repräsentationen, spektraler Information und fragmentbasierter Graphstrukturen entsteht eine funktionsfähige bidirektionale Pipeline, die durch ihre Konstruktion interpretierbar ist.
+In einer Machbarkeitsstudie (Proof of Concept) verbessert eine auf dem Vorwärtsmodell basierende Reranking-Stufe die Wiederauffindung (Retrieval) deutlich, während die fragmentbasierten Komponenten unter den gegebenen Kleinstichprobenbedingungen noch keinen messbaren Vorteil gegenüber Ablationsvarianten erbringen.
+Der wesentliche Beitrag besteht daher im Framework selbst sowie in einer systematischen Analyse seiner Stärken, Grenzen und Fehlermodi, die eine konkrete Grundlage für zukünftige Arbeiten zur gelernten Fragmenterzeugung bildet.
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Zusammenfassung}
