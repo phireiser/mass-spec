@@ -46,6 +46,23 @@ sbatch run/hpc/ml_train.sh
 bash generated_fwd_dg.sh
 ```
 
+## Experiment Tracking (Weights & Biases)
+
+Optional. Training/optimization auto-log to W&B when an API key is present:
+
+```bash
+echo 'export WANDB_API_KEY=<your-key>' > .secrets/wandb.env   # gitignored
+```
+
+Runs log online when the node has internet, else fall back to offline under
+`outputs/wandb/`. Flush any offline runs from a shell with internet:
+
+```bash
+bash run/ci_cd/sync_wand.sh
+```
+
+Set `USE_WANDB=0` to disable. Requires `wandb` in the image (rebuild after pulling).
+
 ## Directory Structure
 
 ```

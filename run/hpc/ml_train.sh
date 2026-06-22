@@ -21,6 +21,10 @@ source "$REPO_ROOT/src/paths.env"
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"
 EPOCHS_BWD="${EPOCHS_BWD:-10000}"
 
+# Optional Weights & Biases tracking (online-first, offline fallback).
+WANDB_GROUP_PREFIX="train"
+source "$REPO_ROOT/run/hpc/wandb_setup.sh"
+
 mkdir -p "$REPO_ROOT/$LOGS_DIR_REL/train"
 mkdir -p "$REPO_ROOT/$CHECKPOINT_DIR_REL"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
@@ -44,11 +48,13 @@ apptainer exec --nv \
     --env CUDA_VISIBLE_DEVICES=0 \
     --env EPOCHS_FWD="$EPOCHS_FWD" \
     --env EPOCHS_BWD="$EPOCHS_BWD" \
+    "${WANDB_ENV[@]}" \
     "$SIF" \
     python "$C_SRC/machine_learning/main.py" \
       --epochs_fwd "$EPOCHS_FWD" \
       --epochs_bwd "$EPOCHS_BWD" \
-      --output_dir "$C_OUTPUTS/checkpoints"
+      --output_dir "$C_OUTPUTS/checkpoints" \
+      "${WANDB_ARGS[@]}"
 
 echo "======================================================================"
 echo "Training complete!"

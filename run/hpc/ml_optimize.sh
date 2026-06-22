@@ -21,6 +21,11 @@ source "$REPO_ROOT/src/paths.env"
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"
 EPOCHS_BWD="${EPOCHS_BWD:-10000}"
 
+# Optional Weights & Biases tracking: each Optuna trial becomes its own run
+# (online-first, offline fallback), grouped together so the sweep is browsable.
+WANDB_GROUP_PREFIX="optuna"
+source "$REPO_ROOT/run/hpc/wandb_setup.sh"
+
 mkdir -p "$REPO_ROOT/$BEST_PARAMS_DIR_REL"
 mkdir -p "$REPO_ROOT/$LOGS_DIR_REL/optim"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
@@ -42,12 +47,14 @@ apptainer exec --nv \
     --env CUDA_VISIBLE_DEVICES=0 \
     --env EPOCHS_FWD="$EPOCHS_FWD" \
     --env EPOCHS_BWD="$EPOCHS_BWD" \
+    "${WANDB_ENV[@]}" \
     "$SIF" \
     python "$C_SRC/machine_learning/optimization/hyperparameter_optimization.py" \
       --epochs_fwd "$EPOCHS_FWD" \
       --epochs_bwd "$EPOCHS_BWD" \
       --train_script "$C_SRC/machine_learning/main.py" \
-      --output_dir "$C_OUTPUTS/best_params"
+      --output_dir "$C_OUTPUTS/best_params" \
+      "${WANDB_ARGS[@]}"
 
 echo "Bayesian optimization complete!"
 echo "Results saved to: best_hyperparams.json"
