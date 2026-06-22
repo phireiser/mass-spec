@@ -4,7 +4,47 @@
 
 %\section{MØD Rule Sets and Strategy Definitions}
 
-%\section{Hyperparameter Tables and Configurations}
+\section{Hyperparameter Tables and Configurations}
+
+\Cref{tab:training-hyperparams} lists the hyperparameters used to train the bidirectional model of \Cref{sec:training-procedure}.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Training hyperparameters.}
+    \label{tab:training-hyperparams}
+    \begin{tabular}{lll}
+        \hline
+        Setting & Symbol & Value \\
+        \hline
+        \multicolumn{3}{l}{\emph{Optimisation}} \\
+        Optimiser                         & ---                              & Adam (one instance per phase) \\
+        Learning rate                     & $\eta$                           & $2\times10^{-4}$ \\
+        Weight decay                      & ---                              & $1\times10^{-4}$ \\
+        Batch size                        & $N$                              & $128$ \\
+        Epochs (Phase~A $+$ Phase~B)      & ---                              & $1000 + 1000$ \\
+        LR schedule / warmup / grad.\ clip & ---                             & none \\
+        Checkpoint selection              & ---                              & final epoch \\
+        \hline
+        \multicolumn{3}{l}{\emph{Architecture}} \\
+        Shared latent dimension           & $d$                              & $128$ \\
+        Graph-embedding dimension         & $d_h$                            & $64$ \\
+        GCN layers                        & ---                              & $2$ ($3\!\to\!64\!\to\!128$) \\
+        Spectral MLP width                & ---                              & $512$ \\
+        Dropout                           & ---                              & $0.1$ \\
+        Normalisation                     & ---                              & LayerNorm \\
+        \hline
+        \multicolumn{3}{l}{\emph{Spectrum binning}} \\
+        $m/z$ range                       & $[mz_{\min}, mz_{\max})$         & $[1, 1000)$ \\
+        Bin width                         & $w_{\mathrm{bin}}$               & $1.0$\,Da \\
+        Number of bins                    & $B$                              & $999$ \\
+        \hline
+        \multicolumn{3}{l}{\emph{Loss}} \\
+        Cosine--Wasserstein weight        & $\lambda$                        & $0.5$ (with $\alpha_{\cos}=1$) \\
+        Contrastive temperature           & $\tau$                           & $0.07$ \\
+        \hline
+    \end{tabular}
+\end{table}
 
 \section{Github Repository}
 The code for this thesis is available at

@@ -40,12 +40,13 @@ Subsequently, this information is utilised to validate predicted fragment assign
     \centering
     \input{fig-tikz/dataGenOverview.tikz.tex}
     \caption[Schematic of the bidirectional fragmentation workflow]{
-        Schematic overview of the bidirectional fragmentation workflow. 
-        Starting from a sample molecule, fragmentation rules are applied to generate a fragmentation tree 
-        that represents possible fragment formation pathways (left). 
-        The resulting fragments are then used as inputs for the inverse direction, 
-        where candidate molecules are reconstructed by combining fragments according to inverse rules (right). 
-        This links forward molecular fragmentation with inverse molecular assembly in a single interpretable framework.
+        Schematic overview of the synthetic data-generation workflow.
+        Starting from a sample molecule, fragmentation rules are applied to generate a fragmentation tree
+        that represents possible fragment formation pathways (left).
+        The resulting fragments can also be recombined according to inverse rules to enumerate
+        candidate molecules consistent with a given fragment set (right).
+        Both directions are produced by the same rule-based graph-transformation pipeline,
+        yielding the molecule--fragment data used to train the model.
     }
     \label{fig:data-gen-overview}
 \end{figure}
@@ -165,6 +166,7 @@ The presence of any heteroatom---such as the nitrogen marked on the right of \Cr
 \end{figure}
 
 \subsection{Data Splits}
+\label{sec:data-splits}
 
 The dataset was partitioned in two stages into training, validation, and test subsets.
 In the first stage, the full set of molecule--spectrum pairs was divided into
@@ -185,9 +187,10 @@ and intermediate performance monitoring.
 In this way, the validation set supports iterative model development,
 while the test set remains an unbiased reference for the final assessment.
 
-All splits are generated with a fixed random seed (\texttt{random\_state=42}) to ensure reproducibility.
-At the same time, the implementation uses \texttt{shuffle=False}, so the split is deterministic and
-preserves the original order of the dataset rather than randomly permuting the samples beforehand.
+The splits are made with \texttt{shuffle=False}, so the data are partitioned in their original order
+rather than being randomly permuted beforehand.
+The split is therefore deterministic and reproducible by construction; no random permutation is involved,
+and the \texttt{random\_state} setting has no effect in this configuration.
 
 An additional technical constraint concerns the fragment representation.
 The fragment vocabulary is constructed only from the training set
@@ -233,7 +236,7 @@ Instead, it is represented as an explicit graph object derived from the M\O D fr
 PyTorch Geometric (PyG) \cite{Fey2025} is a library that extends PyTorch to enable efficient processing of graph-structured data.
 It provides specialized data structures and operations optimized for graph neural networks (GNNs).
 
-For molecular graph encoding, each molecular state is converted by \texttt{GraphFeaturizerMOD} into a PyG \texttt{Data} object.
+For molecular graph encoding, each molecular state is converted into a PyG graph object.
 Atoms are represented as nodes and bonds as edges, allowing GNN architectures to learn from both node features (atomic properties) and edge features (bond information).
 
 Node features are deliberately minimal and chemistry-focused.
@@ -249,7 +252,7 @@ x_i = [\texttt{atom\_id},\; \texttt{charge},\; \texttt{radical}].
 \]
 
 Edge features encode bond type as one scalar value, with single, double, triple, and aromatic bonds mapped to $1.0, \, 2.0, \, 3.0, \, \text{and} \, 1.5$, respectively.
-Connectivity is stored in \texttt{edge\_index} using the Coordinate (COO) format, a sparse matrix representation where edges are specified as pairs of row and column indices, enabling efficient storage and computation for graphs with varying density.
+Connectivity is stored in sparse Coordinate (COO) format, where edges are specified as pairs of row and column indices, enabling efficient storage and computation for graphs with varying density.
 
 Before featurization, preprocessing attempts to detect term-graph inputs and converts them into standard graph form where needed.
 The objective of the normalization step is to ensure the encoder receives a consistently formatted molecular graph representation.
@@ -268,30 +271,26 @@ The flexibility of PyG's API allows seamless integration with standard PyTorch c
 
 \subsection{Two-Level Molecular Latent Representation}
 
-After graph featurization, each molecular \texttt{Data} object is passed to a learned graph encoder.
-In \texttt{DGHypergraphFeaturizer}, this is implemented in \texttt{\_encode\_graphs}, where batches of molecular graphs are processed by \texttt{self.graph\_encoder}.
-The output is a dense latent vector of dimension \texttt{dim\_h} per molecular graph.
-These embeddings are stored as \texttt{mol\_rep}.
+After graph featurization, each molecular graph is passed to a learned graph encoder, which compresses it into a dense state embedding $\mathbf{h}_{s_i} \in \mathbb{R}^{d_h}$, one vector per molecular state.
 
 The central architectural distinction is that molecules are not treated as isolated instances.
-Each molecular state corresponds to a vertex in a derivation graph (\texttt{mod.DG}), and this derivation graph is transformed into a hypergraph representation.
-The method \texttt{\_collect\_graphs} iterates over derivation-graph vertices, extracts the corresponding molecular graph, and maps each graph to a contiguous vertex index.
-Each state graph is encoded, producing one latent embedding per derivation-graph vertex.
-Consequently, node features in the final hypergraph are not raw atom features, but learned embeddings of complete molecular states.
+Each molecular state corresponds to a vertex in the \emph{derivation graph}, the functional object that records fragment genealogy.
+For computation, the derivation graph is realised as a hypergraph data structure, in which a single hyperedge can connect all fragment vertices produced by one transformation step.
+Throughout this work, \enquote{derivation graph} refers to this functional object, whereas \enquote{hypergraph} denotes only its concrete data-structure encoding.
+Encoding each state graph in turn yields one embedding $\mathbf{h}_{s_i}$ per vertex, so that the node features of the derivation graph are not raw atom features but learned embeddings of complete molecular states.
 
 This yields two explicit representational levels:
 \begin{enumerate}
     \item Lower level: each molecule is a molecular graph (atoms and bonds).
-    \item Higher level: each molecular state becomes a node in a derivation hypergraph.
+    \item Higher level: each molecular state becomes a vertex in the derivation graph.
 \end{enumerate}
 
-Technically, molecule encoding proceeds in three steps:
+Molecule encoding therefore proceeds in three steps:
 chemistry-aware graph featurization,
-then graph-to-vector compression into a dense latent embedding,
-and finally use of this embedding as the node feature in the derivation hypergraph.
+graph-to-vector compression into a dense state embedding $\mathbf{h}_{s_i}$,
+and finally use of this embedding as the vertex feature in the derivation graph.
 
-In the final \texttt{HyperGraphData} object generated from the derivation graph, \texttt{x} stores molecular embeddings (\texttt{mol\_rep}), \texttt{edge\_index} stores incidence pairs $(\texttt{vertex\_id},\texttt{hyperedge\_id})$, and \texttt{edge\_attr} stores learned rule embeddings associated with hyperedges.
-Thus, \texttt{x} can be interpreted as per-vertex graph embeddings, \texttt{edge\_attr} as per-hyperedge rule embeddings, and \texttt{edge\_index} as the vertex-hyperedge incidence structure.
+In the resulting derivation-graph data structure, each vertex carries its state embedding $\mathbf{h}_{s_i}$ as node feature, the incidence structure records which vertices participate in each hyperedge, and every hyperedge is annotated with a learned embedding of the transformation rule (or rule set) that produced the corresponding derivation step (\Cref{sec:rule-representation}).
 
 \begin{figure}[H]
     \centering
@@ -299,24 +298,21 @@ Thus, \texttt{x} can be interpreted as per-vertex graph embeddings, \texttt{edge
         \input{fig-tikz/mol_latent.tex}
     }
     \caption[Two-Level Molecular Latent Representation]{
-        In the first stage, each molecular state is represented as an atom-bond graph and encoded by a learned graph encoder into a dense molecular embedding $z_{s_i} \in \mathbb{R}^{d_h}$. 
-        In the second stage, these molecular embeddings are integrated into the derivation graph as vertex features. 
-        Thus, vertices correspond to molecular states with node features $x=\texttt{mol\_rep}$, while hyperedges and incidence relations encode the higher-level fragmentation structure through \texttt{edge\_index}.        
+        In the first stage, each molecular state  is represented as an atom-bond graph and encoded by a learned graph encoder into a dense state embedding.
+        In the second stage, these state embeddings are integrated into the derivation graph as vertex features.
+        Thus, vertices correspond to molecular states (whose node feature is the state embedding), while hyperedges and incidence relations encode the higher-level fragmentation structure.
     }
     \label{fig:two_level_molecular_latent_representation}
 \end{figure}
 
 \subsection{Rule Representation and Hyperedge Annotation}
+\label{sec:rule-representation}
 
-Rule processing is implemented separately from molecule processing.
-Rules are featurized by \texttt{RuleFeaturizerMOD}, but unlike molecular states, a rule is not expanded into a chemically rich multi-node graph.
-Instead, each rule is represented compactly as a one-node \texttt{Data} object, whose single node feature is the indexed rule ID.
+Rule processing is handled separately from molecule processing.
+Unlike a molecular state, a rule is not expanded into a chemically rich multi-node graph; instead, each rule is represented compactly as a single-node graph whose only feature is its indexed rule identifier.
 
-Within \texttt{DGHypergraphFeaturizer}, rule handling is split into three stages.
-Rules are first collected in \texttt{\_prepare\_rules}.
-They are then encoded in \texttt{\_encode\_rules}.
-Finally, they are aggregated in \texttt{\_pool\_rules}.
-If multiple rules are associated with one hyperedge, their embeddings are mean-pooled into one hyperedge-level vector.
+Rule handling then proceeds in three stages---collection, encoding, and aggregation.
+If several rules are associated with one hyperedge, their embeddings are mean-pooled into a single hyperedge-level vector.
 As a result, each hyperedge is annotated with a learned representation of the transformation rule (or rule set) that produced that derivation step.
 
 \subsection{Spectral Vector and Embedding Representation}
@@ -327,15 +323,18 @@ This tuple-based encoding preserves peak information while producing a dense, di
 These vectors are embedded into a spectral latent space, which is trained to be compatible with the structure-derived latent representation.
 A shared latent view integrates fragmentation topology, molecular-state embeddings, and observed spectral evidence in downstream learning tasks.
 
-The conversion of a peak list into a latent embedding $z_s$ proceeds in three steps (\Cref{alg:spectrum-to-latent}). First, the variable-length tuple list is \emph{binned} into a fixed-length vector by discretizing the $m/z$ axis into $B$ equal bins and accumulating peak intensities per bin, yielding an input whose dimension is independent of the number of peaks. Second, an elementwise square root \emph{compresses} the wide intensity range, and $L_2$ normalization removes overall-scale differences so that the encoder responds to the relative-intensity pattern rather than absolute magnitude. Third, the trained encoder \texttt{EncSpec} maps this vector to $z_s \in \mathbb{R}^{d_{\text{latent}}}$, the spectral embedding that the contrastive objective (\Cref{eq:infonce}) aligns with the structure-derived representation.
+The conversion of a peak list into a latent embedding $z_{\mathrm{spec}}$ proceeds in three steps (\Cref{alg:spectrum-to-latent}). 
+First, the variable-length tuple list is \emph{binned} into a fixed-length vector by discretizing the $m/z$ axis into $B$ equal bins and accumulating peak intensities per bin, yielding an input whose dimension is independent of the number of peaks. 
+Second, an elementwise square root \emph{compresses} the wide intensity range, and $L_2$ normalization removes overall-scale differences so that the encoder responds to the relative-intensity pattern rather than absolute magnitude. 
+Third, the trained encoder $\mathrm{Enc}_{\mathrm{spec}}$ maps this vector to $z_{\mathrm{spec}} \in \mathbb{R}^{d}$, the spectral embedding that the contrastive objective (\Cref{eq:infonce}) aligns with the structure-derived representation.
 
 
 \begin{algorithm}
-    \caption{Spectrum to latent embedding: from (m/z, intensity) tuples to $z_s$}
+    \caption{Spectrum to latent embedding: from (m/z, intensity) tuples to $z_{\mathrm{spec}}$}
     \label{alg:spectrum-to-latent}
     \begin{algorithmic}[1]
-        \Require peaks: list of $(mz, I)$ tuples; mz\_min, mz\_max, bin\_width; trained \texttt{EncSpec}
-        \Ensure latent embedding $z_s \in \mathbb{R}^{d_{\text{latent}}}$
+        \Require peaks: list of $(mz, I)$ tuples; mz\_min, mz\_max, bin\_width; trained $\mathrm{Enc}_{\mathrm{spec}}$
+        \Ensure latent embedding $z_{\mathrm{spec}} \in \mathbb{R}^{d}$
         \Statex
         \State \textbf{// Step 1: bin the sparse peak list into a dense vector}
         \State $B \gets \lfloor (\text{mz\_max} - \text{mz\_min}) / \text{bin\_width} \rfloor$ \Comment{number of bins}
@@ -355,8 +354,8 @@ The conversion of a peak list into a latent embedding $z_s$ proceeds in three st
         \Statex
         \State \textbf{// Step 3: encode into latent space; equivalent to \texttt{nn.Sequential}}
         \State $h \gets \text{MLP}_1(\text{vec})$ \Comment{"hidden" representation}
-        \State $z_s \gets \text{MLP}_2(h)$
-        \State \Return $z_s$
+        \State $z_{\mathrm{spec}} \gets \text{MLP}_2(h)$
+        \State \Return $z_{\mathrm{spec}}$
     \end{algorithmic}
 \end{algorithm}
 
@@ -376,7 +375,59 @@ Despite these representational advantages, the proposed encoding pipeline also i
 
 \section{Model Architecture}
 
-This section first lays out the shared three-modality architecture, then walks through the forward, structure-to-spectrum branch and the backward, spectrum-to-structure branch in turn, before explaining how the two directions are coupled into a single bidirectional system.
+This section first states the learning problem in compact form, then lays out the shared three-modality architecture, and finally walks through the forward (structure-to-spectrum) and backward (spectrum-to-structure) branches in turn, before explaining how the two directions are coupled into a single bidirectional system.
+
+\subsection{Problem Formulation}
+\label{sec:problem-formulation}
+
+Before the individual components are described, the learning problem is stated in compact form.
+Each training example couples three views of the same molecule:
+\begin{itemize}
+    \item a \emph{molecular graph} $G$ representing the precursor structure, with atoms as nodes and bonds as edges;
+    \item a \emph{derivation graph} $D(G)$ whose vertices are fragment states and whose edges encode the fragmentation steps that connect them;
+    \item a measured \emph{mass spectrum}, binned into a fixed-length intensity vector $s \in \mathbb{R}^{B}$ over $B$ equal $m/z$ bins (\Cref{sec:spectrumEnc}).
+\end{itemize}
+
+Three encoders map these views into latent vectors,
+\begin{equation}
+    \label{eq:encoders}
+    z_{\mathrm{mol}} = \mathrm{Enc}_{\mathrm{mol}}(G), \qquad
+    z_{\mathrm{frag}} = \mathrm{Enc}_{\mathrm{frag}}\!\bigl(D(G)\bigr), \qquad
+    z_{\mathrm{spec}} = \mathrm{Enc}_{\mathrm{spec}}(s),
+\end{equation}
+where the structural encoders produce graph embeddings of dimension $d_h$, and a set of task heads projects all three views into a shared latent space $\mathbb{R}^{d}$ in which structural and spectral embeddings can be compared directly.
+
+The model is then trained in two coupled directions:
+\begin{description}
+    \item[Forward (structure $\rightarrow$ spectrum):] the molecular and fragment embeddings are fused into a combined latent $z_{\mathrm{combined}}$ and decoded into a predicted spectrum $\hat{s} = \mathrm{Dec}_{\mathrm{spec}}(z_{\mathrm{combined}})$.
+    \item[Backward (spectrum $\rightarrow$ structure):] the spectral embedding $z_{\mathrm{spec}}$ is aligned with the molecular embedding $z_{\mathrm{mol}}$, so that at test time the molecules whose embeddings lie closest to a query spectrum can be retrieved.
+\end{description}
+
+Both directions are optimised jointly under a single composite objective $\mathcal{L}_{\mathrm{total}}$ (\Cref{sec:loss-function}); structure-to-spectrum prediction and spectrum-to-structure retrieval therefore share---and mutually constrain---the same latent space.
+\Cref{tab:notation} collects the symbols used throughout this section, and the remainder expands each encoder, the fusion and decoding steps, and the loss terms in turn.
+
+\begin{table}[H]
+    \centering
+    \caption{Notation used in the model description.}
+    \label{tab:notation}
+    \begin{tabular}{ll}
+        \hline
+        Symbol & Meaning \\
+        \hline
+        $G$ & molecular graph (atoms as nodes, bonds as edges) \\
+        $D(G)$ & derivation graph of fragment states for molecule $G$ \\
+        $s \in \mathbb{R}^{B}$ & binned mass spectrum over $B$ $m/z$ bins \\
+        $\mathbf{h}_{s_i} \in \mathbb{R}^{d_h}$ & embedding of an individual molecular state $s_i$ \\
+        $z_{\mathrm{mol}}$ & molecular (precursor) latent \\
+        $z_{\mathrm{frag}}$ & fragment / derivation-graph latent \\
+        $z_{\mathrm{combined}}$ & fused forward latent, $\tfrac{1}{2}\,(z_{\mathrm{mol}}+z_{\mathrm{frag}})$ \\
+        $z_{\mathrm{spec}}$ & spectral latent \\
+        $\hat{s}$ & predicted spectrum \\
+        $d_h$ & graph-embedding dimension \\
+        $d$ & shared latent (alignment / retrieval) dimension \\
+        \hline
+    \end{tabular}
+\end{table}
 
 \subsection{Overview of the Learning Framework}
 
@@ -408,12 +459,11 @@ the right-hand side of the figure should not be read as a decoder that explicitl
 
 The forward branch corresponds to the left-to-right pathway in \Cref{fig:ml-architecture-diagram}. 
 Its purpose is to predict a mass spectrum from a molecular structure together with fragment-level information derived from precomputed derivation graphs. 
-The molecular encoder, \texttt{EncMol}, is implemented as a two-layer graph convolutional network. 
+The molecular encoder $\mathrm{Enc}_{\mathrm{mol}}$ is implemented as a two-layer graph convolutional network.
 It applies graph convolutions followed by global mean pooling, thereby mapping the input molecular graph to a latent vector $z_{\mathrm{mol}}$. 
 This matches the molecular branch depicted in the figure.
 
-The fragment branch is conceptually represented by the \emph{Derivation Graph} and \emph{FragTreeEnc} boxes in \Cref{fig:ml-architecture-diagram}. 
-In the implementation, this branch is realized by the wrapper module \texttt{FragSetEncoderWrapper}, which encodes derivation-graph structure explicitly. 
+The fragment encoder $\mathrm{Enc}_{\mathrm{frag}}$ is the fragment branch in \Cref{fig:ml-architecture-diagram} (the \emph{Derivation Tree} input and its encoder) and encodes derivation-graph structure explicitly.
 For each molecule, the dataset constructs fragment graphs and an explicit derivation graph whose nodes correspond to fragments and whose directed edges encode fragmentation relations. 
 The fragment encoder first embeds the individual fragment graphs using the molecular graph encoder as a backbone. 
 Fragment masses are appended as additional node features, and a second graph neural network is then applied over the derivation graph itself. 
@@ -428,21 +478,20 @@ The latent fusion step shown in \Cref{fig:ml-architecture-diagram} as $z_{\mathr
 
 This fused representation is then passed through the forward task head, \texttt{$\text{Head}_{\mathrm{FWD}}$}, which projects the latent vector into a task-specific subspace. 
 
-In latent fusion, the molecular and fragment branches are designed to produce vectors of the same dimensionality, either by sharing the final latent dimension $d_L$ or by applying linear projection layers in their respective task heads.
+In latent fusion, the molecular and fragment branches are designed to produce vectors of the same dimensionality, either by sharing the final latent dimension $d$ or by applying linear projection layers in their respective task heads.
 This ensures $z_{\mathrm{mol}}$ and $z_{\mathrm{frag}}$ lie in the same vector space and can be combined element-wise. 
 The simple arithmetic average used here \Cref{eq:arithmetic_fusion} is a lightweight fusion strategy that treats both modalities equally; more complex fusion (concatenation followed by a projection, attention-based fusion, etc.) could be used but was not required for the presented experiments.
 
-Finally, the shared decoder \texttt{DecSpecLatent} maps this representation to a predicted spectrum $\hat{s}_{\mathrm{pred}}$. 
-The forward branch is trained with the spectrum decoder as its decoder.
+Finally, the shared spectrum decoder $\mathrm{Dec}_{\mathrm{spec}}$ maps this representation to a predicted spectrum $\hat{s}$.
 
 \subsection{Backward Model: Spectrum-to-Structure Reconstruction}
 
 The backward branch corresponds to the spectrum-side pathway in \Cref{fig:ml-architecture-diagram}. 
-Its function is to encode spectra into a latent representation that can be aligned with molecular embeddings and used for later retrieval. The spectrum encoder, \texttt{EncSpec}, receives a fixed-length vector of binned intensities. 
+Its function is to encode spectra into a latent representation that can be aligned with molecular embeddings and used for later retrieval. The spectrum encoder $\mathrm{Enc}_{\mathrm{spec}}$ receives a fixed-length vector of binned intensities.
 This encoder is implemented as a regularized stack of residual MLP blocks with normalization and dropout. 
 This makes the spectral branch deeper and more expressive than the simplified notation in the figure might suggest.
 
-Given an input spectrum, \texttt{EncSpec} produces a latent vector $z_{\mathrm{spec}}$, which is then passed through the backward task head, \texttt{$\text{Head}_{\mathrm{BWD}}$}.
+Given an input spectrum, $\mathrm{Enc}_{\mathrm{spec}}$ produces a latent vector $z_{\mathrm{spec}}$, which is then passed through the backward task head, \texttt{$\text{Head}_{\mathrm{BWD}}$}.
 This head serves two purposes. First, it provides a task-specific projection for latent alignment with molecular embeddings during training. 
 Second, it defines the representation that is used at test time for inverse retrieval. 
 The projected spectrum embedding is compared to a latent index of molecular embeddings, thus enabling the model to retrieve the most similar candidate structures in embedding space.
@@ -465,6 +514,7 @@ In addition, the inverse direction can benefit from the forward model through re
 In this sense, the model closes the loop between both directions even though it does not implement a fully generative cycle from spectrum directly back to a reconstructed molecular graph.
 
 \subsection{Loss Function}
+\label{sec:loss-function}
 
 \subsubsection{Metrics}
 
@@ -604,37 +654,97 @@ The Wasserstein distance, by contrast, charges for the displacement itself, so a
 \end{figure}
 
 The behaviour summarised in \cref{fig:cosine-versus-wasserstein} motivates combining the two measures rather than choosing between them: a loss built on cosine alone provides a near-zero gradient once peaks cease to overlap, while the Wasserstein term supplies a gradient that varies smoothly with displacement.
-Wasserstein anchors peaks to the right place along the $m/z$ axis; cosine shapes their relative heights once placed (\cref{fig:cosine-wasserstein-d}). We combine them into a single objective,
+Wasserstein anchors peaks to the right place along the $m/z$ axis; cosine shapes their relative heights once placed (\cref{fig:cosine-wasserstein-d}). We combine them into a single reconstruction objective,
 \begin{equation}
     \label{eq:combined-loss}
-    \mathcal{L} = \lambda\,\mathrm{WD}(P,Q) + (1-\lambda)\,\bigl(1 - \cos(P,Q)\bigr),
+    \mathcal{L}_{\mathrm{spec}} = \alpha_{\cos}\,\bigl(1 - \cos(P,Q)\bigr) + \lambda\,\mathrm{WD}(P,Q),
 \end{equation}
-where the cosine similarity is expressed as a dissimilarity $1 - \cos(P,Q)$ so that both terms are minimised at perfect agreement, and $\lambda \in [0,1]$ balances positional accuracy against intensity-pattern fidelity.
+where the cosine similarity is expressed as a dissimilarity $1 - \cos(P,Q)$ so that both terms are minimised at perfect agreement, and the weights $\alpha_{\cos}$ and $\lambda$ balance intensity-pattern fidelity against positional accuracy. In our configuration $\alpha_{\cos}=1$ and $\lambda=0.5$, and during training the cosine term is evaluated on the precursor-mass--masked prediction.
 
 \subsubsection{Loss shaping}
 
-The training objective is deliberately multi-component in nature and can be most effectively understood as a form of loss shaping that stabilises learning and introduces chemically meaningful constraints. 
-In the forward branch, the reconstruction objective is the combined cosine--Wasserstein loss of \cref{eq:combined-loss}, applied between the predicted and true spectra; \cref{fig:ml-architecture-diagram} situates it within the loss panel of the architecture.
+The training objective is multi-component: a spectral reconstruction term is combined with chemically motivated constraints and a contrastive alignment term. This \emph{loss shaping} stabilises training and ties the shared latent space to chemical structure. \Cref{tab:loss-terms} lists every term with the branch in which it is applied and its weight; the two building blocks the table reuses---the InfoNCE alignment objective and the uncertainty weighting---are defined next, and \cref{eq:total-loss} assembles the full objective.
 
-A second important component is the precursor-mass constraint. 
-This forbidden-region penalty acts as a chemically motivated regularizer that penalizes predicted intensity above the precursor mass and suppresses implausible peaks. 
-The forward phase incorporates a cycle-style consistency term. 
-This involves the re-encoding of a predicted spectrum by the spectrum encoder, with the objective of aligning it closely with the molecular latent representation. 
-In addition, a diversity loss discourages collapse toward overly similar spectral predictions within a batch.
+The forward branch is anchored by the reconstruction loss $\mathcal{L}_{\mathrm{spec}}$ (\cref{eq:combined-loss}) between predicted and true spectra, regularised by a forbidden-region penalty that suppresses intensity beyond the precursor mass, a cycle term that re-encodes the predicted spectrum toward the molecular latent, and a diversity term that discourages collapse to similar predictions within a batch. The backward branch reuses the reconstruction and forbidden-region terms and adds contrastive alignment between spectral and molecular embeddings together with an explicit retrieval-ranking term.
 
-For the backward branch, latent alignment is driven by an InfoNCE contrastive objective between spectrum and molecule embeddings, the mechanism that operationalises the retrieval-oriented alignment introduced in \Cref{fig:ml-architecture-diagram}.
-InfoNCE is a contrastive loss function that encourages the model to bring matching pairs closer together in the latent space while pushing non-matching pairs apart. For a batch of $N$ matched pairs $(z_{s_i}, z_{m_i})_{i=1}^{N}$, the spectrum-to-molecule term is
+Latent alignment uses the InfoNCE objective, a contrastive loss that encourages the model to bring matching pairs closer together in the latent space while pushing non-matching pairs apart. For a batch of $N$ matched pairs $(z_{\mathrm{spec},i}, z_{\mathrm{mol},i})_{i=1}^{N}$,
 \begin{equation}
     \label{eq:infonce}
-    \mathcal{L}_{\mathrm{InfoNCE}} = -\frac{1}{N}\sum_{i=1}^{N} \log \frac{e^{\frac{\mathrm{sim}(z_{s_i}, z_{m_i})}{\tau}}}{\sum_{j=1}^{N} e^{\frac{\mathrm{sim}(z_{s_i}, z_{m_j})}{\tau}}},
+    \mathcal{L}_{\mathrm{InfoNCE}} = -\frac{1}{N}\sum_{i=1}^{N} \log \frac{e^{\frac{\mathrm{sim}(z_{\mathrm{spec},i}, z_{\mathrm{mol},i})}{\tau}}}{\sum_{j=1}^{N} e^{\frac{\mathrm{sim}(z_{\mathrm{spec},i}, z_{\mathrm{mol},j})}{\tau}}},
 \end{equation}
-where $\mathrm{sim}(\cdot,\cdot)$ is cosine similarity and $\tau$ is a parameter, commonly called the temperature, that scales the cosine similarity scores before applying the softmax function.
+where $\mathrm{sim}(\cdot,\cdot)$ is cosine similarity and $\tau$ the temperature. 
+The denominator turns alignment into an $N$-way classification in which the correct molecule $z_{\mathrm{mol},i}$ must be ranked above the other in-batch embeddings, which serve as negatives without separate mining. 
+The three contrastive terms in \Cref{tab:loss-terms} instantiate this form with different embedding pairs.
 
-The denominator turns alignment into an $N$-way classification over the batch: the single correct molecule embedding $z_{m_i}$ must be ranked above every other in-batch embedding $z_{m_j}$, $j\neq i$, which serve as negatives without separate mining.
-This enforces that matching molecule--spectrum pairs are close in latent space while non-matching pairs are separated, and the objective is applied symmetrically so that retrieval is well-defined in both directions.
-The backward phase further includes spectrum reconstruction from the spectral latent, the same precursor-mass penalty, additional cycle-consistency terms, and an explicit retrieval-ranking loss that rewards within-batch discrimination of the correct molecular candidate. 
-Finally, selected losses are uncertainty-weighted through learned log-variance parameters in the task-head module.
+Selected terms are wrapped in a homoscedastic task-uncertainty weighting,
+\begin{equation}
+    \label{eq:uncertainty-wrapper}
+    \mathcal{U}(\mathcal{L};\rho) = e^{-\rho}\,\mathcal{L} + \rho,
+\end{equation}
+where $\rho = \log\sigma^2$ is learned (initialised to $0$): $e^{-\rho}=1/\sigma^2$ down-weights a noisy term while the additive $\rho$ prevents the degenerate solution $\sigma\!\to\!\infty$.
 
-Taken together, these terms show that the architecture in \Cref{fig:ml-architecture-diagram} should not be interpreted as a simple encoder--decoder stack. 
-Rather, it is a coupled bidirectional system in which reconstruction, alignment, ranking, and chemical plausibility constraints are optimized simultaneously. 
-This loss shaping is essential for turning the shared latent space into a representation that is useful both for forward spectrum prediction and for backward structure retrieval.
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Loss terms with the branch in which each is applied and its weight. 
+    The reconstruction components $\mathcal{L}_{\cos}$ and $\mathcal{L}_{\mathrm{wass}}$ together form $\mathcal{L}_{\mathrm{spec}}$ (\cref{eq:combined-loss}), which is wrapped in the uncertainty term $\mathcal{U}(\cdot;\rho_{\mathrm{spec}})$.
+    Here $z_{\mathrm{bwd}}$ is the backward-head projection of $z_{\mathrm{spec}}$ and $m$ the hard precursor-mass mask.}
+    \label{tab:loss-terms}
+    \begin{tabular}{lllc}
+        \hline
+        Term & Compares & Branch & Weight \\
+        \hline
+        $\mathcal{L}_{\cos}$            & masked $\hat{s}\odot m$ vs.\ $s$ (cosine)                       & both     & $\alpha_{\cos}=1.0$ \\
+        $\mathcal{L}_{\mathrm{wass}}$   & $\hat{s}$ vs.\ $s$ (1-D EMD over bins)                          & both     & $\lambda=0.5$ \\
+        $\mathcal{L}_{\mathrm{forb}}$   & intensity beyond precursor mask                                 & both     & $\beta=0.1$ \\
+        $\mathcal{L}_{\mathrm{cyc}}$    & $\mathrm{Enc}_{\mathrm{spec}}(\hat{s})$ vs.\ $z_{\mathrm{mol}}$  & forward  & $\lambda_{\mathrm{cyc}}=0.1$ \\
+        $\mathcal{L}_{\mathrm{div}}$    & off-diagonal batch correlations                                 & forward  & $\alpha_{\mathrm{div}}=0.1$ \\
+        $\mathcal{L}_{\text{cyc-mol}}$  & $\mathrm{Enc}_{\mathrm{spec}}(\hat{s})$ vs.\ $z_{\mathrm{spec}}$ & backward & $\lambda_{\mathrm{cyc}}=0.1$ \\
+        $\mathcal{L}_{\mathrm{con}}$    & $z_{\mathrm{bwd}}$ vs.\ $z_{\mathrm{mol}}$ (InfoNCE)            & backward & $\lambda_{\mathrm{con}}=0.1$ \\
+        $\mathcal{L}_{\text{cyc-spec}}$ & $z_{\mathrm{spec}}$ vs.\ $z_{\mathrm{mol}}$ (InfoNCE)           & backward & $\lambda_{\text{cyc-spec}}=0.1$ \\
+        $\mathcal{L}_{\mathrm{retr}}$   & within-batch true-molecule ranking                              & backward & $\alpha_{\mathrm{retr}}=1.0$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The model is trained in two phases, each with its own optimiser step. The forward phase minimises
+\begin{equation}
+    \label{eq:loss-fwd}
+    \mathcal{L}_{\mathrm{fwd}} = \mathcal{U}(\mathcal{L}_{\mathrm{spec}};\rho_{\mathrm{spec}}) + \beta\,\mathcal{L}_{\mathrm{forb}} + \lambda_{\mathrm{cyc}}\,\mathcal{L}_{\mathrm{cyc}} + \alpha_{\mathrm{div}}\,\mathcal{L}_{\mathrm{div}},
+\end{equation}
+and the backward phase minimises
+\begin{equation}
+    \label{eq:loss-bwd}
+    \begin{aligned}
+        \mathcal{L}_{\mathrm{bwd}} = \;& \mathcal{U}(\mathcal{L}_{\mathrm{spec}};\rho_{\mathrm{spec}}) + \lambda_{\mathrm{con}}\,\mathcal{U}(\mathcal{L}_{\mathrm{con}};\rho_{\mathrm{con}}) + \beta\,\mathcal{L}_{\mathrm{forb}} \\
+        & + \lambda_{\mathrm{cyc}}\,\mathcal{L}_{\text{cyc-mol}} + \lambda_{\text{cyc-spec}}\,\mathcal{L}_{\text{cyc-spec}} + \alpha_{\mathrm{retr}}\,\mathcal{L}_{\mathrm{retr}}.
+    \end{aligned}
+\end{equation}
+
+Over a full epoch the model therefore optimises the union of these terms,
+\begin{equation}
+    \label{eq:total-loss}
+    \begin{aligned}
+        \mathcal{L}_{\mathrm{total}} = \;& \mathcal{U}(\mathcal{L}_{\mathrm{spec}};\rho_{\mathrm{spec}}) + \beta\,\mathcal{L}_{\mathrm{forb}} + \lambda_{\mathrm{cyc}}\bigl(\mathcal{L}_{\mathrm{cyc}} + \mathcal{L}_{\text{cyc-mol}}\bigr) + \lambda_{\text{cyc-spec}}\,\mathcal{L}_{\text{cyc-spec}} \\
+        & + \lambda_{\mathrm{con}}\,\mathcal{U}(\mathcal{L}_{\mathrm{con}};\rho_{\mathrm{con}}) + \alpha_{\mathrm{retr}}\,\mathcal{L}_{\mathrm{retr}} + \alpha_{\mathrm{div}}\,\mathcal{L}_{\mathrm{div}},
+    \end{aligned}
+\end{equation}
+with $\alpha_{\cos}=1.0$, $\lambda=0.5$, $\beta=0.1$, $\lambda_{\mathrm{cyc}}=\lambda_{\text{cyc-spec}}=\lambda_{\mathrm{con}}=0.1$, $\alpha_{\mathrm{div}}=0.1$, $\alpha_{\mathrm{retr}}=1.0$, and $\tau=0.07$; the log-variances $\rho_{\mathrm{spec}}$ and $\rho_{\mathrm{con}}$ are learned.
+
+Two caveats apply. 
+The reconstruction, forbidden-region, and cycle terms enter \emph{both} phases, so \cref{eq:total-loss} is the union of the two phase objectives rather than a single backward pass; and the weighting $\mathcal{U}$ adapts the balance between reconstruction and contrastive terms during training rather than fixing it by hand. 
+The objective is therefore not a simple encoder--decoder reconstruction but a coupled bidirectional system that jointly optimises reconstruction, alignment, ranking, and chemical-plausibility constraints over the shared latent space.
+
+\subsection{Training Procedure}
+\label{sec:training-procedure}
+
+The two branches are trained \emph{sequentially}, in two separate phases, rather than jointly or alternated per batch. Phase~A trains the forward branch (structure$\rightarrow$spectrum) to convergence, after which Phase~B trains the backward branch (spectrum$\rightarrow$structure alignment and spectrum reconstruction); each phase runs for a fixed epoch budget under its own Adam optimiser. 
+Within an epoch, the loss terms of the active branch are summed and back-propagated in a single optimiser step per batch. 
+The spectrum decoder and the task heads---including the learned log-variance weights $\rho$---are shared across both phases and are therefore updated by both optimisers. 
+The molecule encoder is held as a submodule of the fragment encoder, so it is updated in Phase~A as well, even though Phase~A's optimiser is nominally constructed over the fragment encoder, the spectrum decoder, and the task heads.
+
+Both phases use identical Adam settings, with no learning-rate schedule, warmup, or gradient clipping. 
+Each epoch draws its data through a curriculum loader: the fraction of presented molecules grows linearly from $0.3$ by $0.05$ per epoch, saturating at the full training set after roughly fourteen epochs. 
+Training is purely epoch-budgeted---there is no early stopping and no validation-based model selection---and the final-epoch weights are retained as the trained model. 
+Accordingly, the validation split is used only \emph{post hoc} for retrieval evaluation (\Cref{ch:4}), never for checkpoint selection. 
+Reproducibility rests on a single global seed for initialisation and a fixed split state (\Cref{sec:data-splits}). The full set of hyperparameters is collected in \Cref{tab:training-hyperparams}.

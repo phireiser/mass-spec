@@ -28,9 +28,9 @@
 \node[groupLabel] at (labelX |- MOL.north) {Input Data};
 
 % ================== ENCODER ROW ==================
-\node[encoderNode, below=of MOL]  (EncMol) {EncMol\\GCN $3 \rightarrow 64 \rightarrow d_L$\\Global Pool};
-\node[encoderNode, below=of FRAG] (FragSetEnc) {FragTreeEnc\\Fragment Graph +\\Tree GNN + Pool};
-\node[encoderNode, below=of SPEC] (EncSpec) {EncSpec \\$s_{bins} \rightarrow 512 \rightarrow d_L$};
+\node[encoderNode, below=of MOL]  (EncMol) {$\mathrm{Enc}_{\mathrm{mol}}$\\GCN $3 \rightarrow 64 \rightarrow d$\\Global Pool};
+\node[encoderNode, below=of FRAG] (FragSetEnc) {$\mathrm{Enc}_{\mathrm{frag}}$\\Fragment Graph +\\Tree GNN + Pool};
+\node[encoderNode, below=of SPEC] (EncSpec) {$\mathrm{Enc}_{\mathrm{spec}}$\\$s_{bins} \rightarrow 512 \rightarrow d$};
 \node[groupLabel] at (labelX |- EncMol.north) {Encoders};
 
 \draw[arrow] (MOL) -- (EncMol);
@@ -38,11 +38,11 @@
 \draw[arrow] (SPEC) -- (EncSpec);
 
 % ================== LATENT ROW ==================
-\node[latentNode, below=of EncMol]     (ZM) {$z_{mol}$};
-\node[latentNode, below=of FragSetEnc] (ZF) {$z_{frag}$};
-\node[latentNode, below=of EncSpec]    (ZS) {$z_{spec}$};
+\node[latentNode, below=of EncMol]     (ZM) {$z_{\mathrm{mol}}$};
+\node[latentNode, below=of FragSetEnc] (ZF) {$z_{\mathrm{frag}}$};
+\node[latentNode, below=of EncSpec]    (ZS) {$z_{\mathrm{spec}}$};
 
-\node[latentNode, minimum width=1.9cm, below=8mm of ZF] (ZFUSED) {$z_{combined}$};
+\node[latentNode, minimum width=1.9cm, below=8mm of ZF] (ZFUSED) {$z_{\mathrm{combined}}$};
 \node[groupLabel] at (labelX |- ZM.north) {Latent Space};
 
 \draw[arrow] (EncMol) -- (ZM);
@@ -63,8 +63,8 @@
 \draw[syncArrow] (HdFwd) -- (HdBwd) node[midway, above, font=\tiny, gray] {synced};
 
 % ================== DECODER ROW ==================
-\node[decoderNode, below=of HdFwd] (DecFrag) {DecFrag\\$d_L \to V_{frag}$};
-\node[decoderNode, below=of HdBwd] (DecSpec) {DecSpecLatent\\$d_L \to 512 \to s_{bins}$};
+\node[decoderNode, below=of HdFwd] (DecFrag) {$\mathrm{Dec}_{\mathrm{frag}}$\\$d \to V_{frag}$};
+\node[decoderNode, below=of HdBwd] (DecSpec) {$\mathrm{Dec}_{\mathrm{spec}}$\\$d \to 512 \to s_{bins}$};
 \node[groupLabel] at (labelX |- DecFrag.north) {Decoders};
 
 % connect to different anchors so arrows don't overlap
