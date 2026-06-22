@@ -82,17 +82,14 @@ def get_edge_between(
         u: mod.Graph.Vertex,
         v: mod.Graph.Vertex
         ) -> mod.Graph.Edge | None:
-    if ComparableVertex(v) == ComparableVertex(u):
+    cu, cv = ComparableVertex(u), ComparableVertex(v)
+    if cu == cv:
         return None
     for g in graphs:
         for e in g.edges:
-            if ComparableVertex(u) == ComparableVertex(e.source) and ComparableVertex(v) == ComparableVertex(e.target):
-                return e
-            if ComparableVertex(v) == ComparableVertex(e.source) and ComparableVertex(u) == ComparableVertex(e.target):
-                return e
-            if ComparableVertex(u) == ComparableVertex(e.target) and ComparableVertex(v) == ComparableVertex(e.source):
-                return e
-            if ComparableVertex(v) == ComparableVertex(e.target) and ComparableVertex(u) == ComparableVertex(e.source):
+            cs = ComparableVertex(e.source)
+            ct = ComparableVertex(e.target)
+            if {cs, ct} == {cu, cv}:
                 return e
     return None
 
