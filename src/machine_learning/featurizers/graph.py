@@ -6,7 +6,11 @@ import torch
 from torch_geometric.data import Data
 
 import mod
-from src.data_generation.utils.term_transfers import graph_from_term
+from src.data_generation.utils.term_transfers import (
+    atomic_number,
+    encode_vertex_label,
+    graph_from_term,
+)
 
 
 BOND_STRENGTH = {
@@ -33,10 +37,11 @@ class GraphFeaturizerMOD:
             return default
 
     def _vertex_feat(self, v: mod.Graph.Vertex):
-        # Be defensive: attributes may be missing or non-castable
-        a = self._safe_int(getattr(v, "atomId", 0), 0)
-        c = self._safe_int(getattr(v, "charge", 0), 0)
-        r = self._safe_int(getattr(v, "radical", 0), 0)
+        # Parse from the raw stringLabel so biradicals survive: mod's v.radical
+        # is a bool (caps at 1) and int(v.atomId) raises for non-concrete atoms
+        # like 'C..', which would otherwise drop both atom id and radical count.
+        symbol, c, r = encode_vertex_label(getattr(v, "stringLabel", ""))
+        a = atomic_number(symbol)
         return [a, c, r]
 
     def _edge_feat(self, e: mod.Graph.Edge):

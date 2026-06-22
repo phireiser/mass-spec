@@ -21,10 +21,8 @@ def term_from_graph(g: mod.Graph):
 
     s = "graph [\n"
     for v in g.vertices:
-        try:
-            s += f'node [ id {v.id} label "a({v.atomId.symbol}, {v.charge}, {int(v.radical)})" ]'
-        except mod.libpymod.LogicError:
-            s += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
+        symbol, charge, radical = encode_vertex_label(v.stringLabel)
+        s += f'node [ id {v.id} label "a({symbol}, {charge}, {radical})" ]'
 
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
@@ -52,6 +50,33 @@ def decode_vertex_label(l: str) -> str:
     if r > 0: # not elif otherwise vertex can't be charged radical
         lab += "." * r
     return lab
+
+
+def encode_vertex_label(string_label: str) -> "tuple[str, int, int]":
+    """
+    Inverse of :func:`decode_vertex_label`: parse a compact string-mode atom
+    label such as ``'C..'``, ``'C+.'`` or ``'O-'`` into ``(symbol, charge,
+    radical)``.
+
+    Radicals are counted from the number of ``'.'`` characters, so biradicals
+    /carbenes (``'..'``) survive. This is the crucial difference from reading
+    ``int(v.radical)`` (mod's ``radical`` is a *boolean*, capping at 1) or
+    ``v.atomId.symbol`` (raises ``LogicError`` for non-concrete atoms like
+    ``'C..'``, which previously collapsed the symbol to the ``_A`` placeholder).
+
+    A non-element leading token (wildcard ``'*'``, the ``_A`` placeholder, etc.)
+    maps back to ``_A`` to preserve the previous placeholder semantics.
+    """
+    i = 0
+    while i < len(string_label) and string_label[i] not in "+-.":
+        i += 1
+    symbol = string_label[:i]
+    deco = string_label[i:]
+    charge = deco.count("+") - deco.count("-")
+    radical = deco.count(".")
+    if not symbol.isalpha():  # wildcard / placeholder / query atom
+        symbol = "_A"
+    return symbol, charge, radical
 
 
 def decode_edge_label(l: str) -> str:
@@ -126,6 +151,26 @@ def atom_exact_mass(symbol: str) -> float:
     return mass
 
 
+# Atomic number per element symbol, read from mod's own atom data. 0 for
+# placeholders/non-elements (wildcards, the ``_A`` placeholder). Lazily cached.
+_atomic_number_cache: "dict[str, int]" = {}
+
+
+def atomic_number(symbol: str) -> int:
+    """Atomic number of an element ``symbol``; ``0`` for placeholders/non-elements."""
+    n = _atomic_number_cache.get(symbol)
+    if n is None:
+        try:
+            g = mod.Graph.fromGMLString(
+                f'graph [ node [ id 0 label "{symbol}" ] ]', add=False
+            )
+            n = int(next(iter(g.vertices)).atomId)
+        except (mod.libpymod.LogicError, ValueError, StopIteration):
+            n = 0
+        _atomic_number_cache[symbol] = n
+    return n
+
+
 # Electron mass, taken from mod (H minus H+) so it matches mod's own bookkeeping
 # exactly. mod's ``exactMass`` charges the ion: a cation has lost electrons and
 # weighs less, an anion has gained them. Summing neutral atomic masses therefore
@@ -186,10 +231,8 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
 
     g = r.left
     for v in g.vertices:
-        try:
-            left += f'node [ id {v.id} label "a({v.atomId.symbol}, {v.charge}, {int(v.radical)})" ]'
-        except mod.libpymod.LogicError:
-            left += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
+        symbol, charge, radical = encode_vertex_label(v.stringLabel)
+        left += f'node [ id {v.id} label "a({symbol}, {charge}, {radical})" ]'
 
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
@@ -197,22 +240,16 @@ def term_from_rule(r: mod.Rule) -> mod.Rule:
     g = r.context
     for v in g.vertices:
         if hasattr(v, "atomId"):
-            try:
-                symbol = v.atomId.symbol
-                context += f'node [ id {v.id} label "a({symbol}, {v.charge}, {int(v.radical)})" ]'
-            except mod.libpymod.LogicError:
-                context += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
+            symbol, charge, radical = encode_vertex_label(v.stringLabel)
+            context += f'node [ id {v.id} label "a({symbol}, {charge}, {radical})" ]'
     for e in g.edges:
         if hasattr(v, "bondType"):
             bond_type = term_bond_from_bond_type[e.bondType]
             context += f'edge [ source {e.source.id} target {e.target.id} label "e({bond_type})" ]'
     g = r.right
     for v in g.vertices:
-        try:
-            symbol = v.atomId.symbol
-            right += f'node [ id {v.id} label "a({symbol}, {v.charge}, {int(v.radical)})" ]'
-        except mod.libpymod.LogicError:
-            right += f'node [ id {v.id} label "a(_A, {v.charge}, {int(v.radical)})" ]'
+        symbol, charge, radical = encode_vertex_label(v.stringLabel)
+        right += f'node [ id {v.id} label "a({symbol}, {charge}, {radical})" ]'
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
         right += f'edge [ source {e.source.id} target {e.target.id} label "e({bond_type})" ]'
