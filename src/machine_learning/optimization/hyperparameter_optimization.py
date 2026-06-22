@@ -18,6 +18,7 @@ Best parameters will be saved to `best_hyperparams.json`.
 
 import argparse
 import json
+import os
 import sys
 import torch
 import numpy as np
@@ -38,7 +39,7 @@ except ImportError:
     print("Warning: Optuna not installed. Install with: pip install optuna")
 
 
-def train_with_config(train: Path, config: Dict[str, Any], epochs_fwd: int, epochs_bwd: int, device: str = "cuda") -> Dict[str, float]:
+def train_with_config(train: Path, config: Dict[str, Any], epochs_fwd: int, epochs_bwd: int, device: str = "cuda", use_wandb: bool = False) -> Dict[str, float]:
     """
     Train the model with a specific hyperparameter configuration.
     Returns a dictionary with metrics (validation loss, recall@k, mrr).
@@ -68,6 +69,11 @@ def train_with_config(train: Path, config: Dict[str, Any], epochs_fwd: int, epoc
 
     if config.get("use_faiss", False):
         cmd.append("--use_faiss")
+
+    # Each trial trains in its own subprocess, so each becomes its own wandb run.
+    # WANDB_RUN_GROUP (set by the launch script) ties them into one sweep view.
+    if use_wandb:
+        cmd.append("--wandb")
 
     print(f"\n{'='*80}")
     print(f"Training with config: {config}")
@@ -138,7 +144,14 @@ def _extract_metrics_from_output(output: str) -> Dict[str, float]:
     return metrics
 
 
-def objective(runpath: Path, trial: "optuna.Trial", epochs_fwd: int, epochs_bwd: int, device: str) -> float:
+def objective(
+        runpath: Path,
+        trial: "optuna.Trial",
+        epochs_fwd: int,
+        epochs_bwd: int,
+        device: str,
+        use_wandb: bool = False
+        ) -> float:
     """
     Optuna objective function: defines the hyperparameter search space
     and returns the value to minimize (validation loss).
@@ -162,8 +175,13 @@ def objective(runpath: Path, trial: "optuna.Trial", epochs_fwd: int, epochs_bwd:
         "seed": 0
     }
 
+    # Name this trial's wandb run so it is identifiable within the sweep group.
+    # The subprocess inherits os.environ, so setting it here propagates to main.py.
+    if use_wandb:
+        os.environ["WANDB_NAME"] = f"trial-{trial.number}"
+
     # Train with this config
-    metrics = train_with_config(runpath, config, epochs_fwd, epochs_bwd, device)
+    metrics = train_with_config(runpath, config, epochs_fwd, epochs_bwd, device, use_wandb=use_wandb)
 
     # Return primary metric to minimize (validation loss)
     val_loss = metrics.get("val_loss", 1.0)
@@ -176,7 +194,14 @@ def objective(runpath: Path, trial: "optuna.Trial", epochs_fwd: int, epochs_bwd:
     return val_loss
 
 
-def run_optimization(runpath: Path, n_trials: int, epochs_fwd: int, epochs_bwd: int, device: str = "cuda"):
+def run_optimization(
+        runpath: Path,
+        n_trials: int,
+        epochs_fwd: int,
+        epochs_bwd: int,
+        device: str = "cuda",
+        use_wandb: bool = False
+        ) -> Dict[str, Any]:
     """Run hyperparameter optimization."""
 
     print(f"\nStarting hyperparameter optimization with {n_trials} trials...")
@@ -195,7 +220,7 @@ def run_optimization(runpath: Path, n_trials: int, epochs_fwd: int, epochs_bwd: 
 
     # Run optimization
     study.optimize(
-        lambda trial: objective(runpath, trial, epochs_fwd, epochs_bwd, device),
+        lambda trial: objective(runpath, trial, epochs_fwd, epochs_bwd, device, use_wandb=use_wandb),
         n_trials=n_trials,
         n_jobs=1,  # Sequential execution (GPU cannot parallelize)
         show_progress_bar=True
@@ -262,6 +287,7 @@ if __name__ == "__main__":
     p.add_argument("--epochs_fwd", type=int, default=10, help="Forward phase epochs (per trial)")
     p.add_argument("--epochs_bwd", type=int, default=10, help="Backward phase epochs (per trial)")
     p.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
+    p.add_argument("--wandb", action="store_true", help="Log each trial to Weights & Biases as its own run (respects WANDB_* env vars)")
     args = p.parse_args()
 
     run_optimization(
@@ -269,5 +295,6 @@ if __name__ == "__main__":
         n_trials=args.n_trials,
         epochs_fwd=args.epochs_fwd,
         epochs_bwd=args.epochs_bwd,
-        device=args.device
+        device=args.device,
+        use_wandb=args.wandb
     )

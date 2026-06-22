@@ -51,6 +51,14 @@ except Exception:
     faiss = None
     _FAISS_AVAILABLE = False
 
+# Optional Weights & Biases experiment tracking
+try:
+    import wandb  # type: ignore
+    _WANDB_AVAILABLE = True
+except Exception:
+    wandb = None
+    _WANDB_AVAILABLE = False
+
 import mod
 from src.machine_learning import utils_mod
 from src.data_generation import utils
@@ -109,7 +117,17 @@ def main():
     p.add_argument("--spectra_dir", type=str, default=shared_path("NIST_SPECTRA_DIR_REL"), help="Directory containing .jdx spectrum files named by molecule name")
     p.add_argument("--load_path", type=str, default=shared_path("PROCESSED_DIR_REL"), help="Directory containing derivation trees")
     p.add_argument("--output_dir", type=str, default=shared_path("CHECKPOINT_DIR_REL"), help="Directory to save checkpoints and outputs")
+    p.add_argument("--wandb", action="store_true", help="Log this run to Weights & Biases (respects WANDB_* env vars, e.g. WANDB_MODE=offline)")
     args = p.parse_args()
+
+    # Experiment tracking. Project/group/mode/run-dir all come from WANDB_* env vars
+    # set by the SLURM launch script; on HPC compute nodes use WANDB_MODE=offline and
+    # `wandb sync` from a login node afterward.
+    use_wandb = args.wandb and _WANDB_AVAILABLE
+    if args.wandb and not _WANDB_AVAILABLE:
+        print("Warning: --wandb passed but the wandb package is not installed; skipping tracking.")
+    if use_wandb:
+        wandb.init(config=vars(args))
 
     torch.manual_seed(args.seed)
     device = torch.device(args.device)
@@ -279,6 +297,8 @@ def main():
             alpha_diversity=args.alpha_diversity
         )
         print(f"[A] epoch {epoch:02d} loss {loss:.4f} | frac {frac:.2f}")
+        if use_wandb:
+            wandb.log({"phaseA/loss": loss, "phaseA/frac": frac, "epoch": epoch})
 
     # ----------------- Phase B -----------------
     print("== Phase B: align spec latent + spectrum recon (vocab-agnostic) ==")
@@ -292,6 +312,9 @@ def main():
             contrastive_temp=args.contrastive_temp, alpha_retrieval=args.alpha_retrieval
         )
         print(f"[B] epoch {epoch:02d} loss {loss:.4f} | frac {frac:.2f}")
+        if use_wandb:
+            # offset epoch so Phase B continues the same x-axis after Phase A
+            wandb.log({"phaseB/loss": loss, "phaseB/frac": frac, "epoch": args.epochs_fwd + epoch})
 
     # ----------------- Build retrieval index -----------------
     # CRITICAL: Build index on TRAIN+VAL so evaluation sets have ground truth molecules
@@ -351,6 +374,10 @@ def main():
     print("== Retrieval metrics (TEST) ==")
     test_metrics = demo_retrieval_metrics(index, test_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, topk_list=(1,5,10), max_batches=5, skip_reranking=args.skip_reranking)
     print(test_metrics)
+    if use_wandb:
+        # flatten nested metric dicts into "val/..."/"test/..." scalars for the wandb UI
+        wandb.log({f"val/{k}": v for k, v in val_metrics.items()})
+        wandb.log({f"test/{k}": v for k, v in test_metrics.items()})
     # ----------------- Demo: Fragment graph ablation -----------------
     print("== Graph ablation on one VAL sample ==")
     ablation = demo_ablate_adjacency(graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], spec[i],
@@ -378,6 +405,12 @@ def main():
     }
     torch.save(ckpt, args.output_dir / "ml_checkpoint.pt")
     print(f"Saved checkpoint to {args.output_dir / 'ml_checkpoint.pt'}")
+
+    if use_wandb:
+        artifact = wandb.Artifact("ml_checkpoint", type="model")
+        artifact.add_file(str(args.output_dir / "ml_checkpoint.pt"))
+        wandb.log_artifact(artifact)
+        wandb.finish()
 
 if __name__ == "__main__":
     main()
