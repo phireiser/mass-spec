@@ -93,6 +93,88 @@ def graph_from_term(g: mod.Graph) -> mod.Graph:
     return mod.Graph.fromGMLString(s, name= getattr(g, "name", "").replace(", term", ""), add=False)
 
 
+def parse_term_atom(string_label: str) -> "tuple[str, int, int]":
+    """
+    Parse a term vertex label ``a(symbol, charge, radical)`` into its parts.
+
+    Returns ``(symbol, charge, radical)``. This is the cheap, parse-only
+    counterpart to round-tripping a term graph back into string mode via
+    :func:`graph_from_term` when only the atom's scalar properties are needed.
+    """
+    assert string_label.startswith("a(") and string_label.endswith(")"), \
+        f"not a term atom label: {string_label!r}"
+    symbol, charge, radical = (part.strip() for part in string_label[2:-1].split(","))
+    return symbol, int(charge), int(radical)
+
+
+# Per-element exact (monoisotopic) masses, sourced from mod itself so the values
+# match mod's own ``Graph.exactMass`` exactly. Summing these over a graph's atoms
+# reproduces ``graph_from_term(g).exactMass`` without the GML round-trip (verified
+# bit-for-bit on representative molecules). Lazily populated and cached.
+_atom_exact_mass_cache: "dict[str, float]" = {}
+
+
+def atom_exact_mass(symbol: str) -> float:
+    """Exact monoisotopic mass of a single (neutral) ``symbol`` atom, as mod reports it."""
+    mass = _atom_exact_mass_cache.get(symbol)
+    if mass is None:
+        g = mod.Graph.fromGMLString(
+            f'graph [ node [ id 0 label "{symbol}" ] ]', add=False
+        )
+        mass = g.exactMass
+        _atom_exact_mass_cache[symbol] = mass
+    return mass
+
+
+# Electron mass, taken from mod (H minus H+) so it matches mod's own bookkeeping
+# exactly. mod's ``exactMass`` charges the ion: a cation has lost electrons and
+# weighs less, an anion has gained them. Summing neutral atomic masses therefore
+# overshoots by ``net_charge`` electron masses, which we subtract back off.
+_electron_mass_cache: "list[float]" = []
+
+
+def electron_mass() -> float:
+    """Electron rest mass in u, as implied by mod's exact masses (H - H+)."""
+    if not _electron_mass_cache:
+        h = mod.Graph.fromGMLString('graph [ node [ id 0 label "H" ] ]', add=False)
+        hp = mod.Graph.fromGMLString('graph [ node [ id 0 label "H+" ] ]', add=False)
+        _electron_mass_cache.append(h.exactMass - hp.exactMass)
+    return _electron_mass_cache[0]
+
+
+def net_charge_from_term(g: mod.Graph) -> int:
+    """
+    Net formal charge of a term-mode graph, summed straight from the vertex
+    labels. Equivalent to ``smiles.count('+') - smiles.count('-')`` on the
+    round-tripped string-mode molecule, but without building a canonical SMILES
+    or reconstructing the molecule.
+    """
+    return sum(parse_term_atom(v.stringLabel)[1] for v in g.vertices)
+
+
+def exact_mass_from_term(g: mod.Graph) -> "float | None":
+    """
+    Exact (monoisotopic) mass of a term-mode graph, summed from per-atom masses
+    and corrected for the ion's electron count, matching mod's ``exactMass``.
+
+    Returns ``None`` if any vertex carries a non-element (placeholder) symbol,
+    mirroring the ``isMolecule`` guard callers previously used on the
+    round-tripped string-mode graph: a graph with placeholder atoms is not a
+    concrete molecule and has no well-defined mass.
+    """
+    total = 0.0
+    net_charge = 0
+    for v in g.vertices:
+        symbol, charge, _ = parse_term_atom(v.stringLabel)
+        try:
+            total += atom_exact_mass(symbol)
+        except mod.libpymod.LogicError:
+            # non-element / placeholder symbol -> not a concrete molecule
+            return None
+        net_charge += charge
+    return total - net_charge * electron_mass()
+
+
 def term_from_rule(r: mod.Rule) -> mod.Rule:
     """
     takes a rule for term mode and returns a rule for string mode
@@ -172,4 +254,9 @@ __all__ = [
     "term_from_rule",
     "graph_from_term",
     "rule_from_term",
+    "parse_term_atom",
+    "atom_exact_mass",
+    "electron_mass",
+    "net_charge_from_term",
+    "exact_mass_from_term",
 ]

@@ -17,13 +17,15 @@ def amu_bound(
     """
 
     def predicate(derivations):
-        masses = []
+        # Compute each fragment's exact mass straight from its term labels
+        # instead of round-tripping through a string-mode molecule. `None`
+        # means a non-molecule (placeholder atoms), matching the old
+        # `if g.isMolecule` guard. Return on the first in-bounds fragment.
         for g in derivations.right:
-            g = utils.graph_from_term(g)
-            if g.isMolecule:
-                masses.append(g.exactMass)
-        bounds_check = any((mass > minimum) and (mass < maximum) for mass in masses)
-        return bounds_check
+            mass = utils.exact_mass_from_term(g)
+            if mass is not None and minimum < mass < maximum:
+                return True
+        return False
     return mod.rightPredicate[predicate](strategy)
 
 def charge_bound(
@@ -37,12 +39,16 @@ def charge_bound(
     """
 
     def predicate(d):
+        # Net charge is the sum of per-atom formal charges, which we read
+        # straight from the term labels. This replaces the old
+        # `graph_from_term(g).smiles.count('+')-count('-')`, which canonicalised
+        # a SMILES string per fragment purely to count charge signs. The old
+        # `isMolecule` guard only existed because `.smiles` errors on
+        # non-molecules; summing term charges never errors, so it is dropped.
         for g in d.right:
-            g = utils.graph_from_term(g)
-            if g.isMolecule:
-                charge = g.smiles.count('+') - g.smiles.count('-')
-                if minimum <= charge <= maximum:
-                    return True
+            charge = utils.net_charge_from_term(g)
+            if minimum <= charge <= maximum:
+                return True
         return False
     return mod.rightPredicate[predicate](strategy)
 
