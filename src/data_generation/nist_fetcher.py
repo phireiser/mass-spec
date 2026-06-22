@@ -149,7 +149,12 @@ def fetch_nist_spectrum_simple(compound_name, compound_smiles, output_dir="spect
         return False
 
 
-def fetch_from_csv(csv_file, output_dir="spectra", name_column="name", smiles_column="smiles"):
+def fetch_from_csv(
+        csv_file,
+        output_dir="spectra",
+        name_column="name",
+        smiles_column="smiles"
+        ) -> None:
     """
     Fetch spectra for all compounds in a CSV file.
 

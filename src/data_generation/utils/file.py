@@ -9,7 +9,14 @@ import mod
 
 
 class DefaultDGStore:
-    def dump(self, dg: mod.DG, rule_list: List[mod.Rule], name: str, smiles: str, path: Path) -> None:
+    def dump(
+            self,
+            dg: mod.DG,
+            rule_list: List[mod.Rule],
+            name: str,
+            smiles: str,
+            path: Path
+            ) -> None:
         path.mkdir(parents=True, exist_ok=True)
         dg.dump(str(path / (name + ".dmp")))
         graph_database = [obj.getGMLString() for obj in dg.graphDatabase]
@@ -17,7 +24,11 @@ class DefaultDGStore:
         with open(path / (name + ".pkl"), 'wb') as f:
             pickle.dump((smiles, graph_database, rule_database), f)
 
-    def load(self, name: str, path: Path) -> mod.DG:
+    def load(
+            self,
+            name: str,
+            path: Path
+            ) -> mod.DG:
         with open(path / (name + ".pkl"), 'rb') as f:
             data = pickle.load(f)
         if len(data) == 3:
@@ -32,12 +43,21 @@ class DefaultDGStore:
         return dg
 
 
-def dump_derivation_graph(dg: mod.DG, rule_list: List[mod.Rule], name: str, smiles: str, path: Path | str = Path("./dump/")) -> None:
+def dump_derivation_graph(
+        dg: mod.DG,
+        rule_list: List[mod.Rule],
+        name: str,
+        smiles: str,
+        path: Path | str = Path("./dump/")
+        ) -> None:
     store = DefaultDGStore()
     store.dump(dg, rule_list, name, smiles, Path(path))
 
 
-def load_derivation_graph(name: str, path: Path | str = Path("./dump/")) -> mod.DG:
+def load_derivation_graph(
+        name: str,
+        path: Path | str = Path("./dump/")
+        ) -> mod.DG:
     store = DefaultDGStore()
     return store.load(name, Path(path))
 

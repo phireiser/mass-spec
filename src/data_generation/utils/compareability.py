@@ -44,7 +44,10 @@ class ComparableVertexList:
     """
     __slots__ = ("attrs", "_wrapped_list", "_wrapped_set")
 
-    def __init__(self, vertices: Iterable[mod.Graph.Vertex] | Iterable[ComparableVertex], attrs=("id", "stringLabel")):
+    def __init__(
+            self, vertices: Iterable[mod.Graph.Vertex] | Iterable[ComparableVertex],
+            attrs=("id", "stringLabel")
+            ) -> None:
         self.attrs: Tuple[str, ...] = (attrs,) if isinstance(attrs, str) else tuple(attrs)
         wrapped = [ComparableVertex(v.vertex if isinstance(v, ComparableVertex) else v, self.attrs) for v in vertices]
         # Keep both list (to preserve order) and set (for O(1) membership)

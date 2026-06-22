@@ -6,7 +6,12 @@ from urllib.parse import quote
 import requests
 
 class PubChemClient:
-    def __init__(self, session: Optional[requests.Session] = None, base_url: str = "https://pubchem.ncbi.nlm.nih.gov", timeout: float = 8.0):
+    def __init__(
+            self,
+            session: Optional[requests.Session] = None,
+            base_url: str = "https://pubchem.ncbi.nlm.nih.gov",
+            timeout: float = 8.0
+            ):
         self.session = session or requests.Session()
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout

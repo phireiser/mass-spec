@@ -7,7 +7,9 @@ FIELDS_TOP5 = {"Top 5 Peaks"}
 FIELDS_TOP3 = {"m/z Top Peak", "m/z 2nd Highest", "m/z 3rd Highest"}
 
 
-def get_spectra_from_information_section(information: List[Dict[str, Any]]) -> List[Dict[int, List[Tuple[float, float]]]]:
+def get_spectra_from_information_section(
+        information: List[Dict[str, Any]]
+        ) -> List[Dict[int, List[Tuple[float, float]]]]:
     spectra: List[Dict[int, List[Tuple[float, float]]]] = []
     for item in information:
         name = item.get("Name", "")
@@ -37,7 +39,9 @@ def get_spectra_from_information_section(information: List[Dict[str, Any]]) -> L
     return spectra
 
 
-def find_gc_ms_sections(doc: Dict[str, Any]) -> List[Dict[str, Any]]:
+def find_gc_ms_sections(
+        doc: Dict[str, Any]
+        ) -> List[Dict[str, Any]]:
     """Return the GC-MS information sections safely."""
     def walk(sections):
         for s in sections:

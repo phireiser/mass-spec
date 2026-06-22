@@ -1,11 +1,13 @@
 """
 Pure metrics utilities for spectra and sets.
 """
-from typing import Iterable, Any, Dict, List
-import numpy as np
+from typing import Iterable, Any, Dict
 
 
-def dice_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
+def dice_coefficient(
+        a: Iterable[Any],
+        b: Iterable[Any]
+        ) -> float:
     set_a, set_b = set(a), set(b)
     denom = (len(set_a) + len(set_b))
     if denom == 0:
@@ -13,7 +15,10 @@ def dice_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
     return 2 * len(set_a & set_b) / denom
 
 
-def overlap_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
+def overlap_coefficient(
+        a: Iterable[Any],
+        b: Iterable[Any]
+        ) -> float:
     set_a, set_b = set(a), set(b)
     try:
         return len(set_a & set_b) / min(len(set_a), len(set_b))
@@ -21,7 +26,10 @@ def overlap_coefficient(a: Iterable[Any], b: Iterable[Any]) -> float:
         return 0.0
 
 
-def coverage_stats(mod_masses: Iterable[int], ref_masses: Iterable[int]) -> Dict[str, Any]:
+def coverage_stats(
+        mod_masses: Iterable[int],
+        ref_masses: Iterable[int]
+        ) -> Dict[str, Any]:
     """Compute Dice_max and TPR_max across masses collections.
     Returns dict with dice, tpr, supports and sorted masses.
     """
