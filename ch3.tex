@@ -371,6 +371,7 @@ Despite these representational advantages, the proposed encoding pipeline also i
     \item Potential propagation of preprocessing artifacts into learned representations
     \item Risk of over-squashing and long-range dependency loss in message-passing encoders
     \item The set of admissible heteroatoms is not enforced in code but treated as an implicit design assumption (see \Cref{par:heteroatom-check}), so structures containing elements outside the assumed organic set are not formally excluded
+    \item The M\O D backend used for data generation does not support biradicals, so fragmentation pathways through species with two unpaired electrons cannot be represented
 \end{itemize}
 
 
