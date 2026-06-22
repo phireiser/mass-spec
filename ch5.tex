@@ -37,7 +37,7 @@ A key source of inspiration for this transition is ICEBERG \cite{Goldman2024}, w
 task into a \emph{Generate} module that predicts likely fragmentation events and a \emph{Score}
 module that assigns intensities to the resulting fragments.
 Crucially, the fragment graph is not treated as fixed input but as a latent object that must itself
-be predicted: the generative stage is trained to reconstruct an estimated fragmentation DAG, while a
+be predicted: the generative stage is trained to reconstruct an estimated fragmentation directed acyclic graph (DAG), while a
 second module predicts intensities and hydrogen rearrangements for the generated fragments.
 The present model already supplies the main ingredients for the \emph{Score} side of such a system.
 It embeds molecular graphs, fragment-level structures, and spectra into a shared latent space; it

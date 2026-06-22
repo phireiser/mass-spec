@@ -232,6 +232,7 @@ In particular, a molecule is not encoded as a SMILES sequence, fingerprint, or d
 Instead, it is represented as an explicit graph object derived from the M\O D framework, then mapped into a dense latent embedding, and finally placed into a derivation-hypergraph context together with learned rule representations.
 
 \subsection{Molecular Graph Encoding}
+\label{sec:molgraph-encoding}
 
 PyTorch Geometric (PyG) \cite{Fey2025} is a library that extends PyTorch to enable efficient processing of graph-structured data.
 It provides specialized data structures and operations optimized for graph neural networks (GNNs).
@@ -538,7 +539,7 @@ Because the comparison in \cref{eq:cosine-similarity} is normalised by both vect
 
 %The remainder of this section develops the Wasserstein distance, extends it to spectra of differing length, and contrasts it with the cosine similarity to justify our choice.
 
-The Wasserstein distance measures the minimum cost of transporting one distribution onto the other, where cost is mass multiplied by the distance it is moved. 
+The Wasserstein distance, also known as the Earth Mover's Distance (EMD), measures the minimum cost of transporting one distribution onto the other, where cost is mass multiplied by the distance it is moved.
 For two equal-length vectors this reduces to sorting both and summing the absolute differences of matched ranks, a quantity that admits a simple geometric reading. 
 \Cref{fig:wasserstein-distance-illustration} draws each sorted vector as a cumulative staircase and shades the horizontal gap between them at every rank; the distance is the total shaded area, normalised by the number of elements.
 
@@ -734,7 +735,6 @@ The spectrum decoder and the task heads---including the learned log-variance wei
 The molecule encoder is held as a submodule of the fragment encoder, so it is updated in Phase~A as well, even though Phase~A's optimiser is nominally constructed over the fragment encoder, the spectrum decoder, and the task heads.
 
 Both phases use identical Adam settings, with no learning-rate schedule, warmup, or gradient clipping. 
-Each epoch draws its data through a curriculum loader: the fraction of presented molecules grows linearly from $0.3$ by $0.05$ per epoch, saturating at the full training set after roughly fourteen epochs. 
 Training is purely epoch-budgeted---there is no early stopping and no validation-based model selection---and the final-epoch weights are retained as the trained model. 
 Accordingly, the validation split is used only \emph{post hoc} for retrieval evaluation (\Cref{ch:4}), never for checkpoint selection. 
 Reproducibility rests on a single global seed for initialisation and a fixed split state (\Cref{sec:data-splits}). The full set of hyperparameters is collected in \Cref{tab:training-hyperparams}.

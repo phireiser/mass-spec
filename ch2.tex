@@ -757,8 +757,10 @@ mechanistic routes under additional constraints
 (e.g., energy, rule priorities, or experimental evidence).
 They therefore provide a natural bridge between 
 rule-based chemistry models and downstream tasks such as 
-pathway search, and machine-learning-based scoring of candidate transformations. 
+pathway search, and machine-learning-based scoring of candidate transformations.
 \cite[p.~2]{Abel2026}
+
+These graph-transformation and derivation-graph constructs are implemented in the M\O D framework \cite{Andersen2017,MODDocDGStrat}, the software used throughout this work to generate fragmentation data; its Python module is referred to as \texttt{mod} in the following chapters.
 
 One example derivation graph for the fragmentation rules applied is in \autoref{fig:derivation-graph}.
 
@@ -775,20 +777,15 @@ One example derivation graph for the fragmentation rules applied is in \autoref{
 
 
 
-%\subsubsection{Term Mode}
-%Term mode is a representation mode in which chemical structures and reactions are expressed as 
-%formal terms (tree-like expressions) rather than as explicit graphs. 
-%In this mode, molecules are handled as algebraic objects governed by rewrite rules.
-%
-%A term is a symbolic expression built from:
-%
-%\begin{itemize}
-%    \item Function symbols (e.g., constructors such as C, O, bond, ring)
-%    \item Arguments (subterms)
-%\end{itemize}
-%
-%Conceptually, this is similar to expressions in term-rewriting systems or functional programming.
-%
+\subsubsection{Term Mode}
+Alongside the explicit graph representation, M\O D can also handle molecular states in \emph{term mode},
+in which structures are expressed as formal terms (tree-like symbolic expressions) rather than as plain graphs.
+A term is built from function symbols (constructors such as \texttt{C}, \texttt{O}, or \texttt{bond}) applied to
+subterms, much like expressions in term-rewriting systems or functional programming, and is rewritten by the same
+rule machinery.
+The resulting object is a \emph{term-graph}: a graph whose attributes carry this symbolic term structure.
+In this work term-graph inputs are normalised back to plain attributed graphs before encoding (\Cref{sec:molgraph-encoding}),
+so term mode is relevant here only as the source format of some M\O D outputs.
 
 
 \subsection{Graph Neural Networks for Molecular Representation Learning}
