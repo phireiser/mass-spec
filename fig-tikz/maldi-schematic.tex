@@ -1,24 +1,23 @@
-\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,line cap=round,line join=round,font=\sffamily]
-\definecolor{msred}{RGB}{170,0,60}
+\begin{tikzpicture}[x=1cm,y=1cm,fig]
 
 % --- small helper: red analyte ion (circle + hatch) ---
 \newcommand{\analyteion}[3]{% x,y,r
   \begin{scope}[shift={(#1,#2)}]
-    \draw[msred,line width=0.8pt] (0,0) circle (#3);
-    \draw[msred,line width=0.55pt] (-#3,-#3)--(#3,#3);
-    \draw[msred,line width=0.55pt] (-#3,#3)--(#3,-#3);
-    \draw[msred,line width=0.35pt] (-#3,0)--(#3,0);
-    \draw[msred,line width=0.35pt] (0,-#3)--(0,#3);
+    \draw[msred,fig line] (0,0) circle (#3);
+    \draw[msred,fig thin] (-#3,-#3)--(#3,#3);
+    \draw[msred,fig thin] (-#3,#3)--(#3,-#3);
+    \draw[msred,fig hair] (-#3,0)--(#3,0);
+    \draw[msred,fig hair] (0,-#3)--(0,#3);
   \end{scope}
 }
 
 % =========================================================
 % SAMPLE STAGE (left block)
 % =========================================================
-\draw[black,line width=0.9pt] (0,-2.20) rectangle (0.62,1.55);
+\draw[black,fig medium] (0,-2.20) rectangle (0.62,1.55);
 
 % slightly jagged "surface" line at the right edge of the stage
-\draw[black,line width=0.9pt]
+\draw[black,fig medium]
   (0.62,1.40) -- (0.69,1.18) -- (0.61,0.98) -- (0.70,0.78) --
   (0.62,0.58) -- (0.71,0.38) -- (0.60,0.18) -- (0.70,-0.02) --
   (0.62,-0.22) -- (0.70,-0.44) -- (0.61,-0.64) -- (0.70,-0.84) --
@@ -40,7 +39,7 @@
   0.92/-1.92/  -12/0.22/0.64
 }{
   \begin{scope}[shift={(\x,\y)},rotate=\rot]
-    \draw[black,line width=0.8pt,fill=white] (-\w/2,-\h/2) rectangle (\w/2,\h/2);
+    \draw[black,fig line,fill=white] (-\w/2,-\h/2) rectangle (\w/2,\h/2);
   \end{scope}
 }
 
@@ -80,7 +79,7 @@
   6.10/ 1.22/  14
 }{
   \begin{scope}[shift={(\x,\y)},rotate=\rot]
-    \draw[black,line width=0.85pt,fill=white] (-0.11,-0.35) rectangle (0.11,0.35);
+    \draw[black,fig medium,fill=white] (-0.11,-0.35) rectangle (0.11,0.35);
   \end{scope}
 }
 
@@ -95,7 +94,7 @@
 % INCOMING UV LASER LIGHT (5 dashed rays)
 % =========================================================
 \foreach \dy in {-0.40,-0.20,0.00,0.20,0.40}{
-  \draw[black,line width=0.85pt,dash pattern=on 4pt off 4pt]
+  \draw[black,fig medium,dash pattern=on 4pt off 4pt]
     (1.55,0.20+\dy) -- (6.05,2.55+\dy);
 }
 
@@ -103,23 +102,23 @@
 % LABELS
 % =========================================================
 \node[anchor=east,align=center] at (-0.35,-0.05) (sam_lab){Sample\\[-10pt]stage};
-\draw[msred,->,line width=0.9pt] (sam_lab) -- (0.02,-0.55);
+\draw[msred,->,fig medium] (sam_lab) -- (0.02,-0.55);
 
 \node[align=center] at (2.05,-2.80) (cryst_lab) {Crystallized matrix\\[-10pt]with included analyte};
-\draw[msred,->,line width=0.9pt] (cryst_lab) -- (0.92,-0.9);
+\draw[msred,->,fig medium] (cryst_lab) -- (0.92,-0.9);
 
 \node[align=center] at (3.75,-1.60) (mat_lab) {Matrix ions and\\[-10pt]neutrals};
-\draw[msred,->,line width=0.9pt] (mat_lab) -- (3.05,-0.70);
-\draw[msred,->,line width=0.9pt] (mat_lab) -- (4.15,-0.59);
+\draw[msred,->,fig medium] (mat_lab) -- (3.05,-0.70);
+\draw[msred,->,fig medium] (mat_lab) -- (4.15,-0.59);
 
 \node[align=center] at (6.3,-1.6) (a_lab) {Analyte\\[-10pt]ions};
-\draw[msred,->,line width=0.9pt] (a_lab) -- (5.85, 0.15);
-\draw[msred,->,line width=0.9pt] (a_lab) -- (6.25,-0.75);
+\draw[msred,->,fig medium] (a_lab) -- (5.85, 0.15);
+\draw[msred,->,fig medium] (a_lab) -- (6.25,-0.75);
 
 \node[anchor=west,align=left] at (6.5,0.5) {Into mass\\[-10pt]analyzer};
-\draw[msred,->,line width=0.9pt] (6.10,0.10) -- (7.95,0.10);
+\draw[msred,->,fig medium] (6.10,0.10) -- (7.95,0.10);
 
 \node[align=center] at (2.5,2.5) (uv_lab) {Incoming UV\\[-10pt]laser light};
-\draw[msred,->,line width=0.9pt] (uv_lab) -- (4.70,2.20);
+\draw[msred,->,fig medium] (uv_lab) -- (4.70,2.20);
 
 \end{tikzpicture}

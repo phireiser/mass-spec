@@ -2,7 +2,7 @@
     font=\small,
     box/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, align=center, minimum width=2.5cm},
     molecule/.style={circle, draw, thick, minimum size=1cm, fill=blue!20},
-    arrow/.style={-Stealth, very thick},
+    arrow/.style={-Latex, very thick},
     check/.style={circle, draw, thick, minimum size=0.8cm, fill=green!30},
     cross/.style={circle, draw, thick, minimum size=0.8cm, fill=red!30},
 ]
@@ -57,7 +57,7 @@
     \textbf{Transformation}\\
 };
 
-\draw[arrow, green!60!black, line width=2pt] (s1.east) -- (transform.west);
-\draw[arrow, green!60!black, line width=2pt] (s3.east) -- (transform.west);
+\draw[arrow, green!60!black, fig bold] (s1.east) -- (transform.west);
+\draw[arrow, green!60!black, fig bold] (s3.east) -- (transform.west);
 
 \end{tikzpicture}

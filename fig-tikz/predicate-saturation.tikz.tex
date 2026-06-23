@@ -3,8 +3,8 @@
     atom/.style={circle, draw, thick, minimum size=0.6cm, fill=white},
     carbon/.style={atom, fill=blue!20},
     hydrogen/.style={atom, fill=gray!20, minimum size=0.4cm},
-    neg_path/.style={line width=2pt, red!60},
-    pos_path/.style={line width=2pt, green!60},
+    neg_path/.style={fig bold, red!60},
+    pos_path/.style={fig bold, green!60},
     bond/.style={thick, black!70}
 ]
 
@@ -73,7 +73,7 @@
     \node[carbon] (c2) at (1.5,2) {\small C};
     \node[carbon] (c3) at (3,2) {\small C};
     \node[carbon, fill=red!30] (c4) at (4.5,2) {\small C};
-    \node[carbon, draw=red!70!black, line width=0.8pt] (c5) at (3,0.5) {\small C};
+    \node[carbon, draw=red!70!black, fig line] (c5) at (3,0.5) {\small C};
     
     % Hydrogen atoms
     \node[hydrogen] (h1) at (0,3) {\tiny H};
@@ -94,7 +94,7 @@
     \draw[bond] (c3) -- (c5);
 
     % Mark carbon side branch as not allowed
-    \draw[draw=red!70!black, fill=yellow!30, line width=0.8pt] (2.2,0.75) -- (2.0,0.4) -- (2.4,0.4) -- cycle;
+    \draw[draw=red!70!black, fill=yellow!30, fig line] (2.2,0.75) -- (2.0,0.4) -- (2.4,0.4) -- cycle;
     \node[red!70!black, font=\scriptsize] at (2.2,0.52) {!};
     
     % C-H bonds

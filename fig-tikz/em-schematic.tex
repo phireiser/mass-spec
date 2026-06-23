@@ -1,5 +1,4 @@
-\begin{tikzpicture}[x=1cm,y=1cm,line cap=round,line join=round,font=\sffamily]
-\definecolor{msred}{RGB}{170,0,60}
+\begin{tikzpicture}[x=1cm,y=1cm,fig]
 
 % --------------------------
 % Parameters (tuned for Fig 2.17)
@@ -27,11 +26,11 @@
 % --------------------------
 % Dynodes
 % --------------------------
-\draw[msred,line width=1.10pt] ($(L1)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
-\draw[msred,line width=1.10pt] ($(L2)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
-\draw[msred,line width=1.10pt] ($(L3)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
-\draw[msred,line width=1.10pt] ($(R1)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
-\draw[msred,line width=1.10pt] ($(R2)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
+\draw[msred,fig heavy] ($(L1)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
+\draw[msred,fig heavy] ($(L2)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
+\draw[msred,fig heavy] ($(L3)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
+\draw[msred,fig heavy] ($(R1)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
+\draw[msred,fig heavy] ($(R2)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
 
 % --------------------------
 % Anode
@@ -40,8 +39,8 @@
 \coordinate (A2) at ($(R3)+( 0.75,\anodeY-\yLowR)$);
 \coordinate (Astem) at ($(A1)!0.50!(A2)$);
 
-\draw[msred,line width=1.15pt] (A1) -- (A2);
-\draw[msred,line width=1.15pt] (Astem) -- ++(0,-0.95);
+\draw[msred,fig heavy] (A1) -- (A2);
+\draw[msred,fig heavy] (Astem) -- ++(0,-0.95);
 
 % --------------------------
 % Electron cascade
@@ -67,16 +66,16 @@
          \pgfmathsetmacro{\yoff}{2*\k/\kmax - 1}%
          \pgfmathsetmacro{\dyminus}{-1 + 2*(2*\k)/(2*\cnt - 1)}%
          \pgfmathsetmacro{\dyplus}{-1 + 2*(2*\k + 1)/(2*\cnt - 1)}%
-         \draw[msred,line width=0.25pt]
+         \draw[msred,fig hair]
              ($(#1)+(0,0.2*\yoff)$) -- ($(#2)+(0,0.2*\dyminus)$);
-         \draw[msred,line width=0.25pt]
+         \draw[msred,fig hair]
              ($(#1)+(0,0.2*\yoff)$) -- ($(#2)+(0,0.2*\dyplus)$);
       }%
    }
 
   % incoming ion (single)
   \coordinate (IonIn) at ($(P1)+(1.2,0.50)$);
-  \draw[msred,line width=0.25pt] (IonIn) -- (P1);
+  \draw[msred,fig hair] (IonIn) -- (P1);
 
   % --------------------------
   % Stage 1: first reflections
@@ -86,9 +85,9 @@
   \foreach \k in {0,...,\kmax} {
     \pgfmathsetmacro{\dy}{(\k / 1 - 1.0/ \cnt)}
     \pgfmathsetmacro{\yoff}{(\k / 1 - 0.0/ \cnt)}
-    \draw[msred,line width=0.25pt]
+    \draw[msred,fig hair]
       ($(P1)+(0,0.2*\yoff)$) -- ($(P2)+(0,0.2*\dy)$);
-    \draw[msred,line width=0.25pt]
+    \draw[msred,fig hair]
       ($(P1)+(0,0.2*\yoff)$) -- ($(P2)+(0,-0.2*\dy)$);
   }
 
@@ -97,7 +96,7 @@
   \DrawCascadeStage{P4}{P5}{8}
 
   \foreach \t in {0.03125,0.0625,...,0.98}{
-    \draw[msred,line width=0.25pt] 
+    \draw[msred,fig hair] 
       ($(P5) + (0,0.2*\t)$) -- ($(A1)!\t!(A2)$);
   }
 
@@ -108,17 +107,17 @@
 % Labels
 % --------------------------
 \node[anchor=south] at ($(R1)+(0.05,1.20)$) {Ion};
-%\draw[black,line width=0.9pt] ($(R1)+(0.05,1.20)$) -- ($(Z0)+(0.00,-0.05)$);
+%\draw[black,fig medium] ($(R1)+(0.05,1.20)$) -- ($(Z0)+(0.00,-0.05)$);
 
 \node[anchor=east] at ($(L2)+(-1.05,0.05)$) {Dynodes};
-\draw[->,black,line width=0.9pt] ($(L2)+(-0.90,0.05)$) -- ($(L1)+(-0.2,0.1)$);
-\draw[->,black,line width=0.9pt] ($(L2)+(-0.90,0.05)$) -- ($(L3)+(-0.2,0.6)$);
-\draw[->,black,line width=0.9pt] ($(L2)+(-0.90,0.05)$) -- ($(L2)+(-0.2,0.1)$);
+\draw[->,black,fig medium] ($(L2)+(-0.90,0.05)$) -- ($(L1)+(-0.2,0.1)$);
+\draw[->,black,fig medium] ($(L2)+(-0.90,0.05)$) -- ($(L3)+(-0.2,0.6)$);
+\draw[->,black,fig medium] ($(L2)+(-0.90,0.05)$) -- ($(L2)+(-0.2,0.1)$);
 
 \node[anchor=west,align=left] at ($(R2)+(1.05,-0.15)$) {Electron\\[-10pt]cascade};
-%\draw[black,line width=0.9pt] ($(R2)+(0.90,-0.25)$) -- ($(S0)+(-0.05,-0.15)$);
+%\draw[black,fig medium] ($(R2)+(0.90,-0.25)$) -- ($(S0)+(-0.05,-0.15)$);
 
 \node[anchor=east] at ($(A1)+(-0.10,-0.40)$) {Anode};
-\draw[->,black,line width=0.9pt] ($(A1)+(0.20,-0.28)$) -- ($(Astem)+(-0.10,-0.1)$);
+\draw[->,black,fig medium] ($(A1)+(0.20,-0.28)$) -- ($(Astem)+(-0.10,-0.1)$);
 
 \end{tikzpicture}

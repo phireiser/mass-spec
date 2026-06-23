@@ -1,10 +1,10 @@
 \begin{tikzpicture}[
-    >=Stealth, font=\sffamily,
-    bigarrow/.style={-{Stealth[length=3.5mm,width=3.2mm]}, line width=1.4pt},
+    fig,
+    bigarrow/.style={-{Latex[length=3.5mm,width=3.2mm]}, fig heavy},
     greenA/.style={bigarrow, genGreen},
     blueA/.style={bigarrow, scoBlue},
     grayA/.style={bigarrow, black!55},
-    treearrow/.style={-{Stealth[length=1.6mm]}, dashed, black!60, thin},
+    treearrow/.style={-{Latex[length=1.6mm]}, dashed, black!60, thin},
     fragnode/.style={circle, draw=genGreen!80, fill=genGreen!50, minimum size=4mm, inner sep=0pt},
     fragempty/.style={circle, draw=genGreen!70, fill=white, minimum size=4mm, inner sep=0pt},
     fraglight/.style={circle, draw=genGreen!60, fill=genGreen!25, minimum size=4mm, inner sep=0pt},
@@ -14,20 +14,6 @@
 
 
 % =================== Color palette ===================
-\definecolor{genGreen}{RGB}{55,135,85}
-\definecolor{genGreenL}{RGB}{210,235,220}
-\definecolor{genGreenLL}{RGB}{235,245,238}
-\definecolor{scoBlue}{RGB}{60,110,200}
-\definecolor{scoBlueL}{RGB}{210,225,245}
-\definecolor{scoBlueLL}{RGB}{235,243,250}
-\definecolor{spectrumBlue}{RGB}{40,80,180}
-\definecolor{spectrumRed}{RGB}{210,55,55}
-\definecolor{nodeGray}{RGB}{160,165,170}
-\definecolor{boxGray}{RGB}{225,228,232}
-\definecolor{atomBlue}{RGB}{132,170,210}
-\definecolor{atomBlueE}{RGB}{60,100,170}
-\definecolor{atomDark}{RGB}{40,80,140}
-\definecolor{redOx}{RGB}{220,80,75}
 
 
 % =================================================================
@@ -101,7 +87,7 @@
 % =================================================================
 \begin{scope}[shift={(6, 12.10)}]
     % Outer box
-    \draw[rounded corners=3pt, genGreen, line width=1pt, fill=genGreenLL]
+    \draw[rounded corners=3pt, genGreen, fig medium, fill=genGreenLL]
         (-4.8,-2.00) rectangle (4.8, 4.45);
     % Title
     \node[anchor=north, font=\LARGE\bfseries, text=genGreen] at (0, 4.30) {Generate};
@@ -110,7 +96,7 @@
     % Cloud icon (top-left of module) — proper cloud silhouette + small graph
     \begin{scope}[shift={(-3.4, 3.7)}]
         % Cloud silhouette (TikZ cloud shape)
-        \node[cloud, draw=genGreen, line width=0.9pt, fill=white,
+        \node[cloud, draw=genGreen, fig medium, fill=white,
               cloud puffs=11, cloud puff arc=135, aspect=1.6,
               minimum width=1.55cm, minimum height=0.95cm,
               inner sep=0pt] (cloudbg) at (0,0) {};
@@ -119,7 +105,7 @@
         \node[circle, fill=genGreen, minimum size=2mm, inner sep=0pt] (cd2) at ( 0.20, -0.05) {};
         \node[circle, fill=genGreen, minimum size=2mm, inner sep=0pt] (cd3) at ( 0.00,  0.18) {};
         \node[circle, fill=genGreen, minimum size=2mm, inner sep=0pt] (cd4) at ( 0.00, -0.20) {};
-        \draw[genGreen, line width=0.6pt] (cd1)--(cd3) (cd2)--(cd3)
+        \draw[genGreen, fig thin] (cd1)--(cd3) (cd2)--(cd3)
                                           (cd1)--(cd4) (cd2)--(cd4)
                                           (cd1)--(cd2);
     \end{scope}
@@ -202,13 +188,13 @@
 %    % Bond/substructure proposals icon: small branched substructure
 %    \begin{scope}[shift={(0,0)}]
 %        % Bonds (drawn first, behind nodes)
-%        \draw[genGreen, line width=1pt] (-0.35, 0.00) -- (-0.05, 0.00);
-%        \draw[genGreen, line width=1pt] (-0.05, 0.00) -- ( 0.20, 0.22);
-%        \draw[genGreen, line width=1pt] (-0.05, 0.00) -- ( 0.20,-0.22);
-%        \draw[genGreen, line width=1pt] ( 0.20, 0.22) -- ( 0.20,-0.22);
+%        \draw[genGreen, fig medium] (-0.35, 0.00) -- (-0.05, 0.00);
+%        \draw[genGreen, fig medium] (-0.05, 0.00) -- ( 0.20, 0.22);
+%        \draw[genGreen, fig medium] (-0.05, 0.00) -- ( 0.20,-0.22);
+%        \draw[genGreen, fig medium] ( 0.20, 0.22) -- ( 0.20,-0.22);
 %        % Atoms (small filled green dots with outline)
 %        \foreach \x/\y in {-0.35/0.00, -0.05/0.00, 0.20/0.22, 0.20/-0.22} {
-%            \draw[genGreen, line width=0.7pt, fill=genGreen!55]
+%            \draw[genGreen, fig line, fill=genGreen!55]
 %                (\x,\y) circle (0.075);
 %        }
 %    \end{scope}
@@ -251,7 +237,7 @@
 % =================================================================
 \begin{scope}[shift={(6, 6.0)}]
     % Outer box
-    \draw[rounded corners=3pt, scoBlue, line width=1pt, fill=scoBlueLL]
+    \draw[rounded corners=3pt, scoBlue, fig medium, fill=scoBlueLL]
         (-4.8,-2.00) rectangle (4.8, 3.20);
     % Title
     \node[anchor=north, font=\LARGE\bfseries, text=scoBlue] at (0, 3.05) {Score};
@@ -306,7 +292,7 @@
         \draw[scoBlue!70, thin] (0,0) -- (2.2, 0);   % x axis
         \foreach \x/\h in {0.10/0.45, 0.30/0.20, 0.55/0.85, 0.75/0.55, 0.95/0.30,
                           1.25/0.95, 1.50/0.30, 1.70/0.65, 1.90/0.20, 2.10/0.10} {
-            \draw[spectrumBlue, line width=0.9pt] (\x, 0) -- (\x, \h);
+            \draw[spectrumBlue, fig medium] (\x, 0) -- (\x, \h);
         }
         \node[font=\small] at (2.4, 0.45) {$\dots$};
     \end{scope}
@@ -349,7 +335,7 @@
                           1.20/0.95, 1.45/0.45, 1.65/0.65, 1.90/0.30, 2.15/0.80,
                           2.40/0.50, 2.60/0.25, 2.85/0.70, 3.10/0.40, 3.35/0.85,
                           3.60/0.30, 3.85/0.55} {
-            \draw[spectrumBlue, line width=0.9pt] (\x, 0) -- (\x, \h);
+            \draw[spectrumBlue, fig medium] (\x, 0) -- (\x, \h);
         }
         \node[font=\small] at (4.30, 0.45) {$\dots$};
     \end{scope}
@@ -366,11 +352,11 @@
         \foreach \x/\h in {0.10/0.45, 0.25/0.85, 0.40/0.30, 0.55/0.65, 0.70/0.95,
                           0.90/0.40, 1.05/0.55, 1.20/0.20, 1.35/0.70, 1.50/0.30,
                           1.65/0.50, 1.78/0.25} {
-            \draw[spectrumRed, line width=0.9pt] (\x, 0) -- (\x, \h);
+            \draw[spectrumRed, fig medium] (\x, 0) -- (\x, \h);
         }
     \end{scope}
     % Double-ended arrow
-    \draw[<->, line width=1pt] (-0.30, -0.20) -- (0.30, -0.20);
+    \draw[<->, fig medium] (-0.30, -0.20) -- (0.30, -0.20);
     % Two small molecules + dots
     \begin{scope}[shift={(0.85,-0.30)}]
         \node[circle, fill=atomBlueE, minimum size=2mm, inner sep=0pt] (im1) at (0,0.18) {};

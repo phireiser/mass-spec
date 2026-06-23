@@ -1,16 +1,11 @@
-\definecolor{Pred}{RGB}{210,55,40}
-\definecolor{Qblue}{RGB}{40,120,200}
-\definecolor{Wamber}{RGB}{180,120,20}
-\definecolor{gridgray}{RGB}{150,150,150}
-\definecolor{paneltitle}{RGB}{60,60,60}
 
-\begin{tikzpicture}
+\begin{tikzpicture}[fig]
 
 % =====================================================================
 % PANEL C — response curves vs shift
 % =====================================================================
 \begin{scope}[shift={(0,0)}]
-  \node[anchor=west,paneltitle,font=\bfseries] at (0,0.55)
+  \node[anchor=west,panel title] at (0,0.55)
     {(c) Response vs.\ how far B is shifted};
   \begin{axis}[
       at={(0,0cm)}, anchor=north west,
@@ -26,7 +21,7 @@
       xtick={0,4,8,12,16,20},
       xticklabel style={color=gridgray,font=\scriptsize},
       tick style={color=gridgray},
-      every axis plot/.append style={line width=1.3pt},
+      every axis plot/.append style={fig heavy},
     ]
     % cosine: 1 at 0, then 0 (with spurious spikes at 14,17)
     \addplot[Qblue,mark=*,mark size=1.2pt] coordinates {
@@ -47,7 +42,7 @@
       tick style={color=Wamber},
     ]
     % Wasserstein: linear 2.63 * shift
-    \addplot[Wamber,line width=1.3pt,dashed] coordinates {
+    \addplot[Wamber,fig heavy,dashed] coordinates {
       (0,0)(20,52.6)};
     \addplot[Wamber,only marks,mark=*,mark size=1.1pt] coordinates {
       (0,0)(2,5.25)(4,10.5)(6,15.8)(8,21.1)(10,26.3)(12,31.5)

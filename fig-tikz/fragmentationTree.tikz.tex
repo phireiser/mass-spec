@@ -1,6 +1,6 @@
 % Small reusable molecular-graph glyph, centred on the given node.
 \newcommand{\molGlyph}[1]{%
-  \begin{scope}[shift={(#1)}, line width=0.3pt]
+  \begin{scope}[shift={(#1)}, fig hair]
     \draw (0,-2.2) -- (0,0) -- (-2.2,1.3) (0,0) -- (2.2,1.3);
     \fill (0,0) circle[radius=0.55]
           (0,-2.2) circle[radius=0.55]
@@ -12,10 +12,10 @@
 \newcommand{\fragmentationTree}{%
   \begin{tikzpicture}[
       x=0.5mm, y=-0.5mm,
-      >=Latex,
+      fig,
       fragnode/.style={draw, ellipse, minimum width=6mm, minimum height=5mm,
-                       inner sep=0pt, line width=0.4pt},
-      treearrow/.style={->, line width=0.4pt, shorten >=0.5pt, shorten <=0.5pt},
+                       inner sep=0pt, fig thin},
+      treearrow/.style={->, fig thin, shorten >=0.5pt, shorten <=0.5pt},
     ]
     % ---- nodes (centres in original SVG coordinates) ----
     \node[fragnode] (root) at (44.5,  7.7) {};

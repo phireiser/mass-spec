@@ -1,14 +1,9 @@
-\definecolor{Pred}{RGB}{210,55,40}
-\definecolor{Qblue}{RGB}{30,120,200}
-\definecolor{Wamber}{RGB}{190,120,20}
-\definecolor{gridgray}{RGB}{180,180,180}
-
-\begin{tikzpicture}[x=0.85cm,y=2.6cm]
+\begin{tikzpicture}[x=0.85cm,y=2.6cm,fig]
 
   % ---- axis range: x value 0..13, y index 0..1.15 ----
   % gridlines for the i/n levels
   \foreach \lvl/\lab in {0.25/{$\tfrac14$}, 0.5/{$\tfrac24$}, 0.75/{$\tfrac34$}, 1/{$\tfrac44$}}{
-    \draw[gridgray,dashed,line width=0.3pt] (0,\lvl) -- (13,\lvl);
+    \draw[fig grid] (0,\lvl) -- (13,\lvl);
     \node[left,Pred,font=\small] at (0,\lvl) {\lab};
   }
   \node[left,font=\small] at (0,0) {$0$};
@@ -17,54 +12,54 @@
   % level 1 (0..0.25): between P=1 and Q=4  -> width 3
   \fill[pattern=north east lines, pattern color=Wamber]
         (1,0.04) rectangle (4,0.21);
-  \draw[Wamber,line width=0.4pt] (1,0.04) rectangle (4,0.21);
+  \draw[Wamber,fig thin] (1,0.04) rectangle (4,0.21);
   \node[Wamber,font=\bfseries] at (2.5,0.125) {3};
   % level 2 (0.25..0.5): between Q=4 and P=6 -> width 2
   \fill[pattern=north east lines, pattern color=Wamber]
         (4,0.29) rectangle (6,0.46);
-  \draw[Wamber,line width=0.4pt] (4,0.29) rectangle (6,0.46);
+  \draw[Wamber,fig thin] (4,0.29) rectangle (6,0.46);
   \node[Wamber,font=\bfseries] at (5,0.375) {2};
   % level 3 (0.5..0.75): between P=6 and Q=9 -> width 3
   \fill[pattern=north east lines, pattern color=Wamber]
         (6,0.54) rectangle (9,0.71);
-  \draw[Wamber,line width=0.4pt] (6,0.54) rectangle (9,0.71);
+  \draw[Wamber,fig thin] (6,0.54) rectangle (9,0.71);
   \node[Wamber,font=\bfseries] at (7.5,0.625) {3};
   % level 4 (0.75..1): between P=10 and Q=12 -> width 2
   \fill[pattern=north east lines, pattern color=Wamber]
         (10,0.79) rectangle (12,0.96);
-  \draw[Wamber,line width=0.4pt] (10,0.79) rectangle (12,0.96);
+  \draw[Wamber,fig thin] (10,0.79) rectangle (12,0.96);
   \node[Wamber,font=\bfseries] at (11,0.875) {2};
 
   % ---- P staircase (red): sorted P = 1,6,6,10 ----
-  \draw[Pred,line width=1.6pt]
+  \draw[Pred,fig bold]
         (1,0) -- (1,0.25) -- (6,0.25) -- (6,0.75) -- (10,0.75) -- (10,1) -- (12,1);
   \foreach \x/\y in {1/0.25, 6/0.75, 10/1}{
     \fill[Pred] (\x,\y) circle (2pt);
   }
 
   % ---- Q staircase (blue): sorted Q = 4,4,9,12 ----
-  \draw[Qblue,line width=1.6pt]
+  \draw[Qblue,fig bold]
         (4,0) -- (4,0.5) -- (9,0.5) -- (9,0.75) -- (12,0.75) -- (12,1);
   \foreach \x/\y in {4/0.5, 9/0.75, 12/1}{
     \fill[Qblue] (\x,\y) circle (2pt);
   }
 
   % ---- axes ----
-  \draw[-{Stealth[length=3mm]},line width=0.6pt] (0,0) -- (13,0);
-  \draw[-{Stealth[length=3mm]},line width=0.6pt] (0,0) -- (0,1.13);
+  \draw[-{Latex[length=3mm]},fig thin] (0,0) -- (13,0);
+  \draw[-{Latex[length=3mm]},fig thin] (0,0) -- (0,1.13);
   \foreach \x in {1,4,6,9,10,12}{
-    \draw[line width=0.5pt] (\x,0.012) -- (\x,-0.012);
+    \draw[fig thin] (\x,0.012) -- (\x,-0.012);
     \node[below,font=\small] at (\x,-0.01) {\x};
   }
 
   % ---- legend ----
   \begin{scope}[shift={(0.4,-0.22)}]
-    \draw[Pred,line width=1.6pt] (0,0) -- (0.8,0);
+    \draw[Pred,fig bold] (0,0) -- (0.8,0);
     \node[right,font=\small] at (0.8,0) {$P$ staircase};
-    \draw[Qblue,line width=1.6pt] (4.2,0) -- (5,0);
+    \draw[Qblue,fig bold] (4.2,0) -- (5,0);
     \node[right,font=\small] at (5,0) {$Q$ staircase};
     \fill[pattern=north east lines, pattern color=Wamber] (8.4,-0.03) rectangle (8.9,0.03);
-    \draw[Wamber,line width=0.4pt] (8.4,-0.03) rectangle (8.9,0.03);
+    \draw[Wamber,fig thin] (8.4,-0.03) rectangle (8.9,0.03);
     \node[right,font=\small] at (8.9,0) {$|\,\text{difference}\,|$};
   \end{scope}
 

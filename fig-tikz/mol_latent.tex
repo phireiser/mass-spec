@@ -1,34 +1,4 @@
 %% ─── Colours ────────────────────────────────────────────────────────────────
-\definecolor{stBlue}{RGB}{25,95,195}
-\definecolor{stGreen}{RGB}{18,138,95}
-\definecolor{bBlu}{RGB}{218,233,255}
-\definecolor{brdBlu}{RGB}{75,138,218}
-\definecolor{bGrn}{RGB}{208,243,222}
-\definecolor{brdGrn}{RGB}{45,168,118}
-\definecolor{bYel}{RGB}{255,248,208}
-\definecolor{brdYel}{RGB}{198,168,58}
-\definecolor{lgray}{RGB}{158,158,158}
-\definecolor{arrB}{RGB}{28,88,208}
-\definecolor{colN}{RGB}{28,78,198}
-\definecolor{colO}{RGB}{198,38,38}
-\definecolor{colCl}{RGB}{28,158,28}
-\definecolor{colC}{RGB}{78,78,78}
-\definecolor{gCol}{RGB}{68,128,218}
-\definecolor{vB}{RGB}{128,168,228}
-\definecolor{vO}{RGB}{218,158,68}
-\definecolor{vG}{RGB}{118,188,128}
-\definecolor{vP}{RGB}{158,108,208}
-\definecolor{vK}{RGB}{218,108,158}
-\definecolor{vC}{RGB}{78,188,198}
-\definecolor{s1c}{RGB}{55,118,218}
-\definecolor{s2c}{RGB}{218,148,48}
-\definecolor{s3c}{RGB}{48,168,98}
-\definecolor{s4c}{RGB}{138,58,208}
-\definecolor{s5c}{RGB}{208,58,128}
-\definecolor{s6c}{RGB}{28,173,193}
-\definecolor{s7c}{RGB}{198,138,58}
-\definecolor{s8c}{RGB}{78,178,98}
-\definecolor{hFill}{RGB}{222,222,222}
 
 \tikzset{
   aC/.style={circle,draw=colC,fill=white,minimum size=10pt,inner sep=0pt,font=\tiny\bfseries,text=colC},
@@ -36,23 +6,23 @@
   aO/.style={circle,draw=colO,fill=colO!15,minimum size=10pt,inner sep=0pt,font=\tiny\bfseries,text=colO},
   aCl/.style={circle,draw=colCl,fill=colCl!15,minimum size=11pt,inner sep=0pt,font=\tiny\bfseries,text=colCl},
   gn/.style={circle,draw=gCol!80,fill=gCol!30,minimum size=4pt,inner sep=0pt},
-  sn/.style={circle,draw=#1,fill=white,line width=1.3pt,minimum size=22pt,inner sep=0pt,font=\small\bfseries},
-  hb/.style={draw=lgray,fill=hFill,minimum width=18pt,minimum height=14pt,inner sep=2pt,font=\small\bfseries},
+  sn/.style={circle,draw=#1,fill=white,fig heavy,minimum size=22pt,inner sep=0pt,font=\small\bfseries},
+  hb/.style={draw=gridgray,fill=hFill,minimum width=18pt,minimum height=14pt,inner sep=2pt,font=\small\bfseries},
   evB/.style={draw=vB!80,fill=vB!35,minimum width=#1,minimum height=5pt,inner sep=0pt},
   evO/.style={draw=vO!80,fill=vO!35,minimum width=#1,minimum height=5pt,inner sep=0pt},
   evG/.style={draw=vG!80,fill=vG!35,minimum width=#1,minimum height=5pt,inner sep=0pt},
   evP/.style={draw=vP!80,fill=vP!35,minimum width=#1,minimum height=5pt,inner sep=0pt},
   evK/.style={draw=vK!80,fill=vK!35,minimum width=#1,minimum height=5pt,inner sep=0pt},
   evC/.style={draw=vC!80,fill=vC!35,minimum width=#1,minimum height=5pt,inner sep=0pt},
-  sa/.style={->,>=stealth,line width=0.9pt,color=black!75},
-  dl/.style={dashed,line width=0.42pt,color=black!18},
-  dt/.style={dashed,line width=0.9pt,color=lgray}
+  sa/.style={->,>=stealth,fig medium,color=black!75},
+  dl/.style={dashed,fig thin,color=black!18},
+  dt/.style={dashed,fig medium,color=gridgray}
 }
 
 \begin{tikzpicture}[font=\small]
 
 %%──────────────────── STAGE 1 BOX ───────────────────────────────────────────
-\draw[rounded corners=8pt,line width=1pt]
+\draw[rounded corners=8pt,fig medium]
   (-0.5,-15.1) rectangle (9.4,-0.7);
 
 \node[anchor=west,font=\normalsize\bfseries,text=stBlue] at (1,-1.15)
@@ -75,10 +45,10 @@
 \node[font=\scriptsize] at (1.0,-4.75) {(precursor)};
 
 %% mol graph s1: 6-ring + O + Cl
-\draw[colC!55,line width=0.7pt]
+\draw[colC!55,fig line]
   (2.72,-4.62)--(3.2,-4.84)--(3.68,-4.62)--(3.68,-4.18)--(3.2,-3.96)--(2.72,-4.18)--cycle;
-\draw[colC!55,line width=0.7pt] (3.68,-4.62)--(4.04,-4.78);
-\draw[colC!55,line width=0.7pt] (2.72,-4.62)--(2.36,-4.88);
+\draw[colC!55,fig line] (3.68,-4.62)--(4.04,-4.78);
+\draw[colC!55,fig line] (2.72,-4.62)--(2.36,-4.88);
 \node[aC] at (2.72,-4.62) {C};
 \node[aC] at (3.2,-4.84)  {C};
 \node[aC] at (3.68,-4.62) {C};
@@ -87,7 +57,7 @@
 \node[aC] at (2.72,-4.18) {C};
 \node[aO] at (4.04,-4.78) {O};
 \node[aCl]at (2.36,-4.88) {Cl};
-\draw[lgray,rounded corners=3pt,line width=0.5pt]
+\draw[gridgray,rounded corners=3pt,fig thin]
   (2.05,-5.38) rectangle (4.38,-3.64);
 
 \draw[sa] (4.38,-4.62)--(5.28,-4.62);
@@ -98,7 +68,7 @@
 \foreach \ang in {90,0,270,180}
   \node[gn] at ({6.0+0.23*cos(\ang)},{-4.65+0.18*sin(\ang)}) {};
 \foreach \a/\b in {90/0,0/270,270/180,180/90,90/270}
-  \draw[gCol!40,line width=0.35pt]
+  \draw[gCol!40,fig hair]
     ({6.0+0.23*cos(\a)},{-4.65+0.18*sin(\a)}) --
     ({6.0+0.23*cos(\b)},{-4.65+0.18*sin(\b)});
 \draw[sa] (6.72,-4.62)--(7.6,-4.62);
@@ -115,16 +85,16 @@
 \node[font=\scriptsize] at (1.0,-8.3) {(fragment 1)};
 
 %% mol graph s2: 5-ring + O
-\draw[colC!55,line width=0.7pt]
+\draw[colC!55,fig line]
   (3.2,-7.82)--(2.74,-8.16)--(2.9,-8.7)--(3.5,-8.7)--(3.66,-8.16)--cycle;
-\draw[colC!55,line width=0.7pt] (3.66,-8.16)--(4.08,-8.0);
+\draw[colC!55,fig line] (3.66,-8.16)--(4.08,-8.0);
 \node[aN] at (3.2,-7.82)  {N};
 \node[aC] at (2.74,-8.16) {C};
 \node[aC] at (2.9,-8.7)   {C};
 \node[aC] at (3.5,-8.7)   {C};
 \node[aC] at (3.66,-8.16) {C};
 \node[aO] at (4.08,-8.0)  {O};
-\draw[lgray,rounded corners=3pt,line width=0.5pt]
+\draw[gridgray,rounded corners=3pt,fig thin]
   (2.05,-9.0) rectangle (4.38,-7.5);
 
 \draw[sa] (4.38,-8.17)--(5.28,-8.17);
@@ -135,7 +105,7 @@
 \foreach \ang in {90,0,270,180}
   \node[gn] at ({6.0+0.23*cos(\ang)},{-8.2+0.18*sin(\ang)}) {};
 \foreach \a/\b in {90/0,0/270,270/180,180/90,90/270}
-  \draw[gCol!40,line width=0.35pt]
+  \draw[gCol!40,fig hair]
     ({6.0+0.23*cos(\a)},{-8.2+0.18*sin(\a)}) --
     ({6.0+0.23*cos(\b)},{-8.2+0.18*sin(\b)});
 \draw[sa] (6.72,-8.17)--(7.6,-8.17);
@@ -152,14 +122,14 @@
 \node[font=\scriptsize] at (1.0,-11.8) {(fragment 2)};
 
 %% mol graph s3
-\draw[colC!55,line width=0.7pt] (2.78,-11.62)--(3.28,-11.62);
-\draw[colC!55,line width=0.7pt] (3.28,-11.62)--(3.7,-11.18);
-\draw[colC!55,line width=0.7pt] (3.28,-11.62)--(3.7,-12.02);
+\draw[colC!55,fig line] (2.78,-11.62)--(3.28,-11.62);
+\draw[colC!55,fig line] (3.28,-11.62)--(3.7,-11.18);
+\draw[colC!55,fig line] (3.28,-11.62)--(3.7,-12.02);
 \node[aC]  at (2.78,-11.62) {C};
 \node[aC]  at (3.28,-11.62) {C};
 \node[aO]  at (3.7,-11.18)  {O};
 \node[aCl] at (3.7,-12.02)  {Cl};
-\draw[lgray,rounded corners=3pt,line width=0.5pt]
+\draw[gridgray,rounded corners=3pt,fig thin]
   (2.05,-12.44) rectangle (4.38,-10.82);
 
 \draw[sa] (4.38,-11.62)--(5.28,-11.62);
@@ -170,7 +140,7 @@
 \foreach \ang in {90,0,270,180}
   \node[gn] at ({6.0+0.23*cos(\ang)},{-11.65+0.18*sin(\ang)}) {};
 \foreach \a/\b in {90/0,0/270,270/180,180/90,90/270}
-  \draw[gCol!40,line width=0.35pt]
+  \draw[gCol!40,fig hair]
     ({6.0+0.23*cos(\a)},{-11.65+0.18*sin(\a)}) --
     ({6.0+0.23*cos(\b)},{-11.65+0.18*sin(\b)});
 \draw[sa] (6.72,-11.62)--(7.6,-11.62);
@@ -184,10 +154,10 @@
 \node[font=\fontsize{40}{40}\selectfont] at (4.7,-13.35) {$\vdots$};
 
 %%──────────────────── LARGE BLUE ARROW ──────────────────────────────────────
-\draw[->, line width=4pt, arrB](9.6,-7.95) -- (11.1,-7.95);
+\draw[->, fig xbold, arrB](9.6,-7.95) -- (11.1,-7.95);
 
 %%──────────────────── STAGE 2 BOX ───────────────────────────────────────────
-\draw[rounded corners=8pt,line width=1pt]
+\draw[rounded corners=8pt,fig medium]
   (11.5,-15.1) rectangle (21,-0.7);
 
 \node[anchor=west,font=\normalsize\bfseries,text=stGreen] at (11.8,-1.15)
@@ -247,25 +217,25 @@
 
 %% e1 incidence node + links to s2 s3 s4
 \node[hb] (he1) at (15.2,-3.95) {$e_1$};
-\draw[line width=0.7pt,lgray] (hs1)--(he1);
-\draw[line width=0.7pt,lgray] (he1)--(hs2);
-\draw[line width=0.7pt,lgray] (he1)--(hs3);
-\draw[line width=0.7pt,lgray] (he1)--(hs4);
+\draw[fig line,gridgray] (hs1)--(he1);
+\draw[fig line,gridgray] (he1)--(hs2);
+\draw[fig line,gridgray] (he1)--(hs3);
+\draw[fig line,gridgray] (he1)--(hs4);
 
 %% e2 incidence node + links s3 s4 → e2 → s5 s6
 \node[hb] (he2) at (17.0,-7.2) {$e_2$};
-\draw[line width=0.7pt,lgray] (hs3)--(he2);
-\draw[line width=0.7pt,lgray] (he2)--(hs5);
-\draw[line width=0.7pt,lgray] (he2)--(hs6);
+\draw[fig line,gridgray] (hs3)--(he2);
+\draw[fig line,gridgray] (he2)--(hs5);
+\draw[fig line,gridgray] (he2)--(hs6);
 
 %% e3 incidence node + links s2 → e3 → s7 s8
 \node[hb] (he3) at (13.3,-9.6) {$e_3$};
-\draw[line width=0.7pt,lgray] (hs2)--(he3);
-\draw[line width=0.7pt,lgray] (he3)--(hs7);
-\draw[line width=0.7pt,lgray] (he3)--(hs8);
+\draw[fig line,gridgray] (hs2)--(he3);
+\draw[fig line,gridgray] (he3)--(hs7);
+\draw[fig line,gridgray] (he3)--(hs8);
 
 %%──────────────────── LEGEND ─────────────────────────────────────────────────
-\draw[draw=lgray,dashed,rounded corners=4pt,fill=white]
+\draw[draw=gridgray,dashed,rounded corners=4pt,fill=white]
   (11.7,-14.85) rectangle (20.8,-13);
 
 \node[sn=s1c!55,minimum size=13pt] at (12.25,-13.38) {};
@@ -276,7 +246,7 @@
 \node[font=\tiny,align=left,anchor=west] at (12.55,-13.93)
   {Hyperedges: fragmentation rules};
 
-\draw[line width=0.9pt] (12.05,-14.48)--(12.42,-14.48);
+\draw[fig medium] (12.05,-14.48)--(12.42,-14.48);
 \node[font=\tiny,align=left,anchor=west,text width=7.8cm] at (12.55,-14.48)
   {Incidence: (vertex\_id, hyperedge\_id) stored in \texttt{edge\_index}};
 

@@ -1,28 +1,23 @@
-\definecolor{Pred}{RGB}{210,55,40}
-\definecolor{Qblue}{RGB}{40,120,200}
-\definecolor{Wamber}{RGB}{180,120,20}
-\definecolor{gridgray}{RGB}{150,150,150}
-\definecolor{paneltitle}{RGB}{60,60,60}
 
 % peaks: m/z 91,105,122,150,178  heights 35,100,62,18,48
 \newcommand{\stemUP}[3]{% x, height(0..100), color
-  \draw[#3,line width=2.4pt] (#1,0) -- (#1,{#2/100*2.6});}
+  \draw[#3,fig xbold] (#1,0) -- (#1,{#2/100*2.6});}
 \newcommand{\stemDN}[3]{% x, height(0..100), color
-  \draw[#3,line width=2.4pt] (#1,0) -- (#1,{-#2/100*2.6});}
+  \draw[#3,fig xbold] (#1,0) -- (#1,{-#2/100*2.6});}
 
-\begin{tikzpicture}
+\begin{tikzpicture}[fig]
 
 % =====================================================================
 % PANEL A — aligned (shift 0): perfect match
 % =====================================================================
 \begin{scope}[shift={(0,0)}]
-  \node[anchor=west,paneltitle,font=\bfseries] at (0,3.5)
+  \node[anchor=west,panel title] at (0,3.5)
     {(a) Aligned spectra \;—\; identical, $\theta=0$};
   % axis: x from 80..190 mapped to 0..9 ; use raw m/z with xscale
   \begin{scope}[xscale=9/110, xshift=-80*9/110 cm]
     % zero baseline
-    \draw[gridgray,line width=0.8pt] (80,0) -- (192,0);
-    \draw[-{Stealth[length=2mm]},gridgray] (80,0) -- (194,0);
+    \draw[gridgray,fig line] (80,0) -- (192,0);
+    \draw[-{Latex[length=2mm]},gridgray] (80,0) -- (194,0);
     % A up (red), B down (blue) at same positions
     \stemUP{91}{35}{Pred}\stemDN{91}{35}{Qblue}
     \stemUP{105}{100}{Pred}\stemDN{105}{100}{Qblue}
@@ -44,11 +39,11 @@
 % PANEL B — shifted (B moved +8 Da): peaks no longer overlap
 % =====================================================================
 \begin{scope}[shift={(0,-8.4)}]
-  \node[anchor=west,paneltitle,font=\bfseries] at (0,3.5)
+  \node[anchor=west,panel title] at (0,3.5)
     {(b) B shifted $+8$\,Da \;—\; peaks miss, $\theta\!\to\!90^\circ$};
   \begin{scope}[xscale=9/110, xshift=-80*9/110 cm]
-    \draw[gridgray,line width=0.8pt] (80,0) -- (192,0);
-    \draw[-{Stealth[length=2mm]},gridgray] (80,0) -- (194,0);
+    \draw[gridgray,fig line] (80,0) -- (192,0);
+    \draw[-{Latex[length=2mm]},gridgray] (80,0) -- (194,0);
     % A up at original positions
     \stemUP{91}{35}{Pred}\stemUP{105}{100}{Pred}\stemUP{122}{62}{Pred}
     \stemUP{150}{18}{Pred}\stemUP{178}{48}{Pred}
@@ -57,7 +52,7 @@
     \stemDN{158}{18}{Qblue}\stemDN{186}{48}{Qblue}
     % transport arrows (Wasserstein: move each blue back onto red), amber
     \foreach \bx/\ax in {99/91,113/105,130/122,158/150,186/178}{
-      \draw[Wamber,-{Stealth[length=1.6mm]},line width=0.7pt,opacity=0.8]
+      \draw[Wamber,-{Latex[length=1.6mm]},fig line,opacity=0.8]
         (\bx,-0.5) -- (\ax,-0.5);}
     \node[Wamber,font=\scriptsize] at (135,-1.15) {transport distance $=8$ each};
     \foreach \m in {91,105,122,150,178}{
@@ -74,7 +69,7 @@
 % PANEL C — response curves vs shift
 % =====================================================================
 \begin{scope}[shift={(0,-16.0)}]
-  \node[anchor=west,paneltitle,font=\bfseries] at (0,0.55)
+  \node[anchor=west,panel title] at (0,0.55)
     {(c) Response vs.\ how far B is shifted};
   \begin{axis}[
       at={(0,0cm)}, anchor=north west,
@@ -90,7 +85,7 @@
       xtick={0,4,8,12,16,20},
       xticklabel style={color=gridgray,font=\scriptsize},
       tick style={color=gridgray},
-      every axis plot/.append style={line width=1.3pt},
+      every axis plot/.append style={fig heavy},
     ]
     % cosine: 1 at 0, then 0 (with spurious spikes at 14,17)
     \addplot[Qblue,mark=*,mark size=1.2pt] coordinates {
@@ -111,7 +106,7 @@
       tick style={color=Wamber},
     ]
     % Wasserstein: linear 2.63 * shift
-    \addplot[Wamber,line width=1.3pt,dashed] coordinates {
+    \addplot[Wamber,fig heavy,dashed] coordinates {
       (0,0)(20,52.6)};
     \addplot[Wamber,only marks,mark=*,mark size=1.1pt] coordinates {
       (0,0)(2,5.25)(4,10.5)(6,15.8)(8,21.1)(10,26.3)(12,31.5)
@@ -128,7 +123,7 @@
 % PANEL D — response to scaling B's intensity (peaks aligned)
 % =====================================================================
 \begin{scope}[shift={(0,-24.4)}]
-  \node[anchor=west,paneltitle,font=\bfseries] at (0,0.55)
+  \node[anchor=west,panel title] at (0,0.55)
     {(d) Response vs.\ B's peak intensity \;(positions aligned)};
   \begin{axis}[
       at={(0,0cm)}, anchor=north west,
@@ -146,7 +141,7 @@
       tick style={color=gridgray},
     ]
     % cosine: flat at 1.0 regardless of intensity scale
-    \addplot[Qblue,line width=1.3pt,mark=*,mark size=1.2pt] coordinates {
+    \addplot[Qblue,fig heavy,mark=*,mark size=1.2pt] coordinates {
       (1,1)(1.25,1)(1.5,1)(1.75,1)(2,1)(2.5,1)(3,1)};
     \node[Qblue,font=\scriptsize,anchor=south] at (axis cs:2,1.02)
       {cosine unchanged $=1.00$ (scale-invariant)};
@@ -163,7 +158,7 @@
       tick style={color=Wamber},
     ]
     % Wasserstein grows linearly with added mass
-    \addplot[Wamber,line width=1.3pt,dashed] coordinates {(1,0)(3,312.8)};
+    \addplot[Wamber,fig heavy,dashed] coordinates {(1,0)(3,312.8)};
     \addplot[Wamber,only marks,mark=*,mark size=1.1pt] coordinates {
       (1,0)(1.25,39.1)(1.5,78.2)(1.75,117.3)(2,156.4)(2.5,234.6)(3,312.8)};
     \node[Wamber,font=\scriptsize,anchor=west] at (axis cs:1.05,250)

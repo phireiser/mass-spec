@@ -1,15 +1,14 @@
 
 \begin{tikzpicture}[
-    font=\sffamily,
-    >=Stealth,
-    electrode/.style={draw=black,line width=0.9pt,fill=gray!35},
-    beam/.style={draw=purple!75!black,line width=1.0pt,densely dashed,-{Stealth[length=3.0mm]}},
-    ionbeam/.style={draw=green!55!black,line width=1.0pt,densely dashed,-{Stealth[length=3.0mm]}},
-    molarrow/.style={draw=black,line width=0.95pt,-{Stealth[length=2.6mm]}},
-    samplearrow/.style={draw=blue!70!black,line width=1.15pt,-{Stealth[length=3mm]}},
+    fig,
+    electrode/.style={draw=black,fig medium,fill=gray!35},
+    beam/.style={draw=purple!75!black,fig medium,densely dashed,-{Latex[length=3.0mm]}},
+    ionbeam/.style={draw=green!55!black,fig medium,densely dashed,-{Latex[length=3.0mm]}},
+    molarrow/.style={draw=black,fig medium,-{Latex[length=2.6mm]}},
+    samplearrow/.style={draw=blue!70!black,fig heavy,-{Latex[length=3mm]}},
     label/.style={align=center,font=\sffamily\small},
     biglabel/.style={align=center,font=\sffamily\large},
-    callout/.style={draw=black,line width=0.75pt},
+    callout/.style={draw=black,fig line},
     molecule/.style={circle,draw=blue!70!black,fill=blue!20,minimum size=7.6mm,inner sep=0pt,font=\sffamily\small},
     ion/.style={circle,draw=green!55!black,fill=green!22,minimum size=9.2mm,inner sep=0pt,font=\sffamily\small},
     spark/.style={star,star points=10,star point ratio=0.55,draw=orange!80!black,fill=yellow!50,minimum size=3.8mm,inner sep=0pt}
@@ -28,9 +27,9 @@
 \draw[callout] (2.88,6.42) -- (3.38,6.02);
 
 % filament
-\draw[black,line width=1.0pt] (5.55,7.15) -- (5.55,7.45) -- (5.95,7.45) -- (5.95,7.10);
-\draw[black,line width=1.0pt] (6.55,7.10) -- (6.55,7.45) -- (6.95,7.45) -- (6.95,7.15);
-\draw[black,line width=1.0pt,decorate,decoration={coil,aspect=0.55,segment length=3.2pt,amplitude=3.0pt}] (5.95,7.25) -- (6.55,7.25);
+\draw[black,fig medium] (5.55,7.15) -- (5.55,7.45) -- (5.95,7.45) -- (5.95,7.10);
+\draw[black,fig medium] (6.55,7.10) -- (6.55,7.45) -- (6.95,7.45) -- (6.95,7.15);
+\draw[black,fig medium,decorate,decoration={coil,aspect=0.55,segment length=3.2pt,amplitude=3.0pt}] (5.95,7.25) -- (6.55,7.25);
 \node[biglabel,anchor=west] at (7.52,7.88) {Filament};
 \draw[callout] (7.24,7.72) -- (6.60,7.39);
 
@@ -44,10 +43,10 @@
 % electron trap
 \path[electrode] (5.55,1.00) -- (5.55,1.70) -- (6.95,1.70) -- (6.95,1.00) -- (6.65,1.00) -- (6.65,1.45) -- (5.85,1.45) -- (5.85,1.00) -- cycle;
 \path[electrode] (6.18,0.55) rectangle (6.32,1.00);
-\draw[black,line width=0.9pt] (6.25,0.55) -- (6.25,0.24);
-\draw[black,line width=0.9pt] (5.95,0.24) -- (6.55,0.24);
-\draw[black,line width=0.9pt] (6.05,0.07) -- (6.45,0.07);
-\draw[black,line width=0.9pt] (6.15,-0.10) -- (6.35,-0.10);
+\draw[black,fig medium] (6.25,0.55) -- (6.25,0.24);
+\draw[black,fig medium] (5.95,0.24) -- (6.55,0.24);
+\draw[black,fig medium] (6.05,0.07) -- (6.45,0.07);
+\draw[black,fig medium] (6.15,-0.10) -- (6.35,-0.10);
 \node[biglabel,anchor=west] at (7.72,0.40) {Electron trap};
 \node[biglabel,anchor=west] at (7.72,0.00) {(anode)};
 \draw[callout] (7.48,0.50) -- (6.78,1.24);
@@ -83,19 +82,19 @@
 \path[electrode]
  (11.09,2.12) -- (11.23,2.12) -- (11.23,2.90) -- (11.11,3.08) -- (11.11,3.50) -- (10.97,3.50) -- (10.97,3.04) -- (11.09,2.86) -- cycle;
 % extraction label placed above its lens, clear of the electron-beam label
-\draw[black,line width=0.9pt] (11.10,6.04) -- (11.10,6.35);
+\draw[black,fig medium] (11.10,6.04) -- (11.10,6.35);
 \node[label] at (10.82,6.72) {Extraction\\lens};
 
 % ground connection below remaining extraction lens
-\draw[black,line width=0.9pt] (11.04,2.12) -- (11.04,1.56);
-\draw[black,line width=0.9pt] (10.74,1.56) -- (11.34,1.56);
-\draw[black,line width=0.9pt] (10.84,1.39) -- (11.24,1.39);
-\draw[black,line width=0.9pt] (10.94,1.22) -- (11.14,1.22);
+\draw[black,fig medium] (11.04,2.12) -- (11.04,1.56);
+\draw[black,fig medium] (10.74,1.56) -- (11.34,1.56);
+\draw[black,fig medium] (10.84,1.39) -- (11.24,1.39);
+\draw[black,fig medium] (10.94,1.22) -- (11.14,1.22);
 
 % FOCUSING LENS -- moved close to extraction lens; label moved right/up
 \path[electrode] (11.74,4.42) rectangle (11.88,5.88);
 \path[electrode] (11.74,2.28) rectangle (11.88,3.74);
-\draw[black,line width=0.9pt] (11.88,6.04) -- (12.48,6.34) -- (12.48,6.88);
+\draw[black,fig medium] (11.88,6.04) -- (12.48,6.34) -- (12.48,6.88);
 \node[label,anchor=west] at (12.55,7.02) {Focusing\\lens};
 
 \end{tikzpicture}

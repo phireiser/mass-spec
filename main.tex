@@ -49,6 +49,104 @@
 \usetikzlibrary{quotes}
 %\usetikzlibrary{quotesm}
 
+% ---- Shared figure style -------------------------------------------------
+% Centralised palette + tikz styles so all figures share one look.
+% Define a colour/style once here and reference it from the fig-tikz/* files
+% instead of redefining it locally (which had drifted, e.g. three Wambers).
+
+% Recurring semantic palette
+\definecolor{Pred}{RGB}{210,55,40}        % primary accent / "P" distribution
+\definecolor{Qblue}{RGB}{40,120,200}      % secondary / "Q" distribution
+\definecolor{Wamber}{RGB}{180,120,20}     % transport / highlight amber
+\definecolor{msred}{RGB}{170,0,60}        % schematic accent red
+\definecolor{gridgray}{RGB}{150,150,150}  % grid / auxiliary lines
+\definecolor{paneltitle}{RGB}{60,60,60}   % panel titles / labels
+
+% Light tints (panel fills) — derived from their base via xcolor tints
+\colorlet{Predfill}{Pred!10}
+\colorlet{Qbluefill}{Qblue!12}
+\colorlet{Wamberfill}{Wamber!12}
+
+% CPK element colours (shared by molecular-graph figures: mol_latent, gnn_pipeline)
+\definecolor{colC}{RGB}{78,78,78}     % carbon   – gray
+\definecolor{colN}{RGB}{28,78,198}    % nitrogen – blue
+\definecolor{colO}{RGB}{198,38,38}    % oxygen   – red
+\definecolor{colCl}{RGB}{28,158,28}   % chlorine – green
+
+% Categorical "series" palette (shared by mol_latent, level2)
+\definecolor{arrB}{RGB}{28,88,208}
+\definecolor{s1c}{RGB}{55,118,218}
+\definecolor{s2c}{RGB}{218,148,48}
+\definecolor{s3c}{RGB}{48,168,98}
+\definecolor{s4c}{RGB}{138,58,208}
+\definecolor{s5c}{RGB}{208,58,128}
+\definecolor{s6c}{RGB}{28,173,193}
+\definecolor{s7c}{RGB}{198,138,58}
+\definecolor{s8c}{RGB}{78,178,98}
+
+% Figure-local palettes (centralised here; were previously in fig-tikz/*).
+% Grouped by the figure that introduced them; names kept for minimal churn.
+% mol_latent (latent-space molecule map)
+\definecolor{stBlue}{RGB}{25,95,195}
+\definecolor{stGreen}{RGB}{18,138,95}
+\definecolor{bBlu}{RGB}{218,233,255}
+\definecolor{brdBlu}{RGB}{75,138,218}
+\definecolor{bGrn}{RGB}{208,243,222}
+\definecolor{brdGrn}{RGB}{45,168,118}
+\definecolor{bYel}{RGB}{255,248,208}
+\definecolor{brdYel}{RGB}{198,168,58}
+\definecolor{gCol}{RGB}{68,128,218}
+\definecolor{vB}{RGB}{128,168,228}
+\definecolor{vO}{RGB}{218,158,68}
+\definecolor{vG}{RGB}{118,188,128}
+\definecolor{vP}{RGB}{158,108,208}
+\definecolor{vK}{RGB}{218,108,158}
+\definecolor{vC}{RGB}{78,188,198}
+\definecolor{hFill}{RGB}{222,222,222}
+% generative-future (generate -> score schematic)
+\definecolor{genGreen}{RGB}{55,135,85}
+\colorlet{genGreenL}{genGreen!20}
+\colorlet{genGreenLL}{genGreen!10}
+\colorlet{scoBlue}{Qblue}                 % score-blue == primary blue (#3)
+\colorlet{scoBlueL}{scoBlue!22}
+\colorlet{scoBlueLL}{scoBlue!10}
+\definecolor{spectrumBlue}{RGB}{40,80,180}
+\colorlet{spectrumRed}{Pred}              % spectrum-red == primary red (#3)
+\definecolor{nodeGray}{RGB}{160,165,170}
+\definecolor{boxGray}{RGB}{225,228,232}
+\definecolor{atomBlue}{RGB}{132,170,210}
+\definecolor{atomBlueE}{RGB}{60,100,170}
+\definecolor{atomDark}{RGB}{40,80,140}
+\definecolor{redOx}{RGB}{220,80,75}
+% gnn_pipeline (non-atom accents)
+\definecolor{darkBlue}{RGB}{40,80,160}
+\definecolor{purpleArrow}{RGB}{120,90,170}
+\definecolor{embedG}{RGB}{120,170,110}
+% cosine_vectors (vectors A/B are exactly Pred/Qblue; aliased, kept semantic)
+\colorlet{Avec}{Pred}
+\colorlet{Bvec}{Qblue}
+\definecolor{gray60}{RGB}{120,120,120}
+% wasserstein_upsampling
+\definecolor{Green}{RGB}{40,120,60}
+\colorlet{Greenfill}{Green!12}
+
+% Recurring tikz element styles
+\tikzset{
+  fig/.style={>=Latex, line cap=round, line join=round, font=\sffamily},
+  % Line-weight tiers (one shared scale; figures snap to the nearest tier)
+  fig hair/.style={line width=0.3pt},
+  fig thin/.style={line width=0.5pt},
+  fig line/.style={line width=0.7pt},     % primary stroke
+  fig medium/.style={line width=0.9pt},
+  fig heavy/.style={line width=1.3pt},
+  fig bold/.style={line width=1.8pt},
+  fig xbold/.style={line width=2.4pt},
+  fig grid/.style={dashed, line width=0.3pt, draw=gridgray},
+  fig arrow/.style={->, line width=0.7pt},
+  panel title/.style={paneltitle, font=\bfseries},
+}
+% --------------------------------------------------------------------------
+
 % Chemistry
 \usepackage{chemfig}
 

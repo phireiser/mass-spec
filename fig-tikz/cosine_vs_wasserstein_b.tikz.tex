@@ -1,25 +1,20 @@
-\definecolor{Pred}{RGB}{210,55,40}
-\definecolor{Qblue}{RGB}{40,120,200}
-\definecolor{Wamber}{RGB}{180,120,20}
-\definecolor{gridgray}{RGB}{150,150,150}
-\definecolor{paneltitle}{RGB}{60,60,60}
 
 \providecommand{\stemUP}[3]{% x, height(0..100), color
-  \draw[#3,line width=2.4pt] (#1,0) -- (#1,{#2/100*2.6});}
+  \draw[#3,fig xbold] (#1,0) -- (#1,{#2/100*2.6});}
 \providecommand{\stemDN}[3]{% x, height(0..100), color
-  \draw[#3,line width=2.4pt] (#1,0) -- (#1,{-#2/100*2.6});}
+  \draw[#3,fig xbold] (#1,0) -- (#1,{-#2/100*2.6});}
 
-\begin{tikzpicture}
+\begin{tikzpicture}[fig]
 
 % =====================================================================
 % PANEL B — shifted (B moved +8 Da): peaks no longer overlap
 % =====================================================================
 \begin{scope}[shift={(0,0)}]
-  \node[anchor=west,paneltitle,font=\bfseries] at (0,3.5)
+  \node[anchor=west,panel title] at (0,3.5)
     {(b) B shifted $+8$\,Da \;—\; peaks miss, $\theta\!\to\!90^\circ$};
   \begin{scope}[xscale=9/110, xshift=-80*9/110 cm]
-    \draw[gridgray,line width=0.8pt] (80,0) -- (192,0);
-    \draw[-{Stealth[length=2mm]},gridgray] (80,0) -- (194,0);
+    \draw[gridgray,fig line] (80,0) -- (192,0);
+    \draw[-{Latex[length=2mm]},gridgray] (80,0) -- (194,0);
     % A up at original positions
     \stemUP{91}{35}{Pred}\stemUP{105}{100}{Pred}\stemUP{122}{62}{Pred}
     \stemUP{150}{18}{Pred}\stemUP{178}{48}{Pred}
@@ -28,7 +23,7 @@
     \stemDN{158}{18}{Qblue}\stemDN{186}{48}{Qblue}
     % transport arrows (Wasserstein: move each blue back onto red), amber
     \foreach \bx/\ax in {99/91,113/105,130/122,158/150,186/178}{
-      \draw[Wamber,-{Stealth[length=1.6mm]},line width=0.7pt,opacity=0.8]
+      \draw[Wamber,-{Latex[length=1.6mm]},fig line,opacity=0.8]
         (\bx,-0.5) -- (\ax,-0.5);}
     \node[Wamber,font=\scriptsize] at (135,-1.15) {transport distance $=8$ each};
     \foreach \m in {91,105,122,150,178}{
