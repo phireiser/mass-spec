@@ -1,27 +1,27 @@
 \begin{tikzpicture}[
     fig,
-    aC/.style={circle, draw=colC, fill=colC!15, minimum size=6mm,
-               inner sep=0pt, font=\bfseries\footnotesize, text=colC},
-    aO/.style={circle, draw=colO, fill=colO!15, minimum size=6mm,
-               inner sep=0pt, font=\bfseries\footnotesize, text=colO},
-    aN/.style={circle, draw=colN, fill=colN!15, minimum size=6mm,
-               inner sep=0pt, font=\bfseries\footnotesize, text=colN},
-    aP/.style={circle, draw=purpleArrow, fill=purpleArrow!18, minimum size=4mm,
-               inner sep=0pt, font=\bfseries\tiny, text=purpleArrow!70!black},
-    bigA/.style={circle, draw=colC, fill=colC, minimum size=4.5mm,
+    aC/.style={circle, draw=black!70, fill=black!11, minimum size=6mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=black!70},
+    aO/.style={circle, draw=BrickRed, fill=BrickRed!15, minimum size=6mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=BrickRed},
+    aN/.style={circle, draw=RoyalBlue, fill=RoyalBlue!15, minimum size=6mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=RoyalBlue},
+    aP/.style={circle, draw=RoyalPurple, fill=RoyalPurple!18, minimum size=4mm,
+               inner sep=0pt, font=\bfseries\tiny, text=RoyalPurple!70!black},
+    bigA/.style={circle, draw=black!70, fill=black!70, minimum size=4.5mm,
                  inner sep=0pt, font=\bfseries\small, text=white},
-    bigO/.style={circle, draw=colO, fill=colO, minimum size=4.5mm,
+    bigO/.style={circle, draw=BrickRed, fill=BrickRed, minimum size=4.5mm,
                  inner sep=0pt, font=\bfseries\small, text=white},
-    bigN/.style={circle, draw=colN, fill=colN, minimum size=4.5mm,
+    bigN/.style={circle, draw=RoyalBlue, fill=RoyalBlue, minimum size=4.5mm,
                  inner sep=0pt, font=\bfseries\small, text=white},
-    stnum/.style={circle, draw=darkBlue, thick, minimum size=8mm,
-                  inner sep=1pt, font=\bfseries, text=darkBlue},
+    stnum/.style={circle, draw=NavyBlue, thick, minimum size=8mm,
+                  inner sep=1pt, font=\bfseries, text=NavyBlue},
     sttitle/.style={font=\bfseries\small, align=center, text=black!85},
-    fcell/.style={rectangle, draw=colC!50, fill=colC!8,
+    fcell/.style={rectangle, draw=black!35, fill=black!6,
                   minimum width=5mm, minimum height=5.5mm, inner sep=0pt,
                   font=\tiny},
-    parrow/.style={-{Latex[length=2mm]}, thick, purpleArrow, dashed},
-    msgar/.style={-{Latex[length=1.4mm]}, semithick, purpleArrow!80,
+    parrow/.style={-{Latex[length=2mm]}, thick, RoyalPurple, dashed},
+    msgar/.style={-{Latex[length=1.4mm]}, semithick, RoyalPurple!80,
                   dashed, shorten >=1pt, shorten <=1pt},
     biga/.style={-{Latex[length=6mm, width=5.5mm]}, fig xbold, black!60},
 ]
@@ -163,14 +163,14 @@
 \begin{scope}[shift={(#1,#2-0.25)}]
     \molcoords{#3}{0.55}
     % Ring + exocyclic bonds (lighter purple, behind atoms)
-    \draw[thick, purpleArrow!55] (#3top) -- (#3tr);
-    \draw[thick, purpleArrow!55] (#3tr)  -- (#3br);
-    \draw[thick, purpleArrow!55] (#3br)  -- (#3bot);
-    \draw[thick, purpleArrow!55] (#3bot) -- (#3N);
-    \draw[thick, purpleArrow!55] (#3N)   -- (#3tl);
-    \draw[thick, purpleArrow!55] (#3tl)  -- (#3top);
-    \draw[thick, purpleArrow!55] (#3top) -- (#3O);
-    \draw[thick, purpleArrow!55] (#3N)   -- (#3Nme);
+    \draw[thick, RoyalPurple!55] (#3top) -- (#3tr);
+    \draw[thick, RoyalPurple!55] (#3tr)  -- (#3br);
+    \draw[thick, RoyalPurple!55] (#3br)  -- (#3bot);
+    \draw[thick, RoyalPurple!55] (#3bot) -- (#3N);
+    \draw[thick, RoyalPurple!55] (#3N)   -- (#3tl);
+    \draw[thick, RoyalPurple!55] (#3tl)  -- (#3top);
+    \draw[thick, RoyalPurple!55] (#3top) -- (#3O);
+    \draw[thick, RoyalPurple!55] (#3N)   -- (#3Nme);
     % Atoms (named so we can attach message arrows)
     \node[aP] (#3-top) at (#3top) {C};
     \node[aP] (#3-tr)  at (#3tr)  {C};
@@ -191,7 +191,7 @@
 \foreach \i/\yc in {1/7.0, 2/4.4, 3/1.8} {
     \draw[rounded corners=2pt, gray!55]
         (\xC-1.55, \yc-1.05) rectangle (\xC+1.55, \yc+1.25);
-    \node[anchor=north west, font=\scriptsize\bfseries, text=purpleArrow, fill=white, inner sep=1pt]
+    \node[anchor=north west, font=\scriptsize\bfseries, text=RoyalPurple, fill=white, inner sep=1pt]
         at (\xC-1.45, \yc+1.20) {Layer \i};
 }
 \msgring{\xC}{7.0}{L1}
@@ -204,13 +204,13 @@
 
 % Update equation box
 \begin{scope}[shift={(\xC+0.1,-1.0)}]
-    \draw[rounded corners=2pt, purpleArrow, thick]
+    \draw[rounded corners=2pt, RoyalPurple, thick]
         (-1.78,-0.95) rectangle (1.78, 0.95);
     \node[align=center, font=\scriptsize] at (0,0) {%
         $h_v^{(k+1)} = \sigma\!\Big(W_{\text{self}}\,h_v^{(k)}$\\[3pt]
         $+\;\textstyle\sum_{u\in\mathcal{N}(v)} W_{\text{neigh}}\,h_u^{(k)}\Big)$};
 \end{scope}
-\node[align=center, font=\scriptsize\itshape, text=purpleArrow]
+\node[align=center, font=\scriptsize\itshape, text=RoyalPurple]
     at (\xC+0.1,-2.6) {each atom incorporates\\information from\\its neighbors};
 
 % =================================================================
@@ -239,7 +239,7 @@
 \end{scope}
 
 % per-atom embedding vectors below
-\foreach \i/\col [count=\r from 0] in {1/colC, 2/colO, 3/colC, 4/colC, 5/colN, 6/colC} {
+\foreach \i/\col [count=\r from 0] in {1/gray, 2/BrickRed, 3/gray, 4/gray, 5/RoyalBlue, 6/gray} {
     \pgfmathsetmacro{\yy}{2.6 - 0.55*\r}
     \node[font=\scriptsize] at (\xD-1.6, \yy) {\i};
     % small atom dot
@@ -257,7 +257,7 @@
 % STAGE 5 — Pooling
 % =================================================================
 % small embedding rows feeding into Sigma
-\foreach \i/\col [count=\r from 0] in {1/colC, 2/colO, 3/colC, 4/colC, 5/embedG, 6/colC} {
+\foreach \i/\col [count=\r from 0] in {1/gray, 2/BrickRed, 3/gray, 4/gray, 5/OliveGreen, 6/gray} {
     \pgfmathsetmacro{\yy}{5.4 - 0.7*\r}
     \node[circle, fill=\col, draw=\col!70!black, minimum size=3mm, inner sep=0pt]
         (sd\i) at (\xE-0.95, \yy) {};
@@ -299,15 +299,15 @@
 
 % molecular embedding vertical vector
 \begin{scope}[shift={(\xF+1.5, 2.6)}]
-    \draw[rounded corners=1pt, embedG!80, thick] (-0.18,-1.5) rectangle (0.18,1.5);
+    \draw[rounded corners=1pt, OliveGreen!80, thick] (-0.18,-1.5) rectangle (0.18,1.5);
     \foreach \i/\sh in {0/100, 1/70, 2/55, 3/85, 4/100, 5/65, 6/45, 7/90, 8/100, 9/80} {
         \pgfmathsetmacro{\yy}{1.35 - 0.3*\i}
-        \node[rectangle, fill=embedG!\sh, draw=embedG!\sh!black!40,
+        \node[rectangle, fill=OliveGreen!\sh, draw=OliveGreen!\sh!black!40,
               minimum width=3mm, minimum height=3.5mm, inner sep=0pt]
             at (0, \yy) {};
     }
     \node[font=\tiny] at (0,-1.75) {$\vdots$};
-    \node[align=center, font=\scriptsize, text=embedG!50!black] at (0,-2.55)
+    \node[align=center, font=\scriptsize, text=OliveGreen!50!black] at (0,-2.55)
         {molecular\\embedding\\$z_{\text{mol}}$};
 \end{scope}
 
@@ -315,7 +315,7 @@
 % STAGE 7 — Latent space scatter
 % =================================================================
 \begin{scope}[shift={(\xG, 3.0)}]
-    \draw[rounded corners=2pt, dashed, embedG!70, thick] (-1.3,-1.5) rectangle (1.3,1.7);
+    \draw[rounded corners=2pt, dashed, OliveGreen!70, thick] (-1.3,-1.5) rectangle (1.3,1.7);
     % axes
     \draw[->, gray!80] (-1.0,-1.1) -- (1.0,-1.1);
     \draw[->, gray!80] (-1.0,-1.1) -- (-1.0, 1.1);
@@ -325,9 +325,9 @@
     }
     % green points (highlighted)
     \foreach \px/\py in {-0.2/0.2, 0.1/0.0, 0.4/0.5, -0.4/0.7} {
-        \node[circle, fill=embedG, minimum size=2.2mm, inner sep=0pt] at (\px,\py) {};
+        \node[circle, fill=OliveGreen, minimum size=2.2mm, inner sep=0pt] at (\px,\py) {};
     }
-    \node[align=center, font=\scriptsize, text=embedG!50!black, anchor=north]
+    \node[align=center, font=\scriptsize, text=OliveGreen!50!black, anchor=north]
         at (0,-1.80)
         {shared latent\\space for\\comparison\\with spectral\\embeddings};
 \end{scope}

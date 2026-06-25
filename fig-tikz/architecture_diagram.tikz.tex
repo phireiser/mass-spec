@@ -23,14 +23,14 @@
 
 % ================== INPUT ROW ==================
 \node[inputNode] (MOL)  {Molecule Graph};
-\node[inputNode, right=of MOL] (FRAG) {Derivation Tree};
+\node[inputNode, right=of MOL] (FRAG) {Derivation Graph};
 \node[inputNode, right=of FRAG] (SPEC) {Mass Spectrum};
 \node[groupLabel] at (labelX |- MOL.north) {Input Data};
 
 % ================== ENCODER ROW ==================
-\node[encoderNode, below=of MOL]  (EncMol) {$\mathrm{Enc}_{\mathrm{mol}}$\\GCN $3 \rightarrow 64 \rightarrow d$\\Global Pool};
-\node[encoderNode, below=of FRAG] (FragSetEnc) {$\mathrm{Enc}_{\mathrm{frag}}$\\Fragment Graph +\\Tree GNN + Pool};
-\node[encoderNode, below=of SPEC] (EncSpec) {$\mathrm{Enc}_{\mathrm{spec}}$\\$s_{bins} \rightarrow 512 \rightarrow d$};
+\node[encoderNode, below=of MOL]  (EncMol) {$\mathrm{Enc}_{\mathrm{mol}}$\\GCN +\\Global Pool};
+\node[encoderNode, below=of FRAG] (FragSetEnc) {$\mathrm{Enc}_{\mathrm{frag}}$\\Fragment Graph +\\Derivation GNN + Pool};
+\node[encoderNode, below=of SPEC] (EncSpec) {$\mathrm{Enc}_{\mathrm{spec}}$\\Residual MLP};
 \node[groupLabel] at (labelX |- EncMol.north) {Encoders};
 
 \draw[arrow] (MOL) -- (EncMol);
@@ -54,35 +54,31 @@
 \draw[arrow] (ZF.south) -- (ZFUSED.north);
 
 % ================== HEADS ROW (LogVars removed) ==================
-\node[headsNode, below=35mm of ZF] (HdFwd) {Head$_{FWD}$\\$z \to d_t$};
-\node[headsNode, below=35mm of ZS]  (HdBwd) {Head$_{BWD}$\\$z \to d_t$};
+\node[headsNode, below=35mm of ZF] (HdFwd) {Head$_{FWD}$};
+\node[headsNode, below=35mm of ZS]  (HdBwd) {Head$_{BWD}$};
 \node[groupLabel] at (labelX |- HdFwd.north) {Task Heads};
 
 \draw[arrow] (ZFUSED) -- (HdFwd);
 \draw[arrow] (ZS) -- (HdBwd);
-\draw[syncArrow] (HdFwd) -- (HdBwd) node[midway, above, font=\tiny, gray] {synced};
+\draw[syncArrow] (HdFwd) -- (HdBwd) node[midway, above, font=\tiny, gray, align=center] {jointly\\trained};
 
-% ================== DECODER ROW ==================
-\node[decoderNode, below=of HdFwd] (DecFrag) {$\mathrm{Dec}_{\mathrm{frag}}$\\$d \to V_{frag}$};
-\node[decoderNode, below=of HdBwd] (DecSpec) {$\mathrm{Dec}_{\mathrm{spec}}$\\$d \to 512 \to s_{bins}$};
-\node[groupLabel] at (labelX |- DecFrag.north) {Decoders};
+% ================== DECODER ROW (single shared spectrum decoder) ==================
+\node[decoderNode] (DecSpec) at ($(HdFwd)!0.5!(HdBwd)+(0,-15mm)$) {$\mathrm{Dec}_{\mathrm{spec}}$\\(shared)};
+\node[groupLabel] at (labelX |- DecSpec.north) {Decoder};
 
-% connect to different anchors so arrows don't overlap
-\draw[arrow] (HdFwd) -- (DecFrag);
+% both task heads feed the single shared spectrum decoder
+\draw[arrow] (HdFwd) -- (DecSpec);
 \draw[arrow] (HdBwd) -- (DecSpec);
-\draw[syncArrow] (DecFrag) -- (DecSpec) node[midway, above, font=\tiny, gray] {synced};
 
-% ================== OUTPUT ROW (Spectrum + Fragments only) ==================
-\node[outputNode, below=of DecFrag] (FRAG_HAT) {$\hat{f}_{probs}$\\Fragments};
-\node[outputNode, below=of DecSpec] (SPEC_HAT) {$\hat{s}_{pred}$\\Spectrum};
+% ================== OUTPUT ROW ==================
+\node[outputNode, below=of DecSpec] (SPEC_HAT) {$\hat{s}$\\Spectrum};
 
-\draw[arrow] (DecFrag) -- (FRAG_HAT);
 \draw[arrow] (DecSpec) -- (SPEC_HAT);
 
 \end{scope} % end pipeline shift
 
 % ================== INDEX (ALIGNED WITH MOL COLUMN) ==================
-\node[outputNode, at=(MOL |- SPEC_HAT)] (INDEX) {Decoder for Retrieval};
+\node[outputNode, at=(MOL |- SPEC_HAT)] (INDEX) {Molecular Index\\(retrieval)};
 \node[groupLabel] at (labelX |- INDEX.north) {Output};
 
 \draw[arrow] (ZM.south) -- (INDEX.north);

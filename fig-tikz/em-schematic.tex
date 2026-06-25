@@ -26,11 +26,11 @@
 % --------------------------
 % Dynodes
 % --------------------------
-\draw[msred,fig heavy] ($(L1)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
-\draw[msred,fig heavy] ($(L2)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
-\draw[msred,fig heavy] ($(L3)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
-\draw[msred,fig heavy] ($(R1)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
-\draw[msred,fig heavy] ($(R2)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
+\draw[Maroon,fig heavy] ($(L1)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
+\draw[Maroon,fig heavy] ($(L2)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
+\draw[Maroon,fig heavy] ($(L3)+(0,\rDyn)$) arc[start angle=150,end angle=210,radius=\rDyn];
+\draw[Maroon,fig heavy] ($(R1)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
+\draw[Maroon,fig heavy] ($(R2)+(0,\rDyn)$) arc[start angle=30,end angle=-30,radius=\rDyn];
 
 % --------------------------
 % Anode
@@ -39,8 +39,8 @@
 \coordinate (A2) at ($(R3)+( 0.75,\anodeY-\yLowR)$);
 \coordinate (Astem) at ($(A1)!0.50!(A2)$);
 
-\draw[msred,fig heavy] (A1) -- (A2);
-\draw[msred,fig heavy] (Astem) -- ++(0,-0.95);
+\draw[Maroon,fig heavy] (A1) -- (A2);
+\draw[Maroon,fig heavy] (Astem) -- ++(0,-0.95);
 
 % --------------------------
 % Electron cascade
@@ -66,16 +66,16 @@
          \pgfmathsetmacro{\yoff}{2*\k/\kmax - 1}%
          \pgfmathsetmacro{\dyminus}{-1 + 2*(2*\k)/(2*\cnt - 1)}%
          \pgfmathsetmacro{\dyplus}{-1 + 2*(2*\k + 1)/(2*\cnt - 1)}%
-         \draw[msred,fig hair]
+         \draw[Maroon,fig hair]
              ($(#1)+(0,0.2*\yoff)$) -- ($(#2)+(0,0.2*\dyminus)$);
-         \draw[msred,fig hair]
+         \draw[Maroon,fig hair]
              ($(#1)+(0,0.2*\yoff)$) -- ($(#2)+(0,0.2*\dyplus)$);
       }%
    }
 
   % incoming ion (single)
   \coordinate (IonIn) at ($(P1)+(1.2,0.50)$);
-  \draw[msred,fig hair] (IonIn) -- (P1);
+  \draw[Maroon,fig hair] (IonIn) -- (P1);
 
   % --------------------------
   % Stage 1: first reflections
@@ -85,9 +85,9 @@
   \foreach \k in {0,...,\kmax} {
     \pgfmathsetmacro{\dy}{(\k / 1 - 1.0/ \cnt)}
     \pgfmathsetmacro{\yoff}{(\k / 1 - 0.0/ \cnt)}
-    \draw[msred,fig hair]
+    \draw[Maroon,fig hair]
       ($(P1)+(0,0.2*\yoff)$) -- ($(P2)+(0,0.2*\dy)$);
-    \draw[msred,fig hair]
+    \draw[Maroon,fig hair]
       ($(P1)+(0,0.2*\yoff)$) -- ($(P2)+(0,-0.2*\dy)$);
   }
 
@@ -96,7 +96,7 @@
   \DrawCascadeStage{P4}{P5}{8}
 
   \foreach \t in {0.03125,0.0625,...,0.98}{
-    \draw[msred,fig hair] 
+    \draw[Maroon,fig hair] 
       ($(P5) + (0,0.2*\t)$) -- ($(A1)!\t!(A2)$);
   }
 

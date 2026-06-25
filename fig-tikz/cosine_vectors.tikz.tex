@@ -8,35 +8,35 @@
   \coordinate (F) at (3.294,0.8235); % foot of perpendicular from B onto line OA
 
   % faint reference axes
-  \draw[gray60,fig hair,-{Latex[length=2mm]}] (-0.3,0) -- (6.6,0);
-  \draw[gray60,fig hair,-{Latex[length=2mm]}] (0,-0.3) -- (0,4.5);
+  \draw[black!53,fig hair,-{Latex[length=2mm]}] (-0.3,0) -- (6.6,0);
+  \draw[black!53,fig hair,-{Latex[length=2mm]}] (0,-0.3) -- (0,4.5);
 
   % projection construction (perpendicular drop, drawn under the vectors)
-  \draw[gray60,dashed,fig thin] (B) -- (F);
+  \draw[black!53,dashed,fig thin] (B) -- (F);
   % right-angle mark at foot F
   \begin{scope}[shift={(F)}]
-    \draw[gray60,fig thin]
+    \draw[black!53,fig thin]
       ($(0,0)!0.16!(B)$) -- ($($(0,0)!0.16!(B)$)+($(0,0)!0.16!(O)$)$) -- ($(0,0)!0.16!(O)$);
   \end{scope}
 
   % vectors
-  \draw[Avec,fig bold,->] (O) -- (A) node[above right=-1pt,Avec,font=\small] {$A$};
-  \draw[Bvec,fig bold,->] (O) -- (B) node[above=1pt,Bvec,font=\small] {$B$};
+  \draw[BrickRed,fig bold,->] (O) -- (A) node[above right=-1pt,BrickRed,font=\small] {$A$};
+  \draw[RoyalBlue,fig bold,->] (O) -- (B) node[above=1pt,RoyalBlue,font=\small] {$B$};
 
   % projection segment, drawn on top of vector A so it stays visible
-  \draw[Wamber,fig xbold] (O) -- (F)
-        node[midway,below=2pt,Wamber,font=\small] {$\|B\|\cos\theta$};
+  \draw[amber,fig xbold] (O) -- (F)
+        node[midway,below=2pt,amber,font=\small] {$\|B\|\cos\theta$};
 
   % angle between them
-  \pic[draw=Wamber,fig medium,angle radius=1.15cm,
-       angle eccentricity=1.28,"$\theta$"{Wamber,font=\small}]
+  \pic[draw=amber,fig medium,angle radius=1.15cm,
+       angle eccentricity=1.28,"$\theta$"{amber,font=\small}]
        {angle = A--O--B};
 
   % origin dot
   \fill (O) circle (1.6pt) node[below left=-1pt,font=\small] {$O$};
 
   % length labels along the vectors
-  \node[Avec,font=\scriptsize] at ($(O)!0.55!(A)+(0,-0.28)$) {$\|A\|$};
-  \node[Bvec,font=\scriptsize] at ($(O)!0.55!(B)+(-0.32,0.05)$) {$\|B\|$};
+  \node[BrickRed,font=\scriptsize] at ($(O)!0.55!(A)+(0,-0.28)$) {$\|A\|$};
+  \node[RoyalBlue,font=\scriptsize] at ($(O)!0.55!(B)+(-0.32,0.05)$) {$\|B\|$};
 
 \end{tikzpicture}

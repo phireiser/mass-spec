@@ -13,25 +13,25 @@
   \node[anchor=west,panel title] at (0,3.5)
     {(b) B shifted $+8$\,Da \;—\; peaks miss, $\theta\!\to\!90^\circ$};
   \begin{scope}[xscale=9/110, xshift=-80*9/110 cm]
-    \draw[gridgray,fig line] (80,0) -- (192,0);
-    \draw[-{Latex[length=2mm]},gridgray] (80,0) -- (194,0);
+    \draw[black!41,fig line] (80,0) -- (192,0);
+    \draw[-{Latex[length=2mm]},black!41] (80,0) -- (194,0);
     % A up at original positions
-    \stemUP{91}{35}{Pred}\stemUP{105}{100}{Pred}\stemUP{122}{62}{Pred}
-    \stemUP{150}{18}{Pred}\stemUP{178}{48}{Pred}
+    \stemUP{91}{35}{BrickRed}\stemUP{105}{100}{BrickRed}\stemUP{122}{62}{BrickRed}
+    \stemUP{150}{18}{BrickRed}\stemUP{178}{48}{BrickRed}
     % B down at +8
-    \stemDN{99}{35}{Qblue}\stemDN{113}{100}{Qblue}\stemDN{130}{62}{Qblue}
-    \stemDN{158}{18}{Qblue}\stemDN{186}{48}{Qblue}
+    \stemDN{99}{35}{RoyalBlue}\stemDN{113}{100}{RoyalBlue}\stemDN{130}{62}{RoyalBlue}
+    \stemDN{158}{18}{RoyalBlue}\stemDN{186}{48}{RoyalBlue}
     % transport arrows (Wasserstein: move each blue back onto red), amber
     \foreach \bx/\ax in {99/91,113/105,130/122,158/150,186/178}{
-      \draw[Wamber,-{Latex[length=1.6mm]},fig line,opacity=0.8]
+      \draw[amber,-{Latex[length=1.6mm]},fig line,opacity=0.8]
         (\bx,-0.5) -- (\ax,-0.5);}
-    \node[Wamber,font=\scriptsize] at (135,-1.15) {transport distance $=8$ each};
+    \node[amber,font=\scriptsize] at (135,-1.15) {transport distance $=8$ each};
     \foreach \m in {91,105,122,150,178}{
-      \node[Pred,font=\scriptsize] at (\m,2.95) {\m};}
-    \node[gridgray,font=\scriptsize] at (193,-0.35) {$m/z$};
+      \node[BrickRed,font=\scriptsize] at (\m,2.95) {\m};}
+    \node[black!41,font=\scriptsize] at (193,-0.35) {$m/z$};
   \end{scope}
-  \node[Pred,font=\small] at (8.6,2.4) {A};
-  \node[Qblue,font=\small] at (8.6,-2.4) {B};
+  \node[BrickRed,font=\small] at (8.6,2.4) {A};
+  \node[RoyalBlue,font=\small] at (8.6,-2.4) {B};
   \node[anchor=west,font=\small] at (0.1,-3.55)
     {cosine $=\mathbf{0.00}$ (no shared peaks) \qquad Wasserstein $=\mathbf{21.1}$};
 \end{scope}
