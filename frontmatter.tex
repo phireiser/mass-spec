@@ -41,10 +41,10 @@ Die Vorhersage von Massenspektren aus Molekülstrukturen sowie die inverse Ablei
 Während Methoden des maschinellen Lernens die Vorhersage von Spektren aus bekannten Strukturen zunehmend verbessern, bleibt das inverse Problem --- die Vorhersage plausibler Molekülstrukturen aus einem gegebenen Spektrum --- schwierig, mehrdeutig und nur eingeschränkt interpretierbar.
 
 Diese Arbeit untersucht die Integration zusätzlicher Zwischenfragmente, die durch graphbasierte Transformationstools erzeugt werden, in Machine-Learning-Pipelines für die bidirektionale Übersetzung zwischen Molekülstrukturen und Massenspektren.
-Diese graphbasierten Zwischenrepräsentationen bilden eine explizite Fragmentierungsschicht zwischen Molekülen und Spektren und machen den Vorhersageprozess dadurch besser interpretierbar als rein Black-Box-basierte Ansätze.
+Diese graphbasierten Zwischenrepräsentationen bilden eine explizite Fragmentierungsschicht zwischen Molekülen und Spektren und sollen den Vorhersageprozess dadurch transparenter machen als rein Black-Box-basierte Ansätze.
 
 Das vorgeschlagene Framework integriert graphbasierte Fragmentierungszwischenstufen systematisch in Modelle zur Struktur $\leftrightarrow$ Spektrum-Übersetzung.
-Durch die Kombination molekularer Repräsentationen, spektraler Information und fragmentbasierter Graphstrukturen entsteht eine funktionsfähige bidirektionale Pipeline, die durch ihre Konstruktion interpretierbar ist.
+Durch die Kombination molekularer Repräsentationen, spektraler Information und fragmentbasierter Graphstrukturen entsteht eine funktionsfähige bidirektionale Pipeline mit einer expliziten Fragmentierungs-Zwischenschicht.
 In einer Machbarkeitsstudie (Proof of Concept) verbessert eine auf dem Vorwärtsmodell basierende Reranking-Stufe die Wiederauffindung (Retrieval) deutlich, während die fragmentbasierten Komponenten unter den gegebenen Kleinstichprobenbedingungen noch keinen messbaren Vorteil gegenüber Ablationsvarianten erbringen.
 Der wesentliche Beitrag besteht daher im Framework selbst sowie in einer systematischen Analyse seiner Stärken, Grenzen und Fehlermodi, die eine konkrete Grundlage für zukünftige Arbeiten zur gelernten Fragmenterzeugung bildet.
 

@@ -28,7 +28,7 @@
         \hline
         \multicolumn{3}{l}{\emph{Architecture}} \\
         Shared latent dimension           & $d$                              & $128$ \\
-        Graph-embedding dimension         & $d_h$                            & $64$ \\
+        GCN hidden width                  & $d_h$                            & $64$ \\
         GCN layers                        & ---                              & $2$ ($3\!\to\!64\!\to\!128$) \\
         Spectral MLP width                & ---                              & $512$ \\
         Dropout                           & ---                              & $0.1$ \\
@@ -54,7 +54,7 @@ The code for this thesis is available at
 The author used the following AI tools during the writing of this thesis:
 \begin{itemize}
     \item \textbf{ChatGPT} (various versions) for language refinement and grammar checking throughout the document.
-    \item \textbf{DeepL Write} for improving the style in the document
-    \item \textbf{Claude} for structuring and organizing in \Cref{ch:5}.
+    \item \textbf{DeepL Write} for improving the style in the document.
+    \item \textbf{Claude} for structuring and organizing.
     \item \textbf{GitHub Copilot} for code suggestions and auto-completion in the implementation of the codebase.
 \end{itemize}
