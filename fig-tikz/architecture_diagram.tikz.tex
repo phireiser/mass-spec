@@ -85,10 +85,12 @@
 
 % ================== LOSSES (POSITIONED ON THE RIGHT) ==================
 % Position losses in a column to the right of the main diagram
-\node[lossNode] at ($(SPEC_HAT)+(55mm,12mm)$) (LOSS_COS)  {Cosine Loss};
-\node[lossNode] at ($(SPEC_HAT)+(55mm,0mm)$)  (LOSS_WASS) {Wasserstein};
-%\node[lossNode] at ($(SPEC_HAT)+(55mm,-12mm)$) (LOSS_FORB) {Forbidden};
-\node[lossNode] at ($(ZS)+(55mm,0mm)$)        (LOSS_CON)  {InfoNCE};
+% Shared x for the loss column (aligned with the ZS-based losses below)
+\coordinate (LcolX) at ($(ZS)+(55mm,0mm)$);
+\node[lossNode] at ($(LcolX |- SPEC_HAT)+(0,12mm)$) (LOSS_COS)  {Cosine Loss};
+\node[lossNode] at (LcolX |- SPEC_HAT)               (LOSS_WASS) {Wasserstein};
+%\node[lossNode] at ($(LcolX |- SPEC_HAT)+(0,-12mm)$) (LOSS_FORB) {Forbidden};
+\node[lossNode] at (LcolX)                           (LOSS_CON)  {InfoNCE};
 \node[lossNode] at ($(LOSS_CON)+(0mm,12mm)$)   (LOSS_CYCLE){Cycle Cons.};
 
 \node[groupLabel] at ($(LOSS_CYCLE.north)+(-5mm,4mm)$) {Losses};
