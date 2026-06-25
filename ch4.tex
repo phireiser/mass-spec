@@ -5,23 +5,16 @@
 \section{Computation Times of Fragmentation Expansion}
 
 Computation times present a significant bottleneck for this approach. 
-The \texttt{mod} framework, while powerful in generating comprehensive reaction networks, 
-prioritizes flexibility and completeness over computational efficiency. 
-Combined with the combinatorial explosion of possible fragments and parent molecules, 
-runtime becomes prohibitive as the number of fragmentation rules increases. 
-Since only a subset of known rules were applied in this study, 
-computation times per molecule will rise substantially as additional rules are incorporated, 
-making further optimization necessary to ensure the feasibility of this approach at scale.
+The \texttt{mod} framework, while powerful in generating comprehensive reaction networks, prioritizes flexibility and completeness over computational efficiency. 
+Combined with the combinatorial explosion of possible fragments and parent molecules, runtime becomes prohibitive as the number of fragmentation rules increases. 
+Since only a subset of known rules were applied in this study, computation times per molecule will rise substantially as additional rules are incorporated, making further optimization necessary to ensure the feasibility of this approach at scale.
 
 \subsection{Visualization of Computation Times}
 
 A regression analysis was performed to model the relationship between molecular complexity and computation time. 
 
-Here, molecular complexity refers to Boettcher's complexity measure \cite{Boettcher2016}, which summarizes
-structural intricacy from the molecular graph. It provides a single scalar descriptor that allows molecules
-of different sizes and connectivities to be compared on a common scale. In this analysis, it is used as a
-proxy for fragmentation difficulty, although runtime is still influenced by additional factors such as the
-specific structure of the molecule and the available fragmentation pathways.
+Here, molecular complexity refers to Boettcher's complexity measure \cite{Boettcher2016}, which summarizes structural intricacy from the molecular graph. It provides a single scalar descriptor that allows molecules of different sizes and connectivities to be compared on a common scale. In this analysis, it is used as a
+proxy for fragmentation difficulty, although runtime is still influenced by additional factors such as the specific structure of the molecule and the available fragmentation pathways.
 
 The analysis assumes:
 \begin{itemize}[noitemsep,topsep=0pt]
@@ -31,9 +24,7 @@ The analysis assumes:
     \item Normality of residual distribution
 \end{itemize}
 
-In Figure \ref{fig:mod-time-regres}, the regression results are visualized, 
-showing a positive correlation between molecular complexity and computation time, 
-but also show a large variance in computation times for molecules of similar complexity.
+In Figure \ref{fig:mod-time-regres}, the regression results are visualized, showing a positive correlation between molecular complexity and computation time, but also show a large variance in computation times for molecules of similar complexity.
 Note that the threshold of 40 seconds was chosen arbitrarily to exclude trivial expansions.
 
 \begin{figure}[ht]
@@ -41,65 +32,47 @@ Note that the threshold of 40 seconds was chosen arbitrarily to exclude trivial 
     \includegraphics[width=0.8\linewidth]{fig-tikz/time_vs_complexity_logy_over40.png}
     \caption[Fragmentation Computation Times]{
         Regression of Computation time, excluding molecules that had trivial expansions (time $< 40$s).
-        The plot shows a positive correlation between molecular complexity and computation time,
-        but also a large variance in computation times for molecules of similar complexity.
+        The plot shows a positive correlation between molecular complexity and computation time, but also a large variance in computation times for molecules of similar complexity.
         }
     \label{fig:mod-time-regres}
 \end{figure}
 
-So while there is a general trend of increasing computation time with molecular complexity,
-the large variance suggests that other factors, 
-such as specific structural features or the particular fragmentation pathways available, 
-also play a significant role in determining computation time. This highlights the need for further optimization.
+So while there is a general trend of increasing computation time with molecular complexity, the large variance suggests that other factors, such as specific structural features or the particular fragmentation pathways available, also play a significant role in determining computation time. This highlights the need for further optimization.
 
 \section{Evaluation of Fragment Prediction}
 
 The evaluation reveals a mixed but informative picture of the proposed framework. 
 On the one hand, the model learns a usable mapping between molecular structures and spectra in both directions. 
-On the other hand, the fragment-aware components do 
-not currently provide a clear empirical advantage over simpler ablated variants. 
-The strongest positive result instead arises from the reranking stage, 
-which substantially improves retrieval quality.
-To isolate the contribution of individual components, this section includes an \emph{ablation study}
-comparing the full model against no-fragments, no-derivation-tree, and no-reranking variants.
-The paired randomization tests underlying this comparison did not yield statistically significant
-differences for any of the pairwise contrasts, with all p-values exceeding $0.05$.
+On the other hand, the fragment-aware components do not currently provide a clear empirical advantage over simpler ablated variants. 
+The strongest positive result instead arises from the reranking stage, which substantially improves retrieval quality.
+To isolate the contribution of individual components, this section includes an \emph{ablation study} comparing the full model against no-fragments, no-derivation-graph, and no-reranking variants.
+The paired randomization tests underlying this comparison did not yield statistically significant differences for the fragment-related contrasts (all p-values exceeding $0.05$); removing reranking, however, yields a statistically significant drop in retrieval quality (Full vs.\ no-reranking MRR, $p \approx 0.013$).
 
 \begin{figure}[H]
     \centering
     \includesvg[width=0.8\linewidth]{fig-tikz/cosine_mrr.svg}
     \caption[Cosine similarity and MRR for ablation variants]{
-        Ablation of three pipeline components (fragments, derivation tree, and reranker) against the full model. 
-        Cosine similarity measures how similar the query is to the correct target, averaged over all queries; 
-        MRR is the mean reciprocal rank of the ground-truth target. 
+        Ablation of three pipeline components (fragments, derivation graph, and reranker) against the full model.
+        Cosine similarity measures how similar the query is to the correct target, averaged over all queries; MRR is the mean reciprocal rank of the ground-truth target. 
         Error bars show $95\%$ bootstrap confidence intervals (5000 query resamples). 
         Brackets indicate pairwise p-values from paired randomization tests 
         %on per-query differences (10,000 sign flips), 
         computed separately for each metric. 
-        Cosine similarity remains nearly constant across variants ($\approx 0.43$), 
-        while MRR decreases from $0.24$ to $0.10$ when reranking is removed. 
-        Since all confidence intervals overlap and all pairwise p-values exceed $0.05$, 
-        these differences should be interpreted as suggestive rather than statistically established.
+        For \emph{cosine similarity}, all variants are nearly identical ($\approx 0.43$) and no pairwise difference is statistically significant, so forward reconstruction is insensitive to the ablations. 
+        For \emph{MRR}, removing reranking is the only significant effect, lowering it from $0.24$ to $0.10$ (Full vs.\ no-reranking, $p \approx 0.013$), 
+        whereas the fragment and derivation-graph ablations do not differ significantly from the full model.
         }
     \label{fig:cosine-mrr}
 \end{figure}
 
-In this ablation study, with respect to the forward task, 
-all evaluated variants achieve very similar cosine similarity values. 
-The full model reaches a mean cosine similarity of $0.4316$, while the no-fragments 
-and no-derivation-tree ablations achieve $0.4327$ and $0.4322$, respectively. Which is visible in \Cref{fig:cosine-mrr}.
-These differences are extremely small and indicate that the forward reconstruction quality is 
-largely insensitive to the inclusion or removal of the current fragment-aware branch. 
-In practical terms, the molecular encoder appears to capture most of the predictive signal required 
-for the structure-to-spectrum task, while the fragment representation 
-does not yet provide an additional significant benefit.
+In this ablation study, with respect to the forward task, all evaluated variants achieve very similar cosine similarity values. 
+The full model reaches a mean cosine similarity of $0.4316$, while the no-fragments and no-derivation-graph ablations achieve $0.4327$ and $0.4322$, respectively. Which is visible in \Cref{fig:cosine-mrr}.
+These differences are extremely small and indicate that the forward reconstruction quality is largely insensitive to the inclusion or removal of the current fragment-aware branch. 
+In practical terms, the molecular encoder appears to capture most of the predictive signal required for the structure-to-spectrum task, while the fragment representation does not yet provide an additional significant benefit.
 
-The retrieval results are more informative. As shown in Figure \ref{fig:recall-at-k}, for the full model, 
-Recall@1 is $0.091$, Recall@5 is $0.318$, Recall@10 is $0.500$, and Recall@20 is $0.864$, 
-with a mean reciprocal rank (MRR) of $0.243$. This shows that the correct molecule is frequently brought 
-into the top portion of the ranked candidate list, although top-1 identification remains limited. 
-The model therefore behaves more like a candidate narrowing system than a reliable single-shot identifier, 
-which is still useful in practical structure elucidation workflows.
+The retrieval results are more informative. As shown in Figure \ref{fig:recall-at-k}, for the full model, Recall@1 is $0.091$, Recall@5 is $0.318$, Recall@10 is $0.500$, and Recall@20 is $0.864$, with a mean reciprocal rank (MRR) of $0.243$. 
+This shows that the correct molecule is frequently brought into the top portion of the ranked candidate list, although top-1 identification remains limited. 
+The model therefore behaves more like a candidate narrowing system than a reliable single-shot identifier, which is still useful in practical structure elucidation workflows.
 
 \begin{figure}[H]
     \centering
@@ -107,51 +80,36 @@ which is still useful in practical structure elucidation workflows.
     \caption[Recall@k for ablation variants]{
         Recall@k for $k = 1, \ldots, 20$ across the full retrieval model and three ablated variants. 
         Shaded bands show 95\% bootstrap confidence intervals over queries. 
-        The full model and the \texttt{no fragments}~/~\texttt{no derivation tree} variants 
-        cluster together across the full $k$ range, 
-        while the \texttt{no reranking} variant trails the others at every $k$, 
-        with the largest gap at small $k$ and gradual closure toward $k = 20$.
+        The full model and the \texttt{no fragments}~/~\texttt{no derivation graph} variants cluster together across the full $k$ range, while the \texttt{no reranking} variant trails the others at every $k$, with the largest gap at small $k$ and gradual closure toward $k = 20$.
     }
     \label{fig:recall-at-k}
 \end{figure}
 
 The clearest effect in the evaluation is observed for the reranking stage. 
-Removing reranking leaves the forward cosine similarity unchanged, as expected, 
-but substantially reduces retrieval quality. Recall@5 drops from $0.318$ to $0.091$, 
+Removing reranking leaves the forward cosine similarity unchanged, as expected, but substantially reduces retrieval quality. Recall@5 drops from $0.318$ to $0.091$, 
 Recall@10 from $0.500$ to $0.227$, Recall@20 from $0.864$ to $0.409$, and MRR from $0.243$ to $0.103$. 
-This demonstrates that much of the retrieval benefit of 
-the framework arises from combining latent-space retrieval with forward-model-based rescoring. 
-In this sense, the present implementation benefits more from the interaction between the forward 
-and backward branches than from the fragment-aware representation itself.
+This demonstrates that much of the retrieval benefit of the framework arises from combining latent-space retrieval with forward-model-based rescoring. 
+In this sense, the present implementation benefits more from the interaction between the forward and backward branches than from the fragment-aware representation itself.
 
 In contrast, the fragment-related ablations do not support the claim of strong performance. 
-The no-fragments variant demonstrates a marginal improvement in performance when evaluated 
-against the full model in terms of cosine similarity and Recall@5. 
+The no-fragments variant demonstrates a marginal improvement in performance when evaluated against the full model in terms of Recall@5, while the cosine differences are within noise and not statistically significant. 
 However, it exhibits a slight decline in performance when assessed against Recall@10, Recall@20, and MRR. 
-In a similar vein, the no-derivation-tree variant has been shown to be highly competitive, 
-with results that are marginally superior to those of the full model on both Recall@5 and MRR. 
-The findings indicate that the fragment branch, in its present state, 
-is not yet demonstrating a substantial and unambiguously favourable signal. 
+In a similar vein, the no-derivation-graph variant has been shown to be highly competitive, with results that are marginally superior to those of the full model on both Recall@5 and MRR. 
+The findings indicate that the fragment branch, in its present state, is not yet demonstrating a substantial and unambiguously favourable signal. 
 It is evident that, at this juncture, the fragment representation is largely redundant given the molecular encoder.
 
 This conclusion should, however, be interpreted cautiously. 
 The test set contains only $22$ queries, so recall values change in increments of approximately $0.045$. 
 Consequently, differences between variants often reflect only one or two queries. 
-Query-level paired analyses confirm that the differences between the full model 
-and the no-fragments ablation are not statistically convincing for the main metrics, 
+Query-level paired analyses confirm that the differences between the full model and the no-fragments ablation are not statistically convincing for the main metrics, 
 whereas the benefit of reranking is much more substantial. 
-The present evaluation therefore provides stronger support for the usefulness of reranking than 
-for the effectiveness of the fragment-aware branch.
+The present evaluation therefore provides stronger support for the usefulness of reranking than for the effectiveness of the fragment-aware branch.
 
-Overall, the results show that the proposed bidirectional framework is functional and 
-that reranking substantially improves retrieval performance. 
+Overall, the results show that the proposed bidirectional framework is functional and that reranking substantially improves retrieval performance. 
 However, they also indicate that the current fragment integration does not yet realize its intended benefit. 
-The main contribution of the present work is therefore not the demonstration of a clear 
-performance gain from fragment augmentation, 
-but rather the establishment of a fragment-augmented bidirectional framework whose strengths, weaknesses, 
-and failure modes can be analyzed systematically. 
-This in turn provides a concrete basis for future work aimed at improving the informativeness 
-and integration of fragment-level intermediate representations.
+The main contribution of the present work is therefore not the demonstration of a clear performance gain from fragment augmentation, 
+but rather the establishment of a fragment-augmented bidirectional framework whose strengths, weaknesses, and failure modes can be analyzed systematically. 
+This in turn provides a concrete basis for future work aimed at improving the informativeness and integration of fragment-level intermediate representations.
 
 %\section{Forward Model Evaluation}
 %\subsection{Spectral Similarity and Fragment Prediction}
@@ -172,13 +130,9 @@ and integration of fragment-level intermediate representations.
 The thesis is shaped by several interconnected challenges. 
 
 \textbf{First}, fragmentation must be represented in a way that is simultaneously chemically meaningful and useful for machine learning. 
-
 \textbf{Second}, explicit fragment generation leads to a \emph{combinatorial explosion} of candidate structures and limits the practical scale of the approach. 
-
-\textbf{Third}, the absence of unique \emph{ground-truth fragmentation trees} makes fragment-level supervision inherently \emph{ambiguous}. 
-
+\textbf{Third}, the absence of unique \emph{ground-truth fragmentation graphs} makes fragment-level supervision inherently \emph{ambiguous}.
 \textbf{Fourth}, bidirectional learning introduces \emph{competing objectives}, since forward spectrum reconstruction and backward structure retrieval do not necessarily favor the same latent representation. 
-
 Finally and \textbf{fifth}, the empirical contribution of fragment-aware intermediate representations remains difficult to establish conclusively, especially under \emph{small-sample} conditions and in the presence of strong baseline signals from the molecular encoder alone.
 
 
