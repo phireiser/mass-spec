@@ -45,13 +45,13 @@ def train_epoch_phase_a(
     total = 0.0
 
     for batch_data in loader:
-        graph_feats, frag_graphs, frag_masses, true_spectrum, smiles, adj_local, deriv_trees_fwd, deriv_trees_bwd = batch_data
+        graph_feats, _frag_graphs, _frag_masses, true_spectrum, smiles, _adj_local, deriv_trees_fwd, _ = batch_data
 
         true_spectrum = true_spectrum.to(device)
         opt.zero_grad()
         z_m = enc_mol(graph_feats)
 
-        z_f = frag_set_enc(frag_graphs, deriv_tree_batch=deriv_trees_fwd)
+        z_f = frag_set_enc(deriv_tree_batch=deriv_trees_fwd)
 
         z = (z_m + z_f) / 2
         z_fwd, _ = heads(z)

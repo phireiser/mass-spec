@@ -146,8 +146,7 @@ def rerank_candidates(spec_q: torch.Tensor,
                       dec_spec: DecSpecLatent,
                       mz_min: float,
                       mz_max: float,
-                      bin_width: float,
-                      graph_backend: str = "adjacency") -> List[Tuple[str, float]]:
+                      bin_width: float) -> List[Tuple[str, float]]:
     enc_mol.eval(); frag_set_enc.eval(); dec_spec.eval(); heads.eval()
     scores: List[Tuple[str, float]] = []
 
@@ -155,9 +154,8 @@ def rerank_candidates(spec_q: torch.Tensor,
         spec_q_n = F.normalize(spec_q.cpu(), dim=-1)
         for it in candidates:
             z_m_c = enc_mol([it.graph_feat.to(device) if hasattr(it.graph_feat, 'to') else it.graph_feat]).squeeze(0)
-            frag_graphs_c = it.frag_graphs or []
             trees_c = [it.frag_deriv_tree_fwd]
-            z_f_c = frag_set_enc([frag_graphs_c], deriv_tree_batch=trees_c)
+            z_f_c = frag_set_enc(deriv_tree_batch=trees_c)
             z_c = (z_m_c.unsqueeze(0) + z_f_c) / 2
             z_fwd, _ = heads(z_c)
             spec_hat = dec_spec(z_fwd).cpu().squeeze(0)
@@ -174,10 +172,6 @@ def rerank_candidates(spec_q: torch.Tensor,
 
 
 def infer_mol_to_spec(graph_feat: GeometricData,
-                      frag_graphs: List[GeometricData],
-                      frag_adj_local: Optional[torch.Tensor],
-                      frag_masses: Optional[torch.Tensor],
-                      device: torch.device,
                       enc_mol: EncMol,
                       frag_set_enc: Any,
                       dec_spec: DecSpecLatent,
@@ -192,7 +186,7 @@ def infer_mol_to_spec(graph_feat: GeometricData,
 
     with torch.no_grad():
         z_m = enc_mol([graph_feat])
-        z_f = frag_set_enc([frag_graphs], deriv_tree_batch=[frag_deriv_tree])
+        z_f = frag_set_enc(deriv_tree_batch=[frag_deriv_tree])
         z = (z_m + z_f) / 2
         z_fwd, _ = heads(z)
         spec_hat = dec_spec(z_fwd).cpu().squeeze(0)

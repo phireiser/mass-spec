@@ -94,31 +94,6 @@ class EncMol(nn.Module):
         return pooled
 
 
-class EncFrag(nn.Module):
-    """
-    Encodes a bag-of-fragments vector into a latent embedding using a GNN.
-    """
-
-    def __init__(self, fragment_vocab_size, d_latent=128):
-        super().__init__()
-        if GCNConv is None:
-            raise ImportError("torch_geometric is required for GNN fragment encoder.")
-        self.fragment_vocab_size = fragment_vocab_size
-        self.d_latent = d_latent
-        self.gnn1 = GCNConv(1, 32)
-        self.gnn2 = GCNConv(32, d_latent)
-
-    def forward(self, bag: torch.Tensor) -> torch.Tensor:
-        outs = []
-        for i in range(bag.size(0)):
-            x = bag[i].unsqueeze(-1)
-            edge_index = torch.arange(self.fragment_vocab_size).unsqueeze(0).repeat(2, 1)
-            x1 = F.relu(self.gnn1(x, edge_index))
-            x2 = self.gnn2(x1, edge_index)
-            outs.append(x2.mean(dim=0))
-        return torch.stack(outs, 0)
-
-
 class EncSpec(nn.Module):
     """
     Encodes a binned mass spectrum into latent space with normalization/dropout.
@@ -133,38 +108,6 @@ class EncSpec(nn.Module):
 
     def forward(self, spec):
         return self.net(spec.float())
-
-
-class DecFrag(nn.Module):
-    """
-    Decodes latent embeddings back into fragment presence probabilities.
-    """
-
-    def __init__(self, d_latent, fragment_vocab_size, *, dropout: float = 0.1, norm: str = "layer"):
-        super().__init__()
-        self.net = mlp(d_latent, 256, fragment_vocab_size, dropout=dropout, norm=norm, residual=True)
-
-    def forward(self, z):
-        if z.dim() == 1:
-            z = z.unsqueeze(0)
-        return torch.sigmoid(self.net(z))
-
-
-class DecSpec(nn.Module):
-    """
-    Decodes latent embeddings and fragment information into a predicted spectrum.
-    """
-
-    def __init__(self, d_latent, fragment_vocab_size, spectrum_bins_size, *, dropout: float = 0.1, norm: str = "layer"):
-        super().__init__()
-        self.net = nn.Sequential(
-            mlp(d_latent + fragment_vocab_size, 512, 512, dropout=dropout, norm=norm, residual=True),
-            mlp(512, 512, spectrum_bins_size, dropout=dropout, norm=norm, residual=False),
-        )
-
-    def forward(self, z, frag):
-        x = torch.cat([z, frag], -1)
-        return F.relu(self.net(x))
 
 
 class DecSpecLatent(nn.Module):
@@ -194,7 +137,6 @@ class TaskHeads(nn.Module):
         self.fwd = nn.Sequential(nn.Linear(d_latent, d_task), nn.ReLU())
         self.bwd = nn.Sequential(nn.Linear(d_latent, d_task), nn.ReLU())
         self.logvar_spec = nn.Parameter(torch.zeros(1))
-        self.logvar_frag = nn.Parameter(torch.zeros(1))
         self.logvar_con = nn.Parameter(torch.zeros(1))
 
     def forward(self, z):
@@ -203,10 +145,7 @@ class TaskHeads(nn.Module):
 
 __all__ = [
     "EncMol",
-    "EncFrag",
     "EncSpec",
-    "DecFrag",
-    "DecSpec",
     "DecSpecLatent",
     "TaskHeads",
     "ResidualMLP",

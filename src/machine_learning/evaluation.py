@@ -26,11 +26,7 @@ def vec_to_peaks(vec: torch.Tensor, mz_min: float, bin_width: float, top_k: int 
 
 
 def demo_compare_spectrum(graph_feat: GeometricData,
-                          frag_graphs: List[GeometricData],
-                          frag_masses: torch.Tensor,
-                          adj_local: torch.Tensor,
                           true_spec: torch.Tensor,
-                          device,
                           enc_mol,
                           frag_set_enc,
                           dec_spec,
@@ -41,7 +37,7 @@ def demo_compare_spectrum(graph_feat: GeometricData,
                           mz_max: Optional[float] = None,
                           top_k: int = 10) -> Dict[str, Any]:
     """Predict spectrum and compare to ground truth."""
-    spec_hat = infer_mol_to_spec(graph_feat, frag_graphs, adj_local, frag_masses, device, enc_mol, frag_set_enc, dec_spec, heads,
+    spec_hat = infer_mol_to_spec(graph_feat, enc_mol, frag_set_enc, dec_spec, heads,
                                  smiles=smiles, mz_min=mz_min, mz_max=(mz_max if mz_max is not None else mz_min + true_spec.numel()*bin_width), bin_width=bin_width)
     true_spec = true_spec.detach().cpu()
     cos = F.cosine_similarity(F.normalize(spec_hat, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
@@ -98,31 +94,6 @@ def demo_retrieval_metrics(index, loader, device, enc_spec, enc_mol, frag_set_en
     return out
 
 
-def demo_ablate_adjacency(graph_feat: GeometricData,
-                          frag_graphs: List[GeometricData],
-                          adj_local: torch.Tensor,
-                          frag_masses: torch.Tensor,
-                          true_spec: torch.Tensor,
-                          smiles: Optional[str],
-                          mz_min: float,
-                          mz_max: float,
-                          bin_width: float,
-                          device,
-                          enc_mol,
-                          frag_set_enc,
-                          dec_spec,
-                          heads):
-    """Compare spectrum reconstruction with local adjacency vs zero adjacency smoothing."""
-    with torch.no_grad():
-        spec_hat_graph = infer_mol_to_spec(graph_feat, frag_graphs, adj_local, frag_masses, device, enc_mol, frag_set_enc, dec_spec, heads,
-                                           smiles=smiles, mz_min=mz_min, mz_max=mz_max, bin_width=bin_width)
-        spec_hat_none = infer_mol_to_spec(graph_feat, frag_graphs, torch.zeros_like(adj_local), frag_masses, device, enc_mol, frag_set_enc, dec_spec, heads,
-                                          smiles=smiles, mz_min=mz_min, mz_max=mz_max, bin_width=bin_width)
-        cos_graph = F.cosine_similarity(F.normalize(spec_hat_graph, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
-        cos_none = F.cosine_similarity(F.normalize(spec_hat_none, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
-    return {"cos_with_adj": cos_graph, "cos_no_adj": cos_none, "diff": cos_graph - cos_none}
-
-
 def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1, 5, 10), max_batches=5):
     """Add Gaussian noise to spectra and return Recall@K vs noise level."""
     results = {}
@@ -173,13 +144,13 @@ def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc
 
 
 def demo_visualize_reconstructions(
-    graph_feats, frag_graphs, frag_masses, true_spec, smiles, adj_local, device,
+    graph_feats, true_spec, smiles,
     enc_mol, frag_set_enc, dec_spec, heads, n_samples=3
     ) -> bool:
     """Plot true vs reconstructed spectra for n_samples molecules."""
     n = min(n_samples, len(smiles))
     for i in range(n):
-        spec_hat = infer_mol_to_spec(graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], device, enc_mol, frag_set_enc, dec_spec, heads)
+        spec_hat = infer_mol_to_spec(graph_feats[i], enc_mol, frag_set_enc, dec_spec, heads)
         plt.figure()
         plt.plot(true_spec[i].cpu().numpy(), label="true")
         plt.plot(spec_hat.cpu().numpy(), label="pred")
@@ -198,7 +169,6 @@ __all__ = [
     "vec_to_peaks",
     "demo_compare_spectrum",
     "demo_retrieval_metrics",
-    "demo_ablate_adjacency",
     "demo_noise_robustness",
     "demo_visualize_reconstructions",
 ]
