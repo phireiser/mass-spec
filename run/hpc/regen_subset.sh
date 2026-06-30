@@ -15,8 +15,9 @@
 # logs double as Phase 0.2 per-molecule cost data.
 #
 # Usage:
-#   sbatch run/hpc/regen_subset.sh
+#   sbatch run/hpc/regen_subset.sh                                  # built-in ~17-mol subset
 #   sbatch run/hpc/regen_subset.sh --names benzene,toluene,phenol   # custom subset
+#   sbatch run/hpc/regen_subset.sh --all-with-spectrum              # full corpus (~150 mols)
 set -euo pipefail
 
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"

@@ -44,13 +44,23 @@ def main() -> None:
     ap.add_argument("--out-dir", default=None, help="Output dir (a fwd/ subdir is created); required unless --emit-manifest")
     ap.add_argument("--spectra-folder", default=str(shared_path("NIST_SPECTRA_DIR_REL")))
     ap.add_argument("--names", default="", help="Comma-separated subset (default: built-in list)")
+    ap.add_argument("--all-with-spectrum", action="store_true",
+                    help="Use every molecule that has both a dump and a NIST spectrum (full corpus)")
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--emit-manifest", default=None,
                     help="Write 'name<TAB>smiles' lines for the subset to this path (or - for stdout) and exit. "
                          "Used by the SLURM array job to map task index -> molecule.")
     args = ap.parse_args()
 
-    names = [n.strip() for n in args.names.split(",") if n.strip()] or DEFAULT_SUBSET
+    if args.all_with_spectrum:
+        stale = Path(args.stale_fwd)
+        spectra = Path(args.spectra_folder)
+        names = sorted(
+            p.stem for p in stale.glob("*.pkl")
+            if (spectra / f"{p.stem.lower()}-Mass.jdx").exists()
+        )
+    else:
+        names = [n.strip() for n in args.names.split(",") if n.strip()] or DEFAULT_SUBSET
 
     # Manifest mode: emit name<TAB>smiles for the SLURM array, then stop (no generation).
     if args.emit_manifest:

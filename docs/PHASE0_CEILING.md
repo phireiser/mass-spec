@@ -66,6 +66,18 @@ sbatch run/hpc/regen_subset.sh
 Each task is wrapped in `/usr/bin/time -v`, so the per-task logs under
 `outputs/logs/regen_subset/slurm/` double as Phase 0.2 per-molecule cost data.
 
+Full corpus (all ~150 molecules that have both a dump and a spectrum):
+
+```bash
+sbatch run/hpc/regen_subset.sh --all-with-spectrum
+```
+
+> **Cost warning.** Per-molecule cost is dominated by *saturated aliphatic* content,
+> not size, and spans ~6000× on the subset (butane C4H10 ~4 h; aromatics seconds).
+> The full corpus contains longer saturated chains (pentane … nonane, alkyl acids),
+> so expect a heavy tail — keep the wall-time cap generous and treat the result as
+> the Phase 0.2 cost distribution (use it for N\* = B / cost, not a mean).
+
 Ceiling on an existing set of (fresh) dumps:
 
 ```bash
