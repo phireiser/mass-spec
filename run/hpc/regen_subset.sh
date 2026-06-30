@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=phase0_regen_subset
-#SBATCH --time=10-00:30:00
+#SBATCH --time=3-00:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=16G
 #SBATCH --output=outputs/logs/regen_subset/slurm/%A/%j.out
