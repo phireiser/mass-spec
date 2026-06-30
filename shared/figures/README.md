@@ -1,11 +1,24 @@
 # shared/figures
 
-Figures used by **both** the report and the slides live here (single source of
-truth). Both documents add this directory to their `\graphicspath`, so a file
-placed here is referenced by bare name from either document:
+**All** figures for both documents live here — the report (`../report/`) and the
+slides (`../slides/`) keep no figures of their own. This folder is the single
+source of truth; a figure used by one document or by both is stored here once.
 
-    \includegraphics[width=\linewidth]{toluene_spectrum.png}
-    \input{../shared/figures/predicate-alkyl.tikz.tex}
+Both documents add this directory to their `\graphicspath`, so an image placed
+here is referenced by bare name from either document:
+
+    \includegraphics[width=\linewidth]{toluene-qm.png}
+
+TikZ snippets are pulled in with an explicit relative path (`\input` ignores
+`\graphicspath`):
+
+    \input{../shared/figures/wasserstein_expl.tikz.tex}
+
+SVGs and PDFs are likewise referenced with the relative path so they resolve
+regardless of which document compiles:
+
+    \includesvg[width=\linewidth]{../shared/figures/cosine_mrr.svg}
+    \includepdf[pages=-]{../shared/figures/Titelblatt.pdf}
 
 For a shared TikZ snippet that itself `\input`s sub-files or images, use the
 `import` package so nested paths resolve relative to this folder regardless of
@@ -14,18 +27,10 @@ which document compiles it (this is how `dataGenOverview` pulls in
 
     \import{../shared/figures/}{dataGenOverview.tikz.tex}
 
-## Currently consolidated here
+## Contents
 
-| file                          | used by                |
-|-------------------------------|------------------------|
-| architecture_diagram.tikz.tex | report (ch3) + slides  |
-| dataGenOverview.tikz.tex      | report (ch3) + slides  |
-| fragmentationTree.tikz.tex    | helper of dataGenOverview |
-| predicate-filter.tikz.tex     | report (ch3) + slides  |
-| predicate-alkyl.tikz.tex      | report (ch3) + slides  |
-| predicate-heteroatom.tikz.tex | report (ch3) + slides  |
-| predicate-saturation.tikz.tex | report (ch3) + slides  |
-
-The report (`../report/`) versions are the canonical originals; the older
-slide-local copies (`alkyl-group`, `heteroatom-group`, `saturation-example`,
-etc.) were removed when these were adopted.
+- Report-only figures (mass-spec schematics, GNN pipeline, loss illustrations,
+  result plots, `Titelblatt.pdf`, the toluene QM data behind `toluene-qm.png`).
+- Slides-only figures (`motivation`, `MassSpec_*`, `TolueneFragmentation.svg`, …).
+- Figures shared by both (`architecture_diagram`, `dataGenOverview`,
+  `fragmentationTree`, the `predicate-*` snippets, `dg_toluene.pdf`).
