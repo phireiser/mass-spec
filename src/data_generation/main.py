@@ -23,6 +23,7 @@ parser.add_argument("--spectra-folder", type=str, default=str(shared_path("NIST_
 parser.add_argument("--number-threads", type=int, default=64, help="number of threads for mod")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")
+parser.add_argument("--skip-backward", action="store_true", help="Only build the forward DG (skip the backward pass)")
 args = parser.parse_args()
 
 # Enable subgroup diagnostics
@@ -95,6 +96,10 @@ else:
     )
 
 # ------------------------------------------------------------ #
+if args.skip_backward:
+    print("\nskipping backward pass (--skip-backward)\n")
+    raise SystemExit(0)
+
 print("\nbackward\n")
 
 spectra_jdx = utils.get_spectra_from_local_jdx(molecule.name, folder=Path(args.spectra_folder))

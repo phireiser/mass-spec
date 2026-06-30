@@ -1,7 +1,32 @@
 """Importing spectra from JDX files."""
 
 from pathlib import Path
-from typing import List, Tuple
+from typing import Dict, List, Tuple
+
+
+def parse_jdx_header(
+        file: Path
+    ) -> Dict[str, str]:
+    """Parse the ``##KEY=VALUE`` header records of a JDX Mass file.
+
+    Returns a dict keyed by the bare record name (e.g. ``"MOLFORM"``, ``"MW"``,
+    ``"TITLE"``) mapped to its raw string value. Reading stops at the peak table.
+    Multi-line continuation records are not joined (only the first line is kept),
+    which is sufficient for the scalar fields Phase 0 needs.
+    """
+    if not file.exists():
+        raise FileNotFoundError(f"JDX file not found: {file}")
+    header: Dict[str, str] = {}
+    with open(file, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith("##PEAK") or line.startswith("##END"):
+                break
+            if line.startswith("##"):
+                key, sep, value = line[2:].partition("=")
+                if sep:
+                    header[key.strip().lstrip("$").upper()] = value.strip()
+    return header
 
 
 def parse_jdx(
@@ -46,4 +71,6 @@ def get_spectra_from_local_jdx(
 # Public API re-exported by ``data_generation.utils``.
 __all__ = [
     "get_spectra_from_local_jdx",
+    "parse_jdx",
+    "parse_jdx_header",
 ]

@@ -7,6 +7,7 @@ Welcome to the Molecular Spectroscopy Machine Learning project. This project imp
 - [Getting Started](./docs/QUICK_REFERENCE.md)
 - [User Guide](./docs/USER_GUIDE.md)
 - [Data Generation Performance](./docs/DATA_GEN_PERFORMANCE.md)
+- [Phase 0.1 — MØD Explainability Ceiling](./docs/PHASE0_CEILING.md)
 
 
 ## Project Overview
