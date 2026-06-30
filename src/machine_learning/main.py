@@ -22,26 +22,16 @@ Outputs:
 """
 
 import argparse
-from dataclasses import dataclass
-from typing import List, Optional, Dict, Tuple, Union, Any
+from typing import List, Optional, Dict, Tuple
 
 
-from collections import Counter
 from pathlib import Path
-import numpy as np
 
 
 import torch
-from torch import nn
 import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader, Subset, ConcatDataset
-import matplotlib.pyplot as plt
+from torch.utils.data import DataLoader, ConcatDataset
 
-
-from torch_geometric.nn import global_mean_pool
-from torch_geometric.nn import GCNConv
-from torch_geometric.data import Data as GeometricData
-from torch_geometric.data import Batch
 
 # Optional FAISS for ANN retrieval
 try:
@@ -63,16 +53,13 @@ import mod
 from src.machine_learning import utils_mod
 from src.data_generation import utils
 from src.project_paths import shared_path
-from src.machine_learning.featurizers import GraphFeaturizerMOD
 from src.machine_learning.models import DecSpecLatent, EncMol, EncSpec, TaskHeads
-from src.machine_learning.data import Sample, RealDataset, collate, collate_vlex, build_curriculum_loader, train_test_split
-from src.machine_learning.spectrum import make_parent_mass_mask_vec, make_parent_mass_mask_batch
-from src.machine_learning.retrieval import IndexItem, LatentIndex, FaissLatentIndex, rerank_candidates, infer_mol_to_spec, infer_spec_to_mol
-from src.machine_learning.evaluation import vec_to_peaks, demo_compare_spectrum, demo_retrieval_metrics, demo_ablate_adjacency, demo_noise_robustness, demo_visualize_reconstructions
-from src.machine_learning.losses import cosine_loss, wasserstein_1d, info_nce, jaccard_binary
-from src.machine_learning.fragments import FragSetEncoderVocabless, EncFragGraph, FragSetEncoderWrapper
+from src.machine_learning.data import RealDataset, collate_vlex, build_curriculum_loader, train_test_split
+from src.machine_learning.retrieval import LatentIndex, FaissLatentIndex, infer_mol_to_spec, infer_spec_to_mol
+from src.machine_learning.evaluation import demo_compare_spectrum, demo_retrieval_metrics, demo_noise_robustness, demo_visualize_reconstructions
+from src.machine_learning.fragments import FragSetEncoderWrapper
 from src.machine_learning.training import train_epoch_phase_a, train_epoch_phase_b
-from src.machine_learning.demos import demo_heads_comparison, demo_fragment_perturbation
+from src.machine_learning.checkpoint import save_checkpoint
 
 
 def main():
@@ -262,7 +249,6 @@ def main():
     spectrum_bins_size = train_ds.spectrum_bins_size
 
 
-    train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=False, drop_last=False, collate_fn=collate_vlex)
     val_loader   = DataLoader(vali_ds, batch_size=args.batch, shuffle=False, collate_fn=collate_vlex)
     test_loader  = DataLoader(test_ds, batch_size=args.batch, shuffle=False, collate_fn=collate_vlex)
 
@@ -330,14 +316,14 @@ def main():
     # ----------------- Demo: Structure - > Spectrum -----------------
     batch_data = next(iter(test_loader))
     if len(batch_data) == 8:
-        graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local, deriv_trees_fwd, deriv_trees_bwd = batch_data
+        graph_feats, _frag_graphs, _frag_masses, spec, smiles, _adj_local, deriv_trees_fwd, _ = batch_data
     else:
-        graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local = batch_data
+        graph_feats, _frag_graphs, _frag_masses, spec, smiles, _adj_local = batch_data
         deriv_trees_fwd = [None] * len(smiles)
 
     i = 0
     spec_hat = infer_mol_to_spec(
-        graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], device,
+        graph_feats[i],
         enc_mol, frag_set_enc, dec_spec, heads,
         smiles=smiles[i], mz_min=test_ds.mz_min, mz_max=test_ds.mz_max, bin_width=test_ds.bin_width,
         frag_deriv_tree=deriv_trees_fwd[i]
@@ -352,7 +338,7 @@ def main():
     # ----------------- Demo: Compare to ground truth spectrum -----------------
     print("== Demo: Compare predicted vs ground truth (TEST sample) ==")
     _ = demo_compare_spectrum(
-        graph_feats[i], frag_graphs[i], frag_masses[i], adj_local[i], spec[i], device,
+        graph_feats[i], spec[i],
         enc_mol, frag_set_enc, dec_spec, heads,
         mz_min=test_ds.mz_min, bin_width=test_ds.bin_width, smiles=smiles[i], mz_max=test_ds.mz_max, top_k=10
     )
@@ -378,12 +364,6 @@ def main():
         # flatten nested metric dicts into "val/..."/"test/..." scalars for the wandb UI
         wandb.log({f"val/{k}": v for k, v in val_metrics.items()})
         wandb.log({f"test/{k}": v for k, v in test_metrics.items()})
-    # ----------------- Demo: Fragment graph ablation -----------------
-    print("== Graph ablation on one VAL sample ==")
-    ablation = demo_ablate_adjacency(graph_feats[i], frag_graphs[i], adj_local[i], frag_masses[i], spec[i],
-                                     smiles[i], test_ds.mz_min, test_ds.mz_max, test_ds.bin_width,
-                                     device, enc_mol, frag_set_enc, dec_spec, heads)
-    print(ablation)
 
     # ----------------- Demo: Spectrum noise robustness -----------------
     print("== Spectrum noise robustness (VAL subset) ==")
@@ -392,23 +372,23 @@ def main():
 
     # ----------------- Demo: Visualization of reconstructions -----------------
     print("== Visualization: saving recon plots for a few VAL samples ==")
-    _ = demo_visualize_reconstructions(graph_feats, frag_graphs, frag_masses, spec, smiles, adj_local, device, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3)
+    _ = demo_visualize_reconstructions(graph_feats, spec, smiles, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3)
 
-    # save checkpoint
-    ckpt = {
-        "enc_mol": enc_mol.state_dict(),
-        "frag_set_enc": frag_set_enc.state_dict(),
-        "enc_spec": enc_spec.state_dict(),
-        "dec_spec": dec_spec.state_dict(),
-        "heads": heads.state_dict(),
-        "args": vars(args),
-    }
-    torch.save(ckpt, args.output_dir / "ml_checkpoint.pt")
-    print(f"Saved checkpoint to {args.output_dir / 'ml_checkpoint.pt'}")
+    # save checkpoint (enc_mol weights are nested inside frag_set_enc; not stored separately)
+    ckpt_path = args.output_dir / "ml_checkpoint.pt"
+    save_checkpoint(
+        ckpt_path,
+        frag_set_enc=frag_set_enc,
+        enc_spec=enc_spec,
+        dec_spec=dec_spec,
+        heads=heads,
+        args=vars(args),
+    )
+    print(f"Saved checkpoint to {ckpt_path}")
 
     if use_wandb:
         artifact = wandb.Artifact("ml_checkpoint", type="model")
-        artifact.add_file(str(args.output_dir / "ml_checkpoint.pt"))
+        artifact.add_file(str(ckpt_path))
         wandb.log_artifact(artifact)
         wandb.finish()
 

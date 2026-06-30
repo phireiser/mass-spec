@@ -29,13 +29,6 @@ class GraphFeaturizerMOD:
       - edge_index in COO (undirected by doubling)
     """
 
-    @staticmethod
-    def _safe_int(x, default=0):
-        try:
-            return int(x)
-        except ValueError:
-            return default
-
     def _vertex_feat(self, v: mod.Graph.Vertex):
         # Parse from the raw stringLabel so biradicals survive: mod's v.radical
         # is a bool (caps at 1) and int(v.atomId) raises for non-concrete atoms

@@ -178,7 +178,6 @@ class RealDataset(Dataset):
         self._cache = None
         if precompute:
             self._precompute_all()
-        self.mass_vocab_norm = self._build_mass_vocab()
         self.complexities = self._compute_complexities()
         self.sorted_indices = sorted(range(len(self)), key=lambda i: self.complexities[i])
 
@@ -249,32 +248,6 @@ class RealDataset(Dataset):
             else:
                 fragment_adjacency_bwd = adj
         return fragment_adjacency_fwd, fragment_adjacency_bwd
-
-    def _build_mass_vocab(self) -> torch.Tensor:
-        V = self.fragment_vocab_size
-        masses = torch.zeros(V, dtype=torch.float32)
-        seen = set()
-        for _mol_smi, (fwd, bwd) in self.frag_coll.items():
-            for frag_smi, exact_mass, _t, _r in fwd:
-                fid = self.frag_to_id.get(frag_smi)
-                if fid is not None and fid not in seen:
-                    masses[fid] = float(exact_mass)
-                    seen.add(fid)
-            for frag_smi, exact_mass, _t, _r in bwd:
-                fid = self.frag_to_id.get(frag_smi)
-                if fid is not None and fid not in seen:
-                    masses[fid] = float(exact_mass)
-                    seen.add(fid)
-        denom = torch.tensor(self.mz_max if self.mz_max > 0 else 1000.0, dtype=torch.float32)
-        return masses / denom
-
-    def _make_frag_graph(self, idx: int, direction: str = "fwd") -> torch.Tensor:
-        if direction == "fwd":
-            frag_bag = frag_bag_from_list(self.frag_coll.keys(), self.frag_to_id, self.fragment_vocab_size)
-        else:
-            frag_bag = frag_bag_from_list(self.frag_coll.keys(), self.frag_to_id, self.fragment_vocab_size)
-        frag_adj = self._make_frag_adj(idx)
-        return self.graph_featurizer.aggregate(frag_bag, frag_adj)
 
     def _make_frag_bag(self, idx: int) -> torch.Tensor:
         fwd_coll, _ = list(self.frag_coll.values())[idx]
@@ -351,16 +324,6 @@ class RealDataset(Dataset):
                 except Exception:
                     complexities.append(0)
         return complexities
-
-
-def collate(batch: List[Sample]):
-    graph_feats = [b.graph_feat for b in batch]
-    fragments = torch.stack([b.frag_bag for b in batch])
-    true_spectrum = torch.stack([b.true_spectrum for b in batch])
-    smiles = [b.smiles for b in batch]
-    fragment_adjacency_fwd = torch.stack([b.fragment_adjacency_fwd for b in batch])
-    fragment_adjacency_bwd = torch.stack([b.fragment_adjacency_bwd for b in batch])
-    return graph_feats, fragments, true_spectrum, smiles, fragment_adjacency_fwd, fragment_adjacency_bwd
 
 
 def collate_vlex(batch: List[Sample]):
@@ -449,7 +412,6 @@ __all__ = [
     "frag_bag_from_list",
     "compute_bin_index",
     "bin_spectrum",
-    "collate",
     "collate_vlex",
     "build_curriculum_loader",
     "train_test_split",
