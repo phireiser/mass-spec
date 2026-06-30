@@ -1,0 +1,41 @@
+% ===========================================================================
+% shared/notation.tex
+% Shared definitions used by BOTH the thesis (report) and the slides (beamer).
+%
+% Prerequisites (must already be loaded by the including document's preamble):
+%   \usepackage{amsmath, amssymb}
+%   \usepackage{tikz}  with libraries: arrows.meta
+%   \usepackage{xcolor}
+%
+% Include with:   \input{<path>/shared/notation.tex}
+%   report :  \input{../shared/notation}
+%   slides :  \input{../shared/notation}
+% ===========================================================================
+
+% ---- Shared math / text notation -----------------------------------------
+% Add macros here that should mean the same thing in the thesis and the slides.
+\providecommand{\MOD}{M\O D}            % the M\O D graph-transformation tool
+\providecommand{\msmap}{f : M \to S}    % forward map: structure -> spectrum
+\providecommand{\msinv}{f^{-1} : S \to M} % inverse problem: spectrum -> structure
+
+% ---- Shared figure style --------------------------------------------------
+
+% Shared highlight colour used across figures
+\definecolor{amber}{RGB}{255,176,0}
+
+% Recurring tikz element styles
+\tikzset{
+  fig/.style={>=Latex, line cap=round, line join=round, font=\sffamily},
+  % Line-weight tiers (one shared scale; figures snap to the nearest tier)
+  fig hair/.style={line width=0.3pt},
+  fig thin/.style={line width=0.5pt},
+  fig line/.style={line width=0.7pt},     % primary stroke
+  fig medium/.style={line width=0.9pt},
+  fig heavy/.style={line width=1.3pt},
+  fig bold/.style={line width=1.8pt},
+  fig xbold/.style={line width=2.4pt},
+  fig grid/.style={dashed, line width=0.3pt, draw=black!41},
+  fig arrow/.style={->, line width=0.7pt},
+  panel title/.style={black!76, font=\bfseries},
+}
+% ---------------------------------------------------------------------------

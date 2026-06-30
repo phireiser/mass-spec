@@ -25,6 +25,8 @@
 \usepackage{svg}
 \usepackage{epstopdf}
 \usepackage{pdfpages}
+\usepackage{import}                 % robust relative paths for shared snippets
+\graphicspath{{../shared/figures/}}    % search shared figures by bare name
 
 % Math
 \usepackage{amsmath}
@@ -49,26 +51,8 @@
 \usetikzlibrary{quotes}
 %\usetikzlibrary{quotesm}
 
-% ---- Shared figure style -------------------------------------------------
-
-% Shared highlight colour used across figures
-\definecolor{amber}{RGB}{255,176,0}
-
-% Recurring tikz element styles
-\tikzset{
-  fig/.style={>=Latex, line cap=round, line join=round, font=\sffamily},
-  % Line-weight tiers (one shared scale; figures snap to the nearest tier)
-  fig hair/.style={line width=0.3pt},
-  fig thin/.style={line width=0.5pt},
-  fig line/.style={line width=0.7pt},     % primary stroke
-  fig medium/.style={line width=0.9pt},
-  fig heavy/.style={line width=1.3pt},
-  fig bold/.style={line width=1.8pt},
-  fig xbold/.style={line width=2.4pt},
-  fig grid/.style={dashed, line width=0.3pt, draw=black!41},
-  fig arrow/.style={->, line width=0.7pt},
-  panel title/.style={black!76, font=\bfseries},
-}
+% ---- Shared definitions (notation + figure style), see shared/notation.tex
+\input{../shared/notation}
 % --------------------------------------------------------------------------
 
 % Chemistry
@@ -90,7 +74,7 @@
 
 
 
-\addbibresource{master.bib} % a .bib file
+\addbibresource{../shared/refs.bib} % shared bibliography (was master.bib)
 \DeclareLanguageMapping{american}{american-apa}
 
 

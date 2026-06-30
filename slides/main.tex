@@ -1,0 +1,448 @@
+\documentclass{beamer}
+
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{Darmstadt}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{beaver} % or try albatross, beaver, crane, ...
+  \usefonttheme{serif}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{footline}{
+    \hfill\insertframenumber{} / \inserttotalframenumber\hspace{2em}\vspace{2mm}
+  }
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{minted}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.multipart,shadows.blur}
+% extra libraries required by the shared thesis figures:
+\usetikzlibrary{backgrounds,patterns,angles,quotes,shapes.geometric,shapes.symbols}
+\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,decorations.markings}
+\usepackage{graphicx}
+\usepackage{import}                                   % robust relative paths for shared snippets
+\graphicspath{{./}{../shared/figures/}}     % own dir first, then shared figures
+\usepackage{subcaption}
+\usepackage{svg}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{chemfig}
+\usepackage{amssymb} % for \longrightarrow in math, optional
+\usepackage{textcomp} % optional
+\usepackage{csquotes} % recommended by biblatex
+\usepackage{amssymb}
+
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{../shared/refs.bib}   % shared bibliography (was references.bib)
+
+% ---- Shared definitions (notation + figure style), see shared/notation.tex
+\input{../shared/notation}
+
+\newcommand{\checkline}[1]{{\footnotesize\color{black!70}#1}}
+
+
+%\setbeameroption{show notes}
+\setbeameroption{show notes on second screen=right} 
+
+
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\scriptsize,
+    tabsize=1,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{green!60!black},
+    showstringspaces=false,
+    frame=single,
+    breaklines=true
+    }
+
+\title[MS-Thesis]{Bidirectional Mass Spectrometry Modeling 
+Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
+\author{Philipp Reiser}
+\institute{TBI Uni Vienna}
+\date{2026-02-11}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+\note{
+    I will talk here about my master theis project, 
+    which I am doing at the University of Vienna in the TBI group.
+}
+
+% Uncomment these lines for an automatically generated outline.
+%\begin{frame}{Outline}
+%  \tableofcontents
+%\end{frame}
+
+\section{Problem}
+
+\begin{frame}{What is my thesis about?}
+    M \ldots Molecular structure \quad
+    S \ldots Mass spectrum
+    \begin{itemize}
+%      \item \textbf{Computational mass spectrometry} with a focus on \textbf{MS spectrum modeling}
+        \item Formulated mathematically as a function:
+            \[
+                f : M \to S
+            \]
+        \item Investigation of the \textbf{inverse problem}:
+            \[
+                f^{-1} : S \to M
+            \]
+        \item Integration of \textbf{chemically studied reaction rules} modeled in \textbf{M\O D}
+        \item Use of fragmentation trees to support traditional machine-learning-based MS models
+    \end{itemize}
+\end{frame}
+\note{
+    What is this project about?
+
+    formulated as mathematically as a function mapping molecular structure to mass spectrum, 
+
+    and the inverse problem of mapping mass spectrum to molecular structure.
+
+    Here we integrate the relationship between the fragments, 
+
+    which are modeled in M\O D which then are used to enhance ML models
+}
+
+\section{Background}
+
+\begin{frame}{Motivation}
+    \centering
+    \resizebox{0.95\textwidth}{!}{
+        \input{diagram/motivation.tikz.tex}
+    }
+\end{frame}
+\note{
+    Why would we want to do MS modeling? What is the motivation?
+
+    Mass spectrometry is one of the most widely used tools for molecular analysis
+
+    As interpreting MS data remains largely expert-driven and time-consuming
+
+    the high-through-put in data acquisition does
+
+    not get translated through to data analysis, we have a bottleneck.
+
+    Also, through incorporating chemical structure, 
+    we can enhance machine learning models, in terms of interpretability and generalization
+}
+
+\begin{frame}{Mass Spectrometer}
+    \centering
+    
+    % ================== TOP: Overview diagram ==================
+    \resizebox{0.95\textwidth}{!}{
+        \input{diagram/MassSpec_flow.tikz.tex}
+    }
+    
+    \vspace{0.4cm}
+    
+    % ================== BOTTOM: Magnetic sector diagram ==================
+    \resizebox{0.95\textwidth}{!}{
+        \input{diagram/MassSpec_physical.tikz.tex}
+    }
+
+\end{frame}
+\note{
+    A quick reminder on how Mass Spec is working.
+
+    We have a sample, which is ionized,
+
+    then the ions are separated based on their mass-to-charge ratio, 
+
+    and then detected to produce a spectrum.
+
+}
+
+
+\section{Data}
+\begin{frame}{Data Sources}
+    \begin{itemize}
+        \item Mass spectrometry data from NIST $\rightarrow$ SMILES strings \& spectra
+        \item Curated EI fragmentation reactions $\rightarrow$ \textbf{M\O D} rules
+    \end{itemize}
+    
+	\begin{columns}[T,onlytextwidth]
+	  \column{0.5\textwidth}
+	  \centering
+	  \includesvg[width=\linewidth]{TolueneFragmentation.svg}
+	  \nocite{src-wiki-toluene-fragmentation}
+
+	  \column{0.5\textwidth}
+	  \centering
+	  \includegraphics[width=\linewidth]{ms_spectra_toluene.PNG}
+	  \nocite{src-wiki-toluene-spectra}
+	\end{columns}
+\end{frame}
+\note{
+    We have two main data sources:
+
+    Mass spectrometry data from NIST,
+
+    which gives us the molecular structure in the form of SMILES strings and spectra,
+
+    and curated EI fragmentation reactions, which are modeled as M\O D rules.
+}
+
+
+\begin{frame}{Data Generation Overview}
+    \centering
+    \resizebox{0.75\textwidth}{!}{
+        \import{../shared/figures/}{dataGenOverview.tikz.tex}
+    }
+\end{frame}
+\note{
+    a sample molecule is fragmented using the fragmentation rules in M\O D,
+
+    producing a fragmentation graph,
+
+    from which we can extract the fragments.
+
+    These fragments are combined with the inverse of the reaction rules
+
+    to produce candidate precursors for a given spectrum.
+}
+
+\begin{frame}[fragile]{Sample Fragmentation Rules}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.85\linewidth]{IMS_book_page_57.png}
+        \nocite{McLaffertyFredW1995IvM}
+    \end{figure}
+
+	\begin{minted}[
+	  linenos,
+	  numbersep=6pt,
+	  fontsize=\scriptsize,
+	  breaklines,
+	  frame=single
+	]{python}
+	IMS_4_9 = mod.Rule.fromDFS(
+	    s =
+	    "[C]1[C]2[C]3([C]4)[_A+.]5"
+	    ">>"
+	    "[C.]1" "." "[C]2[C]3([C]4){=}[_A+.]5",
+	    name =
+	    "radical induced (alpha-)cleavage for a saturated site"
+	    " 4.9"
+	    " !R1R3R4Y5"
+	)
+	\end{minted}
+\end{frame}
+
+\note{
+    On the top  we see example fragmentation rules as stated in the literature,
+
+    note that these contain as well as atoms also groups.
+
+    On the bottomm we see how these rules are represented in the code using a language to encode the groups of atoms.
+    
+    We use this extended notation in the Graph Transformation step.
+}
+
+
+\begin{frame}{M\O D - Predicate}
+    \centering
+    \resizebox{0.95\textwidth}{!}{
+        \input{../shared/figures/predicate-filter.tikz.tex}
+    }
+\end{frame}
+\note{		
+    in M\O D Predicates act as callbacks during transformation, 
+
+    which I use to filter candidates based on the rule extension.
+
+    In the following slides I will show examples of the predicates
+
+    I implemented for filtering based on the the rule extension.
+}
+
+\begin{frame}{M\O D - Predicate - Alkyl Group}
+    \centering
+    \resizebox{0.95\textwidth}{!}{%
+        \input{../shared/figures/predicate-alkyl.tikz.tex}
+    }
+\end{frame}
+\note{
+    A hydrocarbon substituent is only containing C-H bonds.
+
+	Here I collects in a breadth-first manner all neighbors 
+
+    until they are contained in the match of the original rule
+}
+
+\begin{frame}{M\O D - Predicate - Heteroatom Group}
+    \centering
+    \resizebox{0.95\textwidth}{!}{%
+        \input{../shared/figures/predicate-heteroatom.tikz.tex}
+    }
+\end{frame}
+\note{
+    A valid heteroatom groups must contain at least one non-C/H atom in its neighbors
+
+    Here I collect in a breadth-first manner all neighbors
+
+    that are not matched by the original rule and 
+
+    checks if the resulting set is not disjoint with \{H, C\}
+}
+
+\begin{frame}{M\O D - Predicate - Saturation}
+    \vspace{1.5em}
+    \centering
+    \resizebox{\textwidth}{!}{
+        \input{../shared/figures/predicate-saturation.tikz.tex}
+    }
+\end{frame}
+\note{
+    A chain of carbon atoms connected by single bonds, 
+    where each carbon may only have hydrogen atoms as side branches
+}
+
+
+\begin{frame}{Sample Derivation Graph}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\linewidth]{dg_toluene.pdf}
+    \end{figure}
+\end{frame}
+\note{
+    Here we see a the computed output for the fragmentation depicted as a graph, 
+
+    where the nodes are the fragments and the edges are the reactions that connect them.
+}
+
+
+\section{ML-Modelling}
+%\begin{frame}{Representation}
+%    \centering
+%    \resizebox{0.5\textwidth}{!}{
+%        \input{diagram/representation-visual.tikz.tex}
+%    }
+%\end{frame}
+%
+%\note{
+%\begin{itemize}
+%    \item Machine learning models require vector representations; therefore, molecular graphs must be encoded into vectors.
+%    \item This is challenging because graphs are structured objects.
+%    \item Fingerprints perform better than all graph encodings but are not (easily) invertible.
+%    \item PyTorch Geometric provides tools for graph-based representations.
+%    \item Fragmentation-graphs can also be represented using PyTorch Geometric.
+%\end{itemize}    
+%}
+%
+
+
+%\begin{frame}[fragile]{Molecule Graph Encoding}
+%\end{frame}
+
+%\begin{frame}[fragile]{Fragmentation Graph Encoding}
+%\end{frame}
+
+%\begin{frame}{Reinforcement-Learning}
+%    dynamic programming $\rightarrow$ policy learning
+%\end{frame}
+
+%\begin{frame}[fragile]{Adverserial Architecture Diagram}
+%    \centering
+%    \resizebox{0.7\textwidth}{!}{
+%    \input{diagram/adverserial2.tikz.tex}
+%    }
+%\end{frame}
+
+\begin{frame}[fragile]{Architecture Diagram}
+    \centering
+    \resizebox{0.7\textwidth}{!}{
+        \input{../shared/figures/architecture_diagram.tikz.tex}
+    }
+\end{frame}
+\note{
+    Here we see the architecture of the model I implemented.
+    We have three main inputs: the molecule graph, the fragmentation graph, and the spectrum.
+
+    Each of these is encoded into a latent representation using encoders.
+
+    The latent representations are then combined and fed into task heads for forward and backward prediction.
+
+    Finally, we have decoders that produce the predicted fragments and spectrum.
+    In addition, I have 
+}
+
+\begin{frame}{Results}
+    Diverse Model scores:\\
+    \vskip 1mm
+    \begin{tabular}{ l l}
+       Best Recall@1: &$0.000$\\
+        Best Recall@5: &$0.111$\\
+        Best Recall@10: &$0.259$\\
+    \end{tabular}
+\end{frame}
+\note{
+    For a model trained on a very diverse set of 70 molecules
+
+    I achieve a best similarity score for predicting the correct structure
+
+    for the top-1 of $0.0 \%$ so no molecules was correctly predicted \\
+    for the top-5 of $11.1 \%$ \\
+    for the top-10 of $25.9 \%$ \\
+}
+
+
+\section{End}
+\begin{frame}{References}
+	\scriptsize
+    \printbibliography[heading=none]
+\end{frame}
+\note{these are my sources and references}
+
+\begin{frame}{Discussion}
+    \center{Questions?}
+\end{frame}
+\note{
+    thank you for your attention 
+    
+    Do you have questions?
+}
+
+
+%\section{Acknowledgments}
+%\begin{frame}{Acknowledgements}
+%\begin{itemize}
+%  \item .
+%\end{itemize}
+%\end{frame}
+
+%\begin{frame}[fragile]{M\O D - Strategy}
+%    \begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+%strategy = (
+%    mod.addSubset(universe)
+%    >>  charge_bound(
+%            amu_bound(
+%                sub_group(
+%                    mod.repeat[frag_repeat](fragmentation), 
+%                    derivation_graph
+%                    ),
+%                minimum = min_mass,
+%                maximum = max_mass,
+%            )
+%        )
+%)
+%    \end{lstlisting}
+%\end{frame}
+
+
+\end{document}

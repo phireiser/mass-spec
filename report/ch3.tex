@@ -39,7 +39,7 @@ Subsequently, this information is utilised to validate predicted fragment assign
 
 \begin{figure}
     \centering
-    \input{fig-tikz/dataGenOverview.tikz.tex}
+    \import{../shared/figures/}{dataGenOverview.tikz.tex}
     \caption[Schematic of the bidirectional fragmentation workflow]{
         Schematic overview of the synthetic data-generation workflow.
         Starting from a sample molecule, fragmentation rules are applied to generate a fragmentation graph
@@ -98,7 +98,7 @@ On the functional level, the decision flow of this filtering step, enabled by th
 
 \begin{figure}
     \centering
-    \input{fig-tikz/predicate-filter.tikz.tex}
+    \input{../shared/figures/predicate-filter.tikz.tex}
     \caption[Flow diagram of predicate filter application]{
         Flow diagram explaining predicate filter application at the fragmentation process.
         During rule application, candidate sites are generated based on the rule's extension pattern.
@@ -122,7 +122,7 @@ If the explored neighborhood contains only carbon and hydrogen, the candidate is
 
 \begin{figure}[H]
     \centering
-    \input{fig-tikz/predicate-heteroatom.tikz.tex}
+    \input{../shared/figures/predicate-heteroatom.tikz.tex}
     \caption[Heteroatom check predicate]{
         Heteroatom check predicate: 
         valid case with detected heteroatom (left) versus invalid C/H-only neighborhood (right).
@@ -138,7 +138,7 @@ This removes candidates that include incompatible branch chemistry, such as addi
 
 \begin{figure}[H]
     \centering
-    \input{fig-tikz/predicate-saturation.tikz.tex}
+    \input{../shared/figures/predicate-saturation.tikz.tex}
     \caption[Saturation check predicate as constrained path traversal]{
         Illustration of the concept of a saturated path in a molecular graph. 
         A valid saturated path connects the start and end atoms through a carbon backbone consisting exclusively of single C--C bonds, with only hydrogen atoms as side branches (top). 
@@ -157,7 +157,7 @@ The presence of any heteroatom---such as the nitrogen marked on the right of \Cr
 
 \begin{figure}[H]
     \centering
-    \input{fig-tikz/predicate-alkyl.tikz.tex}
+    \input{../shared/figures/predicate-alkyl.tikz.tex}
     \caption[Alkyl check predicate]{
         Alkyl check predicate formulated as a local-neighborhood traversal.
         Starting from the rule extension location, a breadth-first search (BFS) is performed over the local molecular graph to verify that all reachable neighboring atoms belong to the set \(\{ \mathrm{C}, \mathrm{H} \}\).
@@ -436,7 +436,7 @@ the right-hand side of the figure should not be read as a decoder that explicitl
 \begin{figure}[H]
     \centering
     \resizebox{\textwidth}{!}{
-        \input{fig-tikz/architecture_diagram.tikz.tex}
+        \input{../shared/figures/architecture_diagram.tikz.tex}
     }
     \caption[Architecture]{
         Diagram illustrating the overall architecture of the bidirectional translation framework, showing the flow from molecular graph encoding to spectral embedding and back.

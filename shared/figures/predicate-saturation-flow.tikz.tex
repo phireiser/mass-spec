@@ -1,0 +1,62 @@
+\begin{tikzpicture}[
+	  font=\small,
+	  box/.style={
+	    draw,
+	    rounded corners=2pt,
+	    align=left,
+	    inner xsep=8pt,
+	    inner ysep=6pt,
+	    text width=13.6cm
+	  },
+	  arrow/.style={-Latex, line width=0.6pt},
+	  title/.style={font=\bfseries}
+	]
+
+	% STEP 1
+	\node[box] (s1) {%
+	  {\title \text{STEP 1: Validate Start \& End}}\\
+	  \rule{\linewidth}{0.4pt}\\[-2pt]
+	  \checkline{• Both in morphism (rule mapping)?}\\
+	  \checkline{• Both have allowed labels (H or C)?}\\
+	  \checkline{• If \texttt{start == end} $\rightarrow$ return True}
+	};
+
+	% STEP 2
+	\node[box, below=9mm of s1] (s2) {%
+	  {\title \text{STEP 2: Depth-First Search}}\\
+	  \rule{\linewidth}{0.4pt}\\[-2pt]
+	  \texttt{stack = [(start\_vertex, [start\_vertex])]}\\
+	  \texttt{while stack is not empty:}\\
+	  \hspace*{1.5em}\texttt{(node, path) = stack.pop()}\\
+	  \hspace*{1.5em}\texttt{for neighbor in neighbors(node):}\\
+	  \hspace*{3.0em}\checkline{Check conditions $\rightarrow$}
+	};
+
+	% STEP 3 (wide)
+	\node[box, below=9mm of s2] (s3) {%
+	  {\title \text{STEP 3: Neighbor Validation (Per neighbor)}}\\
+	  \rule{\linewidth}{0.4pt}\\[-2pt]
+	  \checkline{\checkmark\ Not already in path?\hfill(avoid cycles)}\\
+	  \checkline{\checkmark\ Label == \texttt{"C"}?\hfill(only carbon backbone)}\\
+	  \checkline{\checkmark\ Single bond to current node?\hfill(no double/triple bonds)}\\[4pt]
+	  \textbf{IF} \texttt{neighbor == end\_vertex:}\\
+	  \hspace*{1.5em}\checkline{\checkmark\ Path satisfies branch rule?\hfill(only H branches allowed)}\\
+	  \hspace*{1.5em}$\rightarrow$ \textbf{return True}\quad \checkmark\ \textbf{FOUND}\\[4pt]
+	  \textbf{ELSE:}\\
+	  \hspace*{1.5em}\checkline{$\rightarrow$ Add to stack for further exploration}\\
+	};
+
+	% STEP 4
+	\node[box, below=9mm of s3] (s4) {%
+	  {\title \text{STEP 4: Return Result}}\\
+	  \rule{\linewidth}{0.4pt}\\[-2pt]
+	  \checkline{• Path found $\rightarrow$ True}\\
+	  \checkline{• Stack exhausted $\rightarrow$ False}\\
+	};
+
+	% arrows
+	\draw[arrow] (s1.south) -- (s2.north);
+	\draw[arrow] (s2.south) -- (s3.north);
+	\draw[arrow] (s3.south) -- (s4.north);
+
+	\end{tikzpicture}

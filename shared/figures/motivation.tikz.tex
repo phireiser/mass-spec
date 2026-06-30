@@ -1,0 +1,50 @@
+\begin{tikzpicture}[
+    box/.style={rectangle, draw, thick, minimum height=1cm, text width=3cm, align=center},
+    arrow/.style={-Stealth, very thick},
+    wide/.style={rectangle, draw, thick, fill=blue!20, minimum height=1.2cm, minimum width=5cm, align=center},
+    narrow/.style={rectangle, draw, thick, fill=red!30, minimum height=1.2cm, minimum width=1.5cm, align=center},
+    mlbox/.style={rectangle, draw, thick, minimum height=1.5cm, minimum width=2.2cm, align=center, rounded corners}
+]
+
+% Top: High-throughput acquisition → Bottleneck in analysis
+\node[wide] (acq) at (0,4) {\textbf{High-throughput}\\Data Acquisition};
+\node[narrow] (anal) at (6,4) {\textbf{Slow}\\Analysis};
+\draw[arrow] (acq.east) -- (anal.west) node[midway, above, font=\small] {bottleneck};
+
+% Expert symbol - draw hourglass in TikZ
+\begin{scope}[shift={(8.5,4)}]
+  \node[circle, draw, thick, fill=gray!30, minimum size=1.5cm] {};
+  % Top bulb - filled with sand
+  \draw[thick] (-0.22, 0.28) -- (-0.22, 0.18) arc(180:0:0.22) -- (0.22, 0.18);
+  \fill[brown!40, opacity=0.6] (-0.22, 0.18) arc(180:0:0.22) -- (0.22, 0.18) -- (0.22, 0.28) arc(0:180:0.22) -- cycle;
+  % Narrow middle channel
+  \draw[thick] (-0.08, 0.18) -- (-0.05, -0.05) -- (0.05, -0.05) -- (0.08, 0.18);
+  \draw[thick] (-0.08, 0.18) -- (0.08, 0.18);
+  % Bottom bulb - partially filled
+  \draw[thick] (-0.22, -0.18) arc(180:0:0.22) -- (0.22, -0.18) -- (0.22, -0.28) arc(0:180:0.22) -- cycle;
+  \fill[brown!40, opacity=0.6] (-0.22, -0.28) arc(180:0:0.22) -- (0.22, -0.15) -- (-0.22, -0.15) -- cycle;
+  % Falling sand particles
+  \fill[brown!70] (-0.02, 0.05) circle (0.015);
+  \fill[brown!70] (0.03, 0.00) circle (0.015);
+  \fill[brown!70] (-0.01, -0.02) circle (0.015);
+  \fill[brown!60] (0.02, -0.03) circle (0.012);
+\end{scope}
+\node[below, font=\scriptsize, text width=3cm, align=center] at (8.5,2.85) {Expert-driven \& Time-consuming};
+
+% Bottom: ML comparison
+\node[mlbox, fill=red!20] (ml1) at (0,0.5) {\textbf{Pure ML}\\
+    {\scriptsize No structure}\\
+    {\tiny $\times$ interpretability}\\
+    {\tiny $\times$ generalization}};
+
+\node[font=\LARGE] (vs) at (2.5,0.5) {vs};
+
+\node[mlbox, fill=green!20] (ml2) at (5.5,0.5) {\textbf{ML + Structure}\\
+    {\scriptsize Chemical rules}\\
+    {\tiny $\checkmark$ interpretable}\\
+    {\tiny $\checkmark$ generalizable}};
+
+% Title annotations
+\node[above, font=\Large, text width=15cm, align=center] at (3,5.2) {MS is widely used, but analysis is the challenge};
+
+\end{tikzpicture}
