@@ -12,7 +12,7 @@ import faiss
 import mod
 
 from src.machine_learning.data import collate_vlex
-from src.machine_learning.models import EncMol, EncSpec, DecSpecLatent, TaskHeads
+from src.machine_learning.models import EncMol, EncSpec, DecSpecFragment, TaskHeads
 from src.machine_learning.spectrum import make_parent_mass_mask_vec
 
 
@@ -43,7 +43,7 @@ class LatentIndex:
         self.items: List[IndexItem] = []
 
     def build(self, dataset: Dataset, device, enc_mol: EncMol):
-        self.embs.clear()
+        self.embs = []  # reset to list; a prior build() leaves this a stacked Tensor
         self.items.clear()
         enc_mol.eval()
         loader = DataLoader(dataset, batch_size=256, shuffle=False, collate_fn=collate_vlex)
@@ -92,7 +92,7 @@ class FaissLatentIndex(LatentIndex):
         self.index = faiss.IndexFlatIP(d)
 
     def build(self, dataset: Dataset, device, enc_mol: EncMol):
-        self.embs.clear()
+        self.embs = []  # reset to list; a prior build() leaves this a stacked Tensor
         self.items.clear()
         enc_mol.eval()
         loader = DataLoader(dataset, batch_size=256, shuffle=False, collate_fn=collate_vlex)
@@ -143,7 +143,7 @@ def rerank_candidates(spec_q: torch.Tensor,
                       enc_mol: EncMol,
                       frag_set_enc: Any,
                       heads: TaskHeads,
-                      dec_spec: DecSpecLatent,
+                      dec_spec: DecSpecFragment,
                       mz_min: float,
                       mz_max: float,
                       bin_width: float) -> List[Tuple[str, float]]:
@@ -155,10 +155,10 @@ def rerank_candidates(spec_q: torch.Tensor,
         for it in candidates:
             z_m_c = enc_mol([it.graph_feat.to(device) if hasattr(it.graph_feat, 'to') else it.graph_feat]).squeeze(0)
             trees_c = [it.frag_deriv_tree_fwd]
-            z_f_c = frag_set_enc(deriv_tree_batch=trees_c)
+            z_f_c, node_embs, node_masses = frag_set_enc(deriv_tree_batch=trees_c, return_nodes=True)
             z_c = (z_m_c.unsqueeze(0) + z_f_c) / 2
             z_fwd, _ = heads(z_c)
-            spec_hat = dec_spec(z_fwd).cpu().squeeze(0)
+            spec_hat = dec_spec(node_embs, node_masses, z_fwd).cpu().squeeze(0)
             try:
                 pmass = float(mod.Graph.fromSMILES(it.smiles).exactMass)
             except Exception:
@@ -174,7 +174,7 @@ def rerank_candidates(spec_q: torch.Tensor,
 def infer_mol_to_spec(graph_feat: GeometricData,
                       enc_mol: EncMol,
                       frag_set_enc: Any,
-                      dec_spec: DecSpecLatent,
+                      dec_spec: DecSpecFragment,
                       heads: TaskHeads,
                       smiles: Optional[str] = None,
                       mz_min: Optional[float] = None,
@@ -186,10 +186,10 @@ def infer_mol_to_spec(graph_feat: GeometricData,
 
     with torch.no_grad():
         z_m = enc_mol([graph_feat])
-        z_f = frag_set_enc(deriv_tree_batch=[frag_deriv_tree])
+        z_f, node_embs, node_masses = frag_set_enc(deriv_tree_batch=[frag_deriv_tree], return_nodes=True)
         z = (z_m + z_f) / 2
         z_fwd, _ = heads(z)
-        spec_hat = dec_spec(z_fwd).cpu().squeeze(0)
+        spec_hat = dec_spec(node_embs, node_masses, z_fwd).cpu().squeeze(0)
         if (smiles is not None) and (mz_min is not None) and (mz_max is not None) and (bin_width is not None):
             try:
                 pmass = float(mod.Graph.fromSMILES(smiles).exactMass)
@@ -207,7 +207,7 @@ def infer_spec_to_mol(spec: torch.Tensor,
                       enc_mol: EncMol,
                       frag_set_enc: Any,
                       heads: TaskHeads,
-                      dec_spec: DecSpecLatent,
+                      dec_spec: DecSpecFragment,
                       mz_min: float,
                       mz_max: float,
                       bin_width: float,

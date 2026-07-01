@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from torch_geometric.data import Data as GeometricData
 
 from src.machine_learning.retrieval import infer_mol_to_spec, infer_spec_to_mol
+from src.machine_learning.spectrum import make_parent_mass_mask_vec
 
 _script_path = Path(__file__).resolve()
 OUT_DIR = next((p for p in _script_path.parents if p.name == "mol"), _script_path.parent) / "out"
@@ -35,10 +36,12 @@ def demo_compare_spectrum(graph_feat: GeometricData,
                           bin_width: float,
                           smiles: Optional[str] = None,
                           mz_max: Optional[float] = None,
-                          top_k: int = 10) -> Dict[str, Any]:
+                          top_k: int = 10,
+                          frag_deriv_tree=None) -> Dict[str, Any]:
     """Predict spectrum and compare to ground truth."""
     spec_hat = infer_mol_to_spec(graph_feat, enc_mol, frag_set_enc, dec_spec, heads,
-                                 smiles=smiles, mz_min=mz_min, mz_max=(mz_max if mz_max is not None else mz_min + true_spec.numel()*bin_width), bin_width=bin_width)
+                                 smiles=smiles, mz_min=mz_min, mz_max=(mz_max if mz_max is not None else mz_min + true_spec.numel()*bin_width), bin_width=bin_width,
+                                 frag_deriv_tree=frag_deriv_tree)
     true_spec = true_spec.detach().cpu()
     cos = F.cosine_similarity(F.normalize(spec_hat, dim=-1), F.normalize(true_spec, dim=-1), dim=-1).item()
     l1 = torch.mean(torch.abs(spec_hat - true_spec)).item()
@@ -94,6 +97,119 @@ def demo_retrieval_metrics(index, loader, device, enc_spec, enc_mol, frag_set_en
     return out
 
 
+def mass_controlled_retrieval_metrics(
+    index, loader, device, enc_spec, enc_mol, heads, mass_by_smiles,
+    mz_min, mz_max, bin_width, topk_list=(1, 5, 10, 20), windows=(5.0,), max_batches=None,
+):
+    """Mass-controlled spectrum->molecule retrieval scorecard.
+
+    The learned encoder retrieval ``cos(z_spec, z_mol)`` is reported *next to*
+    mass-only baselines and against random chance inside a mass window, so a result
+    only counts as "learned chemistry" if it beats mass. This exists because the
+    forward-collapse audit showed the old headline MRR reduced entirely to
+    parent-mass filtering; here mass is the bar, not an unmeasured confound.
+
+    Methods (full gallery = the retrieval index, i.e. train+val):
+      * ``learned``       -- cos(z_spec, z_mol) from the aligned encoders
+      * ``mass_implied``  -- rank by |gallery_mass - precursor implied by the query
+                             spectrum's top peak|  (honest, spectrum-only)
+      * ``mass_true``     -- rank by |gallery_mass - query's true parent mass|  (oracle)
+      * ``mask_cosine``   -- cos(normalized parent-mass mask, query)  (mass support only)
+    Plus, per window W: learned retrieval restricted to molecules within +/-W Da of
+    the query's true mass, vs analytic random chance (the decisive beyond-mass test).
+    """
+    enc_spec.eval(); enc_mol.eval(); heads.eval()
+    N = len(index.items)
+    gal_smiles = [it.smiles for it in index.items]
+    gal_mass = torch.tensor([float(mass_by_smiles.get(s, mz_max)) for s in gal_smiles])
+    bins = int((mz_max - mz_min) / bin_width)
+    gal_mask_n = F.normalize(
+        torch.stack([make_parent_mass_mask_vec(m.item(), mz_min, mz_max, bin_width) for m in gal_mass], 0),
+        dim=-1,
+    )
+    smiles_to_gidx: Dict[str, int] = {}
+    for j, s in enumerate(gal_smiles):
+        smiles_to_gidx.setdefault(s, j)
+
+    def implied_precursor(spec_i):
+        nz = torch.nonzero(spec_i > 0).flatten()
+        return mz_max if nz.numel() == 0 else mz_min + int(nz.max().item()) * bin_width
+
+    def rank_of(order_gidx, tg):
+        pos = np.nonzero(np.asarray(order_gidx) == tg)[0]
+        return int(pos[0]) + 1 if pos.size else None
+
+    ranks: Dict[str, List] = {m: [] for m in ("learned", "mass_implied", "mass_true", "mask_cosine")}
+    win_rows = {W: [] for W in windows}  # (rank, poolsize, chance_mrr)
+    n = 0
+    with torch.no_grad():
+        for bi, batch in enumerate(loader):
+            if max_batches is not None and bi >= max_batches:
+                break
+            graph_feats, _fg, _fm, spec, smiles, _adj, _tf, _tb = batch
+            spec = spec.to(device)
+            _, z_bwd = heads(enc_spec(spec))
+            z_q = F.normalize(z_bwd, dim=-1).cpu()
+            for i in range(len(smiles)):
+                tg = smiles_to_gidx.get(smiles[i])
+                if tg is None:  # true molecule not in gallery (e.g. test split); skip
+                    continue
+                n += 1
+                tm = gal_mass[tg].item()
+                sims = index.embs @ z_q[i]
+                ranks["learned"].append(rank_of(torch.argsort(sims, descending=True).numpy(), tg))
+                pmz = implied_precursor(spec[i].cpu())
+                ranks["mass_implied"].append(rank_of(torch.argsort(torch.abs(gal_mass - pmz)).numpy(), tg))
+                ranks["mass_true"].append(rank_of(torch.argsort(torch.abs(gal_mass - tm)).numpy(), tg))
+                mc = gal_mask_n @ F.normalize(spec[i].cpu(), dim=-1)
+                ranks["mask_cosine"].append(rank_of(torch.argsort(mc, descending=True).numpy(), tg))
+                for W in windows:
+                    win = torch.nonzero(torch.abs(gal_mass - tm) <= W).flatten()
+                    m = win.numel()
+                    if m == 0:
+                        continue
+                    wsims = index.embs[win] @ z_q[i]
+                    order = win[torch.argsort(wsims, descending=True)].numpy()
+                    Hm = float(np.sum(1.0 / np.arange(1, m + 1)))
+                    win_rows[W].append((rank_of(order, tg), m, Hm / m))
+
+    def summ(rk):
+        a = np.array([r for r in rk if r is not None])
+        d = {f"R@{k}": float((a <= k).mean()) if a.size else 0.0 for k in topk_list}
+        d["MRR"] = float((1.0 / a).mean()) if a.size else 0.0
+        return d
+
+    out: Dict[str, Any] = {"N": n}
+    per = {m: summ(rk) for m, rk in ranks.items()}
+    for m, d in per.items():
+        for k, v in d.items():
+            out[f"{m}/{k}"] = v
+    out["delta_MRR_vs_mass_implied"] = per["learned"]["MRR"] - per["mass_implied"]["MRR"]
+    out["delta_MRR_vs_mass_true"] = per["learned"]["MRR"] - per["mass_true"]["MRR"]
+
+    print(f"== Mass-controlled retrieval (N={n}, gallery={N}) ==")
+    hdr = "  ".join(f"R@{k}" for k in topk_list)
+    print(f"{'method':>13s} |  {hdr}  |   MRR")
+    for m in ("learned", "mass_implied", "mass_true", "mask_cosine"):
+        row = "  ".join(f"{per[m][f'R@{k}']:.3f}" for k in topk_list)
+        print(f"{m:>13s} |  {row}  | {per[m]['MRR']:.4f}")
+    print(f"  delta MRR (learned - mass_implied) = {out['delta_MRR_vs_mass_implied']:+.4f}  "
+          f"(learned - mass_true) = {out['delta_MRR_vs_mass_true']:+.4f}")
+    for W in windows:
+        rows = win_rows[W]
+        a = np.array([r for (r, _m, _c) in rows if r is not None])
+        pools = np.array([m for (_r, m, _c) in rows]) if rows else np.array([0])
+        lm = float((1.0 / a).mean()) if a.size else 0.0
+        cm = float(np.mean([c for (_r, _m, c) in rows])) if rows else 0.0
+        out[f"window{W}/learned_MRR"] = lm
+        out[f"window{W}/chance_MRR"] = cm
+        out[f"window{W}/delta_MRR"] = lm - cm
+        out[f"window{W}/mean_pool"] = float(pools.mean())
+        print(f"  mass-window +/-{W} Da: learned MRR={lm:.4f} vs chance={cm:.4f} "
+              f"(delta {lm - cm:+.4f}, mean pool={pools.mean():.1f})")
+    return out
+
+
 def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1, 5, 10), max_batches=5):
     """Add Gaussian noise to spectra and return Recall@K vs noise level."""
     results = {}
@@ -145,12 +261,14 @@ def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc
 
 def demo_visualize_reconstructions(
     graph_feats, true_spec, smiles,
-    enc_mol, frag_set_enc, dec_spec, heads, n_samples=3
+    enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=None
     ) -> bool:
     """Plot true vs reconstructed spectra for n_samples molecules."""
     n = min(n_samples, len(smiles))
     for i in range(n):
-        spec_hat = infer_mol_to_spec(graph_feats[i], enc_mol, frag_set_enc, dec_spec, heads)
+        tree_i = deriv_trees[i] if deriv_trees is not None else None
+        spec_hat = infer_mol_to_spec(graph_feats[i], enc_mol, frag_set_enc, dec_spec, heads,
+                                     frag_deriv_tree=tree_i)
         plt.figure()
         plt.plot(true_spec[i].cpu().numpy(), label="true")
         plt.plot(spec_hat.cpu().numpy(), label="pred")
@@ -169,6 +287,7 @@ __all__ = [
     "vec_to_peaks",
     "demo_compare_spectrum",
     "demo_retrieval_metrics",
+    "mass_controlled_retrieval_metrics",
     "demo_noise_robustness",
     "demo_visualize_reconstructions",
 ]
