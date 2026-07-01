@@ -8,6 +8,13 @@ from pathlib import Path
 import mod
 
 
+# Suffix of the sentinel written after a dump finishes. A dump is two files
+# (``.dmp`` + ``.pkl``) written in sequence; the marker is written last, so its
+# presence is proof the pair was written completely and not truncated by a
+# killed job. Checking the marker is cheaper than loading to test integrity.
+_DONE_SUFFIX = ".done"
+
+
 class DefaultDGStore:
     def dump(
             self,
@@ -23,6 +30,8 @@ class DefaultDGStore:
         rule_database = [obj.getGMLString() for obj in rule_list]
         with open(path / (name + ".pkl"), 'wb') as f:
             pickle.dump((smiles, graph_database, rule_database), f)
+        # Written last: presence of the marker == a complete dump.
+        (path / (name + _DONE_SUFFIX)).touch()
 
     def load(
             self,
@@ -62,8 +71,35 @@ def load_derivation_graph(
     return store.load(name, Path(path))
 
 
+def dump_is_complete(
+        name: str,
+        path: Path | str = Path("./dump/")
+        ) -> bool:
+    """True iff a completion marker exists for ``name`` (dump finished writing)."""
+    return (Path(path) / (name + _DONE_SUFFIX)).exists()
+
+
+def dump_is_loadable(
+        name: str,
+        path: Path | str = Path("./dump/")
+        ) -> bool:
+    """True iff the dump for ``name`` under ``path`` can be fully loaded.
+
+    Stronger (and costlier) than :func:`dump_is_complete`: it actually loads the
+    graph, catching a truncated/corrupt ``.dmp``/``.pkl`` that a killed job left
+    behind.
+    """
+    try:
+        load_derivation_graph(name, path)
+        return True
+    except Exception:
+        return False
+
+
 # Public API re-exported by ``data_generation.utils``.
 __all__ = [
     "dump_derivation_graph",
     "load_derivation_graph",
+    "dump_is_complete",
+    "dump_is_loadable",
 ]

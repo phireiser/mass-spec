@@ -77,14 +77,18 @@ strat_fwd = strategy.make_fwd_strategy(
     max_mass=molecule.exactMass
 )
 
-if args.avoid_reprocessing and output_path_fwd.exists():
-    print(f"  Forward dump {output_path_fwd} exists, skipping...")
-    #get the dg loaded from file
-    dg_fwd = utils.load_derivation_graph(
-        name=molecule.name,
-        path=Path(args.output_dir) / "fwd/",
-    )
-else:
+fwd_dir = Path(args.output_dir) / "fwd/"
+dg_fwd_reused = False
+if args.avoid_reprocessing and utils.dump_is_complete(molecule.name, fwd_dir):
+    # Marker says the dump is complete; the load doubles as the integrity check.
+    try:
+        dg_fwd = utils.load_derivation_graph(name=molecule.name, path=fwd_dir)
+        dg_fwd_reused = True
+        print(f"  Forward dump {output_path_fwd} complete and loadable, skipping...")
+    except Exception as e:
+        print(f"  Forward dump {output_path_fwd} present but not loadable ({e}); rebuilding...")
+
+if not dg_fwd_reused:
     dg_fwd.build().execute(strat_fwd)
 
     utils.dump_derivation_graph(
@@ -92,7 +96,7 @@ else:
         rule_list=ionization_term_fwd + fragmentation_term_fwd,
         name=molecule.name,
         smiles=args.smiles,
-        path=Path(args.output_dir) / "fwd/"
+        path=fwd_dir
     )
 
 # ------------------------------------------------------------ #
@@ -122,8 +126,10 @@ strat_bwd = strategy.make_bwd_strategy(
     max_mass=molecule.exactMass
 )
 
-if args.avoid_reprocessing and output_path_bwd.exists():
-    print(f"Backward dump {output_path_bwd} exists, skipping...")
+bwd_dir = Path(args.output_dir) / "bwd/"
+if args.avoid_reprocessing and utils.dump_is_complete(molecule.name, bwd_dir) \
+        and utils.dump_is_loadable(molecule.name, bwd_dir):
+    print(f"Backward dump {output_path_bwd} complete and loadable, skipping...")
 else:
     dg_bwd.build().execute(strat_bwd)
 
@@ -132,7 +138,7 @@ else:
         rule_list=ionization_term_bwd + fragmentation_term_bwd,
         name=molecule.name,
         smiles=args.smiles,
-        path=Path(args.output_dir) / "bwd/"
+        path=bwd_dir
     )
 
 print("\n\n")
