@@ -1,8 +1,11 @@
 # single image with all capabilities
 
-# Use 'devel' image so CUDA headers are available for faiss-gpu compilation.
-# 'runtime' lacks the compiler/headers needed to build CUDA extensions.
-FROM docker.io/nvidia/cuda:12.1.0-devel-ubuntu22.04
+# Use 'devel' (not 'runtime') so the full C++/CUDA toolchain and headers are
+# available to build MOD, Boost and Graphviz from source.
+# Stays on ubuntu22.04 (Python 3.10) on purpose: the site-packages paths below
+# are hardcoded to python3.10. Moving to ubuntu24.04 (Python 3.12) is a separate,
+# larger change.
+FROM docker.io/nvidia/cuda:12.6.3-devel-ubuntu22.04
 
 LABEL maintainer="Molecular Spectroscopy Project"
 LABEL description="Molecular Spectroscopy Project"
@@ -81,7 +84,7 @@ RUN \
 # the folder can apparently not be called just 'boost', therefore 'boostDir'
 WORKDIR /opt/boostDir
 RUN wget                                                                   \
-    https://archives.boost.io/release/1.76.0/source/boost_1_76_0.tar.gz       \
+    https://archives.boost.io/release/1.91.0/source/boost_1_91_0.tar.gz       \
     -O boost.tar.gz
 RUN \
     tar -xf boost.tar.gz --one-top-level=boostSrc --strip-components=1        \
