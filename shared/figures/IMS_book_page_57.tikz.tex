@@ -1,0 +1,108 @@
+% ---- styles -------------------------------------------------------------
+\tikzset{
+  atom/.style   = {inner sep=1pt, text height=1.55ex, text depth=0.35ex},
+  chg/.style   = {inner sep=0pt, font=\scriptsize},
+  bond/.style   = {line width=0.5pt},
+  fish/.style   = {-{Stealth[harpoon,length=1.7mm,width=1.7mm]}, line width=0.45pt},
+  rxn/.style    = {-{Stealth[length=2.2mm,width=1.8mm]}, line width=0.55pt},
+}
+\newcommand{\rdot}{\mathbin{\vcenter{\hbox{\scriptsize$\bullet$}}}}  % radical dot
+\newcommand{\pdot}{\raisebox{0.15ex}{\fontsize{5}{5}\selectfont$\bullet$}} % small dot for +.
+
+\begin{tikzpicture}[font=\normalsize]
+
+% =======================================================================
+% (4.9)  Saturated site  --  R-CR2-Y(+.)-R  ->  R. + CR2=Y(+)R
+% =======================================================================
+\def\y{0}
+\node[atom] (A) at (3.00,\y) {$\mathrm{R}$};
+\node[atom] (B) at (3.95,\y) {$\mathrm{CR_2}$};
+\node[atom] (C) at (5.10,\y) {$\mathrm{YR}$};
+\draw[bond] (A.east) -- (B.west);
+\draw[bond] (B.east) -- (C.west);
+\node[chg] at (4.98,\y+0.30) {$+\pdot$};                 % radical cation on Y
+\draw[fish] (3.40,\y+0.05) to[bend left=68]  (4.45,\y+0.07); % big arch: breaking bond -> forming bond
+\draw[fish] (4.92,\y+0.17) to[bend right=74] (4.62,\y+0.07); % radical -> forming bond
+
+%% =======================================================================
+%% (4.10)  Saturated site  --  (+)YR-CH2-CH2(.)  ->  (+.)YR + CH2=CH2
+%% =======================================================================
+%\def\y{-1.55}
+%\node[atom] (A) at (3.00,\y) {$\mathrm{YR}$};
+%\node[atom] (B) at (4.10,\y) {$\mathrm{CH_2}$};
+%\node[atom] (C) at (5.25,\y) {$\mathrm{CH_2}$};
+%\draw[bond] (A.east) -- (B.west);
+%\draw[bond] (B.east) -- (C.west);
+%\node[chg] at (2.92,\y+0.30) {$+$};                       % charge on Y
+%\node[chg] at (5.05,\y+0.30) {\pdot};                     % radical on terminal C
+%\draw[fish] (3.45,\y+0.05) to[bend right=72] (2.80,\y+0.07); % arch1: breaking bond -> onto Y
+%\draw[fish] (3.62,\y+0.05) to[bend left=66]  (4.58,\y+0.07); % arch2: breaking bond -> forming bond
+%\draw[fish] (5.05,\y+0.17) to[bend right=72] (4.80,\y+0.07); % radical -> forming bond
+%
+%% =======================================================================
+%% (4.11)  Unsat. heteroatom  --  R-CR=Y(+.)  ->  R. + CR#Y(+)
+%% =======================================================================
+%\def\y{-3.20}
+%\node[atom] (A) at (3.00,\y) {$\mathrm{R}$};
+%\node[atom] (B) at (3.95,\y) {$\mathrm{CR}$};
+%\node[atom] (C) at (5.00,\y) {$\mathrm{Y}$};
+%\draw[bond] (A.east) -- (B.west);
+%\draw[bond] (B.east) -- (C.west);                          % double bond CR=Y
+%\draw[bond] ([yshift=1.6pt]B.east) -- ([yshift=1.6pt]C.west);
+%\node[chg] at (4.98,\y+0.30) {$+\pdot$};
+%\draw[fish] (3.40,\y+0.05) to[bend left=68]  (4.42,\y+0.07);
+%\draw[fish] (4.92,\y+0.17) to[bend right=74] (4.60,\y+0.07);
+%
+%% =======================================================================
+%% (4.12)  Alkene allylic  --  R-CH2-CH=CH2(+.)  ->  R. + CH2=CH-CH2(+)
+%% =======================================================================
+%\def\y{-4.70}
+%\node[atom] (A) at (3.00,\y) {$\mathrm{R}$};
+%\node[atom] (B) at (3.95,\y) {$\mathrm{CH_2}$};
+%\node[atom] (C) at (5.00,\y) {$\mathrm{CH}$};
+%\node[atom] (D) at (5.80,\y) {$\mathrm{CH_2}$};
+%\draw[bond] (A.east) -- (B.west);
+%\draw[bond] (B.east) -- (C.west);
+%\draw[bond] (C.east) -- (D.west);                          % double bond CH=CH2
+%\draw[bond] ([yshift=1.6pt]C.east) -- ([yshift=1.6pt]D.west);
+%\node[chg] at (5.30,\y+0.30) {$+\pdot$};
+%\draw[fish] (3.40,\y+0.05) to[bend left=66]  (4.42,\y+0.07); % breaking bond -> forming bond
+%\draw[fish] (5.25,\y+0.17) to[bend right=60] (4.62,\y+0.07); % alkene radical cation -> forming bond
+
+% =======================================================================
+% reaction arrows (alpha), products and equation numbers
+% =======================================================================
+\foreach \y in {
+  0%
+  %,-1.55
+  %,-3.20
+  %,-4.70
+  }{
+  \draw[rxn] (6.40,\y) -- (7.55,\y);
+  \node at (6.97,\y+0.22) {$\alpha$};
+}
+\node[atom,anchor=base west] at (7.80,-0.05)
+  {$\mathrm{R}\rdot \;+\; \mathrm{CR_2}{=}\overset{+}{\mathrm{Y}}\mathrm{R}$};
+%\node[atom,anchor=base west] at (7.80,-1.60)
+%  {$\overset{+\pdot}{\mathrm{Y}}\mathrm{R} \;+\; \mathrm{CH_2}{=}\mathrm{CH_2}$};
+%\node[atom,anchor=base west] at (7.80,-3.25)
+%  {$\mathrm{R}\rdot \;+\; \mathrm{CR}{\equiv}\overset{+}{\mathrm{Y}}$};
+%\node[atom,anchor=base west] at (7.80,-4.75)
+%  {$\mathrm{R}\rdot \;+\; \mathrm{CH_2}{=}\mathrm{CH}{-}\overset{+}{\mathrm{C}}\mathrm{H_2}$};
+
+% equation numbers
+\node[anchor=east] at (12.7,0)     {(4.9)};
+%\node[anchor=east] at (12.7,-1.55) {(4.10)};
+%\node[anchor=east] at (12.7,-3.20) {(4.11)};
+%\node[anchor=east] at (12.7,-4.70) {(4.12)};
+
+%% =======================================================================
+%% left-hand category labels
+%% =======================================================================
+%\node[anchor=east] at (2.55,0)      {Saturated site:};
+%\node[anchor=east,align=right] at (2.55,-3.20)
+%  {Unsaturated\\heteroatom:};
+%\node[anchor=east,align=right] at (2.55,-4.70)
+%  {Alkene (allylic\\cleavage):};
+
+\end{tikzpicture}

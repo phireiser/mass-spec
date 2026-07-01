@@ -22,7 +22,7 @@
 \usepackage{minted}
 \usepackage{tikz}
 \usepackage{tikz-cd}
-\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.multipart,shadows.blur}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.multipart,shadows.blur,bending}
 % extra libraries required by the shared thesis figures:
 \usetikzlibrary{backgrounds,patterns,angles,quotes,shapes.geometric,shapes.symbols}
 \usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,decorations.markings}
@@ -70,7 +70,7 @@
 Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 \author{Philipp Reiser}
 \institute{TBI Uni Vienna}
-\date{2026-02-11}
+\date{2026-07-11}
 
 \begin{document}
 
@@ -123,7 +123,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 \begin{frame}{Motivation}
     \centering
     \resizebox{0.95\textwidth}{!}{
-        \input{diagram/motivation.tikz.tex}
+        \input{../shared/figures/motivation.tikz.tex}
     }
 \end{frame}
 \note{
@@ -146,14 +146,14 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     
     % ================== TOP: Overview diagram ==================
     \resizebox{0.95\textwidth}{!}{
-        \input{diagram/MassSpec_flow.tikz.tex}
+        \input{../shared/figures/MassSpec_flow.tikz.tex}
     }
     
     \vspace{0.4cm}
     
     % ================== BOTTOM: Magnetic sector diagram ==================
     \resizebox{0.95\textwidth}{!}{
-        \input{diagram/MassSpec_physical.tikz.tex}
+        \input{../shared/figures/MassSpec_physical.tikz.tex}
     }
 
 \end{frame}
@@ -179,7 +179,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 	\begin{columns}[T,onlytextwidth]
 	  \column{0.5\textwidth}
 	  \centering
-	  \includesvg[width=\linewidth]{TolueneFragmentation.svg}
+	  \includesvg[width=\linewidth]{../shared/figures/TolueneFragmentation.svg}
 	  \nocite{src-wiki-toluene-fragmentation}
 
 	  \column{0.5\textwidth}
@@ -220,10 +220,10 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 \begin{frame}[fragile]{Sample Fragmentation Rules}
     \begin{figure}
         \centering
-        \includegraphics[width=0.85\linewidth]{IMS_book_page_57.png}
+        \resizebox{0.85\linewidth}{!}{\input{../shared/figures/IMS_book_page_57.tikz.tex}}
         \nocite{McLaffertyFredW1995IvM}
     \end{figure}
-
+    \vspace{0.7cm}
 	\begin{minted}[
 	  linenos,
 	  numbersep=6pt,
@@ -331,7 +331,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 %\begin{frame}{Representation}
 %    \centering
 %    \resizebox{0.5\textwidth}{!}{
-%        \input{diagram/representation-visual.tikz.tex}
+%        \input{../shared/figures/representation-visual.tikz.tex}
 %    }
 %\end{frame}
 %
@@ -360,7 +360,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 %\begin{frame}[fragile]{Adverserial Architecture Diagram}
 %    \centering
 %    \resizebox{0.7\textwidth}{!}{
-%    \input{diagram/adverserial2.tikz.tex}
+%    \input{../shared/figures/adverserial2.tikz.tex}
 %    }
 %\end{frame}
 

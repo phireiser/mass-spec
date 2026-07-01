@@ -211,7 +211,7 @@ This preserves local chemical structure while explicitly representing multi-step
 \begin{figure}[H]
     \centering
     \resizebox{0.9\textwidth}{!}{
-        \input{fig-tikz/level2.tikz.tex}
+        \input{../shared/figures/level2.tikz.tex}
     }
     \caption[Overview of the Two-Level Representation]{
         Overview of the two-level molecular encoding pipeline: local graph encoders capture atom- and bond-level chemistry, while global hypergraph encoders model multi-step fragmentation over embedded molecular states. 
@@ -285,7 +285,7 @@ In the resulting derivation-graph data structure, each vertex carries its state 
 \begin{figure}[H]
     \centering
     \resizebox{0.9\textwidth}{!}{
-        \input{fig-tikz/mol_latent.tex}
+        \input{../shared/figures/mol_latent.tex}
     }
     \caption[Two-Level Molecular Latent Representation]{
         In the first stage, each molecular state  is represented as an atom-bond graph and encoded by a learned graph encoder into a dense state embedding.
@@ -506,7 +506,7 @@ The cosine similarity treats each spectrum as a vector and compares two such vec
 \begin{figure}[H]
     \centering
     \resizebox{\textwidth}{!}{
-        \input{fig-tikz/cosine_vectors.tikz.tex}
+        \input{../shared/figures/cosine_vectors.tikz.tex}
     }
     \caption[Cosine similarity geometry]{
         Two vectors $A$ and $B$ drawn from a common
@@ -535,7 +535,7 @@ For two equal-length vectors this reduces to sorting both and summing the absolu
 \begin{figure}[H]
     \centering
     \resizebox{\textwidth}{!}{
-        \input{fig-tikz/wasserstein_expl.tikz.tex}
+        \input{../shared/figures/wasserstein_expl.tikz.tex}
     }
     \caption[Wasserstein distance illustration]{
         Two equal-length vectors, sorted $\tilde P = [1,6,6,10]$ (red) and $\tilde Q = [4,4,9,12]$ (blue), are drawn as cumulative staircases: 
@@ -560,7 +560,7 @@ To recover a matched-pair comparison without discarding or interpolating peaks, 
 \begin{figure}[H]
     \centering
     \resizebox{\textwidth}{!}{
-        \input{fig-tikz/wasserstein_upsampling.tikz.tex}
+        \input{../shared/figures/wasserstein_upsampling.tikz.tex}
     }
     \caption[Wasserstein Upsampling Illustration]{
         The inputs have different lengths, $P = [1,3,4,5]$ ($n=4$) and $Q = [1,3,5]$ ($m=3$), so they are first brought to a common length before matched-pair differences can be formed. 
@@ -594,14 +594,14 @@ The Wasserstein distance, by contrast, charges for the displacement itself, so a
     \centering
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
-        \resizebox{\linewidth}{!}{\input{fig-tikz/cosine_vs_wasserstein_a.tikz.tex}}
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_a.tikz.tex}}
         \caption{Aligned spectra}
         \label{fig:cosine-wasserstein-a}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
-        \resizebox{\linewidth}{!}{\input{fig-tikz/cosine_vs_wasserstein_b.tikz.tex}}
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_b.tikz.tex}}
         \caption{B shifted $+8$\,Da}
         \label{fig:cosine-wasserstein-b}
     \end{subfigure}
@@ -610,14 +610,14 @@ The Wasserstein distance, by contrast, charges for the displacement itself, so a
 
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
-        \resizebox{\linewidth}{!}{\input{fig-tikz/cosine_vs_wasserstein_c.tikz.tex}}
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_c.tikz.tex}}
         \caption{Response vs.\ positional shift}
         \label{fig:cosine-wasserstein-c}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
-        \resizebox{\linewidth}{!}{\input{fig-tikz/cosine_vs_wasserstein_d.tikz.tex}}
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_d.tikz.tex}}
         \caption{Response vs.\ intensity scaling}
         \label{fig:cosine-wasserstein-d}
     \end{subfigure}

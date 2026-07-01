@@ -29,7 +29,7 @@ Note that the threshold of 40 seconds was chosen arbitrarily to exclude trivial 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\linewidth]{fig-tikz/time_vs_complexity_logy_over40.png}
+    \includegraphics[width=0.8\linewidth]{../shared/figures/time_vs_complexity_logy_over40.png}
     \caption[Fragmentation Computation Times]{
         Regression of Computation time, excluding molecules that had trivial expansions (time $< 40$s).
         The plot shows a positive correlation between molecular complexity and computation time, but also a large variance in computation times for molecules of similar complexity.
@@ -50,7 +50,7 @@ The paired randomization tests underlying this comparison did not yield statisti
 
 \begin{figure}[H]
     \centering
-    \includesvg[width=0.8\linewidth]{fig-tikz/cosine_mrr.svg}
+    \includesvg[width=0.8\linewidth]{../shared/figures/cosine_mrr.svg}
     \caption[Cosine similarity and MRR for ablation variants]{
         Ablation of three pipeline components (fragments, derivation graph, and reranker) against the full model.
         Cosine similarity measures how similar the query is to the correct target, averaged over all queries; MRR is the mean reciprocal rank of the ground-truth target. 
@@ -76,7 +76,7 @@ The model therefore behaves more like a candidate narrowing system than a reliab
 
 \begin{figure}[H]
     \centering
-    \includesvg[width=0.8\linewidth]{fig-tikz/recall_at_k.svg}
+    \includesvg[width=0.8\linewidth]{../shared/figures/recall_at_k.svg}
     \caption[Recall@k for ablation variants]{
         Recall@k for $k = 1, \ldots, 20$ across the full retrieval model and three ablated variants. 
         Shaded bands show 95\% bootstrap confidence intervals over queries. 

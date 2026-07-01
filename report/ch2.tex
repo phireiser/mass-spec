@@ -50,7 +50,7 @@ As a result, modern workflows increasingly integrate MS measurements with comput
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-flowchart.tikz.tex}}
+    \resizebox{0.9\textwidth}{!}{\input{../shared/figures/ms-flowchart.tikz.tex}}
     \caption[Simplified block diagram of a mass spectrometer]{
         Simplified block diagram of a mass spectrometer. 
         The sample is introduced into the ion source, where analyte molecules are ionized. 
@@ -61,7 +61,7 @@ As a result, modern workflows increasingly integrate MS measurements with comput
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ms-schematic.tikz.tex}}
+    \resizebox{0.9\textwidth}{!}{\input{../shared/figures/ms-schematic.tikz.tex}}
     \caption[Simplified schematic of MS measurement principle]{
         Simplified schematic of the measurement principle in a magnetic sector mass spectrometer. 
         Following sample introduction, ionisation and acceleration generate an ion beam that is separated in the magnetic field by deflection that depends on $m/z$. 
@@ -118,7 +118,7 @@ A schematic of the EI source is shown in \Cref{fig:ei-schematic}.
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/ei-schematic.tikz.tex}}
+    \resizebox{0.9\textwidth}{!}{\input{../shared/figures/ei-schematic.tikz.tex}}
     \caption[Schematic of EI ionization]{
         Schematic illustration of the electron ionization (EI) process.
         Gaseous sample molecules (M) enter the source and are crossed by a beam of high-energy electrons ($\sim 70$\,eV) emitted from a heated filament and collected at the electron trap (anode).
@@ -152,7 +152,7 @@ The sequence from charged droplet formation to gas-phase ion release is shown in
 
 \begin{figure}[H]
     \centering
-    \input{fig-tikz/esi-schematic.tex}
+    \input{../shared/figures/esi-schematic.tex}
     \caption[Schematic of ESI ionization]{
         Schematic illustration of the electrospray ionization (ESI) process. 
         A sample solution is dispersed by nebulizer gas and subjected to a high electric potential, producing a spray of charged droplets. 
@@ -176,7 +176,7 @@ A schematic of the APCI process is shown in Figure~\ref{fig:apci-schematic}.
 
 \begin{figure}[H]
     \centering
-    \input{fig-tikz/apci-schematic.tex}
+    \input{../shared/figures/apci-schematic.tex}
     \caption[Schematic of APCI ionization]{
         Schematic illustration of atmospheric pressure chemical ionization (APCI). 
         The sample solution is nebulized and vaporized, and a corona discharge operated at high voltage generates reagent ions from the solvent. 
@@ -195,7 +195,7 @@ A general schematic of the MALDI process is shown in Figure~\ref{fig:maldi-schem
 
 \begin{figure}[H]
     \centering
-    \input{fig-tikz/maldi-schematic.tex}
+    \input{../shared/figures/maldi-schematic.tex}
     \caption[Schematic of MALDI ionization]{
         Schematic illustration of matrix-assisted laser desorption/ionization (MALDI). 
         A crystallized matrix containing embedded analyte molecules is irradiated with UV laser light at the sample stage, leading to desorption and ionization of matrix and analyte species. 
@@ -298,7 +298,7 @@ This cascade amplification principle is illustrated in Figure~\ref{fig:em-schema
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.9\textwidth}{!}{\input{fig-tikz/em-schematic.tex}}
+    \resizebox{0.9\textwidth}{!}{\input{../shared/figures/em-schematic.tex}}
     \caption[Schematic of an electron multiplier detector]{
         Schematic illustration of an electron multiplier (EM) detector. 
         An incoming ion strikes the first dynode, causing the emission of secondary electrons. 
@@ -463,9 +463,9 @@ To enable algorithmic processing of molecular structures, we represent them usin
     \centering
     \begin{tikzpicture}
       \node (qm)
-            {\includegraphics[width=.5\textwidth]{fig-tikz/toluene-qm.png}};
+            {\includegraphics[width=.5\textwidth]{../shared/figures/toluene-qm.png}};
       \node [right = of qm] (gg)
-            {\resizebox{0.4\textwidth}{!}{\input{fig-tikz/qm-graph-abstraction.tikz.tex}}};
+            {\resizebox{0.4\textwidth}{!}{\input{../shared/figures/qm-graph-abstraction.tikz.tex}}};
       \draw[->,>=stealth,thick] (qm) to (gg);
     \end{tikzpicture}
     \caption[Abstraction of a molecule as a graph]{
@@ -559,7 +559,7 @@ One example derivation graph for the fragmentation rules applied is in \autoref{
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.8\textwidth]{fig-tikz/dg_toluene.pdf}
+    \includegraphics[width=0.8\textwidth]{../shared/figures/dg_toluene.pdf}
     \caption[Example derivation graph of a fragmentation]{
         Example derivation graph showing reaction pathways for toluene fragmentation.
         Also illustrates the combinatorial explosion of possible pathways as rules are applied iteratively.
@@ -588,7 +588,7 @@ For a visual overview of this workflow, see \autoref{fig:gnn-encoding-workflow}.
 \begin{figure}[ht]
     \centering
     \resizebox{0.9\textwidth}{!}{%
-        \input{fig-tikz/gnn_pipeline.tikz.tex}%
+        \input{../shared/figures/gnn_pipeline.tikz.tex}%
     }
     \caption[Graph-convolutional molecular encoding workflow]{
         Starting from the molecular graph $G=(V,E)$ in \textbf{column 1}, where atoms form the nodes and bonds form the edges, each atom is initialized with a feature vector in \textbf{column 2} that encodes local chemical properties such as atom type, degree, formal charge, and aromaticity. 
