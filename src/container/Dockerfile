@@ -142,7 +142,9 @@ WORKDIR /app
 # Copy application source
 COPY src/ src/
 
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+# --ignore-installed: on Ubuntu 24.04, pip/setuptools/wheel are Debian packages
+# without RECORD files, so a plain --upgrade fails trying to uninstall them.
+RUN pip install --no-cache-dir --upgrade --ignore-installed pip setuptools wheel && \
     pip install --no-cache-dir -r src/container/requirements.txt
 
 # Set Python path for module resolution

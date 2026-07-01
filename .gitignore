@@ -3,3 +3,4 @@ outputs/**
 **/__pycache__/
 mol-spectro.sif
 .secrets/
+.pytest_cache/
