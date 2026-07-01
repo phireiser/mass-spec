@@ -180,6 +180,15 @@ class RealDataset(Dataset):
             self._precompute_all()
         self.complexities = self._compute_complexities()
         self.sorted_indices = sorted(range(len(self)), key=lambda i: self.complexities[i])
+        self.parent_masses = self._compute_parent_masses()
+
+    def _compute_parent_masses(self) -> List[float]:
+        """Per-molecule parent exact mass (max fragment mass), for mass-bucketed
+        batching. Read from the fragment collection so no extra mod parse is needed."""
+        masses: List[float] = []
+        for fwd, _bwd in self.frag_coll.values():
+            masses.append(max((float(em) for (_s, em, _t, _r) in fwd), default=0.0))
+        return masses
 
     def __len__(self) -> int:
         return len(self.frag_coll.keys())
@@ -345,6 +354,28 @@ def build_curriculum_loader(dataset: RealDataset, batch_size: int, fraction: flo
     return DataLoader(Subset(dataset, subset_idx), batch_size=batch_size, shuffle=True, drop_last=False, collate_fn=collate_fn)
 
 
+def build_hardneg_loader(dataset: RealDataset, batch_size: int, fraction: float, collate_fn) -> DataLoader:
+    """Curriculum loader whose batches are near-isobaric.
+
+    Takes the same easy-first curriculum fraction as :func:`build_curriculum_loader`,
+    then sorts that fraction by parent mass and chunks it into contiguous batches, so
+    the in-batch negatives seen by the InfoNCE / diversity / spectral-contrastive
+    losses are the mass-nearest molecules. Mass can no longer separate a positive from
+    its negatives, which forces the encoders and decoder onto structure rather than
+    mass. Batch order is shuffled each call (main rebuilds the loader every epoch).
+    """
+    frac = float(max(0.0, min(1.0, fraction)))
+    n = max(1, int(len(dataset) * frac))
+    subset_idx = list(dataset.sorted_indices[:n])
+    subset_idx.sort(key=lambda i: dataset.parent_masses[i])
+    batches = [subset_idx[k:k + batch_size] for k in range(0, len(subset_idx), batch_size)]
+    # fold a size-1 tail into the previous batch (InfoNCE needs >= 2 samples)
+    if len(batches) >= 2 and len(batches[-1]) < 2:
+        batches[-2].extend(batches.pop())
+    random.shuffle(batches)
+    return DataLoader(dataset, batch_sampler=batches, collate_fn=collate_fn)
+
+
 def train_test_split(
     data: Union[List[Any], Dict[Any, Any]],
     test_size: float = 0.2,
@@ -414,5 +445,6 @@ __all__ = [
     "bin_spectrum",
     "collate_vlex",
     "build_curriculum_loader",
+    "build_hardneg_loader",
     "train_test_split",
 ]

@@ -53,10 +53,10 @@ import mod
 from src.machine_learning import utils_mod
 from src.data_generation import utils
 from src.project_paths import shared_path
-from src.machine_learning.models import DecSpecLatent, EncMol, EncSpec, TaskHeads
-from src.machine_learning.data import RealDataset, collate_vlex, build_curriculum_loader, train_test_split
+from src.machine_learning.models import DecSpecFragment, EncMol, EncSpec, TaskHeads
+from src.machine_learning.data import RealDataset, collate_vlex, build_hardneg_loader, train_test_split
 from src.machine_learning.retrieval import LatentIndex, FaissLatentIndex, infer_mol_to_spec, infer_spec_to_mol
-from src.machine_learning.evaluation import demo_compare_spectrum, demo_retrieval_metrics, demo_noise_robustness, demo_visualize_reconstructions
+from src.machine_learning.evaluation import demo_compare_spectrum, demo_retrieval_metrics, mass_controlled_retrieval_metrics, demo_noise_robustness, demo_visualize_reconstructions
 from src.machine_learning.fragments import FragSetEncoderWrapper
 from src.machine_learning.training import train_epoch_phase_a, train_epoch_phase_b
 from src.machine_learning.checkpoint import save_checkpoint
@@ -97,6 +97,7 @@ def main():
     # Retrieval and diversity parameters (now actively used in training)
     p.add_argument("--alpha_retrieval", type=float, default=1.0, help="Weight for within-batch retrieval ranking loss (Phase B)")
     p.add_argument("--alpha_diversity", type=float, default=0.1, help="Weight for spectrum diversity loss (Phase A)")
+    p.add_argument("--alpha_spec_con", type=float, default=1.0, help="Weight for spectral contrastive loss (Phase A): spec_hat_i vs true_j over mass-bucketed negatives")
     p.add_argument("--contrastive_temp", type=float, default=0.07, help="Temperature for info_nce contrastive loss (Phase B)")
     p.add_argument("--skip_reranking", action="store_true", help="Skip forward-model reranking during retrieval evaluation (faster, tests embedding quality)")
     # paths and data options
@@ -256,7 +257,11 @@ def main():
     enc_mol  = EncMol(args.latent).to(device)
     frag_set_enc = FragSetEncoderWrapper(enc_mol, d_latent=args.latent).to(device)
     enc_spec = EncSpec(spectrum_bins_size, args.latent, dropout=args.dropout, norm=args.norm).to(device)
-    dec_spec = DecSpecLatent(d_in=args.latent, spectrum_bins_size=spectrum_bins_size, dropout=args.dropout, norm=args.norm).to(device)
+    dec_spec = DecSpecFragment(
+        d_node=args.latent, d_cond=args.latent, spectrum_bins_size=spectrum_bins_size,
+        mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width,
+        dropout=args.dropout,
+    ).to(device)
     # Task heads (shared trunk projections)
     heads = TaskHeads(d_latent=args.latent, d_task=args.latent).to(device)
     # expose for helper functions (script-level convenience)
@@ -275,12 +280,13 @@ def main():
     print("== Phase A: train forward (vocab-agnostic) ==")
     for epoch in range(1, args.epochs_fwd + 1):
         frac = min(1.0, args.curriculum_start + (epoch - 1) * args.curriculum_step)
-        cur_loader = build_curriculum_loader(train_ds, batch_size=args.batch, fraction=frac, collate_fn=collate_vlex)
+        cur_loader = build_hardneg_loader(train_ds, batch_size=args.batch, fraction=frac, collate_fn=collate_vlex)
         loss = train_epoch_phase_a(
             cur_loader, device, enc_mol, enc_spec, frag_set_enc, heads, dec_spec, opt_a,
             mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1,
             alpha_cosine=args.alpha_cos, alpha_wass=args.alpha_wass, lam_cycle=args.cycle_fwd,
-            alpha_diversity=args.alpha_diversity
+            alpha_diversity=args.alpha_diversity, alpha_spec_con=args.alpha_spec_con,
+            contrastive_temp=args.contrastive_temp
         )
         print(f"[A] epoch {epoch:02d} loss {loss:.4f} | frac {frac:.2f}")
         if use_wandb:
@@ -290,9 +296,9 @@ def main():
     print("== Phase B: align spec latent + spectrum recon (vocab-agnostic) ==")
     for epoch in range(1, args.epochs_bwd + 1):
         frac = min(1.0, args.curriculum_start + (epoch - 1) * args.curriculum_step)
-        cur_loader = build_curriculum_loader(train_ds, batch_size=args.batch, fraction=frac, collate_fn=collate_vlex)
+        cur_loader = build_hardneg_loader(train_ds, batch_size=args.batch, fraction=frac, collate_fn=collate_vlex)
         loss = train_epoch_phase_b(
-            cur_loader, device, enc_spec, enc_mol, heads, dec_spec, opt_b,
+            cur_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, opt_b,
             mz_min=train_ds.mz_min, mz_max=train_ds.mz_max, bin_width=train_ds.bin_width, beta_forbidden=0.1,
             alpha_cosine=args.alpha_cos, alpha_wass=args.alpha_wass, lam_cycle=args.cycle_bwd, lam_cycle_spec=args.cycle_bwd_spec,
             contrastive_temp=args.contrastive_temp, alpha_retrieval=args.alpha_retrieval
@@ -340,7 +346,8 @@ def main():
     _ = demo_compare_spectrum(
         graph_feats[i], spec[i],
         enc_mol, frag_set_enc, dec_spec, heads,
-        mz_min=test_ds.mz_min, bin_width=test_ds.bin_width, smiles=smiles[i], mz_max=test_ds.mz_max, top_k=10
+        mz_min=test_ds.mz_min, bin_width=test_ds.bin_width, smiles=smiles[i], mz_max=test_ds.mz_max, top_k=10,
+        frag_deriv_tree=deriv_trees_fwd[i]
     )
 
     # ----------------- Demo: Spectrum - > Structure -----------------
@@ -360,10 +367,25 @@ def main():
     print("== Retrieval metrics (TEST) ==")
     test_metrics = demo_retrieval_metrics(index, test_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, topk_list=(1,5,10), max_batches=5, skip_reranking=args.skip_reranking)
     print(test_metrics)
+
+    # ----------------- Mass-controlled retrieval scorecard (headline) -----------------
+    # Learned retrieval only counts if it beats the mass-only baseline; see the
+    # forward-collapse audit for why mass must be the bar, not an unmeasured confound.
+    mass_by_smiles = {}
+    for ds in (train_ds, vali_ds):
+        for smi, m in zip(list(ds.frag_coll.keys()), ds.parent_masses):
+            mass_by_smiles[smi] = m
+    print("== Mass-controlled retrieval (VAL) ==")
+    val_massctl = mass_controlled_retrieval_metrics(
+        index, val_loader, device, enc_spec, enc_mol, heads, mass_by_smiles,
+        mz_min=vali_ds.mz_min, mz_max=vali_ds.mz_max, bin_width=vali_ds.bin_width,
+        topk_list=(1, 5, 10, 20), windows=(5.0, 20.0),
+    )
     if use_wandb:
         # flatten nested metric dicts into "val/..."/"test/..." scalars for the wandb UI
         wandb.log({f"val/{k}": v for k, v in val_metrics.items()})
         wandb.log({f"test/{k}": v for k, v in test_metrics.items()})
+        wandb.log({f"val_massctl/{k}": v for k, v in val_massctl.items()})
 
     # ----------------- Demo: Spectrum noise robustness -----------------
     print("== Spectrum noise robustness (VAL subset) ==")
@@ -372,7 +394,7 @@ def main():
 
     # ----------------- Demo: Visualization of reconstructions -----------------
     print("== Visualization: saving recon plots for a few VAL samples ==")
-    _ = demo_visualize_reconstructions(graph_feats, spec, smiles, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3)
+    _ = demo_visualize_reconstructions(graph_feats, spec, smiles, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=deriv_trees_fwd)
 
     # save checkpoint (enc_mol weights are nested inside frag_set_enc; not stored separately)
     ckpt_path = args.output_dir / "ml_checkpoint.pt"

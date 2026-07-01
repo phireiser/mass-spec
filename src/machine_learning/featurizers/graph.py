@@ -7,7 +7,6 @@ from torch_geometric.data import Data
 
 import mod
 from src.data_generation.utils.term_transfers import (
-    atomic_number,
     encode_vertex_label,
     graph_from_term,
 )
@@ -20,22 +19,34 @@ BOND_STRENGTH = {
     mod.BondType.Aromatic: 1.5,   # conventional choice
 }
 
+# Fixed element vocabulary so the node-feature width is constant across all
+# graphs (required for batching). Anything outside falls into the "other" slot.
+ELEMENT_VOCAB = ("C", "H", "O", "N", "S", "P", "F", "Cl", "Br", "I", "Si", "B")
+_ELEMENT_INDEX = {sym: i for i, sym in enumerate(ELEMENT_VOCAB)}
+# Node feature layout: one-hot(element)+other, then
+# [charge, radical, degree, aromatic, incident_bond_order].
+ATOM_FEATURE_DIM = len(ELEMENT_VOCAB) + 1 + 5
+
 
 class GraphFeaturizerMOD:
     """
     Convert a mod.Graph to torch_geometric.Data:
-      - x[i] = [atom_id, charge, radical]  (dtype: long)
-      - edge_attr[k] = [bond_type_float]    (shape [E, 1], dtype: float32)
-      - edge_index in COO (undirected by doubling)
+      - x[i] = one-hot(element)+other, then [charge, radical, degree, aromatic,
+        incident_bond_order]  (dtype: float32, width ``ATOM_FEATURE_DIM``)
+      - edge_attr[k] = [bond_order_float]   (shape [E, 1], dtype: float32)
+      - edge_index in COO, undirected (each bond emitted in both directions)
+
+    The connectivity-derived channels (degree, aromatic flag, summed bond order)
+    are what let the encoder separate constitutional isomers instead of collapsing
+    to composition/mass; plain atom identity alone cannot.
     """
 
-    def _vertex_feat(self, v: mod.Graph.Vertex):
+    def _vertex_label(self, v: mod.Graph.Vertex):
         # Parse from the raw stringLabel so biradicals survive: mod's v.radical
         # is a bool (caps at 1) and int(v.atomId) raises for non-concrete atoms
         # like 'C..', which would otherwise drop both atom id and radical count.
         symbol, c, r = encode_vertex_label(getattr(v, "stringLabel", ""))
-        a = atomic_number(symbol)
-        return [a, c, r]
+        return symbol, float(c), float(r)
 
     def _edge_feat(self, e: mod.Graph.Edge):
         # Map bondType -> float with clear error on unknown types
@@ -79,15 +90,15 @@ class GraphFeaturizerMOD:
                 return getattr(vertex, "id", repr(vertex))
 
         idx_of = {key_of(v): i for i, v in enumerate(vtx)}
+        n = len(vtx)
 
-        # Node features
-        x_rows = [self._vertex_feat(v) for v in vtx]
-        if x_rows:
-            x = torch.tensor(x_rows, dtype=torch.long)
-        else:
-            x = torch.zeros((0, 3), dtype=torch.long)
+        # Per-vertex atom labels (symbol, charge, radical)
+        labels = [self._vertex_label(v) for v in vtx]
 
-        # Edges and attributes
+        # Connectivity-derived accumulators + undirected edge lists
+        degree = [0.0] * n
+        bond_order = [0.0] * n
+        aromatic = [0.0] * n
         edges, eattrs = [], []
         for e in g.edges:
             k_src = key_of(e.source)
@@ -97,12 +108,29 @@ class GraphFeaturizerMOD:
                 v = idx_of[k_tgt]
             except KeyError as ex:
                 raise RuntimeError(f"Edge {e!r} references unknown vertex "
-                    "(src={k_src!r}, tgt={k_tgt!r})") from ex
+                    f"(src={k_src!r}, tgt={k_tgt!r})") from ex
 
             f = self._edge_feat(e)
+            degree[u] += 1.0; degree[v] += 1.0
+            bond_order[u] += f; bond_order[v] += f
+            if e.bondType == mod.BondType.Aromatic:
+                aromatic[u] = 1.0; aromatic[v] = 1.0
 
-            edges.append([u, v])
-            eattrs.append(f)
+            # emit both directions so message passing is undirected
+            edges.append([u, v]); eattrs.append(f)
+            edges.append([v, u]); eattrs.append(f)
+
+        # Assemble wide float node features: one-hot(element)+other, then
+        # [charge, radical, degree, aromatic, incident_bond_order].
+        x_rows = []
+        for i, (symbol, c, r) in enumerate(labels):
+            onehot = [0.0] * (len(ELEMENT_VOCAB) + 1)
+            onehot[_ELEMENT_INDEX.get(symbol, len(ELEMENT_VOCAB))] = 1.0
+            x_rows.append(onehot + [c, r, degree[i], aromatic[i], bond_order[i]])
+        if x_rows:
+            x = torch.tensor(x_rows, dtype=torch.float32)
+        else:
+            x = torch.zeros((0, ATOM_FEATURE_DIM), dtype=torch.float32)
 
         edge_index = (
             torch.tensor(edges, dtype=torch.long).t().contiguous()
