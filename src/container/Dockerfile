@@ -2,24 +2,28 @@
 
 # Use 'devel' (not 'runtime') so the full C++/CUDA toolchain and headers are
 # available to build MOD, Boost and Graphviz from source.
-# Stays on ubuntu22.04 (Python 3.10) on purpose: the site-packages paths below
-# are hardcoded to python3.10. Moving to ubuntu24.04 (Python 3.12) is a separate,
-# larger change.
-FROM docker.io/nvidia/cuda:12.6.3-devel-ubuntu22.04
+FROM docker.io/nvidia/cuda:12.6.3-devel-ubuntu24.04
+
+# Single source of truth for the Python minor version. Keep in sync with the
+# base image's default python3 (ubuntu24.04 -> 3.12); used in the site-packages
+# paths below where MOD installs its Python module.
+ARG PYTHON_VERSION=3.12
 
 LABEL maintainer="Molecular Spectroscopy Project"
 LABEL description="Molecular Spectroscopy Project"
 
-# Set non-interactive mode and UTF-8 encoding
+# Non-interactive apt, UTF-8, and allow root-level pip installs on Ubuntu 24.04
+# (PEP 668 marks the system Python as externally managed).
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_BREAK_SYSTEM_PACKAGES=1
 
 ENV MOD_INSTALL_PREFIX=/usr/local \
     LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
-    PYTHONPATH=/usr/local/lib/python3.10/site-packages:${PYTHONPATH} \
+    PYTHONPATH=/usr/local/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH} \
     PATH=/usr/local/bin:${PATH}
 
 # Install system dependencies including MOD build requirements
@@ -28,7 +32,7 @@ RUN apt-get update \
     && add-apt-repository universe \
     && apt-get update \
     && apt-get install --no-install-recommends -y \
-    python3.10 \
+    python3 \
     python3-pip \
     python3-dev \
     build-essential \
@@ -62,8 +66,8 @@ RUN apt-get update \
     texlive-science \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Python 3.10 as default
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1 && \
+# Make 'python' resolve to the base image's python3
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 
 ARG j=7
@@ -142,7 +146,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r src/container/requirements.txt
 
 # Set Python path for module resolution
-ENV PYTHONPATH=/app:/usr/local/lib/python3.10/site-packages:${PYTHONPATH}
+ENV PYTHONPATH=/app:/usr/local/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}
 
 # Create necessary output directories
 RUN mkdir -p /app/outputs/{logs,metrics,plots,checkpoints,best_params}
