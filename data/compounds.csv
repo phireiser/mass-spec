@@ -171,4 +171,3 @@ camphor,CC1(C)C2CCC1(C(=O)C2)C,bicyclic_monoterpenoid
 limonene,CC1=CCC(CC1)C(=C)C,monoterpene
 citral,CC(=C)CCC=CC=O,monoterpenoid_aldehyde
 farnesol,CC(=CCCC(=CCCC(=CC)C)C)CO,diterpenoid_alcohol
-chlorophyll_a,CCC(=O)C1=NC2=C(C=C1C=C3C(=C(C=C(N3)C4=CC=C(C=C4)C(=O)OCC)C)C)C)N(C)C,porphyrin_pigment
