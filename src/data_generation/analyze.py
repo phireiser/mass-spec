@@ -40,7 +40,7 @@ print("dump loaded")
 print("\n\n")
 
 dg.print()
-utils.print_grammar(molecule, ionization + fragmentation)
+utils.print_grammar([molecule], ionization + fragmentation)
 
 
 with pd.option_context(
@@ -58,13 +58,7 @@ pprint(utils.spectrum_statistic(dg, molecule_term), width=120)
 
 print("\n\n")
 print("mod post running ...")
+mod.post.enableCompileSummary()
 mod.post.flushCommands()
 
-process = subprocess.run(
-   ["stdbuf", "-oL", "-eL", "mod_post"],
-    check=False,
-    text=True,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-    bufsize=1,
-)
+subprocess.run(["mod_post"], check=True)
