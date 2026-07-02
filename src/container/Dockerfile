@@ -12,14 +12,13 @@ ARG PYTHON_VERSION=3.12
 LABEL maintainer="Molecular Spectroscopy Project"
 LABEL description="Molecular Spectroscopy Project"
 
-# Non-interactive apt, UTF-8, and allow root-level pip installs on Ubuntu 24.04
-# (PEP 668 marks the system Python as externally managed).
+# Non-interactive apt, UTF-8. Python packages install into a virtualenv (created
+# below), so the system Python is never touched and no PEP 668 override is needed.
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1
+    PYTHONDONTWRITEBYTECODE=1
 
 ENV MOD_INSTALL_PREFIX=/usr/local \
     LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
@@ -35,6 +34,7 @@ RUN apt-get update \
     python3 \
     python3-pip \
     python3-dev \
+    python3-venv \
     build-essential \
     cmake \
     git \
@@ -69,6 +69,15 @@ RUN apt-get update \
 # Make 'python' resolve to the base image's python3
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+# Create ONE virtual environment for all Python packages and put it first on PATH,
+# so every later python/pip/pip3/bindep resolves to it. --system-site-packages keeps
+# MOD's compiled bindings (installed under /usr/local dist-packages) and the apt
+# openbabel importable. Inside a venv, pip does not warn about running as root and
+# needs no PEP 668 override.
+RUN python3 -m venv --system-site-packages /opt/venv
+ENV VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:${PATH}
 
 ARG j=7
 
@@ -142,10 +151,11 @@ WORKDIR /app
 # Copy application source
 COPY src/ src/
 
-# --ignore-installed: on Ubuntu 24.04, pip/setuptools/wheel are Debian packages
-# without RECORD files, so a plain --upgrade fails trying to uninstall them.
-RUN pip install --no-cache-dir --upgrade --ignore-installed pip setuptools wheel && \
-    pip install --no-cache-dir -r src/container/requirements.txt
+# Upgrade the venv's own build tooling, then install the pinned app stack into the
+# venv. --ignore-installed forces the pinned versions into the venv even if a
+# --system-site-packages package would otherwise satisfy the requirement.
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir --ignore-installed -r src/container/requirements.txt
 
 # Set Python path for module resolution
 ENV PYTHONPATH=/app:/usr/local/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}
