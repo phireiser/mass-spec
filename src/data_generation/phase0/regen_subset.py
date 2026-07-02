@@ -42,7 +42,7 @@ def main() -> None:
     ap.add_argument("--stale-fwd", default=str(shared_path("PROCESSED_DIR_REL", "fwd")),
                     help="Existing dump dir to read SMILES from")
     ap.add_argument("--out-dir", default=None, help="Output dir (a fwd/ subdir is created); required unless --emit-manifest")
-    ap.add_argument("--spectra-folder", default=str(shared_path("NIST_SPECTRA_DIR_REL")))
+    ap.add_argument("--spectra-folder", default=str(shared_path("PARQUET_DIR_REL")))
     ap.add_argument("--names", default="", help="Comma-separated subset (default: built-in list)")
     ap.add_argument("--all-with-spectrum", action="store_true",
                     help="Use every molecule that has both a dump and a NIST spectrum (full corpus)")
@@ -53,11 +53,12 @@ def main() -> None:
     args = ap.parse_args()
 
     if args.all_with_spectrum:
+        from src.data_generation import utils
         stale = Path(args.stale_fwd)
-        spectra = Path(args.spectra_folder)
+        parquet_dir = Path(args.spectra_folder)
         names = sorted(
             p.stem for p in stale.glob("*.pkl")
-            if (spectra / f"{p.stem.lower()}-Mass.jdx").exists()
+            if utils.get_spectra_by_smiles(smiles_from_dump(p.stem, stale), parquet_dir)
         )
     else:
         names = [n.strip() for n in args.names.split(",") if n.strip()] or DEFAULT_SUBSET

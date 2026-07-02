@@ -30,7 +30,7 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$DATADIR/fwd"
 mkdir -p "$DATADIR/bwd"
 # Bind-mount targets must exist on host before apptainer mounts them
-mkdir -p "$REPO_ROOT/$NIST_SPECTRA_DIR_REL"
+mkdir -p "$REPO_ROOT/$PARQUET_DIR_REL"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
 
 # Count lines
@@ -75,7 +75,7 @@ srun --cpu-bind=cores \
 apptainer exec \
     --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
     --bind "$REPO_ROOT/$PROCESSED_DIR_REL:$C_PROCESSED" \
-    --bind "$REPO_ROOT/$NIST_SPECTRA_DIR_REL:$C_NIST" \
+    --bind "$REPO_ROOT/$PARQUET_DIR_REL:$C_PARQUET" \
     --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
     --bind "$REPO_ROOT/$CSV_PATH_REL:$C_CSV:ro" \
     --env PYTHONPATH="$C_APP" \
@@ -88,7 +88,7 @@ apptainer exec \
       --smiles "$SMILES" \
       --name "$NAME" \
       --output-dir "$C_PROCESSED" \
-      --spectra-folder "$C_NIST" \
+      --spectra-folder "$C_PARQUET" \
       --number-threads "$THREADS" \
       --subgroup-diag \
       --avoid-reprocessing \

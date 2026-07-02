@@ -1,6 +1,7 @@
 """
 Integration test: run the real MØD fragmentation pipeline on toluene and check
-it against the NIST reference spectrum (data/nist_spectra/toluene-Mass.jdx).
+it against the NIST reference spectrum (from the Parquet store, data/parquet/,
+looked up by SMILES).
 
 Unlike the mocked unit tests in test_data_generation_utils.py, this exercises
 the actual `mod` engine end-to-end, so it is slow and skipped unless explicitly

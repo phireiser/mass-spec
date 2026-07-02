@@ -1,76 +1,73 @@
-"""Importing spectra from JDX files."""
+"""Reading spectra from the two-tier Parquet store (built by build_parquet_index.py).
 
+Main store ``nist_spectra.parquet`` (keyed nist_id) + side index
+``nist_index.parquet`` (keyed inchikey). pyarrow/rdkit are imported lazily so this
+module still loads where those packages are absent (e.g. a container built before
+they were added).
+"""
+
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 
-def parse_jdx_header(
-        file: Path
-    ) -> Dict[str, str]:
-    """Parse the ``##KEY=VALUE`` header records of a JDX Mass file.
+@lru_cache(maxsize=4)
+def _load_parquet_store(parquet_dir: str):
+    """Load both tiers once; return (by_inchikey, peaks_by_id, meta_by_id)."""
+    import pyarrow.parquet as pq
 
-    Returns a dict keyed by the bare record name (e.g. ``"MOLFORM"``, ``"MW"``,
-    ``"TITLE"``) mapped to its raw string value. Reading stops at the peak table.
-    Multi-line continuation records are not joined (only the first line is kept),
-    which is sufficient for the scalar fields Phase 0 needs.
-    """
-    if not file.exists():
-        raise FileNotFoundError(f"JDX file not found: {file}")
-    header: Dict[str, str] = {}
-    with open(file, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith("##PEAK") or line.startswith("##END"):
-                break
-            if line.startswith("##"):
-                key, sep, value = line[2:].partition("=")
-                if sep:
-                    header[key.strip().lstrip("$").upper()] = value.strip()
-    return header
+    root = Path(parquet_dir)
+    idx = pq.read_table(root / "nist_index.parquet").to_pandas()
+    spec = pq.read_table(root / "nist_spectra.parquet").to_pandas()
 
-
-def parse_jdx(
-        file: Path
-    ) -> List[Tuple[float, float]]:
-    """Parse a JDX Mass file defensively and return (mz, intensity) tuples."""
-    if not file.exists():
-        raise FileNotFoundError(f"JDX file not found: {file}")
-    spectra: List[Tuple[float, float]] = []
-    with open(file, encoding="utf-8") as f:
-        parsing_peaks = False
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            if line.startswith("##PEAK"):
-                parsing_peaks = True
-                continue
-            if line.startswith("##END"):
-                break
-            if parsing_peaks:
-                for token in line.split():
-                    try:
-                        mz_str, inten_str = token.split(",")
-                        mz = float(mz_str); inten = float(inten_str)
-                        spectra.append((mz, inten))
-                    except Exception:
-                        # skip malformed tokens
-                        continue
-    return spectra
+    by_inchikey: Dict[str, str] = {}
+    for key, nid in zip(idx["inchikey"], idx["nist_id"]):
+        if key:
+            by_inchikey.setdefault(key, nid)
+    peaks_by_id = {
+        nid: [(float(x), float(y)) for x, y in zip(mz, inten)]
+        for nid, mz, inten in zip(spec["nist_id"], spec["mz"], spec["intensity"])
+    }
+    meta_by_id = {
+        row["nist_id"]: {
+            "name": row["name"], "cas": row["cas"], "formula": row["formula"],
+            "nominal_mw": row["nominal_mw"], "inchikey": row["inchikey"],
+        }
+        for row in idx.to_dict("records")
+    }
+    return by_inchikey, peaks_by_id, meta_by_id
 
 
-def get_spectra_from_local_jdx(
-    name: str,
-    folder: Path,
-    ) -> List[Tuple[float, float]]:
-    """Resolve file by name within the project spectra folder and parse via parse_jdx."""
-    jdx_file = folder / f"{name.lower()}-Mass.jdx"
-    return parse_jdx(jdx_file)
+def _resolve_id(smiles: str, by_inchikey: Dict[str, str]):
+    from rdkit import Chem
+
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    return by_inchikey.get(Chem.MolToInchiKey(mol))
+
+
+def get_spectra_by_smiles(smiles: str, parquet_dir: Path) -> List[Tuple[float, float]]:
+    """Peaks for a molecule by SMILES: canonicalise to InChIKey, then look up the
+    side index. Handles any valid SMILES spelling. Returns [] if absent."""
+    by_inchikey, peaks_by_id, _ = _load_parquet_store(str(parquet_dir))
+    nid = _resolve_id(smiles, by_inchikey)
+    return peaks_by_id.get(nid, []) if nid is not None else []
+
+
+def get_record_by_smiles(smiles: str, parquet_dir: Path) -> Dict[str, object]:
+    """Full record for a molecule by SMILES: ``{"peaks", "formula", "nominal_mw",
+    "name", "cas", "inchikey"}``. Empty dict if the molecule is not in the store."""
+    by_inchikey, peaks_by_id, meta_by_id = _load_parquet_store(str(parquet_dir))
+    nid = _resolve_id(smiles, by_inchikey)
+    if nid is None:
+        return {}
+    meta = meta_by_id.get(nid, {})
+    return {"peaks": peaks_by_id.get(nid, []), **meta}
 
 
 # Public API re-exported by ``data_generation.utils``.
 __all__ = [
-    "get_spectra_from_local_jdx",
-    "parse_jdx",
-    "parse_jdx_header",
+    "get_spectra_by_smiles",
+    "get_record_by_smiles",
 ]

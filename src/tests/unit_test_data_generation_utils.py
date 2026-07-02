@@ -1,46 +1,10 @@
-import tempfile
 import unittest
-from pathlib import Path
 import types
 
 from src.data_generation.utils.metrics import coverage_stats, dice_coefficient, overlap_coefficient
-from src.data_generation.utils.spect_jdx import get_spectra_from_local_jdx, parse_jdx
 from src.data_generation.utils import ALK_NES_LABELS
 from src.data_generation.utils import traversal
 from src.data_generation.utils import compareability
-
-
-class TestJdxParsing(unittest.TestCase):
-    def test_parse_jdx_reads_peak_section_and_skips_malformed_tokens(self):
-        content = """##TITLE=Example
-##PEAK TABLE=(XY..XY)
-10,1 20,2 malformed 30,3
-##END=
-40,4
-"""
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            jdx_path = Path(tmp_dir) / "example.jdx"
-            jdx_path.write_text(content, encoding="utf-8")
-
-            peaks = parse_jdx(jdx_path)
-
-        self.assertEqual(peaks, [(10.0, 1.0), (20.0, 2.0), (30.0, 3.0)])
-
-    def test_get_spectra_from_local_jdx_resolves_lowercase_filename(self):
-        content = """##TITLE=Example
-##PEAK TABLE=(XY..XY)
-12,4 15,6
-##END=
-"""
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            folder = Path(tmp_dir)
-            (folder / "benzene-Mass.jdx").write_text(content, encoding="utf-8")
-
-            peaks = get_spectra_from_local_jdx("Benzene", folder=folder)
-
-        self.assertEqual(peaks, [(12.0, 4.0), (15.0, 6.0)])
 
 
 class TestMetrics(unittest.TestCase):

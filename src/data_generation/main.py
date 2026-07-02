@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description="Using MØD as a MassSpec Fragmente
 parser.add_argument("--smiles", type=str, required=True, help="SMILES String of Molecule")
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--output-dir", type=str, required=True, help="Directory for output files")
-parser.add_argument("--spectra-folder", type=str, default=str(shared_path("NIST_SPECTRA_DIR_REL")), help="Directory containing NIST .jdx spectra")
+parser.add_argument("--spectra-folder", type=str, default=str(shared_path("PARQUET_DIR_REL")), help="Directory containing the NIST spectra Parquet store")
 parser.add_argument("--number-threads", type=int, default=64, help="number of threads for mod")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")
@@ -106,7 +106,7 @@ if args.skip_backward:
 
 print("\nbackward\n")
 
-spectra_jdx = utils.get_spectra_from_local_jdx(molecule.name, folder=Path(args.spectra_folder))
+spectra_jdx = utils.get_spectra_by_smiles(args.smiles, Path(args.spectra_folder))
 spectra_jdx = [x[0] for x in spectra_jdx]
 frags_in_spectra = [frag for frag in dg_fwd.graphDatabase \
     if int(utils.graph_from_term(frag).exactMass) in spectra_jdx]

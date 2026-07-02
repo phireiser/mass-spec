@@ -133,7 +133,7 @@ def main():
     p.add_argument("--skip_reranking", action="store_true", help="Skip forward-model reranking during retrieval evaluation (faster, tests embedding quality)")
     # paths and data options
     p.add_argument("--mol_def_path", type=str, default=shared_path("DATA_DIR_REL", "compounds.csv"), help="Path to CSV file with molecule definitions (name, SMILES)")
-    p.add_argument("--spectra_dir", type=str, default=shared_path("NIST_SPECTRA_DIR_REL"), help="Directory containing .jdx spectrum files named by molecule name")
+    p.add_argument("--spectra_dir", type=str, default=shared_path("PARQUET_DIR_REL"), help="Directory containing the NIST spectra Parquet store (nist_spectra/nist_index.parquet)")
     p.add_argument("--load_path", type=str, default=shared_path("PROCESSED_DIR_REL"), help="Directory containing derivation trees")
     p.add_argument("--output_dir", type=str, default=shared_path("CHECKPOINT_DIR_REL"), help="Directory to save checkpoints and outputs")
     p.add_argument("--wandb", action="store_true", help="Log this run to Weights & Biases (respects WANDB_* env vars, e.g. WANDB_MODE=offline)")
@@ -229,7 +229,7 @@ def main():
                         print("empty edges for ", graph.smiles)
 
             frag_coll[smi] = (fwd_coll, bwd_coll)
-            real_spectra_by_smiles[smi] = utils.get_spectra_from_local_jdx(name, folder=Path(args.spectra_dir))
+            real_spectra_by_smiles[smi] = utils.get_spectra_by_smiles(smi, Path(args.spectra_dir))
             mol_order.append(smi)
 
     # Align fragments and spectra by SMILES to avoid length mismatches from skipped files or overwrites

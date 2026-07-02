@@ -69,7 +69,7 @@ if [ -n "${SLURM_ARRAY_TASK_ID:-}" ]; then
       --smiles "$SMILES" \
       --name "$NAME" \
       --output-dir "$C_OUTPUTS/phase0/regen_subset" \
-      --spectra-folder "$C_NIST" \
+      --spectra-folder "$C_PARQUET" \
       --number-threads "$THREADS" \
       --subgroup-diag \
       --skip-backward \

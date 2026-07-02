@@ -2,8 +2,8 @@
 Phase 0.1 corpus runner — the MØD explainability ceiling.
 
 For every molecule that has *both* a forward derivation-graph dump (under
-``data/processed/fwd/``) and a NIST EI spectrum (under ``data/nist_spectra/``),
-this computes how much of the experimental peak intensity the MØD rule library can
+``data/processed/fwd/``) and a NIST EI spectrum (in the Parquet store, looked up
+by SMILES), this computes how much of the experimental peak intensity the MØD rule library can
 explain, with a random-formula null subtracted, plus the M+• presence and the
 odd/even-electron split of the unexplained peaks.
 
@@ -51,8 +51,9 @@ def _mod_masses(name: str, fwd_dir: Path) -> set:
 
 def analyze_molecule(
     name: str,
+    smiles: str,
     fwd_dir: Path,
-    spectra_folder: Path,
+    parquet_dir: Path,
     *,
     taus: List[float],
     primary_tau: float,
@@ -62,27 +63,23 @@ def analyze_molecule(
 ) -> Dict[str, object]:
     """Compute the full ceiling metric row for one molecule.
 
-    Raises on unrecoverable problems (missing files, unreadable dump); the caller
-    records those as skipped. A missing/garbled ``##MOLFORM`` degrades gracefully:
-    the null and OE/EE columns are left as ``nan`` while the raw explained
-    fractions are still reported.
+    Raises on unrecoverable problems (missing spectrum, unreadable dump); the
+    caller records those as skipped. A missing/garbled formula degrades
+    gracefully: the null and OE/EE columns are left as ``nan`` while the raw
+    explained fractions are still reported.
     """
-    jdx = spectra_folder / f"{name.lower()}-Mass.jdx"
-    peaks = utils.parse_jdx(jdx)
-    header = utils.parse_jdx_header(jdx)
+    record = utils.get_record_by_smiles(smiles, parquet_dir)
+    if not record:
+        raise FileNotFoundError(f"no spectrum in Parquet store for {name} ({smiles})")
+    peaks = record["peaks"]
     mod_masses = _mod_masses(name, fwd_dir)
 
-    formula = header.get("MOLFORM", "")
+    formula = record.get("formula") or ""
     inventory = cm.parse_formula(formula) if formula else {}
     n_nitrogen = cm.nitrogen_count(inventory)
 
-    # M+• nominal mass: prefer the header MW, else the heaviest fragment we made.
-    mplus: Optional[int] = None
-    if header.get("MW", "").strip():
-        try:
-            mplus = int(round(float(header["MW"].split()[0])))
-        except ValueError:
-            mplus = None
+    # M+• nominal mass: prefer the stored nominal MW, else the heaviest fragment.
+    mplus: Optional[int] = int(record["nominal_mw"]) if record.get("nominal_mw") else None
     if mplus is None and mod_masses:
         mplus = max(mod_masses)
 
@@ -151,15 +148,18 @@ def analyze_molecule(
     return row
 
 
-def discover_names(fwd_dir: Path, spectra_folder: Path, only: Optional[List[str]]) -> List[str]:
-    """Names with both a dump (``.pkl``) and a spectrum, sorted; ``only`` filters."""
+def discover_names(fwd_dir: Path, name2smiles: Dict[str, str], parquet_dir: Path,
+                   only: Optional[List[str]]) -> List[str]:
+    """Names with both a dump (``.pkl``) and a spectrum in the Parquet store,
+    sorted; ``only`` filters."""
     have_dump = {p.stem for p in fwd_dir.glob("*.pkl")}
     if only:
         wanted = [n.strip() for n in only if n.strip()]
         names = [n for n in wanted if n in have_dump]
     else:
         names = sorted(have_dump)
-    return [n for n in names if (spectra_folder / f"{n.lower()}-Mass.jdx").exists()]
+    return [n for n in names
+            if n in name2smiles and utils.get_spectra_by_smiles(name2smiles[n], parquet_dir)]
 
 
 def summarize(rows: List[Dict[str, object]], config: Dict[str, object]) -> Dict[str, object]:
@@ -223,8 +223,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Phase 0.1 MØD explainability ceiling")
     parser.add_argument("--fwd-dir", type=str, default=str(shared_path("PROCESSED_DIR_REL", "fwd")),
                         help="Directory of forward DG dumps (.dmp/.pkl)")
-    parser.add_argument("--spectra-folder", type=str, default=str(shared_path("NIST_SPECTRA_DIR_REL")),
-                        help="Directory of NIST .jdx spectra")
+    parser.add_argument("--spectra-folder", type=str, default=str(shared_path("PARQUET_DIR_REL")),
+                        help="Directory of the NIST spectra Parquet store")
+    parser.add_argument("--compounds-csv", type=str, default=str(shared_path("CSV_PATH_REL")),
+                        help="CSV mapping molecule name -> SMILES (for parquet lookup)")
     parser.add_argument("--out-dir", type=str, default=str(shared_path("PHASE0_DIR_REL")),
                         help="Directory for ceiling outputs")
     parser.add_argument("--names", type=str, default="",
@@ -240,20 +242,24 @@ def main() -> None:
     args = parser.parse_args()
 
     fwd_dir = Path(args.fwd_dir)
-    spectra_folder = Path(args.spectra_folder)
+    parquet_dir = Path(args.spectra_folder)
     out_dir = Path(args.out_dir)
     taus = [float(t) for t in args.taus.split(",") if t.strip() != ""]
     rng = random.Random(args.seed)
 
+    with open(args.compounds_csv, newline="", encoding="utf-8") as f:
+        name2smiles = {str(r["name"]).strip(): str(r["smiles"]).strip()
+                       for r in csv.DictReader(f)}
+
     only = args.names.split(",") if args.names else None
-    names = discover_names(fwd_dir, spectra_folder, only)
+    names = discover_names(fwd_dir, name2smiles, parquet_dir, only)
     print(f"Phase 0.1: {len(names)} molecules with both a dump and a spectrum")
 
     rows: List[Dict[str, object]] = []
     for i, name in enumerate(names, 1):
         try:
             row = analyze_molecule(
-                name, fwd_dir, spectra_folder,
+                name, name2smiles[name], fwd_dir, parquet_dir,
                 taus=taus, primary_tau=args.primary_tau,
                 draws=args.draws, extra_h=args.extra_h, rng=rng,
             )

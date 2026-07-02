@@ -10,7 +10,7 @@ import mod
 
 from .metrics import dice_coefficient, overlap_coefficient
 from .spect_pubchem import get_spectra_from_pubchem
-from .spect_jdx import get_spectra_from_local_jdx
+from .spect_jdx import get_spectra_by_smiles
 from .spect_mol import get_spectra_from_mod_derivation_graph
 from .term_transfers import graph_from_term
 
@@ -18,7 +18,7 @@ from src.project_paths import shared_path
 
 
 #get_spectra = lambda smiles, name: get_spectra_from_pubchem(smiles)
-get_spectra = lambda smiles, name: get_spectra_from_local_jdx(name, shared_path("NIST_SPECTRA_DIR_REL"))
+get_spectra = lambda smiles, name: get_spectra_by_smiles(smiles, shared_path("PARQUET_DIR_REL"))
 
 def rule_usage(
     derivation_graph: mod.DG,
