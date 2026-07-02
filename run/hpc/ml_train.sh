@@ -3,14 +3,19 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=256G
-#SBATCH --time=40:00:00
+#SBATCH --time=48:00:00
 #SBATCH --output=outputs/logs/train/%j.out
 #SBATCH --error=outputs/logs/train/%j.err
 
 # Usage:
-# sbatch run/hpc/train.sh
+# sbatch run/hpc/ml_train.sh
 # Optional overrides:
-# sbatch --export=EPOCHS_FWD=5000,EPOCHS_BWD=5000 run/hpc/train.sh
+# sbatch --export=EPOCHS_FWD=5000,EPOCHS_BWD=5000 run/hpc/ml_train.sh
+#
+# By default this trains the most recent sweep's best config
+# (best_hyperparams_latest.yaml, written by ml_optimize.sh). Override with
+# HPARAMS_HOST=/path/to/best_hyperparams_<stamp>.yaml to pin a specific sweep,
+# or point it at a missing path to train main.py's built-in default hyperparameters.
 
 set -euo pipefail
 
@@ -20,6 +25,15 @@ source "$REPO_ROOT/src/paths.env"
 
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"
 EPOCHS_BWD="${EPOCHS_BWD:-10000}"
+
+# Tuned hyperparameters from the sweep. Check existence on the host path, but
+# pass main.py the in-container path (outputs is bound to $C_OUTPUTS).
+HPARAMS_HOST="${HPARAMS_HOST:-$REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams_latest.yaml}"
+HPARAMS_CONTAINER="$C_OUTPUTS/best_params/$(basename "$HPARAMS_HOST")"
+HPARAMS_ARGS=()
+if [[ -f "$HPARAMS_HOST" ]]; then
+    HPARAMS_ARGS=(--hparams "$HPARAMS_CONTAINER")
+fi
 
 # Optional Weights & Biases tracking (online-first, offline fallback).
 WANDB_GROUP_PREFIX="train"
@@ -34,6 +48,11 @@ echo "Model Training Job"
 echo "======================================================================"
 echo "Epochs (forward): $EPOCHS_FWD"
 echo "Epochs (backward): $EPOCHS_BWD"
+if [[ -f "$HPARAMS_HOST" ]]; then
+    echo "Hyperparameters: $HPARAMS_HOST"
+else
+    echo "Hyperparameters: NONE FOUND at $HPARAMS_HOST -> using main.py defaults"
+fi
 echo "SIF: $SIF"
 echo "Node: $(hostname)"
 echo "GPU: $CUDA_VISIBLE_DEVICES"
@@ -54,6 +73,7 @@ apptainer exec --nv \
       --epochs_fwd "$EPOCHS_FWD" \
       --epochs_bwd "$EPOCHS_BWD" \
       --output_dir "$C_OUTPUTS/checkpoints" \
+      "${HPARAMS_ARGS[@]}" \
       "${WANDB_ARGS[@]}"
 
 echo "======================================================================"

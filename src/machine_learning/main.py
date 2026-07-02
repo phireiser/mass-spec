@@ -22,6 +22,7 @@ Outputs:
 """
 
 import argparse
+import sys
 from typing import List, Optional, Dict, Tuple
 
 
@@ -60,6 +61,36 @@ from src.machine_learning.evaluation import demo_compare_spectrum, demo_retrieva
 from src.machine_learning.fragments import FragSetEncoderWrapper
 from src.machine_learning.training import train_epoch_phase_a, train_epoch_phase_b
 from src.machine_learning.checkpoint import save_checkpoint
+
+
+# Hyperparameters that may be supplied via a sweep YAML (--hparams). Epochs,
+# paths, device and tracking flags are deliberately excluded: those are per-run
+# training concerns, not tuned model hyperparameters.
+_HPARAMS_OVERRIDABLE = {
+    "batch", "latent", "lr", "weight_decay", "dropout", "norm",
+    "alpha_wass", "alpha_cos", "cycle_fwd", "cycle_bwd", "cycle_bwd_spec",
+    "curriculum_start", "curriculum_step", "use_faiss", "seed",
+}
+
+
+def _apply_hparams_yaml(args, path):
+    """Overlay hyperparameters from a sweep YAML onto ``args``.
+
+    Precedence: argparse defaults < YAML < explicit CLI flags. Only known
+    hyperparameter names are honored; a flag the user passed explicitly on the
+    command line always wins over the YAML. Returns the dict actually applied.
+    """
+    import yaml
+    explicit = {t[2:].split("=", 1)[0] for t in sys.argv[1:] if t.startswith("--")}
+    with open(path) as fh:
+        doc = yaml.safe_load(fh) or {}
+    hp = doc.get("hyperparameters", doc)  # tolerate nested or flat mapping
+    applied = {}
+    for k, v in hp.items():
+        if k in _HPARAMS_OVERRIDABLE and k not in explicit:
+            setattr(args, k, v)
+            applied[k] = v
+    return applied
 
 
 def main():
@@ -106,7 +137,19 @@ def main():
     p.add_argument("--load_path", type=str, default=shared_path("PROCESSED_DIR_REL"), help="Directory containing derivation trees")
     p.add_argument("--output_dir", type=str, default=shared_path("CHECKPOINT_DIR_REL"), help="Directory to save checkpoints and outputs")
     p.add_argument("--wandb", action="store_true", help="Log this run to Weights & Biases (respects WANDB_* env vars, e.g. WANDB_MODE=offline)")
+    p.add_argument("--hparams", type=str, default=None,
+                   help="YAML of tuned hyperparameters (from the Optuna sweep) to load as defaults. "
+                        "Explicit CLI flags override it; epochs/paths/device are never taken from it.")
     args = p.parse_args()
+    # --output_dir arrives as a str when passed on the CLI (e.g. from the HPC
+    # launcher); normalize to Path so downstream "/" joins work.
+    args.output_dir = Path(args.output_dir)
+
+    # Overlay tuned hyperparameters from a sweep YAML, if given. Done before
+    # wandb.init and seeding so the resolved config is what gets logged and used.
+    if args.hparams:
+        applied = _apply_hparams_yaml(args, args.hparams)
+        print(f"Loaded {len(applied)} hyperparameters from {args.hparams}: {applied}")
 
     # Experiment tracking. Project/group/mode/run-dir all come from WANDB_* env vars
     # set by the SLURM launch script; on HPC compute nodes use WANDB_MODE=offline and
@@ -381,20 +424,66 @@ def main():
         mz_min=vali_ds.mz_min, mz_max=vali_ds.mz_max, bin_width=vali_ds.bin_width,
         topk_list=(1, 5, 10, 20), windows=(5.0, 20.0),
     )
+    # Held-out TEST scorecard. Trial selection used VAL, so VAL's delta is
+    # optimistic; TEST was never seen by the sweep -> an unbiased "beyond mass"
+    # check. Retrieval needs the true molecule in the gallery, so build a
+    # TRAIN+VAL+TEST library (closed-library retrieval, the structure-elucidation
+    # setting). The VAL scorecard above keeps its TRAIN+VAL gallery unchanged so
+    # the sweep objective it feeds stays comparable across runs.
+    print("== Mass-controlled retrieval (TEST, held out) ==")
+    if args.use_faiss and _FAISS_AVAILABLE:
+        index_test = FaissLatentIndex(d=args.latent)
+    else:
+        index_test = LatentIndex(d=args.latent)
+    index_test.build(ConcatDataset([train_ds, vali_ds, test_ds]), device, enc_mol)
+    mass_by_smiles_test = dict(mass_by_smiles)
+    for smi, m in zip(list(test_ds.frag_coll.keys()), test_ds.parent_masses):
+        mass_by_smiles_test[smi] = m
+    test_massctl = mass_controlled_retrieval_metrics(
+        index_test, test_loader, device, enc_spec, enc_mol, heads, mass_by_smiles_test,
+        mz_min=test_ds.mz_min, mz_max=test_ds.mz_max, bin_width=test_ds.bin_width,
+        topk_list=(1, 5, 10, 20), windows=(5.0, 20.0),
+    )
+    print(
+        "TEST_MASSCTL "
+        f"massctl_mrr_w5={test_massctl.get('window5.0/learned_MRR', 0.0):.6f} "
+        f"massctl_delta_w5={test_massctl.get('window5.0/delta_MRR', 0.0):.6f}"
+    )
+    # Single source of truth for the sweep objective + tracked secondaries, used
+    # for both the parseable line below and the wandb "objective/*" namespace so
+    # the two can never drift. Mass-controlled learned MRR is the headline: raw
+    # MRR collapses to parent-mass filtering (forward-collapse audit), so the
+    # sweep maximizes retrieval *within* a +/-5 Da window; the rest are tracked.
+    objective_metrics = {
+        "massctl_mrr_w5": val_massctl.get("window5.0/learned_MRR", 0.0),
+        "massctl_delta_w5": val_massctl.get("window5.0/delta_MRR", 0.0),
+        "mrr": val_metrics.get("MRR", 0.0),
+        "r1": val_metrics.get("R@1", 0.0),
+    }
+    # Machine-parseable objective line parsed by
+    # optimization/hyperparameter_optimization.py.
+    print("OPTUNA_OBJECTIVE " + " ".join(f"{k}={v:.6f}" for k, v in objective_metrics.items()))
     if use_wandb:
         # flatten nested metric dicts into "val/..."/"test/..." scalars for the wandb UI
         wandb.log({f"val/{k}": v for k, v in val_metrics.items()})
         wandb.log({f"test/{k}": v for k, v in test_metrics.items()})
         wandb.log({f"val_massctl/{k}": v for k, v in val_massctl.items()})
+        wandb.log({f"test_massctl/{k}": v for k, v in test_massctl.items()})
+        # Explicit objective namespace: "objective/massctl_mrr_w5" is exactly what
+        # Optuna maximizes, so the wandb sweep view and the study agree at a glance.
+        wandb.log({f"objective/{k}": v for k, v in objective_metrics.items()})
+
+    # Plots go beside the checkpoints, under outputs/plots.
+    plots_dir = args.output_dir.parent / "plots"
 
     # ----------------- Demo: Spectrum noise robustness -----------------
     print("== Spectrum noise robustness (VAL subset) ==")
-    noise_res = demo_noise_robustness(index, val_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5)
+    noise_res = demo_noise_robustness(index, val_loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1,5,10), max_batches=5, out_dir=plots_dir)
     print(noise_res)
 
     # ----------------- Demo: Visualization of reconstructions -----------------
     print("== Visualization: saving recon plots for a few VAL samples ==")
-    _ = demo_visualize_reconstructions(graph_feats, spec, smiles, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=deriv_trees_fwd)
+    _ = demo_visualize_reconstructions(graph_feats, spec, smiles, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=deriv_trees_fwd, out_dir=plots_dir)
 
     # save checkpoint (enc_mol weights are nested inside frag_set_enc; not stored separately)
     ckpt_path = args.output_dir / "ml_checkpoint.pt"
