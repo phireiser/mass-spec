@@ -11,10 +11,18 @@ from torch_geometric.data import Data as GeometricData
 
 from src.machine_learning.retrieval import infer_mol_to_spec, infer_spec_to_mol
 from src.machine_learning.spectrum import make_parent_mass_mask_vec
+from src.project_paths import shared_path
 
-_script_path = Path(__file__).resolve()
-OUT_DIR = next((p for p in _script_path.parents if p.name == "mol"), _script_path.parent) / "out"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
+# Where plot demos land by default. Resolved via shared_path so it points at
+# outputs/plots both locally and inside the /app container bind. Callers
+# (e.g. main.py) may override with an explicit out_dir.
+DEFAULT_PLOTS_DIR = shared_path("PLOTS_DIR_REL")
+
+
+def _resolve_plots_dir(out_dir: Optional[Path]) -> Path:
+    out_dir = Path(out_dir) if out_dir is not None else DEFAULT_PLOTS_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+    return out_dir
 
 
 def vec_to_peaks(vec: torch.Tensor, mz_min: float, bin_width: float, top_k: int = 10) -> List[Tuple[float, float]]:
@@ -210,7 +218,7 @@ def mass_controlled_retrieval_metrics(
     return out
 
 
-def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1, 5, 10), max_batches=5):
+def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc, heads, dec_spec, noise_levels=(0.0, 0.05, 0.1, 0.2), topk_list=(1, 5, 10), max_batches=5, out_dir=None):
     """Add Gaussian noise to spectra and return Recall@K vs noise level."""
     results = {}
     try:
@@ -252,7 +260,7 @@ def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc
         plt.legend()
         plt.tight_layout()
         try:
-            plt.savefig(OUT_DIR / "noise_robustness.png", dpi=150)
+            plt.savefig(_resolve_plots_dir(out_dir) / "noise_robustness.png", dpi=150)
         except Exception:
             pass
         plt.clf()
@@ -261,9 +269,10 @@ def demo_noise_robustness(index, loader, device, enc_spec, enc_mol, frag_set_enc
 
 def demo_visualize_reconstructions(
     graph_feats, true_spec, smiles,
-    enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=None
+    enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=None, out_dir=None
     ) -> bool:
     """Plot true vs reconstructed spectra for n_samples molecules."""
+    plots_dir = _resolve_plots_dir(out_dir)
     n = min(n_samples, len(smiles))
     for i in range(n):
         tree_i = deriv_trees[i] if deriv_trees is not None else None
@@ -276,7 +285,7 @@ def demo_visualize_reconstructions(
         plt.legend()
         plt.tight_layout()
         try:
-            plt.savefig(OUT_DIR / f"recon_{i}.png", dpi=150)
+            plt.savefig(plots_dir / f"recon_{i}.png", dpi=150)
         except Exception:
             pass
         plt.close()
