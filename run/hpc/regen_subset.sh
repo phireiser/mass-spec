@@ -40,7 +40,7 @@ if [ "${1:-}" = "ceiling" ]; then
     --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
     --env PYTHONPATH="$C_APP" \
     "$REPO_ROOT/$SIF" \
-    python "$C_SRC/data_generation/utils/analysis/feasibility/run_ceiling.py" \
+    python "$C_SRC/data_generation/analysis/feasibility/run_ceiling.py" \
       --fwd-dir "$C_OUTPUTS/regen_subset/fwd" \
       --out-dir "$C_OUTPUTS/metrics"
   exit 0
@@ -88,7 +88,7 @@ apptainer exec \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --env PYTHONPATH="$C_APP" \
   "$REPO_ROOT/$SIF" \
-  python "$C_SRC/data_generation/utils/analysis/feasibility/regen_subset.py" \
+  python "$C_SRC/data_generation/analysis/feasibility/regen_subset.py" \
     --emit-manifest "$C_OUTPUTS/regen_subset/manifest.tsv" "$@"
 
 N="$(wc -l < "$MANIFEST")"

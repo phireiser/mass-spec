@@ -9,10 +9,10 @@ import numpy as np
 import mod
 
 from .metrics import dice_coefficient, overlap_coefficient
-from ..spect_pubchem import get_spectra_from_pubchem
-from ..spect_jdx import get_spectra_by_smiles
-from ..spect_mol import get_spectra_from_mod_derivation_graph
-from ..term_transfers import graph_from_term
+from src.data_generation.utils.spect_pubchem import get_spectra_from_pubchem
+from src.data_generation.utils.spect_jdx import get_spectra_by_smiles
+from src.data_generation.utils.spect_mol import get_spectra_from_mod_derivation_graph
+from src.data_generation.utils.term_transfers import graph_from_term
 
 from src.project_paths import shared_path
 

@@ -1,7 +1,7 @@
 import unittest
 import types
 
-from src.data_generation.utils.analysis.metrics import coverage_stats, dice_coefficient, overlap_coefficient
+from src.data_generation.analysis.metrics import coverage_stats, dice_coefficient, overlap_coefficient
 from src.data_generation.utils import ALK_NES_LABELS
 from src.data_generation.utils import traversal
 from src.data_generation.utils import compareability

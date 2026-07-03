@@ -6,7 +6,7 @@ from typing import List
 import mod
 from mod import post
 
-from ..term_transfers import graph_from_term, rule_from_term
+from src.data_generation.utils.term_transfers import graph_from_term, rule_from_term
 
 
 def _is_term_graph(g: mod.Graph) -> bool:

@@ -20,6 +20,7 @@ import unittest
 import mod
 
 from src.data_generation import utils
+from src.data_generation.analysis import describe
 from src.data_generation.rules import fragmentation, ionization
 from src.data_generation.core import strategy
 
@@ -60,7 +61,7 @@ class TestTolueneFragmentation(unittest.TestCase):
 
         cls.dg = dg
         cls.molecule_term = molecule_term
-        cls.stats = utils.spectrum_statistic(dg, molecule_term)
+        cls.stats = describe.spectrum_statistic(dg, molecule_term)
 
     def test_produces_more_than_the_molecular_ion(self):
         mod_masses = self.stats["MØD masses"]

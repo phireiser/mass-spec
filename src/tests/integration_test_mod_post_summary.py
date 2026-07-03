@@ -28,11 +28,11 @@ GENERATE_POST_COMMANDS = textwrap.dedent("""
     import mod
     from mod import post
 
-    from src.data_generation import utils
+    from src.data_generation.analysis import printing
     from src.data_generation.rules import ionization
 
     molecule = mod.Graph.fromSMILES("CC1=CC=CC=C1", "toluene")
-    utils.print_grammar([molecule], ionization)
+    printing.print_grammar([molecule], ionization)
 
     post.enableCompileSummary()
     post.flushCommands()

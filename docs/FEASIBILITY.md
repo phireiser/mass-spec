@@ -93,7 +93,7 @@ Cost / budget analysis from the array's sacct record + logs (stdlib, runs bare):
 
 ```bash
 sacct -j <array_job_id> --format=JobID,State,ElapsedRaw,MaxRSS,ReqMem -P -n > sacct.txt
-python3 src/data_generation/utils/analysis/feasibility/cost_analysis.py \
+python3 src/data_generation/analysis/feasibility/cost_analysis.py \
   --sacct-file sacct.txt \
   --manifest outputs/regen_subset/manifest.tsv \
   --log-dir outputs/logs/regen_subset/slurm/<array_job_id> \
@@ -116,14 +116,14 @@ python3 src/tests/unit_test_ceiling.py
 
 ## Code
 
-- `src/data_generation/utils/analysis/feasibility/ceiling_metrics.py` — pure, stdlib-only metrics
+- `src/data_generation/analysis/feasibility/ceiling_metrics.py` — pure, stdlib-only metrics
   (`explained_fraction`, `formula_reachable_masses`, `sample_null`,
   `ceiling_with_ci`, `nitrogen_rule_parity`).
-- `src/data_generation/utils/analysis/feasibility/run_ceiling.py` — corpus runner (the only part
+- `src/data_generation/analysis/feasibility/run_ceiling.py` — corpus runner (the only part
   needing `mod`); writes the ceiling CSV + summary JSON to `outputs/metrics`.
-- `src/data_generation/utils/analysis/feasibility/cost_analysis.py` — pure, stdlib-only cost / N\*
+- `src/data_generation/analysis/feasibility/cost_analysis.py` — pure, stdlib-only cost / N\*
   analysis from a sacct dump + array logs; writes the cost CSV + summary JSON.
-- `src/data_generation/utils/analysis/feasibility/regen_subset.py` — regenerate a subset's forward
+- `src/data_generation/analysis/feasibility/regen_subset.py` — regenerate a subset's forward
   DGs with the current ruleset (reads SMILES from existing dumps; forward-only).
 - `run/analysis/ceiling.sh`, `run/hpc/regen_subset.sh` — container / SLURM wrappers.
 - `src/plot/plot_ceiling.py`, `src/plot/plot_cost.py` — figures (→ `outputs/plots`).

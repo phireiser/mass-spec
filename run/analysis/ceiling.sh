@@ -22,4 +22,4 @@ apptainer exec \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --env PYTHONPATH="$C_APP" \
   "$REPO_ROOT/$SIF" \
-  python "$C_SRC/data_generation/utils/analysis/feasibility/run_ceiling.py" "$@"
+  python "$C_SRC/data_generation/analysis/feasibility/run_ceiling.py" "$@"

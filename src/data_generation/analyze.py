@@ -8,6 +8,7 @@ import pandas as pd
 import mod
 
 from src.data_generation import utils
+from src.data_generation.analysis import describe, printing
 from src.data_generation.rules import fragmentation, ionization
 from src.project_paths import shared_path
 
@@ -40,7 +41,7 @@ print("dump loaded")
 print("\n\n")
 
 dg.print()
-utils.print_grammar([molecule], ionization + fragmentation)
+printing.print_grammar([molecule], ionization + fragmentation)
 
 
 with pd.option_context(
@@ -49,11 +50,11 @@ with pd.option_context(
     'display.width', None,
     'display.max_colwidth', None
     ):
-    print(utils.rule_usage(dg, molecule_term, mod.inputRules).query("active == True"))
+    print(describe.rule_usage(dg, molecule_term, mod.inputRules).query("active == True"))
 
 print("\n\n")
 print("spectrum coverage")
-pprint(utils.spectrum_statistic(dg, molecule_term), width=120)
+pprint(describe.spectrum_statistic(dg, molecule_term), width=120)
 
 
 print("\n\n")

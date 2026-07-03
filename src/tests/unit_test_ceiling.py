@@ -6,7 +6,7 @@ These exercise only the pure ``ceiling_metrics`` functions, so they run bare
 import random
 import unittest
 
-from src.data_generation.utils.analysis.feasibility import ceiling_metrics as cm
+from src.data_generation.analysis.feasibility import ceiling_metrics as cm
 
 
 class TestFormulaParsing(unittest.TestCase):

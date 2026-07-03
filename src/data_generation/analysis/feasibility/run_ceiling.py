@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from src.data_generation import utils
-from src.data_generation.utils.analysis.feasibility import ceiling_metrics as cm
+from src.data_generation.analysis.feasibility import ceiling_metrics as cm
 from src.project_paths import shared_path
 
 
