@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -41,6 +42,7 @@ import requests
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
 from rdkit.Chem import rdFingerprintGenerator
+from rdkit.Chem import rdinchi
 
 MORGAN_RADIUS = 2
 MORGAN_BITS = 2048
@@ -99,11 +101,31 @@ def unpack_fp(blob: bytes, n_bits: int = MORGAN_BITS) -> np.ndarray:
     return np.unpackbits(np.frombuffer(blob, dtype=np.uint8))[:n_bits]
 
 
+def mol_to_inchi(mol: Chem.Mol) -> str:
+    """``Chem.MolToInchi`` but with any InChI-library diagnostic re-emitted with
+    an explicit ``[RDKit InChI]`` tag instead of RDKit's untagged stderr line.
+
+    Structures pulled from the NIST WebBook routinely trip normalisation
+    warnings such as "Omitted undefined stereo" or "Charges were rearranged".
+    These originate in the IUPAC InChI C library (via RDKit), not in our fetch
+    code, so we mark their provenance to keep the build log unambiguous. The
+    low-level ``rdinchi.MolToInchi`` returns the message rather than printing it,
+    letting us prefix it ourselves. ``/AuxNone`` mirrors ``Chem.MolToInchi``.
+    """
+    inchi, _retcode, message, _logs, _aux = rdinchi.MolToInchi(mol, "/AuxNone")
+    if message:
+        print(f"[RDKit InChI] {message}", file=sys.stderr, flush=True)
+    return inchi
+
+
 def features_from_mol(mol: Chem.Mol) -> Dict[str, object]:
     """Derive molecule-identity + physicochemical columns from an RDKit mol."""
+    inchi = mol_to_inchi(mol)
     return {
-        "inchikey": Chem.MolToInchiKey(mol),
-        "inchi": Chem.MolToInchi(mol),
+        # Derive the key from the InChI we already built (identical to
+        # Chem.MolToInchiKey), falling back to the mol if generation failed.
+        "inchikey": Chem.InchiToInchiKey(inchi) if inchi else Chem.MolToInchiKey(mol),
+        "inchi": inchi,
         "canonical_smiles": Chem.MolToSmiles(mol, isomericSmiles=False),
         "isomeric_smiles": Chem.MolToSmiles(mol, isomericSmiles=True),
         "formula": rdMolDescriptors.CalcMolFormula(mol),
@@ -298,6 +320,10 @@ def build_from_catalog(max_mw: int, out_dir: Path, delay: float = 1.0,
             r["mz"] = [float(x) for x in r["mz"]]
             r["intensity"] = [float(x) for x in r["intensity"]]
             spec_rows.append(r)
+        if "webbook_id" not in prev_idx.columns:
+            # store written before the webbook_id column existed; derive it from CAS
+            prev_idx["webbook_id"] = prev_idx["cas"].fillna("").map(
+                lambda c: f"C{c.replace('-', '')}" if c else "")
         idx_rows = prev_idx.to_dict("records")
         done = {w for w in prev_idx["webbook_id"].tolist() if w}
         print(f"Resuming: {len(done)} species already in store")
