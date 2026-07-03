@@ -1,7 +1,7 @@
 """Reading spectra from the two-tier Parquet store (built by build_parquet_index.py).
 
-Main store ``nist_spectra.parquet`` (keyed nist_id) + side index
-``nist_index.parquet`` (keyed inchikey). pyarrow/rdkit are imported lazily so this
+Main store ``spectra.parquet`` (keyed nist_id) + side index
+``index.parquet`` (keyed inchikey). pyarrow/rdkit are imported lazily so this
 module still loads where those packages are absent (e.g. a container built before
 they were added).
 """
@@ -17,8 +17,8 @@ def _load_parquet_store(parquet_dir: str):
     import pyarrow.parquet as pq
 
     root = Path(parquet_dir)
-    idx = pq.read_table(root / "nist_index.parquet").to_pandas()
-    spec = pq.read_table(root / "nist_spectra.parquet").to_pandas()
+    idx = pq.read_table(root / "index.parquet").to_pandas()
+    spec = pq.read_table(root / "spectra.parquet").to_pandas()
 
     by_inchikey: Dict[str, str] = {}
     for key, nid in zip(idx["inchikey"], idx["nist_id"]):

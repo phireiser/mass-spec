@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Fetch NIST EI mass spectra and build the two-tier Parquet store
-# (data/parquet/{nist_spectra,nist_index}.parquet).
+# (outputs/nist_spectra/{spectra,index}.parquet).
 #
 # Fetches the WHOLE NIST WebBook up to a molecular-weight cutoff. Pass the max MW
 # as the first argument (default 1000, i.e. effectively everything ~<=674):
@@ -15,9 +15,12 @@ MAX_MW="${1:-1000}"
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 source "$REPO_ROOT/src/paths.env"
 
+# Bind-mount target must exist on host before apptainer mounts it
+mkdir -p "$REPO_ROOT/$PARQUET_DIR_REL"
+
 apptainer exec \
   --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
-  --bind "$REPO_ROOT/$DATA_DIR_REL:$C_DATA" \
+  --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --env PYTHONPATH="$C_APP:$C_SRC" \
   "$SIF" \
   python $C_SRC/data_generation/build_parquet_index.py \

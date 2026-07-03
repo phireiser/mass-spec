@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Build a two-tier Parquet store for NIST EI mass spectra.
 
-Tier 1 -- ``nist_spectra.parquet`` (main store, keyed by ``nist_id``): the actual
+Tier 1 -- ``spectra.parquet`` (main store, keyed by ``nist_id``): the actual
 spectral payload, one row per spectrum. Holds the parsed peak arrays plus the
 verbatim JCAMP-DX text so the single file is both archive and dataset.
 
-Tier 2 -- ``nist_index.parquet`` (side index, one row per ``nist_id``): the rich
+Tier 2 -- ``index.parquet`` (side index, one row per ``nist_id``): the rich
 lookup/query surface. Molecule identity (InChIKey, canonical/isomeric SMILES,
 InChI), identifiers (CAS, name), physicochemical attributes, and a Morgan
 (ECFP4) fingerprint packed to bytes for Tanimoto similarity / substructure
@@ -285,8 +285,8 @@ def build_from_catalog(max_mw: int, out_dir: Path, delay: float = 1.0,
     already-fetched species (by ``webbook_id``) are skipped."""
     session = _new_session()
     out_dir.mkdir(parents=True, exist_ok=True)
-    spec_path = out_dir / "nist_spectra.parquet"
-    idx_path = out_dir / "nist_index.parquet"
+    spec_path = out_dir / "spectra.parquet"
+    idx_path = out_dir / "index.parquet"
 
     spec_rows: List[dict] = []
     idx_rows: List[dict] = []
@@ -359,7 +359,7 @@ def main() -> None:
                     help="molecular-weight cutoff (fetch every species up to this MW)")
     ap.add_argument("--mw-start", type=int, default=1,
                     help="lower molecular-weight bound")
-    ap.add_argument("--out-dir", default="data/parquet")
+    ap.add_argument("--out-dir", default="outputs/nist_spectra")
     ap.add_argument("--delay", type=float, default=1.0,
                     help="seconds between NIST requests; be polite / avoid rate limits")
     args = ap.parse_args()

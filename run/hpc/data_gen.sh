@@ -29,7 +29,8 @@ LOG_DIR="$REPO_ROOT/$LOGS_DIR_REL/data_gen/slurm/${JOB_GROUP_ID}"
 mkdir -p "$LOG_DIR"
 mkdir -p "$DATADIR/fwd"
 mkdir -p "$DATADIR/bwd"
-# Bind-mount targets must exist on host before apptainer mounts them
+# Bind-mount target must exist on host before apptainer mounts it
+# (the Parquet store lives under outputs/, so the $C_OUTPUTS bind covers it)
 mkdir -p "$REPO_ROOT/$PARQUET_DIR_REL"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
 
@@ -75,7 +76,6 @@ srun --cpu-bind=cores \
 apptainer exec \
     --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
     --bind "$REPO_ROOT/$PROCESSED_DIR_REL:$C_PROCESSED" \
-    --bind "$REPO_ROOT/$PARQUET_DIR_REL:$C_PARQUET" \
     --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
     --bind "$REPO_ROOT/$CSV_PATH_REL:$C_CSV:ro" \
     --env PYTHONPATH="$C_APP" \
