@@ -14,6 +14,47 @@ def vertex_by_id(g: mod.Graph, vid: int) -> mod.Graph.Vertex:
     return next(v for v in g.vertices if v.id == vid)
 
 
+# The BFS/DFS in `collect_bfs`/`saturated_path` rebuild the same molecular
+# adjacency + single-bond index from scratch on every derivation (255k rebuilds
+# on toluene). The index is a pure function of the input graphs, which come from
+# `derivation.left` and are reused across every match and every derivation that
+# shares a reactant. We memoise on the graphs' stable `mod.Graph.id`s so those
+# rebuilds collapse to one per distinct reactant set. A strong ref to the graph
+# list is retained alongside each entry so that the `id()` fallback (used only for
+# graphs without a mod id, e.g. in tests) can never be aliased by a recycled id().
+_traversal_index_cache: dict = {}
+
+
+def clear_traversal_index_cache() -> None:
+    """Drop memoised traversal indices (call between mod universes/tests)."""
+    _traversal_index_cache.clear()
+
+
+def _graphs_cache_key(graphs_list: List[mod.Graph]) -> tuple:
+    key = []
+    for g in graphs_list:
+        gid = getattr(g, "id", None)
+        key.append(gid if gid is not None else ("obj", id(g)))
+    return tuple(key)
+
+
+def build_traversal_index_cached(graphs: Iterable[mod.Graph]) -> tuple[dict, dict]:
+    """Cached ``(neighbor_adj, single_bond_map)`` for a set of term-mode graphs.
+
+    Returns the same shared, read-only dicts as :func:`_build_traversal_index`;
+    callers must not mutate them.
+    """
+    graphs_list = list(graphs)
+    key = _graphs_cache_key(graphs_list)
+    hit = _traversal_index_cache.get(key)
+    if hit is not None:
+        return hit[0]
+    built = [graph_from_term(g) for g in graphs_list]
+    idx = _build_traversal_index(built, graphs_list)
+    _traversal_index_cache[key] = (idx, graphs_list)
+    return idx
+
+
 def mol_neighbors(
         graphs: Iterable[mod.Graph],
         v: mod.Graph.Vertex
@@ -46,12 +87,9 @@ def collect_bfs(
     # to an O(n^2) scan that never actually deduplicated and churned until the
     # `max_visits` cap. With a proper visited-set the BFS now terminates once the
     # reachable component is covered, yielding the same set of neighbour labels.
-    built = [graph_from_term(g) for g in graphs]
-    neighbor_adj: dict = {}
-    for gg in built:
-        for e in gg.edges:
-            neighbor_adj.setdefault(ComparableVertex(e.source), []).append(e.target)
-            neighbor_adj.setdefault(ComparableVertex(e.target), []).append(e.source)
+    # The adjacency itself is memoised per graph set, so repeated calls on the same
+    # reactant reuse it (see `build_traversal_index_cached`).
+    neighbor_adj, _ = build_traversal_index_cached(graphs)
 
     start = list(start_vertices)
     visited = {ComparableVertex(v) for v in start}
@@ -177,8 +215,9 @@ def saturated_path(
     # DFS step (the original hot path). Profiling showed the per-step fallback
     # dominated runtime even for small molecules, so the index is now always
     # used; `_build_traversal_index` is documented to yield identical results.
-    built = [graph_from_term(g) for g in graph]
-    neighbor_adj, single_bond_map = _build_traversal_index(built, graph)
+    # The index is memoised per graph set so repeated calls on the same reactant
+    # (across matches/derivations) reuse it (see `build_traversal_index_cached`).
+    neighbor_adj, single_bond_map = build_traversal_index_cached(graph)
 
     def neighbors_of(v):
         return neighbor_adj.get(ComparableVertex(v), ())
@@ -232,4 +271,6 @@ __all__ = [
     "collect_bfs",
     "get_edge_between",
     "saturated_path",
+    "build_traversal_index_cached",
+    "clear_traversal_index_cache",
 ]

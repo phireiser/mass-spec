@@ -10,16 +10,25 @@ class ComparableVertex:
     Lightweight wrapper around mod.Graph.Vertex to provide stable equality and hashing
     across different derivation graphs (by selected attributes).
     """
-    __slots__ = ("vertex", "attrs")
+    __slots__ = ("vertex", "attrs", "_key")
 
     def __init__(self, vertex, attrs=("id", "stringLabel")):
         if isinstance(vertex, ComparableVertex):  # unwrap if needed
             vertex = vertex.vertex
         self.vertex = vertex
         self.attrs = (attrs,) if isinstance(attrs, str) else tuple(attrs)
+        # Read the comparison attributes off the mod vertex exactly once and cache
+        # the resulting key tuple. Each `getattr` on a mod object goes through mod's
+        # (slow) Python `__getattribute__` wrapper, and these wrappers are hashed
+        # and compared tens of millions of times per molecule (84M `__hash__` calls
+        # on toluene). Precomputing moves that cost from every hash/eq to a single
+        # read at construction; the hash value is identical to before.
+        self._key = tuple(getattr(vertex, attr) for attr in self.attrs)
 
     def __eq__(self, other):
         if isinstance(other, ComparableVertex):
+            if other.attrs == self.attrs:
+                return self._key == other._key  # fast path: compare cached keys
             other_vertex = other.vertex
         elif isinstance(other, mod.Graph.Vertex):
             other_vertex = other
@@ -28,7 +37,7 @@ class ComparableVertex:
         return all(getattr(self.vertex, attr) == getattr(other_vertex, attr) for attr in self.attrs)
 
     def __hash__(self):
-        return hash(tuple(getattr(self.vertex, attr) for attr in self.attrs))
+        return hash(self._key)
 
     def __repr__(self):
         attrs_str = ", ".join(f"{a}={getattr(self.vertex, a)}" for a in self.attrs)

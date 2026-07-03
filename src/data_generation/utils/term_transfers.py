@@ -101,10 +101,33 @@ def decode_edge_label(l: str) -> str:
     return bt
 
 
+# The term->string conversion is a pure function of the input graph's atoms and
+# bonds, but the `sub_group` predicate calls it on the same handful of fragment
+# graphs hundreds of thousands of times (once per BFS/DFS rebuild per derivation),
+# and each call pays a full GML round-trip through `mod.Graph.fromGMLString`
+# (~1.2M calls / ~210s cumulative on toluene). We memoise on `mod.Graph.id`, a
+# stable, process-unique, never-reused integer -- crucially NOT `id(g)`, because
+# mod hands out a *fresh* Python wrapper on every access so `id(g)` never repeats.
+# The distinct-graph count equals the DG size (tens), so the cache stays tiny while
+# collapsing the millions of calls to a few real conversions.
+_graph_from_term_cache: "dict[int, mod.Graph]" = {}
+
+
+def clear_graph_from_term_cache() -> None:
+    """Drop the memoised term->string conversions (call between mod universes/tests)."""
+    _graph_from_term_cache.clear()
+
+
 def graph_from_term(g: mod.Graph) -> mod.Graph:
     """
     takes a graph in of string mode and returns a graph for term mode
     """
+
+    gid = getattr(g, "id", None)
+    if gid is not None:
+        cached = _graph_from_term_cache.get(gid)
+        if cached is not None:
+            return cached
 
     s = "graph [\n"
     for v in g.vertices:
@@ -115,7 +138,10 @@ def graph_from_term(g: mod.Graph) -> mod.Graph:
         # I don't kown why I need to exchange target and source
         s += f'edge [ source {e.target.id} target {e.source.id} label "{edge_label}" ]\n'
     s += "]\n"
-    return mod.Graph.fromGMLString(s, name= getattr(g, "name", "").replace(", term", ""), add=False)
+    result = mod.Graph.fromGMLString(s, name= getattr(g, "name", "").replace(", term", ""), add=False)
+    if gid is not None:
+        _graph_from_term_cache[gid] = result
+    return result
 
 
 def parse_term_atom(string_label: str) -> "tuple[str, int, int]":
@@ -290,6 +316,7 @@ __all__ = [
     "term_from_graph",
     "term_from_rule",
     "graph_from_term",
+    "clear_graph_from_term_cache",
     "rule_from_term",
     "parse_term_atom",
     "atom_exact_mass",
