@@ -2,7 +2,7 @@
 #SBATCH --job-name=phase0_regen_subset
 #SBATCH --time=3-00:00:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=16G
+#SBATCH --mem=32G
 #SBATCH --output=outputs/logs/regen_subset/slurm/%A/%j.out
 #
 # Phase 0.1 — regenerate a representative subset of forward DGs with the CURRENT
