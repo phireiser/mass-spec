@@ -37,6 +37,13 @@ from src.data_generation.core import strategy
 MOLECULE_NAME = "toluene"
 MOLECULE_SMILES = "CC1=CC=CC=C1"
 
+# Fragmentation rounds for this test. The asserted charge properties (charge set
+# {0, +1}; M+. at m/z 92) are independent of cascade depth; 2 exercises the charge
+# bookkeeping on at least one secondary fragment while avoiding the ~2x cost of the
+# default 5 (which only adds cheap tail rounds for toluene). Data generation uses
+# make_fwd_strategy's default of 5.
+FRAG_REPEAT = 2
+
 
 def _reference_charge(term_graph):
     """Old charge path: round-trip to a string-mode molecule, count SMILES signs.
@@ -87,6 +94,7 @@ class TestChargeCounting(unittest.TestCase):
             ionization=ionization_terms,
             fragmentation=fragmentation_terms,
             max_mass=molecule.exactMass,
+            frag_repeat=FRAG_REPEAT,
         )
         dg.build().execute(strat)
 

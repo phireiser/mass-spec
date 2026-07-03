@@ -1,18 +1,18 @@
 #!/bin/bash
-#SBATCH --job-name=phase0_regen_subset
+#SBATCH --job-name=regen_subset
 #SBATCH --time=3-00:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=32G
 #SBATCH --output=outputs/logs/regen_subset/slurm/%A/%j.out
 #
-# Phase 0.1 — regenerate a representative subset of forward DGs with the CURRENT
+# Feasibility — regenerate a representative subset of forward DGs with the CURRENT
 # EI ruleset (incl. ei_molecular_ion) on SLURM, one molecule per array task, then
 # score the provisional explainability ceiling as a dependent job.
 #
 # The on-disk data/processed/fwd dumps are stale (pre-EI; no M+•), so this writes
 # fresh dumps to a gitignored dir under outputs/ and leaves the stale dumps intact.
 # Forward-only (--skip-backward); each task is wrapped in `/usr/bin/time -v` so the
-# logs double as Phase 0.2 per-molecule cost data.
+# logs double as per-molecule cost data (see feasibility/cost_analysis.py).
 #
 # Usage:
 #   sbatch run/hpc/regen_subset.sh                                  # built-in ~17-mol subset
@@ -24,8 +24,8 @@ SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
 REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
 source "$REPO_ROOT/src/paths.env"
 
-REGEN_REL="outputs/phase0/regen_subset"
-CEIL_REL="outputs/phase0/subset"
+REGEN_REL="outputs/regen_subset"
+CEIL_REL="$METRICS_DIR_REL"
 MANIFEST="$REPO_ROOT/$REGEN_REL/manifest.tsv"
 
 JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID:-${SLURM_JOB_ID:-local}}"
@@ -40,9 +40,9 @@ if [ "${1:-}" = "ceiling" ]; then
     --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
     --env PYTHONPATH="$C_APP" \
     "$REPO_ROOT/$SIF" \
-    python "$C_SRC/data_generation/phase0/run_ceiling.py" \
-      --fwd-dir "$C_OUTPUTS/phase0/regen_subset/fwd" \
-      --out-dir "$C_OUTPUTS/phase0/subset"
+    python "$C_SRC/data_generation/utils/analysis/feasibility/run_ceiling.py" \
+      --fwd-dir "$C_OUTPUTS/regen_subset/fwd" \
+      --out-dir "$C_OUTPUTS/metrics"
   exit 0
 fi
 
@@ -68,7 +68,7 @@ if [ -n "${SLURM_ARRAY_TASK_ID:-}" ]; then
     python "$C_SRC/data_generation/main.py" \
       --smiles "$SMILES" \
       --name "$NAME" \
-      --output-dir "$C_OUTPUTS/phase0/regen_subset" \
+      --output-dir "$C_OUTPUTS/regen_subset" \
       --spectra-folder "$C_PARQUET" \
       --number-threads "$THREADS" \
       --subgroup-diag \
@@ -88,8 +88,8 @@ apptainer exec \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --env PYTHONPATH="$C_APP" \
   "$REPO_ROOT/$SIF" \
-  python "$C_SRC/data_generation/phase0/regen_subset.py" \
-    --emit-manifest "$C_OUTPUTS/phase0/regen_subset/manifest.tsv" "$@"
+  python "$C_SRC/data_generation/utils/analysis/feasibility/regen_subset.py" \
+    --emit-manifest "$C_OUTPUTS/regen_subset/manifest.tsv" "$@"
 
 N="$(wc -l < "$MANIFEST")"
 if [ "$N" -le 0 ]; then echo "empty manifest; nothing to submit" >&2; exit 1; fi

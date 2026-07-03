@@ -1,7 +1,7 @@
 """
 Regenerate a representative subset of forward DGs with the CURRENT EI ruleset.
 
-Phase 0.1 validation helper. The on-disk dumps under ``data/processed/fwd`` are
+Feasibility-study helper. The on-disk dumps under ``data/processed/fwd`` are
 stale -- generated before the ``ei_molecular_ion`` rule, so they lack the molecular
 ion (M+•) and the EI fragment set. This re-runs *forward* MØD generation for a
 small, class-spanning subset into a separate output dir, leaving the stale dumps
@@ -10,7 +10,7 @@ untouched, so we can measure a provisional EI ceiling before committing to a ful
 
 SMILES are read straight from each molecule's existing dump pickle, so no external
 molecule list is needed; generation is delegated to ``data_generation/main.py``
-with ``--skip-backward`` (Phase 0.1 only needs the forward DG).
+with ``--skip-backward`` (the ceiling only needs the forward DG).
 """
 from __future__ import annotations
 

@@ -5,8 +5,8 @@ from typing import List, Tuple, Dict, Any
 from collections import defaultdict
 from math import isfinite
 
-from .pubchem_client import PubChemClient
-from .pubchem_parser import get_spectra_from_information_section, find_gc_ms_sections
+from .analysis.pubchem_client import PubChemClient
+from .analysis.pubchem_parser import get_spectra_from_information_section, find_gc_ms_sections
 
 
 def pubchem_smiles_lookup(smiles: str) -> int:

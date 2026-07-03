@@ -1,10 +1,13 @@
-# Phase 0.1 — MØD Explainability Ceiling
+# Feasibility — MØD Explainability Ceiling & Enumeration Cost
 
 The cheap, no-ML gate for the EI spectrum-to-structure thesis. Before building any
-learned model or scaling teacher-DAG construction, it answers: **does the MØD rule
-library actually explain the high-intensity peaks in real EI spectra?** If the
-ceiling is low, the rule library — not the model — is the bottleneck, and chemistry
-must be fixed before modeling.
+learned model or scaling teacher-DAG construction, it answers two questions:
+**(1) does the MØD rule library actually explain the high-intensity peaks in real EI
+spectra?** (the explainability *ceiling*), and **(2) is full forward enumeration
+affordable across the corpus?** (the per-molecule *cost* and the budget crossover
+`N* = B / cost_per_molecule`). If the ceiling is low, the rule library — not the
+model — is the bottleneck. If the cost tail is intractable, selective construction
+is required before scaling. Both must be settled before modeling.
 
 ## What it computes
 
@@ -59,12 +62,13 @@ leaves the stale `data/processed/fwd` dumps intact:
 
 ```bash
 sbatch run/hpc/regen_subset.sh
-# array regen -> outputs/phase0/regen_subset/fwd
-# dependent ceiling -> outputs/phase0/subset/{ceiling_per_molecule.csv,ceiling_summary.json}
+# array regen -> outputs/regen_subset/fwd
+# dependent ceiling -> outputs/metrics/{ceiling_per_molecule.csv,ceiling_summary.json}
 ```
 
 Each task is wrapped in `/usr/bin/time -v`, so the per-task logs under
-`outputs/logs/regen_subset/slurm/` double as Phase 0.2 per-molecule cost data.
+`outputs/logs/regen_subset/slurm/` double as per-molecule cost data (fed to
+`cost_analysis.py`; see the cost section below).
 
 Full corpus (all ~150 molecules that have both a dump and a spectrum):
 
@@ -76,19 +80,32 @@ sbatch run/hpc/regen_subset.sh --all-with-spectrum
 > not size, and spans ~6000× on the subset (butane C4H10 ~4 h; aromatics seconds).
 > The full corpus contains longer saturated chains (pentane … nonane, alkyl acids),
 > so expect a heavy tail — keep the wall-time cap generous and treat the result as
-> the Phase 0.2 cost distribution (use it for N\* = B / cost, not a mean).
+> the cost distribution (use it for N\* = B / cost, not a mean).
 
 Ceiling on an existing set of (fresh) dumps:
 
 ```bash
-bash run/analysis/phase0_ceiling.sh                       # full corpus, default dirs
-bash run/analysis/phase0_ceiling.sh --names acetone,toluene,aniline --draws 200   # quick
+bash run/analysis/ceiling.sh                       # full corpus, default dirs
+bash run/analysis/ceiling.sh --names acetone,toluene,aniline --draws 200   # quick
 ```
 
-Plots (pure pandas/matplotlib):
+Cost / budget analysis from the array's sacct record + logs (stdlib, runs bare):
 
 ```bash
-python src/plot/plot_phase0_ceiling.py --csv outputs/phase0/subset/ceiling_per_molecule.csv
+sacct -j <array_job_id> --format=JobID,State,ElapsedRaw,MaxRSS,ReqMem -P -n > sacct.txt
+python3 src/data_generation/utils/analysis/feasibility/cost_analysis.py \
+  --sacct-file sacct.txt \
+  --manifest outputs/regen_subset/manifest.tsv \
+  --log-dir outputs/logs/regen_subset/slurm/<array_job_id> \
+  --out-dir outputs/metrics
+# -> outputs/metrics/{cost_per_molecule.csv,cost_summary.json}
+```
+
+Plots (matplotlib lives in the container; both default to `outputs/plots/`):
+
+```bash
+python src/plot/plot_ceiling.py   # -> outputs/plots/ceiling.png
+python src/plot/plot_cost.py      # -> outputs/plots/cost.png
 ```
 
 Unit tests for the pure metrics (run bare, no container):
@@ -99,15 +116,17 @@ python3 src/tests/unit_test_ceiling.py
 
 ## Code
 
-- `src/data_generation/phase0/ceiling_metrics.py` — pure, stdlib-only metrics
+- `src/data_generation/utils/analysis/feasibility/ceiling_metrics.py` — pure, stdlib-only metrics
   (`explained_fraction`, `formula_reachable_masses`, `sample_null`,
   `ceiling_with_ci`, `nitrogen_rule_parity`).
-- `src/data_generation/phase0/run_ceiling.py` — corpus runner (the only part needing
-  `mod`); writes the CSV + summary JSON.
-- `src/data_generation/phase0/regen_subset.py` — regenerate a subset's forward DGs
-  with the current ruleset (reads SMILES from existing dumps; forward-only).
-- `run/analysis/phase0_ceiling.sh`, `run/data/regen_subset.sh` — container wrappers.
-- `src/plot/plot_phase0_ceiling.py` — figures.
+- `src/data_generation/utils/analysis/feasibility/run_ceiling.py` — corpus runner (the only part
+  needing `mod`); writes the ceiling CSV + summary JSON to `outputs/metrics`.
+- `src/data_generation/utils/analysis/feasibility/cost_analysis.py` — pure, stdlib-only cost / N\*
+  analysis from a sacct dump + array logs; writes the cost CSV + summary JSON.
+- `src/data_generation/utils/analysis/feasibility/regen_subset.py` — regenerate a subset's forward
+  DGs with the current ruleset (reads SMILES from existing dumps; forward-only).
+- `run/analysis/ceiling.sh`, `run/hpc/regen_subset.sh` — container / SLURM wrappers.
+- `src/plot/plot_ceiling.py`, `src/plot/plot_cost.py` — figures (→ `outputs/plots`).
 
 ## Reading the gate
 
@@ -118,8 +137,17 @@ python3 src/tests/unit_test_ceiling.py
 - **M+• rate low:** an ionization-model problem (e.g. stale dumps, or a missing M+•
   rule) — fix before trusting the ceiling.
 
-## Out of scope (Phase 0.2)
+## Reading the cost gate
 
-Per-molecule MØD cost and the extrapolated full-enumeration budget → the crossover
-N\* = B / cost_per_molecule that decides whether Phase 2's selective construction is
-needed. A timed full regeneration doubles as this cost measurement.
+`cost_analysis.py` reports per-molecule wall time (the only honest cost unit — the
+`time -v` figures in the logs wrap `srun`, so their CPU/RSS is the launcher, not the
+payload; use sacct's `.0`-step MaxRSS for memory). Output graph count does **not**
+predict cost, so it can't be used to pre-filter cheap molecules.
+
+- **Cost light-tailed, no censoring:** full enumeration is affordable; N\* comfortably
+  exceeds the projected corpus → skip selective construction.
+- **Heavy tail / tasks censored at the wall:** a hard subset (saturated aliphatics,
+  large flexible molecules) is individually intractable *regardless of corpus N* → full
+  enumeration is not viable; selective / RL construction is required. This is a stronger
+  condition than "corpus > N\*". TIMEOUT tasks are right-censored, so the reported mean
+  is a lower bound and every N\* is an upper bound.

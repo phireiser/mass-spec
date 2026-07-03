@@ -1,5 +1,5 @@
 """
-Pure metrics for the Phase 0.1 MØD explainability ceiling.
+Pure metrics for the MØD explainability ceiling (feasibility study).
 
 These functions are deliberately dependency-light (standard library only) so the
 unit tests can run *outside* the ``mol-spectro.sif`` container, where ``mod`` and

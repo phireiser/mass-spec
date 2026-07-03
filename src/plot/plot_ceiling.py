@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Plot the Phase 0.1 MØD explainability-ceiling results.
+"""Plot the MØD explainability-ceiling results (feasibility study).
 
-Reads ``ceiling_per_molecule.csv`` (from ``run_ceiling.py``) and renders four
-panels: the ceiling distribution, raw-explained vs formula-null, ceiling vs
-molecular mass, and the mean odd/even-electron split of the unexplained intensity.
-Pure pandas/matplotlib -- no ``mod`` -- so it runs outside the container.
+Reads ``ceiling_per_molecule.csv`` (from ``run_ceiling.py``, under
+``outputs/metrics``) and renders four panels: the ceiling distribution,
+raw-explained vs formula-null, ceiling vs molecular mass, and the mean
+odd/even-electron split of the unexplained intensity. Pure pandas/matplotlib --
+no ``mod`` -- but matplotlib lives in the container, so run inside mol-spectro.sif.
 """
 import argparse
 from pathlib import Path
@@ -19,13 +20,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Plot Phase 0.1 ceiling results")
-    ap.add_argument("--csv", default=str(ROOT / "outputs" / "phase0" / "ceiling_per_molecule.csv"))
-    ap.add_argument("--out-dir", default=None, help="Default: <csv dir>/plots")
+    ap = argparse.ArgumentParser(description="Plot ceiling results (feasibility study)")
+    ap.add_argument("--csv", default=str(ROOT / "outputs" / "metrics" / "ceiling_per_molecule.csv"))
+    ap.add_argument("--out-dir", default=None, help="Default: outputs/plots")
     args = ap.parse_args()
 
     csv_path = Path(args.csv)
-    out_dir = Path(args.out_dir) if args.out_dir else csv_path.parent / "plots"
+    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "outputs" / "plots"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(csv_path)
@@ -87,7 +88,7 @@ def main() -> None:
     ax.grid(True, alpha=0.3, axis="y")
 
     fig.tight_layout()
-    out_path = out_dir / "phase0_ceiling.png"
+    out_path = out_dir / "ceiling.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     print(f"Saved {out_path}")
 

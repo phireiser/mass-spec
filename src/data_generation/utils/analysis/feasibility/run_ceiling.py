@@ -1,5 +1,5 @@
 """
-Phase 0.1 corpus runner — the MØD explainability ceiling.
+Feasibility study — corpus runner for the MØD explainability ceiling.
 
 For every molecule that has *both* a forward derivation-graph dump (under
 ``data/processed/fwd/``) and a NIST EI spectrum (in the Parquet store, looked up
@@ -7,12 +7,12 @@ by SMILES), this computes how much of the experimental peak intensity the MØD r
 explain, with a random-formula null subtracted, plus the M+• presence and the
 odd/even-electron split of the unexplained peaks.
 
-This is the only Phase-0 module that needs ``mod``; it loads each dump, pulls the
+This is the only feasibility module that needs ``mod``; it loads each dump, pulls the
 charged-fragment nominal masses, and defers every numeric decision to the pure
 functions in :mod:`ceiling_metrics`. Run it inside ``mol-spectro.sif`` via
-``run/analysis/phase0_ceiling.sh``.
+``run/analysis/ceiling.sh``.
 
-Outputs (under ``--out-dir``, default ``outputs/phase0``):
+Outputs (under ``--out-dir``, default ``outputs/metrics``):
   * ``ceiling_per_molecule.csv`` — one row per analyzed molecule
   * ``ceiling_summary.json``     — corpus aggregates + the run configuration
 """
@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from src.data_generation import utils
-from src.data_generation.phase0 import ceiling_metrics as cm
+from src.data_generation.utils.analysis.feasibility import ceiling_metrics as cm
 from src.project_paths import shared_path
 
 
@@ -220,14 +220,14 @@ def write_csv(rows: List[Dict[str, object]], path: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Phase 0.1 MØD explainability ceiling")
+    parser = argparse.ArgumentParser(description="MØD explainability ceiling (feasibility study)")
     parser.add_argument("--fwd-dir", type=str, default=str(shared_path("PROCESSED_DIR_REL", "fwd")),
                         help="Directory of forward DG dumps (.dmp/.pkl)")
     parser.add_argument("--spectra-folder", type=str, default=str(shared_path("PARQUET_DIR_REL")),
                         help="Directory of the NIST spectra Parquet store")
     parser.add_argument("--compounds-csv", type=str, default=str(shared_path("CSV_PATH_REL")),
                         help="CSV mapping molecule name -> SMILES (for parquet lookup)")
-    parser.add_argument("--out-dir", type=str, default=str(shared_path("PHASE0_DIR_REL")),
+    parser.add_argument("--out-dir", type=str, default=str(shared_path("METRICS_DIR_REL")),
                         help="Directory for ceiling outputs")
     parser.add_argument("--names", type=str, default="",
                         help="Comma-separated subset of molecule names (default: all)")
@@ -253,7 +253,7 @@ def main() -> None:
 
     only = args.names.split(",") if args.names else None
     names = discover_names(fwd_dir, name2smiles, parquet_dir, only)
-    print(f"Phase 0.1: {len(names)} molecules with both a dump and a spectrum")
+    print(f"Feasibility ceiling: {len(names)} molecules with both a dump and a spectrum")
 
     rows: List[Dict[str, object]] = []
     for i, name in enumerate(names, 1):
@@ -284,7 +284,7 @@ def main() -> None:
         json.dump(summary, f, indent=2)
 
     c = summary["ceiling"]
-    print(f"\nPhase 0.1 ceiling: mean={c['mean']:.3f} median={c['median']:.3f} "
+    print(f"\nCeiling: mean={c['mean']:.3f} median={c['median']:.3f} "
           f"(n={c['n']}); M+• in spectrum {summary['mplus_in_spectrum_rate']:.2f}, "
           f"in MØD {summary['mplus_in_mod_rate']:.2f}")
     print(f"Wrote {out_dir/'ceiling_per_molecule.csv'} and {out_dir/'ceiling_summary.json'}")
