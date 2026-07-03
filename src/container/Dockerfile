@@ -102,7 +102,11 @@ RUN wget                                                                   \
 RUN \
     tar -xf boost.tar.gz --one-top-level=boostSrc --strip-components=1        \
     && cd boostSrc                                                            \
-    && ./bootstrap.sh --with-python=python3                                   \
+    # Use the SYSTEM interpreter, not the venv one on PATH. Boost derives the
+    # Python include dir from sys.prefix; the venv's prefix (/opt/venv) has an
+    # empty include/ dir, so Boost.Python fails with 'pyconfig.h: No such file'.
+    # /usr/bin/python3 -> prefix /usr -> /usr/include/python3.12 (has the header).
+    && ./bootstrap.sh --with-python=/usr/bin/python3                          \
     && ./b2 --with-python --with-graph --with-iostreams --with-test -j $j     \
     && ./b2 install                                                           \
     && cd ..                                                                  \
