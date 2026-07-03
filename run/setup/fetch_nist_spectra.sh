@@ -6,8 +6,8 @@ set -euo pipefail
 #
 # Fetches the WHOLE NIST WebBook up to a molecular-weight cutoff. Pass the max MW
 # as the first argument (default 1000, i.e. effectively everything ~<=674):
-#   run/data/fetch_nist_spectra.sh            # all species (MW <= 1000)
-#   run/data/fetch_nist_spectra.sh 300        # only species with MW <= 300
+#   run/setup/fetch_nist_spectra.sh            # all species (MW <= 1000)
+#   run/setup/fetch_nist_spectra.sh 300        # only species with MW <= 300
 # The build is resumable: re-running continues from the existing store.
 
 MAX_MW="${1:-1000}"
