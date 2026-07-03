@@ -1,10 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=data_gen_fragment
-#SBATCH --time=0-00:30:00
+#SBATCH --time=7-00:30:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=16G
 #SBATCH --output=outputs/logs/data_gen/slurm/%A/%j.out
-###SBATCH --time=29-00:30:00
 
 # Usage:
 # sbatch run/hpc/data_gen.sh
