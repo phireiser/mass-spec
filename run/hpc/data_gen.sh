@@ -18,7 +18,16 @@ source "$REPO_ROOT/src/paths.env"
 
 # Directories and files
 DATADIR="$REPO_ROOT/$PROCESSED_DIR_REL"
-DEFINITION_FILE="$REPO_ROOT/$CSV_PATH_REL"
+# Definition CSV (name,smiles,category). Override with DEFINITION_FILE to run a
+# different batch, e.g. the Phase-1 decoys:
+#   DEFINITION_FILE=data/decoys_wave1.csv sbatch run/hpc/data_gen.sh
+# A relative override is resolved against the repo root. Exported so the
+# array self-resubmit below inherits it.
+if [ -n "${DEFINITION_FILE:-}" ] && [ "${DEFINITION_FILE#/}" = "${DEFINITION_FILE}" ]; then
+  DEFINITION_FILE="$REPO_ROOT/$DEFINITION_FILE"
+fi
+DEFINITION_FILE="${DEFINITION_FILE:-$REPO_ROOT/$CSV_PATH_REL}"
+export DEFINITION_FILE
 JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID:-}"
 if [ -z "$JOB_GROUP_ID" ]; then
   JOB_GROUP_ID="${SLURM_JOB_ID:-local}"
