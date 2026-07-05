@@ -4,3 +4,6 @@ outputs/**
 mol-spectro.sif
 .secrets/
 .pytest_cache/
+
+# remain private until the thesis is published
+thesis/**
