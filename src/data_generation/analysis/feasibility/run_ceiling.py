@@ -42,11 +42,22 @@ def _mean(values) -> float:
     return statistics.fmean(vals) if vals else float("nan")
 
 
-def _mod_masses(name: str, fwd_dir: Path) -> set:
-    """Nominal (round) masses of the charged MØD fragments in a forward dump."""
-    dg = utils.load_derivation_graph(name, path=fwd_dir)
-    spectra = utils.get_spectra_from_mod_derivation_graph(dg)
-    return {round(mass) for mass, _occ, _rules in spectra}
+def _dump_stems(name: str, cas: object) -> List[str]:
+    """Candidate dump names to try, CAS first (the single identifier) then the
+    legacy human name, so scoring works before and after the CAS rename."""
+    return [s for s in [str(cas or ""), name] if s]
+
+
+def _mod_masses(stems: List[str], fwd_dir: Path) -> set:
+    """Nominal (round) masses of the charged MØD fragments in a forward dump.
+    Tries each candidate stem (CAS first) and uses the first that loads."""
+    for stem in stems:
+        if not utils.dump_is_complete(stem, path=fwd_dir):
+            continue
+        dg = utils.load_derivation_graph(stem, path=fwd_dir)
+        spectra = utils.get_spectra_from_mod_derivation_graph(dg)
+        return {round(mass) for mass, _occ, _rules in spectra}
+    raise FileNotFoundError(f"no complete dump for any of {stems}")
 
 
 def analyze_molecule(
@@ -72,7 +83,7 @@ def analyze_molecule(
     if not record:
         raise FileNotFoundError(f"no spectrum in Parquet store for {name} ({smiles})")
     peaks = record["peaks"]
-    mod_masses = _mod_masses(name, fwd_dir)
+    mod_masses = _mod_masses(_dump_stems(name, record.get("cas")), fwd_dir)
 
     formula = record.get("formula") or ""
     inventory = cm.parse_formula(formula) if formula else {}
@@ -150,16 +161,19 @@ def analyze_molecule(
 
 def discover_names(fwd_dir: Path, name2smiles: Dict[str, str], parquet_dir: Path,
                    only: Optional[List[str]]) -> List[str]:
-    """Names with both a dump (``.pkl``) and a spectrum in the Parquet store,
-    sorted; ``only`` filters."""
+    """Target names (from the compounds CSV) that have both a Parquet spectrum and a
+    forward dump under either their CAS or legacy name; sorted, ``only`` filters."""
     have_dump = {p.stem for p in fwd_dir.glob("*.pkl")}
-    if only:
-        wanted = [n.strip() for n in only if n.strip()]
-        names = [n for n in wanted if n in have_dump]
-    else:
-        names = sorted(have_dump)
-    return [n for n in names
-            if n in name2smiles and utils.get_spectra_by_smiles(name2smiles[n], parquet_dir)]
+    wanted = ([n.strip() for n in only if n.strip()] if only else sorted(name2smiles))
+    out: List[str] = []
+    for n in wanted:
+        smi = name2smiles.get(n)
+        if not smi or not utils.get_spectra_by_smiles(smi, parquet_dir):
+            continue
+        stems = _dump_stems(n, utils.get_cas_by_smiles(smi, parquet_dir))
+        if any(s in have_dump for s in stems):
+            out.append(n)
+    return out
 
 
 def summarize(rows: List[Dict[str, object]], config: Dict[str, object]) -> Dict[str, object]:
