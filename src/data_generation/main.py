@@ -24,6 +24,10 @@ parser.add_argument("--number-threads", type=int, default=64, help="number of th
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")
 parser.add_argument("--skip-backward", action="store_true", help="Only build the forward DG (skip the backward pass)")
+parser.add_argument("--name-by-cas", action="store_true",
+                    help="Name the dump by the CAS registry number resolved from the store "
+                         "(the project-wide single identifier) instead of --name; falls back "
+                         "to --name if the molecule is not in the store")
 args = parser.parse_args()
 
 # Enable subgroup diagnostics
@@ -35,10 +39,20 @@ mod.config.common.numThreads = args.number_threads
 print(args.number_threads, "threads requested")
 print(f"Using {mod.config.common.numThreads} threads")
 
-output_path_fwd = Path(args.output_dir) / "fwd/" / (args.name + ".dmp")
-output_path_bwd = Path(args.output_dir) / "bwd/" / (args.name + ".dmp")
+# CAS is the single project-wide identifier used to name every dump.
+dump_name = args.name
+if args.name_by_cas:
+    cas = utils.get_cas_by_smiles(args.smiles, Path(args.spectra_folder))
+    if cas:
+        dump_name = cas
+    else:
+        print(f"  --name-by-cas: no CAS in store for {args.name} ({args.smiles}); "
+              f"falling back to --name '{args.name}'")
 
-molecule = mod.Graph.fromSMILES(args.smiles, args.name)
+output_path_fwd = Path(args.output_dir) / "fwd/" / (dump_name + ".dmp")
+output_path_bwd = Path(args.output_dir) / "bwd/" / (dump_name + ".dmp")
+
+molecule = mod.Graph.fromSMILES(args.smiles, dump_name)
 molecule_term= utils.term_from_graph(molecule)
 
 aoc = utils.all_occuring([molecule], utils.ALL_ATOMS)

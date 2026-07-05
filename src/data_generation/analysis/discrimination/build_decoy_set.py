@@ -64,13 +64,17 @@ def load_structures_with_spectra(parquet_dir: Path):
         rd_formula = rdMolDescriptors.CalcMolFormula(mol)
         if store_formula and rd_formula.rstrip("+-") != store_formula:
             continue  # mislabelled / isotopologue with shifted true mass
+        cas = _str(r.get("cas"))
+        if not cas:
+            continue  # CAS is the identifier every dump is named by; no CAS => unusable
         key = Chem.MolToInchiKey(mol)
         if key in seen:
             continue
         seen.add(key)
         form2structs[rd_formula].append({
-            "inchikey": key, "smiles": Chem.MolToSmiles(mol), "formula": rd_formula,
-            "name": _str(r.get("name")), "nheavy": mol.GetNumHeavyAtoms(),
+            "inchikey": key, "cas": cas, "smiles": Chem.MolToSmiles(mol),
+            "formula": rd_formula, "name": _str(r.get("name")),
+            "nheavy": mol.GetNumHeavyAtoms(),
         })
     return dict(form2structs)
 
@@ -90,42 +94,43 @@ def main() -> None:
     parquet_dir = Path(args.spectra_folder)
     out_dir = Path(args.out_dir)
     form2structs = load_structures_with_spectra(parquet_dir)
-    key2formula = {s["inchikey"]: f for f, ss in form2structs.items() for s in ss}
+    key2struct = {s["inchikey"]: s for ss in form2structs.values() for s in ss}
 
     with open(args.compounds_csv, newline="", encoding="utf-8") as f:
         targets = {str(r["name"]).strip(): str(r["smiles"]).strip()
                    for r in csv.DictReader(f)}
 
+    # Dumps are named by CAS, so "already generated" is a CAS-stem check, and a
+    # decoy that is itself a target is excluded (targets are generated separately).
     have_dump = {p.stem for p in Path(args.fwd_dir).glob("*.pkl")}
-    dumped_keys = set()
-    target_keys = set()
-    for name, smi in targets.items():
+    target_cas: set = set()
+    for smi in targets.values():
         m = Chem.MolFromSmiles(smi)
         if not m:
             continue
-        ik = Chem.MolToInchiKey(m)
-        target_keys.add(ik)
-        if name in have_dump:
-            dumped_keys.add(ik)
+        s = key2struct.get(Chem.MolToInchiKey(m))
+        if s:
+            target_cas.add(s["cas"])
 
-    decoys: Dict[str, dict] = {}
+    decoys: Dict[str, dict] = {}   # keyed by CAS
     n_targets_with_decoy = 0
-    for name, smi in targets.items():
+    for smi in targets.values():
         m = Chem.MolFromSmiles(smi)
         if not m:
             continue
         ik = Chem.MolToInchiKey(m)
-        formula = key2formula.get(ik)
-        if not formula:
+        s = key2struct.get(ik)
+        if not s:
             continue
-        group = [s for s in form2structs.get(formula, []) if s["inchikey"] != ik]
+        group = [d for d in form2structs.get(s["formula"], []) if d["inchikey"] != ik]
         if group:
             n_targets_with_decoy += 1
-        for s in group:
-            decoys.setdefault(s["inchikey"], s)
+        for d in group:
+            decoys.setdefault(d["cas"], d)
 
-    need = [d for d in decoys.values() if d["inchikey"] not in dumped_keys]
-    need.sort(key=lambda d: (d["nheavy"] if d["nheavy"] is not None else 99, d["inchikey"]))
+    need = [d for d in decoys.values()
+            if d["cas"] not in target_cas and d["cas"] not in have_dump]
+    need.sort(key=lambda d: (d["nheavy"] if d["nheavy"] is not None else 99, d["cas"]))
 
     def write(rows: List[dict], path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -133,9 +138,8 @@ def main() -> None:
             w = csv.writer(f)
             w.writerow(["name", "smiles", "category"])
             for d in rows:
-                # Full InChIKey (not the 14-char skeleton) so names stay unique.
-                w.writerow([f"decoy_{d['inchikey']}", d["smiles"],
-                            f"decoy_{d['formula']}"])
+                # name = CAS (the single project-wide identifier; also the dump name).
+                w.writerow([d["cas"], d["smiles"], d["formula"]])
 
     wave1 = [d for d in need if (d["nheavy"] or 99) <= args.max_heavy]
     wave2 = [d for d in need if (d["nheavy"] or 99) > args.max_heavy]
@@ -150,7 +154,7 @@ def main() -> None:
                 else "13-15" if h <= 15 else ">15"] += 1
     print(f"targets with >=1 decoy: {n_targets_with_decoy}")
     print(f"unique decoy structures: {len(decoys)} "
-          f"({len(decoys)-len(need)} already have a dump, {len(need)} need generation)")
+          f"({len(decoys)-len(need)} are a target or already dumped, {len(need)} need generation)")
     print(f"heavy-atom buckets (needed): {dict(buckets)}")
     print(f"wave 1 (<= {args.max_heavy} heavy): {len(wave1)}   wave 2: {len(wave2)}")
     print(f"wrote {out_dir/'decoys.csv'}, decoys_wave1.csv, decoys_wave2.csv")

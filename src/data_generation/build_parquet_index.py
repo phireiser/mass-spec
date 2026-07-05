@@ -224,7 +224,10 @@ def fetch_structure(session: requests.Session, webbook_id: str) -> Optional[Chem
 
 # ------------------------------------------------------------ Arrow schemas
 
+# CAS is the project-wide single identifier (primary key); nist_id (the NIST Mass
+# Spec No) is retained as metadata for provenance.
 SPECTRA_SCHEMA = pa.schema([
+    ("cas", pa.string()),
     ("nist_id", pa.string()),
     ("inchikey", pa.string()),
     ("mz", pa.list_(pa.float32())),
@@ -235,6 +238,7 @@ SPECTRA_SCHEMA = pa.schema([
 ])
 
 INDEX_SCHEMA = pa.schema([
+    ("cas", pa.string()),
     ("nist_id", pa.string()),
     ("webbook_id", pa.string()),
     ("inchikey", pa.string()),
@@ -272,6 +276,7 @@ def _spectrum_rows(nist_id: str, header: Dict[str, str], mz: List[float],
     cas = header.get("CAS REGISTRY NO", "")
     webbook_id = f"C{cas.replace('-', '')}" if cas else ""
     spec_row = {
+        "cas": cas,
         "nist_id": nist_id,
         "inchikey": feats.get("inchikey"),
         "mz": [float(x) for x in mz],

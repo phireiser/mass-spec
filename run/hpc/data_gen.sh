@@ -100,4 +100,5 @@ apptainer exec \
       --number-threads "$THREADS" \
       --subgroup-diag \
       --avoid-reprocessing \
+      --name-by-cas \
   >"$OUTFILE" 2>&1
