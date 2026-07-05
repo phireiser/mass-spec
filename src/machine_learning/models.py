@@ -104,7 +104,12 @@ class EncMol(nn.Module):
 
     def forward(self, batch_graphs):
         device = next(self.parameters()).device
-        batch = Batch.from_data_list(batch_graphs).to(device)
+        # Move each graph to the model's device *before* collating: from_data_list
+        # concatenates tensors, and mixing CPU + CUDA graphs (e.g. a TRAIN+VAL+TEST
+        # ConcatDataset where only the training graphs were cached on GPU) makes the
+        # cat inside collate throw a device-mismatch. A trailing .to() cannot fix
+        # a batch that fails to build.
+        batch = Batch.from_data_list([g.to(device) for g in batch_graphs])
         x = self.atom_lin(batch.x.float())
         edge_index = batch.edge_index
         ea = batch.edge_attr

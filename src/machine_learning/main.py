@@ -351,6 +351,21 @@ def main():
             # offset epoch so Phase B continues the same x-axis after Phase A
             wandb.log({"phaseB/loss": loss, "phaseB/frac": frac, "epoch": args.epochs_fwd + epoch})
 
+    # Persist the trained model immediately, before any (fragile) eval/demo step.
+    # The mass-controlled TEST scorecard builds a TRAIN+VAL+TEST index and has
+    # crashed there before; saving here means such a crash costs the scorecard,
+    # not the whole training run.
+    ckpt_path = args.output_dir / "ml_checkpoint.pt"
+    save_checkpoint(
+        ckpt_path,
+        frag_set_enc=frag_set_enc,
+        enc_spec=enc_spec,
+        dec_spec=dec_spec,
+        heads=heads,
+        args=vars(args),
+    )
+    print(f"Saved checkpoint to {ckpt_path}")
+
     # ----------------- Build retrieval index -----------------
     # CRITICAL: Build index on TRAIN+VAL so evaluation sets have ground truth molecules
     print("== Building retrieval index on TRAIN+VAL sets ==")
@@ -485,18 +500,9 @@ def main():
     print("== Visualization: saving recon plots for a few VAL samples ==")
     _ = demo_visualize_reconstructions(graph_feats, spec, smiles, enc_mol, frag_set_enc, dec_spec, heads, n_samples=3, deriv_trees=deriv_trees_fwd, out_dir=plots_dir)
 
-    # save checkpoint (enc_mol weights are nested inside frag_set_enc; not stored separately)
-    ckpt_path = args.output_dir / "ml_checkpoint.pt"
-    save_checkpoint(
-        ckpt_path,
-        frag_set_enc=frag_set_enc,
-        enc_spec=enc_spec,
-        dec_spec=dec_spec,
-        heads=heads,
-        args=vars(args),
-    )
-    print(f"Saved checkpoint to {ckpt_path}")
-
+    # Checkpoint was already saved right after training (above), so a crash in the
+    # eval/demo section cannot lose the trained weights. Upload it as a wandb
+    # artifact here, once the run is otherwise complete.
     if use_wandb:
         artifact = wandb.Artifact("ml_checkpoint", type="model")
         artifact.add_file(str(ckpt_path))
