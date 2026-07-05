@@ -79,14 +79,27 @@ def sub_group(
     kept for experimentation only and is not the chemically intended behaviour.
     """
 
-    def _match_satisfies(derivation, match, generalization_extention) -> bool:
-        """Evaluate the subgroup definition for a single rule->molecule embedding."""
-        alkyl_position, hetro_position, saturated_position = \
-            utils.transfer_positions_of_generalization_extention(
-                generalization_extention,
-                match
-            )
+    def _positions_signature(alkyl_position, hetro_position, saturated_position):
+        """Order-stable identity of a match's *generalized* positions (R/Y/S).
 
+        Within one derivation the morphism (``match.codomain``) is identical for
+        every match, and neither ``collect_bfs`` (which ignores ``match``) nor
+        ``saturated_path`` (which uses ``match`` only via that constant morphism)
+        depends on anything else, so ``_match_satisfies`` is a pure function of
+        where the rule's generalized positions land in the molecule. mod hands
+        back ~10^3 matches per derivation dominated by symmetry-equivalent
+        embeddings that map those positions to the *same* atoms; deduping on this
+        signature runs the expensive traversal once per distinct assignment.
+        """
+        return (
+            tuple(v.id for v in alkyl_position),
+            tuple(v.id for v in hetro_position),
+            tuple((a.id, b.id) for a, b in saturated_position),
+        )
+
+    def _match_satisfies(derivation, match, alkyl_position, hetro_position,
+                         saturated_position) -> bool:
+        """Evaluate the subgroup definition for a single rule->molecule embedding."""
         hetro_bool = True
         alkyl_bool = True
         sat_bool = True
@@ -159,15 +172,31 @@ def sub_group(
         if not matches:
             return True
 
+        # The ~10^3 matches per derivation are dominated by symmetry-equivalent
+        # embeddings that assign the generalized positions to the same atoms;
+        # within this derivation the morphism is fixed, so the subgroup outcome
+        # depends only on that assignment. Compute the (cheap) positions per
+        # match, then run the (expensive) traversal once per distinct signature.
+        sig_cache: "dict[tuple, bool]" = {}
+
+        def evaluate(match) -> bool:
+            positions = utils.transfer_positions_of_generalization_extention(
+                generalization_extention, match
+            )
+            sig = _positions_signature(*positions)
+            cached = sig_cache.get(sig)
+            if cached is not None:
+                return cached
+            result = _match_satisfies(derivation, match, *positions)
+            sig_cache[sig] = result
+            return result
+
         # Accept the derivation if any embedding satisfies the definition
         # (logical OR -- the chemically correct, existential semantics; see
         # docstring). `require_all_matches` switches to AND for experimentation
         # only. Generators keep the short-circuit: `any` stops at the first
         # satisfying match, `all` at the first failing one.
-        results = (
-            _match_satisfies(derivation, match, generalization_extention)
-            for match in matches
-        )
+        results = (evaluate(match) for match in matches)
         return all(results) if require_all_matches else any(results)
 
     return mod.rightPredicate[predicate](strategy)
