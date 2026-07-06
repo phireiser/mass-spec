@@ -1,0 +1,65 @@
+\tikzset{
+  mod/.style={draw, rounded corners=2pt, align=center, thick,
+    fill=blue!8, draw=blue!55!black, minimum height=11mm,
+    inner xsep=6pt, text width=38mm},
+  ten/.style={draw, shape=rounded rectangle, align=center,
+    fill=gray!10, draw=gray!60!black, minimum height=9mm, inner xsep=10pt},
+  bwd/.style={draw, rounded corners=2pt, align=center, thick,
+    fill=orange!30, draw=orange!70!black, text=black,
+    minimum height=11mm, inner xsep=6pt, text width=38mm},
+  bwdten/.style={draw, shape=rounded rectangle, align=center,
+    fill=orange!30, draw=orange!70!black, text=black,
+    minimum height=9mm, inner xsep=10pt},
+  aux/.style={draw, rounded corners=2pt, align=center,
+    fill=gray!6, draw=gray!55!black, minimum height=10mm,
+    inner xsep=6pt, text width=34mm},
+  flow/.style={-{Stealth[length=2.5mm]}, thick},
+  lbl/.style={font=\scriptsize\itshape, inner sep=1.5pt, fill=white,
+              fill opacity=0.9, text opacity=1},
+  obj/.style={-{Stealth[length=2.5mm]}, thick, dotted, gray!55!black},
+  nce/.style={{Stealth[length=2.5mm]}-{Stealth[length=2.5mm]},
+              line width=1.1pt, teal!55!black},
+  title/.style={font=\bfseries\large, anchor=west},
+}
+
+\begin{tikzpicture}[font=\small]
+
+\node[title] at (-0.6,1.2) {Inference / retrieval};
+\node[font=\itshape\footnotesize, anchor=west] at (-0.6,0.6)
+  {Query with $z_{\text{bwd}}$ into the molecule-latent index, then rerank with the forward model};
+
+% backward encoder column (amber)
+\node[bwd]    (spec)   at (0,-0.4) {\textbf{Binned spectrum}\\ \texttt{spec} $[B,\text{bins}]$};
+\node[bwd]    (encspec)at (0,-2.2) {\textbf{EncSpec}\\ residual MLP};
+\node[bwdten] (zs)     at (0,-4.0) {$z_s\ [B,d]$};
+\node[bwd]    (bwdh)   at (0,-5.8) {\textbf{heads.bwd}\\ Linear $+$ ReLU};
+\node[bwdten] (zbwd)   at (0,-7.6) {$z_{\text{bwd}}$};
+
+% retrieval side
+\node[aux, text width=36mm] (zmdb) at (5.0,-4.2)
+  {\textbf{$z_m$ database}\\ precomputed, normalized};
+\node[mod, text width=36mm] (idx) at (5.0,-7.6)
+  {\textbf{LatentIndex}\\ nearest-neighbour search};
+\node[aux, text width=34mm] (cand) at (10.0,-7.6)
+  {\textbf{top-$k$ candidates}\\ retrieved molecules};
+\node[mod, text width=40mm] (rerank) at (10.0,-4.2)
+  {\textbf{Forward-model rerank}\\ predict $\widehat{\texttt{spec}}$, score vs input};
+\node[ten, text width=34mm] (out) at (10.0,-1.2)
+  {\textbf{Ranked structures}};
+
+% flow
+\draw[flow] (spec) -- (encspec);  \draw[flow] (encspec) -- (zs);
+\draw[flow] (zs) -- (bwdh);       \draw[flow] (bwdh) -- (zbwd);
+\draw[flow] (zbwd) -- node[lbl]{query} (idx);
+\draw[flow] (zmdb) -- node[lbl]{build} (idx);
+\draw[flow] (idx) -- node[lbl,pos=0.5]{top-$k$} (cand);
+\draw[flow] (cand) -- (rerank);
+\draw[flow] (rerank) -- (out);
+
+% rerank scores candidates against the observed spectrum
+\begin{scope}[on background layer]
+  \draw[obj] (spec.east) to[out=0,in=135]
+    node[lbl,pos=0.55]{score vs input spec} (rerank.north west);
+\end{scope}
+
+\end{tikzpicture}
