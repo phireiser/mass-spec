@@ -22,7 +22,6 @@
 \usepackage{graphicx}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{color}
-\usepackage{svg}
 \usepackage{epstopdf}
 \usepackage{pdfpages}
 \usepackage{import}                 % robust relative paths for shared snippets
@@ -44,7 +43,7 @@
 \usetikzlibrary{backgrounds}
 \usetikzlibrary{shadows.blur}
 \usetikzlibrary{arrows.meta}
-\usetikzlibrary{shapes.geometric, shapes.symbols, shapes.multipart}
+\usetikzlibrary{shapes.geometric, shapes.symbols, shapes.multipart, shapes.misc}
 \usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, decorations.markings}
 \usetikzlibrary{patterns}
 \usetikzlibrary{angles}
@@ -74,13 +73,30 @@
 
 
 
-\addbibresource{../shared/refs.bib} % shared bibliography (was master.bib)
+\addbibresource{../shared/refs.bib}
 \DeclareLanguageMapping{american}{american-apa}
 
 
 \renewcommand{\arraystretch}{1.4}
 \newcommand{\linespacing}{1.5}
 \renewcommand{\baselinestretch}{\linespacing}
+
+% Placeholder for numbers pending the final retrained-model run. Renders in red
+% bold so unfilled values are obvious; grep for "\ph{" to find them all.
+\newcommand{\ph}[1]{\textcolor{red}{\textbf{#1}}}
+
+% Include a figure if its file exists, otherwise draw a visible "pending" box so
+% the document still compiles before a figure has been generated (e.g. results
+% figures awaiting the retrained-model run). #1 = \includegraphics options,
+% #2 = figure path.
+\newcommand{\figorpending}[2]{%
+    \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }%
+}
 
 
 \raggedbottom

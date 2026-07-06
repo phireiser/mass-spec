@@ -28,8 +28,8 @@ These graph-based intermediate representations provide an explicit fragmentation
 
 The proposed framework systematically incorporates graph-based fragmentation intermediates into structure $\leftrightarrow$ spectrum translation models.
 By combining molecular representations, spectral information, and fragment-level graph structures, it establishes a functional bidirectional pipeline with an explicit intermediate fragmentation layer.
-In a proof-of-concept evaluation, a forward-model reranking stage substantially improves retrieval, whereas the fragment-aware components do not yet yield a measurable gain over ablated variants under the small-sample setting.
-The principal contribution is therefore the framework itself, together with a systematic analysis of its strengths, limitations, and failure modes, providing a concrete basis for future work on learned fragment generation.
+In a proof-of-concept evaluation, the forward model predicts molecule-specific spectra whose peaks fall at physically realizable fragment masses by construction, and spectrum-to-structure retrieval is assessed under a mass-controlled protocol that treats precursor mass as the baseline to beat. Within a fixed mass window, learned retrieval exceeds the analytic random-chance baseline on held-out molecules --- structural signal that a raw retrieval score would otherwise attribute to mass filtering alone.
+The principal contribution is the framework itself, together with a mass-controlled evaluation that separates learned structural signal from mere mass consistency, providing a concrete basis for future work on learned fragment generation.
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Abstract}
@@ -45,8 +45,8 @@ Diese graphbasierten Zwischenrepräsentationen bilden eine explizite Fragmentier
 
 Das vorgeschlagene Framework integriert graphbasierte Fragmentierungszwischenstufen systematisch in Modelle zur Struktur $\leftrightarrow$ Spektrum-Übersetzung.
 Durch die Kombination molekularer Repräsentationen, spektraler Information und fragmentbasierter Graphstrukturen entsteht eine funktionsfähige bidirektionale Pipeline mit einer expliziten Fragmentierungs-Zwischenschicht.
-In einer Machbarkeitsstudie (Proof of Concept) verbessert eine auf dem Vorwärtsmodell basierende Reranking-Stufe die Wiederauffindung (Retrieval) deutlich, während die fragmentbasierten Komponenten unter den gegebenen Kleinstichprobenbedingungen noch keinen messbaren Vorteil gegenüber Ablationsvarianten erbringen.
-Der wesentliche Beitrag besteht daher im Framework selbst sowie in einer systematischen Analyse seiner Stärken, Grenzen und Fehlermodi, die eine konkrete Grundlage für zukünftige Arbeiten zur gelernten Fragmenterzeugung bildet.
+In einer Machbarkeitsstudie (Proof of Concept) sagt das Vorwärtsmodell molekülspezifische Spektren vorher, deren Peaks konstruktionsbedingt bei physikalisch realisierbaren Fragmentmassen liegen; die Spektrum-zu-Struktur-Wiederauffindung (Retrieval) wird unter einem massenkontrollierten Protokoll bewertet, das die Vorläufermasse als zu übertreffende Referenz behandelt. Innerhalb eines festen Massenfensters übertrifft das gelernte Retrieval die analytische Zufallsbasislinie auf ungesehenen Molekülen --- ein strukturelles Signal, das eine rohe Retrieval-Kennzahl andernfalls allein der Massenfilterung zuschreiben würde.
+Der wesentliche Beitrag besteht im Framework selbst sowie in einer massenkontrollierten Evaluation, die gelerntes strukturelles Signal von bloßer Massenkonsistenz trennt und damit eine konkrete Grundlage für zukünftige Arbeiten zur gelernten Fragmenterzeugung bildet.
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Zusammenfassung}

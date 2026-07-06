@@ -42,7 +42,7 @@ This thesis is motivated by the hypothesis that integrating chemically structure
 The objective of this thesis is to design, implement, and systematically evaluate a fragment-augmented machine learning framework for improving the bidirectional translation between molecular structures and mass spectra. 
 Specifically, the work investigates whether the integration of graph-based reaction and fragment derivation graphs, generated through chemically valid graph transformation rules, can serve as structured intermediate representations, and to what extent they affect predictive performance.
 
-Mass spectrometry-based structure elucidation represents an inherently ill-posed inverse problem: structurally distinct molecules may yield partially overlapping spectral signatures, while minor structural modifications can induce substantial spectral changes. 
+As noted in the motivation, structure elucidation from mass spectra is an inherently ill-posed inverse problem.
 This thesis therefore introduces fragment-level intermediates derived from rule-based graph transformations to inject chemically grounded structure into the learning process.
 
 Instead of directly learning a mapping between molecular graphs and spectral representations, the proposed framework decomposes the task into a structured pipeline in which molecular graphs are transformed into chemically plausible fragment sets, which in turn mediate the relationship to spectral outputs.
@@ -68,5 +68,4 @@ Consequently, the results should be interpreted as proof-of-concept validation r
 It is also important to note that the reactions are defined in terms of graph symbols in an ambiguous manner.
 Furthermore, the transformation rules are not exhaustive of all possible fragmentation pathways, and some may even be incorrect.
 This means that the generated fragment derivation graphs may not capture all relevant chemical transformations, and the model's performance may be sensitive to the specific choice of transformation rules. 
-Therefore, the generated fragment derivations are constrained by the assumptions embedded in the rule set.
-Consequently, it may not generalize to fragmentation processes that deviate from these assumptions.
+The generated derivations are therefore constrained by the assumptions embedded in the rule set.

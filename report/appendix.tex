@@ -28,8 +28,9 @@
         \hline
         \multicolumn{3}{l}{\emph{Architecture}} \\
         Shared latent dimension           & $d$                              & $128$ \\
-        GCN hidden width                  & $d_h$                            & $64$ \\
-        GCN layers                        & ---                              & $2$ ($3\!\to\!64\!\to\!128$) \\
+        GINEConv hidden width             & $d_h$                            & $128$ \\
+        GINEConv layers                   & ---                              & $3$ (each $128\!\to\!128$; input proj.\ $18\!\to\!128$) \\
+        Derivation-graph GCN              & ---                              & $2$ GCNConv, $(d{+}1)\!\to\!64\!\to\!128$, mean pool \\
         Spectral MLP width                & ---                              & $512$ \\
         Dropout                           & ---                              & $0.1$ \\
         Normalisation                     & ---                              & LayerNorm \\

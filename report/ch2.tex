@@ -3,43 +3,43 @@
 \noindent
 \section{Fundamentals and Capabilities of Mass Spectrometry}
 Mass spectrometry is a core analytical technique that characterizes chemical species by converting them into gas-phase ions and measuring their mass-to-charge ratio ($m/z$). \cite[p.~5]{Hoffmann2011}
-A mass spectrometer therefore acts as a highly sensitive ``molecular balance'' whose output  -- a mass spectrum -- reports which ionic species are present and with what relative abundances. 
+A mass spectrometer therefore acts as a highly sensitive ``molecular balance'' whose output  -- a mass spectrum -- reports which ionic species are present and with what relative abundances.
 
 Conceptually, an MS experiment comprises three main steps:
-\newcounter{mssteps} 
+\newcounter{mssteps}
 \begin{enumerate}[label=(\roman*)]
     \item \textbf{ionization}, in which neutral molecules are transferred into the gas phase and charged; \cite[p.~1]{Hoffmann2011}
-    \item \textbf{mass analysis}, in which ions are separated according to $m/z$; 
-    and \item \textbf{detection}, in which ion signals are recorded and assembled into a spectrum. \cite[p.~5]{Hoffmann2011}    
+    \item \textbf{mass analysis}, in which ions are separated according to $m/z$;
+    and \item \textbf{detection}, in which ion signals are recorded and assembled into a spectrum. \cite[p.~5]{Hoffmann2011}
 \end{enumerate}
- 
+
 Because many compounds form multiple ion species (e.g., adducts \cite[p.~21]{Hoffmann2011}, isotopologues \cite[p.~67]{Gross2006}, fragments), the measured spectrum is not a direct image of the neutral molecule but a structured measurement that must be interpreted in the context of the ionization and fragmentation processes used. \cite[p.~16-18]{Hoffmann2011}
 
-A key capability of MS is the \emph{identification of unknown compounds}. 
-Even without prior knowledge of the analyte, MS provides constraints that narrow the space of possible identities. 
-Accurate $m/z$ measurements can restrict candidate molecular formulas; 
+A key capability of MS is the \emph{identification of unknown compounds}.
+Even without prior knowledge of the analyte, MS provides constraints that narrow the space of possible identities.
+Accurate $m/z$ measurements can restrict candidate molecular formulas;
 isotope patterns (e.g., from $\mathrm{^{13}C}$, $\mathrm{^{37}Cl}$, $\mathrm{^{81}Br}$) further refine these candidates by providing diagnostic abundance ratios and characteristic spacings. \cite[p.~263]{Gross2006}
 When fragmentation data are available -- either through tandem MS (MS/MS) or through ionization methods that induce fragmentation -- structural hypotheses can be tested by matching observed fragment ions and neutral losses to expected substructures. \cite[p.~225]{Gross2006}
-In practice, unknown identification often combines these orthogonal cues with computational searches in spectral libraries and structure databases, 
+In practice, unknown identification often combines these orthogonal cues with computational searches in spectral libraries and structure databases,
 where a measured spectrum is matched against reference spectra or predicted fragmentation patterns. \cite[p.~8]{Scheubert2013}
 For complex samples, chromatographic coupling (GC-MS or LC-MS) adds retention time as an additional dimension, \cite[p.~475]{Gross2006} improving selectivity and reducing confounding effects from co-eluting compounds. \cite[p.~233-237]{Hoffmann2011}
 
 
-Also in \emph{purity control and quality assurance} MS serves a critical role, particularly in pharmaceutical manufacturing. 
-By detecting the presence and abundance of impurities, degradation products, and unexpected byproducts, MS ensures that manufactured compounds meet specification and quality standards. 
+Also in \emph{purity control and quality assurance} MS serves a critical role, particularly in pharmaceutical manufacturing.
+By detecting the presence and abundance of impurities, degradation products, and unexpected byproducts, MS ensures that manufactured compounds meet specification and quality standards.
 The high selectivity and sensitivity of MS make it ideal for identifying trace contaminants that would escape less discriminating analytical techniques. Combined with chromatographic separation, MS provides definitive identification and quantification of both the target compound and potential impurities in a single analytical run. \cite[p.~2]{Rambhad2025}
 
 MS is equally important for the \emph{quantification of known substances}, where the goal is to estimate analyte concentration rather than molecular identity. \cite[p.~260]{Hoffmann2011}
 Quantitative MS is grounded in the relationship between the number of detected ions and the amount of analyte introduced into the instrument. \cite[p.~261 \& 265-266]{Hoffmann2011}
 In idealized settings, ion signal intensity scales proportionally with concentration; in real measurements, this proportionality is skewed.
-Consequently, reliable quantification typically relies on calibration strategies. 
+Consequently, reliable quantification typically relies on calibration strategies.
 \emph{External calibration} constructs a response curve from standards of known concentration, while \emph{internal standardization} -- often using isotopically labeled analogs -- compensates for variability during sample preparation, injection, and ionization. \cite[p.~264-268]{Hoffmann2011}
 The outcome is a method that can measure trace concentrations across wide dynamic ranges, which is central in many applications.
 
-Beyond identity and amount, MS provides a systematic route to \emph{deduce structural features of molecules}. 
+Beyond identity and amount, MS provides a systematic route to \emph{deduce structural features of molecules}.
 Structural inference is primarily enabled by fragmentation behavior: when a precursor ion breaks apart, the resulting fragment ions reflect chemically plausible bond cleavages and rearrangements, thereby encoding information about functional groups, substructures, and connectivity.  \cite[p.~i49]{Boecker2008}
-Certain fragmentation pathways are characteristic  -- for example, losses of small neutrals such as $\mathrm{H_2O}$, $\mathrm{NH_3}$, or $\mathrm{CO}$ can indicate the presence of hydroxyl, amino, or carbonyl functionalities, while specific fragment series can suggest alkyl chain lengths or aromatic substitution patterns. \cite[p.~504]{Gross2006} 
-Importantly, structural elucidation from MS data is rarely straight forward; 
+Certain fragmentation pathways are characteristic  -- for example, losses of small neutrals such as $\mathrm{H_2O}$, $\mathrm{NH_3}$, or $\mathrm{CO}$ can indicate the presence of hydroxyl, amino, or carbonyl functionalities, while specific fragment series can suggest alkyl chain lengths or aromatic substitution patterns. \cite[p.~504]{Gross2006}
+Importantly, structural elucidation from MS data is rarely straight forward;
 rather, it is an inference problem in which multiple candidate structures may explain the same spectral evidence, especially for isomers. \cite[p.~53]{Vaniya2015}
 
 As a result, modern workflows increasingly integrate MS measurements with computational models that generate and rank candidate structures based on spectral consistency.
@@ -52,8 +52,8 @@ As a result, modern workflows increasingly integrate MS measurements with comput
     \centering
     \resizebox{0.9\textwidth}{!}{\input{../shared/figures/ms-flowchart.tikz.tex}}
     \caption[Simplified block diagram of a mass spectrometer]{
-        Simplified block diagram of a mass spectrometer. 
-        The sample is introduced into the ion source, where analyte molecules are ionized. 
+        Simplified block diagram of a mass spectrometer.
+        The sample is introduced into the ion source, where analyte molecules are ionized.
         The resulting ions are separated in the mass analyzer according to their mass-to-charge ratio (m/z), detected by the detector, and subsequently processed in the data analysis step. \cite{wikibooks-ms-flowchart}
         }
     \label{fig:ms-flow}
@@ -63,8 +63,8 @@ As a result, modern workflows increasingly integrate MS measurements with comput
     \centering
     \resizebox{0.9\textwidth}{!}{\input{../shared/figures/ms-schematic.tikz.tex}}
     \caption[Simplified schematic of MS measurement principle]{
-        Simplified schematic of the measurement principle in a magnetic sector mass spectrometer. 
-        Following sample introduction, ionisation and acceleration generate an ion beam that is separated in the magnetic field by deflection that depends on $m/z$. 
+        Simplified schematic of the measurement principle in a magnetic sector mass spectrometer.
+        Following sample introduction, ionisation and acceleration generate an ion beam that is separated in the magnetic field by deflection that depends on $m/z$.
         The separated ions are then detected and transformed into an electrical signal for further processing. \cite{chemguide}
     }
     \label{fig:ms-schematic}
@@ -74,8 +74,8 @@ As a result, modern workflows increasingly integrate MS measurements with comput
 
 \subsubsection{Instrument workflow}
 
-Figure \ref{fig:ms-flow} shows steps in a mass spectrometer: a \emph{sample} is introduced, converted into gas-phase ions in the ion source, separated according to motion in the \emph{mass analyzer} that depends on mass, detected in the \emph{detector}, and finally interpreted during \emph{data analysis}; Figure~\ref{fig:ms-schematic} depicts this sequence for a magnetic-sector instrument. 
-The central observable is the mass to charge ratio $m/z$. 
+Figure \ref{fig:ms-flow} shows steps in a mass spectrometer: a \emph{sample} is introduced, converted into gas-phase ions in the ion source, separated according to motion in the \emph{mass analyzer} that depends on mass, detected in the \emph{detector}, and finally interpreted during \emph{data analysis}; Figure~\ref{fig:ms-schematic} depicts this sequence for a magnetic-sector instrument.
+The central observable is the mass to charge ratio $m/z$.
 A mass spectrum is therefore a distribution of signal intensity as a function of $m/z$, where the signal reflects the abundance of ions reaching the detector. \cite[p.~1566]{Murray2013}
 In most practical contexts, intensities are reported as relative intensity, normalized such that the most intense peak equals 100\% of the base peak.  \cite[p.~1550]{Murray2013}
 The x-axis is conventionally labeled with $m/z$ (mass to charge ratio), a dimensionless quantity.
@@ -83,19 +83,19 @@ Labeling the axis with mass units such as \emph{daltons} (Da), amu, or the unifi
 
 \subsubsection{Ion notation and precursor concepts}
 
-Ions observed in mass spectrometry are typically derived from a neutrally charged molecule $M$. 
+Ions observed in mass spectrometry are typically derived from a neutrally charged molecule $M$.
 In electron ionization (EI) a hard ionization method, removal of an electron yields the molecular ion \cite[p.~1541]{Murray2013}
--- also called the parent ion -- denoted  $[M]^{+\bullet}$, \cite[p.~1582]{Murray2013} a radical cation carrying both a positive charge and an unpaired electron. 
-More generally, the term \emph{precursor ion} refers to the ion selected for fragmentation, \cite[p.~1578]{Murray2013} from which product ions are generated. 
+-- also called the parent ion -- denoted  $[M]^{+\bullet}$, \cite[p.~1582]{Murray2013} a radical cation carrying both a positive charge and an unpaired electron.
+More generally, the term \emph{precursor ion} refers to the ion selected for fragmentation, \cite[p.~1578]{Murray2013} from which product ions are generated.
 In soft ionization methods like electrospray, ion formation is often dominated by proton transfer, producing a protonated molecule  $[M+H]^+$. \cite[p.~1580]{Murray2013}
 
 \subsubsection{Peak types: isotope, fragment, and base peaks}
 
-A measured spectrum contains several conceptually distinct peak types. 
-\emph{Isotope peaks} arise from naturally occurring heavier isotopes (e.g., $^{13}\mathrm{C}$, $^{37}\mathrm{Cl}$), 
-producing characteristic $M+1, M+2, \ldots$ patterns adjacent to the monoisotopic ion peak. 
-\emph{Fragment peaks} arise when precursor ions undergo dissociation, 
-yielding smaller product ions whose $m/z$ values and relative intensities encode structural information. 
+A measured spectrum contains several conceptually distinct peak types.
+\emph{Isotope peaks} arise from naturally occurring heavier isotopes (e.g., $^{13}\mathrm{C}$, $^{37}\mathrm{Cl}$),
+producing characteristic $M+1, M+2, \ldots$ patterns adjacent to the monoisotopic ion peak.
+\emph{Fragment peaks} arise when precursor ions undergo dissociation,
+yielding smaller product ions whose $m/z$ values and relative intensities encode structural information.
 The \emph{base peak} is the most intense peak in the spectrum \cite[p.~1524]{Murray2013} and is used for normalization; \cite[p.~1550]{Murray2013}
 it is not necessarily the molecular ion and often corresponds to a particularly stable fragment. \cite[p.~2]{Moorthy2023} \cite[p.~263]{Gross2006}
 
@@ -103,7 +103,7 @@ it is not necessarily the molecular ion and often corresponds to a particularly 
 
 \subsection{Ionization and Fragmentation}
 
-Ionization techniques are broadly classified into two categories based on the energy imparted to the analyte: 
+Ionization techniques are broadly classified into two categories based on the energy imparted to the analyte:
 \emph{hard ionization} methods, which deliver high internal energy and promote extensive fragmentation, \cite[p.~1547]{Murray2013}
 and \emph{soft ionization} methods, which minimize fragmentation and favor molecular ion preservation. \cite[p.~1591]{Murray2013} \cite[p.~34]{Rockwood2018}
 
@@ -129,8 +129,7 @@ A schematic of the EI source is shown in \Cref{fig:ei-schematic}.
 \end{figure}
 
 
-The reproducible nature of EI fragmentation pathways makes electron ionization particularly valuable for structural elucidation. \cite{VargasMedina2023}
-Characteristic losses of small neutral species provide diagnostic clues about functional groups and connectivity. \cite{Bourcier2008}
+These characteristics make electron ionization particularly valuable for structural elucidation. \cite{VargasMedina2023}
 EI is the dominant ionization method in gas chromatography-mass spectrometry (GC-MS) and remains widely used in small-molecule analysis. \cite[p.~1]{Amirav2021}
 
 \paragraph{Spark Ionization (SI)}, is a hard ionization technique \cite[p.~1]{Lin2024}, that often utilized to detect trace elements at parts-per-billion (ppb) levels. \cite[p.~428]{Ganeev2016}
@@ -142,7 +141,7 @@ It uses high-voltage up to  $100$ kV pulsed electric sparks between two electrod
 In ESI, a liquid sample is converted into a fine aerosol of charged droplets by applying a high electric potential (typically several kilovolts) between a capillary needle and a counter electrode. \cite[p.~3]{Banerjee2012}
 As the droplets travel toward the mass analyzer, they undergo solvent evaporation and coulombic fission, eventually releasing gas-phase ions into the vacuum of the spectrometer. \cite[p.~7]{Banerjee2012} \cite[p.~53]{Dass2007}
 
-ESI ionization is exceptionally gentle, with minimal or no fragmentation in the ion source. \cite[p.~7]{Banerjee2012} 
+ESI ionization is exceptionally gentle, with minimal or no fragmentation in the ion source. \cite[p.~7]{Banerjee2012}
 This characteristic makes ESI ideal for determining accurate molecular weights of intact molecules. \cite[p.~50]{Dass2007}
 Notably, ESI can generate multiply charged ions $[M+nH]^{n+}$ from large molecules, reducing their effective $m/z$ and enabling their analysis on instruments with limited mass range. \cite[p.~50]{Dass2007}
 
@@ -154,9 +153,9 @@ The sequence from charged droplet formation to gas-phase ion release is shown in
     \centering
     \input{../shared/figures/esi-schematic.tex}
     \caption[Schematic of ESI ionization]{
-        Schematic illustration of the electrospray ionization (ESI) process. 
-        A sample solution is dispersed by nebulizer gas and subjected to a high electric potential, producing a spray of charged droplets. 
-        Progressive solvent evaporation and droplet fission lead to the formation of gas-phase ions, which are transferred through the interface region into the mass detector. 
+        Schematic illustration of the electrospray ionization (ESI) process.
+        A sample solution is dispersed by nebulizer gas and subjected to a high electric potential, producing a spray of charged droplets.
+        Progressive solvent evaporation and droplet fission lead to the formation of gas-phase ions, which are transferred through the interface region into the mass detector.
         The figure highlights the transition from charged droplets to molecular ions, exemplified here by protonated species \([\mathrm{M+H}]^{+}\).
     }
     \label{fig:esi-schematic}
@@ -164,22 +163,22 @@ The sequence from charged droplet formation to gas-phase ion release is shown in
 \end{figure}
 
 \paragraph{Atmospheric Pressure Chemical Ionization (APCI)} is a soft ionization method used primarily in LC-MS, \cite[p.~39]{Rockwood2018} where analytes are ionized at atmospheric pressure via ion-molecule chemistry initiated by a corona discharge. \cite[p.~1523]{Murray2013}
-In contrast to ESI, no high voltage is applied to the inlet capillary; 
-instead, the mobile phase is nebulized, rapidly evaporated in a heated region, \cite[p.~171]{Dass2007} and the resulting vapor passes a high-voltage needle that generates reagent ions. 
+In contrast to ESI, no high voltage is applied to the inlet capillary;
+instead, the mobile phase is nebulized, rapidly evaporated in a heated region, \cite[p.~171]{Dass2007} and the resulting vapor passes a high-voltage needle that generates reagent ions.
 Solvents dominate the early ionization steps \cite[p.~39]{Rockwood2018} and effectively act as a reagent gas, transferring charge to neutral analytes mainly by proton transfer to form $[M+H]^+$.
 
-Because APCI imparts relatively little internal energy, spectra typically show limited fragmentation %\cite[] 
-and are well suited to quantitative LC-MS/MS, \cite[p.~171]{Dass2007} where signal is concentrated into a few precursor-ion peaks. 
+Because APCI imparts relatively little internal energy, spectra typically show limited fragmentation %\cite[]
+and are well suited to quantitative LC-MS/MS, \cite[p.~171]{Dass2007} where signal is concentrated into a few precursor-ion peaks.
 A heated transfer tube and/or countercurrent curtain gas is used to decluster solvent-analyte adducts prior to ion extraction. \cite[p.~39]{Rockwood2018}
-APCI is often more efficient than ESI for less polar compounds, \cite[p.~466]{Gross2006} but its higher source temperatures can induce thermal degradation. \cite[p.~39]{Rockwood2018} 
+APCI is often more efficient than ESI for less polar compounds, \cite[p.~466]{Gross2006} but its higher source temperatures can induce thermal degradation. \cite[p.~39]{Rockwood2018}
 A schematic of the APCI process is shown in Figure~\ref{fig:apci-schematic}.
 
 \begin{figure}[H]
     \centering
     \input{../shared/figures/apci-schematic.tex}
     \caption[Schematic of APCI ionization]{
-        Schematic illustration of atmospheric pressure chemical ionization (APCI). 
-        The sample solution is nebulized and vaporized, and a corona discharge operated at high voltage generates reagent ions from the solvent. 
+        Schematic illustration of atmospheric pressure chemical ionization (APCI).
+        The sample solution is nebulized and vaporized, and a corona discharge operated at high voltage generates reagent ions from the solvent.
         In the example shown, protonated ions transfer a proton to the analyte molecule \(M\), forming the protonated molecular ion \([M+H]^{+}\), which is then introduced through the interface region into the mass detector.
     }
     \label{fig:apci-schematic}
@@ -197,24 +196,24 @@ A general schematic of the MALDI process is shown in Figure~\ref{fig:maldi-schem
     \centering
     \input{../shared/figures/maldi-schematic.tex}
     \caption[Schematic of MALDI ionization]{
-        Schematic illustration of matrix-assisted laser desorption/ionization (MALDI). 
-        A crystallized matrix containing embedded analyte molecules is irradiated with UV laser light at the sample stage, leading to desorption and ionization of matrix and analyte species. 
+        Schematic illustration of matrix-assisted laser desorption/ionization (MALDI).
+        A crystallized matrix containing embedded analyte molecules is irradiated with UV laser light at the sample stage, leading to desorption and ionization of matrix and analyte species.
         During plume formation, matrix ions and neutrals promote the formation of analyte ions, which are subsequently transferred into the mass analyzer.
     }
     \label{fig:maldi-schematic}
     \cite[p.~42]{Rockwood2018}
 \end{figure}
- 
+
 \subsection{Mass Analyzers}
 
-After ionization, the generated ions must be separated according to their mass-to-charge ratio $m/z$ before detection. 
+After ionization, the generated ions must be separated according to their mass-to-charge ratio $m/z$ before detection.
 This separation is performed by the \textit{mass analyzer}. \cite[pp.~5-6]{Dass2007}
-Different analyzer designs exploit electric and magnetic fields to distinguish ions with different $m/z$ values. 
+Different analyzer designs exploit electric and magnetic fields to distinguish ions with different $m/z$ values.
 Among the most widely used analyzers are magnetic sector instruments, time-of-flight (TOF) analyzers, and quadrupole analyzers. \cite[pp.~108-109]{Dass2007}
 
 \subsubsection{Magnetic Sector Mass Analyzers}
 
-Magnetic sector analyzers separate ions according to their motion in a magnetic field. 
+Magnetic sector analyzers separate ions according to their motion in a magnetic field.
 The motion of a charged particle with mass $m$ and charge $q$ in electric and magnetic fields is described by the Lorentz force equation
 
 \[
@@ -222,9 +221,9 @@ The motion of a charged particle with mass $m$ and charge $q$ in electric and ma
 \]
 
 where $\mathbf{E}$ is the electric field, $\mathbf{B}$ the magnetic field, $\mathbf{v}$ the ion velocity, and $\mathbf{a}$ the acceleration.
-Ions with identical mass-to-charge ratios experience identical forces and therefore follow identical trajectories inside the analyzer. 
+Ions with identical mass-to-charge ratios experience identical forces and therefore follow identical trajectories inside the analyzer.
 
-When ions enter a magnetic field perpendicular to their velocity, the Lorentz force bends their trajectory into a circular path. 
+When ions enter a magnetic field perpendicular to their velocity, the Lorentz force bends their trajectory into a circular path.
 The balance between the magnetic force and the centripetal force yields
 
 \[
@@ -237,7 +236,7 @@ with $r$ being the radius of the circular path, which leads to
 \frac{m}{q} = \frac{B^{2} r^{2}}{2V},
 \]
 
-assuming the ions were accelerated through a potential $V$. 
+assuming the ions were accelerated through a potential $V$.
 Ions with different $m/z$ therefore follow trajectories with different radii and can be spatially separated. \cite[pp.~1799-1800]{Bowen2016}
 
 \subsubsection{Time-of-Flight (TOF) Analyzers}
@@ -264,7 +263,7 @@ Consequently, lighter ions reach the detector earlier than heavier ions, allowin
 \subsubsection{Quadrupole Mass Filter (QMF)}
 
 Quadrupole analyzers consist of four parallel rods to which a combination of radio-frequency (RF) and direct current (DC) voltages is applied. \cite[p.~2]{Li2021}
-The resulting oscillating electric field produces ion trajectories that are stable only for ions within a specific range of mass-to-charge ratios. 
+The resulting oscillating electric field produces ion trajectories that are stable only for ions within a specific range of mass-to-charge ratios.
 Ions with stable trajectories pass through the quadrupole to the detector, while ions with unstable trajectories collide with the rods and are removed. \cite[p.~1]{Jang2022}
 By scanning the applied voltages, ions of increasing $m/z$ can be transmitted sequentially, generating a mass spectrum. \cite[p.~2]{Li2021}
 
@@ -280,7 +279,7 @@ This fundamental geometric difference enables the QIT to accumulate and store io
 After ions have been separated by the mass analyzer, they must be detected and converted into a measurable electrical signal. \cite[pp.~5-6]{Dass2007}
 The detector is transforming the arrival of individual ions into quantifiable data that can be assembled into a mass spectrum. \cite[p.~103]{Dass2007}
 
-The dominant detector in Electron Ionization Mass Spectrometry is the Electron Multiplier (EM). 
+The dominant detector in Electron Ionization Mass Spectrometry is the Electron Multiplier (EM).
 \cite[p.~103]{Dass2007}
 
 An electron multiplier operates by converting a single incoming ion into a large cascade of electrons through the following sequence:
@@ -300,9 +299,9 @@ This cascade amplification principle is illustrated in Figure~\ref{fig:em-schema
     \centering
     \resizebox{0.9\textwidth}{!}{\input{../shared/figures/em-schematic.tex}}
     \caption[Schematic of an electron multiplier detector]{
-        Schematic illustration of an electron multiplier (EM) detector. 
-        An incoming ion strikes the first dynode, causing the emission of secondary electrons. 
-        These electrons are then accelerated to subsequent dynodes, where they generate additional electrons in a cascading effect. 
+        Schematic illustration of an electron multiplier (EM) detector.
+        An incoming ion strikes the first dynode, causing the emission of secondary electrons.
+        These electrons are then accelerated to subsequent dynodes, where they generate additional electrons in a cascading effect.
         After multiple stages, this results in a significant amplification of the original ion signal, producing a measurable current pulse that can be digitized and recorded as part of the mass spectrum.
     }
     \label{fig:em-schematic}
@@ -314,9 +313,7 @@ The resulting current pulses are digitized and recorded as a function of $m/z$, 
 
 \subsection{Manual Interpretation of the MS Spectrum}
 
-Data analysis transforms the raw spectrum into structural hypotheses: isotope patterns constrain elemental composition, \cite[p.~67]{Gross2006} while fragment ions and neutral-loss relationships constrain functional groups and connectivity. 
-\cite{Bourcier2008}
-Note, multiple candidate structures can be compatible with the same spectral evidence, particularly for isomers under hard ionization methods like EI. \cite[p.~6996]{Wu2023}
+Data analysis transforms the raw spectrum into structural hypotheses: isotope patterns constrain elemental composition, \cite[p.~67]{Gross2006} while fragment ions and neutral losses constrain connectivity. \cite{Bourcier2008}
 
 The following summarize a typical manual workflow \cite[pp.~215-216]{Dass2007} for interpreting EI mass spectra.
 
@@ -355,11 +352,11 @@ The following subsections describe some of the most important mechanisms.
 
 \subsubsection{Homolytic single-bond cleavage}
 
-The most straightforward fragmentation pathway is \emph{simple bond cleavage}, in which a single bond in the molecular ion breaks homolytically, yielding a charged fragment and a neutral radical. 
+The most straightforward fragmentation pathway is \emph{simple bond cleavage}, in which a single bond in the molecular ion breaks homolytically, yielding a charged fragment and a neutral radical.
 The probability of cleavage at a particular bond depends primarily on bond strength: weaker bonds are more readily broken. \cite[p.~30]{Gross2006}
 For aliphatic hydrocarbons, C--C bonds adjacent to branching points or heteroatoms are particularly susceptible to cleavage. \cite[p.~258]{Gross2006}
 
-\subsubsection{Alpha Cleavage} 
+\subsubsection{Alpha Cleavage}
 
 \emph{Alpha cleavage} is a characteristic fragmentation mode in molecules containing functional groups with heteroatoms. \cite[pp.~220--221]{Dass2007}
 In this process, the bond directly adjacent to the functional group is cleaved, producing a resonance-stabilized cation. \cite[pp.~220--221]{Dass2007}
@@ -371,13 +368,13 @@ This reaction pathway often produces intense peaks in the spectrum and serves as
 The \emph{McLafferty rearrangement} is a hydrogen-transfer reaction characteristic of carbonyl compounds and other systems with abstractable $\gamma$-hydrogens.\cite[p.~223]{Dass2007}
 In the commonly depicted mechanism, a six-membered transition state facilitates the transfer of a hydrogen atom from the $\gamma$ position to the carbonyl oxygen, accompanied by cleavage of the bond between the $\alpha$ and $\beta$ carbons. \cite[p.~265]{Gross2006}
 The result is an enol radical cation and a neutral alkene. \cite[p.~224]{Dass2007}
-This rearrangement is particularly valuable for structural elucidation because it reveals connectivity information that would not be apparent from simple cleavage alone. 
+This rearrangement is particularly valuable for structural elucidation because it reveals connectivity information that would not be apparent from simple cleavage alone.
 \cite[p.~224]{Dass2007}
 
 \subsubsection{Charge-Induced Fragmentations}
 
 Beyond the radical-site-driven cleavages described above, fragmentation can also be initiated by the charge center itself.
-In such \emph{charge-directed fragmentations}, the positive charge polarizes nearby bonds, facilitating heterolytic cleavage and producing even-electron cations and neutral radicals. 
+In such \emph{charge-directed fragmentations}, the positive charge polarizes nearby bonds, facilitating heterolytic cleavage and producing even-electron cations and neutral radicals.
 \cite[pp.~281]{Hoffmann2011}
 
 
@@ -389,6 +386,7 @@ Modern workflows integrate in silico fragmentation models, spectral database sea
 In this section, we outline the key computational strategies in mass spectrometry, including library matching, in silico prediction, and de novo structure inference, before turning to their mathematical and algorithmic foundations.
 
 \subsection{Library Search}
+\label{sec:library-search}
 Library search is a spectrum-matching procedure used to identify an unknown compound by comparing its measured spectrum against a reference database of known spectra. \cite[p.~8]{Scheubert2013}
 Each entry in such a database typically stores a reference spectrum together with metadata such as molecular formula, structure, and acquisition conditions.
 
@@ -399,13 +397,13 @@ A query spectrum is considered a match if a reference spectrum reproduces both t
 A typical library search workflow proceeds as follows: \cite[pp.~1, 5]{Scheubert2013}
 \begin{enumerate}[label=(\roman*)]
     \item \textbf{Pre-processing:} the query spectrum is converted into a form suitable for comparison, for example by peak selection, intensity scaling, or related preprocessing steps.
-    \item \textbf{Candidate filtering:} database entries may be restricted using precursor mass or precursor $m/z$ information within a tolerance window, reducing the number of candidates that must be evaluated. 
+    \item \textbf{Candidate filtering:} database entries may be restricted using precursor mass or precursor $m/z$ information within a tolerance window, reducing the number of candidates that must be evaluated.
     \cite[p.~14]{Young2024}
-    \item \textbf{Scoring and ranking:} each candidate reference spectrum is assigned a similarity score against the query, and candidates are ranked accordingly. 
+    \item \textbf{Scoring and ranking:} each candidate reference spectrum is assigned a similarity score against the query, and candidates are ranked accordingly.
     \cite[p.~5]{Scheubert2013}
 \end{enumerate}
 
-The most widely used similarity metric is the \emph{cosine similarity}, computed over the vector of peak intensities aligned by $m/z$: 
+The most widely used similarity metric is the \emph{cosine similarity}, computed over the vector of peak intensities aligned by $m/z$:
 \cite[p.~1]{Harwood2023}
 \begin{equation}
     \cos(\mathbf{q}, \mathbf{r}) = \frac{\mathbf{q} \cdot \mathbf{r}}{\|\mathbf{q}\|\,\|\mathbf{r}\|},
@@ -419,8 +417,8 @@ A score of 1 indicates a perfect match; lower values indicate increasing dissimi
 In silico fragmentation predicts how a molecule may dissociate in a mass spectrometer and generates a theoretical spectrum from these simulated fragment ions. \cite[p.~1]{Nowatzky2025}
 The standard workflow starts from a candidate molecular structure, applies computational fragmentation rules or learned models to produce plausible fragments, converts these fragments into a predicted spectrum, and finally compares the prediction against the measured spectrum using a similarity score. \cite[p.~2]{Nowatzky2025}
 This approach is particularly useful when no exact match is available in spectral libraries, because it enables structure-aware candidate ranking beyond pure reference lookup. \cite[pp.~1--2]{Scheubert2013}\cite[p.~1]{Ashyrmamatov2025}
-At the same time, prediction quality depends strongly on how well the model captures real instrument conditions, ionization-dependent chemistry, and fragment intensities; 
-consequently, performance can degrade for compounds or fragmentation pathways that are underrepresented in the training data or incompletely described by rule sets. 
+At the same time, prediction quality depends strongly on how well the model captures real instrument conditions, ionization-dependent chemistry, and fragment intensities;
+consequently, performance can degrade for compounds or fragmentation pathways that are underrepresented in the training data or incompletely described by rule sets.
 \cite[p.~1989]{Hamaneh2024}
 
 When these in silico predictions remain ambiguous, the workflow may shift to de novo inference directly from spectral constraints.
@@ -433,17 +431,154 @@ Importantly, \emph{de novo} characterizes the \emph{template-free} nature of the
 Accordingly, de novo approaches may incorporate empirical heuristics, statistical learning, or mechanistic constraints, depending on the application. \cite[pp.~701--702]{Wei2019}
 
 \subsection{First Principles}
-In contrast, \emph{first-principles} modeling emphasizes deriving predictions without empirical parameterization, i.e., without fitting to experimental data. \cite[p.~1]{Bhattacharyya2019} 
+In contrast, \emph{first-principles} modeling emphasizes deriving predictions without empirical parameterization, i.e., without fitting to experimental data. \cite[p.~1]{Bhattacharyya2019}
 In physics and chemistry, such first-principles treatments are often realized via \emph{ab initio} electronic-structure methods.
 
 \subsubsection{Ab Initio MS Prediction}
 
 Ab initio MS prediction refers to computational modeling of mass spectra directly from molecular structure using nonempirical quantum-mechanical methods that are, in principle, independent of experimental fitting \cite[p.~1921]{Minkin1999}.
 In this sense, ab initio approaches constitute first-principles modeling, because they aim to predict fragmentation behavior and resulting spectra from the underlying physics and chemistry of the molecule rather than from learned correlations.
-Operationally, ab initio MS prediction typically relies on quantum-chemical calculations (to obtain energetics and feasible fragmentation channels) combined with dynamical or statistical treatments to relate accessible pathways to predicted fragment distributions. 
+Operationally, ab initio MS prediction typically relies on quantum-chemical calculations (to obtain energetics and feasible fragmentation channels) combined with dynamical or statistical treatments to relate accessible pathways to predicted fragment distributions.
 
 While ab initio methods can provide mechanistic insight and may achieve high accuracy for small molecules, their computational cost often limits scalability to large molecular libraries and complex systems. \cite[p.~702]{Wei2019}
 
+
+\subsection{Spectral Similarity and Distance Measures}
+\label{sec:spectral-measures}
+
+In computational mass spectrometry, evaluation metrics quantify how well predicted spectra match experimental observations.
+The choice of metric matters beyond diagnostics: when a metric is reused as a training objective, its geometry determines the loss landscape and therefore what a model is rewarded for reproducing (\Cref{sec:loss-function}).
+Two families of comparison are available: \emph{geometric} measures such as the cosine similarity, and \emph{transport} measures such as the Wasserstein distance.
+The cosine similarity treats each spectrum as a vector and compares two such vectors $A$ and $B$ by the angle $\theta$ between them, normalising away their magnitudes so that only their relative direction enters the comparison; \Cref{fig:cosine-distance-illustration} illustrates this geometry and \cref{eq:cosine-similarity} gives the corresponding formula. \cite[p.~4]{Wang2022}
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \input{../shared/figures/cosine_vectors.tikz.tex}
+    }
+    \caption[Cosine similarity geometry]{
+        Two vectors $A$ and $B$ drawn from a common
+        origin~$O$. The cosine similarity is the cosine of the angle~$\theta$ between
+        them, $\cos\theta = (A\cdot B)/(\|A\|\,\|B\|)$, and equals the length of the
+        projection of $B$ onto the direction of $A$ (amber) normalised by $\|B\|$. It
+        depends only on the vectors' \emph{directions}: scaling either vector changes its
+        length but leaves $\theta$, and hence the similarity, unchanged.
+    }
+    \label{fig:cosine-distance-illustration}
+\end{figure}
+\begin{equation}
+    \label{eq:cosine-similarity}
+    \mathrm{Cos_{Sim}}(A,B) = \frac{A\cdot B}{\|A\|\,\|B\|} = \frac{\sum_i A_i B_i}{\|A\|\,\|B\|}
+\end{equation}
+
+Because the comparison in \cref{eq:cosine-similarity} is normalised by both vectors' norms, $\mathrm{Cos_{Sim}}$ depends only on direction and is invariant to the overall scale of either spectrum.
+
+The Wasserstein distance, also known as the Earth Mover's Distance (EMD), measures the minimum cost of transporting one distribution onto the other, where cost is mass multiplied by the distance it is moved. \cite[pp.~1--8]{Ciach2020} \cite{Memoli2011}
+For two equal-length vectors this reduces to sorting both and summing the absolute differences of matched ranks, a quantity that admits a simple geometric reading.
+\Cref{fig:wasserstein-distance-illustration} draws each sorted vector as a cumulative staircase and shades the horizontal gap between them at every rank; the distance is the total shaded area, normalised by the number of elements.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \input{../shared/figures/wasserstein_expl.tikz.tex}
+    }
+    \caption[Wasserstein distance illustration]{
+        Two equal-length vectors, sorted $\tilde P = [1,6,6,10]$ (red) and $\tilde Q = [4,4,9,12]$ (blue), are drawn as cumulative staircases:
+        the horizontal axis is the value and the vertical axis is the rank index $i/n$, so each curve steps up by $1/n$ at every element.
+        At each level the hatched amber rectangle spans the horizontal gap between the two staircases, whose width equals the matched-pair difference $|\tilde P_i - \tilde Q_i|$.
+        The Wasserstein distance is the total hatched area divided by~$n$ (see \cref{eq:wasserstein-distance}),
+        illustrating that the distance accumulates the cost of horizontally transporting one sorted distribution onto the other.
+    }
+    \label{fig:wasserstein-distance-illustration}
+\end{figure}
+
+\begin{equation}
+    \label{eq:wasserstein-distance}
+    \mathrm{WD}(P,Q)=\dfrac{1}{n}\sum_{i=1}^{n}\bigl|\tilde P_i-\tilde Q_i\bigr| =\dfrac{3+2+3+2}{4}=2.5
+\end{equation}
+
+The matched-pair form in \cref{eq:wasserstein-distance} presupposes that both vectors contain the same number of elements, since each rank in $\tilde P$ must be paired with a corresponding rank in $\tilde Q$.
+Real spectra rarely satisfy this: two spectra typically differ in the number of detected peaks.
+To recover a matched-pair comparison without discarding or interpolating peaks, each vector is upsampled to a common length equal to the least common multiple of the two cardinalities, repeating every element enough times to preserve its relative share of the total mass.
+\Cref{fig:wasserstein-upsampling-illustration} shows this construction for vectors of length four and three.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \input{../shared/figures/wasserstein_upsampling.tikz.tex}
+    }
+    \caption[Wasserstein Upsampling Illustration]{
+        The inputs have different lengths, $P = [1,3,4,5]$ ($n=4$) and $Q = [1,3,5]$ ($m=3$), so they are first brought to a common length before matched-pair differences can be formed.
+        Each is upsampled to $\mathrm{LCM}(4,3) = 12$ by repeating every element of $P$ three times and every element of $Q$ four times (red and blue braces), giving aligned vectors $P' = [1,1,1,\,3,3,3,\,4,4,4,\,5,5,5]$ and $Q' = [1,1,1,1,\,3,3,3,3,\,5,5,5,5]$.
+        The amber badges mark the four index positions where the upsampled entries differ, with per-index gaps $2,1,1,1$.
+        The Wasserstein distance is the mean of these absolute differences (see \cref{eq:wasserstein-upsampling}),
+        showing how repetition lets each value contribute mass in proportion to its share of the original vector, so distributions of different cardinality can be compared directly.
+    }
+    \label{fig:wasserstein-upsampling-illustration}
+\end{figure}
+
+\begin{align*}
+    P' &= [1,1,1,\,3,3,3,\,4,4,4,\,5,5,5]\\
+    Q' &= [1,1,1,1,\,3,3,3,3,\,5,5,5,5]\\
+\end{align*}
+
+\begin{align}
+    \label{eq:wasserstein-upsampling}
+    \mathrm{WD} &= \tfrac{1}{12}\cdot(0+0+0+2+0+0+1+1+1+0+0+0) \\
+                &= \tfrac{5}{12} \nonumber \\
+                &\approx 0.417 \nonumber
+\end{align}
+
+The two measures differ in what they consider when two peaks fail to coincide.
+Because the cosine similarity accumulates intensity only at \emph{shared} coordinates, it is blind to how far apart two peaks are: a peak displaced by a fraction of a Dalton and one displaced across the whole axis are treated alike once they no longer overlap.
+The Wasserstein distance, by contrast, charges for the displacement itself, so a near miss is scored as nearly correct.
+\Cref{fig:cosine-versus-wasserstein} makes this contrast explicit by sliding and rescaling one spectrum against the other and tracking both measures.
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_a.tikz.tex}}
+        \caption{Aligned spectra}
+        \label{fig:cosine-wasserstein-a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_b.tikz.tex}}
+        \caption{B shifted $+8$\,Da}
+        \label{fig:cosine-wasserstein-b}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_c.tikz.tex}}
+        \caption{Response vs.\ positional shift}
+        \label{fig:cosine-wasserstein-c}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \resizebox{\linewidth}{!}{\input{../shared/figures/cosine_vs_wasserstein_d.tikz.tex}}
+        \caption{Response vs.\ intensity scaling}
+        \label{fig:cosine-wasserstein-d}
+    \end{subfigure}
+
+    \caption[Cosine similarity versus Wasserstein distance as spectral comparison measures]{
+        Spectrum~A (red) is plotted upward and spectrum~B (blue) mirrored downward on a shared $m/z$ axis with non-uniformly spaced peaks. \\
+        \subref{fig:cosine-wasserstein-a}~Aligned spectra: every B peak meets its A counterpart tip-to-tip, so cosine $=1$ (intensity vectors parallel, $\theta = 0$) and Wasserstein $=0$ (no mass to move). \\
+        \subref{fig:cosine-wasserstein-b}~Shifting B by $+8$\,Da slides every peak off its partner; cosine counts only intensity at \emph{shared} positions, so its dot product vanishes and similarity collapses to~$0$, while Wasserstein measures the work to transport B's mass back onto~A (amber arrows) and returns a finite $21.1$.
+        \subref{fig:cosine-wasserstein-c}~Sweeping the shift, cosine (blue) drops to zero almost at once and stays flat---with \emph{spurious} spikes near $14$ and $17$\,Da where a displaced peak accidentally coincides with a \emph{different} peak---whereas Wasserstein (amber) rises linearly with displacement, degrading gracefully. \\
+        \subref{fig:cosine-wasserstein-d}~Scaling B's overall intensity with positions held fixed isolates the complementary property: cosine is unchanged at $1.00$ because it compares vector \emph{direction}, not magnitude (scale-invariant), while the (un-normalized) Wasserstein distance grows in proportion to the added mass.
+        Together the panels show that the two measures capture different things: cosine rewards matching the \emph{pattern} of relative intensities at fixed coordinates and ignores absolute scale, whereas Wasserstein is sensitive to peak \emph{position} along the axis \emph{and} to total intensity, making it robust to the small calibration shifts that break cosine but responsive to mass differences that cosine discards.
+    }
+    \label{fig:cosine-versus-wasserstein}
+\end{figure}
+
+A third family, \emph{edit-distance} metrics, quantifies the minimum number of peak modifications needed to transform one spectrum into another, reflecting the structural differences between molecules. \cite[pp.~1--2]{Maekinen2007}
+Cosine similarity is also the conventional similarity metric used for library matching (\Cref{sec:library-search}), while the combined cosine--Wasserstein objective used to train the model of this work is developed in \Cref{sec:loss-function}.
 
 \section{Computational Representations of Molecules and Reactions}
 
@@ -454,6 +589,7 @@ Reactions are modeled as graph transformations that break and form bonds. \cite[
 
 
 \subsection{Molecular Graphs}
+\label{sec:molecular-graphs}
 
 To enable algorithmic processing of molecular structures, we represent them using an abstract graph model that separates topology (which atoms are connected) from optional geometric detail. \cite[p.~18]{Mueller2022}
 
@@ -469,19 +605,20 @@ To enable algorithmic processing of molecular structures, we represent them usin
       \draw[->,>=stealth,thick] (qm) to (gg);
     \end{tikzpicture}
     \caption[Abstraction of a molecule as a graph]{
-        Toluene on the left depicted as a quantum-mechanical model with 3D coordinates and electron density, and on the right as a molecular graph abstraction. 
+        Toluene on the left depicted as a quantum-mechanical model with 3D coordinates and electron density, and on the right as a molecular graph abstraction.
         The graph captures the connectivity of atoms (vertices) and bonds (edges) while abstracting away geometric and electronic details.
 }
     \label{fig:qm-graph-abstraction}
 \end{figure}
 
-This abstraction enables precise operations such as matching and rule-based transformation. \cite[pp.~2--3]{Andersen2013} 
+This abstraction enables precise operations such as matching and rule-based transformation. \cite[pp.~2--3]{Andersen2013}
 The formal definition used throughout this thesis is introduced next.
 
 \subsubsection{Formal definition}
 
 A molecular graph is typically defined as \cite[p.~2]{Ehrlich2012} \cite[p.~3]{Fujita2025}
 \begin{equation}
+    \label{eq:mol-graph}
     G = (V, E)
 \end{equation}
 where:
@@ -502,28 +639,28 @@ To model chemical reactions algorithmically, molecular graphs are combined with 
 In this view, a reaction is not an arbitrary edit of a graph, but a constrained transformation that preserves valid molecular structure while modifying a specific reaction center. \cite[p.~2]{Andersen2013} \cite[p.~6]{Abel2026}
 
 \subsubsection{Double Pushout Graph Rewriting}
-A standard formalism is the double pushout (DPO) approach. \cite[p.~3]{Andersen2013} A rule is given by 
+A standard formalism is the double pushout (DPO) approach. \cite[p.~3]{Andersen2013} A rule is given by
 \[
 p = (L \xleftarrow{l} K \xrightarrow{r} R),
 \]
 where \(L\) is the left-hand side pattern to be matched, \(R\) is the right-hand side pattern after rewriting, and \(K\) is the interface that is preserved. \cite[p.~75]{Echahed2016}
-Given a match \(m:L\to G\) in a host graph \(G\), DPO rewriting constructs an intermediate graph \(D\) (deletion pushout complement) \cite[p.~680]{HABEL2001}and then the product graph \(H\) (insertion pushout). 
+Given a match \(m:L\to G\) in a host graph \(G\), DPO rewriting constructs an intermediate graph \(D\) (deletion pushout complement) \cite[p.~680]{HABEL2001}and then the product graph \(H\) (insertion pushout).
 Intuitively, parts in \(L\setminus K\) are removed, parts in \(R\setminus K\) are added, and \(K\) remains unchanged. \cite[p.~3]{Andersen2013} \cite[p.~4]{Flamm2025}
 
 \begin{figure}[H]
     \centering
     \begin{tikzcd}
-    L \arrow[d, "m"'] 
-    & K \arrow[l, "l"'] \arrow[r, "r"] \arrow[d] 
+    L \arrow[d, "m"']
+    & K \arrow[l, "l"'] \arrow[r, "r"] \arrow[d]
     & R \arrow[d, "m^{*}"] \\
-    G 
-    & D \arrow[l, "l^{*}"] \arrow[r, "r^{*}"'] 
+    G
+    & D \arrow[l, "l^{*}"] \arrow[r, "r^{*}"']
     & H
     \end{tikzcd}
     \caption[Double pushout graph rewriting]{
-        Schematic of the double pushout (DPO) graph rewriting process. 
-        A rule \(p\) consists of a left-hand side \(L\), an interface \(K\), and a right-hand side \(R\). 
-        Given a match \(m: L \to G\) in the host graph \(G\), the DPO approach constructs an intermediate graph \(D\) by removing parts of \(G\) corresponding to \(L \setminus K\), and then constructs the product graph \(H\) by adding parts corresponding to \(R \setminus K\). 
+        Schematic of the double pushout (DPO) graph rewriting process.
+        A rule \(p\) consists of a left-hand side \(L\), an interface \(K\), and a right-hand side \(R\).
+        Given a match \(m: L \to G\) in the host graph \(G\), the DPO approach constructs an intermediate graph \(D\) by removing parts of \(G\) corresponding to \(L \setminus K\), and then constructs the product graph \(H\) by adding parts corresponding to \(R \setminus K\).
         The interface \(K\) is preserved throughout the transformation, ensuring that the resulting graph \(H\) maintains valid molecular structure.
     }
     \label{fig:dpo-rewriting}
@@ -536,18 +673,18 @@ In chemistry, this DPO construction (Figure~\ref{fig:dpo-rewriting}) provides a 
 Building on the local rewrite step formalized above, derivation graphs -- induced by repeated rule application -- provide a global view that shows mechanistically plausible chemical states.
 \cite[pp.~2--3]{Andersen2013}
 
-A derivation graph, often also called a reaction network, is a higher-level graph that captures all transformation steps generated by a graph rewriting system. 
+A derivation graph, often also called a reaction network, is a higher-level graph that captures all transformation steps generated by a graph rewriting system.
 \cite[Sec.~10]{MODDocDGStrat} \cite[p.~2]{Abel2026}
-Whereas a molecular graph represents the internal structure of a single molecule, a derivation graph represents the \emph{space of possible reactions} between many molecular states. 
+Whereas a molecular graph represents the internal structure of a single molecule, a derivation graph represents the \emph{space of possible reactions} between many molecular states.
 \cite[pp.~2--3]{Andersen2013}
 
-Formally, each node corresponds to an object state (e.g., a molecule, multiset of molecules, or intermediate), and each directed edge corresponds to an application of a rewrite rule that transforms one state into another. 
+Formally, each node corresponds to an object state (e.g., a molecule, multiset of molecules, or intermediate), and each directed edge corresponds to an application of a rewrite rule that transforms one state into another.
  \cite[p.~75]{Echahed2016}
 If a rule $p$ transforms state $G$ into state $H$, this step is represented as
 \[
 G \stackrel{p}{\longrightarrow} H.
 \]
-By collecting many such derivations, one obtains a directed graph whose topology encodes reachable states, alternative pathways, and cycles.  
+By collecting many such derivations, one obtains a directed graph whose topology encodes reachable states, alternative pathways, and cycles.
 
 In computational chemistry, derivation graphs are useful for enumerating reaction pathways, identifying branching points, analyzing network connectivity, and ranking plausible mechanistic routes under additional constraints (e.g., energy, rule priorities, or experimental evidence).
 They therefore provide a natural bridge between rule-based chemistry models and downstream tasks such as pathway search, and machine-learning-based scoring of candidate transformations.
@@ -578,9 +715,9 @@ In this work term-graph inputs are normalised back to plain attributed graphs be
 
 
 \subsection{Graph Neural Networks for Molecular Representation Learning}
-The molecular encoder represents each molecule as a graph whose nodes correspond to atoms and whose edges correspond to chemical bonds. 
-Initial atom features are updated through graph-convolutional message passing, allowing each atom representation to incorporate information from its local molecular environment. 
-The resulting atom embeddings are pooled into a fixed-length graph-level representation, which is subsequently projected into the shared latent space used for comparison with spectral embeddings. 
+The molecular encoder represents each molecule as a graph whose nodes correspond to atoms and whose edges correspond to chemical bonds.
+Initial atom features are updated through graph-convolutional message passing, allowing each atom representation to incorporate information from its local molecular environment.
+The resulting atom embeddings are pooled into a fixed-length graph-level representation, which is subsequently projected into the shared latent space used for comparison with spectral embeddings.
 This produces a continuous molecular vector that preserves structural information while being suitable for downstream neural-network training.
 For a visual overview of this workflow, see \autoref{fig:gnn-encoding-workflow}.
 
@@ -591,97 +728,11 @@ For a visual overview of this workflow, see \autoref{fig:gnn-encoding-workflow}.
         \input{../shared/figures/gnn_pipeline.tikz.tex}%
     }
     \caption[Graph-convolutional molecular encoding workflow]{
-        Starting from the molecular graph $G=(V,E)$ in \textbf{column 1}, where atoms form the nodes and bonds form the edges, each atom is initialized with a feature vector in \textbf{column 2} that encodes local chemical properties such as atom type, degree, formal charge, and aromaticity. 
-        Through repeated graph-convolution/message-passing layers in \textbf{column 3}, these atom representations are updated by aggregating information from neighboring atoms, yielding the context-aware atom embeddings shown in \textbf{column 4}. 
-        These embeddings are then pooled over all atoms in \textbf{column 5} to obtain a fixed-length molecular representation, which is projected in \textbf{column 6} into the shared latent space as the molecular embedding $z_{\mathrm{mol}}$. 
+        Starting from the molecular graph $G=(V,E)$ in \textbf{column 1}, where atoms form the nodes and bonds form the edges, each atom is initialized with a feature vector in \textbf{column 2} that encodes local chemical properties such as atom type, degree, formal charge, and aromaticity.
+        Through repeated graph-convolution/message-passing layers in \textbf{column 3}, these atom representations are updated by aggregating information from neighboring atoms, yielding the context-aware atom embeddings shown in \textbf{column 4}.
+        These embeddings are then pooled over all atoms in \textbf{column 5} to obtain a fixed-length molecular representation, which is projected in \textbf{column 6} into the shared latent space as the molecular embedding $z_{\mathrm{mol}}$.
         As indicated in \textbf{column 7}, this vector can subsequently be compared with spectral embeddings for molecule--spectrum alignment.
-        The atom features shown here (atom type, degree, formal charge, aromaticity) are a generic illustration of typical GNN inputs; the specific node-feature set used in this work---$\texttt{atom\_id}$ ($Z$), formal charge, and radical state---is defined in \Cref{sec:molgraph-encoding}.
+        The atom features shown here (atom type, degree, formal charge, aromaticity) are a generic illustration of typical GNN inputs; the specific node-feature set used in this work---a one-hot element encoding together with formal charge, radical state, degree, aromaticity, and incident bond order---is defined in \Cref{sec:molgraph-encoding}.
     }
     \label{fig:gnn-encoding-workflow}
 \end{figure}
-
-
-
-
-\section{Machine Learning in Mass Spectrometry}
-\subsection{Problem Formulations}
-% spectrum->structure, spectrum->property
-Two main problem formulations are common in the literature:
-\begin{itemize}
-    \item \textbf{Structure-to-Spectrum Prediction:}
-    Given a molecular structure, predict the corresponding mass spectrum.
-    This is a forward problem that can be approached using mechanistic models, data-driven models, or hybrid approaches that combine both.
-    \item \textbf{Spectrum-to-Structure Prediction:} 
-    Given a mass spectrum, predict the corresponding molecular structure. 
-    As this is an inverse problem, it is often ill-posed, with multiple candidate structures potentially consistent with the same spectrum.
-\end{itemize}
-Both tasks are important for different applications: structure-to-spectrum prediction is useful for in silico fragmentation and library generation, while spectrum-to-structure prediction is essential for de novo identification of unknown compounds.
-
-Bidirectional models that can perform both tasks are also possible, and may leverage shared representations to improve performance on both tasks.
-
-\subsection{Case Study: Generating Molecular Fragmentation Graphs with Autoregressive Neural Networks}
-
-A prominent example of integrating physical fragmentation models with neural networks is the work of \cite{Goldman2024}, which proposes an approach to predict tandem mass spectra by directly modeling fragmentation pathways as graphs. 
-Rather than treating spectrum prediction as a black-box prediction task, this method learns to generate fragmentation graphs sequentially: at each step, the model predicts which bonds are most likely to break in the molecular ion, scores the resulting fragments, and iteratively builds a complete fragmentation landscape.
-
-This hybrid approach is particularly relevant to computational MS because it bridges two historically separate paradigms: rule-based in silico fragmentation, which is interpretable but computationally expensive and relies on heuristic intensity prediction, and purely data-driven neural networks, which are fast but lack chemical interpretability. \cite[p.~3420]{Goldman2024}
-By grounding fragmentation prediction in explicit bond-breaking events, the model maintains mechanistic transparency while leveraging the expressiveness of neural networks for learning complex fragmentation preferences from data.
-
-The method demonstrates several key strengths. 
-Because predictions are generated as explicit fragmentation pathways, the model enables human-interpretable explanations: chemists can inspect why particular fragments appear and evaluate whether predicted breakages are chemically plausible. 
-Also the approach shows particular utility for natural products and complex scaffolds where fragmentation patterns deviate from those captured by simple bond-breaking rules, improving metabolite identification from candidate databases. \cite[p.~3427]{Goldman2024}
-
-However, limitations remain.
-Prediction quality still depends on the distribution of training data; compounds or fragmentation pathways underrepresented in training tend to be mispredicted, and the model may struggle with instrument-specific quirks or unusual ionization regimes not seen during learning.
-
-
-\section{Interpretability in Chemical Machine Learning}
-\subsection{Why Interpretability Matters}
-% trust, scientific insight, hypothesis generation
-
-Interpretability in machine learning refers to the ability to understand and explain why a model makes a particular prediction. \cite[p.~1]{Montavon2018}
-
-For structure elucidation from MS data, an uninterpretable model that ranks candidate structures is of limited value if chemists cannot understand the reasoning. 
-Conversely, models that expose their decision-making process \cite[p.~2]{Montavon2018} ---by highlighting which structural features drive spectral predictions or which fragmentation pathways are favored--- enable hypothesis generation and accelerate scientific insight.
-
-Furthermore, interpretability serves as a diagnostic tool: when model explanations reveal chemically implausible patterns (e.g., incorrect fragmentation rules or unphysical feature importance), this signals potential model failures or training-data biases that numeric performance metrics alone might not expose.
-
-\subsection{Classic and General Interpretability Methods}
-
-\subsubsection{Saliency Maps and Gradient-Based Attribution}
-
-Saliency maps compute the gradient of the model output with respect to input features, visualizing regions of input space where small changes produce large changes in prediction. 
-For molecular inputs, saliency can be backpropagated through graph neural networks to identify atoms or bonds whose perturbation most affects the predicted spectrum. \cite[p.~4]{Simonyan2013}
-This approach is computationally efficient and provides local explanations for individual predictions. 
-However, gradients can be noisy, especially near decision boundaries, and may not capture higher-order interactions or saturating effects. \cite{Bach2015}
-
-\subsubsection{SHAP and Permutation-Based Methods}
-
-SHAP (SHapley Additive exPlanations) provides a principled, game-theoretic framework for feature attribution based on Shapley values from cooperative game theory. \cite[p.~3]{Lundberg2017}
-By computing the marginal contribution of each feature when iteratively included or excluded, SHAP assigns consistent importance scores that sum to the difference between the model prediction and a baseline. \cite[p.~2]{Lundberg2017}
-For molecular graphs, SHAP can be applied to atomic features or subgraph patterns, revealing which structural motifs drive predictions.
-Permutation-based importance methods offer similar insights by repeatedly shuffling features and measuring the resulting drop in model performance. \cite[p.~23]{Breiman2001}
-These methods are model-agnostic and theoretically grounded, but computationally expensive for large molecules or high-dimensional representations.
-
-\subsubsection{Counterfactual Explanations}
-
-Counterfactual explanations identify minimal modifications to an input that would change the model output, answering the question: ``What would need to change for a different prediction?'' \cite[p.~4]{Guidotti2018}
-In the chemical domain, counterfactuals correspond to structural modifications--- the loss or gain of functional groups, changes in substitution patterns, or alternative regioisomers--- that would yield different predicted spectra. \cite[pp.~2--3]{Wellawatte2022}
-These explanations are human-interpretable and actionable, but their discovery is computationally challenging, especially in high-dimensional chemical spaces with complex constraints (e.g., synthetic accessibility, valence rules).
-
-\subsection{Evaluation of Explanations}
-
-The quality of explanations must be evaluated in order to determine whether a method actually achieves its explainability objective and to enable comparison between alternative explanation methods. \cite[p.~1]{Zhou2021} 
-Zhou et al. describe explanation quality in terms of \emph{interpretability} and \emph{fidelity}. 
-Interpretability concerns human understandability and includes the properties of \emph{clarity}, \emph{parsimony}, and \emph{broadness}, whereas fidelity concerns how accurately the explanation reflects model behaviour and includes \emph{completeness} and \emph{soundness}. \cite[p.~3]{Zhou2021}
-
-Based on this view, explanation quality can be assessed through both human-centred and functionality-grounded evaluation. Human-centred evaluation includes application-grounded and human-grounded studies and often considers subjective measures such as trust and confidence together with task-related performance.
-Functionality-grounded evaluation instead relies on formal proxy metrics tied to specific explainability properties. \cite[p.~8]{Zhou2021} \cite[p.~10]{Zhou2021}
-
-\subsection{Evaluation Metrics of Prediction Performance}
-
-In computational mass spectrometry, evaluation metrics quantify how well predicted spectra match experimental observations. 
-Cosine similarity measures spectral alignment by computing the dot product of normalized peak intensity vectors, accounting for both peak positions and intensities. \cite[p.~4]{Wang2022}
-Edit-distance metrics quantify the minimum number of peak modifications needed to transform one spectrum into another, reflecting the structural differences between molecules. \cite[pp.~1--2]{Maekinen2007}
-Wasserstein distances provide a framework for comparing peak distributions, measuring the cost of optimally transporting one spectral peak distribution to another. \cite[pp.~1--8]{Ciach2020} \cite{Memoli2011}
-These metrics collectively enable rigorous assessment of model predictions against ground-truth spectra and facilitate comparison of different spectral prediction methods in computational workflows.
