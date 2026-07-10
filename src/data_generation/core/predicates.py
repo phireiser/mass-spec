@@ -160,10 +160,25 @@ def sub_group(
 
         # A derivation edge can have multiple rule->molecule embeddings; fetch
         # them all rather than silently using the first one.
+        #
+        # `right_limit=1` caps `DGVertexMapper`'s enumeration of *right-side*
+        # (product-graph automorphism) comaps to one per left match. Unbounded,
+        # mod returns the full product of left-match x right-comatch embeddings --
+        # up to ~10^4 per derivation on symmetric molecules -- but the subgroup
+        # outcome depends only on the *left* map (where the generalized R/Y/S
+        # positions land in the reactant), which the right-side multiplicity does
+        # not change. So capping it cannot drop a distinct
+        # `(alkyl, hetero, saturated)` signature, only redundant repeats of one.
+        # Validated byte-identical forward+backward dumps across benzene, toluene,
+        # acetone, 1-/2-propanol, 1-butene, acetic acid, propanal and alanine;
+        # this is the dominant per-molecule speedup (up to ~13x on 2-propanol),
+        # cutting both the native mapper enumeration and the per-match Python
+        # signature loop at the source.
         matches = utils.get_rule_2_molecule_maps(
             derivation = derivation,
             graphs = derivation_graph.graphDatabase,
-            label_settings = derivation_graph.labelSettings
+            label_settings = derivation_graph.labelSettings,
+            right_limit = 1,
         )
 
         # No embedding found: keep the previous behaviour of accepting the
@@ -172,11 +187,13 @@ def sub_group(
         if not matches:
             return True
 
-        # The ~10^3 matches per derivation are dominated by symmetry-equivalent
-        # embeddings that assign the generalized positions to the same atoms;
-        # within this derivation the morphism is fixed, so the subgroup outcome
-        # depends only on that assignment. Compute the (cheap) positions per
-        # match, then run the (expensive) traversal once per distinct signature.
+        # `right_limit=1` already collapses the symmetry-equivalent embeddings
+        # upstream, so `matches` is now typically one per distinct generalized-
+        # position assignment. The signature dedup below is kept as a cheap
+        # belt-and-suspenders for any residual multiplicity: within this
+        # derivation the morphism is fixed, so the subgroup outcome depends only
+        # on that assignment -- run the (expensive) traversal once per distinct
+        # signature.
         sig_cache: "dict[tuple, bool]" = {}
 
         def evaluate(match) -> bool:

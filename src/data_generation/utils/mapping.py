@@ -8,7 +8,8 @@ from .term_transfers import graph_from_term
 def get_rule_2_molecule_maps(
     derivation: mod.Derivation,
     graphs: mod.Graph,
-    label_settings: mod.LabelSettings
+    label_settings: mod.LabelSettings,
+    right_limit: "int | None" = None,
     ) -> "list[mod.DGVertexMapper.Result.match]":
     """Return *all* vertex maps from the rule's left side onto the molecule.
 
@@ -18,6 +19,17 @@ def get_rule_2_molecule_maps(
     embedding; we keep every one so callers can decide how to combine the
     per-match outcomes instead of silently relying on whichever match ``mod``
     happens to produce first (see ``sub_group``).
+
+    ``right_limit`` is forwarded to ``DGVertexMapper``'s ``rightLimit`` argument,
+    which caps how many right-side (product-graph automorphism) comaps are
+    enumerated per left match. ``None`` (default) leaves mod's own default
+    (effectively unbounded) for callers that need every embedding. Callers whose
+    result depends only on the *left* map -- e.g. ``sub_group``, which only looks
+    at where the rule's generalized positions land in the reactant -- can pass
+    ``right_limit=1`` to avoid materialising the full left x right product
+    (up to ~10^4 embeddings per derivation) without losing any distinct left
+    map. See the call site in ``core/predicates.sub_group`` for the correctness
+    argument and validation.
     """
     # The embeddings depend only on this single derivation's left/right graphs
     # and its rule, not on the rest of the database. Seeding the scratch DG with
@@ -36,7 +48,8 @@ def get_rule_2_molecule_maps(
         d.right = derivation.right
         b.addDerivation(d)
     e = next(edge for edge in dg_new.edges if derivation.rule in edge.rules)
-    vms = mod.DGVertexMapper(e)
+    vms = mod.DGVertexMapper(e) if right_limit is None \
+        else mod.DGVertexMapper(e, True, right_limit)
     return [vm.match for vm in vms]
 
 
