@@ -4,7 +4,7 @@ Traversal and saturation checks extracted from rule_extention.
 import collections
 from typing import List, Set, Optional, Iterable
 import mod
-from .compareability import ComparableVertex, ComparableVertexList
+from .compareability import ComparableVertex
 from .term_transfers import graph_from_term, decode_edge_label
 from .label_utils import mol_cleaned_label_str
 from .diag import _diag_log, _diag_inc
@@ -19,15 +19,42 @@ def vertex_by_id(g: mod.Graph, vid: int) -> mod.Graph.Vertex:
 # on toluene). The index is a pure function of the input graphs, which come from
 # `derivation.left` and are reused across every match and every derivation that
 # shares a reactant. We memoise on the graphs' stable `mod.Graph.id`s so those
-# rebuilds collapse to one per distinct reactant set. A strong ref to the graph
-# list is retained alongside each entry so that the `id()` fallback (used only for
-# graphs without a mod id, e.g. in tests) can never be aliased by a recycled id().
-_traversal_index_cache: dict = {}
+# rebuilds collapse to one per distinct reactant set. A strong ref to the term
+# graph list is retained alongside each entry so that the `id()` fallback (used
+# only for graphs without a mod id, e.g. in tests) can never be aliased by a
+# recycled id(). The index stores only primitive (id, stringLabel) keys -- NOT mod
+# vertices -- so an entry no longer pins the string-mode graph copies alive for the
+# whole process; those are freed once built (see `_build_traversal_index`) and the
+# weakref `_graph_from_term_cache` lets them go.
+#
+# Bounded LRU: a molecule that keeps discovering new reactant sets (the ones that
+# run for hours) cannot grow this cache without limit. Eviction only forces a
+# recompute of a pure function -- never a different result. The cap is high enough
+# that molecules which complete never evict, so their timing/output are unchanged;
+# it only bounds pathological long runs.
+_TRAVERSAL_INDEX_CACHE_CAP = 4096
+_traversal_index_cache: "collections.OrderedDict" = collections.OrderedDict()
 
 
 def clear_traversal_index_cache() -> None:
     """Drop memoised traversal indices (call between mod universes/tests)."""
     _traversal_index_cache.clear()
+
+
+def _vk(v: "mod.Graph.Vertex") -> tuple:
+    """Primitive identity key for a vertex: ``(id, stringLabel)``.
+
+    Hash- and equality-identical to ``ComparableVertex(v)`` (which keys on exactly
+    these two attrs), so it is a drop-in dict/set key -- but it holds no reference
+    to the mod vertex, so caching these keys does not pin the string-mode graph the
+    vertex belongs to.
+    """
+    return (v.id, v.stringLabel)
+
+
+def _key_label(k: tuple) -> str:
+    """Cleaned molecular label for a vertex key; equals ``mol_cleaned_label(v)``."""
+    return mol_cleaned_label_str(k[1])
 
 
 def _graphs_cache_key(graphs_list: List[mod.Graph]) -> tuple:
@@ -48,10 +75,13 @@ def build_traversal_index_cached(graphs: Iterable[mod.Graph]) -> tuple[dict, dic
     key = _graphs_cache_key(graphs_list)
     hit = _traversal_index_cache.get(key)
     if hit is not None:
+        _traversal_index_cache.move_to_end(key)
         return hit[0]
     built = [graph_from_term(g) for g in graphs_list]
     idx = _build_traversal_index(built, graphs_list)
     _traversal_index_cache[key] = (idx, graphs_list)
+    if len(_traversal_index_cache) > _TRAVERSAL_INDEX_CACHE_CAP:
+        _traversal_index_cache.popitem(last=False)
     return idx
 
 
@@ -91,28 +121,31 @@ def collect_bfs(
     # reactant reuse it (see `build_traversal_index_cached`).
     neighbor_adj, _ = build_traversal_index_cached(graphs)
 
-    start = list(start_vertices)
-    visited = {ComparableVertex(v) for v in start}
-    queue = collections.deque(start)
-    labels = [mol_cleaned_label(v) for v in start]
-    vertices = list(start)
+    # Work in primitive (id, stringLabel) key space -- identical hashing/equality to
+    # the old ComparableVertex-keyed set, but the index and the visited-set no longer
+    # hold mod vertices. The second returned value (previously the raw vertices) is
+    # not consumed by any caller; it is returned as the visited keys for parity.
+    start_keys = [_vk(v) for v in start_vertices]
+    visited = set(start_keys)
+    queue = collections.deque(start_keys)
+    labels = [_key_label(k) for k in start_keys]
+    keys_out = list(start_keys)
     visits = 0
     while queue:
-        v = queue.popleft()
-        for vertex in neighbor_adj.get(ComparableVertex(v), ()):
-            cv = ComparableVertex(vertex)
-            if cv not in visited:
-                visited.add(cv)
-                queue.append(vertex)
-                labels.append(mol_cleaned_label(vertex))
-                vertices.append(vertex)
+        k = queue.popleft()
+        for nk in neighbor_adj.get(k, ()):
+            if nk not in visited:
+                visited.add(nk)
+                queue.append(nk)
+                labels.append(_key_label(nk))
+                keys_out.append(nk)
                 visits += 1
                 if max_visits is not None and visits >= max_visits:
                     _diag_inc("collect_bfs_cap")
                     _diag_log(f"[subgroup] collect_bfs cap hit: visits={visits}, cap={max_visits}")
                     queue.clear()
                     break
-    return labels, vertices
+    return labels, keys_out
 
 
 def get_edge_between(
@@ -146,40 +179,45 @@ def _build_traversal_index(
     on each step, which is what made large molecules (e.g. fused steroid rings)
     churn until the job was killed.
     """
+    # Store primitive (id, stringLabel) keys, not mod vertices: the values used to
+    # be raw `e.target`/`e.source` vertices, which pinned the string-mode graph
+    # copies alive in the cache for the whole process. A key tuple carries the same
+    # identity (ComparableVertex hashes/compares on exactly these attrs) and the
+    # same cleaned label (derivable from the stringLabel), so the traversal result
+    # is unchanged while the string graphs become collectable once this returns.
     neighbor_adj: dict = {}
     for gg in built_graphs:
         for e in gg.edges:
-            cs = ComparableVertex(e.source)
-            ct = ComparableVertex(e.target)
-            neighbor_adj.setdefault(cs, []).append(e.target)
-            neighbor_adj.setdefault(ct, []).append(e.source)
+            s = _vk(e.source)
+            t = _vk(e.target)
+            neighbor_adj.setdefault(s, []).append(t)
+            neighbor_adj.setdefault(t, []).append(s)
     single_bond_map: dict = {}
     for g in term_graphs:
         for e in g.edges:
-            cs = ComparableVertex(e.source)
-            ct = ComparableVertex(e.target)
-            if (cs, ct) in single_bond_map:  # first edge wins, like get_edge_between
+            s = _vk(e.source)
+            t = _vk(e.target)
+            if (s, t) in single_bond_map:  # first edge wins, like get_edge_between
                 continue
             is_single = decode_edge_label(e.stringLabel) == '-'
-            single_bond_map[(cs, ct)] = is_single
-            single_bond_map[(ct, cs)] = is_single
+            single_bond_map[(s, t)] = is_single
+            single_bond_map[(t, s)] = is_single
     return neighbor_adj, single_bond_map
 
 
 def _path_satisfies_branch_rule(
-        neighbors_of, path: List[mod.Graph.Vertex],
-        comp_morphism: Set[ComparableVertex],
+        neighbors_of, path: List[tuple],
+        morphism_keys: Set[tuple],
         branch_ok_labels: Set[str]
         ) -> bool:
-    comp_path = {ComparableVertex(x) for x in path}
-    for v in path:
-        for neighbor in neighbors_of(v):
-            cn = ComparableVertex(neighbor)
-            if cn in comp_path:
+    path_set = set(path)
+    for k in path:
+        for nk in neighbors_of(k):
+            if nk in path_set:
                 continue
-            if cn not in comp_morphism:
+            if nk not in morphism_keys:
                 continue
-            if mol_cleaned_label(neighbor) not in branch_ok_labels:
+            if _key_label(nk) not in branch_ok_labels:
                 return False
     return True
 
@@ -193,17 +231,18 @@ def saturated_path(
         branch_ok_label: Optional[Iterable[str]] = ("H",),
         max_expansions: Optional[int] = None
         ) -> bool:
-    morphism_vertices = set(match.codomain.vertices)
-    comp_morphism_vertices = ComparableVertexList(morphism_vertices)
-    if ComparableVertex(start_vertex) not in comp_morphism_vertices:
+    morphism_keys = {_vk(x) for x in match.codomain.vertices}
+    start_key = _vk(start_vertex)
+    end_key = _vk(end_vertex)
+    if start_key not in morphism_keys:
         return False
-    if ComparableVertex(end_vertex) not in comp_morphism_vertices:
+    if end_key not in morphism_keys:
         return False
     if mol_cleaned_label(start_vertex) not in allowed_labels:
         return False
     if mol_cleaned_label(end_vertex) not in allowed_labels:
         return False
-    if start_vertex == end_vertex:
+    if start_key == end_key:
         return True
     if isinstance(branch_ok_label, str):
         branch_ok_labels = {branch_ok_label}
@@ -219,39 +258,35 @@ def saturated_path(
     # (across matches/derivations) reuse it (see `build_traversal_index_cached`).
     neighbor_adj, single_bond_map = build_traversal_index_cached(graph)
 
-    def neighbors_of(v):
-        return neighbor_adj.get(ComparableVertex(v), ())
+    def neighbors_of(k):
+        return neighbor_adj.get(k, ())
 
     def is_single_bond(u, v):
-        return single_bond_map.get((ComparableVertex(u), ComparableVertex(v)), False)
-
-    comp_morphism = {ComparableVertex(x) for x in morphism_vertices}
-    comp_end = ComparableVertex(end_vertex)
+        return single_bond_map.get((u, v), False)
 
     stack = collections.deque()
-    stack.append((start_vertex, [start_vertex], {ComparableVertex(start_vertex)}))
+    stack.append((start_key, [start_key], {start_key}))
     expansions = 0
     while stack:
         node, path, path_set = stack.pop()
-        for vertex in neighbors_of(node):
-            cv = ComparableVertex(vertex)
-            if cv in path_set:
+        for nk in neighbors_of(node):
+            if nk in path_set:
                 continue
-            if mol_cleaned_label(vertex) != "C":
+            if _key_label(nk) != "C":
                 continue
-            if not is_single_bond(node, vertex):
+            if not is_single_bond(node, nk):
                 continue
-            new_path = path + [vertex]
-            if cv == comp_end:
+            new_path = path + [nk]
+            if nk == end_key:
                 if _path_satisfies_branch_rule(
                     neighbors_of,
                     new_path,
-                    comp_morphism,
+                    morphism_keys,
                     branch_ok_labels
                     ):
                     return True
             else:
-                stack.append((vertex, new_path, path_set | {cv}))
+                stack.append((nk, new_path, path_set | {nk}))
                 expansions += 1
                 # Safety guard against combinatorial blow-up: the index makes
                 # each step cheap, but the number of simple paths is still

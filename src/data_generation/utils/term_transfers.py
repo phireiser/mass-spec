@@ -3,6 +3,7 @@ for and back transformations from term mode to string mode
 """
 
 import collections
+import weakref
 import mod
 
 term_bond_from_bond_type = {
@@ -117,7 +118,15 @@ def decode_edge_label(l: str) -> str:
 # mod hands out a *fresh* Python wrapper on every access so `id(g)` never repeats.
 # The distinct-graph count equals the DG size (tens), so the cache stays tiny while
 # collapsing the millions of calls to a few real conversions.
-_graph_from_term_cache: "dict[int, mod.Graph]" = {}
+#
+# WeakValueDictionary (not a strong dict): the string-mode graph is only kept alive
+# while some caller actually holds it. Once the traversal index that used it is
+# dropped (it now stores primitive keys, not vertices -- see traversal.py), the
+# string copy is collected instead of being pinned for the whole per-molecule
+# process. A miss after collection just re-converts (a pure function), so behaviour
+# is unchanged; only the redundant second (string) representation of each fragment
+# stops accumulating alongside the DG-owned term representation.
+_graph_from_term_cache: "weakref.WeakValueDictionary[int, mod.Graph]" = weakref.WeakValueDictionary()
 
 
 def clear_graph_from_term_cache() -> None:
