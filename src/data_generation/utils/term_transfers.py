@@ -26,6 +26,13 @@ def term_from_graph(g: mod.Graph):
 
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
+        if bond_type.startswith("__error"):
+            raise ValueError(
+                f"term_from_graph: {g.name!r} has a {e.bondType} bond, which has "
+                f"no term-mode encoding. Aromatic bonds must be kekulised to "
+                f"explicit single/double bonds first -- build the molecule with "
+                f"utils.graph_from_smiles (or pass a Kekulé SMILES)."
+            )
         s += f'edge [ source {e.source.id} target {e.target.id} label "e({bond_type})" ]'
     s +="]\n"
     return mod.Graph.fromGMLString(s, name=g.name + ", term", add=False)

@@ -176,7 +176,6 @@ def sub_group(
         # signature loop at the source.
         matches = utils.get_rule_2_molecule_maps(
             derivation = derivation,
-            graphs = derivation_graph.graphDatabase,
             label_settings = derivation_graph.labelSettings,
             right_limit = 1,
         )

@@ -190,13 +190,11 @@ def main():
     mol_order: List[str] = []
 
     for name, smi in mols_definitions:
-        if (Path(args.load_path) / "fwd" / f"{name}.dmp").exists() \
-        and (Path(args.load_path) / "bwd" / f"{name}.dmp").exists():
+        if (Path(args.load_path) / "fwd" / f"{name}.dmp").exists():
             mol = mod.Graph.fromSMILES(smi, name=name)
 
 
             fwd_dg = utils.load_derivation_graph(name, path=Path(args.load_path) / "fwd")
-            bwd_dg = utils.load_derivation_graph(name, path=Path(args.load_path) / "bwd")
 
             fwd_coll = []
             for graph_term in fwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
@@ -212,21 +210,28 @@ def main():
 
 
 
+            # The backward dump is optional: the backward pass is opt-in in data-gen
+            # (--run-backward) and its collection is unused by the model. Load it only
+            # if present; otherwise use an empty backward collection so the molecule is
+            # NOT dropped for lacking a bwd dump.
             bwd_coll = []
-            for graph_term in bwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
-                graph = utils.graph_from_term(graph_term)
-                if graph.isMolecule:
-                    dg_v = bwd_dg.findVertex(graph_term)
-                    try:
-                        targets = dict()
-                        rules = dict()
-                        for edge in dg_v.outEdges:
-                            targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
-                            rules[edge.id] = [rule for rule in edge.rules]
-                        bwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
-                    except mod.libpymod.LogicError:
-                        #bwd_coll.append((graph.smiles, dict(), dict()))
-                        print("empty edges for ", graph.smiles)
+            bwd_dmp = Path(args.load_path) / "bwd" / f"{name}.dmp"
+            if bwd_dmp.exists():
+                bwd_dg = utils.load_derivation_graph(name, path=Path(args.load_path) / "bwd")
+                for graph_term in bwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
+                    graph = utils.graph_from_term(graph_term)
+                    if graph.isMolecule:
+                        dg_v = bwd_dg.findVertex(graph_term)
+                        try:
+                            targets = dict()
+                            rules = dict()
+                            for edge in dg_v.outEdges:
+                                targets[edge.id] = [utils.graph_from_term(t.graph).smiles for t in edge.targets]
+                                rules[edge.id] = [rule for rule in edge.rules]
+                            bwd_coll.append((graph.smiles, graph.exactMass, targets, rules))
+                        except mod.libpymod.LogicError:
+                            #bwd_coll.append((graph.smiles, dict(), dict()))
+                            print("empty edges for ", graph.smiles)
 
             frag_coll[smi] = (fwd_coll, bwd_coll)
             real_spectra_by_smiles[smi] = utils.get_spectra_by_smiles(smi, Path(args.spectra_dir))

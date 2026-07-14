@@ -7,7 +7,6 @@ from .term_transfers import graph_from_term
 
 def get_rule_2_molecule_maps(
     derivation: mod.Derivation,
-    graphs: mod.Graph,
     label_settings: mod.LabelSettings,
     right_limit: "int | None" = None,
     ) -> "list[mod.DGVertexMapper.Result.match]":
@@ -33,10 +32,12 @@ def get_rule_2_molecule_maps(
     """
     # The embeddings depend only on this single derivation's left/right graphs
     # and its rule, not on the rest of the database. Seeding the scratch DG with
-    # the whole `graphs` database (as this used to) made every call rebuild a DG
-    # over all species discovered so far -- quadratic over a run, since this is
-    # invoked per derivation from the `sub_group` predicate. Restrict it to the
-    # two graphs actually involved.
+    # the whole discovered-species database (as this used to) made every call
+    # rebuild a DG over all species discovered so far -- quadratic over a run,
+    # since this is invoked per derivation from the `sub_group` predicate.
+    # Restrict it to the two graphs actually involved. (The former `graphs`
+    # parameter was dead once this switched to left/right seeding and has been
+    # removed; the caller no longer materialises `dg.graphDatabase` per call.)
     dg_new = mod.DG(
         graphDatabase=[*derivation.left, *derivation.right],
         labelSettings=label_settings,
@@ -55,7 +56,6 @@ def get_rule_2_molecule_maps(
 
 def get_rule_2_molecule_map(
     derivation: mod.Derivation,
-    graphs: mod.Graph,
     label_settings: mod.LabelSettings
     ) -> "mod.DGVertexMapper.Result.match | None":
     """Backward-compatible helper returning only the first match (or ``None``).
@@ -63,7 +63,7 @@ def get_rule_2_molecule_map(
     Prefer :func:`get_rule_2_molecule_maps` whenever the number of embeddings
     matters; this wrapper exists for callers that only need a single match.
     """
-    matches = get_rule_2_molecule_maps(derivation, graphs, label_settings)
+    matches = get_rule_2_molecule_maps(derivation, label_settings)
     return matches[0] if matches else None
 
 

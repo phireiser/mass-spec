@@ -6,6 +6,45 @@ graph traversal, filtering
 from typing import List, Set, Optional
 import mod
 
+
+def graph_from_smiles(smiles: str, name: Optional[str] = None) -> mod.Graph:
+    """
+    Build a molecule graph from SMILES, localising any aromatic bonds first.
+
+    MØD's term mode has no encoding for ``mod.BondType.Aromatic`` (see
+    :func:`data_generation.utils.term_transfers.term_from_graph`, which would
+    otherwise emit the unparseable placeholder ``e(__error2)``). So an aromatic
+    SMILES such as ``c1ccccc1`` cannot flow through the fragmentation pipeline
+    as-is; it must be kekulised to explicit single/double bonds.
+
+    ``mod.Graph.fromSMILES`` preserves explicit bonds and does not re-perceive
+    aromaticity, so a kekulised SMILES flows through forward/backward derivation
+    unchanged. We build the graph first and only rebuild from a RDKit-kekulised
+    SMILES when mod actually reports aromatic bonds -- SMILES already written in
+    Kekulé form are returned byte-for-byte unchanged (no resonance re-assignment,
+    hence no behaviour change for molecules that already worked).
+
+    If RDKit cannot parse or kekulise the input, the aromatic graph is returned
+    unchanged; ``term_from_graph`` then raises a clear error naming the molecule.
+    """
+    g = mod.Graph.fromSMILES(smiles, name) if name is not None \
+        else mod.Graph.fromSMILES(smiles)
+    if not any(e.bondType == mod.BondType.Aromatic for e in g.edges):
+        return g
+
+    from rdkit import Chem
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is not None:
+        try:
+            Chem.Kekulize(mol, clearAromaticFlags=True)
+            kekule = Chem.MolToSmiles(mol, kekuleSmiles=True)
+            return mod.Graph.fromSMILES(kekule, name) if name is not None \
+                else mod.Graph.fromSMILES(kekule)
+        except Exception:
+            pass
+    return g
+
+
 def get_parents(
     dg: mod.DG,
     frag: mod.Graph
@@ -87,6 +126,7 @@ def get_fragment_ids_by_edge_id(dg: mod.DG, eid: int) -> List[int]:
 
 # Public API re-exported by ``data_generation.utils``.
 __all__ = [
+    "graph_from_smiles",
     "get_parents",
     "filter_ancestors_out",
     "get_out_edges_by_vertex_id",

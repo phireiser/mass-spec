@@ -20,10 +20,23 @@ parser.add_argument("--smiles", type=str, required=True, help="SMILES String of 
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--output-dir", type=str, required=True, help="Directory for output files")
 parser.add_argument("--spectra-folder", type=str, default=str(shared_path("PARQUET_DIR_REL")), help="Directory containing the NIST spectra Parquet store")
-parser.add_argument("--number-threads", type=int, default=64, help="number of threads for mod")
+parser.add_argument("--number-threads", type=int, default=1, help="number of threads for mod (production runs 1 per SLURM cpus-per-task; direct runs default to 1 to match)")
+parser.add_argument("--frag-repeat", type=int, default=5,
+                    help="Max sequential fragmentation rounds (mod.repeat depth) for both passes. "
+                         "Default 5 reproduces current output. Lowering it bounds the DG growth on "
+                         "the molecules that OOM in forward, at the cost of dropping deep fragments; "
+                         "~14%% of molecules still produce new fragments at rounds 4-5, so validate "
+                         "peak coverage before lowering below 5.")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")
-parser.add_argument("--skip-backward", action="store_true", help="Only build the forward DG (skip the backward pass)")
+parser.add_argument("--skip-backward", action="store_true",
+                    help="[deprecated] Force-skip the backward pass. The backward pass is now "
+                         "skipped by default; this flag is kept so existing forward-only callers "
+                         "keep working. Pass --run-backward to opt back in.")
+parser.add_argument("--run-backward", action="store_true",
+                    help="Opt in to building the backward (recombination) DG. Off by default: the "
+                         "backward dump is not consumed by the ML pipeline and its generative build "
+                         "is the dominant OOM/timeout source. --skip-backward overrides this.")
 parser.add_argument("--name-by-cas", action="store_true",
                     help="Name the dump by the CAS registry number resolved from the store "
                          "(the project-wide single identifier) instead of --name; falls back "
@@ -52,7 +65,7 @@ if args.name_by_cas:
 output_path_fwd = Path(args.output_dir) / "fwd/" / (dump_name + ".dmp")
 output_path_bwd = Path(args.output_dir) / "bwd/" / (dump_name + ".dmp")
 
-molecule = mod.Graph.fromSMILES(args.smiles, dump_name)
+molecule = utils.graph_from_smiles(args.smiles, dump_name)
 molecule_term= utils.term_from_graph(molecule)
 
 aoc = utils.all_occuring([molecule], utils.ALL_ATOMS)
@@ -88,7 +101,8 @@ strat_fwd = strategy.make_fwd_strategy(
     universe=molecule_term,
     ionization=ionization_term_fwd,
     fragmentation=fragmentation_term_fwd,
-    max_mass=molecule.exactMass
+    max_mass=molecule.exactMass,
+    frag_repeat=args.frag_repeat,
 )
 
 fwd_dir = Path(args.output_dir) / "fwd/"
@@ -114,16 +128,36 @@ if not dg_fwd_reused:
     )
 
 # ------------------------------------------------------------ #
-if args.skip_backward:
-    print("\nskipping backward pass (--skip-backward)\n")
+# Backward pass is opt-in: skip unless --run-backward is given (and --skip-backward
+# always wins for the existing forward-only callers). The backward recombination DG
+# is unused downstream and is the dominant OOM/timeout source, so forward-only is the
+# default. See the ML loader, which now treats a missing bwd dump as an empty backward
+# collection rather than dropping the molecule.
+run_backward = args.run_backward and not args.skip_backward
+if not run_backward:
+    reason = "--skip-backward" if args.skip_backward else "default; pass --run-backward to enable"
+    print(f"\nskipping backward pass ({reason})\n")
     raise SystemExit(0)
 
 print("\nbackward\n")
 
 spectra_jdx = utils.get_spectra_by_smiles(args.smiles, Path(args.spectra_folder))
 spectra_jdx = [x[0] for x in spectra_jdx]
-frags_in_spectra = [frag for frag in dg_fwd.graphDatabase \
-    if int(utils.graph_from_term(frag).exactMass) in spectra_jdx]
+# Keep the fragments whose nominal mass matches an observed peak. Use the
+# term-space mass helper: it returns None for non-molecule fragments -- those
+# with an atom mod won't assign a mass to (placeholder ``_A`` atoms, or
+# aromatic-typed atoms such as a lone ``c`` that mod perceives on some generated
+# cations) -- which have no defined mass and cannot match a peak. This avoids the
+# ``LogicError: Can not get exact mass of a non-molecule`` that
+# ``graph_from_term(frag).exactMass`` raises on them. The forward graphDatabase
+# legitimately contains such non-molecule graphs (see the ``isMolecule`` guard in
+# ``utils.spect_mol``), so they must be skipped, not left to abort the whole
+# backward pass. The helper also drops the GML round-trip.
+frags_in_spectra = [
+    frag for frag in dg_fwd.graphDatabase
+    if (mass := utils.exact_mass_from_term(frag)) is not None
+    and int(mass) in spectra_jdx
+]
 
 # filter fragments out ancerters of other fragments
 bwd_universe = utils.filter_ancestors_out(frags_in_spectra, dg_fwd)
@@ -137,7 +171,8 @@ strat_bwd = strategy.make_bwd_strategy(
     derivation_graph=dg_bwd,
     universe=bwd_universe,
     fragmentation=fragmentation_term_bwd,
-    max_mass=molecule.exactMass
+    max_mass=molecule.exactMass,
+    frag_repeat=args.frag_repeat,
 )
 
 bwd_dir = Path(args.output_dir) / "bwd/"

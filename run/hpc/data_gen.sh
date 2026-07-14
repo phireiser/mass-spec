@@ -2,7 +2,7 @@
 #SBATCH --job-name=data_gen_fragment
 #SBATCH --time=7-00:30:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=32G
+#SBATCH --mem=128G
 #SBATCH --output=outputs/logs/data_gen/slurm/%A/%j.out
 
 # Usage:

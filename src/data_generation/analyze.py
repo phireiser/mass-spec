@@ -20,7 +20,7 @@ parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--dir", type=str, required=True, help="Directory of loading files")
 args = parser.parse_args()
 
-molecule = mod.Graph.fromSMILES(args.smiles, args.name)
+molecule = utils.graph_from_smiles(args.smiles, args.name)
 molecule_term = utils.term_from_graph(molecule)
 
 aoc = utils.all_occuring([molecule], utils.ALL_ATOMS)
