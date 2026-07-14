@@ -8,15 +8,18 @@
 
 \Cref{tab:training-hyperparams} lists the hyperparameters used to train the bidirectional model of \Cref{sec:training-procedure}. The tuned values (learning rate, weight decay, batch size, latent dimension, dropout, normalisation, the spectrum-loss and cycle-consistency weights, and the curriculum schedule) are the optimum selected by an Optuna hyperparameter search ($20$ trials); the remaining entries (network widths, epochs, spectrum binning) were fixed a priori.
 
-\begin{table}[H]
-    \centering
-    \small
+{\small
+\begin{longtable}{@{}l l p{6cm}@{}}
     \caption{Training hyperparameters. Tuned entries are the best trial of the Optuna sweep.}
-    \label{tab:training-hyperparams}
-    \begin{tabular}{lll}
+    \label{tab:training-hyperparams} \\
         \hline
         Setting & Symbol & Value \\
         \hline
+        \endfirsthead
+        \hline
+        Setting & Symbol & Value \\
+        \hline
+        \endhead
         \multicolumn{3}{l}{\emph{Optimisation}} \\
         Optimiser                         & ---                              & Adam (one instance per phase) \\
         Learning rate                     & $\eta$                           & $7.1\times10^{-5}$ \\
@@ -52,8 +55,7 @@
         Start fraction (easy molecules)   & ---                              & $0.73$ \\
         Per-epoch increment               & ---                              & $0.17$ \\
         \hline
-    \end{tabular}
-\end{table}
+\end{longtable}}
 
 \section{Github Repository}
 The code for this thesis is available at
