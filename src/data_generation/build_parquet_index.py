@@ -206,9 +206,26 @@ def fetch_jcamp_by_id(session: requests.Session, webbook_id: str) -> Optional[st
     return None
 
 
+# Known NIST WebBook structure-resolution errors: for these species the WebBook
+# structure endpoints (Str2File / InChI-on-page) return the WRONG molecule, so the
+# built store would carry a foreign structure (inchikey/smiles/fingerprint) against
+# a correct spectrum + name. Map the WebBook ID to a correct SMILES to override the
+# fetch. Keep this list in sync with any structure fixes applied to the built store.
+STRUCTURE_OVERRIDES: Dict[str, str] = {
+    # C119653 (Isoquinoline) resolves to quinoline's MOL; supply real isoquinoline.
+    "C119653": "c1ccc2cnccc2c1",
+}
+
+
 def fetch_structure(session: requests.Session, webbook_id: str) -> Optional[Chem.Mol]:
-    """Resolve a species' structure: MOL file via ``Str2File`` (preferred), with
-    an InChI-from-page fallback. Returns an RDKit mol or None."""
+    """Resolve a species' structure: a curated override (for known WebBook errors)
+    takes precedence, then the MOL file via ``Str2File`` (preferred), with an
+    InChI-from-page fallback. Returns an RDKit mol or None."""
+    override = STRUCTURE_OVERRIDES.get(webbook_id)
+    if override:
+        mol = Chem.MolFromSmiles(override)
+        if mol is not None:
+            return mol
     mol_block = _get(session, {"Str2File": webbook_id})
     if mol_block:
         mol = Chem.MolFromMolBlock(mol_block)
@@ -229,7 +246,6 @@ def fetch_structure(session: requests.Session, webbook_id: str) -> Optional[Chem
 SPECTRA_SCHEMA = pa.schema([
     ("cas", pa.string()),
     ("nist_id", pa.string()),
-    ("inchikey", pa.string()),
     ("mz", pa.list_(pa.float32())),
     ("intensity", pa.list_(pa.float32())),
     ("n_peaks", pa.int32()),
@@ -241,7 +257,6 @@ INDEX_SCHEMA = pa.schema([
     ("cas", pa.string()),
     ("nist_id", pa.string()),
     ("webbook_id", pa.string()),
-    ("inchikey", pa.string()),
     ("canonical_smiles", pa.string()),
     ("isomeric_smiles", pa.string()),
     ("inchi", pa.string()),
@@ -359,7 +374,7 @@ def build_from_catalog(max_mw: int, out_dir: Path, delay: float = 1.0,
                   f"struct={'y' if mol else 'n'} total={len(spec_rows)}", flush=True)
         if checkpoint_every and i % checkpoint_every == 0:
             _write(spec_rows, SPECTRA_SCHEMA, spec_path, sort_key="nist_id")
-            _write(idx_rows, INDEX_SCHEMA, idx_path, sort_key="inchikey")
+            _write(idx_rows, INDEX_SCHEMA, idx_path, sort_key="cas")
 
     _write(spec_rows, SPECTRA_SCHEMA, spec_path, sort_key="nist_id")
     _write(idx_rows, INDEX_SCHEMA, idx_path, sort_key="inchikey")

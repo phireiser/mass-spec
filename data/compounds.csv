@@ -78,7 +78,8 @@ iodoform,CI(I)(I)I,halogenated_aliphatic
 piperidine,C1CCNCC1,heterocyclic_amine
 pyrrole,C1=CN=CC1,heterocyclic_aromatic
 quinoline,C1=CC=CC2=NC=CC=C12,heterocyclic_aromatic
-isoquinoline,C1=CC=NC2=CC=CC=C12,heterocyclic_aromatic
+91-22-5,C1=CC=CC2=NC=CC=C12,heterocyclic_aromatic
+isoquinoline,C1=CC=C2C=NC=CC2=C1,heterocyclic_aromatic
 dimethyl_sulfide,CSC,organosulfur
 diethyl_sulfide,CCSCC,organosulfur
 dimethyl_sulfoxide,CS(=O)C,organosulfur_oxide

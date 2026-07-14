@@ -65,7 +65,10 @@ def load_store(parquet_dir: Path):
     for row in idx.to_dict("records"):
         nid = row["nist_id"]
         formula = _str(row.get("formula"))
-        inchikey = _str(row.get("inchikey"))
+        # InChIKey recomputed from the structure column (the stored inchikey column
+        # was dropped from the store); isomeric SMILES keeps isotope/stereo layers.
+        inchikey = resolve_inchikey(
+            _str(row.get("isomeric_smiles")) or _str(row.get("canonical_smiles"))) or ""
         meta_by_id[nid] = {
             "formula": formula,
             "inchikey": inchikey,

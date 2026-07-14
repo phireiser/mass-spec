@@ -18,8 +18,17 @@ def _load_parquet_store(parquet_dir: str):
     """Load both tiers once; return (by_inchikey, peaks_by_cas, meta_by_cas), all
     keyed by CAS. Spectra rows are joined to CAS by ``cas`` if present, else via
     the index's ``nist_id`` -> ``cas`` map (current store has no ``cas`` in the
-    main tier)."""
+    main tier).
+
+    The InChIKey lookup map is derived from each row's ``isomeric_smiles`` -- the
+    store's authoritative structure column -- rather than a stored ``inchikey``
+    column (dropped from the store, see build_parquet_index): a persisted key can
+    drift from the structure it is meant to identify, so we recompute it. The
+    *isomeric* SMILES (not canonical) is used because canonical_smiles is written
+    with ``isomericSmiles=False`` and so drops isotope/stereo layers -- which would
+    collapse distinct species like benzene and benzene-D6 onto one key."""
     import pyarrow.parquet as pq
+    from rdkit import Chem
 
     root = Path(parquet_dir)
     idx = pq.read_table(root / "index.parquet").to_pandas()
@@ -27,6 +36,16 @@ def _load_parquet_store(parquet_dir: str):
 
     def _s(v) -> str:
         return "" if v is None or (isinstance(v, float) and v != v) else str(v).strip()
+
+    _ik_cache: Dict[str, str] = {}
+
+    def _inchikey(smiles: str) -> str:
+        if not smiles:
+            return ""
+        if smiles not in _ik_cache:
+            mol = Chem.MolFromSmiles(smiles)
+            _ik_cache[smiles] = Chem.MolToInchiKey(mol) if mol is not None else ""
+        return _ik_cache[smiles]
 
     nist_to_cas: Dict[str, str] = {}
     by_inchikey: Dict[str, str] = {}
@@ -36,7 +55,7 @@ def _load_parquet_store(parquet_dir: str):
         if not cas:
             continue
         nist_to_cas[_s(row.get("nist_id"))] = cas
-        ikey = _s(row.get("inchikey"))
+        ikey = _inchikey(_s(row.get("isomeric_smiles")) or _s(row.get("canonical_smiles")))
         if ikey:
             by_inchikey.setdefault(ikey, cas)
         meta_by_cas.setdefault(cas, {
