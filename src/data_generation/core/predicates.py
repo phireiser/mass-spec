@@ -6,6 +6,28 @@ import mod
 from .. import utils
 
 
+def _mem_growth_log(derivation, phase: str, n_matches: int) -> None:
+    """Per-derivation memory sampling for --mem-diag (no-op when disabled).
+
+    Samples the process peak-RSS watermark and, only when it GREW, attributes the
+    growth to this derivation's rule + reactant mass/charge + embedding fan-out.
+    ``phase`` distinguishes the sample taken on entry (``"pre"`` -- captures growth
+    from MØD's product construction, before the predicate) from the one after the
+    embedding enumeration (``"map"`` -- captures growth from get_rule_2_molecule_maps
+    and carries ``n_matches``). The reactant mass/charge are computed only on a
+    growth event, so the disabled/steady-state path stays cheap.
+    """
+    sample = utils.mem_grown()
+    if sample is None:
+        return
+    try:
+        mass = round(sum((utils.exact_mass_from_term(g) or 0.0) for g in derivation.left), 2)
+        charge = sum(utils.net_charge_from_term(g) for g in derivation.left)
+    except Exception:
+        mass, charge = -1, -1
+    utils.mem_write(sample, phase, derivation.rule.name, mass, charge, n_matches)
+
+
 def amu_bound(
     strategy: mod.DGStrat,
     minimum: int = 50,
@@ -151,6 +173,10 @@ def sub_group(
         return sat_bool & alkyl_bool & hetro_bool
 
     def predicate(derivation):
+        # mem-diag: sample before any work so a growth here is attributed to MØD's
+        # product construction for this derivation (runs before the predicate).
+        _mem_growth_log(derivation, "pre", -1)
+
         rule_parts = derivation.rule.name.split("§")
         generalization_extention = rule_parts[1] if len(rule_parts) > 1 else None
 
@@ -179,6 +205,11 @@ def sub_group(
             label_settings = derivation_graph.labelSettings,
             right_limit = 1,
         )
+
+        # mem-diag: sample after the embedding enumeration so a growth here is
+        # attributed to get_rule_2_molecule_maps, with the fan-out (n_matches) that
+        # the C++-cost theory blames.
+        _mem_growth_log(derivation, "map", len(matches))
 
         # No embedding found: keep the previous behaviour of accepting the
         # derivation (the old code fell through the `if match:` block to

@@ -28,6 +28,10 @@ parser.add_argument("--frag-repeat", type=int, default=5,
                          "~14%% of molecules still produce new fragments at rounds 4-5, so validate "
                          "peak coverage before lowering below 5.")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
+parser.add_argument("--mem-diag", type=str, default=None, metavar="CSV",
+                    help="Localise the exploding derivation: log per-derivation peak-RSS growth "
+                         "events (rule, reactant mass/charge, embedding fan-out) to this CSV. "
+                         "Off by default; used to diagnose the forward OOMs.")
 parser.add_argument("--avoid-reprocessing", action="store_true", help="Avoid reprocessing if output exists")
 parser.add_argument("--skip-backward", action="store_true",
                     help="[deprecated] Force-skip the backward pass. The backward pass is now "
@@ -46,6 +50,10 @@ args = parser.parse_args()
 # Enable subgroup diagnostics
 if args.subgroup_diag:
     utils.enable_subgroup_diag(True)
+
+# Enable per-derivation memory instrumentation (localise the exploding derivation)
+if args.mem_diag:
+    utils.enable_mem_diag(args.mem_diag)
 
 mod.getConfig()
 mod.config.common.numThreads = args.number_threads
