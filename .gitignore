@@ -7,3 +7,6 @@ mol-spectro.sif
 
 # remain private until the thesis is published
 thesis/**
+_minted-main/**
+_minted/
+_minted-*/
