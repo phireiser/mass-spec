@@ -23,14 +23,14 @@ Inputs
    - rr
    - hit_at_1 ... hit_at_20
 
-Outputs
+Outputs (each written as both .pdf and .svg; the report embeds the PDF)
 -------
-1. cosine_mrr.svg
+1. cosine_mrr.pdf / .svg
    Grouped bar chart for:
    - Cosine similarity
    - MRR
 
-2. recall_at_k.svg
+2. recall_at_k.pdf / .svg
    Line plot of Recall@k for k = 1..20
 
 If --with-ci is used and a per-query CSV is provided, bootstrap 95% confidence
@@ -63,6 +63,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 MAX_K = 20
+
+# The report includes figures as PDF (\includegraphics); LISC has no Inkscape,
+# so the svg package cannot convert at build time. We emit PDF as the figure the
+# thesis embeds and keep an SVG alongside for quick previewing.
+FIGURE_FORMATS = (".pdf", ".svg")
+
+
+def save_figure(fig, output_path: Path) -> None:
+    """Write ``fig`` to ``output_path`` once per :data:`FIGURE_FORMATS` suffix."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    for ext in FIGURE_FORMATS:
+        fig.savefig(output_path.with_suffix(ext), dpi=300, bbox_inches="tight")
 
 
 def load_summary_csv(csv_path: Path) -> dict[str, dict[str, float]]:
@@ -465,8 +477,7 @@ def plot_cosine_mrr(
         ax.set_ylim(0, max(1.0, top_reached + 0.04))
 
     fig.tight_layout()
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
+    save_figure(fig, output_path)
     plt.close(fig)
 
 
@@ -498,8 +509,7 @@ def plot_recall_curve(
     ax.grid(alpha=0.3)
 
     fig.tight_layout()
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
+    save_figure(fig, output_path)
     plt.close(fig)
 
 
@@ -586,20 +596,23 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    cosine_path = args.output_dir / "cosine_mrr.pdf"
+    recall_path = args.output_dir / "recall_at_k.pdf"
     plot_cosine_mrr(
         summary=summary,
-        output_path=args.output_dir / "cosine_mrr.svg",
+        output_path=cosine_path,
         ci_data=summary_ci,
         significance=significance,
     )
     plot_recall_curve(
         summary=summary,
-        output_path=args.output_dir / "recall_at_k.svg",
+        output_path=recall_path,
         ci_data=recall_ci,
     )
 
-    print(f"Saved: {(args.output_dir / 'cosine_mrr.svg').resolve()}")
-    print(f"Saved: {(args.output_dir / 'recall_at_k.svg').resolve()}")
+    for base in (cosine_path, recall_path):
+        for ext in FIGURE_FORMATS:
+            print(f"Saved: {base.with_suffix(ext).resolve()}")
 
 
 if __name__ == "__main__":
