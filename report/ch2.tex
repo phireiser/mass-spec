@@ -79,7 +79,7 @@ The central observable is the mass to charge ratio $m/z$.
 A mass spectrum is therefore a distribution of signal intensity as a function of $m/z$, where the signal reflects the abundance of ions reaching the detector. \cite[p.~1566]{Murray2013}
 In most practical contexts, intensities are reported as relative intensity, normalized such that the most intense peak equals 100\% of the base peak.  \cite[p.~1550]{Murray2013}
 The x-axis is conventionally labeled with $m/z$ (mass to charge ratio), a dimensionless quantity.
-Labeling the axis with mass units such as \emph{daltons} (Da), amu, or the unified atomic mass unit (u) is common in practice. \cite[p.~1516]{Murray2013}
+Labeling the axis with mass units such as \emph{daltons} (Da), amu, or the unified atomic mass unit (u) is common in practice, although IUPAC recommends against it because $m/z$ is a dimensionless quantity. \cite[p.~1516]{Murray2013}
 
 \subsubsection{Ion notation and precursor concepts}
 
@@ -97,7 +97,7 @@ producing characteristic $M+1, M+2, \ldots$ patterns adjacent to the monoisotopi
 \emph{Fragment peaks} arise when precursor ions undergo dissociation,
 yielding smaller product ions whose $m/z$ values and relative intensities encode structural information.
 The \emph{base peak} is the most intense peak in the spectrum \cite[p.~1524]{Murray2013} and is used for normalization; \cite[p.~1550]{Murray2013}
-it is not necessarily the molecular ion and often corresponds to a particularly stable fragment. \cite[p.~2]{Moorthy2023} \cite[p.~263]{Gross2006}
+it is not necessarily the molecular ion and often corresponds to a particularly stable fragment. \cite[p.~2]{Moorthy2023} \cite[pp.~258 \& 263]{Gross2006}
 
 \fussy
 
@@ -132,7 +132,7 @@ A schematic of the EI source is shown in \Cref{fig:ei-schematic}.
 These characteristics make electron ionization particularly valuable for structural elucidation. \cite{VargasMedina2023}
 EI is the dominant ionization method in gas chromatography-mass spectrometry (GC-MS) and remains widely used in small-molecule analysis. \cite[p.~1]{Amirav2021}
 
-\paragraph{Spark Ionization (SI)}, is a hard ionization technique \cite[p.~1]{Lin2024}, that often utilized to detect trace elements at parts-per-billion (ppb) levels. \cite[p.~428]{Ganeev2016}
+\paragraph{Spark Ionization (SI)}, is a hard ionization technique, that often utilized to detect trace elements at parts-per-billion (ppb) levels. \cite[p.~428]{Ganeev2016}
 It uses high-voltage up to  $100$ kV pulsed electric sparks between two electrodes to vaporize, atomize, and ionize conductive or semi-conductive materials. \cite[p.~428]{Ganeev2016}
 
 \subsubsection{Soft Ionization methods}
@@ -168,7 +168,7 @@ instead, the mobile phase is nebulized, rapidly evaporated in a heated region, \
 Solvents dominate the early ionization steps \cite[p.~39]{Rockwood2018} and effectively act as a reagent gas, transferring charge to neutral analytes mainly by proton transfer to form $[M+H]^+$.
 
 Because APCI imparts relatively little internal energy, spectra typically show limited fragmentation %\cite[]
-and are well suited to quantitative LC-MS/MS, \cite[p.~171]{Dass2007} where signal is concentrated into a few precursor-ion peaks.
+and are well suited to quantitative LC-MS/MS, \cite[p.~46]{Dass2007} where signal is concentrated into a few precursor-ion peaks.
 A heated transfer tube and/or countercurrent curtain gas is used to decluster solvent-analyte adducts prior to ion extraction. \cite[p.~39]{Rockwood2018}
 APCI is often more efficient than ESI for less polar compounds, \cite[p.~466]{Gross2006} but its higher source temperatures can induce thermal degradation. \cite[p.~39]{Rockwood2018}
 A schematic of the APCI process is shown in Figure~\ref{fig:apci-schematic}.
@@ -258,7 +258,7 @@ In a field-free drift region of length $L$, the flight time is therefore
 t = \frac{L}{v} = L\sqrt{\frac{m}{2qV}}.
 \]
 
-Consequently, lighter ions reach the detector earlier than heavier ions, allowing determination of their $m/z$ values. \cite[p.~1152]{Wiley1955}
+Consequently, lighter ions reach the detector earlier than heavier ions, allowing determination of their $m/z$ values. \cite[pp.~1150--1151]{Wiley1955}
 
 \subsubsection{Quadrupole Mass Filter (QMF)}
 
@@ -270,7 +270,9 @@ By scanning the applied voltages, ions of increasing $m/z$ can be transmitted se
 \subsubsection{Quadrupole Ion Trap (QIT)}
 
 The quadrupole ion trap operates on the same fundamental principle as the linear quadrupole analyzer described above, added with the ability of oscillating radiofrequency fields to selectively confine ions according to their mass-to-charge ratio. \cite[p.~1156]{Raffaelli2021}
-The key distinction lies in the geometry of the electric field: whereas the linear quadrupole uses four parallel rods to create a two-dimensional confining potential that allows ions to pass through along the axial direction, the ion trap employs a three-dimensional quadrupolar field configuration that confines ions in all spatial dimensions within a central cavity. \cite[p.~962]{March2009}
+The key distinction lies in the geometry of the electric field.
+The linear quadrupole uses four parallel rods to create a two-dimensional confining potential that allows ions to pass through axially.
+In contrast, the ion trap uses a three-dimensional quadrupolar field configuration to confine ions within a central cavity in all spatial dimensions. \cite[p.~962]{March2009}
 This fundamental geometric difference enables the QIT to accumulate and store ions over time \cite[p.~973]{March2009}, rather than merely filtering them during transit, which has profound implications for sensitivity, scan modes, and the ability to perform multiple stages of mass analysis within a single device. \cite[p.~984]{March2009}
 
 
@@ -280,7 +282,7 @@ After ions have been separated by the mass analyzer, they must be detected and c
 The detector is transforming the arrival of individual ions into quantifiable data that can be assembled into a mass spectrum. \cite[p.~103]{Dass2007}
 
 The dominant detector in Electron Ionization Mass Spectrometry is the Electron Multiplier (EM).
-\cite[p.~103]{Dass2007}
+\cite[pp.~103--104]{Dass2007}
 
 An electron multiplier operates by converting a single incoming ion into a large cascade of electrons through the following sequence:
 
@@ -398,7 +400,7 @@ A typical library search workflow proceeds as follows: \cite[pp.~1, 5]{Scheubert
 \begin{enumerate}[label=(\roman*)]
     \item \textbf{Pre-processing:} the query spectrum is converted into a form suitable for comparison, for example by peak selection, intensity scaling, or related preprocessing steps.
     \item \textbf{Candidate filtering:} database entries may be restricted using precursor mass or precursor $m/z$ information within a tolerance window, reducing the number of candidates that must be evaluated.
-    \cite[p.~14]{Young2024}
+    \cite[p.~8]{Scheubert2013}
     \item \textbf{Scoring and ranking:} each candidate reference spectrum is assigned a similarity score against the query, and candidates are ranked accordingly.
     \cite[p.~5]{Scheubert2013}
 \end{enumerate}
@@ -616,7 +618,7 @@ The formal definition used throughout this thesis is introduced next.
 
 \subsubsection{Formal definition}
 
-A molecular graph is typically defined as \cite[p.~2]{Ehrlich2012} \cite[p.~3]{Fujita2025}
+A molecular graph is typically defined as \cite[p.~2]{Ehrlich2012}
 \begin{equation}
     \label{eq:mol-graph}
     G = (V, E)
@@ -631,6 +633,13 @@ In Representations each node may carry attributes such as element type (e.g., C,
 Likewise, each edge may encode bond order (single, double, or triple), aromatic character, and bond stereochemistry. \cite[pp.~4--5]{Wojtuch2023}
 By construction, this basic molecular graph does not include geometric or electronic detail, such as 3D coordinates, molecular conformation, or wavefunction-level information; these require augmented graph models or separate geometric and electronic representations.
 \cite[pp.~3--4]{Wojtuch2023} \cite[p.~595]{Kearnes2016}
+Embedding a molecule into 3D space, is itself a computationally hard problem, as it amounts to a high-dimensional conformational search over many degrees of freedom.
+
+The abstraction is therefore a deliberate trade-off.
+What is lost are all properties that depend on spatial arrangement: stereochemistry and chirality, cis/trans and conformational isomerism, bond lengths and angles, and the electronic and energetic detail that determines reactivity, spectra, and physical behaviour.
+Two molecules that differ only in handedness, for instance, map to the same underlying graph unless such information is explicitly re-encoded as vertex or edge attributes. \cite[pp.~4--5]{Wojtuch2023}
+What is gained is a discrete, finite, and canonicalisable object that is amenable to exact algorithmic treatment: subgraph matching, isomorphism testing, and rule-based transformation all become well-defined combinatorial operations rather than continuous geometric or quantum-mechanical computations. \cite[pp.~2--3]{Andersen2013}
+It is precisely this tractability that makes the graph representation the natural substrate for the transformation systems introduced next.
 
 
 
@@ -670,12 +679,12 @@ Intuitively, parts in \(L\setminus K\) are removed, parts in \(R\setminus K\) ar
 In chemistry, this DPO construction (Figure~\ref{fig:dpo-rewriting}) provides a representation of a reaction center: atoms and bonds in the preserved interface \(K\) define shared context, while changes between \(L\) and \(R\) encode bond breaking/forming events. \cite[p.~5]{Andersen2017}
 
 \subsubsection{Derivation Graph}
-Building on the local rewrite step formalized above, derivation graphs -- induced by repeated rule application -- provide a global view that shows mechanistically plausible chemical states.
+Building on the local rewrite step formalized above, derivation hypergraphs -- induced by repeated rule application -- provide a global view that shows mechanistically plausible chemical states.
 \cite[pp.~2--3]{Andersen2013}
 
-A derivation graph, often also called a reaction network, is a higher-level graph that captures all transformation steps generated by a graph rewriting system.
+A derivation hypergraph, often also called a reaction network, is a higher-level hypergraph that captures all transformation steps generated by a graph rewriting system.
 \cite[Sec.~10]{MODDocDGStrat} \cite[p.~2]{Abel2026}
-Whereas a molecular graph represents the internal structure of a single molecule, a derivation graph represents the \emph{space of possible reactions} between many molecular states.
+Whereas a molecular graph represents the internal structure of a single molecule, a derivation hypergraph represents the \emph{space of possible reactions} between many molecular states.
 \cite[pp.~2--3]{Andersen2013}
 
 Formally, each node corresponds to an object state (e.g., a molecule, multiset of molecules, or intermediate), and each directed edge corresponds to an application of a rewrite rule that transforms one state into another.
@@ -684,21 +693,21 @@ If a rule $p$ transforms state $G$ into state $H$, this step is represented as
 \[
 G \stackrel{p}{\longrightarrow} H.
 \]
-By collecting many such derivations, one obtains a directed graph whose topology encodes reachable states, alternative pathways, and cycles.
+By collecting many such derivations, one obtains a directed hypergraph whose topology encodes reachable states, alternative pathways, and cycles.
 
-In computational chemistry, derivation graphs are useful for enumerating reaction pathways, identifying branching points, analyzing network connectivity, and ranking plausible mechanistic routes under additional constraints (e.g., energy, rule priorities, or experimental evidence).
+In computational chemistry, derivation hypergraphs are useful for enumerating reaction pathways, identifying branching points, analyzing network connectivity, and ranking plausible mechanistic routes under additional constraints (e.g., energy, rule priorities, or experimental evidence).
 They therefore provide a natural bridge between rule-based chemistry models and downstream tasks such as pathway search, and machine-learning-based scoring of candidate transformations.
 \cite[p.~2]{Abel2026}
 
-These graph-transformation and derivation-graph constructs are implemented in the M\O D framework \cite{Andersen2017,MODDocDGStrat}, the software used throughout this work to generate fragmentation data; its Python module is referred to as \texttt{mod} in the following chapters.
+These graph-transformation and derivation hypergraph constructs are implemented in the M\O D framework \cite{Andersen2017,MODDocDGStrat}, the software used throughout this work to generate fragmentation data; its Python module is referred to as \texttt{mod} in the following chapters.
 
-One example derivation graph for the fragmentation rules applied is in \autoref{fig:derivation-graph}.
+One example derivation hypergraph for the fragmentation rules applied is in \autoref{fig:derivation-graph}.
 
 \begin{figure}[htp]
     \centering
     \includegraphics[width=0.8\textwidth]{../shared/figures/dg_toluene.pdf}
-    \caption[Example derivation graph of a fragmentation]{
-        Example derivation graph showing reaction pathways for toluene fragmentation.
+    \caption[Example derivation hypergraph of a fragmentation]{
+        Example derivation hypergraph showing reaction pathways for toluene fragmentation.
         Also illustrates the combinatorial explosion of possible pathways as rules are applied iteratively.
     }
     \label{fig:derivation-graph}

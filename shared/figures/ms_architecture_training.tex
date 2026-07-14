@@ -1,14 +1,14 @@
 \tikzset{
   mod/.style={draw, rounded corners=2pt, align=center, thick,
-    fill=blue!8, draw=blue!55!black, minimum height=11mm,
+    fill=RoyalBlue!8, draw=RoyalBlue!55!black, minimum height=11mm,
     inner xsep=6pt, text width=38mm},
   ten/.style={draw, shape=rounded rectangle, align=center,
     fill=gray!10, draw=gray!60!black, minimum height=9mm, inner xsep=10pt},
   bwd/.style={draw, rounded corners=2pt, align=center, thick,
-    fill=orange!30, draw=orange!70!black, text=black,
+    fill=amber!30, draw=amber!70!black, text=black,
     minimum height=11mm, inner xsep=6pt, text width=38mm},
   bwdten/.style={draw, shape=rounded rectangle, align=center,
-    fill=orange!30, draw=orange!70!black, text=black,
+    fill=amber!30, draw=amber!70!black, text=black,
     minimum height=9mm, inner xsep=10pt},
   aux/.style={draw, rounded corners=2pt, align=center,
     fill=gray!6, draw=gray!55!black, minimum height=10mm,
@@ -18,63 +18,63 @@
               fill opacity=0.9, text opacity=1},
   obj/.style={-{Stealth[length=2.5mm]}, thick, dotted, gray!55!black},
   nce/.style={{Stealth[length=2.5mm]}-{Stealth[length=2.5mm]},
-              line width=1.1pt, teal!55!black},
+              line width=1.1pt, SeaGreen!55!black},
   title/.style={font=\bfseries\large, anchor=west},
 }
 
 \begin{tikzpicture}[font=\small]
 
-\node[title] at (-1.6,1.4) {Training};
-\node[font=\itshape\footnotesize, anchor=west] at (-1.6,0.8)
+\node[title] at (-1.6,1.7) {Training};
+\node[font=\itshape\footnotesize, anchor=west] at (-1.6,1.0)
   {Phase A: molecule/fragments $\to$ spectrum \quad|\quad Phase B: spectrum $\to$ aligned latent};
 
 % --- Phase B branch (left, amber) ---
-\node[bwd]    (spec)   at (0,-0.4) {\textbf{Binned spectrum}\\ \texttt{spec} $[B,\text{bins}]$};
-\node[bwd]    (encspec)at (0,-2.2) {\textbf{EncSpec}\\ residual MLP};
-\node[bwdten] (zs)     at (0,-4.0) {$z_s\ [B,d]$};
-\node[bwd]    (bwdh)   at (0,-5.8) {\textbf{heads.bwd}\\ Linear $+$ ReLU};
-\node[bwdten] (zbwd)   at (0,-7.6) {$z_{\text{bwd}}$};
+\node[bwd]    (spec)   at (0,-0.4) {\textbf{Binned spectrum}\\ $s\ [B,\text{bins}]$};
+\node[bwd]    (encspec)at (0,-2.6) {\textbf{EncSpec}\\ residual MLP};
+\node[bwdten] (zs)     at (0,-4.8) {$z_{\mathrm{spec}}\ [B,d]$};
+\node[bwd]    (bwdh)   at (0,-6.9) {\textbf{heads.bwd}\\ Linear $+$ ReLU};
+\node[bwdten] (zbwd)   at (0,-8.8) {$z_{\mathrm{bwd}}$};
 
 % --- Phase A branch (centre / right) ---
-\node[mod] (smiles) at (4.6,-0.4) {\textbf{Molecule}\\ SMILES $\to$ MOD graph};
-\node[mod] (dtree)  at (9.2,-0.4) {\textbf{Derivation tree}\\ per-fragment graphs $+$ masses};
-\node[mod] (encmol) at (4.6,-2.2) {\textbf{EncMol}\\ GINEConv GNN $+$ pool};
-\node[mod] (fse)    at (9.2,-2.2) {\textbf{FragSetEncoder}\\ EncMol/frag $\to$ GCN $\to$ pool};
-\node[ten] (zm)     at (4.6,-4.0) {$z_m\ [B,d]$};
-\node[ten] (zf)     at (9.2,-4.0) {$z_f\ [B,d]$};
-\node[ten] (nodes)  at (11.4,-5.3) {node\_embs,\\ node\_masses};
-\node[ten] (fuse)   at (6.9,-5.6) {$z=(z_m+z_f)/2$};
-\node[mod] (fwd)    at (6.9,-7.3) {\textbf{heads.fwd}\\ Linear $+$ ReLU};
-\node[ten] (zfwd)   at (6.9,-9.0) {$z_{\text{fwd}}$};
+\node[mod] (smiles) at (5.6,-0.4)  {\textbf{Molecule}\\ SMILES $\to$ MOD graph};
+\node[mod] (dtree)  at (11.2,-0.4) {\textbf{Derivation tree}\\ per-fragment graphs $+$ masses};
+\node[mod] (encmol) at (5.6,-2.6)  {\textbf{EncMol}\\ GINEConv GNN $+$ pool};
+\node[mod] (fse)    at (11.2,-2.6) {\textbf{FragSetEncoder}\\ EncMol/frag $\to$ GCN $\to$ pool};
+\node[ten] (zm)     at (5.6,-4.8)  {$z_{\mathrm{mol}}\ [B,d]$};
+\node[ten] (zf)     at (11.2,-4.8) {$z_{\mathrm{frag}}\ [B,d]$};
+\node[ten] (nodes)  at (14.0,-6.7) {node\_embs,\\ node\_masses};
+\node[ten] (fuse)   at (8.4,-6.9)  {$z_{\mathrm{combined}}=(z_{\mathrm{mol}}+z_{\mathrm{frag}})/2$};
+\node[mod] (fwd)    at (8.4,-8.9)  {\textbf{heads.fwd}\\ Linear $+$ ReLU};
+\node[ten] (zfwd)   at (8.4,-10.7) {$z_{\mathrm{fwd}}$};
 
 % --- shared decoder + reconstruction ---
-\node[mod, text width=44mm] (dec) at (6.0,-10.8)
+\node[mod, text width=44mm] (dec) at (7.4,-12.7)
   {\textbf{DecSpecFragment}\\ intensity/frag $\to$ scatter to m/z bins};
-\node[ten] (spechat) at (6.0,-12.4)
-  {$\widehat{\texttt{spec}}\ \times\ \text{parent-mass mask}$};
+\node[ten] (spechat) at (7.4,-14.4)
+  {$\hat{s}\ \times\ \text{parent-mass mask}$};
 
 % --- foreground flow ---
 \draw[flow] (spec) -- (encspec);    \draw[flow] (encspec) -- (zs);
 \draw[flow] (zs) -- (bwdh);         \draw[flow] (bwdh) -- (zbwd);
 \draw[flow] (smiles) -- (encmol);   \draw[flow] (dtree) -- (fse);
 \draw[flow] (encmol) -- (zm);       \draw[flow] (fse) -- (zf);
-\draw[flow] (fse.south) to[out=-60,in=100] (nodes.north);
+\draw[flow] (fse.south) to[out=-55,in=110] (nodes.north);
 
-\draw[flow] (zm) to[out=-90,in=150] node[lbl,pos=0.65]{Phase A} (fuse);
-\draw[flow] (zf) to[out=-90,in=30]  node[lbl,pos=0.65]{Phase A} (fuse);
+\draw[flow] (zm) to[out=-90,in=155] node[lbl,pos=0.62]{Phase A} (fuse);
+\draw[flow] (zf) to[out=-90,in=25]  node[lbl,pos=0.62]{Phase A} (fuse);
 \draw[flow] (fuse) -- (fwd);        \draw[flow] (fwd) -- (zfwd);
 
-\draw[flow] (nodes) to[out=-90,in=55] (dec.east);
-\draw[flow] (zfwd) to[out=-100,in=100] node[lbl,pos=0.55]{Phase A cond} (dec.north);
-\draw[flow] (zbwd) to[out=-40,in=180] node[lbl,pos=0.55]{Phase B cond} (dec.west);
+\draw[flow] (nodes) to[out=-90,in=45] (dec.east);
+\draw[flow] (zfwd) to[out=-100,in=95] node[lbl,pos=0.55]{Phase A cond} (dec.north);
+\draw[flow] (zbwd) to[out=-40,in=180] node[lbl,pos=0.5]{Phase B cond} (dec.west);
 \draw[flow] (dec) -- (spechat);
 
 % --- objective edges: short InfoNCE now that branches are adjacent ---
-\draw[nce] (zbwd.east) to[out=30,in=-110]
+\draw[nce] (zbwd.east) to[out=35,in=-115]
   node[lbl,pos=0.55]{InfoNCE align} (zm.south);
 % reconstruction loss routed cleanly down the left margin (clear of the amber column)
 \draw[obj, rounded corners=5mm]
-  (spec.west) -- (-2.6,-0.4) -- (-2.6,-12.4) -- (spechat.west);
-\node[lbl, anchor=east] at (-2.7,-6.4) {cosine $+$ Wasserstein};
+  (spec.west) -- (-2.8,-0.4) -- (-2.8,-14.4) -- (spechat.west);
+\node[lbl, anchor=east] at (-2.9,-7.4) {cosine $+$ Wasserstein};
 
 \end{tikzpicture}

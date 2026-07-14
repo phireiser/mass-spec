@@ -81,14 +81,10 @@
 \newcommand{\linespacing}{1.5}
 \renewcommand{\baselinestretch}{\linespacing}
 
-% Placeholder for numbers pending the final retrained-model run. Renders in red
-% bold so unfilled values are obvious; grep for "\ph{" to find them all.
+% Placeholder for comments in red, e.g. \ph{[TODO: ...]}
 \newcommand{\ph}[1]{\textcolor{red}{\textbf{#1}}}
 
-% Include a figure if its file exists, otherwise draw a visible "pending" box so
-% the document still compiles before a figure has been generated (e.g. results
-% figures awaiting the retrained-model run). #1 = \includegraphics options,
-% #2 = figure path.
+% Include a figure if its file exists, otherwise draw a visible "pending" box so the document still compiles
 \newcommand{\figorpending}[2]{%
     \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
         \framebox[0.8\linewidth]{%

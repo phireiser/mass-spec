@@ -21,10 +21,7 @@
 
 \begin{tikzpicture}[font=\small]
 
-%%──────────────────── STAGE 1 BOX ───────────────────────────────────────────
-\draw[rounded corners=8pt,fig medium]
-  (-0.5,-15.1) rectangle (9.4,-0.7);
-
+%%──────────────────── STAGE 1 ───────────────────────────────────────────────
 \node[anchor=west,font=\normalsize\bfseries,text=RoyalBlue] at (1,-1.15)
   {Molecular encoding \textit{\small(local structure)}};
 
@@ -73,7 +70,7 @@
     ({6.0+0.23*cos(\b)},{-4.65+0.18*sin(\b)});
 \draw[sa] (6.72,-4.62)--(7.6,-4.62);
 
-\node[font=\scriptsize] at (8.1,-3.95) {$z_{s_1}\!\in\!\mathbb{R}^{d_h}$};
+\node[font=\scriptsize] at (8.1,-3.95) {$z_{v_1}\!\in\!\mathbb{R}^{d}$};
 \foreach \yy in {-4.2,-4.34,-4.48,-4.62,-4.76,-4.9}
   \node[evB=18pt,minimum height=5.5pt] at (8.1,\yy) {};
 \node[font=\normalsize] at (8.1,-5.18) {$\vdots$};
@@ -110,7 +107,7 @@
     ({6.0+0.23*cos(\b)},{-8.2+0.18*sin(\b)});
 \draw[sa] (6.72,-8.17)--(7.6,-8.17);
 
-\node[font=\scriptsize] at (8.1,-7.5) {$z_{s_2}\!\in\!\mathbb{R}^{d_h}$};
+\node[font=\scriptsize] at (8.1,-7.5) {$z_{v_2}\!\in\!\mathbb{R}^{d}$};
 \foreach \yy in {-7.75,-7.89,-8.03,-8.17,-8.31,-8.45}
   \node[evO=18pt,minimum height=5.5pt] at (8.1,\yy) {};
 \node[font=\normalsize] at (8.1,-8.73) {$\vdots$};
@@ -145,7 +142,7 @@
     ({6.0+0.23*cos(\b)},{-11.65+0.18*sin(\b)});
 \draw[sa] (6.72,-11.62)--(7.6,-11.62);
 
-\node[font=\scriptsize] at (8.1,-10.95) {$z_{s_3}\!\in\!\mathbb{R}^{d_h}$};
+\node[font=\scriptsize] at (8.1,-10.95) {$z_{v_3}\!\in\!\mathbb{R}^{d}$};
 \foreach \yy in {-11.2,-11.34,-11.48,-11.62,-11.76,-11.9}
   \node[evG=18pt,minimum height=5.5pt] at (8.1,\yy) {};
 \node[font=\normalsize] at (8.1,-12.18) {$\vdots$};
@@ -156,10 +153,7 @@
 %%──────────────────── LARGE BLUE ARROW ──────────────────────────────────────
 \draw[->, fig xbold, RoyalBlue](9.6,-7.95) -- (11.1,-7.95);
 
-%%──────────────────── STAGE 2 BOX ───────────────────────────────────────────
-\draw[rounded corners=8pt,fig medium]
-  (11.5,-15.1) rectangle (21,-0.7);
-
+%%──────────────────── STAGE 2 ───────────────────────────────────────────────
 \node[anchor=west,font=\normalsize\bfseries,text=SeaGreen] at (11.8,-1.15)
   {Derivation Graph encoding \textit{\small(global structure)}};
 
@@ -168,52 +162,52 @@
 \node[font=\scriptsize\bfseries,text=Cerulean] at (15.2,-2.4) {$s_1$};
 \node[evB=24pt,minimum height=7pt] at (16.02,-2.4) {};
 \node[font=\scriptsize] at (16.58,-2.4) {\ldots};
-\node[font=\scriptsize,anchor=north] at (14.97,-2.72) {$z_{s_1}$};
+\node[font=\scriptsize,anchor=north] at (14.97,-2.72) {$z_{v_1}$};
 
 %% s2 s3 s4 row
 \node[sn=amber,minimum size=20pt] (hs2) at (13.5,-5.5) {};
 \node[font=\scriptsize\bfseries,text=amber] at (13.5,-5.5) {$s_2$};
 \node[evO=21pt,minimum height=6pt] at (14.27,-5.5) {};
 \node[font=\scriptsize] at (14.81,-5.5) {\ldots};
-\node[font=\scriptsize,anchor=north] at (13.27,-5.82) {$z_{s_2}$};
+\node[font=\scriptsize,anchor=north] at (13.27,-5.82) {$z_{v_2}$};
 
 \node[sn=SeaGreen,minimum size=20pt] (hs3) at (15.8,-5.5) {};
 \node[font=\scriptsize\bfseries,text=SeaGreen] at (15.8,-5.5) {$s_3$};
 \node[evG=21pt,minimum height=6pt] at (16.58,-5.5) {};
 \node[font=\scriptsize] at (17.12,-5.5) {\ldots};
-\node[font=\scriptsize,anchor=north] at (15.58,-5.82) {$z_{s_3}$};
+\node[font=\scriptsize,anchor=north] at (15.58,-5.82) {$z_{v_3}$};
 
 \node[sn=RoyalPurple,minimum size=20pt] (hs4) at (18.1,-5.5) {};
 \node[font=\scriptsize\bfseries,text=RoyalPurple] at (18.1,-5.5) {$s_4$};
 \node[evP=21pt,minimum height=6pt] at (18.88,-5.5) {};
 \node[font=\scriptsize] at (19.42,-5.5) {\ldots};
-\node[font=\scriptsize,anchor=north] at (17.87,-5.82) {$z_{s_4}$};
+\node[font=\scriptsize,anchor=north] at (17.87,-5.82) {$z_{v_4}$};
 
 %% s5 s6 row
 \node[sn=Magenta,minimum size=20pt] (hs5) at (15.6,-8.6) {};
 \node[font=\scriptsize\bfseries,text=Magenta] at (15.6,-8.6) {$s_5$};
 \node[evK=21pt,minimum height=6pt] at (16.38,-8.6) {};
 \node[font=\scriptsize] at (16.92,-8.6) {\ldots};
-\node[font=\scriptsize,anchor=north] at (15.37,-8.92) {$z_{s_5}$};
+\node[font=\scriptsize,anchor=north] at (15.37,-8.92) {$z_{v_5}$};
 
 \node[sn=TealBlue,minimum size=20pt] (hs6) at (18.1,-8.6) {};
 \node[font=\scriptsize\bfseries,text=TealBlue] at (18.1,-8.6) {$s_6$};
 \node[evC=21pt,minimum height=6pt] at (18.88,-8.6) {};
 \node[font=\scriptsize] at (19.42,-8.6) {\ldots};
-\node[font=\scriptsize,anchor=north] at (17.87,-8.92) {$z_{s_6}$};
+\node[font=\scriptsize,anchor=north] at (17.87,-8.92) {$z_{v_6}$};
 
 %% s7 s8 row
 \node[sn=RawSienna,minimum size=18pt] (hs7) at (13.3,-11.3) {};
 \node[font=\tiny\bfseries,text=RawSienna] at (13.3,-11.3) {$s_7$};
 \node[evO=17pt,minimum height=5pt] at (14.05,-11.3) {};
 \node[font=\scriptsize] at (14.53,-11.3) {\ldots};
-\node[font=\scriptsize,anchor=north] at (13.07,-11.6) {$z_{s_7}$};
+\node[font=\scriptsize,anchor=north] at (13.07,-11.6) {$z_{v_7}$};
 
 \node[sn=OliveGreen,minimum size=18pt] (hs8) at (15.7,-11.3) {};
 \node[font=\tiny\bfseries,text=OliveGreen] at (15.7,-11.3) {$s_8$};
 \node[evG=17pt,minimum height=5pt] at (16.45,-11.3) {};
 \node[font=\scriptsize] at (16.93,-11.3) {\ldots};
-\node[font=\scriptsize,anchor=north] at (15.47,-11.6) {$z_{s_8}$};
+\node[font=\scriptsize,anchor=north] at (15.47,-11.6) {$z_{v_8}$};
 
 %% e1 incidence node + links to s2 s3 s4
 \node[hb] (he1) at (15.2,-3.95) {$e_1$};
