@@ -825,12 +825,17 @@ IMS_4_35_rHalpha = mod.Rule.fromDFS(
 # Interpreation von Massenspektren Springer, Seite 75, Gl. 4.36
 IMS_4_36_ = mod.Rule.fromDFS(
 	s =
-	"[C]1[C]2[C]3([H]4)[C]5[C]6[C]7{=}[C]8[C]9{=}[C]10[C]11{=}[C]12{-}7" # ring has somewhere.
+	# LHS ring is AROMATIC (e(ar)); this rule de-aromatises an alkyl-substituted
+	# benzene into a distonic radical cation. Matching the aromatic ring (not one
+	# Kekulé form) makes the de-aromatisation position-invariant; the RHS product is
+	# genuinely non-aromatic so it stays localised, and IMS_4_36__rHalpha (below)
+	# matches that localised product unchanged.
+	"[C]1[C]2[C]3([H]4)[C]5[C]6[C]7:[C]8:[C]9:[C]10:[C]11:[C]12:7"
 	">>"
 	"[C]1[C]2[C]3([H]4)[C]5[C]6"
 	"[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7",
 	name=
-    "gamma H-migr. to unsaturated group Odd electron Ion" 
+    "gamma H-migr. to unsaturated group Odd electron Ion"
     " 4.36 charge move"
 	""
 )
