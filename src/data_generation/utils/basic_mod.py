@@ -9,40 +9,33 @@ import mod
 
 def graph_from_smiles(smiles: str, name: Optional[str] = None) -> mod.Graph:
     """
-    Build a molecule graph from SMILES, localising any aromatic bonds first.
+    Build a molecule graph from SMILES, keeping aromatic rings aromatic.
 
-    MØD's term mode has no encoding for ``mod.BondType.Aromatic`` (see
-    :func:`data_generation.utils.term_transfers.term_from_graph`, which would
-    otherwise emit the unparseable placeholder ``e(__error2)``). So an aromatic
-    SMILES such as ``c1ccccc1`` cannot flow through the fragmentation pipeline
-    as-is; it must be kekulised to explicit single/double bonds.
+    Aromatic bonds now ride through the fragmentation pipeline as the inert term
+    ``e(ar)`` (see :func:`data_generation.utils.term_transfers.term_from_graph`),
+    so the molecule is NOT kekulised. This is deliberate: kekulising commits the
+    ring to one arbitrary Kekulé form, and because the term-mode rules match on
+    exact bond order, that arbitrary choice would change which fragments are
+    reachable (resonance-dependent fragmentation). Left aromatic, the ring carries
+    no alternation to be arbitrary about, and only the curated aromatic rules can
+    match it -- generic integer-bond-order rules cannot touch an ``e(ar)`` ring.
 
-    ``mod.Graph.fromSMILES`` preserves explicit bonds and does not re-perceive
-    aromaticity, so a kekulised SMILES flows through forward/backward derivation
-    unchanged. We build the graph first and only rebuild from a RDKit-kekulised
-    SMILES when mod actually reports aromatic bonds -- SMILES already written in
-    Kekulé form are returned byte-for-byte unchanged (no resonance re-assignment,
-    hence no behaviour change for molecules that already worked).
-
-    If RDKit cannot parse or kekulise the input, the aromatic graph is returned
-    unchanged; ``term_from_graph`` then raises a clear error naming the molecule.
+    ``mod.Graph.fromSMILES`` perceives aromaticity but *preserves* explicit bonds,
+    so a SMILES written in some arbitrary Kekulé form would flow through Kekulé and
+    stay resonance-dependent. To make the fix robust to input form, we first
+    canonicalise through RDKit (whose default SMILES writes aromatic rings in the
+    lowercase aromatic form); mod then perceives ``mod.BondType.Aromatic`` ring
+    bonds -> term ``e(ar)``. If RDKit cannot parse the input, the raw SMILES is used.
     """
-    g = mod.Graph.fromSMILES(smiles, name) if name is not None \
+    try:
+        from rdkit import Chem
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is not None:
+            smiles = Chem.MolToSmiles(mol)  # default: aromatic (kekuleSmiles=False)
+    except Exception:
+        pass
+    return mod.Graph.fromSMILES(smiles, name) if name is not None \
         else mod.Graph.fromSMILES(smiles)
-    if not any(e.bondType == mod.BondType.Aromatic for e in g.edges):
-        return g
-
-    from rdkit import Chem
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is not None:
-        try:
-            Chem.Kekulize(mol, clearAromaticFlags=True)
-            kekule = Chem.MolToSmiles(mol, kekuleSmiles=True)
-            return mod.Graph.fromSMILES(kekule, name) if name is not None \
-                else mod.Graph.fromSMILES(kekule)
-        except Exception:
-            pass
-    return g
 
 
 def get_parents(

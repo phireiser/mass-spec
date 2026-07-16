@@ -33,9 +33,9 @@ IMS_8_1_var1_step3 = mod.Rule.fromDFS(
     "[C]1([H]2){=}[C]3([H]4)[C+]5([H]6)([H]7)"
     "[C]8([H]9)([H]10)([H]11)"
     ">>"
-    "[c]1([H]2)[c+]3([H]4)[c]5([H]6){-}1"
+    "[C]1([H]2):[C+]3([H]4):[C]5([H]6):1"
     "."
-    "[H]7[C]8([H]9)([H]10)([H]11)", # https://en.wikipedia.org/wiki/Cyclopropenium_ion
+    "[H]7[C]8([H]9)([H]10)([H]11)", # aromatic cyclopropenium (e(ar) ring); https://en.wikipedia.org/wiki/Cyclopropenium_ion
     name =
     "monomolecular ion-cleavage"
 	" 8.1 rH 2.5"
@@ -59,7 +59,7 @@ IMS_8_1_var2_step2 = mod.Rule.fromDFS(
     s =
     "[C+]1([H]2)([H]3)[C]4([H]5){=}[C]6([H]7)([H]8)"
     ">>"
-    "[c+]1([H]2)[c]4([H]5)[c]6([H]7){-}1" # charge somewhere in ring # https://en.wikipedia.org/wiki/Cyclopropenium_ion
+    "[C+]1([H]2):[C]4([H]5):[C]6([H]7):1" # aromatic cyclopropenium (e(ar) ring); charge delocalised over ring; https://en.wikipedia.org/wiki/Cyclopropenium_ion
     "."
     "[H]3[H]8", 
     name =
@@ -345,7 +345,7 @@ IMS_8_6_1 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1"
     ">>"
-    "[c]1[c+]2[c]3[C]4[C]5[c]6[c.]7[c]8",
+    "[C]1[C+]2[C]3[C]4[C]5[C]6[C.]7[C]8",
     name =
     "stepwise symetric openchained intermediate product"
     " 8.6 var 1"
@@ -356,7 +356,7 @@ IMS_8_6_2 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1"
     ">>"
-    "[c]1[c.]2[c]3[C]4[C]5[c]6[c+]7[c]8",
+    "[C]1[C.]2[C]3[C]4[C]5[C]6[C+]7[C]8",
     name =
     "stepwise symetric openchained intermediate product"
     " 8.6 var 2"
@@ -365,7 +365,7 @@ IMS_8_6_2 = mod.Rule.fromDFS(
 
 IMS_8_6_3 = mod.Rule.fromDFS(
     s =
-    "[c]1[c+]2[c]3[C]4[C]5[c]6[c.]7[c]8"
+    "[C]1[C+]2[C]3[C]4[C]5[C]6[C.]7[C]8"
     ">>"
     "[C]1{=}[C+]2[C]3{=}[C]4.[C]5{=}[C]6[C.]7{=}[C]8",
     name =
@@ -376,7 +376,7 @@ IMS_8_6_3 = mod.Rule.fromDFS(
 
 IMS_8_6_4 = mod.Rule.fromDFS(
     s =
-    "[c]1[c.]2[c]3[C]4[C]5[c]6[c+]7[c]8"
+    "[C]1[C.]2[C]3[C]4[C]5[C]6[C+]7[C]8"
     ">>"
     "[C]1{=}[C.]2[C]3{=}[C]4" "." "[C]5{=}[C]6[C+]7{=}[C]8",
     name =

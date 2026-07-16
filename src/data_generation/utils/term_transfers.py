@@ -11,7 +11,13 @@ term_bond_from_bond_type = {
     mod.BondType.Single: "p(0)",
     mod.BondType.Double: "p(p(0))",
     mod.BondType.Triple: "p(p(p(0)))",
-    mod.BondType.Aromatic: "__error2"
+    # Aromatic bonds ride through term mode as an inert ground term e(ar): no
+    # rule authored with p(0)/p(p(0))/... can match it, so an aromatic ring is
+    # protected from the (integer electron-pushing) generic rules by construction
+    # -- only the curated aromatic rules mention e(ar). This replaces the old
+    # "__error2" reject sentinel; carrying aromaticity is a Python-side encoding
+    # choice, not a mod limitation (mod perceives BondType.Aromatic natively).
+    mod.BondType.Aromatic: "ar"
 }
 
 
@@ -28,11 +34,11 @@ def term_from_graph(g: mod.Graph):
     for e in g.edges:
         bond_type = term_bond_from_bond_type[e.bondType]
         if bond_type.startswith("__error"):
+            # Reaches here only for BondType.Invalid ("__error1"); aromatic bonds
+            # now encode to the inert term e(ar) and pass through unchanged.
             raise ValueError(
                 f"term_from_graph: {g.name!r} has a {e.bondType} bond, which has "
-                f"no term-mode encoding. Aromatic bonds must be kekulised to "
-                f"explicit single/double bonds first -- build the molecule with "
-                f"utils.graph_from_smiles (or pass a Kekulé SMILES)."
+                f"no term-mode encoding."
             )
         s += f'edge [ source {e.source.id} target {e.target.id} label "e({bond_type})" ]'
     s +="]\n"
@@ -104,6 +110,10 @@ def decode_edge_label(l: str) -> str:
         bt = "="
     elif l == "p(p(p(0)))":
         bt = "#"
+    elif l == "ar":
+        # inverse of term_bond_from_bond_type[BondType.Aromatic]; ":" is mod's
+        # string-mode aromatic bond, so the round-tripped graph is aromatic again
+        bt = ":"
     else:
         raise ValueError(f"Can not convert edge term '{l}' to a molecule.")
     return bt

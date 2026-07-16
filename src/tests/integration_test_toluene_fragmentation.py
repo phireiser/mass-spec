@@ -38,9 +38,9 @@ class TestTolueneFragmentation(unittest.TestCase):
         mod.getConfig()
         mod.config.common.numThreads = 1
 
-        # Kekulé SMILES (alternating single/double bonds) rather than the aromatic
-        # form "Cc1ccccc1": term_from_graph has no term encoding for aromatic bonds,
-        molecule = mod.Graph.fromSMILES("CC1=CC=CC=C1", "toluene")
+        # Aromatic SMILES: the ring rides through term mode as the inert bond
+        # e(ar), and the curated aromatic rules (benzylAllyl_*) match it directly.
+        molecule = mod.Graph.fromSMILES("Cc1ccccc1", "toluene")
         molecule_term = utils.term_from_graph(molecule)
         aoc = utils.all_occuring([molecule], utils.ALL_ATOMS)
 

@@ -19,8 +19,8 @@ It also pins concrete chemistry for toluene: the species charges form the set
 Like the other integration tests this drives the real MOD engine, so it is slow
 and skipped unless RUN_MOD_INTEGRATION_TESTS=1 (see run/ci_cd/integration_test.sh).
 
-SMILES are written in Kekule form (explicit single/double bonds): term_from_graph
-has no term encoding for aromatic bonds.
+The ring is written aromatic (lowercase): it rides through term mode as the inert
+bond e(ar), and the charge/mass helpers under test are bond-order agnostic.
 """
 
 import os
@@ -35,7 +35,7 @@ from src.data_generation.core import strategy
 
 
 MOLECULE_NAME = "toluene"
-MOLECULE_SMILES = "CC1=CC=CC=C1"
+MOLECULE_SMILES = "Cc1ccccc1"
 
 # Fragmentation rounds for this test. The asserted charge properties (charge set
 # {0, +1}; M+. at m/z 92) are independent of cascade depth; 2 exercises the charge

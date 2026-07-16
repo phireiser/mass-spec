@@ -26,15 +26,15 @@ from src.data_generation.rules import fragmentation, ionization
 from src.data_generation.core import strategy
 
 
-# (name, Kekulé SMILES): an aromatic, a substituted aromatic and a carbonyl
-# (heteroatom), so the carbon-localized molecular-ion rule is exercised on
-# unsaturated, aromatic and heteroatom skeletons. A saturated alkane (butane) was
-# dropped: its round-1 fragmentation is pathologically slow (~30 min of predicate
-# work), which made this test effectively unrunnable; toluene's methyl still
-# provides sp3 carbons.
+# (name, SMILES): an aromatic, a substituted aromatic and a carbonyl (heteroatom),
+# so the carbon-localized molecular-ion rule is exercised on unsaturated, aromatic
+# and heteroatom skeletons. The rings are written aromatic (lowercase) so they ride
+# through term mode as e(ar). A saturated alkane (butane) was dropped: its round-1
+# fragmentation is pathologically slow (~30 min of predicate work), which made this
+# test effectively unrunnable; toluene's methyl still provides sp3 carbons.
 MOLECULES = [
-    ("benzene", "C1=CC=CC=C1"),
-    ("toluene", "CC1=CC=CC=C1"),
+    ("benzene", "c1ccccc1"),
+    ("toluene", "Cc1ccccc1"),
     ("acetone", "CC(=O)C"),
 ]
 
