@@ -55,8 +55,34 @@ aryl_CO_loss = mod.Rule.fromDFS(
 )
 
 
+# Five-membered heteroaromatics (long tail): eject the ring heteroatom X with an
+# adjacent ring C-H as H-C=X, opening the ring. Furan -> formyl (H-C=O) leaving
+# C3H3+ (m/z 39); thiophene -> thioformyl (H-C=S) leaving C3H3+ (m/z 39). These
+# fire only where an aromatic O/S sits in a ring next to an aromatic C-H, so they
+# are self-limiting to O-/S-heteroaromatics. NIST-validated: furan 68->39
+# (Dice 0.14->0.26), thiophene 84->39. (Pyrrole's analogous HCN loss is not shipped:
+# the store has no pyrrole reference to validate against.)
+furan_CHO_loss = mod.Rule.fromDFS(
+    s =
+    "[C]3:[C]2([H]4):[O]1:[C]5"
+    ">>"
+    "[C]3" "." "[C]2([H]4){=}[O]1" "." "[C]5",
+    name = "furan CHO loss"
+)
+
+thiophene_HCS_loss = mod.Rule.fromDFS(
+    s =
+    "[C]3:[C]2([H]4):[S]1:[C]5"
+    ">>"
+    "[C]3" "." "[C]2([H]4){=}[S]1" "." "[C]5",
+    name = "thiophene HCS loss"
+)
+
+
 aromatic_ring_loss_fragmentation = [
     aromatic_C2H2_loss,
     aromatic_HCN_loss,
     aryl_CO_loss,
+    furan_CHO_loss,
+    thiophene_HCS_loss,
 ]
