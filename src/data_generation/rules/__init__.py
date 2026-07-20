@@ -18,10 +18,11 @@ from .wikipedia import (
     wiki_ionization,
     wiki_fragmentation,
 )
+from .aromatic_ring_loss import aromatic_ring_loss_fragmentation
 
-# TODO heterocyclic ring fission (HRF)
 # TODO benzofuran forming fission (BFF)
 # TODO quinone methide (QM) fission
+# (heterocyclic ring fission: partially covered by aromatic_ring_loss HCN/CO channels)
 
 # Curated rule collections for common usage
 ionization = []
@@ -37,6 +38,7 @@ fragmentation.extend(IMS_cover_fragmentation)
 fragmentation.extend(IMS_chap4_examples)
 fragmentation.extend(IMS_chap8_examples)
 fragmentation.extend(wiki_fragmentation)
+fragmentation.extend(aromatic_ring_loss_fragmentation)
 
 __all__ = [
     "ionization",
@@ -52,4 +54,5 @@ __all__ = [
     "wiki_ionization",
     "wiki_fragmentation",
     "rearrangements",
+    "aromatic_ring_loss_fragmentation",
 ]
