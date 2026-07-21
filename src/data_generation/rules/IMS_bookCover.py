@@ -175,17 +175,38 @@ hTransition_saturated_2 = mod.Rule.fromDFS( # siehe 8.53
 	" §Y4"
 )
 
-# hTransition_saturated_2_alpha -- DISABLED pending a proper re-authoring.
-#
-# Its left side was two "."-separated components, so MOD applied it bimolecularly
-# across two independent fragments -- the mis-encoding this file is being cleaned of.
-# Unlike the saturated_1/2/3 rules it cannot simply be reconnected, because as written
-# the receptor A1 DETACHES from C2 and re-attaches to a bare carbon C5 that has no other
-# stated context (the reviewer flagged the resulting centre as over-valent), while a
-# hydrogen simultaneously shifts C3 -> C2. That is three changes at once and the
-# intended topology is not recoverable from the cover figure alone; it is the "(*) auch
-# Y" footnote pointing at Gl. 8.53, which is not drawn on the endpaper.
-# Re-derive it from Gl. 8.53 as a SINGLE connected component before re-enabling.
+hTransition_saturated_2_alpha = mod.Rule.fromDFS( # siehe 8.53
+	s =
+	# RE-AUTHORED from Gl. 8.53 (book p. 179, "Decompositions of cyclic structures"),
+	# which the endpaper's "(*) auch Y" footnote points at. The old form was two
+	# "."-separated components AND unreadable as chemistry: the receptor A1 detached
+	# from C2 and re-attached to a bare carbon C5 with no stated context, while a
+	# hydrogen simultaneously shifted C3 -> C2. Three changes at once, none of them
+	# what the book draws.
+	#
+	# What Gl. 8.53 actually shows for an OE(+.) precursor is plain radical-site
+	# alpha-cleavage: the unpaired electron on a carbon pairs with one electron of a
+	# bond on the NEIGHBOURING atom, forming a pi bond and expelling whatever that bond
+	# held. Here the neighbour C2 carries the onium A3, so the C2-A3 bond breaks
+	# homolytically, C1=C2 forms, and A3 leaves as the CHARGED radical.
+	#
+	# That is the endpaper's "alpha oder rd -- Ladungserhalt, das Ion erhaelt das
+	# H-Atom" branch, and it is the exact analogue of hTransition_saturated_1_alpha:
+	# same electron bookkeeping, but because A3 sits on the carbon ADJACENT to the
+	# radical there is no chain left to close, so the neutral product is an alkene
+	# rather than a carbocycle.
+	#
+	# Matched to the rH product of hTransition_saturated_2 (radical on C1, onium A3 on
+	# the neighbouring C2). Conserving by construction: charge 1 -> 1, unpaired 1 -> 1
+	# (it moves C1 -> A3), and the two valences freed on C1 (radical) and C2 (lost A3)
+	# are exactly the two the new pi bond consumes.
+	"[C.]1[C]2([_A+]3)[C]4[C]5"
+	">>"
+	"[C]1{=}[C]2[C]4[C]5" "." "[_A+.]3",
+	name =
+	"H transition receptor site saturated alpha"
+	" §Y3"
+)
 
 hTransition_saturated_3 = mod.Rule.fromDFS( # siehe 4.44 & 4.46
 	s =
@@ -221,15 +242,44 @@ hTransition_saturated_3_alpha = mod.Rule.fromDFS( # siehe 4.44 & 4.46
 	" §Y5R9"
 )
 
-# hTransition_saturated_4 -- DISABLED pending a proper re-authoring.
-#
-# Left side was two "."-separated components (bimolecular mis-encoding). Reconnecting it
-# is not mechanical: the acceptor carbon already carries a hydrogen and a double bond to
-# the receptor, so simply bonding it into the donor chain makes it PENTAVALENT. Making it
-# work requires choosing whether the chain attaches to the carbon or to the heteroatom,
-# and whether the C={A} pi bond collapses to a single bond as the hydrogen arrives --
-# a decision that needs Gl. 8.90, which is not drawn on the endpaper this file encodes.
-# Re-derive from Gl. 8.90 as a SINGLE connected component before re-enabling.
+hTransition_saturated_4 = mod.Rule.fromDFS( # siehe 8.90
+	s =
+	# RE-AUTHORED from Gl. 8.90 (book p. 204, "Steric effects in OE+. rearrangements"),
+	# which the endpaper's third receptor variant ("CH={Y}R", siehe 8.90) points at.
+	# Two defects fixed. The left side was two "."-separated components, and -- the
+	# reason it could not simply be reconnected -- the old rule delivered the migrating
+	# hydrogen to the CARBON C4, which already carried H5 and a double bond to the
+	# receptor, so bonding it into the donor chain made that carbon PENTAVALENT.
+	#
+	# Gl. 8.90 settles it: the hydrogen goes to the HETEROATOM, not to the carbon.
+	# The book's example is a long-chain alkanal, R-(CH2)n-CH=O(+.), whose remote C-H
+	# reaches round to the ionised carbonyl oxygen; the oxygen ends up as =O(+)H and
+	# the radical is left behind on the carbon that gave the hydrogen up. (The
+	# subsequent cyclisation and ring cleavage that Gl. 8.90 then draws, expelling
+	# C2H4, are separate steps and are not encoded here.)
+	#
+	# This is NOT redundant with hTransition_unsaturated. There the receptor is bonded
+	# into the chain by the double bond itself (...C5{=}A6), giving a six-membered
+	# transition state -- the classic McLafferty ring. Here the chain ends in a CARBON
+	# that is single-bonded to the chain and double-bonded to the receptor, so the ring
+	# is one atom larger. That is exactly why the book notes these eliminations "give
+	# rise to abundant product ions not in the spectra of lower homologs (below
+	# hexanal)": the longer reach needs the longer chain.
+	#
+	# The endpaper draws the receptor as "{Y}R", i.e. with a substituent. That variant
+	# is deliberately not authored: with =C6 and R already on it, the receptor would be
+	# tetravalent once the hydrogen arrives, which only N+ and S+ can be. The plain
+	# aldehyde/ketone form below is what Gl. 8.90 itself shows.
+	#
+	# Conserving: charge 1 -> 1, unpaired 1 -> 1 (it moves A8 -> C2), H1 simply changes
+	# owner.
+	"[H]1[C]2[C]3[C]4[C]5[C]6([H]7){=}[_A+.]8"
+	">>"
+	"[C.]2[C]3[C]4[C]5[C]6([H]7){=}[_A+]8[H]1",
+	name =
+	"H transition receptor site saturated rH"
+	" §Y8"
+)
 
 hTransition_saturated_4_alpha = mod.Rule.fromDFS( # siehe 8.90
 	s =
@@ -245,35 +295,86 @@ hTransition_saturated_4_alpha = mod.Rule.fromDFS( # siehe 8.90
 	"" #TODO no rule enhancemend?
 )
 
-hTransition_saturated_5 = mod.Rule.fromDFS( # siehe 4.45
+# hTransition_saturated_5 and its _inductive_1/_2/_3 -- REPLACED by the two rules below.
+#
+# The old family was unsalvageable. All three inductive rules had a disconnected left
+# side ("[C]1([_A+]2) . [C]3[C]4[_A..]5([H]6)"), so MOD applied them across two
+# INDEPENDENT fragments, and none of them was charge balanced: _1 turned a +1 precursor
+# into a +3 product (marking BOTH C4 and A5 as new cations) and _2/_3 then consumed that
+# impossible +3 species and emitted +2. Their precursor hTransition_saturated_5 was never
+# in the active list either, so nothing generated their input in the first place.
+#
+# The root cause was a MISREAD OF THE ENDPAPER. Its fourth receptor variant is drawn
+# "{Y}R" with TWO DOTS over the Y -- a LONE PAIR, in the ordinary organic sense. The
+# transcription read those dots as two UNPAIRED electrons and wrote "[_A..]", a triplet
+# heteroatom, which no step of the mechanism can produce or consume. (The "(**) auch {Y}"
+# note to its left carries ONE dot, and that one really is the radical.)
+#
+# Rather than guess an atom mapping from the schematic, both rules below are transcribed
+# directly from Gl. 4.45 itself (book p. 82), which the endpaper cites: the McLafferty
+# rearrangement of an ESTER.
+#
+#     R-CH2-CH2-O-CO-R' (+.)  --rH-->  distonic ion  --alpha-->  R-CH=CH2 + R'C(OH)=O (+.)
+#
+# Both heteroatoms are written as EXPLICIT oxygen rather than generalized to "_A", even
+# though the book extends the reaction to thioesters, amides, phosphates and sulfones
+# (p. 81). The reason is a hard limitation of this codebase's term encoding, not chemistry:
+# ``encode_vertex_label`` maps EVERY non-alphabetic atom symbol to the single term variable
+# ``_A``, so "_A", "_B", "_C" are all the same variable and every placeholder in one rule
+# must unify to the SAME element. An ester needs O at both positions and C at R', which as
+# "[_A]4 ... [_A+.]6 ... [_A]7" cannot be satisfied by any molecule and matched nothing at
+# all (verified: 0 derivations generalized, 3 derivations oxygen-explicit, on ionized ethyl
+# acetate). Thioester/amide analogues therefore need their own explicit rules -- one
+# generalized rule cannot express them.
+#
+# PREREQUISITE: these rules consume an ion whose charge and radical sit on the CARBONYL
+# heteroatom. The only ionization rule in the library is ``ei_molecular_ion``, "[C]1 >>
+# [C+.]1", which ionizes CARBON exclusively, so that species is never generated and these
+# rules cannot fire in the pipeline as it currently stands. See the note in
+# rules/__init__.py.
+
+esterMcLafferty_rH = mod.Rule.fromDFS( # siehe 4.45 (step 1 of 2)
 	s =
-	"[H]1[C]2([_A+]3)[C]4[C]5[_A..]6" #YRY "[H]1[C]2([_A+]3)[C]4[C]5[_A..]6[_A]7"
+	# Gl. 4.45, first step. The gamma hydrogen H1 reaches through space to the ionised
+	# carbonyl heteroatom A6 and the radical is left behind on the carbon that gave it
+	# up. The transition state is the classic six-membered McLafferty ring:
+	# H1, C2, C3, A4, C5, A6.
+	#
+	#   C2 = gamma carbon (donates H1)      O4 = ester oxygen (lone pair, in chain)
+	#   C3 = beta carbon                    C5 = carbonyl carbon
+	#   O6 = carbonyl oxygen, ionised       C7 = R' on the carbonyl carbon
+	#
+	# Conserving: charge 1 -> 1, unpaired 1 -> 1 (O6 -> C2), H1 changes owner. O6 goes
+	# from a doubly bonded radical cation (2 bonds) to a doubly bonded cation carrying
+	# the hydrogen (3 bonds), which is what "=O(+)H" means.
+	#
+	# No "§..." extension: every atom is an explicit element, so there is nothing for
+	# ``sub_group`` to constrain and it short-circuits to accepted. (Adding one here
+	# would be the same silent-veto trap that stopped rules/dehydration.py from firing.)
+	"[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7"
 	">>"
-	"[C]2([_A+]3)[C]4[C]5[_A..]6([H]1)", #YRY "[C]2([_A+]3)[C]4[C]5[_A..]6([H]1)[_A]7"
+	"[C.]2[C]3[O]4[C]5({=}[O+]6[H]1)[C]7",
 	name =
-	"H transition receptor site saturated rH"
-	" §Y6S2-4Y3" #YRY " §Y6S2-4Y3R7"
+	"ester McLafferty rH"
 )
 
-# hTransition_saturated_5_inductive_1 / _2 / _3 -- REMOVED (were BIMOLECULAR and unbalanced).
-#
-# All three had a disconnected left side ("[C]1([_A+]2) . [C]3[C]4[_A..]5([H]6)"), so MOD
-# applied them across two INDEPENDENT fragments -- the mis-encoding this file is being
-# cleaned of. They were also never chargebalanced: _1 turned a +1 precursor into a +3
-# product (marking BOTH C4 and A5 as new cations) and _2/_3 then consumed that impossible
-# +3 species and emitted +2.
-#
-# They cannot be repaired by reconnecting alone, because the whole family hangs off a
-# receptor written as "[_A..]" -- TWO unpaired electrons, i.e. a triplet heteroatom. The
-# mechanism needs a mono-radical "[_A.]", so the intended reactant is not recoverable from
-# the endpaper; Gl. 4.45 (the "(**) auch Y" footnote they cite) is a lactone/ester case
-# that is not drawn on the cover.
-#
-# Their precursor hTransition_saturated_5 (above) is itself not wired into the active list,
-# so nothing generated their input in the first place.
-#
-# Re-derive the whole family from Gl. 4.45 as SINGLE connected components, with a
-# mono-radical receptor, before reinstating any of it.
+esterMcLafferty_alpha = mod.Rule.fromDFS( # siehe 4.45 (step 2 of 2)
+	s =
+	# Gl. 4.45, second step, matched to the rH product above. Radical-site alpha
+	# cleavage: the unpaired electron on C1 pairs with one electron of the C2-A3 bond
+	# to form C1=C2, and the other electron goes to A3. The alkene leaves NEUTRAL and
+	# the ion keeps both heteroatoms -- it is the acid (enol) radical cation
+	# R'C(OH)=O(+.), drawn in the book as the distonic ".O-C(=O(+)H)R'".
+	#
+	# Same electron bookkeeping as hTransition_saturated_2_alpha above; the two valences
+	# freed on C1 (radical) and C2 (lost O3) are exactly the two the new pi bond takes.
+	# Conserving: charge 1 -> 1, unpaired 1 -> 1 (C1 -> O3).
+	"[C.]1[C]2[O]3[C]4({=}[O+]5[H]6)[C]7"
+	">>"
+	"[C]1{=}[C]2" "." "[O.]3[C]4({=}[O+]5[H]6)[C]7",
+	name =
+	"ester McLafferty alpha"
+)
 
 
 ####### h2Transiton
@@ -363,25 +464,19 @@ rearrangements = [
 	# hTransition_saturated_1_inductive_2 removed -- see the note at its definition.
 
 	hTransition_saturated_2,
-	# hTransition_saturated_2_alpha disabled -- see note at its definition.
+	hTransition_saturated_2_alpha,   # re-authored from Gl. 8.53
 
 	hTransition_saturated_3,
 	hTransition_saturated_3_alpha,
 
-	# hTransition_saturated_4 disabled -- see note at its definition.
+	hTransition_saturated_4,         # re-authored from Gl. 8.90
 	hTransition_saturated_4_alpha,
 
-	# The saturated_5 inductive family was REMOVED entirely -- see the note at its
-	# former definition site.
-	#  * _inductive_1 turns a +1 precursor into a +3 product (it marks BOTH C4 and A5
-	#    as new cations), and _2/_3 then consume that impossible +3 species and emit +2
-	#    -- charge is conserved by none of the three.
-	#  * They all hang off the receptor written as [_A..] (TWO unpaired electrons). The
-	#    mechanism needs a mono-radical [_A.]; a triplet heteroatom is not what the book
-	#    draws, so the intended reactant is unclear.
-	#  * Their precursor rule hTransition_saturated_5 is itself not in this list, so
-	#    nothing generates their input in the first place.
-	# Re-derive from the book (Gl. 4.45) before re-enabling.
+	# The old saturated_5 family (rH + three inductive rules) is REPLACED by the two
+	# rules below, transcribed straight from Gl. 4.45 -- see the note at their
+	# definition for why the originals could not be repaired.
+	esterMcLafferty_rH,
+	esterMcLafferty_alpha,
 
 	h2Transiton_1,
 	h2Transiton_2,
@@ -396,3 +491,36 @@ IMS_cover_fragmentation = [
 ]
 
 IMS_cover_fragmentation.extend(rearrangements)
+
+
+# Ionization that feeds esterMcLafferty_rH. Without it that rule has no substrate: the
+# library's general ionization is ``ei_molecular_ion`` ("[C]1 >> [C+.]1"), which ionizes
+# CARBON only, and the one heteroatom ionization that does exist -- ``ml_ionization`` in
+# rules/wikipedia.py -- puts its C-C-C chain on the ACYL side of the carbonyl, whereas
+# Gl. 4.45 takes the gamma hydrogen from the ALCOHOL side, through the ester oxygen. So an
+# ester's carbonyl oxygen was never ionized and Gl. 4.45 could not start (verified on ethyl
+# acetate: no O-centred ion anywhere in its DG).
+#
+# This follows the ``ml_ionization`` idiom exactly -- ionize in context rather than
+# globally -- so it fires only on a genuine Gl. 4.45 substrate (gamma H, beta carbon, ester
+# oxygen, carbonyl carbon with an R'), and cannot inflate the DG of a molecule that has no
+# ester in it.
+#
+# NOTE this is a narrow patch, not the general fix. In real EI the most weakly held
+# electron is a heteroatom n-electron, so O/N/S ionization is the NORM, and the whole
+# "reaction initiation at radical or charge sites" machinery of the book's Chapter 4
+# assumes it. A general "[_A]1 >> [_A+.]1 §Y1" rule is one line, and on ethyl acetate it
+# additionally recovers m/z 43 (the real base peak) and m/z 29 -- but it widens every DG in
+# the corpus, so it wants measuring before it ships. See the note in rules/__init__.py.
+esterMcLafferty_ionization = mod.Rule.fromDFS( # siehe 4.45 (ionization)
+	s =
+	"[H]1[C]2[C]3[O]4[C]5({=}[O]6)[C]7"
+	">>"
+	"[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7",
+	name =
+	"ester McLafferty ionization"
+)
+
+IMS_cover_ionization = [
+    esterMcLafferty_ionization,
+]
