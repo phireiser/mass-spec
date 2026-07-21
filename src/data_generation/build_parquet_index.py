@@ -214,6 +214,12 @@ def fetch_jcamp_by_id(session: requests.Session, webbook_id: str) -> Optional[st
 STRUCTURE_OVERRIDES: Dict[str, str] = {
     # C119653 (Isoquinoline) resolves to quinoline's MOL; supply real isoquinoline.
     "C119653": "c1ccc2cnccc2c1",
+    # C69727 (Salicylic acid, CAS 69-72-7) resolves to 3-hydroxybenzoic acid
+    # (meta, O=C(O)c1cccc(O)c1) instead of the 2-hydroxy (ortho) isomer. The
+    # spectrum is genuinely salicylic's -- base peak m/z 120 is the ortho-effect
+    # water loss, which the meta isomer physically cannot do -- so the mismatch made
+    # that base peak permanently unexplainable. Supply real salicylic acid.
+    "C69727": "O=C(O)c1ccccc1O",
 }
 
 
