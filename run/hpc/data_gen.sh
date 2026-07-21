@@ -16,6 +16,15 @@ SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
 REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
 source "$REPO_ROOT/src/paths.env"
 
+# Optional output-dir override, so an experimental ruleset can be rebuilt into a
+# side directory without clobbering the baseline dumps in data/processed. Same
+# pattern as DEFINITION_FILE below; exported so the array self-resubmit inherits it.
+#   PROCESSED_DIR_OVERRIDE=data/processed_reauth sbatch run/hpc/data_gen.sh
+if [ -n "${PROCESSED_DIR_OVERRIDE:-}" ]; then
+  PROCESSED_DIR_REL="$PROCESSED_DIR_OVERRIDE"
+  export PROCESSED_DIR_OVERRIDE
+fi
+
 # Directories and files
 DATADIR="$REPO_ROOT/$PROCESSED_DIR_REL"
 # Definition CSV (name,smiles,category). Override with DEFINITION_FILE to run a

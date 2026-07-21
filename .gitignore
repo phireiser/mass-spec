@@ -5,8 +5,20 @@ mol-spectro.sif
 .secrets/
 .pytest_cache/
 
+# Copyrighted reference material: the McLafferty textbook PDF plus scans of its
+# endpaper/figures, kept locally as the provenance for the rules in
+# src/data_generation/rules/IMS_*.py. Not redistributable, so not committed.
+data/IMS-Book/
+
+# Side-by-side rebuild of the dumps under the re-authored ruleset, kept while the
+# baseline in data/processed/ is still the reference. Promote to data/processed/
+# (which IS tracked) once the comparison is settled; do not commit both.
+data/processed_reauth/
+
 # remain private until the thesis is published
-thesis/**
+# NOTE: "thesis/" not "thesis/**" -- the /** form matches the directory's *contents*,
+# so git still reported the (separately version-controlled) thesis/ tree as untracked.
+thesis/
 _minted-main/**
 _minted/
 _minted-*/
