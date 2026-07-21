@@ -23,7 +23,18 @@ def apply_constraints(
     """
     Splice a constrainLabelAny block with selected labels into each rule.
     """
-    constraint_string = constrain_label_any(all_occuring_atoms, placeholder)
+    if not all_occuring_atoms:
+        # `constrainLabelAny` with an empty `labels [ ]` block is not valid GML
+        # (mod: "Expected 1 of String(label). Got only 0."), and semantically a
+        # wildcard restricted to nothing could never match anyway. Refuse loudly
+        # rather than emit a rule file mod will reject deep inside the loop.
+        raise ValueError(
+            "apply_constraints: no occurring atoms were detected, so the "
+            f"'_{placeholder}' wildcard cannot be constrained. This means "
+            "all_occuring() matched none of the element labels -- check that it "
+            "is comparing undecorated atom symbols."
+        )
+    constraint_string = constrain_label_any(sorted(all_occuring_atoms), placeholder)
     constraint_rules = []
     for rule in rules:
         constraint_rules.append(add_constraints(rule, constraint_string))
@@ -39,19 +50,44 @@ def get_constraint(
     """
     return constrain_label_any(atoms, repl_label)
 
+def _undecorated_symbol(string_label: str) -> str:
+    """
+    Strip charge/radical decoration off a string-mode atom label: ``'O+'`` -> ``'O'``,
+    ``'C+.'`` -> ``'C'``, ``'Cl-'`` -> ``'Cl'``. Mirrors the split done by
+    :func:`data_generation.utils.term_transfers.encode_vertex_label` (kept local to
+    avoid an import cycle).
+    """
+    i = 0
+    while i < len(string_label) and string_label[i] not in "+-.":
+        i += 1
+    return string_label[:i]
+
+
 def all_occuring(
     in_molecule_list: Iterable[mod.Graph],
     element_list: Iterable[str],
     ) -> Set[str]:
     """
-    Collect all labels from element_list that occur in any graph from in_molecule_list.
+    Collect all elements from element_list that occur in any graph from in_molecule_list.
+
+    Matching is on the *undecorated* atom symbol, not the raw vertex label. The
+    previous ``vLabelCount(e)`` form asked mod for an exact label match, so a
+    charged or radical atom was invisible: in carbon monoxide, written
+    ``[C-]#[O+]``, the labels are ``'C-'`` and ``'O+'``, neither of which equals
+    ``'C'`` or ``'O'``. Every atom in that molecule is charged, so the result was
+    the EMPTY set, which then produced an invalid ``constrainLabelAny`` block with
+    no labels and killed the whole run (mod: "Expected 1 of String(label). Got only
+    0."). Reading the vertices directly also drops the O(|element_list|) scan --
+    ALL_ATOMS is ~100 entries -- in favour of one pass over the atoms.
     """
 
+    wanted = set(element_list)
     occuring = set()
     for m in in_molecule_list:
-        for e in element_list:
-            if m.vLabelCount(e) > 0:
-                occuring.add(e)
+        for v in m.vertices:
+            symbol = _undecorated_symbol(v.stringLabel)
+            if symbol in wanted:
+                occuring.add(symbol)
 
     return occuring
 
