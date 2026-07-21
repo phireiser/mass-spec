@@ -1169,7 +1169,12 @@ IMS_chap4_examples = [
 	IMS_4_26_2,
 	IMS_4_27_1,
 	IMS_4_27_2,
-	IMS_4_28_1,
+	# IMS_4_28_1 disabled: its left side is disconnected ("[_A][O][H] . [H+]"), so MOD
+	# applies it BIMOLECULARLY, pairing a free [H+] (from deProtonation_proton) with an
+	# -OH on a *different* fragment. That is chemical-ionization chemistry, not EI, and
+	# it accounted for 100% (1494/1494) of the multi-source fusion edges in the corpus.
+	# The intramolecular route to the same water loss is rules/dehydration.py.
+	# IMS_4_28_1,
 	IMS_4_28_2,
 	IMS_4_29,
     IMS_4_30,

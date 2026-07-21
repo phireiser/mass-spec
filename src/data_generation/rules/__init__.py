@@ -7,6 +7,7 @@ from .benzylAllyl_ringGeneral import (
     benzylAllyl_ionizaton,
     benzylAllyl_fragmentation,
 )
+from .dehydration import dehydration_all
 from .deprotonation import deProtonation_all, ei_molecular_ion
 from .IMS_bookCover import (
     IMS_cover_fragmentation,
@@ -34,6 +35,7 @@ ionization.extend(deProtonation_all)
 fragmentation = []
 fragmentation.extend(benzylAllyl_fragmentation)
 # fragmentation.extend(deProtonation_all) # hardly probable
+fragmentation.extend(dehydration_all)  # intramolecular replacement for the bimolecular IMS_4_28_1
 fragmentation.extend(IMS_cover_fragmentation)
 fragmentation.extend(IMS_chap4_examples)
 fragmentation.extend(IMS_chap8_examples)
@@ -46,6 +48,7 @@ __all__ = [
     # Individual rule collections
     "benzylAllyl_ionizaton",
     "benzylAllyl_fragmentation",
+    "dehydration_all",
     "deProtonation_all",
     "ei_molecular_ion",
     "IMS_cover_fragmentation",
