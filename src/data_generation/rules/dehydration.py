@@ -54,9 +54,33 @@ import mod
 # keeps the wins and removes the blow-up by construction.
 #
 # NOTE: this deliberately gives up plain alcohol dehydration (R-OH -> alkene + H2O),
-# which is a real EI process. It is deferred, not denied: it needs a gate that limits
-# it on polyols (ideally "only on a charged fragment", which MOD cannot express as a
-# local rule constraint) before it can be re-enabled.
+# which is a real EI process. It remains deferred.
+#
+# THE OBVIOUS GATE WAS TRIED AND IS REFUTED. The plan was to re-enable the general
+# "[H][C][C][O][H]" form behind a strategy-level rightPredicate restricting it to CHARGED
+# reactants (the chemically meaningful restriction: in EI only the ion goes on
+# fragmenting). Implemented and measured, it does not work, for a reason that only shows
+# up on contact:
+#
+#   * It does not contain the blow-up. Glucose: 86 edges baseline -> 1246 gated -> 1735
+#     ungated. The gate removes ~28% of the firings; the explosion happens ON the charged
+#     ion itself, which is exactly what the gate lets through.
+#   * It fires in the wrong place. mod matches labels exactly, so "[C]" (term a(C,0,0))
+#     cannot match a carbon that carries the charge. The rule therefore only matches a
+#     H-C-C-O-H motif whose atoms are all NEUTRAL -- which, combined with "the graph must
+#     be charged", means it fires only on large molecules with the charge parked somewhere
+#     else, i.e. precisely the polyols, and never on a simple alcohol. Measured: ionized
+#     ethanol gives 0 derivations (both carbons are in the motif), ionized propanol with
+#     the charge on the far carbon gives 2.
+#
+# So the gate is backwards: it blocks the small alcohols it was meant to enable and admits
+# the polyols it was meant to block.
+#
+# What the measurement points at instead: real EI dehydration of an alcohol proceeds
+# through the IONIZED OXYGEN, so the rule should carry the charge on the reacting oxygen
+# as a local constraint rather than delegating to a whole-graph predicate. That needs the
+# ionized-heteroatom species to exist in the first place -- the same missing general
+# heteroatom ionization documented in rules/__init__.py. Fix that first; this follows.
 dehydration_carboxyl = mod.Rule.fromDFS(
     s=
     "[H]1[C]2[C]3({=}[O]6)[O]4[H]5"
