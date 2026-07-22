@@ -228,6 +228,56 @@ STRUCTURE_OVERRIDES: Dict[str, str] = {
     # structure would fragment along bonds real pyrrole does not have. Supply real
     # aromatic pyrrole.
     "C109977": "c1cc[nH]c1",
+    # C75478 (Iodoform / "Methane, triiodo-", CAS 75-47-8) resolves to a
+    # hypervalent-iodine junk MOL (C[IH](I)(I)I, RDKit formula CH4I4, nominal 524)
+    # -- a typo'd SMILES, not the real CHI3 (nominal 394). The stored nominal_mw
+    # (394) and spectrum are genuinely iodoform's, so MOD was fragmenting a 524-Da
+    # phantom and the surplus mass showed up as supra-parent fragments with zero
+    # fusion edges. Supply real iodoform.
+    "C75478": "C(I)(I)I",
+    # C127184 (Tetrachloroethylene, CAS 127-18-4) resolves to a 4-carbon
+    # tetrachloro-1,3-butadiene (ClC=C(Cl)C(Cl)=CCl, C4H2Cl4, nominal 190) instead
+    # of perchloroethylene C2Cl4 (nominal 164). Same supra-parent-with-no-fusion
+    # signature. Supply real tetrachloroethylene.
+    "C127184": "ClC(Cl)=C(Cl)Cl",
+    # --- 2026-07-22 batch: 34 more WebBook structures whose fetched MOL disagrees
+    # with the record's NIST nominal_mw (audit check [2b]). Each SMILES is the
+    # PubChem canonical parent for the record's CAS, verified so its nominal mass
+    # equals the store nominal_mw (shown in the trailing comment as formula, mass).
+    "C541059": "C[Si]1(C)O[Si](C)(C)O[Si](C)(C)O1",  # hexamethylcyclotrisiloxane (C6H18O3Si3, 222)
+    "C52904": "NC(CS)C(=O)O",  # cysteine (C3H7NO2S, 121)
+    "C70473": "NC(=O)CC(N)C(=O)O",  # asparagine (C4H8N2O3, 132)
+    "C56859": "NC(=O)CCC(N)C(=O)O",  # glutamine (C5H10N2O3, 146)
+    "C74793": "NC(N)=NCCCC(N)C(=O)O",  # arginine (C6H14N4O2, 174)
+    "C533675": "OCC1OC(O)CC1O",  # deoxyribose (C5H10O4, 134)
+    "C60333": "CCCCCC=CCC=CCCCCCCCC(=O)O",  # linoleic_acid (C18H32O2, 280)
+    "C98920": "NC(=O)c1cccnc1",  # nicotinamide (C6H6N2O, 122)
+    "C83885": "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(CC(O)C(O)C(O)CO)c2cc1C",  # riboflavin (C17H20N4O6, 376)
+    "C50817": "O=C1OC(C(O)CO)C(O)=C1O",  # ascorbic_acid (C6H8O6, 176)
+    "C57885": "CC(C)CCCC(C)C1CCC2C3CC=C4CC(O)CCC4(C)C3CCC12C",  # cholesterol (C27H46O, 386)
+    "C73405": "Nc1nc2nc[nH]c2c(=O)[nH]1",  # guanine (C5H5N5O, 151)
+    "C58617": "Nc1ncnc2c1ncn2C1OC(CO)C(O)C1O",  # adenosine (C10H13N5O4, 267)
+    "C71443": "NCCCNCCCCNCCCN",  # spermine (C10H26N4, 202)
+    "C51616": "NCCc1ccc(O)c(O)c1",  # dopamine (C8H11NO2, 153)
+    "C51672": "NCCc1ccc(O)cc1",  # tyramine (C8H11NO, 137)
+    "C73314": "COc1ccc2[nH]cc(CCNC(C)=O)c2c1",  # melatonin (C13H16N2O2, 232)
+    "C58220": "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(O)CCC12",  # testosterone (C19H28O2, 288)
+    "C50282": "CC12CCC3c4ccc(O)cc4CCC3C1CCC2O",  # estradiol (C18H24O2, 272)
+    "C53167": "CC12CCC3c4ccc(O)cc4CCC3C1CCC2=O",  # estrone (C18H22O2, 270)
+    "C57830": "CC(=O)C1CCC2C3CCC4=CC(=O)CCC4(C)C3CCC12C",  # progesterone (C21H30O2, 314)
+    "C50237": "CC12CCC(=O)C=C1CCC1C2C(O)CC2(C)C1CCC2(O)C(=O)CO",  # cortisol (C21H30O5, 362)
+    "C52391": "CC12CCC(=O)C=C1CCC1C2C(O)CC2(C=O)C(C(=O)CO)CCC12",  # aldosterone (C21H28O5, 360)
+    "C53430": "CC12CCC3C(CC=C4CC(O)CCC43C)C1CCC2=O",  # dehydroepiandrosterone (C19H28O2, 288)
+    "C58855": "O=C(O)CCCCC1SCC2NC(=O)NC21",  # biotin (C10H16N2O3S, 244)
+    "C7235407": "CC(C=CC=C(C)C=CC1=C(C)CCCC1(C)C)=CC=CC=C(C)C=CC=C(C)C=CC1=C(C)CCCC1(C)C",  # beta_carotene (C40H56, 536)
+    "C97530": "C=CCc1ccc(O)c(OC)c1",  # eugenol (C10H12O2, 164)
+    "C56757": "O=C(NC(CO)C(O)c1ccc([N+](=O)[O-])cc1)C(Cl)Cl",  # chloramphenicol (C11H12Cl2N2O5, 322)
+    "C126078": "COC1=CC(=O)CC(C)C12Oc1c(Cl)c(OC)cc(OC)c1C2=O",  # griseofulvin (C17H17ClO6, 352)
+    "C1162658": "COc1cc2c(c3oc(=O)c4c(c13)CCC4=O)C1C=COC1O2",  # aflatoxin_B1 (C17H12O6, 312)
+    "C51343": "CN1C2CC(OC(=O)C(CO)c3ccccc3)CC1C1OC12",  # scopolamine (C17H21NO4, 303)
+    "C51558": "CN1C2CCC1CC(OC(=O)C(CO)c1ccccc1)C2",  # atropine (C17H23NO3, 289)
+    "C76573": "COc1ccc2c3c1OC1C(O)C=CC4C(C2)N(C)CCC341",  # codeine (C18H21NO3, 299)
+    "C5392405": "CC(C)=CCCC(C)=CC=O",  # citral (C10H16O, 152)
 }
 
 
