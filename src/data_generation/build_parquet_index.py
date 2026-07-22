@@ -220,6 +220,14 @@ STRUCTURE_OVERRIDES: Dict[str, str] = {
     # water loss, which the meta isomer physically cannot do -- so the mismatch made
     # that base peak permanently unexplainable. Supply real salicylic acid.
     "C69727": "O=C(O)c1ccccc1O",
+    # C109977 (Pyrrole, CAS 109-97-7) resolves to 3H-pyrrole (C1=CN=CC1, a
+    # NON-aromatic imine with an sp3 CH2), not aromatic 1H-pyrrole. Same C4H5N
+    # formula, so the audit's formula check cannot see it. It matters here because
+    # the forward model protects an aromatic ring (bonds ride through as the inert
+    # term e(ar)) while it happily shreds the non-aromatic isomer, so the wrong
+    # structure would fragment along bonds real pyrrole does not have. Supply real
+    # aromatic pyrrole.
+    "C109977": "c1cc[nH]c1",
 }
 
 

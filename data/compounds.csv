@@ -76,7 +76,7 @@ tetrachloroethylene,C(Cl)=C(Cl)C(Cl)=C(Cl),halogenated_alkene
 bromoethane,CCBr,halogenated_aliphatic
 iodoform,CI(I)(I)I,halogenated_aliphatic
 piperidine,C1CCNCC1,heterocyclic_amine
-pyrrole,C1=CN=CC1,heterocyclic_aromatic
+pyrrole,C1=CC=CN1,heterocyclic_aromatic
 quinoline,C1=CC=CC2=NC=CC=C12,heterocyclic_aromatic
 isoquinoline,C1=CC=C2C=NC=CC2=C1,heterocyclic_aromatic
 dimethyl_sulfide,CSC,organosulfur
