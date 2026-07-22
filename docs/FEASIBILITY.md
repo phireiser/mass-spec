@@ -55,26 +55,25 @@ monoisotopic mass sits just below the integer — land on the correct nominal pe
 > shipped under `data/processed/fwd` predate that rule and lack M+•; running on them
 > measures the obsolete ruleset (M+• rate ≈ 0 by construction). Regenerate first.
 
-Provisional EI ceiling on a representative, class-spanning subset, on SLURM
-(one molecule per array task; a dependent `afterany` job scores the ceiling once
-the array finishes). Writes fresh forward DGs to a gitignored `outputs/` dir and
-leaves the stale `data/processed/fwd` dumps intact:
+Regenerate forward DGs with the current EI ruleset via the corpus builder, on
+SLURM (one molecule per array task, reading `NAME,SMILES` from `compounds.csv`):
 
 ```bash
-sbatch run/hpc/regen_subset.sh
-# array regen -> outputs/regen_subset/fwd
-# dependent ceiling -> outputs/metrics/{ceiling_per_molecule.csv,ceiling_summary.json}
+sbatch run/hpc/data_gen.sh                                  # full compounds.csv
+DEFINITION_FILE=data/<subset>.csv sbatch run/hpc/data_gen.sh   # a subset
 ```
 
-Each task is wrapped in `/usr/bin/time -v`, so the per-task logs under
-`outputs/logs/regen_subset/slurm/` double as per-molecule cost data (fed to
-`cost_analysis.py`; see the cost section below).
+Dumps land in `data/processed/fwd` (`--name-by-cas`, resolved via the store).
+`--avoid-reprocessing` skips molecules whose dump already exists, so delete the
+stale dumps first to force a rebuild. Each task is wrapped in `/usr/bin/time -v`,
+so the per-task logs under `outputs/logs/data_gen/slurm/` double as per-molecule
+cost data (fed to `cost_analysis.py`; see the cost section below).
 
-Full corpus (all ~150 molecules that have both a dump and a spectrum):
-
-```bash
-sbatch run/hpc/regen_subset.sh --all-with-spectrum
-```
+> **Removed 2026-07-22.** The earlier `regen_subset` side-dir workflow (wrote to
+> `outputs/regen_subset/fwd`, read SMILES from the *stale dump pickles*) is gone —
+> it rebuilt whatever structure the old dump held, silently defeating any
+> `compounds.csv` structure fix. Always regenerate via `data_gen.sh`, which reads
+> the corrected `compounds.csv`.
 
 > **Cost warning.** Per-molecule cost is dominated by *saturated aliphatic* content,
 > not size, and spans ~6000× on the subset (butane C4H10 ~4 h; aromatics seconds).
@@ -93,10 +92,12 @@ Cost / budget analysis from the array's sacct record + logs (stdlib, runs bare):
 
 ```bash
 sacct -j <array_job_id> --format=JobID,State,ElapsedRaw,MaxRSS,ReqMem -P -n > sacct.txt
+# manifest is name<TAB>smiles; build it from compounds.csv:
+#   tail -n +2 data/compounds.csv | cut -d, -f1,2 | tr ',' '\t' > manifest.tsv
 python3 src/data_generation/analysis/feasibility/cost_analysis.py \
   --sacct-file sacct.txt \
-  --manifest outputs/regen_subset/manifest.tsv \
-  --log-dir outputs/logs/regen_subset/slurm/<array_job_id> \
+  --manifest manifest.tsv \
+  --log-dir outputs/logs/data_gen/slurm/<array_job_id> \
   --out-dir outputs/metrics
 # -> outputs/metrics/{cost_per_molecule.csv,cost_summary.json}
 ```
@@ -123,9 +124,8 @@ python3 src/tests/unit_test_ceiling.py
   needing `mod`); writes the ceiling CSV + summary JSON to `outputs/metrics`.
 - `src/data_generation/analysis/feasibility/cost_analysis.py` — pure, stdlib-only cost / N\*
   analysis from a sacct dump + array logs; writes the cost CSV + summary JSON.
-- `src/data_generation/analysis/feasibility/regen_subset.py` — regenerate a subset's forward
-  DGs with the current ruleset (reads SMILES from existing dumps; forward-only).
-- `run/analysis/ceiling.sh`, `run/hpc/regen_subset.sh` — container / SLURM wrappers.
+- `run/analysis/ceiling.sh` — container wrapper for `run_ceiling.py`.
+- `run/hpc/data_gen.sh` — SLURM corpus builder (regenerate forward DGs from `compounds.csv`).
 - `src/plot/plot_ceiling.py`, `src/plot/plot_cost.py` — figures (→ `outputs/plots`).
 
 ## Reading the gate
