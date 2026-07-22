@@ -492,35 +492,8 @@ IMS_cover_fragmentation = [
 
 IMS_cover_fragmentation.extend(rearrangements)
 
-
-# Ionization that feeds esterMcLafferty_rH. Without it that rule has no substrate: the
-# library's general ionization is ``ei_molecular_ion`` ("[C]1 >> [C+.]1"), which ionizes
-# CARBON only, and the one heteroatom ionization that does exist -- ``ml_ionization`` in
-# rules/wikipedia.py -- puts its C-C-C chain on the ACYL side of the carbonyl, whereas
-# Gl. 4.45 takes the gamma hydrogen from the ALCOHOL side, through the ester oxygen. So an
-# ester's carbonyl oxygen was never ionized and Gl. 4.45 could not start (verified on ethyl
-# acetate: no O-centred ion anywhere in its DG).
-#
-# This follows the ``ml_ionization`` idiom exactly -- ionize in context rather than
-# globally -- so it fires only on a genuine Gl. 4.45 substrate (gamma H, beta carbon, ester
-# oxygen, carbonyl carbon with an R'), and cannot inflate the DG of a molecule that has no
-# ester in it.
-#
-# NOTE this is a narrow patch, not the general fix. In real EI the most weakly held
-# electron is a heteroatom n-electron, so O/N/S ionization is the NORM, and the whole
-# "reaction initiation at radical or charge sites" machinery of the book's Chapter 4
-# assumes it. A general "[_A]1 >> [_A+.]1 §Y1" rule is one line, and on ethyl acetate it
-# additionally recovers m/z 43 (the real base peak) and m/z 29 -- but it widens every DG in
-# the corpus, so it wants measuring before it ships. See the note in rules/__init__.py.
-esterMcLafferty_ionization = mod.Rule.fromDFS( # siehe 4.45 (ionization)
-	s =
-	"[H]1[C]2[C]3[O]4[C]5({=}[O]6)[C]7"
-	">>"
-	"[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7",
-	name =
-	"ester McLafferty ionization"
-)
-
-IMS_cover_ionization = [
-    esterMcLafferty_ionization,
-]
+# esterMcLafferty_rH needs an ion whose charge+radical sit on the CARBONYL oxygen. That
+# substrate is now supplied by the general ``heteroatom_ionization`` rules in
+# rules/deprotonation.py ("[O]1 >> [O+.]1" ionizes every oxygen, the carbonyl one
+# included). An earlier narrow in-context ionization rule here was superseded by that
+# general one and removed.

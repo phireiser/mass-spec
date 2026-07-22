@@ -58,6 +58,37 @@ ei_molecular_ion = mod.Rule.fromDFS(
 	""
 )
 
+# Heteroatom molecular-ion formation (M -> M+.), the n-electron counterpart of
+# ei_molecular_ion. In real EI the most weakly held electron is a heteroatom
+# lone-pair (n) electron, so O/N/S/... ionization is the NORM, not the exception,
+# and McLafferty's whole Chapter 4 ("reaction initiation at radical or charge
+# sites") is built on it. ei_molecular_ion only ionizes carbon, which starved every
+# rule whose left side needs an ionized heteroatom (hTransition_saturated_1/3/4,
+# hTransition_unsaturated, the ester McLafferty pair): they had no substrate.
+#
+# One explicit rule per heteroatom rather than a single "[_A]1 >> [_A+.]1 §Y1"
+# because the "_A" placeholder is expanded by apply_constraints to EVERY occurring
+# atom, carbon and hydrogen included, and the "§Y" subgroup check inspects a matched
+# atom's NEIGHBOURS, not the atom itself, so it does not exclude them. That form was
+# measured to also ionize hydrogens ([H+.]) -- chemically meaningless species that
+# just inflate the DG. Carbon is already covered by ei_molecular_ion (and a
+# carbon-ionized M+. from either rule is the same graph, so it de-duplicates), so
+# only the heteroatoms are listed here.
+#
+# Measured impact (explicit form): recovers real ions that were previously
+# unreachable -- ethyl acetate m/z 43 (the experimental BASE peak) and 29; glucose's
+# whole dehydration series (m/z 60, 18, ...). DG blow-up is bounded and heteroatom-
+# proportional: toluene (no heteroatom) 1.0x, ethyl acetate 1.4x, glucose 2.7x.
+# Molecules with no heteroatom are untouched. The largest multi-heteroatom molecules
+# (steroids, disaccharides) are slow to build at baseline already, so the definitive
+# no-timeout check is the corpus rebuild via regen (3-day limit), not data_gen.
+_HETEROATOMS_EI = ["O", "N", "S", "P", "F", "Cl", "Br", "I"]
+heteroatom_ionization = [
+    mod.Rule.fromDFS(s=f"[{x}]1" ">>" f"[{x}+.]1", name=f"EI molecular ion {x}")
+    for x in _HETEROATOMS_EI
+]
+
+
 deProtonation_all = [
     deProtonation_radical,
     deProtonation_proton,
