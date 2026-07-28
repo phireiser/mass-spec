@@ -1,0 +1,374 @@
+{
+  "mechanism_id": "IMS8-EQT8.2p",
+  "species": [
+    {
+      "species_id": "cyclohexanone_radical_cation",
+      "mapped_smiles": "[C:1]1(=[O+:7])[CH:2]([1H:10])[CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_acylium",
+      "mapped_smiles": "[C:1](#[O+:7])[CH:2]([1H:10])[CH2:3][CH2:4][CH2:5][CH2:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "h_shifted_distonic_acylium",
+      "mapped_smiles": "[C:1](#[O+:7])[CH:2][CH2:3][CH2:4][CH2:5][CH2:6][1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acryloyl_cation",
+      "mapped_smiles": "[C:1](#[O+:7])[CH:2]=[CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "n_propyl_radical",
+      "mapped_smiles": "[CH2:4][CH2:5][CH2:6][1H:10]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclohexanone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_distonic_acylium"
+      ]
+    },
+    {
+      "state_id": "state_h_shifted",
+      "species_ids": [
+        "h_shifted_distonic_acylium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acryloyl_cation",
+        "n_propyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_1_5",
+      "from_state": "state_ring_opened",
+      "to_state": "state_h_shifted",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_second",
+      "from_state": "state_h_shifted",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 168,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.85,
+      "curator_note": "Table 8.2 (printed p.168), first example row: 'Three bonds cleaved', OE+. reactant type alpha-alpha-alpha, charge-RETENTION channel. Step 1 of the printed three-arrow sequence: n-ionised cyclohexanone undergoes radical-site alpha cleavage of a ring C(alpha)-C(carbonyl) bond, which does NOT expel a fragment but OPENS THE RING to a distonic acylium (+O#C-CH2CH2CH2CH2-CH2.). Bond-line pixel analysis of the scan confirms the printed intermediate carries a TRIPLE C#O bond (three parallel rules) whereas the cyclohexanone reactant carries a double bond, i.e. the book really draws the acylium. Book draws 2 arcs; moves 1,2 are drawn, move 3 is an implicit homolysis hook required for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "ev_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_5",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 168,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.8,
+      "curator_note": "Step 2 of the row, printed over the arrow as 'rH'. The book redraws the open six-carbon chain coiled into a hexagon so the terminal carbon radical (map 6) faces an explicitly drawn H on the carbon alpha to the acylium (map 2); the transfer is therefore a 1,5-H shift through a six-membered transition state and it moves the radical site from the chain terminus to the position alpha to the C#O+ group. Book draws 2 arcs; moves 1,2 are drawn, move 3 is an implicit homolysis hook required for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "ev_step_alpha2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_second",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 168,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.85,
+      "curator_note": "Step 3 of the row, printed over the arrow as 'alpha'. The new radical site (map 2) drives a second alpha cleavage: the C3-C4 bond breaks and the C2=C3 pi bond forms, giving the even-electron acryloyl cation CH2=CH-C#O+ and the printed neutral loss '.C3H7'. Three bonds of the original ring have now been cleaved (alpha, alpha, alpha), which is what puts this example in the 'Three bonds cleaved' block of the table. Book draws 2 arcs; moves 1,2 are drawn, move 3 is an implicit homolysis hook required for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2p",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 168,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "No MØD rule is indexed to 'Table 8.2' in rule_index.json (by_equation has no such key). NEAREST cross-link for step 1, but MIS-ENCODED: IMS_4_14 ([C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]) has the right INTENT -- cleave a C-C bond incident to the carbonyl carbon that forms the new C#O+ triple bond -- and its LEFT pattern does embed on the instantiated cyclohexanone radical cation (RDKit reports 1 match with uniquify on, but the pattern is symmetric in its two ring branches, so there are 2 symmetry-equivalent embeddings; rule-C1 -> map 1, rule-O -> map 7). Its RIGHT side, however, TRANSPOSES the chain: the left graph bonds C1-C4 while the right graph bonds C5-C1 (C4-C5 is retained on both sides). Applied to cyclohexanone M+. the rule therefore also breaks C1-C4 and forms C1-C5, giving the BRANCHED, skeletally rearranged acylium CH3-CH(C#O+)-CH2CH2CH2. instead of the linear ring-opened distonic acylium .CH2(CH2)3CH2-C#O+ that this page draws. Every other chain rule in IMS_chap4_examples.py (e.g. IMS_4_13_1/2) preserves chain order across '>>', so this is a transposition typo; writing the product as '[C]5[C]4[C]1{#}[O+]' would make the rule describe the drawn step exactly. The record's step 1 encodes the DRAWN (linear) ring opening, not the rule. MISMATCH: the generic sibling IMS_4_11 ([C]1[C]2[C]3{=}[_A+.]4>>[C.]1.[C]2[C]3{#}[_A+]4) also pattern-matches this substrate (2 RDKit matches) but cleaves C1-C2, a bond NOT incident to C3, the atom that forms the new multiple bond -- it is the known Ch.4 alpha-cleavage geometry bug and it does NOT describe this scheme. Steps 2 and 3 have NO MØD rule: the nearest H-shift rule hTransition_saturated_2 ([H]1[C]2[C]3([_A+]4)[C]5[C.]6>>...) needs a four-carbon donor/acceptor chain plus a cationic substituent on C3, while step 2 is a five-carbon 1,5 shift with the charge on a remote acylium; and an exhaustive scan of all 154 indexed rules found none that performs a carbon-radical alpha cleavage in which the even-electron acylium is RETAINED and the alkyl radical departs (IMS_4_33_alpha_1, IMS_4_31_alpha2 and hTransition_unsaturated_alpha all keep the odd electron on the ion)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 98.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acryloyl",
+      "species_id": "acryloyl_cation",
+      "step_id": "step_alpha_second",
+      "observed_mz": 55.0178,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

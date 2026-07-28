@@ -1,0 +1,183 @@
+{
+  "mechanism_id": "IMS8-EQ8.20a",
+  "species": [
+    {
+      "species_id": "phenylethanol_molecular_ion",
+      "mapped_smiles": "[C:4]1(=[CH:5][CH:6]=[CH:7][CH:9][CH+:10]1)[CH2:3][CH2:1][O:2][1H:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylenecyclohexadiene_radical_cation",
+      "mapped_smiles": "[CH2:3]=[C:4]1[CH:5]([1H:8])[CH:6]=[CH:7][CH:9][CH+:10]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_neutral",
+      "mapped_smiles": "[CH2:1]=[O:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "phenylethanol_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylenecyclohexadiene_radical_cation",
+        "formaldehyde_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_six_membered_formaldehyde_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_20a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_six_membered_formaldehyde_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 152,
+        "equation": "8.20",
+        "section": "8.x Transition-state structure / ring size of the rearrangement (five- and six-membered transition states favored). Equation 8.20 branch (a), labelled 'rH'."
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.20, FAVORED branch (a), labelled 'rH' (hydrogen rearrangement). 2-phenylethanol molecular ion loses formaldehyde (CH2=O) through a SIX-membered transition state (ring atoms O2-C1-C3-C4-C5 plus the migrating H8) to give the LESS-STABLE methylenecyclohexadiene radical cation (C7H8+., m/z 92). Text: 'The preference for a six-membered transition state also applies to the elimination of formaldehyde from 2-phenylethanol, which forms the less-stable (dHf = 0.3 eV) methylenecyclohexadiene ion (Equation 8.20, Burgers et al. 1982).' ARC COUNT (convention D): the page draws a DENSE concerted-radical depiction of roughly six fishhook (half-arrow) arcs threaded around the six-membered TS -- the O-H bond over to the ortho ring carbon, ring pi-bond shifts, the ipso->benzylic (exocyclic) pi formation, and the C1-C3/C1=O2 region -- together with a TRANSIENT distonic marking, a dot (.) drawn on the carbinol carbon C1 and a (+) drawn near the benzylic/ipso carbon inside the TS. Book draws ~6 fishhook arc(s); none is an implicit hook -- every bond-forming/breaking electron is drawn (6 single-electron fishhooks = the 3 encoded double-barbed 2e moves paired up). ENCODING: I encode the NET bond reorganization as a balanced 6-electron retro-ene-type (pericyclic) flow with three double-barbed (2e) moves: move<1> O2-H8 sigma -> new C5-H8 bond (H8 delivered to the ortho ring carbon C5); move<2> the C4=C5 ring pi -> the exocyclic C3=C4 pi; move<3> the C1-C3 sigma -> the new C1=O2 carbonyl pi (expelling neutral formaldehyde). CONVENTION C (delocalized aromatic radical cation): the aromatic ring radical cation is DELOCALIZED; the page draws +. on the ring in both the reactant and the product. I choose ONE localized Kekule/distonic resonance form -- odd electron on C9 (a meta-position carbon radical) and formal + on C10 (adjacent, allylic to the exocyclic methylene / benzylic-stabilized) -- consistently in precursor and both products, so the +. rides along as a SPECTATOR (no atom radical change, no radical arrow needed). The transient TS dot/plus that the book draws on C1/benzylic is the concerted midpoint, not an isolable species. CONVENTION F: no m/z and no % are printed for this ion on the page; observed_mz 92.0621 is the curator-computed monoisotopic m/z of C7H8+. from this instantiation, status 'inferred', detected=false, relative_intensity omitted."
+    },
+    {
+      "evidence_id": "ev_mech_8_20a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.20a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 152,
+        "equation": "8.20"
+      },
+      "confidence": 0.1,
+      "curator_note": "No MØD rule is indexed to equation 8.20 (rule_index by_equation has no '8.20' key; the ch.8 index runs 8.1-8.14, and no 'entries' DFS is tagged 8.20). Nothing to cross-link. The related aromatic-loss family rules for other equations were not verified against this substrate; convention E cross-links are therefore not asserted here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 122.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_92_methylenecyclohexadiene",
+      "species_id": "methylenecyclohexadiene_radical_cation",
+      "step_id": "step_rH_six_membered_formaldehyde_loss",
+      "observed_mz": 92.0621,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

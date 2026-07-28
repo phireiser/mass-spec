@@ -1,0 +1,323 @@
+{
+  "mechanism_id": "IMS8-EQ8.66",
+  "species": [
+    {
+      "species_id": "cycloalkanol_radical_cation",
+      "mapped_smiles": "[OH+:1][CH:2]1[CH:3]([1H:8])[CH2:4][CH2:5][CH2:6][CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_oxocarbenium_distonic_ion",
+      "mapped_smiles": "[OH+:1]=[CH:2][CH:3]([1H:8])[CH2:4][CH2:5][CH2:6][CH2:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_enol_radical_cation",
+      "mapped_smiles": "[OH+:1][CH:2]=[CH:3][CH2:4][CH2:5][CH2:6][CH2:7][1H:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cycloalkanol_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_oxocarbenium_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ring_opened_enol_radical_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rh_to_enol_ion",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 188,
+        "equation": "8.66",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.75,
+      "curator_note": "First transformation of Equation 8.66, labelled '(alpha)' over a plain straight reaction arrow. GENERIC SCHEME: the page draws an alicyclic alcohol whose ring is closed by a curl (a polymethylene bridge of unspecified length); the surrounding text (page 187) covers cycloalkyl-OH compounds of five- to at least eight-membered rings. INSTANTIATION: cyclohexanol (6-ring, M+. m/z 100.088), chosen to match the six-membered middle column of Equation 8.65 on the facing page; every m/z in this record derives from that curator-chosen instantiation and is NOT printed by the book. Atom maps: 1 = O, 2 = the carbinol carbon C1, 3 = the ring carbon C2 that carries the transferred H (map 8), 4-6 = the bridge carbons C3-C5, 7 = the ring CH2 (C6) whose bond to C1 is cleaved. The molecular ion is n-ionized at oxygen ('+.' drawn over the HO group), and alpha-cleavage of the C1-C6 ring bond forms the O=C1 head, leaving the CH2 radical terminus. Book draws 0 arcs for this step; NO move is drawn - moves <1,2,3> (the O odd electron into the forming O=C1 pi bond, one C1-C6 sigma electron into that same pi bond, and the implicit homolysis hook putting the other C1-C6 electron on C6) are all curator-supplied and required for electron balance (not drawn on the page). RESONANCE / DRAWN-STRUCTURE DISCLOSURE: the page draws this intermediate in the CARBENIUM resonance form - a plain HO- single bond with '+' written under the carbinol carbon and '.' on the CH2 - and draws the C1...C6 bond as a DOTTED, incompletely dissociated bond (that is the whole point of the equation: 'the C-C bond alpha to the heteroatom does not fully dissociate before the H transfer; the incipient -CH2. radical can remain weakly bound to the charged heteroatom functional group'). Per convention (C) one localized form is encoded consistently, and the oxocarbenium partner HO+=CH- is used here so the arrows balance; the residual weak C1...C6 interaction the book dots in is NOT encoded as a bond. The ring-opened species is still a single connected molecule (the chain C1-C2-C3-C4-C5-C6 survives), so it is a legitimate mapped_smiles species."
+    },
+    {
+      "evidence_id": "ev_step_rh_to_enol_ion",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_to_enol_ion",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 188,
+        "equation": "8.66",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.75,
+      "curator_note": "Second transformation of Equation 8.66, labelled 'rH': the H on the ring carbon adjacent to the carbinol carbon (map 8 on atom 3) is transferred to the CH2 radical terminus (atom 7, which becomes CH3), the C1=C2 double bond forms, and the charge/odd electron end up on oxygen - the page draws the product as HO(+.)-CH=CH-...-CH3, an acyclic enol radical cation that is an ISOMER of the molecular ion (no mass is lost in Equation 8.66). Book draws 1 arc for this step: a single fishhook running from the transferred H down onto the .CH2 terminus; that arc is move <2> (one electron of the C2-H bond travelling with the H into the new C6-H bond). Moves <1,3,4,5> are implicit and required for electron balance (not drawn on the page): <1> the C6 odd electron into the new C6-H bond, <3> the other C2-H electron into the forming C1=C2 pi bond, <4> one electron of the O=C1 pi bond into that same C1=C2 bond, and <5> the other O=C1 pi electron back onto oxygen, regenerating the O(+.) the book draws on the product. The 1,5-H transfer from C3 to C7 (donor and acceptor are four bonds apart along C3-C4-C5-C6-C7; an earlier version of this note said '1,4-H transfer from C2 to C6', which mis-stated both the shift order and the atom maps - the encoded moves are bond[3,8]->bond[7,8]) is geometrically possible only because of the residual weak C1...C6 bonding the book dots into the intermediate; that non-covalent contact is disclosed here and not encoded."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.66",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 188,
+        "equation": "8.66",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.66 (its chapter-8 keys stop at 8.14), so no MOD rule variable is cross-linked. Candidates checked and REJECTED: (i) IMS_4_9 'radical induced (alpha-)clevage for a saturated site', DFS [C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5 - it cleaves C1-C2, a bond NOT incident to C3, the atom that forms the new pi bond to the heteroatom, so its geometry is not the alpha-cleavage of this scheme; it also keeps [_A+.] on the product heteroatom while creating [C.]1, i.e. one unpaired electron becomes two, which fails the L->R spin conservation the rules/__init__.py guardrail enforces, so the rule is auto-dropped from the fragmentation list. (ii) IMS_4_13_1 is correctly encoded (the cleaved C1-C5 bond IS incident to C5, the atom that forms C5=O8) but is hard-wired to a dialkyl ETHER skeleton C-C-O(+.)-C-C, so its pattern cannot match a secondary alcohol HO(H)-C. (iii) hTransition_saturated_1 (DFS [H]1[C]2[C]3[C]4[C]5[_A+.]6) delivers the H onto the HETEROATOM, so it does not describe this step. hTransition_saturated_2 (DFS [H]1[C]2[C]3([_A+]4)[C]5[C.]6 >> [C.]2[C]3([_A+]4)[C]5[C]6([H]1)) DOES move the H onto a carbon radical terminus - the same kind of step as this one (an earlier version of this note claimed the opposite; that was wrong, verified against IMS_bookCover.py). It is nevertheless REJECTED here on geometry: the rule is a 1,4-shift whose onium [_A+]4 sits on the carbon BETWEEN donor and acceptor (chain C2-C3-C5-C6), whereas Eq 8.66 is a 1,5-shift (donor C3, acceptor C7, four bonds apart) whose oxocarbenium O1=C2 sits on the far side of the donor, outside the donor->acceptor chain. Chain length and charge-site placement both differ, so the rule cannot match this substrate."
+    },
+    {
+      "evidence_id": "ev_peak_enol_ion",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_enol_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 188,
+        "equation": "8.66",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": null,
+      "curator_note": "NO m/z and NO intensity are printed anywhere on Equation 8.66 - the scheme is generic (curl = unspecified polymethylene bridge) and its product is an isomerization product, not a fragment. observed_mz 100.0883 is the monoisotopic m/z of C6H12O+. computed by the curator from the chosen cyclohexanol instantiation (it is identical to the molecular-ion m/z, since no neutral is lost); status is 'inferred' and the species is detected=false. The book does not present this ion as an independently observed peak."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_enol_ion",
+      "species_id": "ring_opened_enol_radical_cation",
+      "step_id": "step_rh_to_enol_ion",
+      "observed_mz": 100.0883,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

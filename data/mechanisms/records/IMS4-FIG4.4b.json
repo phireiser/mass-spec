@@ -1,0 +1,203 @@
+{
+  "mechanism_id": "IMS4-FIG4.4b",
+  "species": [
+    {
+      "species_id": "diethylamine_radical_cation",
+      "mapped_smiles": "[CH3:1][CH:2]([1H:6])[NH+:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "iminium_ion_72",
+      "mapped_smiles": "[CH3:1][CH:2]=[NH+:3][CH2:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "hydrogen_radical",
+      "mapped_smiles": "[1H:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "diethylamine_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "iminium_ion_72",
+        "hydrogen_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_h",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_h",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 62,
+        "equation": null,
+        "figure": "4.4",
+        "panel": null,
+        "section": "Chapter 4 Basic Mechanisms of Ion Fragmentation; radical-site (alpha) cleavage of amines"
+      },
+      "confidence": 0.85,
+      "curator_note": "ARC COUNT / DRAWN-vs-INFERRED (convention D): Figure 4.4 is the diethylamine BAR SPECTRUM annotated with wavy cleavage-marks (which bond breaks -> which m/z) and the '58a' peak label; it draws 0 curved electron-pushing arrows. The 3-fishhook alpha-cleavage flow encoded here is curator-inferred from the book's own alpha attribution (the cleavage-mark + 'a' label), not transcribed from drawn arcs. Second alpha channel of the same diethylamine molecular ion (m/z 73, M+.): loss of a hydrogen atom from the alpha carbon gives the iminium ion CH3-CH=N(+)(H)-CH2CH3 at m/z 72 (M-1). Book draws 0 curved arrows for this step: it is shown by a horizontal squiggly bond-cleavage mark drawn across the alpha C-H bond of the explicitly drawn CH2 group, bracketed and labelled '72' (McLafferty's cleavage notation, not electron-pushing arrows). All 3 electron moves are encoded here for electron balance (odd electron on N into the forming N=C pi bond; one electron of the breaking Ca-H sigma into that pi bond; the second electron of that sigma onto the departing H atom); NONE is drawn as an arc on the page. The alpha carbon's departing hydrogen is given explicit atom map :6 so the homolysis is balanced; it carries an explicit protium isotope tag [1H] (mass 1.008, chemically ordinary hydrogen) purely as a tooling device so RDKit retains it as a mapped atom instead of folding it into an implicit H count -- it is NOT an isotopic label of the real molecule."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-FIG4.4b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 62,
+        "equation": null,
+        "figure": "4.4",
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "No MØD rule in src/data_generation/rules/ encodes this amine alpha C-H (M-1, loss of H•) cleavage. The nearest amine alpha-cleavage rule IMS_4_43_ (book eq 4.43) handles only the Ca-Cb channel (loss of an alkyl radical, the m/z 58 scheme of record IMS4-FIG4.4a). A search of rule_index.json for a nitrogen alpha-cleavage rule that expels an [H.] fragment while forming N=C returned no match, so this M-1 channel is currently unmodelled by MØD."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_72",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 62,
+        "equation": null,
+        "figure": "4.4",
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.7,
+      "curator_note": "The figure marks the alpha C-H cleavage of diethylamine with the bracketed label '72' (M-1). Figure 4.4 is a bar spectrum with no printed numeric intensities; the m/z 72 bar is minor and no percentage is printed, so relative_intensity is omitted and the status is 'inferred'. observed_mz is the curator-computed monoisotopic mass of the proposed C4H10N+ iminium ion, not a value read from the page."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 73.0886,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_72",
+      "species_id": "iminium_ion_72",
+      "step_id": "step_alpha_cleavage_h",
+      "observed_mz": 72.0808,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

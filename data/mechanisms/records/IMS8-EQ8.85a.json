@@ -1,0 +1,176 @@
+{
+  "mechanism_id": "IMS8-EQ8.85a",
+  "species": [
+    {
+      "species_id": "protonated_methyl_isopropyl_ether",
+      "mapped_smiles": "[CH3:3][CH:1]([CH2:2][1H:7])[O+:4]([1H:6])[CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "isopropyl_cation",
+      "mapped_smiles": "[CH3:3][CH+:1][CH2:2][1H:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methanol",
+      "mapped_smiles": "[O:4]([1H:6])[CH3:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_methyl_isopropyl_ether"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "isopropyl_cation",
+        "methanol"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_CO_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_85a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_CO_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": "top reaction arrow, labelled 'i'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.85, TOP reaction arrow, labelled with the italic 'i' (inductive cleavage). The drawn reactant is protonated methyl isopropyl ether, written on the page as (CH3)2CH-O(+)(H)-CH3 with the '+' printed on the OXYGEN and the O-bound H drawn explicitly; the mapped SMILES localizes the charge on that same oxygen (convention B). The drawn products are 'i-C3H7+ + CH3OH' with '40%' printed underneath. MECHANISM: heterolysis of the C1-O4 bond with both electrons going to the oxygen, which leaves as neutral methanol and leaves the even-electron isopropyl cation (m/z 43.0542, curator-computed monoisotopic). Book draws 0 arc(s): Equation 8.85 contains NO curved electron-pushing arrows at all - it is drawn with straight reaction/equilibrium arrows plus dashed 'partial bond' strokes that denote the loose bonds of the ion-neutral complexes. The single encoded move <1> is reconstructed for electron balance (not drawn on the page). NOTE ON THE DRAWN INTERMEDIATE: the vertical double arrow below the reactant leads to the same dissociation drawn as an ion-neutral COMPLEX 'CH2(H)-CH(CH3)...O(+)(H)CH3' (a dashed C...O bond, one methyl H drawn out explicitly because it is the H that becomes labile); that complex is non-covalent and has no defined bond orders, so it is not encoded as a discrete mapped species - this record encodes the net C-O heterolysis, which is what the dashed bond depicts. The up-arrow at the centre of the scheme shows that the same 40% products are also reached from the proton-bound complex of Equation 8.85b. CONTEXT: the p.199 text introduces Equation 8.85 with 'In the absence of activating functional groups in EE ions, proton-exchange reactions can proceed in ion-molecule complexes (Equations 8.14, 8.85; Terlouw et al. 1986; Bowen 1991); demonstration of such pathways usually requires D-labeling. Here both the hydrogen lability and site receptivity' [continues on p.200] 'are determined by the relative proton affinities of the donor and acceptor sites: PA(C3H6, CH3OH) = 7.8, 7.9 eV. Note that the competitive dissociations of such a proton-bound isomer of (AB + H)+ produce AH+ and BH+, whose mass sum equals AB + 2.' The reacting ion is therefore the protonated molecule (AB+H)+ of methyl isopropyl ether, C4H11O+, curator-computed monoisotopic m/z 75.0804; the page prints no m/z for it. The two percentages printed on the page (40%, 60%) are the BRANCHING abundances of the two competing dissociation channels, not 70 eV EI relative intensities."
+    },
+    {
+      "evidence_id": "ev_mech_8_85a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.85a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.85",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.85, so no MØD rule is cross-linked. Candidates checked and REJECTED: IMS_8_10 ('[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>...[C+]5....[O]8{=}[C]9...') and IMS_8_12 both require an OXOCARBENIUM precursor - the left side pins a DOUBLE bond [O+]8{=}[C]9 - whereas Equation 8.85 starts from a protonated ether whose O+ carries three single bonds (C, H, CH3); the pattern cannot match this substrate even though the bond that breaks (C-O, heterolytic, charge retained on carbon) is of the same inductive type. IMS_8_14_1/_1b (the proton-bound-complex rH pair) are additionally atom-unbalanced (their product half carries an extra methyl copy-pasted from IMS_8_13). The IMS_8_7_* 'hydrogen exchange in an ion-molecule complex' family operates on odd-electron ketone/enol systems, not on a protonated ether. Equation 8.85 is unmodelled by the current rule set."
+    },
+    {
+      "evidence_id": "ev_peak_8_85a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_iC3H7",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "The page prints '40%' under 'i-C3H7+ + CH3OH': that is the printed branching abundance of this channel relative to the competing 60% channel of Equation 8.85b, NOT a 70 eV EI relative intensity, and it is a channel yield rather than a measured peak height. relative_intensity 0.4 stores the printed percentage; observed_mz 43.0542 is the curator-computed monoisotopic m/z of C3H7+ (electron-mass corrected) - the page prints no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "unspecified - the page names no ionization or activation experiment; the reacting ion is the protonated molecule (AB+H)+ of methyl isopropyl ether discussed in the p.199/200 text (Terlouw et al. 1986; Bowen 1991). ionization_method 'CI' is the curator's inference for how an (AB+H)+ ion is made, NOT a statement printed on the page",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 75.0804,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_iC3H7",
+      "species_id": "isopropyl_cation",
+      "step_id": "step_inductive_CO_cleavage",
+      "observed_mz": 43.0542,
+      "relative_intensity": 0.4,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

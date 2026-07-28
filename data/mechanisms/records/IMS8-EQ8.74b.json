@@ -1,0 +1,144 @@
+{
+  "mechanism_id": "IMS8-EQ8.74b",
+  "species": [
+    {
+      "species_id": "dimethylcyclobutanol_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1]1([OH+:2])[CH2:4][CH2:5][CH:6]1[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_radical_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[OH+:2])[CH2:4][CH2:5][CH:6][CH3:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["dimethylcyclobutanol_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["distonic_radical_ion"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 6]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 6]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_ring_8_74b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 192,
+        "equation": "8.74",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements, subsection 'Two bonds cleaved'"
+      },
+      "confidence": 0.85,
+      "curator_note": "RIGHT-HAND half of Equation 8.74. DIRECTION: the reaction arrow between the middle and the right structure points LEFTWARDS, so the cyclic species is the reactant and the middle distonic ion is the product; the equation shows two different precursors converging on that one ion (the acyclic ketone branch is recorded separately as IMS8-EQ8.74a). SUBSTRATE, read off the drawing: a cyclobutane square with a methyl on the upper-left ring carbon, and on the upper-right ring carbon both a methyl (the plain line running to the right) and an 'HO' group carrying a printed '+.' above it -- i.e. the oxygen-ionized molecular ion of 1,2-dimethylcyclobutan-1-ol, C6H12O+., the same elemental composition and the same m/z 100.0883 as the hexan-2-one ion on the left. Localization follows convention B: the charge and the odd electron are put on the hydroxyl oxygen exactly where the book prints them, so [OH+:2] carries two bonds and one unpaired electron. ARROWS: Book draws 2 arc(s), both single-barbed fishhooks that converge on the C(1)-O(2) bond -- moves <1,2> are drawn: move <1> starts at the '+.' on the oxygen, loops right and down, and its barb points back at the C-O bond; move <2> starts on the ring C(1)-C(6) bond (the top edge of the square, on the left of the carbinol vertex) and its barb sweeps up to the same C-O bond. Move <3> is an implicit homolysis hook required for electron balance (the second electron of the cleaved C(1)-C(6) ring bond dropping onto C(6); not drawn on the page, though the product structure in the middle is drawn with its radical dot already on that carbon). Encoded together they give exactly the printed product: the ring bond between the carbinol carbon and the methyl-bearing ring carbon is cleaved, C(1)=O(2) becomes a double bond (the drawn 'HO' with a bare '+'), and the odd electron ends up on C(6) -- ring-opening alpha cleavage at an n-ionized oxygen, the same first-step 'separate the radical and the charge site' logic the paragraph above ascribes to ring cleavages (Equations 8.48-8.50, 8.53-8.54). CURATOR CONTEXT (not a book statement about this drawing): the cyclobutanol is the ring-closed counterpart of the Norrish-Type-II 1,4-species whose photochemical parallel is discussed in the paragraph at the top of the page. MS CONTEXT: the page names no experiment for this structure -- it is drawn purely as a second, cyclic precursor of the same distonic ion. Since the drawn reacting species is a whole-molecule odd-electron radical cation, ms_context records the convention-G default for such a precursor (70 eV EI, adduct [M]+., precursor_mz = the C6H12O+. molecular-ion m/z); no ionization method, electron energy or activation is printed on p.192. NO PRINTED NUMBERS: p.192 prints no m/z and no abundance anywhere in this scheme, so the product is detected=false, peak status 'inferred', no relative_intensity; m/z 100.0883 is the curator's computed monoisotopic value for C6H12O+. and is not an independently observable peak (the distonic ion is isobaric with its own precursor)."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_74b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.74b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.74",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "NO MOD RULE IMPLEMENTS THIS SCHEME. rule_index.json has no key '8.74', and every candidate in the index was checked against the DFS and, where expressible as connectivity, tested with an RDKit substructure match against the encoded precursor '[CH3:3][C:1]1([OH+:2])[CH2:4][CH2:5][CH:6]1[CH3:7]' -- all three nearest analogues FAIL to match. (i) IMS_8_8_1 '[C]1([H]2)([H]3)([H]4)[C]5([H]6)[O+.]7[C]8([H]9)([H]10){-}5>>[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[O+]7[C.]8([H]9)([H]10)' performs the identical TRANSFORMATION (a ring C-C bond alpha to an ionized oxygen cleaves, the C=O+ pi bond forms, the radical stays on the other carbon inside one connected distonic product), but its oxygen sits INSIDE the opened ring, bridging both carbons of the cleaved bond (an epoxide-type 3-ring); ours is an exocyclic hydroxyl whose second substituent is an H, so the pattern '[#6]1[O+][#6]1' does not match (tested: False). (ii) IMS_4_13_1 '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)>>[C.]1(...)...{=}[O+]8...' is alpha cleavage at an ionized ETHER oxygen: it needs a CH2 next to a two-carbon-substituted O+ (pattern '[#6]-[CH2]-[O+]-[#6]', tested: False -- our carbinol carbon carries no hydrogen and the oxygen's other substituent is H), and it dissociates into two separate components rather than opening a ring. (iii) IMS_4_26_1 '[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6>>[_A.]1.[C]2([H]3)([H]4){=}[O+]5[_A]6' is the generic version of the same dissociative alpha cleavage; besides the same CH2-next-to-O requirement (tested: False) its two '_A' placeholders must unify to one element, whereas here the departing site is carbon and the oxygen's other substituent is hydrogen. So a ring-opening alpha cleavage that keeps charge and radical in ONE species -- the distonic-ion-forming reaction of Equation 8.74 -- is currently unmodelled by the MOD rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_distonic_oe_ion_from_ring",
+      "species_id": "distonic_radical_ion",
+      "step_id": "step_ring_alpha_cleavage",
+      "observed_mz": 100.0883,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

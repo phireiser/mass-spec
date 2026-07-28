@@ -1,0 +1,142 @@
+{
+  "mechanism_id": "IMS8-EQ8.50",
+  "species": [
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[O+:1][CH2:5][CH2:4][CH2:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_resonance_ion",
+      "mapped_smiles": "[CH2:5][O+:1]=[CH2:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ring_opened_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ethylene_neutral", "distonic_oxonium_resonance_ion"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ethylene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ethylene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 178, "equation": "8.50", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.7,
+      "curator_note": "Lower branch off the ring-opened distonic ion, labelled 'alpha': a genuine radical-site alpha-cleavage. The tail radical forms a new C=C pi bond (expelling neutral ethylene, C2H4, for Y=O) and the sigma bond beta to the radical breaks, leaving a radical on the carbon adjacent to Y. The product is the resonance-stabilised distonic oxonium/methylene ion .CH2-Y+=CH2 <-> CH2=Y+-CH2. (m/z 44 for Y=O). Book draws 0 electron-pushing fishhooks on this branch (only the 'alpha'-labelled reaction arrow); the two structures the book shows for the product ARE the two resonance forms, connected by a double-headed resonance arrow (eq 8.50). RESONANCE CHOICE (convention C): the mapped_smiles encodes the left/form-1 localisation .CH2(map5)-O+=CH2(map2); the right/form-2 CH2=O+-CH2.(map5) is the drawn resonance partner. The 3 fishhooks are curator-supplied for balance and reproduce standard radical-site alpha-cleavage exactly."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.50",
+      "support_type": "curator_inferred",
+      "locator": {"page": 178, "equation": "8.50", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.50; no MØD rule variable is cross-linked to this scheme."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 72.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_distonic_oxonium",
+      "species_id": "distonic_oxonium_resonance_ion",
+      "step_id": "step_alpha_ethylene_loss",
+      "observed_mz": 44.0257,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "mechanism_id": "IMS4-EQ4.8",
+  "species": [
+    {
+      "species_id": "dimethylbutane_molecular_ion",
+      "mapped_smiles": "[CH3:2][C:1]([CH3:6])([CH3:10])[CH2:14][CH3:20]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tert_butyl_cation",
+      "mapped_smiles": "[CH3:2][C+:1]([CH3:6])[CH3:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH2:14][CH3:20]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethylbutane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "tert_butyl_cation",
+        "ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_dissociation",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              14
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              14
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_dissociation",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 56,
+        "equation": "4.8",
+        "section": "4.5 Sigma-bond dissociation"
+      },
+      "confidence": 0.9,
+      "curator_note": "Concrete example: 2,2-dimethylbutane (CH3)3C-CH2CH3 is ionized (-e-) to its molecular ion and then dissociates its central sigma C-C bond, retaining the charge on the more-substituted (tertiary) carbon to give the tert-butyl cation (CH3)3C(+) (m/z 57, printed '100%', the base peak) and losing an ethyl radical .CH2CH3. REPRESENTATION CAVEAT (honest): the saturated-alkane molecular ion is a sigma radical cation whose odd electron occupies the one-electron C-C bond and cannot be localized on any single atom (C6H14 radical cation has no connected integer-bond structure: 37 valence electrons -> 18 two-electron bonds + 1 unpaired e-, one fewer than the 19 needed to connect the 20 atoms). The precursor mapped_smiles therefore shows the NEUTRAL 2,2-dimethylbutane skeleton (the real origin of the arrows) while the species charge=1/radical_electrons=1 fields record that it is the M+.. Book draws 0 curved arrows/fishhooks; it labels two reaction arrows, '-e-' (ionization) and 'sigma' (dissociation). The two encoded electron moves map 1:1 onto those two labels: move <1> routes one electron of the C1-C14 sigma bond to the leaving carbon (C14 -> ethyl radical), move <2> routes the other sigma electron to EXTERNAL (the '-e-' ionization the book states removes an electron from the saturated framework), leaving C1 as the tert-butyl cation. No arc is misrepresented as drawn."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.8",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 56,
+        "equation": "4.8"
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index cross-links equation 4.8 to IMS_4_8, whose DFS (explicit-H) is [C+.]1([CH3])([CH3])([CH3])[CH2]14[CH3]20 >> [C+]1([CH3])([CH3])([CH3]).[C.]14([H])([H])[CH3]17. VERIFIED BOND-CHANGE MATCH: it cleaves the quaternary-C1 to CH2-C14 sigma bond, sends atom1 [C+.] -> [C+] (the retained tert-butyl cation) and atom14 -> [C.] (the CH2 of the leaving ethyl radical), exactly the book's fragmentation. MODEL-DIVERGENCE CAVEAT: the rule's precursor places the '+.' on the 4-coordinate quaternary carbon, which MOD's untyped graph model permits but RDKit rejects ('Explicit valence for atom C, 4, is greater than permitted', confirmed in the container). The bond CHANGE is faithful; only the atom-localized radical-cation precursor is not RDKit-representable, which is why this record's precursor mapped_smiles uses the neutral skeleton. m/z values are curator-computed (57.0699 for the tert-butyl cation, electron-mass corrected)."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_tert_butyl_cation",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 56,
+        "equation": "4.8"
+      },
+      "confidence": 0.85,
+      "curator_note": "The page prints '100%' beneath (CH3)3C(+), i.e. it is the base peak of the 2,2-dimethylbutane spectrum. observed_mz 57.0699 is the curator-computed monoisotopic m/z of C4H9(+) (electron-mass corrected); the book states the abundance, not the exact mass."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.109,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_tert_butyl_cation",
+      "species_id": "tert_butyl_cation",
+      "step_id": "step_sigma_dissociation",
+      "observed_mz": 57.0699,
+      "relative_intensity": 1.0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

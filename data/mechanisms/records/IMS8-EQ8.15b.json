@@ -1,0 +1,194 @@
+{
+  "mechanism_id": "IMS8-EQ8.15b",
+  "species": [
+    {
+      "species_id": "protonated_phenyl_3_butenyl_ether",
+      "mapped_smiles": "[OH+:7]([CH2:9][CH:10]([1H:20])[CH:11]=[CH2:12])[c:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "phenol_neutral",
+      "mapped_smiles": "[OH:7][c:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "but_2_enyl_cation",
+      "mapped_smiles": "[CH2+:9][CH:10]=[CH:11][CH2:12][1H:20]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_phenyl_3_butenyl_ether"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "phenol_neutral",
+        "but_2_enyl_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              20
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              12,
+              20
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 148,
+        "equation": "8.15",
+        "section": "8.x Proton-bound complexes in CI: protonated phenyl 3-butenyl ether"
+      },
+      "confidence": 0.75,
+      "curator_note": "The book (eq 8.15) DRAWS a proton-bound complex [PhO...H...butadiene] as the intermediate from the methane-CI [M+H]+ ion of phenyl 3-butenyl ether; the non-covalent complex is NOT separately encoded (partial bonds not RDKit-representable) - this record encodes the net rH reaction precursor->but-2-enyl cation (76%). 0 electron-pushing arcs drawn (only 'rH' reaction arrows). Equation 8.15, branch giving protonated butadiene (drawn as H3C-CH=CH-CH2+ and labelled 76% on the page). Same precursor (protonated phenyl 3-butenyl ether, MH+ from methane CI) and same rH to the proton-bound complex [phenol...H+...butadiene] as branch 8.15a, but here the shared proton stays on the butadiene (PA 8.4 eV) -> neutral phenol + protonated butadiene, the resonance-stabilised but-2-enyl (1-methylallyl) cation C4H7+ (m/z 55). INTERMEDIATE OMITTED (non-covalent proton-bound complex): encoded as the NET rearrangement in one formal-arrow step. RESONANCE: the C4H7+ product is allylic, CH3-CH=CH-CH2+ <-> CH3-CH+-CH=CH2; I encode the single localised Kekule form the page draws (cation on C9, C10=C11 double bond, CH3 at C12). Book draws 0 electron-pushing arcs; all three encoded moves are reconstructed for electron balance (not drawn on the page): move <1> is a heterolytic O7-C9 cleavage taking that bonding pair onto O7 (neutralising the oxonium to neutral phenol and leaving C9 as the primary cation), moves <2> and <3> perform the allylic H-relay that delivers the beta H (H20) from C10 to the terminal C12 while shifting the C11=C12 pi bond to C10=C11 -- net, H20 migrates C10 -> C12 and the double bond walks, giving the but-2-enyl cation drawn in the book. Closed-shell throughout. Migrating H written as isotope-tagged [1H:20] so RDKit preserves its map."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.15b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 148,
+        "equation": "8.15"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD rule is cross-linked: rule_index by_equation['8.15'] is null. The 'Gl. 8.15' comment in src/data_generation/rules/IMS_chap8_examples.py has no Rule.fromDFS beneath it. rule_mismatches: none (nothing to compare against)."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_C4H7",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 148,
+        "equation": "8.15"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book prints '76%' under the protonated-butadiene product. observed_mz 55.0537 is the curator-computed monoisotopic m/z of the but-2-enyl cation C4H7+ (electron-mass corrected); the page prints the relative abundance (76% -> relative_intensity 0.76) but no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "electron_energy_ev": null,
+    "precursor_mz": 149.0955,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C4H7",
+      "species_id": "but_2_enyl_cation",
+      "step_id": "step_hydrogen_rearrangement",
+      "observed_mz": 55.0537,
+      "relative_intensity": 0.76,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

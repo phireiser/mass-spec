@@ -1,0 +1,176 @@
+{
+  "mechanism_id": "IMS8-EQ8.55c",
+  "species": [
+    {
+      "species_id": "ring_opened_allyl_distonic_ion",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH+:1][CH:6]([1H:8])[CH:5]([1H:7])[CH2:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hexa_1_3_diene_radical_cation",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH+:1][CH:6][CH:5]([1H:8])[CH2:4][1H:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ring_opened_allyl_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["hexa_1_3_diene_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_random_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [4]},
+          "target": {"type": "bond", "atom_maps": [4, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 7]},
+          "target": {"type": "bond", "atom_maps": [4, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 7]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "bond", "atom_maps": [5, 8]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 8]},
+          "target": {"type": "bond", "atom_maps": [5, 8]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 8]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_random_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.65,
+      "curator_note": "Equation 8.55, LOWER 'rH' branch off the ring-opened distonic ion, followed down the vertical arrow to the isomerised acyclic diene ion. Book draws 2 arc(s), both single-barbed fishhooks, both starting at an explicitly written H: (i) the H on C5 - the carbon that carries the '.CH2' group - to the radical dot on C4, and (ii) the H on C6 to C5. Net effect of the two drawn hydrogen shifts: the terminal .CH2 becomes the CH3 that the product structure shows, and the radical site walks two carbons along the chain (C4 -> C6), where it ends up adjacent to the allyl-cation carbon C1, i.e. exactly the acyclic 1,3-hexadiene radical cation CH2=CH-CH=CH-CH2-CH3 that the page draws in brackets with '+.'. Moves <2,5> ARE the two drawn fishhooks (each carries one electron of a breaking C-H sigma bond into the forming C-H bond); moves <1,4> (the acceptor radical's odd electron into the forming C-H bond) and <3,6> (the second electron of the breaking C-H sigma bond, left behind on the donor carbon) are implicit hooks required for electron balance and are NOT drawn on the page. LOCALIZATION (convention C): the drawn product carries two fully formed C=C bonds plus a bracketed '+.'; this record writes the localisation in which the second (ionised) pi bond is split into C1(+) and C6(.) on adjacent carbons - the same ion, and the only RDKit-parseable way to place the charge and the odd electron where the mechanism puts them. The migrating hydrogens are isotope-tagged [1H:7] (C5 -> C4) and [1H:8] (C6 -> C5) so RDKit keeps them as separately mapped atoms. 'rH' is the book's random/skeletal hydrogen rearrangement; the prose below the scheme attributes the poor isomeric specificity to 'the tendency of hydrocarbons to undergo random rearrangements'."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.55c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.2,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.55; no MOD rule variable is cross-linked. The only hydrogen-to-radical-carbon rH encoding in the rule set is hTransition_saturated_2 ('[H]1[C]2[C]3([_A+]4)[C]5[C.]6>>[C.]2[C]3([_A+]4)[C]5[C]6([H]1)', indexed under eq 4.38, comment 'siehe 8.53'), which is a 1,4- (through-space) H shift onto a radical carbon whose 1,3-neighbour carries a charged substituent [_A+]. It cannot match this precursor: its C3 must bear BOTH a charged substituent and a second carbon neighbour with a transferable H, whereas in the distonic ion the carbon adjacent to the charge (C6) has only two heavy neighbours (C1 and C5), both already consumed by the pattern - and the drawn rearrangement here is two consecutive 1,2-shifts, not a 1,4-shift. No MOD rule encodes the 8.55 rH step."
+    },
+    {
+      "evidence_id": "ev_peak_hexadiene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_hexadiene_82",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.3,
+      "curator_note": "observed_mz 82.0777 is the curator-computed monoisotopic m/z of the rearranged C6H10+. ion (an isomer of the molecular ion, electron-mass corrected). The page prints neither an m/z nor an abundance for it; status 'inferred', no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 82.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_hexadiene_82",
+      "species_id": "hexa_1_3_diene_radical_cation",
+      "step_id": "step_random_h_rearrangement",
+      "observed_mz": 82.0777,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.3
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

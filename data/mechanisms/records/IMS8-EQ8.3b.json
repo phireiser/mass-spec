@@ -1,0 +1,143 @@
+{
+  "mechanism_id": "IMS8-EQ8.3b",
+  "species": [
+    {
+      "species_id": "butyl_methyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][O+:5][CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methoxy_cation",
+      "mapped_smiles": "[O+:5][CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 2,
+      "spin_multiplicity": 3,
+      "detected": true
+    },
+    {
+      "species_id": "butyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butyl_methyl_ether_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["methoxy_cation", "butyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 141,
+        "equation": "8.3",
+        "section": "8.2 Product stability -- Charge competition in OE(+.) decompositions: Stevenson's Rule"
+      },
+      "confidence": 0.85,
+      "curator_note": "Eq 8.3 row 1, the 'or' branch (unlabeled arrow). Same C-O cleavage as 8.3a but the charge is RETAINED on the oxygen-bearing fragment giving OCH3+ (1%), with the odd electron migrating to the departing butyl radical .C4H9. Consistent with Stevenson's rule this minor channel is disfavoured because IE(.OCH3)=8.6 eV > IE(C4H9.)=8.0 eV. Book draws 0 arcs (summary equation); the homolytic C-O cleavage (one sigma electron of bond 4-5 to C4 giving the butyl radical, one to O5 pairing with the oxygen odd electron) is reconstructed for electron balance. NOTE: 'OCH3+' as drawn is the methoxy oxenium cation CH3-O(+) (valence-1 oxygen); RDKit renders this open-shell with two unpaired electrons (triplet), hence radical_electrons=2. The ion actually observed at m/z 31 is commonly the closed-shell H-rearranged CH2=OH(+), but the book's scheme depicts direct charge retention on the intact methoxy group with no H shift, which is what is encoded here."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.3b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 141, "equation": "8.3"},
+      "confidence": 0.2,
+      "curator_note": "Cross-linked MOD rule IMS_8_3_ind (equation 8.3, cleaves the C-O bond). MISMATCH: the rule emits both fragments as cations (C4H9(+) and CH3-O(+)), charge +2 on the RHS, and fuses this 1% OCH3+ retention branch with the 25% C4H9+ migration branch (8.3a) into one non-conserving step; dropped by the conservation guardrail. Does NOT match this substrate. See rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_OCH3",
+      "support_type": "explicitly_reported",
+      "locator": {"page": 141, "equation": "8.3"},
+      "confidence": 0.85,
+      "curator_note": "Book prints '1%' relative abundance under OCH3+. observed_mz 31.0178 is the curator-computed electron-mass-corrected monoisotopic m/z of CH3O+; the page prints only the % abundance and the fragment IE (8.6 eV), no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+.",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 88.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_OCH3",
+      "species_id": "methoxy_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 31.0178,
+      "relative_intensity": 0.01,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

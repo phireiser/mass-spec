@@ -1,0 +1,308 @@
+{
+  "mechanism_id": "IMS8-EQ8.61",
+  "species": [
+    {
+      "species_id": "dimethylpiperidine_molecular_ion",
+      "mapped_smiles": "[CH3:8][CH:2]1[CH2:3][CH2:4][CH2:5][CH2:6][N+:1]1[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclic_immonium_98",
+      "mapped_smiles": "[CH3:7][N+:1]1=[CH:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dienyl_immonium_70",
+      "mapped_smiles": "[CH2:6]=[N+:1]([CH3:7])[CH:2]=[CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:4]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethylpiperidine_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_immonium",
+      "species_ids": [
+        "cyclic_immonium_98",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "dienyl_immonium_70",
+        "ethylene_neutral",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_immonium",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_retro_diels_alder",
+      "from_state": "state_immonium",
+      "to_state": "state_products",
+      "step_class": "retro_diels_alder",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_8_61",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.61",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (two bonds cleaved)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Substrate is the 1,2-dimethylpiperidine molecular ion: the page prints '+.' on the ring nitrogen, so the precursor mapped_smiles localizes both the charge and the odd electron on N(1) (three sigma bonds on N+ leave one unpaired electron), exactly as drawn. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the odd electron printed on N(1) into the N(1)-C(2) bond; drawn arc 2 = a fishhook from the C(2)-CH3(8) sigma bond into that same N(1)-C(2) bond, which therefore rises from single to double (immonium). The undrawn move 3 carries the second electron of the cleaved C(2)-CH3 bond onto C(8); the book simply writes CH3 off the page and prints the resulting (M-CH3)+ ion. Note the methyl that leaves is the RING-carbon methyl on C(2), not the N-methyl C(7), which is retained in the m/z 98 ion as drawn. Map numbers: 1 = N, 2 = C2 (alpha ring carbon), 3-6 = ring C3..C6, 7 = N-methyl (retained), 8 = C2-methyl (expelled)."
+    },
+    {
+      "evidence_id": "evidence_step_rda_8_61",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_diels_alder",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.61",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (two bonds cleaved)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 3 arc(s) on the m/z 98 structure; moves <1,2,3> are ALL drawn and no implicit hook is needed - this is an even-electron retro-Diels-Alder, i.e. a three-arrow cyclic two-electron flow, and every arrowhead on the page is a full (double-barbed) head, hence electron_count 2 throughout. Drawn arc 1 = the N(1)=C(2) pi pair sliding to C(2)=C(3); drawn arc 2 = the C(3)-C(4) sigma pair becoming the C(4)=C(5) pi bond of the expelled ethylene; drawn arc 3 = the C(5)-C(6) sigma pair becoming the new N(1)=C(6) pi bond. Net: the C(3)-C(4) and C(5)-C(6) ring bonds break and CH2=N+(CH3)-CH=CH2 (m/z 70) plus CH2=CH2 are formed, exactly the two structures drawn to the right. HONEST LABEL NOTE: the arrow on the page is labelled with a single italic 'i' (McLafferty's charge-site/inductive initiation), while the running text on the same page calls this an 'RDA decomposition'; step_class is set from the text (retro_diels_alder) and the printed 'i' is recorded here rather than silently dropped. The expelled CH3 radical of the first step is carried through this state as a spectator so that the step stays atom- and electron-balanced."
+    },
+    {
+      "evidence_id": "evidence_mod_8_61",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.61",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.61",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.61 (its chapter-8 keys stop at 8.14), so no MOD rule variable is cross-linked and none is asserted. Two candidates were CHECKED rather than assumed. (i) IMS_4_43_ (DFS '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+.]8([H]9)[C]10([H]11)([H]12)[C]13([H]14)([H]15)[H]16>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+]8([H]9){=}[C]10([H]11)([H]12).[C.]13([H]14)([H]15)[H]16') is the correct amine alpha-cleavage geometry - the cleaved C(10)-C(13) bond IS incident to the pi-forming carbon C(10) - but it does NOT match this substrate: it requires the alpha carbon to carry at least two hydrogens and a methyl beyond it on BOTH nitrogen arms, whereas the alpha carbon of 1,2-dimethylpiperidine bears only one H. Verified with RDKit: SMARTS [CH3][C;H2,H3][N+]([C;H2,H3][CH3]) gives 0 matches on the precursor. (ii) No retro-Diels-Alder rule is indexed at all: the two variables whose names end in '_rd' (IMS_4_37_rd, IMS_4_42_rd) are radical DISPLACEMENT rules that form a new C-heteroatom ring bond, not RDA ring cleavages, and the IMS_8_6_* family fragments an all-carbon open chain. So the second step of this equation has no MOD counterpart either. The page prints its abundances ('m/z 98, 100%', 'm/z 70, 12%') as bare percentages without naming the experiment; they are the book's standard 70 eV EI values (running head '8 / Detailed Mechanisms of Ion Fragmentation') and ms_context is set accordingly."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 113.1199,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_98",
+      "species_id": "cyclic_immonium_98",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 98.0964,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    },
+    {
+      "peak_id": "peak_70",
+      "species_id": "dienyl_immonium_70",
+      "step_id": "step_retro_diels_alder",
+      "observed_mz": 70.0651,
+      "relative_intensity": 0.12,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

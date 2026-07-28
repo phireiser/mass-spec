@@ -1,0 +1,190 @@
+{
+  "mechanism_id": "IMS8-EQT8.2b",
+  "species": [
+    {
+      "species_id": "fluoroethane_radical_cation",
+      "mapped_smiles": "[CH3:1][CH:2]([1H:4])[F:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "fluoronium_ion",
+      "mapped_smiles": "[CH3:1][CH:2]=[F+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "hydrogen_atom",
+      "mapped_smiles": "[1H:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "fluoroethane_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "fluoronium_ion",
+        "hydrogen_atom"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_pi",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_pi",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 166,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3"
+      },
+      "confidence": 0.75,
+      "curator_note": "Table 8.2, row 2 (OE+. one-bond sigma cleavage, A:BCD -> A. + B=C(+)D). Book draws 0 arcs -- only the double-dagger ':' on the C-H bond of the printed example H:CH(CH3)F (fluoroethane). Loss of H. from the F-bearing carbon gives the even-electron fluoronium CH3CH=F+ (m/z 47). Encoded electron balance (3 implicit moves, none drawn): one C-H bond electron -> EI hole (external), the other -> departing H., and an F lone pair (2e) forms the new C=F+ pi bond. No m/z / intensity printed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MØD rule indexed to Table 8.2 (see note in EQT8.2a). This charge-stabilised sigma cleavage forming a C=F+ double bond has no dedicated rule in the index."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 48.037,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_CH3CHF",
+      "species_id": "fluoronium_ion",
+      "step_id": "step_sigma_pi",
+      "observed_mz": 47.0292,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

@@ -1,0 +1,241 @@
+{
+ "mechanism_id": "IMS4-EQ4.44",
+ "species": [
+  {
+   "species_id": "dichlorobutane_molecular_ion",
+   "mapped_smiles": "[Cl+:1][CH:2]([CH3:3])[CH2:8][CH2:11][Cl:14]",
+   "role": "precursor_ion",
+   "charge": 1,
+   "radical_electrons": 1,
+   "spin_multiplicity": 2,
+   "detected": false
+  },
+  {
+   "species_id": "secondary_carbocation",
+   "mapped_smiles": "[CH3:3][CH+:2][CH2:8][CH2:11][Cl:14]",
+   "role": "intermediate",
+   "charge": 1,
+   "radical_electrons": 0,
+   "spin_multiplicity": 1,
+   "detected": true
+  },
+  {
+   "species_id": "chlorine_radical",
+   "mapped_smiles": "[Cl:1]",
+   "role": "neutral_radical",
+   "charge": 0,
+   "radical_electrons": 1,
+   "spin_multiplicity": 2,
+   "detected": false
+  },
+  {
+   "species_id": "methallyl_cation",
+   "mapped_smiles": "[CH3:3][CH+:2][CH:8]=[CH2:11]",
+   "role": "product_ion",
+   "charge": 1,
+   "radical_electrons": 0,
+   "spin_multiplicity": 1,
+   "detected": true
+  },
+  {
+   "species_id": "hydrogen_chloride",
+   "mapped_smiles": "[ClH:14]",
+   "role": "neutral_loss",
+   "charge": 0,
+   "radical_electrons": 0,
+   "spin_multiplicity": 1,
+   "detected": false
+  }
+ ],
+ "states": [
+  {
+   "state_id": "state_precursor",
+   "species_ids": [
+    "dichlorobutane_molecular_ion"
+   ]
+  },
+  {
+   "state_id": "state_after_inductive",
+   "species_ids": [
+    "secondary_carbocation",
+    "chlorine_radical"
+   ]
+  },
+  {
+   "state_id": "state_products",
+   "species_ids": [
+    "methallyl_cation",
+    "hydrogen_chloride",
+    "chlorine_radical"
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "step_id": "step_inductive_cleavage",
+   "from_state": "state_precursor",
+   "to_state": "state_after_inductive",
+   "step_class": "inductive_cleavage",
+   "semantics": "formal_arrow_step",
+   "electron_moves": [
+    {
+     "source": {
+      "type": "bond",
+      "atom_maps": [
+       1,
+       2
+      ]
+     },
+     "target": {
+      "type": "atom",
+      "atom_maps": [
+       1
+      ]
+     },
+     "electron_count": 2
+    }
+   ],
+   "reaction_smirks": null,
+   "reversible": false
+  },
+  {
+   "step_id": "step_h_rearrangement",
+   "from_state": "state_after_inductive",
+   "to_state": "state_products",
+   "step_class": "hydrogen_rearrangement",
+   "semantics": "formal_arrow_step",
+   "electron_moves": [
+    {
+     "source": {
+      "type": "bond",
+      "atom_maps": [
+       11,
+       14
+      ]
+     },
+     "target": {
+      "type": "bond",
+      "atom_maps": [
+       8,
+       11
+      ]
+     },
+     "electron_count": 2
+    }
+   ],
+   "reaction_smirks": null,
+   "reversible": false
+  }
+ ],
+ "sources": [
+  {
+   "source_id": "mclafferty_ims_4e",
+   "source_type": "book",
+   "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+   "doi": null,
+   "isbn": "0-935702-25-3",
+   "url": null
+  },
+  {
+   "source_id": "mod_rules",
+   "source_type": "software_output",
+   "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+   "doi": null,
+   "isbn": null,
+   "url": null
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "evidence_step_inductive",
+   "source_id": "mclafferty_ims_4e",
+   "target_type": "step",
+   "target_id": "step_inductive_cleavage",
+   "support_type": "textbook_proposed",
+   "locator": {
+    "page": 80,
+    "equation": "4.44",
+    "figure": null,
+    "panel": null,
+    "section": "4 / Basic Mechanisms of Ion Fragmentation (EE+ H-rearrangement not involving the charge site)"
+   },
+   "confidence": 0.85,
+   "curator_note": "First step of eq 4.44 (arrow labelled 'i', inductive cleavage). The 1,3-dichlorobutane molecular ion is drawn n-ionized at the secondary chlorine (Cl carries '+.'): CH3-C(+.)HCl-CH2-CH2Cl. ARC COUNT: the book draws 1 arc - a single full-headed (two-electron) arrow whose tail sits on the C2-Cl1 sigma bond and whose head points at the charged chlorine (Cl1, the '+.'). This is charge-site-driven inductive heterolysis: the C2-Cl1 bonding pair migrates onto Cl1, neutralising it to a chlorine radical (Cl(+.) -> Cl.) and leaving an even-electron secondary carbocation CH3-CH(+)-CH2-CH2Cl (m/z 91). LOCALIZATION (convention B): charge and odd electron are placed on Cl1 in the mapped SMILES ([Cl+] with one sigma bond = Cl(+.), one unpaired electron), matching the '+.' the book draws over that chlorine. ENCODING: the single drawn arc is transcribed exactly as electron_move <1> (bond 1-2 -> atom 1, electron_count 2). The two electrons landing on Cl1 form a new lone pair while its pre-existing odd electron is retained, so the arrow-check reports a soft 'lone pair rather than radicals' note on atom 1 (radical count unchanged at 1); this is expected for a heterolysis onto an already-radical cation site and is not a defect."
+  },
+  {
+   "evidence_id": "evidence_step_rh",
+   "source_id": "mclafferty_ims_4e",
+   "target_type": "step",
+   "target_id": "step_h_rearrangement",
+   "support_type": "textbook_proposed",
+   "locator": {
+    "page": 80,
+    "equation": "4.44",
+    "figure": null,
+    "panel": null,
+    "section": "4 / Basic Mechanisms of Ion Fragmentation (EE+ H-rearrangement, 'rH', charge site not involved)"
+   },
+   "confidence": 0.8,
+   "curator_note": "Second step of eq 4.44 (arrow labelled 'rH'): the even-electron secondary carbocation eliminates neutral HCl, giving the resonance-stabilised C4H7(+) cation at m/z 55 (the base peak of 1,3- and 1,1-dichlorobutane per the running text). This is an H rearrangement that does NOT involve the charge site: the departing chlorine (Cl14, on the terminal CH2) abstracts an H from the adjacent CH2 (C8) while the C8=C11 double bond forms and the C11-Cl14 bond breaks. ARC COUNT: the book draws 2 arc(s): arc(1) runs from a chlorine lone pair (drawn as the ':' on Cl14) to the hydrogen on C8 (Cl abstracts H); arc(2) runs from the C8-H sigma bond into the forming C8=C11 pi bond. The book does NOT draw the C11-Cl14 heterolysis - the departure of chlorine as part of HCl is left IMPLICIT (Cl14 is simply written into the HCl product). For full electron balance an implicit third hook, C11-Cl14 sigma -> Cl14 lone pair, is required (not drawn on the page). ENCODING NOTE: because RDKit strips atom-mapped hydrogens in this build, the two drawn arcs (both terminate on / originate from the migrating H) are not directly transcribable. The heavy-atom skeleton change (form C8=C11, break C11-Cl14) is instead encoded as a single re-decomposed two-electron move <1> = bond 11-14 -> bond 8-11 (the C11-Cl14 sigma pair routed into the new C8=C11 pi bond); the complementary C8-H -> H-Cl14 transfer that supplies chlorine's H is folded into the implicit-H counts (C8: CH2 -> =CH; Cl14: Cl -> HCl). This re-decomposition preserves exactly the drawn heavy-atom transformation; no heavy-atom bond change is omitted, but the encoded move is NOT a verbatim copy of either drawn arc. RESONANCE (convention C): the product is the 1-methylallyl / methallyl cation, drawn here in the localized form CH3-CH(+)-CH=CH2 (charge on C2); its allylic resonance partner CH3-CH=CH-CH2(+) carries the charge on C11 and is the reason for the ion's stability and base-peak intensity. PRINTED INTENSITY: none - the page prints no numeric percentages; the text only states m/z 55 is 'the base peak', a qualitative statement, so relative_intensity is omitted."
+  },
+  {
+   "evidence_id": "evidence_mechanism_mod",
+   "source_id": "mod_rules",
+   "target_type": "mechanism",
+   "target_id": "IMS4-EQ4.44",
+   "support_type": "computationally_supported",
+   "locator": {
+    "page": null,
+    "equation": "4.44",
+    "figure": null,
+    "panel": null,
+    "section": "src/data_generation/rules/IMS_chap4_examples.py"
+   },
+   "confidence": 0.85,
+   "curator_note": "Cross-linked to MOD rules IMS_4_44_ind (inductive cleavage) and IMS_4_44_rH (H-rearrangement). VERIFIED bond-by-bond against their DFS. IMS_4_44_ind '[Cl+.]1[C]2([C]3(H3))(H)[C]8(H2)[C]11(H2)[Cl]14 >> [Cl.]1 . [C]3(H3)[C+]2(H)[C]8(H2)[C]11(H2)[Cl..]14' breaks the C2-Cl1 bond, drops both electrons onto Cl1 (Cl(+.) -> .Cl) and leaves C2 as an even-electron carbocation - identical to step_inductive_cleavage (the DFS map 1/2/3/8/11/14 line up 1:1 with this record's maps). IMS_4_44_rH '[C]1(H3)[C+]5(H)[C]7(H2)[C]10(H2)[Cl..]13 >> [C]1(H3)[C+]5(H)[C]7(H){=}[C]10(H2) . [Cl]13[H]' forms the C7=C10 double bond, transfers one H from C7 to Cl13 and expels HCl while the cation stays on C5 - the same net change as step_h_rearrangement (rH-rule maps 1/5/7/10/13 correspond to this record's maps 3/2/8/11/14). In BOTH rules the cleaved bond is incident to the atom(s) that reorganise: for rH the cleaved C10-Cl13 bond is incident to C10, which forms the new C10=C7 pi bond - correct geometry, so neither rule is mis-encoded relative to the book (no mismatch). Charge/radical are localised exactly as the book draws (Cl-ionized molecular ion; even-electron carbocation, then allyl cation). Computed monoisotopic m/z (electron-mass-corrected cations, RDKit ExactMolWt) are curator-derived: precursor 125.9992, m/z 91.0304, m/z 55.0537; the page prints no numeric intensities."
+  }
+ ],
+ "ms_context": {
+  "ionization_method": "EI",
+  "polarity": "positive",
+  "adduct": "[M]+•",
+  "activation_method": "electron ionization",
+  "collision_energy": null,
+  "electron_energy_ev": 70.0,
+  "precursor_mz": 125.9992,
+  "precursor_charge": 1,
+  "instrument_type": "unspecified"
+ },
+ "peak_assignments": [
+  {
+   "peak_id": "peak_91",
+   "species_id": "secondary_carbocation",
+   "step_id": "step_inductive_cleavage",
+   "observed_mz": 91.0304,
+   "relative_intensity": null,
+   "hydrogen_shift": 0,
+   "isotope_offset": 0,
+   "status": "proposed",
+   "confidence": 0.8
+  },
+  {
+   "peak_id": "peak_55",
+   "species_id": "methallyl_cation",
+   "step_id": "step_h_rearrangement",
+   "observed_mz": 55.0537,
+   "relative_intensity": null,
+   "hydrogen_shift": 1,
+   "isotope_offset": 0,
+   "status": "proposed",
+   "confidence": 0.85
+  }
+ ],
+ "curation": {
+  "schema_version": "1.0.0",
+  "record_version": 1,
+  "extraction_method": "vision_multiagent",
+  "review_status": "unreviewed",
+  "created_at": "2026-07-25T00:00:00Z",
+  "modified_at": "2026-07-25T00:00:00Z"
+ }
+}

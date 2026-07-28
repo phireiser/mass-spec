@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS8-EQ8.82g",
+  "species": [
+    {
+      "species_id": "aldehyde_protonated_ester_ion",
+      "mapped_smiles": "[CH:7](=[O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "oxo_acylium_ion",
+      "mapped_smiles": "[CH:7](=[O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1]#[O+:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methanol",
+      "mapped_smiles": "[CH3:12][OH:11]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "aldehyde_protonated_ester_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "oxo_acylium_ion",
+        "methanol"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_loss_of_methanol",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              10
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82g",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_loss_of_methanol",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Right column of Equation 8.82, vertical arrow labelled 'i': the protonated ester group of OHC-(CH2)n-C(=O)-O(+)(H)CH3 loses methanol inductively, giving the drawn acylium OHC-(CH2)n-C(triple bond)O(+). Book draws 1 arc: a FULL (double-barbed, two-electron) arrow whose tail sits on the C(1)-O(11) bond and whose head points at the protonated methoxy oxygen -- the bonding pair leaves with the neutral methanol (move <1>). Move <2>, the carbonyl O(10) lone pair closing the C(1)#O(10)+ triple bond of the acylium, is an implicit two-electron arrow required for electron balance (not drawn on the page); without it the arrow gate sees an unexplained +1 bond order on C(1)-O(10). INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82g",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82g",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. CLOSEST EXISTING RULE (verified, but not usable here): IMS_4_41_ind1 '[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12>>...[C]8{#}[O+]9.[O]10([H]11)[C]12' performs EXACTLY this elementary transformation (protonated methyl ester -> acylium + neutral methanol, with the same two bond changes). It cannot fire on this substrate because its left-hand pattern hard-codes the Equation 4.41 skeleton: a Kekulized six-membered ring (bonds 2-3, 3=4, 4-5, 5=6, 6-7, 7=2) bearing the ester on one ring carbon and a radical site [_A.] attached to another. VERIFIED with RDKit: the SMARTS 'C1(=CC=CC=C1)[CX3](=O)[O+;H1][CH3]' does not match either protonated-ester ion of Equation 8.82 (both acyclic and radical-free), while the bare core SMARTS '[CX3](=O)[O+;H1][CH3]' does match both. So the reaction type IS encoded in the rule set, but only substrate-locked to Equation 4.41; no generic rule covers 8.82."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI (consecutive fragmentation of the m/z-159 ion)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 159.1016,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acylium_127",
+      "species_id": "oxo_acylium_ion",
+      "step_id": "step_inductive_loss_of_methanol",
+      "observed_mz": 127.0754,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS8-EQT8.2d",
+  "species": [
+    {
+      "species_id": "methyl_ethyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methoxy_radical",
+      "mapped_smiles": "[O:3][CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyl_ethyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "methoxy_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 166,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3"
+      },
+      "confidence": 0.75,
+      "curator_note": "Table 8.2, row 4 (upper): OE+. inductive (charge-site) cleavage 'i', charge-MIGRATION product AB+ + .CD. Book draws 1 arc -- a curved arrow pulling the C-O bonding pair onto the charged oxygen (heterolysis). Encoded as the single drawn 2-electron move (bond C-O -> atom O). Printed example is methyl ethyl ether C2H5-O(+.)CH3 -> C2H5+ (m/z 29) + .OCH3. No m/z / intensity printed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2d",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.5,
+      "curator_note": "MØD rule IMS_4_18 (DFS [_A]1[_A+.]2>>[_A+]1.[_A.]2) does NOT match this row (MISMATCH). In this codebase's MØD term-matching, ALL _A placeholders in one rule unify to the SAME element, so [_A]1[_A+.]2 can only cleave a HOMOATOMIC X-X(+.) bond -- not the C-O ether bond cleaved here (methyl ethyl ether radical cation -> ethyl cation + methoxy radical; C and O are different elements). IMS_4_18 as written therefore cannot fire on this substrate; the earlier 'MATCHES' claim was wrong. The same latent same-element mis-encoding affects its canonical instance IMS4-EQ4.18 (diethyl ether). Not indexed under Table 8.2 itself; listed in rule_mismatches."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 60.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_Et",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive",
+      "observed_mz": 29.0386,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

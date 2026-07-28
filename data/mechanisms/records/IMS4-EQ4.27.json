@@ -1,0 +1,248 @@
+{
+  "mechanism_id": "IMS4-EQ4.27",
+  "species": [
+    {
+      "species_id": "ketone_radical_cation",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:3])[CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acylium_ion",
+      "mapped_smiles": "[CH3:4][C:2]#[O+:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical_Rprime",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "carbon_monoxide",
+      "mapped_smiles": "[C-:2]#[O+:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_cation_R",
+      "mapped_smiles": "[CH3+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ketone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_after_alpha",
+      "species_ids": [
+        "acylium_ion",
+        "methyl_radical_Rprime"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "carbon_monoxide",
+        "methyl_cation_R",
+        "methyl_radical_Rprime"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_after_alpha",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_after_alpha",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 66,
+        "equation": "4.27",
+        "section": "Even-electron ions (Sec. 4.4/4.9)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Generic scheme R'-C(=O)-R, ketone molecular ion n-ionized at oxygen; step 1 is the alpha-cleavage that expels R'. and forms the acylium R-C#O(+). Book draws 3 arc(s); moves <1,2,3> are ALL drawn on the page -- the odd electron on O into the forming (third) C-O bond (move 1), one electron of the R'-C sigma bond into that same bond (move 2), and the second electron of that sigma bond onto the departing R' radical (move 3). No implicit homolysis hook is required. Instantiated as acetone radical cation CH3-C(=O)-CH3(+.) (R'=CH3, R=CH3): acylium = CH3-C#O(+) at m/z 43.0178."
+    },
+    {
+      "evidence_id": "evidence_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 66,
+        "equation": "4.27",
+        "section": "Even-electron ions (Sec. 4.4/4.9)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Step 2 (labelled 'i') is the inductive cleavage of the even-electron acylium R-C#O(+): the R-C sigma bond breaks heterolytically with both electrons going to the acyl carbon, expelling neutral CO and leaving R(+). Book draws 1 arc (a single full curved arrow from the R-C bond onto the carbon); move 1 (electron_count 2) is that drawn arrow. Neutral CO is encoded as the standard [C-]#[O+] localized form (net-neutral, closed shell); the C-O triple bond is retained. Text notes this two-step route is less favourable (0.2-0.8 eV) than one-step Eq 4.25 but is not rejected. R(+) computed m/z 15.0229 derives from R=CH3, not the book (no m/z or % printed)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.27",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 66,
+        "equation": "4.27"
+      },
+      "confidence": 0.75,
+      "curator_note": "Cross-linked MØD rules. IMS_4_27_1 ([_A]1[C]2([_A]3){=}[O+.]4 >> [_A]1.[_A]3[C]2{#}[O+]4) MATCHES step_alpha_cleavage in connectivity: it cleaves R'-C (incident to the pi-forming carbon), forms the C#O(+) triple bond and quenches the O radical; CAVEAT: the departing R' is written [_A]1 without an explicit radical dot (contrast IMS_4_26_1 which writes [_A.]1) -- a cosmetic radical-marker omission, connectivity is correct. IMS_4_27_2 ([_A]1[C]2{#}[O+]3 >> [_A+]1.[C]2[O]3) cleaves the correct R-C bond and yields R(+), matching the connectivity change of step_inductive_cleavage, BUT its product CO is written with a SINGLE C-O bond ([C]2[O]3), dropping the C#O triple bond; as written it does not conserve bond order/electrons on the neutral (rather than neutral C#O). Flagged in rule_mismatches."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_R_cation",
+      "species_id": "methyl_cation_R",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 15.0229,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

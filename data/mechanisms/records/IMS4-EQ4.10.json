@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS4-EQ4.10",
+  "species": [
+    {
+      "species_id": "distonic_dimethyloxonio_ethyl_radical",
+      "mapped_smiles": "[CH3:1][O+:3]([CH3:2])[CH2:4][CH2:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dimethyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][O+:3][CH3:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethene",
+      "mapped_smiles": "[CH2:4]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_dimethyloxonio_ethyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "dimethyl_ether_radical_cation",
+        "ethene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 57,
+        "equation": "4.10",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Generic scheme (+)YR-CH2-CH2(.) -> YR(+.) + CH2=CH2: the radical site is on the terminal carbon and the charge stays on the saturated heteroatom (converse of eq 4.9). Book draws 3 arc(s); moves <1,2,3> are ALL drawn on the page -- one electron of the Y-CH2 sigma bond onto Y, the other into the forming C=C bond, and the odd electron of the terminal CH2 into that same bond -- so no implicit hook is required here. Instantiated by the curator as Y = O carrying a second methyl: the book leaves Y's remaining valences open, and a charge-only (even-electron) oxygen needs three bonds, so CH3-O(+)(CH3)-CH2-CH2. is the smallest faithful realisation. This precursor is a distonic ion formed in an earlier step, not the molecular ion itself; ms_context records the EI context and the curator-computed precursor m/z."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.10",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 57,
+        "equation": "4.10"
+      },
+      "confidence": 0.3,
+      "curator_note": "rule_index cross-links equation 4.10 to IMS_4_10 ([_A+]1[C]2[C.]3 >> [_A+.]1.[C]2[C.]3). PARTIAL MISMATCH, not support: the left side and the cleaved Y-C bond are correct, but the right side never forms the C=C pi bond and leaves the odd electron on the terminal carbon, so a second unpaired electron is invented (spin 1 -> 2). Verified in the container: applied to CH3-O(+)-CH2-CH(.)-CH3 it returns C[O+.] plus [CH2][CH2.]C, a di-radical fragment instead of an alkene. The rule is therefore dropped at assembly time by the conservation guardrail in rules/__init__.py ('4.10 ... [spin 1->2]'); the faithful DFS would be [_A+]1[C]2[C.]3 >> [_A+.]1.[C]2{=}[C]3. No live rule reproduces this equation. All m/z values here are curator-computed from the instantiation."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_oxonium",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 57,
+        "equation": "4.10"
+      },
+      "confidence": 0.5,
+      "curator_note": "No m/z and no intensity are printed for this generic scheme; 46.0413 is the curator-computed monoisotopic m/z of (CH3)2O+. for the chosen instantiation (electron-mass corrected). Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_oxonium",
+      "species_id": "dimethyl_ether_radical_cation",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 46.0413,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

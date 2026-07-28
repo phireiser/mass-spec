@@ -1,0 +1,153 @@
+{
+  "mechanism_id": "IMS8-EQ8.77",
+  "species": [
+    {
+      "species_id": "ethyl_methyl_sulfide_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][S+:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_thioacetaldehyde_ion",
+      "mapped_smiles": "[CH3:1][CH:2]=[SH+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ethyl_methyl_sulfide_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["protonated_thioacetaldehyde_ion", "methyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_radical_site_displacement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_displacement_8_77",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_radical_site_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 195,
+        "equation": "8.77",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (thioether isomerization by a 'displacement reaction', cf. Section 8.11)"
+      },
+      "confidence": 0.85,
+      "curator_note": "The page draws R-CH(H)-S(+.)-R': the sulfur carries the printed '+' and a separate '.' (n-ionized thioether), the hydrogen that migrates is written out as an explicit H letter above the carbon that is DIRECTLY BONDED to sulfur, and the products are printed as R-CH=SH(+) -- a '+' only, no dot -- plus .R'. ARCS ACTUALLY DRAWN: FOUR. (i) a fishhook from the C-H bond sweeping up-right, head between H and S; (ii) a fishhook starting at the '.' of the '+.' on S, arcing up and to the LEFT, head pointing back toward the same H...S region -- (i) and (ii) converge where the new S-H bond forms; (iii) a second fishhook from the same C-H bond pointing DOWN-right onto the C-S bond (the forming C=S pi bond); (iv) a large fishhook that starts under the S-R' bond, sweeps below the sulfur and ends with a barb pointing up-left at the C-S bond (the same forming pi bond). Book draws 4 arc(s); move <2> is drawn (arc iv), move <3> is an implicit homolysis hook required for electron balance (not drawn on the page: the second electron of the cleaved S-R' bond, which leaves as the .R' the page simply writes as a product), and move <1> is a heavy-atom bookkeeping COMPOSITE of the three drawn arcs (i)+(ii)+(iii) that involve the migrating hydrogen: RDKit folds a mapped explicit [H] back into implicit valence (verified: '[CH3:1][CH:2]([H:5])[S+:3][CH3:4]' loses atom 5 on parsing), so neither the broken C-H bond nor the formed S-H bond exists in the mapped topology and the pair of electrons that ends up in the S-H bond cancels out; what remains observable is exactly 'one non-bonding electron leaves sulfur and one electron enters the new C=S pi bond', which is what move <1> states. INSTANTIATION (convention F): R = CH3 and R' = CH3, i.e. ethyl methyl sulfide, so the drawn generic scheme becomes CH3CH2-S(+.)-CH3 -> CH3-CH=SH+ + .CH3. NO m/z AND NO INTENSITY ARE PRINTED for this equation: detected=false, peak status 'inferred', no relative_intensity; m/z 61.0106 is computed for this instantiation, not measured. Note that the isomerization does NOT change the mass -- the direct S-CH3 alpha cleavage of the same ion gives CH3CH2-S+ at the same nominal and exact mass (C2H5S+), which is precisely the point the surrounding text makes: the rearrangement 'compromis[es] its characterization of the original molecular structure' (hydrogen_shift is therefore 0). TEXT-vs-FIGURE DISCREPANCY, disclosed rather than smoothed over: the running text writes the product as 'RCH=SH(+.)' (with a dot), but the equation itself prints only '+' on the sulfur, and electron balance demands the even-electron cation, because the co-product .R' printed alongside it is an odd-electron radical; the record follows the figure."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_77",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.77",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.77",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json 'by_equation')"
+      },
+      "confidence": 0.4,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.77, and CROSS-LINK VERIFICATION FINDS NO RULE THAT REPRODUCES THIS TRANSFORMATION. Checked against every candidate family, comparing which bond is cleaved, which bond gains order, and whether the cleaved bond is incident to the atom that forms the new multiple bond: (a) 'substituion' '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' and IMS_4_42_rd '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2' are the two displacement rules in the index, but both form a RING (a cyclic onium, new bond {-}2) and expel a carbon radical from the far end of the chain; equation 8.77 forms no ring, cleaves the heteroatom-R' bond and creates a C=S double bond, so neither matches. (b) IMS_4_43_ '[C]1(...)[C]5(...)[N+.]8([H]9)[C]10(...)[C]13(...)>>...[N+]8([H]9){=}[C]10(...).[C.]13(...)' does form the X=C double bond and expel an alkyl radical, but it cleaves the C10-C13 bond one atom FURTHER OUT (a plain alpha cleavage at nitrogen) and involves no hydrogen migration, whereas 8.77 cleaves the S-R' bond that is incident to the radical/charge site itself and is driven by the 1,2-H shift onto that site. (c) IMS_4_43_rH '...[N+]8([H]9){=}[C]10(...)>>[C]1(...){=}[C]5(...).[N+]8([H]4)([H]9){=}[C]10(...)' has the H migration but builds the new pi bond in the LEAVING neutral (an alkene) instead of in the retained ion. (d) the hTransition_* families all transfer a REMOTE hydrogen (donor carbon four atoms from the receptor, 6- or 7-membered arrays), not the 1,2-hydrogen of 8.77. (e) No rule anywhere in rule_index.json contains sulfur; the generic '_A' placeholder rules could instantiate to S, but none of them has the 8.77 connectivity change. CONCLUSION: equation 8.77 is UNCOVERED by the current MØD rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization, threshold (low-internal-energy) conditions -- the page speaks of 'threshold formation of the more-stable RCH=SH+ isomer'; no electron energy is printed",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 76.0341,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_protonated_thioacetaldehyde",
+      "species_id": "protonated_thioacetaldehyde_ion",
+      "step_id": "step_radical_site_displacement",
+      "observed_mz": 61.0106,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

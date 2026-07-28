@@ -1,0 +1,238 @@
+{
+  "mechanism_id": "IMS8-EQ8.7e",
+  "species": [
+    {
+      "species_id": "sec_butyl_cation",
+      "mapped_smiles": "[CH3:1][CH:2]([1H:9])[CH+:3][CH3:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "vinyloxy_radical",
+      "mapped_smiles": "[CH2:5]=[CH:6][O:7]",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butene_radical_cation",
+      "mapped_smiles": "[CH3:1][CH:2][CH+:3][CH3:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetaldehyde_neutral",
+      "mapped_smiles": "[CH2:5]([1H:9])[CH:6]=[O:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_complex_2",
+      "species_ids": [
+        "sec_butyl_cation",
+        "vinyloxy_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butene_radical_cation",
+        "acetaldehyde_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_intracomplex_h_transfer",
+      "from_state": "state_complex_2",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_intracomplex_h_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 144,
+        "equation": "8.7",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation (Random or hidden rearrangements)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Equation 8.7, row 3 (second bracketed ion-molecule complex -> separated products). Intra-complex hydrogen-atom transfer: the vinyloxy radical abstracts an H atom from the sec-butyl cation. Net H-atom transfer turns the sec-butyl cation into the but-2-ene radical cation C4H8+. (m/z 56) and the vinyloxy radical into neutral acetaldehyde CH3CHO. Book draws 4 arc(s): (1) the sec-butyl C-H attacking the vinyloxy terminal carbon = move 1; (2) the hook forming the butene double bond = move 2 (the book draws a full C=C; encoded here as the localized 1,2-distonic radical cation CH3-CH.-CH+-CH3 required for one-electron bookkeeping); (3) the vinyloxy C=C shifting toward the carbonyl = move 4; (4) the O odd-electron fishhook = move 5. Move 3 (the second electron completing the new C-H bond to the terminal carbon) is an implicit hook, not drawn as its own arc. DRAWN COMPLEX: reactant is the square-bracketed complex {sec-butyl cation, CH2=CH-O.}; encoded as two-species states since the complex is not a single mapped SMILES. DELOCALISATION: the page draws the butene product with a full C=C and '+.'; the localized distonic form CH3-CH.-CH+-CH3 is chosen so the arrows balance (RDKit cannot carry an overall radical cation on a closed C=C). The vinyloxy radical is drawn/encoded as the O-radical form CH2=CH-O. (same as bracket 2). Text: at LOW electron energy 'the C4H8+ ion predominates', consistent with this channel; IE(1-butene)=9.6 eV."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.7e",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 144,
+        "equation": "8.7"
+      },
+      "confidence": 0.5,
+      "curator_note": "Cross-link (PARTIAL/NET, and the cited rule is BROKEN): MØD rule IMS_8_7_5 (rule_name 'Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 3 process 2', IMS_chap8_examples.py:442). Its product DFS contains a MALFORMED bond token '[=}' (should be '{=}') at '[C]2[=}[C+.]3'. VERIFIED IN-CONTAINER: this does NOT raise (mod.Rule.fromDFS parses it and the module imports), so the rule is NOT dead - but MOD SILENTLY ABSORBS the bad token into a product NODE LABEL: getGMLString() shows right[ node[ id 2 label \"=}[C+.\" ] ], a phantom non-element node. Consequently the intended C2=C3 double bond and the C+. charge/radical are LOST; the rule loads but its right-hand side does NOT encode the butene radical cation. So IMS_8_7_5 is semantically broken (a real corpus bug), independent of the fact that it is also a COLLAPSED NET rule folding steps c/d/e (distonic ion straight to C4H8+. + CH3CHO) rather than the elementary bracket-2 -> products step drawn here. Listed in rule_mismatches. Fix in the rule source: '[=}' -> '{=}'."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_56",
+      "support_type": "experimentally_supported",
+      "locator": {
+        "page": 144,
+        "equation": "8.7"
+      },
+      "confidence": 0.7,
+      "curator_note": "The text states that 'at low electron energies the C4H8+ ion predominates' (Liedtke and Djerassi 1969) -- this m/z 56 radical cation is the detected product of the low-energy complex channel. No numeric intensity is printed for it on this page, so relative_intensity is OMITTED. observed_mz 56.0621 is the curator-computed monoisotopic m/z of C4H8+. (electron-mass corrected)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "low-energy electron ionization (ion-molecule complex)",
+    "electron_energy_ev": null,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_56",
+      "species_id": "butene_radical_cation",
+      "step_id": "step_intracomplex_h_transfer",
+      "observed_mz": 56.0621,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

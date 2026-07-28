@@ -1,0 +1,179 @@
+{
+  "mechanism_id": "IMS8-EQ8.20b",
+  "species": [
+    {
+      "species_id": "phenylethanol_molecular_ion",
+      "mapped_smiles": "[C:4]1(=[CH:5][CH:6]=[CH:7][CH:9][CH+:10]1)[CH2:3][CH2:1][O:2][1H:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "toluene_radical_cation",
+      "mapped_smiles": "[C:4]1(=[CH:5][CH:6]=[CH:7][CH:9][CH+:10]1)[CH2:3][1H:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_neutral",
+      "mapped_smiles": "[CH2:1]=[O:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "phenylethanol_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "toluene_radical_cation",
+        "formaldehyde_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_four_membered_formaldehyde_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_20b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_four_membered_formaldehyde_loss",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 152,
+        "equation": "8.20",
+        "section": "8.x Transition-state structure / ring size of the rearrangement. Equation 8.20 branch (b) -- reaction arrow drawn CROSSED OUT."
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.20, DISFAVORED branch (b): the reaction arrow leading FROM the 2-phenylethanol molecular ion TO this branch is drawn CROSSED OUT (a large X over the arrow next to the label '(b)'). This four-membered transition state (ring atoms O2-C1-C3 plus the migrating H8) would transfer the O-H hydrogen H8 directly to the BENZYLIC carbon C3 and cleave C1-C3, giving the MORE-STABLE toluene radical cation (C7H8+., m/z 92) plus neutral formaldehyde. The book rejects it: four- and three-membered transition-state rings are disfavored (text, same page), so despite the greater product stability the path does not compete with branch (a). Encoded with support_type=contradicted and peak status=rejected. ARC COUNT (convention D): the page draws a four-pointed 'bowtie'/star of roughly four fishhook (half-arrow) arcs inside the small four-membered TS (the O-H bond -> new C3-H bond, and the C1-C3 sigma -> C1=O2 carbonyl). Book draws ~4 fishhook arc(s); none is an implicit hook (4 single-electron fishhooks = the 2 encoded double-barbed 2e moves paired up). ENCODING: move<1> O2-H8 sigma -> new C3-H8 bond (H8 to the benzylic carbon, making the ring methyl of toluene); move<2> the C1-C3 sigma -> the new C1=O2 carbonyl pi (expelling neutral formaldehyde). CONVENTION C: the aromatic ring is NOT involved in this branch and rides through UNCHANGED; the delocalized ring radical cation is localized in ONE Kekule/distonic form (odd electron on C9, formal + on C10) consistently in precursor and product, so +. is a spectator. CONVENTION F: no m/z or % printed; observed_mz 92.0621 is the curator-computed monoisotopic m/z of C7H8+., status 'rejected', detected=false, relative_intensity omitted."
+    },
+    {
+      "evidence_id": "ev_mech_8_20b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.20b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 152,
+        "equation": "8.20"
+      },
+      "confidence": 0.1,
+      "curator_note": "No MØD rule is indexed to equation 8.20 (rule_index by_equation has no '8.20' key). Consistent with the book crossing this branch out, there is nothing to cross-link."
+    },
+    {
+      "evidence_id": "ev_peak_8_20b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_92_toluene",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 152,
+        "equation": "8.20"
+      },
+      "confidence": 0.7,
+      "curator_note": "observed_mz 92.0621 is the curator-computed monoisotopic m/z of the toluene radical cation C7H8+.. status 'rejected': the book crosses out the four-membered-TS branch that would produce this (more stable) ion. No m/z or intensity printed; relative_intensity omitted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI (branch not observed)",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 122.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_92_toluene",
+      "species_id": "toluene_radical_cation",
+      "step_id": "step_rH_four_membered_formaldehyde_loss",
+      "observed_mz": 92.0621,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "rejected",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

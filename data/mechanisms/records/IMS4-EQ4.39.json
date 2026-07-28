@@ -1,0 +1,177 @@
+{
+  "mechanism_id": "IMS4-EQ4.39",
+  "species": [
+    {
+      "species_id": "n_butylacetamide_n_ionized",
+      "mapped_smiles": "[1H:5][CH2:1][C:2](=[O:3])[NH+:4][CH2:6][CH2:7][CH2:8][CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_after_rH",
+      "mapped_smiles": "[CH2:1][C:2](=[O:3])[NH+:4]([1H:5])[CH2:6][CH2:7][CH2:8][CH3:9]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ketene_neutral",
+      "mapped_smiles": "[CH2:1]=[C:2]=[O:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "butylamine_radical_cation",
+      "mapped_smiles": "[NH+:4]([1H:5])[CH2:6][CH2:7][CH2:8][CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["n_butylacetamide_n_ionized"]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": ["distonic_after_rH"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ketene_neutral", "butylamine_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [4]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        }
+      ],
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 4]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 4]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 77, "equation": "4.39", "section": "4.9 Radical site rearrangements"},
+      "confidence": 0.85,
+      "curator_note": "Radical-site hydrogen rearrangement: the N-centred odd electron of the n-ionized amide abstracts an alpha (acetyl-methyl) hydrogen, giving a C-radical / even-electron ammonium-type N+ intermediate (the middle structure the book draws). Book draws 3 arcs; moves <1,2,3> are all drawn (the small hook returning one C-H electron to the methyl carbon, the large sweep carrying the other C-H electron to the forming N-H bond, and the check-mark fishhook feeding the N radical electron into that same N-H bond) - a fully depicted three-fishhook H-atom transfer, no implicit hook. The migrating hydrogen (map 5) is written as [1H] - ordinary protium with its isotope pinned, NOT deuterium - solely so RDKit's default parser retains it as a mapped atom (plain mapped [H] is stripped by removeHs), letting the C-H and N-H bond changes be bookkept."
+    },
+    {
+      "evidence_id": "ev_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 77, "equation": "4.39", "section": "4.9 Radical site rearrangements"},
+      "confidence": 0.85,
+      "curator_note": "Alpha-cleavage at the new C-radical: the CH2 radical forms the ketene C=C while the adjacent C(acyl)-N bond breaks, expelling the butylamine radical cation and retaining the charge on the original (nitrogen) charge site - McLafferty's 'charge retention' path. Book draws 2 arcs; moves <1,2> are drawn (radical electron into the forming C=C, and one electron of the breaking C-N bond into that C=C), move <3> is an implicit homolysis hook required for electron balance - the other C-N electron going to nitrogen to make the departing radical cation (not drawn on the page; the product is simply written with its +. label)."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.39",
+      "support_type": "computationally_supported",
+      "locator": {"equation": "4.39"},
+      "confidence": 0.9,
+      "curator_note": "Cross-linked MØD rules IMS_4_39_rH and IMS_4_39_alpha (rule_index by_equation 4.39). VERIFIED against their DFS: IMS_4_39_rH cleaves the C(methyl)-H bond and forms the N-H bond, turning N+. into an even-electron N+ and creating the C radical - identical bond changes to step_rH. IMS_4_39_alpha forms the C=C (ketene) and cleaves the C(acyl)-N bond, the cleaved bond being incident to the carbonyl carbon that gains the new double bond (a geometrically correct alpha-cleavage), and leaves the N-fragment as N+. - identical to step_alpha. Both rules match this substrate."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 115.0997,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_73",
+      "species_id": "butylamine_radical_cation",
+      "step_id": "step_alpha",
+      "observed_mz": 73.0886,
+      "relative_intensity": 0.2,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed"
+  }
+}

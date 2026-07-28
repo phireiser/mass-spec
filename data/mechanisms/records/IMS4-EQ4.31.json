@@ -1,0 +1,284 @@
+{
+  "mechanism_id": "IMS4-EQ4.31",
+  "species": [
+    {
+      "species_id": "phenylcyclohexene_molecular_ion",
+      "mapped_smiles": "[CH:2]1([C:1]2=[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]2)[CH2:3][CH2:4][CH+:5][CH:6][CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_radical_cation",
+      "mapped_smiles": "[C:1]1([CH:2][CH2:3][CH2:4][CH+:5][CH:6]=[CH2:7])=[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butadiene_radical_cation",
+      "mapped_smiles": "[CH2:4][CH+:5][CH:6]=[CH2:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "styrene_neutral_loss",
+      "mapped_smiles": "[C:1]1([CH:2]=[CH2:3])=[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "phenylcyclohexene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "ring_opened_distonic_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butadiene_radical_cation",
+        "styrene_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha1_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha2_charge_retention",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha1_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 70,
+        "equation": "4.31",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (retro-Diels-Alder)"
+      },
+      "confidence": 0.85,
+      "curator_note": "First alpha-cleavage (ring opening) of the stepwise retro-Diels-Alder of a 4-R-cyclohexene molecular ion. ARC COUNT: the book draws 3 arc(s) on the molecular ion (p.70) and all three are printed - this is a fully drawn 3-fishhook alpha-cleavage. Move <1> (top-right fishhook next to the dot) = the odd electron on the pi-ionized alkene carbon (map 6) into the forming C6=C7 pi bond; move <2> (large central arc across the top of the ring) = one electron of the breaking C2-C7 ring sigma bond into that same forming pi bond; move <3> (small top-left fishhook next to R) = the other electron of the C2-C7 bond onto the R-bearing carbon (map 2), its new radical site. LOCALIZATION (convention B/C): the alkene radical cation is drawn localized as C5(+)-C6(.), i.e. cation on map 5 (the '+' at the lower-right vertex) and the odd electron on map 6 (the dot at the upper-right vertex); the neutral C=C double bond of 4-R-cyclohexene sat between maps 5 and 6. Instantiated as R=C6H5 (4-phenylcyclohexene) so map 1 is the phenyl ipso carbon."
+    },
+    {
+      "evidence_id": "evidence_step_alpha2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha2_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 70,
+        "equation": "4.31",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (retro-Diels-Alder, charge retention)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Second alpha-cleavage on the ring-opened distonic radical cation gives the CHARGE-RETENTION products (eq 4.31): the allylic/benzylic radical (map 2) drives cleavage of the C3-C4 bond. ARC COUNT: the book draws 2 arc(s) - the two fishhooks printed on the left of the intermediate. Move <1> = odd electron (map 2) into the forming C2=C3 pi bond; move <2> = one C3-C4 sigma electron into that same pi bond. Move <3>, the other C3-C4 sigma electron onto map 4 (the new radical of the departing diene ion), is an implicit homolysis hook required for electron balance (not drawn on the page - the book simply prints the dot on the butadiene fragment). Charge stays on the C4-C7 diene fragment -> butadiene radical cation, m/z 54; the R-CH=CH2 alkene (styrene for R=C6H5) leaves neutral. PRINTED INTENSITIES for m/z 54: R=H 80% (relative to cyclohexene's C5H7+ base peak = 100%, IE 9.1); R=C6H5 0.4% (IE of the styrene fragment 8.4). This record instantiates R=C6H5, hence relative_intensity 0.004 - the low value reflects that phenyl diverts the charge to the migration channel (eq 4.32)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.31",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.31",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MOD rules IMS_4_31_alpha1 (ring-opening first alpha cleavage) and IMS_4_31_alpha2 (second alpha cleavage, charge conservation). VERIFIED against their DFS. IMS_4_31_alpha1 '[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7' breaks the ring bond map2-map7, forms the C6=C7 pi bond and relocates the radical from map6 to map2 - exactly step_alpha1_ring_opening's bond changes (the rule map numbers align 1:1 with this record's map numbers). IMS_4_31_alpha2 '[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7>>[C]1[C]2{=}[C]3.[C.]4[C+]5[C]6{=}[C]7' cleaves map3-map4, forms C2=C3 and splits off the [C.]4[C+]5[C]6{=}[C]7 diene radical cation (charge retained) plus the neutral R-C2=C3 alkene - exactly step_alpha2_charge_retention. Both cleaved bonds are incident to the carbon that forms the new pi bond, so the rules are correctly encoded alpha-cleavages (no mismatch). The generic rules use a bare carbon at map1 as the R handle and require a substituent at map2, so they match this R=C6H5 substrate (map1 = phenyl ipso); they would NOT match plain cyclohexene (R=H) at map2, for which the generic ring cleavage IMS_4_30 is the relevant rule."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 158.1090,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_54",
+      "species_id": "butadiene_radical_cation",
+      "step_id": "step_alpha2_charge_retention",
+      "observed_mz": 54.0464,
+      "relative_intensity": 0.004,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

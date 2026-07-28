@@ -1,0 +1,227 @@
+{
+  "mechanism_id": "IMS8-EQ8.117",
+  "species": [
+    {
+      "species_id": "bis_silyl_oxonium_ion",
+      "mapped_smiles": "[CH3:2][Si:1]([CH3:3])([CH3:4])[O:5][CH2:6][CH2:7][O+:8]=[Si:9]([CH3:10])[CH3:11]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "pentamethyldisiloxanylium_147",
+      "mapped_smiles": "[CH3:2][Si:1]([CH3:3])([CH3:4])[O+:8]=[Si:9]([CH3:10])[CH3:11]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclic_ether_neutral",
+      "mapped_smiles": "[CH2:6]1[CH2:7][O:5]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "bis_silyl_oxonium_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "pentamethyldisiloxanylium_147",
+        "cyclic_ether_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_re_silyl_migration_with_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination_with_group_migration",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_re_silyl_migration_with_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.117",
+        "figure": null,
+        "panel": "the four arcs on the left-hand structure; the reaction arrow is labelled 're'",
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book draws 4 arc(s); moves <1,2,3,4> are all drawn, and no implicit hook is needed for electron balance. ARC GEOMETRY AS READ FROM THE SCAN (zoomed): the arcs form a bow-tie. Two arcs leave the Si-O sigma bond of the (CH3)3Si-O group (their common tail sits on that bond, mid-way between 'Si' and 'O') and two leave the O(+)-CH2 bond (common tail mid-way between the '+O' and the 'CH2'). Their heads converge in PAIRS: the two upper heads meet in the empty space between the (CH3)3Si and the +O=Si(CH3)2 -- the forming Si-O bond -- and the two lower heads meet in the empty space between the O and the CH2 -- the forming O-CH2 bond. Two heads meeting on one new bond can only be single-electron (fishhook) arcs, so each breaking bond is drawn as contributing one electron to each new bond; that is exactly how the four moves are encoded (electron_count 1 each). The barbs are too coarse in the scan to confirm half-heads by eye, but the 2-heads-per-new-bond geometry settles the count: four full 2-electron arrows would put eight electrons into two new bonds. GENERIC SCHEME INSTANTIATED (convention F): the book writes the chain as -(CH2)n- and the product ring generically; n = 1 was chosen here, i.e. the [M-CH3]+ ion of ethane-1,2-diol bis(TMS) ether, so the neutral is oxirane. Nothing about the electron flow depends on n."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.117",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.117",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.117' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. Silicon does not occur in ANY rule pattern in the set (a search of every DFS string in rule_index.json['entries'] for 'Si' returns nothing), so no rule can match a silyl-migration substrate at all -- this is a verified gap, not an untested guess."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_147",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.117",
+        "figure": null,
+        "panel": null,
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.117 prints no m/z and no abundance; the scheme is generic in n. m/z 147.0656 is the curator-computed monoisotopic mass of the drawn product ion (CH3)3SiO(+)=Si(CH3)2 = C5H15OSi2+ (it happens to be the well known m/z 147 of bis-TMS derivatives, but the book does not print that number here). Status 'inferred', detected=false, no relative_intensity. The precursor m/z in ms_context (191.0919) likewise derives from the n = 1 instantiation, not from the page."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 191.0919,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_147",
+      "species_id": "pentamethyldisiloxanylium_147",
+      "step_id": "step_re_silyl_migration_with_elimination",
+      "observed_mz": 147.0656,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

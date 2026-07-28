@@ -1,0 +1,250 @@
+{
+  "mechanism_id": "IMS4-EQ4.33",
+  "species": [
+    {
+      "species_id": "hexan_2_one_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[CH2:4][CH2:5][CH2:6][CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_H_intermediate",
+      "mapped_smiles": "[CH3:3][C:1](=[OH+:2])[CH2:4][CH2:5][CH:6][CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetone_enol_radical_cation",
+      "mapped_smiles": "[CH2:4][C:1](=[OH+:2])[CH3:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "propene_neutral",
+      "mapped_smiles": "[CH2:5]=[CH:6][CH3:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexan_2_one_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_H_intermediate"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetone_enol_radical_cation",
+        "propene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_beta_cleavage_alpha",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH_4_33",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 72,
+        "equation": "4.33",
+        "figure": null,
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (gamma-H rearrangement to an unsaturated group with beta-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book draws 3 arc(s) for a full gamma-H ATOM transfer through the six-membered ring: (a) a fishhook from the odd electron on the n-ionized carbonyl oxygen (printed '+.' on O, C=O drawn intact) reaching to the gamma-hydrogen, (b) a long fishhook from the gamma C-H bond into the forming O-H bond, and (c) a fishhook from that same C-H bond back onto the gamma-carbon C(6). ENCODING NOTE (honest divergence from the drawing): the migrating hydrogen cannot be atom-mapped -- RDKit's SMILES parser folds any mapped explicit H into implicit valence -- so the C-H and O-H bonds are invisible to the bond-order bookkeeping. The electron_moves therefore encode the single change that survives at the heavy-atom level, namely the odd electron relocating from O(2) to the gamma-carbon C(6), which is exactly the net spin change the three drawn arcs accomplish (the page calls the product a 'distonic radical ion', i.e. the radical site has moved from O to the gamma-carbon while the H moved the other way). The transferred H is recorded by hydrogen_shift on the detected peak. C=O and the +charge on oxygen are retained (oxocarbenium =O+(H)). Instantiated with R = CH3 (parent = hexan-2-one)."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_4_33",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 72,
+        "equation": "4.33",
+        "figure": null,
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (charge retention)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn: (1) a fishhook from the radical on the gamma-carbon C(6) into the forming C(5)=C(6) pi bond, and (2) a fishhook from the C(4)-C(5) sigma bond (the beta C-C bond; the arrow itself is labelled 'alpha' on the page) into that same C(5)=C(6) pi bond. Implicit: (3) the second electron of the C(4)-C(5) bond returning to the alpha-carbon C(4), leaving the radical there -- the enol radical cation is simply drawn with its dot already on C(4). Products: the acetone enol radical cation (charge retained, m/z 58) plus neutral propene (R = CH3). The page draws the m/z 58 ion in its two resonance forms joined by a double-headed arrow -- the distonic form .CH2-C(=O+H)-CH3 (charge on O, radical on C4, encoded here) and the conventional form CH2=C(O+.H)-CH3 (radical+charge on O, C=C toward the carbonyl carbon); the encoded arrows produce exactly the distonic form."
+    },
+    {
+      "evidence_id": "evidence_mod_4_33",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.33",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.33",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py (IMS_4_33_rH, IMS_4_33_alpha_1, IMS_4_33_alpha_2)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked MOD rule variables, verified against this scheme rather than asserted. IMS_4_33_rH DFS '[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3' maps exactly onto the rH step: it moves H(3) from the gamma-carbon C(2) to the oxygen O(8), keeps the C(6)=O(8) double bond, and leaves the charge on O with the odd electron now on the gamma-carbon C(2) -- the same net change encoded here (their C2/C6/O8/H3 = my C6/C1/O2/migrating-H). Note the MOD rule DOES atom-map the migrating H (index 3) because MOD's term graphs are not subject to RDKit H-folding; the JSON record cannot, hence the single net arrow above. IMS_4_33_alpha_1 DFS '[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2{=}[C]3.[C.]4[C]5([C]6){=}[O+]7[H]8' matches the alpha step: the gamma-radical C(2) forms the C(2)=C(3) pi bond, the beta C(3)-C(4) sigma bond cleaves, the alpha-carbon C(4) keeps the radical and the charge stays on O -- i.e. the cleaved bond IS incident to the pi-forming atom, giving the distonic enol radical cation exactly as drawn. RULE MISMATCH: IMS_4_33_alpha_2 DFS '...>>[C]1[C]2{=}[C]3.[C.]4{=}[C]5([C]6)[O+.]7[H]8' is intended as the resonance-partner encoding (C=C toward the carbonyl carbon, radical+charge on O) but is mis-encoded -- it writes BOTH a radical on the alpha-carbon C(4) AND the C(4)=C(5) double bond, so its product is a C3H5O diradical cation (m/z 57), not the m/z 58 enol radical cation, and it raises the unpaired-electron count from 1 (LHS) to 2 (RHS); it should be dropped by the L->R conservation guardrail. Only IMS_4_33_alpha_1 faithfully reproduces the drawn charge-retention product."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58",
+      "species_id": "acetone_enol_radical_cation",
+      "step_id": "step_beta_cleavage_alpha",
+      "observed_mz": 58.0413,
+      "relative_intensity": 0.40,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

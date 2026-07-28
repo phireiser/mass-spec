@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS8-EQT8.2i",
+  "species": [
+    {
+      "species_id": "methanethiol_radical_cation",
+      "mapped_smiles": "[CH2:1]([1H:4])[SH+:2]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "thioformaldehyde_H_cation",
+      "mapped_smiles": "[CH2:1]=[SH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "hydrogen_atom",
+      "mapped_smiles": "[1H:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methanethiol_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "thioformaldehyde_H_cation",
+        "hydrogen_atom"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rd_displacement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 166,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3"
+      },
+      "confidence": 0.75,
+      "curator_note": "Table 8.2, row 7: OE+. radical-site displacement 'rd' (radical site drives new pi-bond formation with expulsion of D.). Book draws ~3 fishhooks (S-radical odd electron -> forming C=S pi; one C-H electron -> that pi; the other C-H electron -> departing H.), plus a stylistic connecting loop; all 3 electron-flow moves encoded. Printed example methanethiol CH3-S(+.)-H -> H2C=S(+)H (m/z 47, monoisotopic 46.9950) + .H. Mechanistically an alpha-type pi-forming radical cleavage; the book classifies it 'rd', distinct from its alpha row. No m/z / intensity printed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2i",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MØD rule indexed to Table 8.2 (see note in EQT8.2a)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 48.0028,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_CH2SH",
+      "species_id": "thioformaldehyde_H_cation",
+      "step_id": "step_rd_displacement",
+      "observed_mz": 46.995,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

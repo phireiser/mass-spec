@@ -1,0 +1,194 @@
+{
+  "mechanism_id": "IMS4-EQ4.30",
+  "species": [
+    {
+      "species_id": "cyclohexane_distonic_radical_cation_84",
+      "mapped_smiles": "[CH2:1][CH2:2][CH2:3][CH2:4][CH2:5][CH2+:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "c4h8_distonic_radical_cation_56",
+      "mapped_smiles": "[CH2:3][CH2:4][CH2:5][CH2+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:1]=[CH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclohexane_distonic_radical_cation_84"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "c4h8_distonic_radical_cation_56",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 68,
+        "equation": "4.30",
+        "section": "4.8 Decompositions of cyclic structures"
+      },
+      "confidence": 0.9,
+      "curator_note": "Equation 4.30 (ring decomposition needs TWO ring-bond cleavages to expel a fragment). The full equation draws a three-arrow sequence: (i) cyclohexane loses an electron (-e-) to the C6H12 molecular ion m/z 84, drawn as an intact hexagon with a delocalised '+.', NO arcs; (ii) a sigma ring-bond cleavage isomerises the molecular ion WITHOUT mass change to a ring-opened DISTONIC radical cation, m/z 84 (radical at one chain terminus, charge at the other), NO arcs drawn; (iii) an alpha cleavage at the radical terminus expels neutral ethylene and gives the C4H8 distonic radical cation at m/z 56. THIS RECORD encodes step (iii), the only step the book draws electron arrows for. Structures (i) and (ii) at m/z 84 are drawn but NOT separately encoded: the intact-ring radical cation is a sigma (2-centre-1-electron) radical cation that cannot be localised in a single Kekule SMILES (all ring carbons are 4-coordinate, leaving no room for a localised radical or a 3-coordinate carbenium) -- which is exactly why the book draws it delocalised. The distonic ion m/z 84 IS localisable and is used here as the precursor of the drawn alpha cleavage; it has the same formula/mass (C6H12+., 84.0934) as the molecular ion, so ms_context.precursor_mz = 84.0934 holds for either. ARCS: the book draws THREE fishhook (single-barbed) arcs on structure 3, and ALL THREE encoded moves are drawn -- move <1> the radical-terminus carbon's odd electron -> the forming C1=C2 pi bond [rightmost fishhook, springing from the '.' dot]; move <2> one electron of the C2-C3 sigma bond -> that same forming C1=C2 pi bond [large arc over the ring peak]; move <3> the other electron of the C2-C3 sigma bond -> C3, the new radical site [leftmost fishhook]. This is a complete radical-site alpha-cleavage; NO implicit homolysis hook is required (nothing is left undrawn). The text just below the equation confirms move <1>: 'The unpaired electron in this isomeric ion is donated to form a new bond to the adjacent carbon atom.'"
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.30",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 68,
+        "equation": "4.30"
+      },
+      "confidence": 0.3,
+      "curator_note": "rule_index by_equation cross-links equation 4.30 to a single MOD rule, IMS_4_30 (rule_name 'Ring spaltung generell 4.30'), DFS [C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6. VERIFIED MISMATCH (RDKit-checked) -- IMS_4_30 does NOT reproduce this scheme. (a) Its reactant is C6H10+. -- UNSATURATED, with a pre-existing C5=C6 double bond and an INTERNAL carbenium at C4 -- whereas the book's structure 3 is the SATURATED distonic ion C6H12+. with a TERMINAL carbenium; the formulae differ by H2 (82 vs 84 u). (b) It cleaves C2-C3 to form a NEW C3=C4 double bond and splits into a CHARGED 2-carbon fragment (C1.-C2+, i.e. C2H4+.) plus NEUTRAL butadiene (C4H6). The book's alpha cleavage instead forms the C1=C2 pi bond, expels the two carbons at the radical terminus as NEUTRAL ethylene (C2H4), and RETAINS the charge on the 4-carbon fragment as the m/z 56 radical cation (C4H8+.). So relative to the book the charge ends up on the OTHER fragment and the neutral loss differs (butadiene vs ethylene). IMS_4_30 is mis-encoded relative to book Eq 4.30 (listed in rule_mismatches); no MOD rule faithfully encodes the drawn alpha cleavage. support_type is 'curator_inferred' (NOT 'computationally_supported') precisely because the cross-linked rule does not reproduce the mechanism."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_56",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 68,
+        "equation": "4.30"
+      },
+      "confidence": 0.6,
+      "curator_note": "The book labels the fragment ion at nominal m/z 56 directly under structure 4 of Equation 4.30, but prints NO intensity percentage for it on this page (the Unknown 4.11 table and spectrum above belong to an UNRELATED C8H18O molecule, not cyclohexane), so relative_intensity is omitted rather than invented. observed_mz 56.0621 is the curator-computed monoisotopic m/z of the C4H8+. distonic radical cation (electron-mass corrected); the figure shows only the nominal integer 56."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 84.0934,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_56",
+      "species_id": "c4h8_distonic_radical_cation_56",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 56.0621,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

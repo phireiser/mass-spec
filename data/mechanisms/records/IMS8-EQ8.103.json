@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.103",
+  "species": [
+    {
+      "species_id": "chlorohexane_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][CH2:5][CH2:6][Cl+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tetramethylene_chloronium_ion",
+      "mapped_smiles": "[CH2:3]1[CH2:4][CH2:5][CH2:6][Cl+:7]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "expelled_ethyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "chlorohexane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "tetramethylene_chloronium_ion",
+        "expelled_ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rd_displacement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_103",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 213,
+        "equation": "8.103",
+        "figure": null,
+        "panel": "first scheme under the sub-heading 'Displacement:'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.103 is printed generically: 'R' is attached by a horizontal bond to the top-left corner of a U-shaped polymethylene chain, the top-right end of that chain carries 'Y' with '+.' written above it, the arrow is labelled 'rd', and the products are drawn as 'R. + [ring closed between the top-left carbon and Y, with + over the ring Y]'. So the bond that breaks is C(top-left)-R and the bond that forms is C(top-left)-Y, both incident to the same carbon. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks, and their barbs CONVERGE pointing down into the empty gap between the R-bearing carbon and Y - i.e. onto the forming C-Y bond. Arc 1 has its tail on the R-C bond; arc 2 has its tail at the odd-electron dot of the '+.' over Y. Moves <1,2> are those two drawn arcs (move 1 = the chlorine odd electron into the forming C-Cl bond, move 2 = one electron of the breaking C-R bond into the same forming bond); move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it puts the second electron of the breaking C-R bond on the departing carbon, which is what actually produces the R. radical the book prints as a product. INSTANTIATION (convention F): the page prints no m/z and no intensity, but the book's own continuation on p. 214 fixes the instantiation - 'among the most striking examples of rd reactions are those involving the monovalent elements chlorine and bromine (reactions 4.42 and 8.103, Y = Cl, Br) to yield the stabilized cyclic halonium ion. For Y = Cl the C4H8Cl+ peak (m/z 91) is the base peak for R = C2H5 through C8H17'. This record therefore uses Y = Cl, R = C2H5, i.e. the 1-chlorohexane molecular ion (C6H13(35Cl), M+. m/z 120.0695), giving the five-membered tetramethylenechloronium ion C4H8(35Cl)+ (m/z 91.0304) plus the ethyl radical (29.0391). LOCALIZATION (convention B): the precursor SMILES puts the charge and the odd electron explicitly on chlorine ([Cl+:7] with one bond = one unpaired electron in RDKit), so arc 2 has a real origin; the product ion is the closed-shell divalent [Cl+] of the ring. Chain-length note: the five-membered ring (Cl + 4 C) is the book's own preferred size; the page's U-arc is generic in chain length, and p. 214 adds that six-membered (Y = NH2) and three-membered rings also occur."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_103",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.103",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 213,
+        "equation": "8.103",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked MØD rule: IMS_4_42_rd (src/data_generation/rules/IMS_chap4_examples.py, 'displacement reaction 4.42 rd §R1'), DFS '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2'. VERIFIED, not asserted: (i) the DFS cleaves C1-C2 and forms Cl6-C2, so the cleaved bond and the newly formed bond are incident to the SAME carbon (C2) - exactly the geometry encoded here; (ii) the ring it closes, C2-C3-C4-C5-Cl6, is the five-membered chloronium; (iii) RDKit substructure test of the rule's left pattern '[#6]-[#6]-[#6]-[#6]-[#6]-[Cl+]' against this record's instantiated precursor returns exactly one match, atom maps (2,3,4,5,6,7), i.e. rule C1 -> map 2 (the carbon that departs inside the ethyl radical), rule C2 -> map 3 (the carbon attacked), rule Cl6 -> map 7; applying the rule to 1-chlorohexane therefore gives precisely the encoded products. The book itself equates the two schemes ('reactions 4.42 and 8.103, Y = Cl, Br', p. 214), and the curated record IMS4-EQ4.42 encodes the same step for R = CH3. CHECKED AND REJECTED: the generic book-cover rule 'substituion' (IMS_bookCover.py, '§R1S2-3Y4', DFS '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2') belongs to the same rd family but (a) closes a THREE-membered ring (the p.-214 variant that gives cyclic C2H4SH+), not the five-membered ring drawn here, and (b) its '_A' placeholders all unify to the same element - documented in IMS_bookCover.py: 'encode_vertex_label maps EVERY non-alphabetic atom symbol to the single term variable _A, so \"_A\", \"_B\", \"_C\" are all the same variable and every placeholder in one rule must unify to the SAME element' - so it demands a leaving group of the same element as the charge site. RDKit confirms: '[Cl]-[#6]-[#6]-[Cl+]' gives 0 matches against this precursor while the unconstrained '[!#1]-[#6]-[#6]-[Cl+]' gives 1, so 'substituion' cannot expel the alkyl radical R. that Equation 8.103 expels. rule_index.json has no '8.103' key at all (its chapter-8 index runs 8.1-8.14 only, German-edition numbering)."
+    },
+    {
+      "evidence_id": "ev_peak_8_103",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_91",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 214,
+        "equation": "8.103",
+        "figure": null,
+        "panel": null,
+        "section": "8.11 Other rearrangements, Displacement reactions"
+      },
+      "confidence": 0.6,
+      "curator_note": "NO MEASUREMENT ON THE SCANNED PAGE (convention F): page 213 prints neither m/z nor intensity for Equation 8.103 - the scheme is entirely generic (R, Y). m/z 91.0304 is curator-computed (RDKit ExactMolWt, electron-mass corrected) for the chosen instantiation Y = Cl, R = C2H5, so status is 'inferred', detected=false and relative_intensity is omitted. It is worth recording that the SAME number appears in the book's running text on the NEXT page (p. 214): 'For Y = Cl the C4H8Cl+ peak (m/z 91) is the base peak for R = C2H5 through C8H17 (Figure 3.23), and the homologous C5H10Cl+ peak is usually 5 to 20% as abundant.' That sentence is a real measurement, but it is printed on p. 214, not on the page this record transcribes, so it is quoted here rather than stored as a relative_intensity of 1.0."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 120.0695,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_91",
+      "species_id": "tetramethylene_chloronium_ion",
+      "step_id": "step_rd_displacement",
+      "observed_mz": 91.0304,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

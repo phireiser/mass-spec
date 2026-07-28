@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS4-EQ4.15b",
+  "species": [
+    {
+      "species_id": "ethylbenzene_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "benzyl_cation_quinoid_form",
+      "mapped_smiles": "[CH2:2]=[C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylbenzene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "benzyl_cation_quinoid_form",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_benzylic_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_4_15b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_benzylic_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 59,
+        "equation": "4.15",
+        "figure": null,
+        "panel": "second (lower) scheme, ethylbenzene",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book draws 3 arc(s); moves <1,2,3> are all drawn on the page and none is implicit: (1) a fishhook from the odd electron of the ionized phenyl pi system ('+.' printed over C6H5) into the CH2-C(ipso) bond, (2) a fishhook from the CH3-CH2 sigma bond into that same bond (the two barbs are printed side by side between CH2 and C6H5), and (3) a leftmost fishhook from the CH3-CH2 sigma bond onto the departing CH3. LOCALIZATION NOTE (convention C): the phenyl radical cation is delocalized; one Kekule/canonical form is chosen and used consistently - the odd electron on the ipso carbon C(3) (the atom the arrow starts from, alpha to the cleaving bond) and the positive charge at the para carbon C(6), with ring double bonds C4=C5 and C7=C8. The arrows then produce exactly the product the book draws, 'CH2=C6H5(+)', i.e. the quinoid methylenecyclohexadienyl cation with the exocyclic C(2)=C(3) double bond; the book prints the partner form '(+)CH2-C6H5' (benzyl cation, aromatic ring) in parentheses. An ortho-cation canonical form would serve equally; para was chosen. Both forms are the same C7H7+ ion (m/z 91), the base peak of ethylbenzene."
+    },
+    {
+      "evidence_id": "evidence_mod_4_15b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.15b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "4.15",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py:354-374"
+      },
+      "confidence": 0.3,
+      "curator_note": "MISMATCH, reported rather than papered over. rule_index links eq 4.15 to IMS_4_15_3_1 and IMS_4_15_3_2 ('4.15 2nd prod 1/2'), whose eight-carbon left sides correspond to this ethylbenzene row, but neither reproduces the drawn scheme. (i) IMS_4_15_3_1 '[C]1[C]2[C+.]3[C]4[C]5[C]6[C]7[C]8>>[C]1.[C]2{=}[C+]3[C]4...' writes the departing methyl as [C]1 with no radical: spin non-conserving, and it is dropped at import by the conservation guardrail (measured: '4.15 2nd prod 1 [spin 1->0]'), so it never fires. (ii) IMS_4_15_3_2 '[C]1[C]2[C]3[C+.]4[C]5[C]6[C]7[C]8>>[C.]1.[C+]2[C]3[C]4...' conserves, but NO bond gains order in it: it is a plain C1-C2 cleavage into a primary carbocation plus an alkyl radical, with charge and radical hopping two bonds; the book's step forms the CH2=C(ipso) bond, so the pi-bond-forming arc is absent from the rule. (iii) Both DFS strings encode the eight carbons as an open single-bonded chain with no ring closure and no aromatic/alternating bonds, so they cannot match a benzene ring at all: RDKit test, the all-single 8-carbon chain pattern does NOT match kekulized ethylbenzene (False), while a bond-order-agnostic 8-atom path does (True). No MOD rule in the library currently reproduces equation 4.15's benzylic scheme."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 106.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_91",
+      "species_id": "benzyl_cation_quinoid_form",
+      "step_id": "step_benzylic_alpha_cleavage",
+      "observed_mz": 91.0542,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.95
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

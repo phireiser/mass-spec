@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS4-EQ4.22",
+  "species": [
+    {
+      "species_id": "diethyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethoxy_radical",
+      "mapped_smiles": "[O:3][CH2:4][CH3:5]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "diethyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "ethoxy_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_book",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 65,
+        "equation": "4.22",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.9,
+      "curator_note": "Diethyl ether molecular ion, charge and odd electron localized on oxygen (drawn +•). Book draws 1 arc: a curved full (2-electron) arrow from the C-O sigma bond to O. move <1> is drawn and is the complete electron flow; no implicit move is required because a single 2-electron heterolysis (both C-O bonding electrons to O) fully balances the step, giving C2H5+ (40%) + •OC2H5. In symmetric Et2O either C-O bond is equivalent."
+    },
+    {
+      "evidence_id": "evidence_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.22",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 65,
+        "equation": "4.22",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.9,
+      "curator_note": "Cross-linked MØD variable: IMS_4_22. MISMATCH - IMS_4_22 DFS '[C]1[C]2[_A+.]3[C]4[C]5>>[C+]1[C]2[_A.]3[C]4[C]5' does NOT cleave any bond (the product is a single connected five-atom chain with no fragment separator), places the + on the terminal methyl (map 1) instead of the carbon that loses the C-O bond, and leaves the heteroatom two-coordinate while marking it a neutral radical (electronically impossible for O). It does not reproduce the drawn C-O inductive heterolysis to C2H5+ + •OC2H5."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0732,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ethyl_cation",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 29.0391,
+      "relative_intensity": 0.4,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "observed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

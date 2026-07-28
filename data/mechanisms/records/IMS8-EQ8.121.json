@@ -1,0 +1,437 @@
+{
+  "mechanism_id": "IMS8-EQ8.121",
+  "species": [
+    {
+      "species_id": "anthraquinone_molecular_ion",
+      "mapped_smiles": "[O+:2]=[C:1]1[c:3]2[cH:9][cH:10][cH:11][cH:12][c:8]2[C:6](=[O:7])[c:5]2[cH:16][cH:15][cH:14][cH:13][c:4]12",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "fluorenone_radical_cation",
+      "mapped_smiles": "[O+:7]=[C:6]1[c:5]2[cH:16][cH:15][cH:14][cH:13][c:4]2[c:3]2[cH:9][cH:10][cH:11][cH:12][c:8]12",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "carbon_monoxide_first",
+      "mapped_smiles": "[C-:1]#[O+:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "biphenylene_radical_cation",
+      "mapped_smiles": "[C:3]12=[CH:9][CH:10][CH+:11][CH:12]=[C:8]1[c:5]1[cH:16][cH:15][cH:14][cH:13][c:4]21",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "carbon_monoxide_second",
+      "mapped_smiles": "[C-:6]#[O+:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "anthraquinone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_fluorenone",
+      "species_ids": [
+        "fluorenone_radical_cation",
+        "carbon_monoxide_first"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "biphenylene_radical_cation",
+        "carbon_monoxide_first",
+        "carbon_monoxide_second"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_co_loss_1",
+      "from_state": "state_precursor",
+      "to_state": "state_fluorenone",
+      "step_class": "elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_co_loss_2",
+      "from_state": "state_fluorenone",
+      "to_state": "state_products",
+      "step_class": "elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_co1_8_121",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_co_loss_1",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 220,
+        "equation": "8.121",
+        "figure": null,
+        "panel": "first '- CO' arrow; arcs are drawn on the left-hand (anthraquinone) structure",
+        "section": "8.11 Other rearrangements -- 'Elimination of small stable species'"
+      },
+      "confidence": 0.85,
+      "curator_note": "SUBSTRATE READ FROM THE DRAWING: 9,10-anthraquinone drawn as the ionized molecule, with '+.' written above the TOP carbonyl oxygen only (the bottom C=O is drawn neutral). The running text introduces it: 'Beynon et al. (1959) first pointed out the common loss of CO from aromatic compounds such as quinones. For anthraquinone (Equation 8.121) at least the second CO loss must involve a new bond between the rings; the IE of the neutral product is 7.6 eV.' THIS STEP is the first '- CO': the ionized top carbonyl is extruded and the two ring carbons it bridged (C9a = map 3 and C8a = map 4) become directly bonded, contracting the central six-membered ring to the five-membered ring of the fluorenone radical cation that the book prints in the middle (drawn in a bracket with '+.' outside it). ARC COUNT (convention D): Book draws 3 arc(s), all three single-barbed fishhooks, all on the left structure; moves <1,2,3> are drawn, moves <4,5,6> are implicit hooks required for electron balance (not drawn on the page). Drawn arc 1 starts at -- strictly, a few pixels to the right of, which is the only sensible reading but is less exact than the first draft of this note claimed -- the odd-electron dot of the '+.' above the top oxygen, sweeps right and down and its barb points back at the C9=O bond (move 1: odd electron of O into the C-O bond, raising it to C(triple)O). Drawn arc 2 starts on -- strictly, a few pixels above, with a visible white gap -- the C9-C8a bond (the bond running down-right from the carbonyl carbon into the right-hand ring), sweeps up-left and its barb points at the same C9=O bond just below arc 1 (move 2: the second electron needed to make the triple bond). Drawn arc 3 is the short arc starting on the C9-C9a bond (down-left from the carbonyl carbon) whose barb points down-right into the interior of the central ring, at the midpoint of the C9a...C8a gap, i.e. at the FORMING aryl-aryl bond (move 3). IMPLICIT MOVES: move 4 routes the second electron of the cleaving C9-C8a bond into that same forming C9a-C8a bond (without it the new bond would have only one electron); move 5 routes the second electron of the cleaving C9-C9a bond onto the departing carbon; move 6 is the one that the picture hides entirely -- a neutral CO molecule is [C-]#[O+], so its carbon must end up with a LONE PAIR, and the four electrons of the two cleaved C-C bonds are one electron short of supplying the new bond, the new pi bond AND that lone pair. Exactly one extra electron must therefore come out of the part of the molecule that keeps the charge; that is the formal content of the book's '+.' migrating from the departing oxygen to the bracket around the whole fluorenone ion. CONVENTION B/C LOCALIZATION: the precursor SMILES puts the charge and the odd electron on the top oxygen ([O+:2] with two bonds = one unpaired electron in RDKit) exactly where the book draws them, so arc 1 has a real origin; and the fluorenone radical cation -- which the book leaves delocalized inside a bracket -- is localized here as the n-ionized ketone C=[O+.] on the REMAINING carbonyl (map 7), which is why move 6 takes its single electron out of that oxygen's lone pair. That choice is a curator choice, not the book's drawing; it was made because it is the same localization the book itself uses for the anthraquinone precursor and because it puts a radical site on the oxygen that the second '- CO' step then needs. Both benzo rings are left aromatic and untouched in this step, so the step has no aromatic-bond bookkeeping ambiguity."
+    },
+    {
+      "evidence_id": "ev_step_co2_8_121",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_co_loss_2",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 220,
+        "equation": "8.121",
+        "figure": null,
+        "panel": "second '- CO' arrow; no arcs are drawn on the fluorenone structure",
+        "section": "8.11 Other rearrangements -- 'Elimination of small stable species'"
+      },
+      "confidence": 0.7,
+      "curator_note": "SECOND '- CO' of equation 8.121: the fluorenone radical cation loses its remaining CO and the two ring carbons it bridged (map 5 and map 8) bond to each other, giving the biphenylene radical cation the book prints on the right (again a bracket with '+.' outside, the four-membered ring drawn explicitly between the two benzo rings). This is the loss the running text singles out: 'at least the second CO loss must involve a new bond between the rings'. ARC COUNT (convention D): Book draws 0 arc(s) on this arrow -- the middle and right-hand structures carry no fishhooks at all, only the '- CO' label over the arrow. ALL SEVEN moves are therefore curator-supplied, transcribed by strict analogy with the three arcs the book does draw on the first structure: moves 1-2 build the C(triple)O of the leaving CO (odd electron of the ionized oxygen + one electron of the cleaving C10-C10a bond), moves 3-4 build the new C10a-C4a aryl-aryl bond from one electron of each cleaving C-C bond, and moves 5-6 fill the departing carbon's lone pair. As in step 1 the four electrons of the two cleaved C-C bonds are one short, so move 6 draws one electron out of the ring system; here there is no second carbonyl left, so it necessarily comes out of an aromatic pi bond, and move 7 leaves that bond's partner electron behind as the ring radical. CONVENTION C LOCALIZATION: the biphenylene radical cation is delocalized in reality and the book draws it with no charge/radical position at all. This record localizes it in ONE Kekule form: the left-hand benzo ring is written 3=9 / 10-11 / 12=8 with the odd electron on map 10 and the '+' on the adjacent map 11, i.e. the ring that donated the electron is the ring that carries the hole. The Kekule form assumed for the SAME ring in the fluorenone precursor is 3=9 / 10=11 / 12=8, so move 6/7 simply remove one electron from the 10=11 pi bond. RDKit, however, perceives that precursor ring as aromatic (all six bonds order 1.5), so the arrow checker reports the six ring bonds of that ring as '(aromatic/delocalised)' soft advisories: the observed half-order changes cannot be matched by integer fishhook bookkeeping. That is the documented delocalization caveat of the checker, not an omitted arrow -- every bond that actually changes in the localized picture is accounted for. The other benzo ring and both ring-fusion bonds are untouched."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_121",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.121",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 220,
+        "equation": "8.121",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.121' key -- the chapter-8 rule set stops at equation 8.14 (German-edition numbering), so nothing in the rule set is authored for this equation. Convention E check of every plausible candidate, run with RDKit against this record's own instantiated substrates: (i) The only three rules in the whole set that expel a two-atom C/O fragment are IMS_4_27_2 '[_A]1[C]2{#}[O+]3>>[_A+]1.[C]2[O]3', IMS_8_2_ind_4_5 '[C]1([H]2)([H]3)([H]4)[C]5{#}[O+]6>>[C+]1([H]2)([H]3)([H]4).[C]5{=}[O]6' and IMS_8_2_ind_2_7. The first two ARE inductive CO loss from a preformed even-electron ACYLIUM (they require an existing C(triple)O+ group); IMS_8_2_ind_2_7 is NOT, and the first draft of this note mis-described it as the 'same acylium motif with a longer chain' -- corrected against the rule source. Its DFS is '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13)[C]14[O+]15 >> [C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13) . [C]14[O]15': the C14-O15 bond is UNSPECIFIED (single, not '{#}'), and the rule additionally requires a pre-existing carbenium [C+]11 inside a saturated H-bearing chain. All three hand the charge to an even-electron carbenium ion and form NO new C-C bond, so the negative conclusion below is unaffected. Tested on the anthraquinone molecular ion, the acylium pattern '[#6]-[#6]#[#8+]' (and even the bare '[#6]#[#8+]') gives 0 matches, and likewise 0 on the fluorenone radical cation -- neither substrate contains an acylium, and neither product of equation 8.121 is an even-electron cation. (ii) IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5', the generic radical-site alpha-cleavage, cannot fire either: its left pattern bonds the heteroatom cation to its carbon by a SINGLE bond (it is authored 'for a saturated site'), and the RDKit test is explicit -- '[#6]~[#6]~[#6](~[#6])-[#8+]' gives 0 matches on the anthraquinone molecular ion while the same pattern written with the ketone double bond '[#6]~[#6]~[#6](~[#6])=[#8+]' gives 4. It is in any case the rule with the known geometry defect (it cleaves the C1-C2 bond, which is not incident to the atom that forms the new pi bond) and it is dropped at import by the conservation guardrail because its product carries two unpaired electrons where the reactant has one. (iii) The chapter-8 Field rules IMS_8_11 and IMS_8_12 need an oxonium '[O+]{=}[C]' with an alkyl chain ('[#6]~[#6]-[#8+]=[#6]' gives 0 matches here) and perform rH/inductive chain cleavages, not ring extrusion. CONCLUSION, worth recording as a coverage gap: NO rule in src/data_generation/rules/ encodes extrusion of CO from a cyclic ketone radical cation with formation of a new C-C bond between the two carbons the carbonyl bridged -- the ring-contraction class that equation 8.121 is the archetype of. A separate structural obstacle is that both substrates here are aromatic: MOD has no aromatic bond term (BondType.Aromatic maps to an error term), so any future rule for this class must be authored against a Kekule form."
+    },
+    {
+      "evidence_id": "ev_peaks_8_121",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_180",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 220,
+        "equation": "8.121",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): equation 8.121 prints neither an m/z nor an abundance for any ion -- it is drawn purely as three structures joined by two '- CO' arrows. The only number in the surrounding prose is a thermochemical one, 'the IE of the neutral product is 7.6 eV' (the ionization energy of biphenylene), plus the IE list 14.0 / 15.6 / 13.8 / 12.3 eV for CO / N2 / CO2 / SO2 in the opening paragraph; none of these is an intensity. Every species is therefore detected=false, both peak assignments carry status 'inferred', and relative_intensity is omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected): anthraquinone M+. C14H8O2 208.0519 -> [- CO, 27.9949] fluorenone radical cation C13H8O 180.0570 -> [- CO] biphenylene radical cation C12H8 152.0621. They are not numbers printed by the book. MS-CONTEXT ASSUMPTION (disclosed): ms_context.activation_method '70 eV EI' and electron_energy_ev 70.0 are the Chapter-8 house default, NOT printed on this page -- the page names no ionisation or activation conditions. Only the ion type (the drawn '+.' / '+') is source-backed."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 208.0519,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_180",
+      "species_id": "fluorenone_radical_cation",
+      "step_id": "step_co_loss_1",
+      "observed_mz": 180.057,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    },
+    {
+      "peak_id": "peak_152",
+      "species_id": "biphenylene_radical_cation",
+      "step_id": "step_co_loss_2",
+      "observed_mz": 152.0621,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

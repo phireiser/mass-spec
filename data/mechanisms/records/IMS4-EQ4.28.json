@@ -1,0 +1,147 @@
+{
+  "mechanism_id": "IMS4-EQ4.28",
+  "species": [
+    {
+      "species_id": "protonated_alcohol",
+      "mapped_smiles": "[CH3:1][OH2+:2]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "water",
+      "mapped_smiles": "[OH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_cation_R",
+      "mapped_smiles": "[CH3+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_alcohol"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "water",
+        "methyl_cation_R"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 66,
+        "equation": "4.28",
+        "section": "Even-electron ions / chemical ionization (Sec. 4.4/4.9)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Equation 4.28 is a chemical-ionization (CI) pathway: R-OH is first protonated by the CI reagent to the even-electron ion R-OH2(+) (first arrow, labelled 'H+ / Cl' as a reagent arrow with 0 fishhook arcs drawn), which then undergoes inductive cleavage (arrow 'i') to R(+) + H2O. Only the inductive-cleavage step is encoded here as an electron-pushing step: the R-O sigma bond breaks heterolytically with both electrons going to oxygen, giving neutral water and R(+). Book draws 1 arc for this step (a single full curved arrow from the R-O bond onto O); move 1 (electron_count 2) is that drawn arrow. The protonation step is NOT encoded as a formal_arrow_step -- it is a reagent association (0 arcs) and the transferred/hydroxyl H atoms cannot be carried as mapped atoms because RDKit absorbs explicit mapped H into implicit counts. Instantiated as protonated methanol CH3-OH2(+) (R=CH3), MH+ m/z 33.0335; R(+) computed m/z 15.0229 derives from R=CH3, not the book (no m/z or % printed on this generic scheme). Text: (M+H-H2O)+ at m/z 148 for ephedrine is the concrete manifestation the book cites."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.28",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 66,
+        "equation": "4.28"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked MØD rules. IMS_4_28_2 ([_A]1[O+]2([H]3)([H]4) >> [_A+]1.[O]2([H]3)([H]4)) MATCHES step_inductive_cleavage: it cleaves the R-O bond, sends both electrons to O and expels neutral H2O leaving R(+); this rule is correct and bond-order/electron conserving (water has no internal multiple bond to drop, unlike the CO/CH2O neutrals of 4_27_2 / 4_26_2). IMS_4_28_1 ([_A]1[O]2[H]3.[H+]4 >> [_A]1[O+]2([H]3)([H]4)) is the CI protonation that forms the R-OH2(+) precursor ion (also correct); it is referenced here as the ion-forming step but is not encoded as a formal_arrow_step in this record (0 arcs drawn; mapped H not trackable in the RDKit-parsed SMILES). The rule maps both hydrogens explicitly; this record carries them as implicit H on oxygen, which is connectivity-equivalent."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "precursor_mz": 33.0335,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_R_cation",
+      "species_id": "methyl_cation_R",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 15.0229,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

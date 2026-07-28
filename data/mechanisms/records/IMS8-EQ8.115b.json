@@ -1,0 +1,290 @@
+{
+  "mechanism_id": "IMS8-EQ8.115b",
+  "species": [
+    {
+      "species_id": "steroid_tms_molecular_ion",
+      "mapped_smiles": "[CH3:19][C:10]12[CH2:1][CH2:2][C:3](=[O+:25])[CH:4]=[C:5]1[CH2:6][CH2:7][CH:8]3[CH:9]2[CH2:11][CH2:12][C:13]4([CH3:18])[CH:14]3[CH2:15][CH2:16][CH:17]4[CH:20]([CH3:21])[CH2:22][CH2:23][CH2:24][O:26][Si:27]([CH3:28])([CH3:29])[CH3:30]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_a_dienol_tms_ion_196",
+      "mapped_smiles": "[CH3:19][CH:10]1[CH2:1][CH2:2][C:3](=[CH:4][C:5]1=[CH2:6])[O+:25][Si:27]([CH3:28])([CH3:29])[CH3:30]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "cd_ring_diene_alcohol_neutral",
+      "mapped_smiles": "[CH2:7]=[C:8]1[CH:9]=[CH:11][CH2:12][C:13]2([CH3:18])[CH:17]([CH:20]([CH3:21])[CH2:22][CH2:23][CH2:24][OH:26])[CH2:16][CH2:15][CH:14]12",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "steroid_tms_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ring_a_dienol_tms_ion_196",
+        "cd_ring_diene_alcohol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_remote_tms_migration_and_ring_b_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination_with_group_migration",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              25
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              25,
+              27
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              27,
+              26
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              26
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_remote_tms_migration_and_ring_b_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.115",
+        "figure": null,
+        "panel": "right-hand product of the single reaction arrow, labelled 'm/z 196, 100%'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.45,
+      "curator_note": "ARCS ACTUALLY DRAWN: ZERO. As for 8.115a, the equation carries one plain reaction arrow and no curved arrows, no fishhooks and no reaction-type label; all eight moves encoded here are curator-constructed. WHY THIS IS A SEPARATE RECORD: the book prints TWO products joined by 'and'. The second, 'm/z 196, 100%', is drawn as the same ring 'A' but with (CH3)3SiO- (bearing '+.') on the ring carbon, a ring C=C from that carbon, the same exocyclic =CH2 and the same methyl -- C11H20OSi+., m/z 196.128. Its TMS therefore sits on the ring-A oxygen, whereas the drawn substrate carries its TMS on the far end of the C24 side chain: the ion can only arise if the silyl group MIGRATES the whole length of the molecule first, which is precisely the 'other rearrangement' this section is about. WHAT IS CURATOR-ASSIGNED: (i) moves 1-4, the migration itself, encoded as a closed 2-electron cascade - C3=O pi -> O3-Si; Si-O24 sigma -> O24-H; C6-H -> C5=C6; C4=C5 pi -> C3=C4 - which converts the 4-en-3-one into the well known 3-silyloxy-3,5-diene and leaves a free 24-OH on the neutral; (ii) moves 5-8, the same ring-B double cleavage as 8.115a, here delivering H(C8) to C6 and H(C11) to C10, which is what the drawn ion demands (its C6 is a =CH2 with two hydrogens and its C10 carries one). ENCODING OF THE HYDROGEN TRANSFERS: hydrogens are implicit in the mapped SMILES (RDKit's parser deletes mapped [H] atoms, so an H cannot carry an atom map here), so each hydrogen shift is encoded as a two-electron atom->atom move from the donor heavy atom to the acceptor heavy atom - the convention already used in this corpus, e.g. IMS4-EQ4.33; move 2 (Si-O24 pair -> O24 non-bonding) and move 3 (C6-H pair -> C5=C6 pi) are the two halves of the C6-H -> O24-H transfer written the same way. The heavy-atom bond ledger is complete on its own: every sigma/pi bond that changes order is accounted for by a bond->bond move. The book draws neither the dienol-ether intermediate nor the neutral (C16H26O with C7=C8, C9=C11 and the 24-OH), so no intermediate state is asserted here."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.115b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.115",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.115' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. There is in addition no silicon chemistry anywhere in the rule set (no rule pattern contains Si), so a trimethylsilyl migration cannot be expressed by any existing rule; that was checked by searching the rule DFS strings in rule_index.json for 'Si', which returns nothing."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_196",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 219,
+        "equation": "8.115",
+        "figure": null,
+        "panel": "italic label under the right product",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.9,
+      "curator_note": "THE PAGE PRINTS 'm/z 196, 100%' under this product; the abundance is therefore a printed datum. observed_mz 196.1278 is the curator-computed monoisotopic mass of C11H20OSi+., consistent with the printed nominal 196. Ionisation conditions are not stated on the page for Eq 8.115; the 70 eV EI entry in ms_context is a chapter-context assumption, not a printed datum."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 430.3262,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_196",
+      "species_id": "ring_a_dienol_tms_ion_196",
+      "step_id": "step_remote_tms_migration_and_ring_b_cleavage",
+      "observed_mz": 196.1278,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

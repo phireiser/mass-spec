@@ -1,0 +1,300 @@
+{
+  "mechanism_id": "IMS8-EQ8.111",
+  "species": [
+    {
+      "species_id": "dimethyl_fumarate_molecular_ion",
+      "mapped_smiles": "[CH3:11][O:10][C:8](=[O:9])[CH:1][CH+:2][C:3](=[O:4])[O:5][CH2:6][1H:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_carbenium_methylene_radical",
+      "mapped_smiles": "[CH3:11][O:10][C:8](=[O:9])[CH:1]([1H:7])[CH+:2][C:3](=[O:4])[O:5][CH2:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "gamma_butyrolactone_3_ylium",
+      "mapped_smiles": "[CH+:2]1[C:3](=[O:4])[O:5][CH2:6][CH:1]1[1H:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methoxycarbonyl_radical",
+      "mapped_smiles": "[CH3:11][O:10][C:8]=[O:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethyl_fumarate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_carbenium_methylene_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "gamma_butyrolactone_3_ylium",
+        "methoxycarbonyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_six_membered",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_lactone_closure",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_111",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_six_membered",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.111",
+        "figure": null,
+        "panel": "first arrow, labelled 'r H'",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.8,
+      "curator_note": "SUBSTRATE READ FROM THE DRAWING: the leftmost structure is MeOCO-CH=CH-C(=O)-O-CH3 in square brackets with '+.' outside the bracket, i.e. the molecular ion of dimethyl fumarate (the two ester groups are drawn on opposite sides of the C=C, the trans/E arrangement; C6H8O4, M+. 144.042). One ester is abbreviated 'MeOCO' and attached to the upper alkene carbon; the other is drawn out in full, and ONE hydrogen of its O-methyl is written explicitly and points back across at the alkene. THIS STEP: that explicit hydrogen migrates to the alkene carbon that carries the MeOCO group, through the six-membered ring H(-C(methyl)-O-C(=O)-C-C) - exactly the '6-membered-ring H-displacement' the running text on this page invokes. The result is the centre structure the book prints: MeOCO-CH2-C(+)H-C(=O)-O-CH2., an even-electron carbenium centre on the carbon alpha to the intact ester and the odd electron on the O-methylene, which the book marks with a dot. ARC COUNT (convention D): Book draws 0 arc(s) for this step - the leftmost structure carries no curved arrows at all; the transfer is indicated only by the explicitly drawn hydrogen, the 'r H' label over the arrow, and the printed product. All three encoded moves are therefore curator-supplied to balance the electrons: move <1> the odd electron of the radical site to the forming C-H bond, move <2> one electron of the breaking C(methyl)-H bond to that same forming bond, move <3> the implicit homolysis hook that leaves the second electron of the C-H bond on the methylene carbon, which is what creates the radical the book prints as a dot. LOCALIZATION (convention C): the book leaves the charge and the odd electron DELOCALIZED - '+.' is printed outside the bracket and the C=C is drawn as an intact double bond. A mapped SMILES cannot carry that, so one resonance form is chosen and used consistently: the alkene pi bond is ionized as C(1).-C(2)+, i.e. a single C-C bond with the unpaired electron on the carbon that bears MeOCO and the positive charge on the carbon that bears the drawn-out ester. That is the only localization from which a homolytic H transfer reproduces the centre structure the book prints (the H must arrive at a radical site, and the '+' must end up where the book draws 'HC+'). STEREOCHEMISTRY: the drawn trans (fumarate) geometry is not encoded in the SMILES; it does not affect this intramolecular transfer, which reaches only to the neighbouring carbon. ATOM-MAP NOTE: the migrating hydrogen is written [1H:7] so RDKit keeps it explicit and it can carry an atom map; it is ordinary protium, not a label the book draws."
+    },
+    {
+      "evidence_id": "ev_step_rd_8_111",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_lactone_closure",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.111",
+        "figure": null,
+        "panel": "second arrow, labelled 'rd'",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.111, SECOND arrow, labelled 'rd'. The O-methylene radical of the distonic ion attacks the carbon that carries the MeOCO group and displaces that group as a radical: the book prints the products as 'MeOCO .' plus a five-membered ring drawn as HC(+) at the upper left, then a CH2, then a CH2, then the ring oxygen at the right, then the C=O at the bottom back to the HC(+). That is the gamma-butyrolactone ring carrying the charge on its alpha carbon (2-oxotetrahydrofuran-3-ylium, C4H5O2+), and 'MeOCO .' is the methoxycarbonyl radical .C(=O)OCH3 (59.013); 144 - 59 = 85 for the ion. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks, meeting barb-to-barb (they form the characteristic 'W' where the two heads touch) in the empty space between the radical-bearing methylene and the MeOCO-bearing carbon - i.e. on the forming C-C ring bond. Arc 1 starts on the bond joining the 'MeOCO' label to the 'H2C' carbon; arc 2 starts at the radical dot on the methylene. Moves <1,2> are those two drawn arcs; move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it carries the second electron of the cleaving C-C(O)OMe bond onto the ester carbon, which is what actually makes the 'MeOCO .' radical the book writes as a product. LABEL READING: 'MeOCO-' is read as methoxycarbonyl, CH3-O-CO-, attached through the carbonyl CARBON; the mass balance (loss of 59, not 75) confirms it is the ester and not a carbonate."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_111",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.111",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 216,
+        "equation": "8.111",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.111' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering). The candidates were CHECKED against this record's own species with RDKit, not assumed (convention E). (i) 'substituion' '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' is the generic ring-closing displacement and is conservation-clean, so it is live. Its left pattern '[*]-[#6]-[#6]-[*+]' DOES match the distonic intermediate exactly once, but the match is chemically wrong in two independent ways, so the rule is a mismatch and is listed in rule_mismatches. First, the matched atoms are O(map 10)-C(map 8)-C(map 1)-C(map 2): the rule would treat the CARBENIUM carbon (map 2) as the attacking centre, close a three-membered ring onto the ester carbon (map 8) and expel the methoxy oxygen (map 10) as a radical - nothing like the five-membered lactone and the .COOCH3 loss the book draws. Second, the rule's attacking atom is specified as '[_A+.]', charge AND unpaired electron on the same atom; an explicit atom-by-atom scan of the distonic intermediate finds NO such atom - the charge sits on carbon map 2 with no unpaired electron and the odd electron sits on carbon map 6 with no charge - so the pattern's decisive label is unsatisfiable here even though the plain connectivity matches. (ii) IMS_4_42_rd '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2' is the closest ring-size analogue (it closes a five-membered ring and expels a carbon radical) but it requires a chlorine as the attacking site: 0 matches. (iii) No rule in the set performs an H transfer onto an ionized C=C, so step 1 has no candidate at all. Every chapter-4 'displacement reaction' rule (IMS_4_43_, IMS_4_44_ind/rH, IMS_4_45_*, IMS_4_46_*) is built on an amine, a chloroalkane or an ester with the reacting hydrogen on the O-alkyl chain, none of which is this substrate."
+    },
+    {
+      "evidence_id": "ev_peaks_8_111",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_85",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 216,
+        "equation": "8.111",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): equation 8.111 prints no m/z and no intensity anywhere - the products are drawn as structures only ('MeOCO .' and the lactone ring), and the surrounding prose quotes no abundance for this reaction. Every species is therefore detected=false, the single peak assignment has status 'inferred' and relative_intensity is omitted. observed_mz 85.0284 is the curator-computed monoisotopic mass of the C4H5O2+ lactone cation (RDKit ExactMolWt, electron-mass corrected), and ms_context.precursor_mz 144.0417 is likewise the computed M+. of dimethyl fumarate C6H8O4 for the structure read off the drawing; the page states neither number, nor an electron energy - the 70 eV EI setting follows the book's default EI convention, not a statement on this page."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 144.0417,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85",
+      "species_id": "gamma_butyrolactone_3_ylium",
+      "step_id": "step_rd_lactone_closure",
+      "observed_mz": 85.0284,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

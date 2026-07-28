@@ -1,0 +1,161 @@
+{
+  "mechanism_id": "IMS4-EQ4.38b",
+  "species": [
+    {
+      "species_id": "hexene_distonic_radical_cation_mz84",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2:4][CH2:5][CH2+:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butene_distonic_radical_cation_mz56",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral_loss",
+      "mapped_smiles": "[CH2:5]=[CH2:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexene_distonic_radical_cation_mz84"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butene_distonic_radical_cation_mz56",
+        "ethylene_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_i_inductive_ethylene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_i2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_i_inductive_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 76,
+        "equation": "4.38",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (charge migration, inductive cleavage 'i')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Second, lower half of eq 4.38: the m/z 84 distonic hydrocarbon radical cation (carbenium at map 6, carbon radical at map 3) undergoes an inductive ('i') charge-site cleavage. The C4-C5 sigma bond ionizes heterolytically toward the cation: both electrons form the new C5=C6 double bond (releasing neutral ethylene, H2C=CH2, maps 5/6) and the positive charge migrates from map 6 to map 4, giving the m/z 56 ion (100%, base peak). The carbon radical on map 3 is a spectator throughout, so m/z 56 is again a distonic radical cation (butene radical cation). ARC COUNT: the book draws 1 arc -- a single full (double-barbed) arrow spanning the breaking C4-C5 bond into the forming C5=C6 bond; move <1> carries electron_count 2, so no implicit hook is required. 'Charge migration' (labelled on the page): the charge ends up on the hydrocarbon rather than on the lost neutral."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.38b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.38",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MOD rule IMS_4_38_ind_2; VERIFIED against its DFS '[C]1[C]2[C.]3[C]4[C]5[C+]6 >> [C]1[C]2[C.]3[C+]4.[C]5{=}[C]6'. The rule breaks the C4-C5 bond, forms the C5=C6 double bond and moves the cation from map 6 to map 4 while the radical on map 3 is untouched -- exactly step_i_inductive_ethylene_loss (rule map numbers align 1:1 with this record). This is the standard charge-site inductive cleavage: the departing ethylene is the two carbons distal to the radical, and the charge relocates one carbon inward."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 102.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_56",
+      "species_id": "butene_distonic_radical_cation_mz56",
+      "step_id": "step_i_inductive_ethylene_loss",
+      "observed_mz": 56.0621,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

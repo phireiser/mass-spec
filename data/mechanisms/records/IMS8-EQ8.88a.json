@@ -1,0 +1,182 @@
+{
+  "mechanism_id": "IMS8-EQ8.88a",
+  "species": [
+    {
+      "species_id": "aminoalcohol_O_ionized_molecular_ion",
+      "mapped_smiles": "[OH+:1][CH2:2][CH2:3][CH2:4][CH:5]([1H:10])[CH2:6][CH2:7][CH2:8][NH2:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_carbon_radical",
+      "mapped_smiles": "[OH+:1]([1H:10])[CH2:2][CH2:3][CH2:4][CH:5][CH2:6][CH2:7][CH2:8][NH2:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "aminoalcohol_O_ionized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_oxonium_carbon_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_to_Y",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_88a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_to_Y",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 202,
+        "equation": "8.88",
+        "figure": null,
+        "panel": "upper 'rH' branch (solid arcs)",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.75,
+      "curator_note": "RE-ENCODED 2026-07-28. Through-space H rearrangement onto the ionized hydroxyl oxygen O(1): the odd electron on that site pairs with one electron of the C(5)-H bond to form the new heteroatom-H bond, and the second C-H electron is left on C(5) as the new radical terminus. ARC COUNT: the book draws 2 single-barbed fishhooks on this branch - one from the '+.' on the heteroatom arcing toward the forming heteroatom...H region (= move <1>), one from the central C-H bond curling up to the same point (= move <2>) - and the third hook (move <3>, the other C-H electron onto C(5)) is an IMPLICIT homolysis hook required for electron balance, not drawn on the page. CORRECTION vs the previous version, which was judged unfaithful: it encoded only ONE move, a heavy-atom net electron relocation (1 -> 5) that transcribed NEITHER drawn arc, and justified the collapse by asserting that 'the migrating hydrogen cannot carry an atom map because RDKit folds a mapped explicit [H:n] into the heavy atom's implicit valence'. That justification is FALSE as stated: it holds for a bare [H:n], but the corpus's standard workaround is the ISOTOPE-TAGGED [1H:n], which RDKit keeps as a real mapped atom - it is used in 80 of the records, and IMS8-EQ8.19 encodes this very reaction type with the full three-hook flow via [1H:8]. The migrating hydrogen is therefore now carried explicitly as [1H:10] and the complete balanced three-move flow is encoded, matching IMS8-EQ8.19. Protium-1 is ordinary hydrogen, so no mass is altered. ms_context: p202 prints NO ionization conditions for Eq 8.88; ionization_method 'EI' / electron_energy_ev 70.0 are the book's STANDING convention applied as a chapter default, NOT data read off this page (disclosed here, as sibling IMS8-EQ8.89 does)."
+    },
+    {
+      "evidence_id": "ev_mech_8_88a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.88a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.88",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_bookCover.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.88 (its Chapter-8 keys stop at 8.14), so no equation-indexed MOD rule exists for this scheme. The un-indexed GENERIC rule hTransition_saturated_1 (src/data_generation/rules/IMS_bookCover.py, name 'H transition receptor site saturated §Y6', DFS '[H]1[C]2[C]3[C]4[C]5[_A+.]6 >> [C.]2[C]3[C]4[C]5[_A+]6[H]1') does describe exactly this step: the ionized SATURATED receptor _A+. takes the hydrogen from the carbon four bonds away (a six-membered TS), leaving a carbon radical [C.]2 and an even-electron onium [_A+]6[H]1 -- the same bond changes (C-H broken, A-H formed, no heavy-atom bond order changed, radical relocated from A to C) as the arcs drawn here. VERIFIED rather than asserted (convention E): the term-mode rule was applied to this record's instantiated precursor inside the project container (mod.DG one-step apply, LabelType.Term/Specialisation) and returns 'C(CC[CH.]CCCN)[OH2+]', i.e. HO(H)+-(CH2)3-CH(.)-(CH2)3-NH2 -- exactly the product species encoded here (2 derivations, one per hydrogen of the central CH2). Cross-linked as computationally supported, with the caveat that the rule is generic (element wildcard _A) and carries no equation id, so it is not a book-authored 8.88 rule. hTransition_unsaturated ('[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>...') was checked and does NOT apply: it requires a double bond between the receptor and its neighbour, whereas the receptor sites of Equation 8.88 as instantiated (OH, NH2) are saturated."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 131.1299,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_distonic_oxonium",
+      "species_id": "distonic_oxonium_carbon_radical",
+      "step_id": "step_rH_to_Y",
+      "observed_mz": 131.1299,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

@@ -1,0 +1,1497 @@
+{
+  "generated_from": [
+    "src/data_generation/rules/IMS_chap4_examples.py",
+    "src/data_generation/rules/IMS_chap8_examples.py",
+    "src/data_generation/rules/IMS_bookCover.py"
+  ],
+  "n_rules": 154,
+  "n_equations": 57,
+  "n_rules_without_equation": 17,
+  "by_equation": {
+    "4.10": [
+      "IMS_4_10"
+    ],
+    "4.11": [
+      "IMS_4_11"
+    ],
+    "4.12": [
+      "IMS_4_12_1",
+      "IMS_4_12_2"
+    ],
+    "4.13": [
+      "IMS_4_13_1",
+      "IMS_4_13_2"
+    ],
+    "4.14": [
+      "IMS_4_14"
+    ],
+    "4.15": [
+      "IMS_4_15_1_1",
+      "IMS_4_15_1_2",
+      "IMS_4_15_2_1",
+      "IMS_4_15_2_2",
+      "IMS_4_15_3_1",
+      "IMS_4_15_3_2"
+    ],
+    "4.17": [
+      "IMS_4_17",
+      "IMS_4_17_1",
+      "IMS_4_17_2",
+      "IMS_4_17_3"
+    ],
+    "4.18": [
+      "IMS_4_18"
+    ],
+    "4.19": [
+      "IMS_4_19_1",
+      "IMS_4_19_2"
+    ],
+    "4.20": [
+      "IMS_4_20",
+      "hTransition_unsaturated"
+    ],
+    "4.21": [
+      "IMS_4_21"
+    ],
+    "4.22": [
+      "IMS_4_22"
+    ],
+    "4.23": [
+      "IMS_4_23_1",
+      "IMS_4_23_2"
+    ],
+    "4.24": [
+      "IMS_4_24_1",
+      "IMS_4_24_2"
+    ],
+    "4.25": [
+      "IMS_4_25_1",
+      "IMS_4_25_2"
+    ],
+    "4.26": [
+      "IMS_4_26_1",
+      "IMS_4_26_2"
+    ],
+    "4.27": [
+      "IMS_4_27_1",
+      "IMS_4_27_2"
+    ],
+    "4.28": [
+      "IMS_4_28_1",
+      "IMS_4_28_2"
+    ],
+    "4.29": [
+      "IMS_4_29"
+    ],
+    "4.3": [
+      "IMS_4_3_var1",
+      "IMS_4_3_var2"
+    ],
+    "4.30": [
+      "IMS_4_30"
+    ],
+    "4.31": [
+      "IMS_4_31_alpha1",
+      "IMS_4_31_alpha2"
+    ],
+    "4.32": [
+      "IMS_4_32_alpha",
+      "IMS_4_32_ind"
+    ],
+    "4.33": [
+      "IMS_4_33_rH",
+      "IMS_4_33_alpha_1",
+      "IMS_4_33_alpha_2"
+    ],
+    "4.34": [
+      "IMS_4_34_rH",
+      "IMS_4_34_ind"
+    ],
+    "4.35": [
+      "IMS_4_35_rHalpha"
+    ],
+    "4.36": [
+      "IMS_4_36_",
+      "IMS_4_36__rHalpha"
+    ],
+    "4.37": [
+      "IMS_4_37_rH",
+      "IMS_4_37_rd"
+    ],
+    "4.38": [
+      "IMS_4_38_rH",
+      "IMS_4_38_ind",
+      "IMS_4_38_ind_2",
+      "hTransition_saturated_2"
+    ],
+    "4.39": [
+      "IMS_4_39_rH",
+      "IMS_4_39_alpha"
+    ],
+    "4.4": [
+      "IMS_4_4_row1",
+      "IMS_4_4_row2",
+      "IMS_4_4_row3",
+      "IMS_4_4_row4"
+    ],
+    "4.40": [
+      "IMS_4_40_rH",
+      "IMS_4_40_ind"
+    ],
+    "4.41": [
+      "IMS_4_41_rH",
+      "IMS_4_41_ind1",
+      "IMS_4_41_ind2"
+    ],
+    "4.42": [
+      "IMS_4_42_rd"
+    ],
+    "4.43": [
+      "IMS_4_43_",
+      "IMS_4_43_rH"
+    ],
+    "4.44": [
+      "IMS_4_44_ind",
+      "IMS_4_44_rH"
+    ],
+    "4.45": [
+      "IMS_4_45_rH",
+      "IMS_4_45_alpha"
+    ],
+    "4.46": [
+      "IMS_4_46_rH_1",
+      "IMS_4_46_rH_2",
+      "IMS_4_46_rH_2_"
+    ],
+    "4.5": [
+      "IMS_4_5"
+    ],
+    "4.6": [
+      "IMS_4_6_row1",
+      "IMS_4_6_row2",
+      "IMS_4_6_row3",
+      "IMS_4_6_row4",
+      "IMS_4_6_row5"
+    ],
+    "4.7": [
+      "IMS_4_7",
+      "sigma_lowIE"
+    ],
+    "4.8": [
+      "IMS_4_8"
+    ],
+    "4.9": [
+      "IMS_4_9"
+    ],
+    "8.1": [
+      "IMS_8_1_var1_step1",
+      "IMS_8_1_var1_step2",
+      "IMS_8_1_var1_step3",
+      "IMS_8_1_var2_step1",
+      "IMS_8_1_var2_step2",
+      "IMS_8_1_var3_step1",
+      "IMS_8_1_var3_step2"
+    ],
+    "8.10": [
+      "IMS_8_10"
+    ],
+    "8.11": [
+      "IMS_8_11"
+    ],
+    "8.12": [
+      "IMS_8_12"
+    ],
+    "8.13": [
+      "IMS_8_13"
+    ],
+    "8.14": [
+      "IMS_8_14_1",
+      "IMS_8_14_1b",
+      "IMS_8_14_2"
+    ],
+    "8.2": [
+      "IMS_8_2_bidirectional_down",
+      "IMS_8_2_bidirectional_up",
+      "IMS_8_2_alpha_1_1",
+      "IMS_8_2_ind_4_5",
+      "IMS_8_2_ind_2_1",
+      "IMS_8_2_ind_3_1",
+      "IMS_8_2_alpha_0_7",
+      "IMS_8_2_ind_2_7",
+      "IMS_8_2_alpha_0_6",
+      "IMS_8_2_rH_2_0",
+      "IMS_8_2_ind_1_6",
+      "IMS_8_2_alpha_3_8"
+    ],
+    "8.3": [
+      "IMS_8_3_ind",
+      "IMS_8_3_alpha"
+    ],
+    "8.4": [
+      "IMS_8_4"
+    ],
+    "8.5": [
+      "IMS_8_5_1",
+      "IMS_8_5_2"
+    ],
+    "8.6": [
+      "IMS_8_6_1",
+      "IMS_8_6_2",
+      "IMS_8_6_3",
+      "IMS_8_6_4"
+    ],
+    "8.7": [
+      "IMS_8_7_1",
+      "IMS_8_7_2",
+      "IMS_8_7_3",
+      "IMS_8_7_4",
+      "IMS_8_7_5"
+    ],
+    "8.8": [
+      "IMS_8_8_1",
+      "IMS_8_8_2",
+      "IMS_8_8_2b",
+      "IMS_8_8_3"
+    ],
+    "8.9": [
+      "IMS_8_9_1_CH3",
+      "IMS_8_9_2_CH3",
+      "IMS_8_9_1_OCH3",
+      "IMS_8_9_2_OCH3"
+    ]
+  },
+  "entries": [
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_3_var1",
+      "equation_id": "4.3",
+      "german_page": 56,
+      "rule_name": "one bond cleavage 4.3 var1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)([H]7)[C]8([H]9)([H]10)([H]11)>>[C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7).[C.]8([H]9)([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_3_var2",
+      "equation_id": "4.3",
+      "german_page": null,
+      "rule_name": "one bond cleavage 4.3 var2",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)([H]7)[C]8([H]9)([H]10)([H]11)>>[C]1([H]2)([H]3)([H]4)[C.]5([H]6)([H]7).[C+]8([H]9)([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_4_row1",
+      "equation_id": "4.4",
+      "german_page": 56,
+      "rule_name": "charge conservation 4.4 row 1",
+      "dfs": "[C]1([H]2)([H]3)[C]4([H]5)[O+.]6([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13){-}1>>[C]1([H]2)([H]3){=}[C]4([H]5)[O+.]6([H]7).[C]8([H]9)([H]10){=}[C]11([H]12)([H]13)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_4_row2",
+      "equation_id": "4.4",
+      "german_page": null,
+      "rule_name": "charge transfer 4.4 row 2",
+      "dfs": "[C]1([H]2)([H]3)[C]4([H]5)[O+.]6([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13){-}1>>[C]1([H]2)([H]3){=}[C]4([H]5)[O]6([H]7).[C]8([H]9)([H]10){=}[C+.]11([H]12)([H]13)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_4_row3",
+      "equation_id": "4.4",
+      "german_page": null,
+      "rule_name": "charge conseration var 2 4.4 row 3",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8([H]9)>>[C]1([H]2)([H]3){=}[C]5([H]6)([H]4).[H]7[O+.]8[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_4_row4",
+      "equation_id": "4.4",
+      "german_page": null,
+      "rule_name": "charge transfer var 2 4.4 row 4",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8([H]9)>>[C]1([H]2)([H]3){=}[C+.]5([H]6)([H]4).[H]7[O]8[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_5",
+      "equation_id": "4.5",
+      "german_page": 56,
+      "rule_name": "cleavage of 3 bonds 4.5",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[C+.]8([H]10)([H]11)[C]12([H]13)([H]14)([H]15)>>[C]1([H]2)([H]3)([H]4)[C.]5([H]6)([H]7).[C+]8([H]10)([H]11)[C]12([H]13).[H]14[H]15"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_6_row1",
+      "equation_id": "4.6",
+      "german_page": 56,
+      "rule_name": "rule of uneven elektron counts 4.6 row 1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7).[O]8{=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_6_row2",
+      "equation_id": "4.6",
+      "german_page": null,
+      "rule_name": "rule of uneven elektron counts 4.6 row 2",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3){=}[C+]5([H]6)([H]4).[H]7[O+]8{=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_6_row3",
+      "equation_id": "4.6",
+      "german_page": null,
+      "rule_name": "rule of uneven elektron counts 4.6 row 3",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7){-}[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)([H]4)[C.]5([H]6)([H]7).[O]8{=}[C+.]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_6_row4",
+      "equation_id": "4.6",
+      "german_page": null,
+      "rule_name": "rule of uneven elektron counts 4.4 row 4",
+      "dfs": "[C]1([H]2)([H]3)[C+]4([H]5)[C]6([H]7)([H]8)[C]9([H]10)([H]11){-}1>>[C]1([H]2)([H]3){=}[C+]4([H]5).[C]6([H]7)([H]8){=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_6_row5",
+      "equation_id": "4.6",
+      "german_page": null,
+      "rule_name": "rule of uneven elektron counts 4.6 row 5",
+      "dfs": "[C]1([H]2)([H]3)[C]4([H]5)[C]6([H]7)([H]8)[C]9([H]10)([H]11){-}1>>[C]1([H]2)([H]3)[C.]4([H]5)[C]6([H]7)([H]8)[C+.]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_7",
+      "equation_id": "4.7",
+      "german_page": 58,
+      "rule_name": "dissoziation of a sigma bond for alkans 4.7 \u00a7R1R3R4R5",
+      "dfs": "[C+.]1[C]2[C]3[C]4[C]5>>[C.]1.[C+]2[C]3[C]4[C]5"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_8",
+      "equation_id": "4.8",
+      "german_page": 59,
+      "rule_name": null,
+      "dfs": "[C+.]1([C]2([H]3)([H]4)([H]5))([C]6([H]7)([H]8)([H]9))([C]10([H]11)([H]12)([H]13))[C]14([H]15)([H]16)[C]20([H]21)([H]22)([H]23)>>[C+]1([C]2([H]3)([H]4)([H]5))([C]6([H]7)([H]8)([H]9))([C]10([H]11)([H]12)([H]13)).[C.]14([H]15)([H]16)[C]17([H]18)([H]19)([H]20)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_9",
+      "equation_id": "4.9",
+      "german_page": 59,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.9 \u00a7R1R3R4Y5",
+      "dfs": "[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_10",
+      "equation_id": "4.10",
+      "german_page": 59,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.10 \u00a7Y1",
+      "dfs": "[_A+]1[C]2[C.]3>>[_A+.]1.[C]2[C.]3"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_11",
+      "equation_id": "4.11",
+      "german_page": 59,
+      "rule_name": "radical induced (alpha-)clevage for a unsaturated heteroatom 4.11 \u00a7R1R3Y4",
+      "dfs": "[C]1[C]2[C]3{=}[_A+.]4>>[C.]1.[C]2[C]3{#}[_A+]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_12_1",
+      "equation_id": "4.12",
+      "german_page": 59,
+      "rule_name": "radical induced (alpha-)clevage for a alkene charge left 4.12_1 \u00a7R1",
+      "dfs": "[C]1[C]2[C]3[C+.]4>>[C.]1.[C]2{=}[C]3[C+]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_12_2",
+      "equation_id": "4.12",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a alkene charge right 4.12_2 \u00a7R1",
+      "dfs": "[C]1[C]2[C+.]3[C]4>>[C.]1.[C]2{=}[C]3[C+]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_13_1",
+      "equation_id": "4.13",
+      "german_page": 60,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.13_1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)>>[C.]1([H]2)([H]3)([H]4).[C]5([H]6)([H]7){=}[O+]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_13_2",
+      "equation_id": "4.13",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.13_2",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)>>[C.]1([H]2)([H]3)([H]4).[C+]5([H]6)([H]7){-}[O]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_14",
+      "equation_id": "4.14",
+      "german_page": 60,
+      "rule_name": "radical induced (alpha-)clevage for a unsaturated heteroatom 4.14",
+      "dfs": "[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_15_1_1",
+      "equation_id": "4.15",
+      "german_page": 62,
+      "rule_name": "radical induced (alpha-)clevage for a alkene 4.15 prod 1 left charge",
+      "dfs": "[C]1[C]2[C+.]3[C]4>>[C.]1.[C]2{=}[C]3[C+]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_15_1_2",
+      "equation_id": "4.15",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a alkene 4.15 prod 1 right charge",
+      "dfs": "[C]1[C]2[C]3[C+.]4>>[C.]1.[C]2{=}[C]3[C+]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_15_2_1",
+      "equation_id": "4.15",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a alkene 4.15 prod 2 left charge",
+      "dfs": "[C]1[C]2[C+.]3[C]4>>[C]1.[C+]2[C]3{=}[C]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_15_2_2",
+      "equation_id": "4.15",
+      "german_page": null,
+      "rule_name": null,
+      "dfs": "[C]1[C]2[C]3[C+.]4>>[C.]1.[C+]2[C]3{=}[C]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_15_3_1",
+      "equation_id": "4.15",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a alkene 4.15 2nd prod 1",
+      "dfs": "[C]1[C]2[C+.]3[C]4[C]5[C]6[C]7[C]8>>[C]1.[C]2{=}[C+]3[C]4[C]5[C]6[C]7[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_15_3_2",
+      "equation_id": "4.15",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a alkene 4.15 2nd prod 2",
+      "dfs": "[C]1[C]2[C]3[C+.]4[C]5[C]6[C]7[C]8>>[C.]1.[C+]2[C]3[C]4[C]5[C]6[C]7[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_17",
+      "equation_id": "4.17",
+      "german_page": 63,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.17",
+      "dfs": "[C]1([C]2[C]3[C]4)([C]5[C]6)([C]7)([O+.]8)>>[C]5[C]6[C]1([C]7)[O+.]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_17_1",
+      "equation_id": "4.17",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.17_1",
+      "dfs": "[C]1([C]2[C]3[C]4)([C]5[C]6)([C]7)([O+.]8)>>[C]5[C]6[C]1([C]7)[O+.]8.[C]2[C]3[C]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_17_2",
+      "equation_id": "4.17",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.17_2",
+      "dfs": "[C]1([C]2[C]3[C]4)([C]5[C]6)([C]7)([O+.]8)>>[C]2[C]3[C]4[C]1([C]7)[O+.]8.[C]5[C]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_17_3",
+      "equation_id": "4.17",
+      "german_page": null,
+      "rule_name": "radical induced (alpha-)clevage for a saturated site 4.17_3",
+      "dfs": "[C]1([C]2[C]3[C]4)([C]5[C]6)([C]7)([O+.]8)>>[C]2[C]3[C]4[C]1([C]5[C]6)[O+.]8.[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_18",
+      "equation_id": "4.18",
+      "german_page": 66,
+      "rule_name": "inductive cleavage odd electron 1 4.18 \u00a7R1Y2",
+      "dfs": "[_A]1[_A+.]2>>[_A+]1.[_A.]2"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_19_1",
+      "equation_id": "4.19",
+      "german_page": 66,
+      "rule_name": "inductive cleavage odd electron 2 4.19 \u00a7R1R3Y4",
+      "dfs": "[_A]1([C]2)[_A]3{=}[_A+.]4>>[_A+]1.[C]2[_A.]3{=}[_A]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_19_2",
+      "equation_id": "4.19",
+      "german_page": 66,
+      "rule_name": "inductive cleavage odd electron 3 4.19 \u00a7R1R3Y2",
+      "dfs": "[_A]1([_A]3)[C+]4{=}[_A.]2>>[_A+]1.[_A]3[C.]4{=}[_A]2"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_20",
+      "equation_id": "4.20",
+      "german_page": 66,
+      "rule_name": "inductive cleavage even electron 1 4.20 \u00a7R1Y2",
+      "dfs": "[_A]1[_A+]2[H]3([H]4)>>[_A+]1.[_A]2[H]3([H]4)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_21",
+      "equation_id": "4.21",
+      "german_page": 66,
+      "rule_name": "inductive cleavage even electron 2 4.21 \u00a7R1Y2",
+      "dfs": "[_A]1[_A+]2{=}[C]3[H]4([H]5)>>[_A+]1.[_A]2{=}[C]3[H]4([H]5)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_22",
+      "equation_id": "4.22",
+      "german_page": 67,
+      "rule_name": "inductive cleavage odd electron 4.22",
+      "dfs": "[C]1[C]2[_A+.]3[C]4[C]5>>[C+]1[C]2[_A.]3[C]4[C]5"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_23_1",
+      "equation_id": "4.23",
+      "german_page": 67,
+      "rule_name": "inductive cleavage odd electron 4.23 prod 1",
+      "dfs": "[C]1[C]2[C]3[C]4([H]5)[Cl+.]6>>[C+]1[C]2[C]3[C]4.[H]5[Cl+.]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_23_2",
+      "equation_id": "4.23",
+      "german_page": null,
+      "rule_name": "inductive cleavage odd electron 4.23 prod 1",
+      "dfs": "[C]1[C]2[C]3[C]4([H]5)[Cl+.]6>>[C+]1[C]2[C]3.[C]4[H]5[Cl+.]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_24_1",
+      "equation_id": "4.24",
+      "german_page": 67,
+      "rule_name": "inductive cleavage odd electron 4.24 prod 1",
+      "dfs": "[C]1([C]2)([C]3)[C]4([H]5)[Cl+.]6>>[C+]1[C]2[C]3[C]4.[H]5[Cl+.]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_24_2",
+      "equation_id": "4.24",
+      "german_page": null,
+      "rule_name": "inductive cleavage odd electron 4.24 prod 1",
+      "dfs": "[C]1([C]2)([C]3)[C]4([H]5)[Cl+.]6>>[C+]1([C]2)([C]3).[C]4[H]5[Cl+.]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_25_1",
+      "equation_id": "4.25",
+      "german_page": 67,
+      "rule_name": "inductive cleavage odd electron 4.25 reactant 1 \u00a7R1R3",
+      "dfs": "[C]1[C]2([C]3){=}[O+.]4>>[C+]1.[C]3[C.]2{=}[O]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_25_2",
+      "equation_id": "4.25",
+      "german_page": null,
+      "rule_name": "inductive cleavage odd electron 4.25 reactant 2 \u00a7R1R3",
+      "dfs": "[_A]1[C+]2([_A]3)[O.]4>>[_A+]1.[_A]3[C.]2{=}[O]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_26_1",
+      "equation_id": "4.26",
+      "german_page": 68,
+      "rule_name": "inductive cleavage even electron 4.26 step 1 alpha \u00a7R1R6",
+      "dfs": "[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6>>[_A.]1.[C]2([H]3)([H]4){=}[O+]5[_A]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_26_2",
+      "equation_id": "4.26",
+      "german_page": null,
+      "rule_name": "inductive cleavage even electron 4.26 step 2 inductive \u00a7R5",
+      "dfs": "[C]1([H]2)([H]3){=}[O+]4[_A]5>>[C]1([H]2)([H]3)[O]4.[_A+]5"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_27_1",
+      "equation_id": "4.27",
+      "german_page": 68,
+      "rule_name": "inductive cleavage even electron 4.27 step 1 alpha \u00a7R1R3",
+      "dfs": "[_A]1[C]2([_A]3){=}[O+.]4>>[_A]1.[_A]3[C]2{#}[O+]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_27_2",
+      "equation_id": "4.27",
+      "german_page": null,
+      "rule_name": "inductive cleavage even electron 4.27 step 2 inductive \u00a7R1",
+      "dfs": "[_A]1[C]2{#}[O+]3>>[_A+]1.[C]2[O]3"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_28_1",
+      "equation_id": "4.28",
+      "german_page": 68,
+      "rule_name": "inductive cleavage even electron 4.28 step 1 chemical ionization \u00a7R1",
+      "dfs": "[_A]1[O]2[H]3.[H+]4>>[_A]1[O+]2([H]3)([H]4)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_28_2",
+      "equation_id": "4.28",
+      "german_page": null,
+      "rule_name": "inductive cleavage even electron 4.28 step 2 inductive \u00a7R1",
+      "dfs": "[_A]1[O+]2([H]3)([H]4)>>[_A+]1.[O]2([H]3)([H]4)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_29",
+      "equation_id": "4.29",
+      "german_page": 70,
+      "rule_name": "inductive cleavage even electron 4.29 \u00a7R1",
+      "dfs": "[_A]1[C]2[C]3[C]4[C]5[C]6[C]7([H]8)[O]9([H]10)[C]11([H]12)[C]13([H]14)([H]15)([H]16)[N+]17([H]18)([H]19)[C]20([H]21)([H]22)([H]23)>>[_A]1[C]2[C]3[C]4[C]5[C]6[C]7([H]8)[O]9([H]10)[C+]11([H]12)[C]13([H]14)([H]15)([H]16).[N]17([H]18)([H]19)[C]20([H]21)([H]22)([H]23)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_30",
+      "equation_id": "4.30",
+      "german_page": 71,
+      "rule_name": "Ring spaltung generell 4.30",
+      "dfs": "[C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_31_alpha1",
+      "equation_id": "4.31",
+      "german_page": 72,
+      "rule_name": "retro diels alder charge conservation 4.31 alpha 1 \u00a7R1",
+      "dfs": "[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_31_alpha2",
+      "equation_id": "4.31",
+      "german_page": null,
+      "rule_name": "retro diels alder charge conservation 4.31 alpha 2 \u00a7R1",
+      "dfs": "[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7>>[C]1[C]2{=}[C]3.[C.]4[C+]5[C]6{=}[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_32_alpha",
+      "equation_id": "4.32",
+      "german_page": 72,
+      "rule_name": "retro diels alder charge drift 4.32 alpha \u00a7R1",
+      "dfs": "[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_32_ind",
+      "equation_id": "4.32",
+      "german_page": null,
+      "rule_name": "retro diels alder charge drift 4.32 ind \u00a7R1",
+      "dfs": "[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7>>[C]1[C.]2[C+]3.[C]4{=}[C]5[C]6{=}[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_33_rH",
+      "equation_id": "4.33",
+      "german_page": 74,
+      "rule_name": "gamma H-migr. to unsat. group with beta cleavage 4.33 rH \u00a7R1",
+      "dfs": "[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_33_alpha_1",
+      "equation_id": "4.33",
+      "german_page": null,
+      "rule_name": "gamma H-migr. to unsat. group with beta cleavage 4.33 alpha 1 \u00a7R1",
+      "dfs": "[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2{=}[C]3.[C.]4[C]5([C]6){=}[O+]7[H]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_33_alpha_2",
+      "equation_id": "4.33",
+      "german_page": null,
+      "rule_name": "gamma H-migr. to unsat. group with beta cleavage 4.33 alpha 2 \u00a7R1",
+      "dfs": "[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2{=}[C]3.[C.]4{=}[C]5([C]6)[O+.]7[H]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_34_rH",
+      "equation_id": "4.34",
+      "german_page": 74,
+      "rule_name": "gamma H-migr. to unsat. group with beta cleavage 4.34 rH \u00a7R1",
+      "dfs": "[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C+]6([C]7)[O]8[H]3"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_34_ind",
+      "equation_id": "4.34",
+      "german_page": null,
+      "rule_name": "gamma H-migr. to unsat. group with beta cleavage 4.34 inductive \u00a7R1",
+      "dfs": "[C]1[C.]2[C]3[C]4[C+]5([C]6)[O]7[H]8>>[C]1[C.]2[C+]3.[C]4{=}[C]5([C]6)[O]7[H]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_35_rHalpha",
+      "equation_id": "4.35",
+      "german_page": 75,
+      "rule_name": "gamma H-migr. to unsaturated group Odd electron Ion 4.35 rH alpha",
+      "dfs": "[C]1[C]2([H]3)[C]4[C]5[C]6{=}[N+.]8[N]9([C]10)[C]11>>[C]1[C]2{=}[C]4.[C.]5[C]6{=}[N+]8([H]3)[N]9([C]10)[C]11"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_36_",
+      "equation_id": "4.36",
+      "german_page": 75,
+      "rule_name": "gamma H-migr. to unsaturated group Odd electron Ion 4.36 charge move",
+      "dfs": "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7:[C]8:[C]9:[C]10:[C]11:[C]12:7>>[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_36__rHalpha",
+      "equation_id": "4.36",
+      "german_page": null,
+      "rule_name": "gamma H-migr. to unsaturated group Odd electron Ion 4.36 rH alpha",
+      "dfs": "[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7>>[C]1[C]2[C]3{=}[C]5.[C.]6[C+]7[C]8([H]4)[C]9{=}[C]10[C]11{=}[C]12{-}7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_37_rH",
+      "equation_id": "4.37",
+      "german_page": 78,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.37 rH",
+      "dfs": "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9>>[C]1[C]2[C.]3[C]5[C]6[C]7[O+]8([H]4)[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_37_rd",
+      "equation_id": "4.37",
+      "german_page": null,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.37 rd",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9>>[C]1[C]2[C]3[C]4[C]5[C]6{-}3.[O+.]7([H]8)[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_38_rH",
+      "equation_id": "4.38",
+      "german_page": 78,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.38 rH",
+      "dfs": "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9>>[C]1[C]2[C.]3[C]5[C]6[C]7[O+]8([H]4)[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_38_ind",
+      "equation_id": "4.38",
+      "german_page": null,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.38 ind",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9>>[C]1[C]2[C.]3[C]4[C]5[C+]6.[O]7([H]8)[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_38_ind_2",
+      "equation_id": "4.38",
+      "german_page": null,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.38 ind",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C+]6>>[C]1[C]2[C.]3[C+]4.[C]5{=}[C]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_39_rH",
+      "equation_id": "4.39",
+      "german_page": 79,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.39 rH",
+      "dfs": "[C]1([H]2)[C]3({=}[O]4)[N+.]5([H]6)[C]7[C]8[C]9[C]10>>[C.]1[C]3({=}[O]4)[N+]5([H]2)([H]6)[C]7[C]8[C]9[C]10"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_39_alpha",
+      "equation_id": "4.39",
+      "german_page": null,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.39 alpha",
+      "dfs": "[C.]1[C]2({=}[O]3)[N+]4([H]5)([H]6)[C]7[C]8[C]9[C]10>>[C]1{=}[C]2{=}[O]3.[N+.]4([H]5)([H]6)[C]7[C]8[C]9[C]10"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_40_rH",
+      "equation_id": "4.40",
+      "german_page": 79,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.40 rH",
+      "dfs": "[C]1[C]2[C]3([H]4)[C]5[C]6[Cl+.]7>>[C]1[C]2[C.]3[C]5[C]6[Cl+]7[H]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_40_ind",
+      "equation_id": "4.40",
+      "german_page": null,
+      "rule_name": "H-migration to unsat. hetroatom and clevage of neighb. bond 4.40 ind",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[Cl+]6[H]7>>[C]1[C]2[C]3[C]4[C+.]5{-}3.[Cl]6[H]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_41_rH",
+      "equation_id": "4.41",
+      "german_page": 80,
+      "rule_name": "H-migr to unsat. hetrostructur and clevage of neighb. bond 4.41 rH \u00a7Y2R12",
+      "dfs": "[H]1[_A]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+.]11[C]12>>[_A.]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+]11([H]1)[C]12"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_41_ind1",
+      "equation_id": "4.41",
+      "german_page": null,
+      "rule_name": "H-migr to unsat. hetrostructur  and clevage of neighb. bond 4.41 ind prod 1 \u00a7Y1R12",
+      "dfs": "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12>>[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8{#}[O+]9.[O]10([H]11)[C]12"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_41_ind2",
+      "equation_id": "4.41",
+      "german_page": null,
+      "rule_name": "H-migr to unsat. hetrostructur  and clevage of neighb. bond 4.41 ind prod 2 \u00a7Y1R12",
+      "dfs": "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12>>[_A]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({-}2){=}[C]8{=}[O+]9.[O]10([H]11)[C]12"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_42_rd",
+      "equation_id": "4.42",
+      "german_page": 81,
+      "rule_name": "displacement reaction 4.42 rd \u00a7R1",
+      "dfs": "[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_43_",
+      "equation_id": "4.43",
+      "german_page": 82,
+      "rule_name": "displacement reaction 4.43",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+.]8([H]9)[C]10([H]11)([H]12)[C]13([H]14)([H]15)[H]16>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+]8([H]9){=}[C]10([H]11)([H]12).[C.]13([H]14)([H]15)[H]16"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_43_rH",
+      "equation_id": "4.43",
+      "german_page": null,
+      "rule_name": "displacement reaction 4.43 rH",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+]8([H]9){=}[C]10([H]11)([H]12)>>[C]1([H]2)([H]3){=}[C]5([H]6)([H]7).[N+]8([H]4)([H]9){=}[C]10([H]11)([H]12)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_44_ind",
+      "equation_id": "4.44",
+      "german_page": 82,
+      "rule_name": "displacement reaction 4.44 ind",
+      "dfs": "[Cl+.]1[C]2([C]3([H]4)([H]5)([H]6))([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[Cl]14>>[Cl.]1.[C]3([H]4)([H]5)([H]6)[C+]2([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[Cl..]14"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_44_rH",
+      "equation_id": "4.44",
+      "german_page": null,
+      "rule_name": "displacement reaction 4.44 rH",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C+]5([H]6)[C]7([H]8)([H]9)[C]10([H]11)([H]12)[Cl..]13>>[C]1([H]2)([H]3)([H]4)[C+]5([H]6)[C]7([H]8){=}[C]10([H]11)([H]12).[Cl]13[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_45_rH",
+      "equation_id": "4.45",
+      "german_page": 84,
+      "rule_name": "displacement reaction 4.45 rH \u00a7R1R7",
+      "dfs": "[C]1[C]2([H]3)[C]4[O]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[O]5[C]6([C]7){=}[O+]8[H]3"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_45_alpha",
+      "equation_id": "4.45",
+      "german_page": null,
+      "rule_name": "displacement reaction 4.45 alpha \u00a7R1R6",
+      "dfs": "[C]1[C.]2[C]3[O]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2[C]3.[O+.]4{=}[C]5([C]6)[O+]7[H]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_46_rH_1",
+      "equation_id": "4.46",
+      "german_page": 84,
+      "rule_name": "displacement reaction 4.46 rH \u00a7R2R8",
+      "dfs": "[H]1[C]2[C]3([H]4)[C]5[O]6[C]7([C]8){=}[O+.]9>>[H]1[C]2[C.]3[C]5[O+]6[C]7([C]8){=}[O]9[H]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_46_rH_2",
+      "equation_id": "4.46",
+      "german_page": null,
+      "rule_name": "displacement reaction 4.46 rH2 var 1 \u00a7R2R7",
+      "dfs": "[H]1[C]2[C.]3[C]4[O]5[C]6([C]7){=}[O]8[H]9>>[C]2[C.]3[C]4.[H]1[O+]5{=}[C]6([C]7)[O]8[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap4_examples.py",
+      "variable": "IMS_4_46_rH_2_",
+      "equation_id": "4.46",
+      "german_page": null,
+      "rule_name": "displacement reaction 4.46 rH2 var 2 \u00a7R2R7",
+      "dfs": "[H]1[C]2[C.]3[C]4[O]5[C]6([C]7){=}[O]8[H]9>>[C]2[C.]3[C]4.[H]1[O+]5[C]6([C]7){=}[O+]8[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var1_step1",
+      "equation_id": "8.1",
+      "german_page": 143,
+      "rule_name": "monomolecular ion-cleavage 8.1 rH -0.6",
+      "dfs": "[H]1[C]2([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12){=}[C+.]13([H]14)([H]15)>>[H]1[C]2([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9){=}[C]11([H]12)[C+.]13([H]14)([H]15)([H]10)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var1_step2",
+      "equation_id": "8.1",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.1 alpha 1.0",
+      "dfs": "[H]1[C]2([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9){=}[C]10([H]11)[C+.]12([H]13)([H]14)([H]15)>>[H]1[C.]2([H]3)([H]4).[C]5([H]6){=}[C]8([H]9)[C+]10([H]11)([H]7)[C]12([H]13)([H]14)([H]15)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var1_step3",
+      "equation_id": "8.1",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.1 rH 2.5",
+      "dfs": "[C]1([H]2){=}[C]3([H]4)[C+]5([H]6)([H]7)[C]8([H]9)([H]10)([H]11)>>[C]1([H]2):[C+]3([H]4):[C]5([H]6):1.[H]7[C]8([H]9)([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var2_step1",
+      "equation_id": "8.1",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.1 alpha 1.7",
+      "dfs": "[H]1[C]2([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12){=}[C+.]13([H]14)([H]15)>>[H]1[C]2([H]3)([H]4)[C.]5([H]6)([H]7).[C+]8([H]9)([H]10)[C]11([H]12){=}[C]13([H]14)([H]15)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var2_step2",
+      "equation_id": "8.1",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.1 rH 3.0",
+      "dfs": "[C+]1([H]2)([H]3)[C]4([H]5){=}[C]6([H]7)([H]8)>>[C+]1([H]2):[C]4([H]5):[C]6([H]7):1.[H]3[H]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var3_step1",
+      "equation_id": "8.1",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.1 rH 0.3",
+      "dfs": "[H]1[C]2([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12){=}[C+.]13([H]14)([H]15)>>[C.]2([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)[C]13([H]14)([H]15)([H]1)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_1_var3_step2",
+      "equation_id": "8.1",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.1 alpha 1.1",
+      "dfs": "[C.]1([H]2)([H]3)[C]4([H]5)([H]6)[C]7([H]8)([H]9)[C+]10([H]11)[C]12([H]13)([H]14)([H]15)>>[C]1([H]2)([H]3)[C]4([H]5)([H]6).[C]7([H]8)([H]9)([H]11)[C]10([H]13){=}[C+.]12([H]14)([H]15)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_bidirectional_down",
+      "equation_id": "8.2",
+      "german_page": 144,
+      "rule_name": "monomolecular ion-cleavage 8.2 bidirectional down",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+.]19>>[C]1([H]2)([H]3)([H]4)[C.]5([H]6)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+]19([H]7)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_bidirectional_up",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 bidirectional up",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C.]5([H]6)[C]7([H]8)([H]9)[C]10([H]11)([H]12)[C]13([C]14([H]15)([H]16)([H]17)){=}[O+]18([H]19)>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]19)[C]7([H]8)([H]9)[C]10([H]11)([H]12)[C]13([C]14([H]15)([H]16)([H]17)){=}[O+.]18"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_alpha_1_1",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 alpha 1.1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+.]19>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C.]11([H]12)([H]13).[C]15([H]16)([H]17)([H]18)[C]14{#}[O+]19"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_ind_4_5",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 inductive 4.5",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5{#}[O+]6>>[C+]1([H]2)([H]3)([H]4).[C]5{=}[O]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_ind_2_1",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 inductive 2.1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+.]19>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13).[C]15([H]16)([H]17)([H]18)[C.]14{=}[O]19"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_ind_3_1",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 inductive 3.1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13)>>[C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7).[C]8([H]9)([H]10)[C]11([H]12)([H]13)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_alpha_0_7",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 alpha 0.7",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+.]19>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14[O+]19.[C.]15([H]16)([H]17)([H]18)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_ind_2_7",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 inductive 2.7",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13)[C]14[O+]15>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13).[C]14[O]15"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_alpha_0_6",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 alpha 0.6",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C.]5([H]6)[C]7([H]8)([H]9)[C]10([H]11)([H]12)[C]13([C]14([H]15)([H]16)([H]17)){=}[O+]18([H]19)>>[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[C]7([H]8)([H]9).[C]10([H]11)([H]12){=}[C]13([C]14([H]15)([H]16)([H]17)){=}[O+.]18([H]19)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_rH_2_0",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 rH 2.0",
+      "dfs": "[C]1([H]2)([H]3){=}[C]4([C]5([H]6)([H]7)([H]8)){=}[O+.]9([H]10)>>[C.]1([H]2)([H]3)([H]10).[C]4([C]5([H]6)([H]7)([H]8))[O+]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_ind_1_6",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 inductive 1.6",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C.]5([H]6)[C]7([H]8)([H]9)[C]10([H]11)([H]12)[C]13([C]14([H]15)([H]16)([H]17)){=}[O+]18([H]19)>>[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)[C]7([H]8)([H]9).[C]10([H]11)([H]12){=}[C]13([C]14([H]15)([H]16)([H]17))[O]18([H]19)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_2_alpha_3_8",
+      "equation_id": "8.2",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.2 alpha 3.8",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)[C]7([H]8)([H]9)>>[C]1([H]2)([H]3)[C+]5([H]6)[C]7([H]8)([H]9).[H.]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_3_ind",
+      "equation_id": "8.3",
+      "german_page": 147,
+      "rule_name": "monomolecular ion-cleavage 8.3 ind",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+.]11([H]12)([H]13)[O]14[C]15([H]16)([H]17)([H]18)>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+]11([H]12)([H]13).[O+]14[C]15([H]16)([H]17)([H]18)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_3_alpha",
+      "equation_id": "8.3",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.3 alpha",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C+.]8([H]9)([H]10)[C]11([H]12)([H]13)[O]14[C]15([H]16)([H]17)([H]18)>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C+]8([H]9)([H]10).[C]11([H]12)([H]13){=}[O+]14[C]15([H]16)([H]17)([H]18)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_4",
+      "equation_id": "8.4",
+      "german_page": 147,
+      "rule_name": "monomolecular ion-cleavage 8.4 ind",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+.]11([H]12)([H]13)[C]14[O]15[C]16([H]17)([H]18)([H]19)>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C+.]11([H]12)([H]13).[C]16([H]17)([H]18)([H]19)[C]14[O+]15"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_5_1",
+      "equation_id": "8.5",
+      "german_page": 148,
+      "rule_name": "monomolecular ion-cleavage 8.5 row 1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([H]15)([H]16)[C]17([H]18)([H]19){=}[O+.]20>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C+.]8([H]9){=}[C]11([H]12)([H]13).[C]14([H]15)([H]16){=}[C]17([H]18)([H]19)[O+.]20[H]10"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_5_2",
+      "equation_id": "8.5",
+      "german_page": null,
+      "rule_name": "monomolecular ion-cleavage 8.5 row 2",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[O]14([H]15)([H]16)[C]17([H]18)([H]19){=}[C+.]20([H]21)([H]22)>>[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C+.]8([H]9){=}[C]11([H]12)([H]13).[O+.]14([H]15)([H]16){=}[C]17([H]18)([H]19)[C]20([H]21)([H]22)([H]10)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_6_1",
+      "equation_id": "8.6",
+      "german_page": 149,
+      "rule_name": "stepwise symetric openchained intermediate product 8.6 var 1",
+      "dfs": "[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1>>[C]1[C+]2[C]3[C]4[C]5[C]6[C.]7[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_6_2",
+      "equation_id": "8.6",
+      "german_page": null,
+      "rule_name": "stepwise symetric openchained intermediate product 8.6 var 2",
+      "dfs": "[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1>>[C]1[C.]2[C]3[C]4[C]5[C]6[C+]7[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_6_3",
+      "equation_id": "8.6",
+      "german_page": null,
+      "rule_name": "stepwise symetric openchained intermediate product 8.6 var 1 alpha",
+      "dfs": "[C]1[C+]2[C]3[C]4[C]5[C]6[C.]7[C]8>>[C]1{=}[C+]2[C]3{=}[C]4.[C]5{=}[C]6[C.]7{=}[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_6_4",
+      "equation_id": "8.6",
+      "german_page": null,
+      "rule_name": "stepwise symetric openchained intermediate product 8.6 var 2 alpha",
+      "dfs": "[C]1[C.]2[C]3[C]4[C]5[C]6[C+]7[C]8>>[C]1{=}[C.]2[C]3{=}[C]4.[C]5{=}[C]6[C+]7{=}[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_7_1",
+      "equation_id": "8.7",
+      "german_page": 150,
+      "rule_name": "Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 1 rH",
+      "dfs": "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7([H]8){=}[O+.]9>>[C]1[C]2[C.]3[C]5[C]6[C]7([H]8){=}[O+]9[H]4"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_7_2",
+      "equation_id": "8.7",
+      "german_page": null,
+      "rule_name": "Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 1 high energy",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9>>[C]1[C]2[C]3{=}[C]4.[C]5{=}[C]6([H]7)[O+.]8[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_7_3",
+      "equation_id": "8.7",
+      "german_page": null,
+      "rule_name": "Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 2 low energy",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9>>[C]1[C]2[C]3{=}[C]4.[C]5{=}[C]6([H]7)[O+.]8[H]9"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_7_4",
+      "equation_id": "8.7",
+      "german_page": null,
+      "rule_name": "Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 3 process 1",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9>>[C]1[C]2([H]9)[C+]3[C]4[H]7.[C]5{=}[C]6[O.]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_7_5",
+      "equation_id": "8.7",
+      "german_page": null,
+      "rule_name": "Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 3 process 2",
+      "dfs": "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9>>[C]1[C]2[=}[C+.]3[C]4.[H]7[C]5[C]6([H]9){=}[O]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_8_1",
+      "equation_id": "8.8",
+      "german_page": 151,
+      "rule_name": "rearangement with stable Acylium-Ion 8.8 row 1 process 1",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)[O+.]7[C]8([H]9)([H]10){-}5>>[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[O+]7[C.]8([H]9)([H]10)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_8_2",
+      "equation_id": "8.8",
+      "german_page": null,
+      "rule_name": "rearangement with stable Acylium-Ion 8.8 row 1 process 2",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[O+]7[C.]8([H]9)([H]10)>>[C]1([H]2)([H]3){=}[C]5([H]6)[O+.]7[C]8([H]9)([H]10)([H]4)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_8_2b",
+      "equation_id": "8.8",
+      "german_page": null,
+      "rule_name": "rearangement with stable Acylium-Ion 8.8 row 1 process 2 back",
+      "dfs": "[C]1([H]2)([H]3){=}[C]4([H]5)[O+.]6[C]7([H]8)([H]9)([H]10)>>[C]1([H]2)([H]3)([H]10)[C]4([H]5){=}[O+]6[C.]7([H]8)([H]9)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_8_3",
+      "equation_id": "8.8",
+      "german_page": null,
+      "rule_name": "rearangement with stable Acylium-Ion 8.8 row 2 process 2",
+      "dfs": "[C]1([H]2)([H]3){=}[C]4([H]5)[O+.]6[C]7([H]8)([H]9)([H]10)>>[C]1([H]2)([H]3)([H]5)[C]4{#}[O+]6.[C.]7([H]8)([H]9)([H]10)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_9_1_CH3",
+      "equation_id": "8.9",
+      "german_page": 152,
+      "rule_name": "stabil Dienol Ion 8.9 row 1 process 1 rH CH3 \u00a7R1",
+      "dfs": "[_A]1[C]2[C]3([H]4)[C]5{=}[C]6[C]7([C]8([H]9)([H]10)([H]11)){=}[O+.]12>>[_A]1[C]2[C]3{=}[C]5[C]6{=}[C]7([C]8([H]9)([H]10)([H]11))[O+.]12([H]4)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_9_2_CH3",
+      "equation_id": "8.9",
+      "german_page": null,
+      "rule_name": "stabil Dienol Ion 8.9 row 1 process 2 alpha CH3 \u00a7R1",
+      "dfs": "[_A]1[C]2[C]3{=}[C]4[C]5{=}[C]6([C]7([H]8)([H]9)([H]10))[O+.]11([H]12)>>[_A.]1.[C]2{=}[C]3[C]4{=}[C]5[C]6([C]7([H]8)([H]9)([H]10)){=}[O+.]11([H]12)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_9_1_OCH3",
+      "equation_id": "8.9",
+      "german_page": null,
+      "rule_name": "stabil Dienol Ion 8.9 row 1 process 1 rH OCH3 \u00a7R1",
+      "dfs": "[_A]1[C]2[C]3([H]4)[C]5{=}[C]6[C]7([O]8[C]9([H10])([H]11)([H]12)){=}[O+.]13>>[_A]1[C]2[C]3{=}[C]5[C]6{=}[C]7([O]8[C]9([H]10)([H]11)([H]12))[O+.]13([H]4)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_9_2_OCH3",
+      "equation_id": "8.9",
+      "german_page": null,
+      "rule_name": "stabil Dienol Ion 8.9 row 1 process 2 alpha OCH3 \u00a7R1",
+      "dfs": "[_A]1[C]2[C]3{=}[C]4[C]5{=}[C]6([O]7[C]8([H]9)([H]10)([H]11))[O+.]12([H]13)>>[_A.]1.[C]2{=}[C]3[C]4{=}[C]5[C]6([O]7[C]8([H]9)([H]10)([H]11)){=}[O+.]12([H]13)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_10",
+      "equation_id": "8.10",
+      "german_page": 153,
+      "rule_name": "Field Rule 8.10 inductive",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7).[O]8{=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_11",
+      "equation_id": "8.11",
+      "german_page": 153,
+      "rule_name": "Field Rule 8.11 rH",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7).[H]4[O+]8{=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_12",
+      "equation_id": "8.12",
+      "german_page": 153,
+      "rule_name": "Field Rule 8.12 ind",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)>>[C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7).[O]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_13",
+      "equation_id": "8.13",
+      "german_page": 153,
+      "rule_name": "Field Rule 8.13 rH",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7).[H]4[O+]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_14_1",
+      "equation_id": "8.14",
+      "german_page": 154,
+      "rule_name": "Field Rule 8.14 r1p1 rH",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7)[H+]4[O]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_14_1b",
+      "equation_id": "8.14",
+      "german_page": null,
+      "rule_name": "Field Rule 8.14 r1p1 back rH",
+      "dfs": "[C]1([H]2)([H]3)[C]4([H]5)([H]6)[H+]7[O]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)>>[C]1([H]2)([H]3)[C]4([H]5)([H]6)[H]7[O+]8{=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_chap8_examples.py",
+      "variable": "IMS_8_14_2",
+      "equation_id": "8.14",
+      "german_page": null,
+      "rule_name": "Field Rule 8.14 r1p2 rH",
+      "dfs": "[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7).[H]4[O+]8{=}[C]9([H]10)([H]11)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "sigma_lowIE",
+      "equation_id": "4.7",
+      "german_page": null,
+      "rule_name": "dissoziation of a sigma bond for Elements with low IE \u00a7R1",
+      "dfs": "[_A+.]1[I]2>>[_A.]1.[I+]2"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_unsaturated",
+      "equation_id": "4.20",
+      "german_page": null,
+      "rule_name": "H transition receptor site unsaturated \u00a7Y6",
+      "dfs": "[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_unsaturated_alpha",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site unsaturated \u00a7Y5",
+      "dfs": "[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C]1{=}[C]2.[C.]3[C]4{=}[_A+]5[H]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_unsaturated_bidirect",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site unsaturated \u00a7Y5",
+      "dfs": "[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C.]1[C]2[C]3[C+]4[_A]5[H]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_unsaturated_inductive",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site unsaturated \u00a7Y5",
+      "dfs": "[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C.]1[C+]2.[C]3{=}[C]4[_A]5[H]6"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_1",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated \u00a7Y6",
+      "dfs": "[H]1[C]2[C]3[C]4[C]5[_A+.]6>>[C.]2[C]3[C]4[C]5[_A+]6[H]1"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_1_alpha",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated \u00a7Y5",
+      "dfs": "[C.]1[C]2[C]3[C]4[_A+]5([H]6)>>[C]1[C]2[C]3[C]4{-}1.[_A+.]5([H]6)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_1_inductive_1",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated \u00a7Y5",
+      "dfs": "[C.]1[C]2[C]3[C]4[_A+]5([H]6)>>[C.]1[C]2[C]3[C+]4.[_A]5([H]6)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_2",
+      "equation_id": "4.38",
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated rH \u00a7Y4",
+      "dfs": "[H]1[C]2[C]3([_A+]4)[C]5[C.]6>>[C.]2[C]3([_A+]4)[C]5[C]6([H]1)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_2_alpha",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated alpha \u00a7Y3",
+      "dfs": "[C.]1[C]2([_A+]3)[C]4[C]5>>[C]1{=}[C]2[C]4[C]5.[_A+.]3"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_3",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated rH \u00a7Y6R9",
+      "dfs": "[H]1[C]2[C]3[C]4[C]5[_A+.]6{=}[C]7([H]8)([_A]9)>>[C.]2[C]3[C]4[C]5[_A+]6([H]1){=}[C]7([H]8)([_A]9)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_3_alpha",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated alpha \u00a7Y5R9",
+      "dfs": "[C.]1[C]2[C]3[C]4[_A+]5([H]6){=}[C]7([H]8)([_A]9)>>[C]1[C]2[C]3[C]4{-}1.[_A+.]5([H]6){=}[C]7([H]8)([_A]9)"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_4",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated rH \u00a7Y8",
+      "dfs": "[H]1[C]2[C]3[C]4[C]5[C]6([H]7){=}[_A+.]8>>[C.]2[C]3[C]4[C]5[C]6([H]7){=}[_A+]8[H]1"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "hTransition_saturated_4_alpha",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "H transition receptor site saturated alpha",
+      "dfs": "[C.]1[C]2[C]3[C]4([H]5){=}[O+]7[C]8>>[C]1[C]2[C]3{-}1.[C]4([H]5){=}[O+.]7[C]8"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "esterMcLafferty_rH",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "ester McLafferty rH",
+      "dfs": "[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7>>[C.]2[C]3[O]4[C]5({=}[O+]6[H]1)[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "esterMcLafferty_alpha",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "ester McLafferty alpha",
+      "dfs": "[C.]1[C]2[O]3[C]4({=}[O+]5[H]6)[C]7>>[C]1{=}[C]2.[O.]3[C]4({=}[O+]5[H]6)[C]7"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "h2Transiton_1",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "2 H transition rH1 \u00a7Y5Y8",
+      "dfs": "[H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8>>[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "h2Transiton_2",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "2 H transition charge \u00a7Y5Y8",
+      "dfs": "[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1>>[C.]2([H]3)[C]4[_A+]5{=}[C]6([C]7)[_A]8[H]1"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "h2Transiton_3",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "2 H transition rH2 split \u00a7Y5Y8",
+      "dfs": "[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1>>[C]2{=}[C]4.[H]3[_A+.]5{=}[C]6([C]7)[_A]8[H]1"
+    },
+    {
+      "file": "src/data_generation/rules/IMS_bookCover.py",
+      "variable": "substituion",
+      "equation_id": null,
+      "german_page": null,
+      "rule_name": "Substituion \u00a7R1S2-3Y4",
+      "dfs": "[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2"
+    }
+  ]
+}

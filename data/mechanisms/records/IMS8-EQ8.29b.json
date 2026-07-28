@@ -1,0 +1,137 @@
+{
+  "mechanism_id": "IMS8-EQ8.29b",
+  "species": [
+    {
+      "species_id": "trans_diacetate_mh",
+      "mapped_smiles": "[CH2:2]1[CH:1]([O:7][C:8](=[O:9])[CH3:10])[CH2:6][CH2:5][CH2:4][CH:3]1[O:11][C:12](=[OH+:13])[CH3:14]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetoxycyclohexyl_cation",
+      "mapped_smiles": "[CH2:2]1[CH:1]([O:7][C:8](=[O:9])[CH3:10])[CH2:6][CH2:5][CH2:4][CH+:3]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetic_acid_loss",
+      "mapped_smiles": "[CH3:14][C:12](=[O:11])[OH:13]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["trans_diacetate_mh"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["acetoxycyclohexyl_cation", "acetic_acid_loss"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [3, 11]},
+          "target": {"type": "bond", "atom_maps": [11, 12]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [12, 13]},
+          "target": {"type": "atom", "atom_maps": [13]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 159, "equation": "8.29", "figure": null, "panel": "b", "section": "8.3 Steric factors"},
+      "confidence": 0.75,
+      "curator_note": "trans-1,3-cyclohexanediol diacetate protonated on one acetate carbonyl (arrow label 'i', inductive cleavage). The trans geometry cannot bring the neutral acetate's carbonyl oxygen behind C3, so no anchimeric acetoxonium forms; instead the protonated acetate simply departs as neutral acetic acid, leaving a secondary cyclohexyl cation that still bears the intact neutral acetate. Book draws 1 arc: the ring C3-O11 ester bond breaking as the leaving fragment's C12=O11 carbonyl forms. Move <2> (the protonated carbonyl pi C12=O13 collapsing to an O13 lone pair, neutralising O13-H+ to the acetic-acid hydroxyl) is an implicit heterolytic step required for electron balance (not drawn). The page additionally crosses out (X) the alternative cyclisation of this trans isomer to the acetoxonium of 8.29a and shows it only via a dashed non-arrow -- i.e. the bridged-ion pathway is explicitly rejected for the trans diastereomer on steric grounds; it is not encoded as a separate record because with stereochemistry omitted its connectivity is identical to IMS8-EQ8.29a."
+    },
+    {
+      "evidence_id": "ev_mech_b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.29b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 159, "equation": "8.29", "figure": null, "panel": "b", "section": "8.3 Steric factors"},
+      "confidence": 0.9,
+      "curator_note": "No MØD rule cross-links this scheme: rule_index.json by_equation has no entry for 8.29 (it covers only 4.x and 8.1-8.14). Detected-ion m/z 141.0910 (C8H13O2+, [MH-CH3COOH]+) is a curator computation from the instantiated trans-1,3-diacetate; the page prints no m/z or intensity for equation 8.29."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 201.1121,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acetoxycyclohexyl_141",
+      "species_id": "acetoxycyclohexyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 141.0910,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

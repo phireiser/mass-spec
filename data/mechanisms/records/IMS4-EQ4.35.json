@@ -1,0 +1,252 @@
+{
+  "mechanism_id": "IMS4-EQ4.35",
+  "species": [
+    {
+      "species_id": "pentanal_dimethylhydrazone_molecular_ion",
+      "mapped_smiles": "[CH3:7][CH:6]([1H:3])[CH2:5][CH2:4][CH:1]=[N+:2][N:8]([CH3:9])[CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_H_intermediate",
+      "mapped_smiles": "[CH3:7][CH:6][CH2:5][CH2:4][CH:1]=[N+:2]([1H:3])[N:8]([CH3:9])[CH3:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hydrazone_enamine_radical_cation",
+      "mapped_smiles": "[CH2:4][CH:1]=[N+:2]([1H:3])[N:8]([CH3:9])[CH3:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "propene_neutral",
+      "mapped_smiles": "[CH3:7][CH:6]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentanal_dimethylhydrazone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_H_intermediate"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "hydrazone_enamine_radical_cation",
+        "propene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [2]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [3, 6]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [3, 6]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [6]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_beta_cleavage_alpha",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [6]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [5, 6]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [4, 5]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [5, 6]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [4, 5]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [4]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH_4_35",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 73,
+        "equation": "4.35",
+        "figure": null,
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (gamma-H rearrangement to an unsaturated group; hydrazones, Eq. 4.35)"
+      },
+      "confidence": 0.85,
+      "curator_note": "gamma-H rearrangement (labelled 'rH') of the n-ionized molecular ion of an N,N-dimethylhydrazone. Instantiated as pentanal N,N-dimethylhydrazone, CH3CH2CH2CH2CH=N-N(CH3)2 (M = C7H16N2, m/z 128), which is the aldehyde hydrazone whose McLafferty loses propene, matching the 'CH3-||' (propene) neutral drawn on the page. Convention B/C: the molecular ion is localized with BOTH the charge and the odd electron on the imine nitrogen (map 2, drawn '+.' on N in the figure), exactly as printed; the C=N double bond is retained (=N+.). ARC COUNT: the page draws the whole concerted six-membered-ring McLafferty on the reactant with 3 curved fishhook arcs total (1 for this H-transfer, 2 for the beta-cleavage step). For THIS rH step: Book draws 1 arc -- the sweeping fishhook running from the gamma C-H bond over to the N+. radical. Move <2> (one electron of the C(6)-H(3) bond into the forming N(2)-H(3) bond) is the drawn arc; move <1> (the odd electron on N(2) into that same forming N-H bond) and move <3> (the other C(6)-H(3) electron back onto the gamma-carbon C(6), leaving the radical there) are the implicit homolysis hooks required for electron balance (not separately drawn; the product distonic ion is simply shown with its radical already on the gamma-carbon). ENCODING NOTE: the migrating H (map 3) is written [1H] -- ordinary protium, isotope-tagged only so RDKit keeps it as an atom-mapped node -- letting the three fishhooks reference the real C(6)-H and N(2)-H bonds."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_4_35",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 73,
+        "equation": "4.35",
+        "figure": null,
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (beta-cleavage / charge retention, labelled 'alpha')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Radical-site beta-cleavage (arrow labelled 'alpha'): the gamma-carbon radical of the distonic ion forms the C(5)=C(6) pi bond and cleaves the beta C(4)-C(5) sigma bond, giving neutral propene plus the charge-retaining odd-electron ion (an alpha,beta-unsaturated dimethylhydrazinium radical cation, .CH2-CH=N+(H)-N(CH3)2). ARC COUNT: Book draws 2 arc(s) on the reactant ring for this stage -- one fishhook on the ring edge for the forming C(5)=C(6) pi bond and one fishhook at the alpha-carbon for the cleaving C(4)-C(5) sigma bond. Moves <1> (C(6) radical into the C(5)=C(6) pi bond) and <3> (one C(4)-C(5) electron onto the alpha-carbon C(4), the new radical site) are the drawn arcs; move <2> (the other C(4)-C(5) electron into the C(5)=C(6) pi bond) is the implicit hook required for electron balance. The cleaved C(4)-C(5) bond IS incident to C(5), one of the two pi-forming atoms -- correct McLafferty geometry. M/Z DISCREPANCY (flagged for review): the electron-balanced product ion drawn here (a true OE+. radical cation, C4H10N2) computes to m/z 86 (monoisotopic 86.0838); 128 - 42(propene) = 86. The page, however, prints 'm/z 85 = 100%'. m/z 85 is ODD and the ion carries TWO nitrogens, so by the nitrogen rule m/z 85 must be an EVEN-electron cation (C4H9N2+, the (CH3)2N-N=CH-CH2+ / dimethylhydrazonium ion, one H less than the drawn radical cation), NOT the OE+. species the '+.' in the figure depicts. The drawn concerted OE+. McLafferty product is m/z 86; the printed base peak m/z 85 is its even-electron analogue from a closely related pathway. observed_mz below is the computed value for the structure actually drawn/encoded (86.0838); the '90%' also printed on the page is retained here as a note."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_4_35",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.35",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.35",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py (IMS_4_35_rHalpha)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to the single MOD rule IMS_4_35_rHalpha, VERIFIED against this scheme (not asserted). Its DFS '[C]1[C]2([H]3)[C]4[C]5[C]6{=}[N+.]8[N]9([C]10)[C]11 >> [C]1[C]2{=}[C]4.[C.]5[C]6{=}[N+]8([H]3)[N]9([C]10)[C]11' fuses BOTH of my steps into one transformation: it moves H(their 3) from the gamma-carbon (their C2) to the imine nitrogen (their N8), forms the neutral-alkene pi bond (their C2=C4, = propene), cleaves the beta C-C bond (their C4-C5), leaves the radical on the alpha-carbon (their C5) and keeps charge on the imine N (their N8+, now bearing the migrated H). Mapping their->mine: C1(delta CH3)->7, C2(gamma)->6, C4(beta)->5, C5(alpha)->4, C6(imine C)->1, N8(imine N)->2, N9(hydrazine N)->8, C10/C11(N-methyls)->9/10, H3(migrating H)->3. The cleaved bond (their C4-C5, my C5-C4 = beta-alpha) IS incident to the pi-forming beta-carbon -- correct McLafferty geometry, NO rule mismatch. Note the MOD rule atom-maps the migrating H (index 3) because MOD term graphs are not subject to RDKit H-folding; this JSON record likewise keeps it (as [1H]). Record uses its own consistent numbering, given above."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1308,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_86",
+      "species_id": "hydrazone_enamine_radical_cation",
+      "step_id": "step_beta_cleavage_alpha",
+      "observed_mz": 86.0838,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

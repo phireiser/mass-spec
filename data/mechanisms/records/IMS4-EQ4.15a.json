@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS4-EQ4.15a",
+  "species": [
+    {
+      "species_id": "but_1_ene_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2+:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_cation",
+      "mapped_smiles": "[CH2:2]=[CH:3][CH2+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "but_1_ene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_cation",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_allylic_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_4_15a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_allylic_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 59,
+        "equation": "4.15",
+        "figure": null,
+        "panel": "first (upper) scheme, 1-butene",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book draws 3 arc(s); moves <1,2,3> are all drawn on the page and none is implicit: (1) a fishhook from the odd electron of the ionized double bond into the C(2)-C(3) bond, (2) a fishhook from the C(1)-C(2) sigma bond into that same C(2)-C(3) bond (the two barbs are printed side by side between CH2 and CH), and (3) a leftmost fishhook from the C(1)-C(2) sigma bond onto the departing CH3. LOCALIZATION NOTE (convention B/C): the page prints the ionized double bond as 'CH3-CH2-CH(+.)-CH2', i.e. the '+' and the dot as one superscript on the internal alkene carbon while the terminal CH2 is left with three bonds. That literal reading is not electron-balanced (it would make C(4) a carbene), so this record localizes the odd electron on C(3) - the atom the arrow starts from - and the positive charge on the terminal C(4), which is also where the book's own product 'CH2=CH-CH2(+)' puts it. The book adds the partner canonical form '(+)CH2-CH=CH2' in parentheses; the allyl cation written here is the form the drawn arrows actually produce. The text notes that the radical site may equally sit on the other carbon of the double bond."
+    },
+    {
+      "evidence_id": "evidence_mod_4_15a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.15a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.15",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py:310-352"
+      },
+      "confidence": 0.7,
+      "curator_note": "Cross-linked MOD rule variables: IMS_4_15_1_1 '[C]1[C]2[C+.]3[C]4>>[C.]1.[C]2{=}[C]3[C+]4' and IMS_4_15_1_2 '[C]1[C]2[C]3[C+.]4>>[C.]1.[C]2{=}[C]3[C+]4'. Verified, not asserted: both cleave C1-C2 and raise C2-C3 from single to double, the cleaved bond being incident to C2 which gains the bond order - the same two bond changes as the drawn arrows - and both release the alkyl as [C.]. IMS_4_15_1_2 is the 'radical site on the other alkene carbon' variant the text mentions. Bookkeeping difference: MOD writes the ionized alkene the way ei_molecular_ion builds it, with charge AND odd electron on ONE carbon ([C+.]), then relocates the charge to C4 in the product, whereas this record keeps the charge on C4 throughout; consequently the rule's left pattern (a carbon carrying both + and a radical) does not match this record's precursor SMILES (RDKit substructure test: False), although it does match the M+. that ei_molecular_ion produces. Also over-general: neither DFS requires a C=C anywhere, so the rules fire on any C-C-C(+.)-C chain, alkane included. IMS_4_15_2_2 '[C]1[C]2[C]3[C+.]4>>[C.]1.[C+]2[C]3{=}[C]4' encodes the same net reaction expressed in the partner canonical form the book prints in parentheses (charge on C2, C3=C4). IMS_4_15_2_1 is MIS-ENCODED: it writes the departing alkyl as [C]1 with no radical and is dropped at import by the conservation guardrail (measured: '4.15 prod 2 left charge [spin 1->0]')."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 56.0621,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_41",
+      "species_id": "allyl_cation",
+      "step_id": "step_allylic_alpha_cleavage",
+      "observed_mz": 41.0386,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.95
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

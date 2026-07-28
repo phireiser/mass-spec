@@ -1,0 +1,283 @@
+{
+  "mechanism_id": "IMS8-EQ8.6",
+  "species": [
+    {
+      "species_id": "vinylcyclohexene_molecular_ion",
+      "mapped_smiles": "[CH:2]1([CH:1]=[CH2:8])[CH2:3][CH2:4][CH+:5][CH:6][CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "symmetric_ring_opened_distonic_radical_cation",
+      "mapped_smiles": "[CH2:8]=[CH:1][CH:2][CH2:3][CH2:4][CH+:5][CH:6]=[CH2:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butadiene_radical_cation",
+      "mapped_smiles": "[CH2:4][CH+:5][CH:6]=[CH2:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "butadiene_neutral_loss",
+      "mapped_smiles": "[CH2:8]=[CH:1][CH:2]=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "vinylcyclohexene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "symmetric_ring_opened_distonic_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butadiene_radical_cation",
+        "butadiene_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha1_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha2_charge_retention",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha1_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 143,
+        "equation": "8.6",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (stepwise retro-Diels-Alder of the 4-vinylcyclohexene molecular ion)"
+      },
+      "confidence": 0.85,
+      "curator_note": "First alpha-cleavage (ring opening) of the stepwise retro-Diels-Alder of the 4-vinylcyclohexene molecular ion (C8H12+., m/z 108) -- the vinyl analog of eq 4.31/4.32 (R = vinyl instead of R = phenyl). ARC COUNT: the book draws 0 reaction fishhooks for this step; the precursor is drawn as the [M]+. bracket (top-left) and the step is indicated ONLY by the alpha-labelled straight arrow. All three moves <1,2,3> are implicit, required for electron balance (not drawn on the page). Move <1> = the odd electron on the pi-ionized ring alkene carbon (map 6) into the forming C6=C7 pi bond; move <2> = one electron of the breaking C2-C7 ring sigma bond into that same forming pi bond; move <3> = the other electron of the C2-C7 bond onto the R-bearing carbon (map 2), its new (allylic) radical site. LOCALIZATION (convention B/C): the text states 'the ring double bond is the ionization site (IE = 8.9 eV, compared with 9.6 eV for the [isolated double bond])', so the radical cation is localized on the two former sp2 RING carbons as C5(+)-C6(.); the neutral C=C of 4-vinylcyclohexene sat between maps 5 and 6. R = vinyl: map 1 = the CH= carbon attached to the ring (map 2), map 8 = the terminal =CH2."
+    },
+    {
+      "evidence_id": "evidence_step_alpha2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha2_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 143,
+        "equation": "8.6",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (second alpha-cleavage of the symmetric open-ring intermediate)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Second alpha-cleavage on the symmetric ring-opened distonic radical cation: the allylic radical (map 2) drives cleavage of the central C3-C4 bond, giving 1,3-butadiene radical cation (m/z 54) + neutral 1,3-butadiene. ARC COUNT: the book draws 0 reaction fishhooks for this step; the intermediate is drawn as TWO resonance forms joined by the identity/resonance sign (triple-bar), collected by a brace, and the step is indicated ONLY by the alpha-labelled arrow down to products (a)/(b). The curved arcs visible ON the intermediate (one arc + '+' at each left end, one arc + '.' at each right end, drawn in BOTH resonance forms) are allyl-delocalization (resonance) arrows, NOT this step's electron flow. All three moves <1,2,3> are implicit, required for electron balance (not drawn on the page). Move <1> = odd electron (map 2) into the forming C2=C3 pi bond; move <2> = one C3-C4 sigma electron into that same pi bond; move <3> = the other C3-C4 sigma electron onto map 4 (new radical of the departing diene ion). PRODUCTS (a)/(b): the page draws two butadiene radical-cation forms with 'or' between them -- (a) s-cis and (b) s-trans 1,3-butadiene+. (equivalently the endocyclic- vs exocyclic-derived diene ion); for the unsubstituted, symmetric parent both are the same species C4H6+. (m/z 54), so charge-retention and charge-migration channels coincide. This record encodes the C4-C7 (endocyclic-diene) fragment as the ion; the C8/C1/C2/C3 (vinyl+two-ring-carbon) fragment leaves as neutral butadiene. RESONANCE (convention C): the ion is the delocalized butadiene radical cation; it is written here in one localized distonic form, .CH2-CH(+)-CH=CH2 (radical map 4, charge map 5). NO relative intensity is printed for this ion on p.143 (the quantitative data appear as ln([Ar+]/[C4H4+.]) vs IE in Figure 8.3, not as a % on the scheme), so relative_intensity is omitted."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.6",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.6",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap8_examples.py"
+      },
+      "confidence": 0.6,
+      "curator_note": "Cross-linked MOD variables (rule_index by_equation '8.6'): IMS_8_6_1, IMS_8_6_2 (step 1, two resonance variants) and IMS_8_6_3, IMS_8_6_4 (step 2, two variants). CROSS-CHECKED against their DFS -- reported as MISMATCH, not asserted as support (see rule_mismatches). (1) Step-1 rules IMS_8_6_1/_2 '[C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1 >> [C]1[C+]2[C]3[C]4[C]5[C]6[C.]7[C]8' localize the molecular-ion (+.) on the SATURATED, vinyl-bearing ring carbon (map 6) and keep the ring C2=C3 and vinyl C7=C8 double bonds, contradicting the book/text which ionizes the RING double bond (IE 8.9 eV); their open-chain product is a fully single-bonded C8 chain with an isolated carbenium (map 2) and isolated radical (map 7) that DROPS both double bonds, so it is not the book's bis-allylic (allyl-cation ... CH2CH2 ... allyl-radical) symmetric intermediate and is bond-order non-conserving (two pi bonds vanish with nothing formed). (2) Step-2 rules IMS_8_6_3/_4 '[C]1[C+]2[C]3[C]4[C]5[C]6[C.]7[C]8 >> [C]1{=}[C+]2[C]3{=}[C]4.[C]5{=}[C]6[C.]7{=}[C]8' split the chain into a butadien-2-yl CATION (charge on interior map 2) + a butadien-2-yl RADICAL (radical on interior map 7): charge and radical land on SEPARATE fragments, so NEITHER product is the butadiene RADICAL CATION the book draws (products a/b carry +. on ONE fragment), and the interior 2-position placement gives high-energy vinyl-type ions rather than the resonance-stabilized allylic distonic radical cation. The record instead encodes the book faithfully as the R=vinyl instance of the verified charge-retention retro-DA (same step patterns and atom numbering as IMS4-EQ4.31)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 108.0934,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_54",
+      "species_id": "butadiene_radical_cation",
+      "step_id": "step_alpha2_charge_retention",
+      "observed_mz": 54.0464,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

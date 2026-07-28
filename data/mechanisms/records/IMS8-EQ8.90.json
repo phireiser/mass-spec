@@ -1,0 +1,245 @@
+{
+  "mechanism_id": "IMS8-EQ8.90",
+  "species": [
+    {
+      "species_id": "hexanal_molecular_ion_carbonyl_O_ionized",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH2:2][CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_hydroxycarbenium_gamma_radical",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4][CH2:3][CH2:2][CH+:1][O:7][1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ionized_2_ethylcyclobutanol",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]1[CH2:3][CH2:2][CH:1]1[O+:7][1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "but_1_en_1_ol_radical_cation",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]=[CH:1][O+:7][1H:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["hexanal_molecular_ion_carbonyl_O_ionized"]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": ["distonic_hydroxycarbenium_gamma_radical"]
+    },
+    {
+      "state_id": "state_cyclobutane",
+      "species_ids": ["ionized_2_ethylcyclobutanol"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["but_1_en_1_ol_radical_cation", "ethylene_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_gamma_H_to_carbonyl_oxygen",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [4, 10]},
+          "target": {"type": "bond", "atom_maps": [7, 10]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [7]},
+          "target": {"type": "bond", "atom_maps": [7, 10]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 10]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 7]},
+          "target": {"type": "lone_pair", "atom_maps": [7]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_cyclization_to_cyclobutane_ring",
+      "from_state": "state_distonic",
+      "to_state": "state_cyclobutane",
+      "step_class": "radical_site_cyclization",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [4]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "lone_pair", "atom_maps": [7]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_retro_2plus2_ethylene_loss",
+      "from_state": "state_cyclobutane",
+      "to_state": "state_products",
+      "step_class": "retro_2plus2_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_gamma_H_to_carbonyl_oxygen",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.90", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.75,
+      "curator_note": "First arrow of Equation 8.90 (labelled 'rH'). The drawn substrate is generic: 'R' on the gamma carbon of an ALKANAL whose carbonyl carbon carries an explicit H, ionized on the carbonyl oxygen ('+.' printed over the O). The running text fixes the smallest homolog for which this channel matters ('not in the spectra of lower homologs (below hexanal)'), so R = ethyl and the instantiation encoded here is HEXANAL; every m/z in this record follows from that curator choice, not from the page. Book draws 2 arcs; moves <1,2> are drawn (a large fishhook whose tail sits on the gamma C-H bond and whose head points at the O, and a small fishhook from the '+.' odd electron on O curving down toward the same forming O-H bond). Move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - the second C-H electron stays on the gamma carbon, which is why the next structure is drawn with a '.' there. Move <4> (the C=O pi PAIR collapsing onto oxygen as a lone pair) is likewise NOT drawn: it is forced by the book's own next structure, which prints '+' next to the carbon and draws a plain single-bonded O-H, i.e. the C(+)-OH carbenium valence-bond form rather than the C=OH(+) oxocarbenium form. Encoding the drawn form honestly therefore needs this fourth (undrawn) move; the two forms are resonance structures of the same distonic ion (convention C: the C(+)-OH form drawn by the book is the one carried through this record)."
+    },
+    {
+      "evidence_id": "ev_step_cyclization",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_cyclization_to_cyclobutane_ring",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.90", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.65,
+      "curator_note": "Second arrow of Equation 8.90 (bare arrow, no label). Book draws 2 arcs, and BOTH are encoded - no implicit hook is needed here: <1> a fishhook from the '.' on the gamma carbon curving right, and <2> a fishhook from the O curving down-left; both heads point into the interior of the drawn loop, i.e. at the forming gamma-C/carbonyl-C sigma bond. Because the book's reactant here is the C(+)-OH form, the second electron of that new C-C bond can only come from an oxygen lone pair, which is exactly what the drawn arc shows and why the product is drawn as the ionized cyclobutanol with '+.' on the OH oxygen. The validator's soft note 'atom 7: radical change +1 vs arrows -1 (consistent with a lone pair rather than radicals)' is precisely this lone-pair-to-radical bookkeeping and is expected. Product: the four-membered ring is gamma-C / beta-C / alpha-C / carbonyl-C, i.e. ionized 2-ethylcyclobutanol for the hexanal instantiation."
+    },
+    {
+      "evidence_id": "ev_step_retro",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_2plus2_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.90", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.6,
+      "curator_note": "Third arrow of Equation 8.90 (bare arrow). Book draws 0 arcs on the cyclobutane structure - the electron flow encoded here is read off the two drawn structures: the ring splits across the diagonal pair of bonds gamma-C/beta-C and alpha-C/carbonyl-C, the remaining gamma-C/carbonyl-C bond becomes the enol double bond of R-CH=CH-OH(+.) and the beta-C/alpha-C bond becomes CH2=CH2. Encoded as the standard retro-[2+2]: two two-electron (double-barbed) moves, each carrying a breaking sigma pair into one of the two forming pi bonds; the charge and the odd electron stay on the enol oxygen as drawn. This partition is what makes 8.90 an ETHYLENE loss (28 u) and distinguishes it from the ordinary McLafferty split of the same distonic ion, which would expel the R-side alkene and keep CH2=CHOH(+.) (m/z 44)."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.90",
+      "support_type": "curator_inferred",
+      "locator": {"page": 204, "equation": "8.90", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.90 (its chapter-8 keys stop at 8.14, German-edition numbering), so no rule is cross-linked by equation id. Candidates were checked against the DFS and by RDKit substructure test on the instantiated hexanal ion rather than assumed. (i) STEP 1 IS covered, up to resonance form, by IMS_8_7_1 ('[C]1[C]2[C]3([H]4)[C]5[C]6[C]7([H]8){=}[O+.]9 >> [C]1[C]2[C.]3[C]5[C]6[C]7([H]8){=}[O+]9[H]4', equation 8.7) - an aldehyde-specific gamma-H transfer over the same 6-membered TS; its left pattern MATCHES hexanal M+. (RDKit: True). The generic hTransition_unsaturated ('[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6 >> [C.]2[C]3[C]4[C]5{=}[_A+]6[H]1') also matches (True). Both produce the C=OH(+) oxocarbenium form, NOT the C(+)-OH carbenium form Equation 8.90 draws. (ii) The rule that does give the drawn carbenium form, IMS_4_34_rH ('...[C]6([C]7){=}[O+.]8 >> ...[C+]6([C]7)[O]8[H]3'), requires a CARBON substituent on the carbonyl carbon, i.e. a ketone: it does NOT match the alkanal of Equation 8.90 (RDKit: False on hexanal M+., True on the 2-hexanone control) - listed as a rule mismatch. (iii) STEPS 2 and 3 have no counterpart at all. The nearest, hTransition_saturated_1_alpha ('[C.]1[C]2[C]3[C]4[_A+]5([H]6) >> [C]1[C]2[C]3[C]4{-}1 . [_A+.]5([H]6)') and IMS_4_37_rd, do close the same four-membered carbocycle but simultaneously EXPEL the onium heteroatom as H-Y(+.) - that is the water-elimination branch the same paragraph mentions, not the ethylene elimination drawn here, where the OH stays bonded to the ring and the ring only opens in the following step. IMS_8_7_2 / IMS_8_7_3 cleave the distonic ion the OTHER way (alkene + CH2=CHOH(+.)), i.e. the competing normal McLafferty channel. No indexed MØD rule reproduces the ring-closure/retro-[2+2] ethylene loss of Equation 8.90."
+    },
+    {
+      "evidence_id": "ev_peak_note",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_M_minus_C2H4",
+      "support_type": "curator_inferred",
+      "locator": {"page": 204, "equation": "8.90", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.5,
+      "curator_note": "NO m/z and NO intensity are printed anywhere in Equation 8.90 - the scheme is fully generic (R). observed_mz 72.0570 is curator-computed for the hexanal instantiation (C4H8O+., electron mass subtracted; M+. = 100.0883, loss of C2H4 = 28.0313) and is NOT a measured or printed value, so status is 'inferred', detected=false on the species and relative_intensity is omitted. The only claim the page makes about abundance is prose: the eliminations of water or ethylene from larger alkanals 'can give rise to abundant product ions not in the spectra of lower homologs (below hexanal)' (Meyerson et al. 1970). For a longer alkanal the neutral lost is still C2H4 but the ion m/z shifts with R."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_C2H4",
+      "species_id": "but_1_en_1_ol_radical_cation",
+      "step_id": "step_retro_2plus2_ethylene_loss",
+      "observed_mz": 72.057,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

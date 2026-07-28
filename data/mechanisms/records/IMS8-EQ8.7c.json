@@ -1,0 +1,143 @@
+{
+  "mechanism_id": "IMS8-EQ8.7c",
+  "species": [
+    {
+      "species_id": "distonic_gamma_radical_cation",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4][CH2:3][CH2:2][CH:1]=[O+:7][1H:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetaldehyde_enol_radical_cation",
+      "mapped_smiles": "[CH2:2]=[CH:1][O+:7][1H:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "but_1_ene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH:4][CH2:5][CH3:6]",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_gamma_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_complex",
+      "species_ids": [
+        "acetaldehyde_enol_radical_cation",
+        "but_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_beta_cleavage_low_energy",
+      "from_state": "state_precursor",
+      "to_state": "state_complex",
+      "step_class": "beta_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": { "type": "radical_orbital", "atom_maps": [4] },
+          "target": { "type": "bond", "atom_maps": [3, 4] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [2, 3] },
+          "target": { "type": "bond", "atom_maps": [3, 4] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [2, 3] },
+          "target": { "type": "bond", "atom_maps": [1, 2] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [1, 7] },
+          "target": { "type": "bond", "atom_maps": [1, 2] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [1, 7] },
+          "target": { "type": "atom", "atom_maps": [7] },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage_low_energy",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 144,
+        "equation": "8.7",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation (Random or hidden rearrangements)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.7, row 1 -> row 2 (arrow labelled 'low energy'). Same beta-cleavage bond changes as the high-energy channel, but the two fragments do NOT separate: the book draws them inside square brackets as a non-covalent ion-molecule complex [1-butene ... CH2=CH-OH+.]. A complex is not a single mapped SMILES, so it is encoded here as the two-species product state {enol radical cation, 1-butene}; they remain associated (held by ion-dipole forces, per the page's text about threshold-energy fragments being trapped in a potential well) and go on to exchange hydrogen (steps IMS8-EQ8.7d, IMS8-EQ8.7e) rather than dissociating. Book draws 0 arc(s) on the 'low energy' arrow itself; the 5 moves are the implicit beta-cleavage flow, identical to IMS8-EQ8.7b. The curved arrows drawn INSIDE the bracket belong to the following intra-complex H-transfer step (IMS8-EQ8.7d), not to this cleavage."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.7c",
+      "support_type": "computationally_supported",
+      "locator": { "page": 144, "equation": "8.7" },
+      "confidence": 0.9,
+      "curator_note": "Cross-link: MØD rule IMS_8_7_3 (rule_name 'Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 2 low energy'). Its DFS is IDENTICAL to IMS_8_7_2: [C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9 >> [C]1[C]2[C]3{=}[C]4.[C]5{=}[C]6([H]7)[O+.]8[H]9. VERIFIED consistent with this record's bond/charge/spin change. The MØD rule emits the two separated fragments; the book's low-energy distinction (fragments retained as an ion-molecule complex, then H-exchanging) is not representable in a single MØD term-graph rule and is captured here at the mechanism-record level via the following two steps."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "low-energy electron ionization",
+    "electron_energy_ev": null,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

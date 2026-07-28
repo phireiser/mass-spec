@@ -1,0 +1,335 @@
+{
+  "mechanism_id": "IMS8-EQ8.9",
+  "species": [
+    {
+      "species_id": "molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH:5]=[CH:6][C:7](=[O+:8])[CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dienol_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]=[CH:5][CH:6]=[C:7]([CH3:9])[OH+:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "product_ion_favored",
+      "mapped_smiles": "[CH2:2]=[CH:3][CH:5]=[CH:6][C:7]([CH3:9])=[OH+:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_radical_R",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_molecular_ion",
+      "species_ids": [
+        "molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_dienol_ion",
+      "species_ids": [
+        "dienol_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "product_ion_favored",
+        "alkyl_radical_R"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_rearrangement",
+      "from_state": "state_molecular_ion",
+      "to_state": "state_dienol_ion",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_dienol_ion",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 146,
+        "equation": "8.9",
+        "figure": null,
+        "panel": null,
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.8,
+      "curator_note": "Radical-cation McLafferty-type gamma-H rearrangement (labelled rH) of an ALPHA,BETA-unsaturated carbonyl molecular ion (the drawn C=C is conjugated to the C=O; the migrating gamma-H sits on the R-CH2 gamma carbon) through a 6-membered cyclic transition state, giving a conjugated dienol radical cation. Book draws 5 single-barb (fishhook) arcs (zoomed re-read): (i) the O odd-electron reaching toward the migrating gamma-H (arrowhead points left toward the H), (ii) the gamma C-H bond fishhook (the C-H bond breaks, the H leaving as an atom toward O), (iii) formation of the C3=C5 pi bond, (iv) the C5=C6 -> C6=C7 shift, and (v) the carbonyl pi (C7=O) rotating up onto O. Only the two heavy-atom framework pi-pair shifts that the arrow gate can track are emitted as electron_moves: C7=O -> C6=C7 (move 1) and C5=C6 -> C3=C5 (move 2), drawn by the book as single-barb fishhooks but encoded as two double-barbed pair shifts. The gamma-H migration from C3 to O and the O-radical's role in abstracting it are carried IMPLICITLY by the heavy-atom hydrogen counts (RDKit absorbs an explicit mapped H, so a C-H -> O-H bond move cannot be tracked in this schema); the odd electron remains on oxygen (O+.) across the step, consistent with the MOD rule DFS."
+    },
+    {
+      "evidence_id": "ev_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 146,
+        "equation": "8.9",
+        "figure": null,
+        "panel": null,
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.8,
+      "curator_note": "Vinylogous radical-site alpha-cleavage (labelled a) of the dienol ion: the odd electron relays from O through the conjugated system to expel R. at the far end, giving the resonance-stabilized even-electron oxocarbenium C6H9O+ (charge delocalized over O and the diene; the O+-localized Kekule form is drawn/encoded here). Book draws 5 single-barb (fishhook) arcs: R. departure (arc pointing back onto R), C2=C3 formation, the internal C3=C5 -> C5=C6 shift, C6=C7 -> C7=O, and the O odd-electron into the new C=O. These are the seven single-electron moves' drawn subset (moves 1,2,4,6,7); the two pair-completing hooks (moves 3 and 5: C3=C5 -> C2=C3 and C6=C7 -> C5=C6) are NOT drawn on the page and are added here for electron balance. The odd electron ends on the departing R (R. radical), so oxygen carries no radical in the product ion."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.9",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 146,
+        "equation": "8.9",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "Cross-linked MOD rules (rule_index by_equation 8.9): rH step <-> IMS_8_9_1_CH3 / IMS_8_9_1_OCH3 (\"stabil Dienol Ion 8.9 row 1 process 1 rH\"); alpha step <-> IMS_8_9_2_CH3 / IMS_8_9_2_OCH3 (\"row 1 process 2 alpha\"). VERIFIED at the connectivity level: the IMS_8_9_1 DFS moves H (map 4 in the rule) from the gamma-carbon to O with C3=C5 and C6=C7 formation and C5=C6/C7=O loss (matches step_rH), and IMS_8_9_2 forms C2=C3, C4=C5 and C6=O while ejecting R (matches step_alpha). MISMATCH (see rule_mismatches): the IMS_8_9_2 PRODUCT DFS keeps a radical dot on oxygen ([O+.]) while the same O also carries a C=O double bond and an O-H (over-valent) AND marks the departing R as a radical ([_A.]1) -> two unpaired electrons out of a one-radical precursor (spin non-conservation); the conservation guardrail would drop this rule. The chemically correct product ion is the even-electron oxocarbenium [O+] encoded here (odd electron fully relayed to R). m/z values (M+. 112.0883; product 97.0648) are computed from the curator's instantiation (R = CH3, X = CH3; the scheme is generic in R and X = CH3/OCH3) and are not printed in the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 112.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_product_favored",
+      "species_id": "product_ion_favored",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 97.0648,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed"
+  }
+}

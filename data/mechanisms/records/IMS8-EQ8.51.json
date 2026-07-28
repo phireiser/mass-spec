@@ -1,0 +1,137 @@
+{
+  "mechanism_id": "IMS8-EQ8.51",
+  "species": [
+    {
+      "species_id": "cyclic_onium_ee_ion",
+      "mapped_smiles": "[CH3:3][C:2]1=[O+:1][CH2:7][CH2:6][CH2:5][CH2:4]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acylium_ion",
+      "mapped_smiles": "[CH3:3][C:2]#[O+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cycloalkane_neutral",
+      "mapped_smiles": "[CH2:7]1[CH2:6][CH2:5][CH2:4]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["cyclic_onium_ee_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["acylium_ion", "cycloalkane_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_double_inductive_ring_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 7]},
+          "target": {"type": "bond", "atom_maps": [4, 7]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 4]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_double_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_double_inductive_ring_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 179, "equation": "8.51", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.7,
+      "curator_note": "GENERIC SCHEME, printed under the heading 'EE+'. The book draws a ring of unspecified size that contains the heteroatom Y at the top; Y carries the + charge, is single-bonded to one ring carbon and DOUBLE-bonded to the neighbouring ring carbon, which bears the substituent R (a cyclic onium / oxocarbenium ion). The reaction arrow is labelled 'i, i' = two successive charge-site (inductive) cleavages. Products: the linear onium ion R-C(triple bond)Y+ (an acylium for Y=O) plus a CYCLIC neutral (drawn as the closed 'half-moon' D-shape, i.e. a carbocycle, not a chain). INSTANTIATION (convention F/B): Y=O, R=CH3, ring size 6 (the same hexagon the book draws explicitly one line lower in Eq 8.52), giving the 2-methyl-oxocarbenium of tetrahydropyran, C6H11O+ m/z 99.0804; the charge is localised on the ring oxygen in the mapped SMILES exactly where the book prints the '+'. Products for that instantiation: acetylium CH3-C#O+ (m/z 43.0178) + cyclobutane. Book draws 2 arc(s); moves <1,2> are both drawn full-headed (two-electron) arcs and no implicit move is needed - this EE+ path is entirely heterolytic, so the electron bookkeeping closes with the two drawn arrows alone. Arc 1 (left) leaves the Y-C sigma bond and points into the ring cavity: that pair becomes the new C-C bond that closes the neutral carbocycle (maps 4-7). Arc 2 (right) leaves the ring C-C bond next to the substituted carbon and points up at the Y=C bond, raising it to Y#C+ (maps 1-2)."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.51",
+      "support_type": "curator_inferred",
+      "locator": {"page": 179, "equation": "8.51", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": null,
+      "curator_note": "CROSS-LINK CHECKED, NONE FOUND: rule_index.json 'by_equation' covers 4.3-4.46 and 8.1-8.14 only, so there is no MØD rule variable indexed to Eq 8.51; a grep of src/data_generation/rules/ for '8.51' also returns nothing. No rule is claimed. MS CONTEXT: the species undergoing the drawn reaction is an even-electron FRAGMENT ion (the book's 'EE+' heading), not the molecular ion, so adduct is null and precursor_mz is that fragment's m/z; the page names no experiment (no CAD, MI or CI), prints no m/z and no intensity, so activation_method and electron_energy_ev are left null. PEAK: observed_mz 43.0178 is COMPUTED from the curator's Y=O/R=CH3/6-ring instantiation, not measured or printed by the book - status 'inferred', detected=false, no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 99.0804,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acylium",
+      "species_id": "acylium_ion",
+      "step_id": "step_double_inductive_ring_cleavage",
+      "observed_mz": 43.0178,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

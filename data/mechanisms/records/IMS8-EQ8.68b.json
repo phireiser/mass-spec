@@ -1,0 +1,300 @@
+{
+  "mechanism_id": "IMS8-EQ8.68b",
+  "species": [
+    {
+      "species_id": "n_ionized_1_methyl_octahydroindol_5_ol",
+      "mapped_smiles": "[CH3:2][N+:1]1[CH2:3][CH2:4][CH:5]2[CH2:11][CH:9]([OH:10])[CH2:8][CH2:7][CH:6]12",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH3:2][N+:1]1=[CH:6][CH:5]([CH2:11][CH:9]([OH:10])[CH2:8][CH2:7])[CH2:4][CH2:3]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylene_pyrrolinium_ion_mz96",
+      "mapped_smiles": "[CH3:2][N+:1]1=[CH:6][C:5](=[CH2:11])[CH2:4][CH2:3]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "one_hydroxypropyl_radical",
+      "mapped_smiles": "[CH:9]([OH:10])[CH2:8][CH3:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_ionized_1_methyl_octahydroindol_5_ol"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylene_pyrrolinium_ion_mz96",
+        "one_hydroxypropyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_h_transfer_and_beta_cleavage",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 189,
+        "equation": "8.68",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s) on the leftmost structure; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = the fishhook printed straight after 'CH3N+.', taking the nitrogen odd electron into the N(1)-C(6) bond; drawn arc 2 = the arc that loops below and left of C(6), tail on the C(6)-C(7) carbocycle bond and fishhook head back on the N(1)-C(6) bond, raising it to N+=C(6). The undrawn move 3 carries the second electron of the cleaved C(6)-C(7) bond onto C(7); the book instead simply prints the radical dot on that carbon in the drawn intermediate. This is the classic radical-site alpha cleavage that only OPENS the carbocycle -- no mass is lost yet, so the intermediate is a distonic ion of the same m/z as the molecular ion."
+    },
+    {
+      "evidence_id": "evidence_step_h_transfer",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_transfer_and_beta_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 189,
+        "equation": "8.68",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.75,
+      "curator_note": "Book draws 3 arc(s) on the drawn intermediate; move <3> is drawn, move <1> COMPRESSES the two drawn hydrogen-transfer fishhooks into one net one-electron migration, and moves <2,4> are not drawn on the page. Detail: the two arcs around the explicitly lettered 'H' depict the 1,5-hydrogen abstraction -- one fishhook runs from the C(5)-H bond down toward the radical carbon C(7), the other runs from the C(7) radical site up toward that same H; because the transferred hydrogen carries no atom map in this schema, both are encoded as the single net move C(7) -> C(5) (the same compression used in the corpus for gamma-H rearrangements, cf. IMS4-EQ4.33). The third drawn arc has its tail on the C(11)-C(9) bond and its fishhook head on the C(5)-C(11) bond -- that is move <3>, the sigma->pi electron. The two undrawn moves are move <2> (the electron left on C(5) by the H abstraction going into the new C(5)=C(11) pi bond) and move <4> (the second electron of the cleaved C(11)-C(9) bond going onto C(9)); the book simply prints the resulting radical dot on the hydroxyl-bearing carbon of the expelled neutral. Net result: the C(9)-C(11) bond breaks, C(11) leaves with the ion as the exocyclic methylene, and 1-hydroxypropyl radical departs -- exactly the neutral drawn ('H2C' methylene, a CH with the wavy bond, and a radical-dot CH-OH)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_instantiation",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.68b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 189,
+        "equation": "8.68",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.7,
+      "curator_note": "GENERIC SCHEME, INSTANTIATED, AND UNNUMBERED ON THE PAGE. This is the SECOND (middle) scheme of page 189; it carries NO printed equation number -- '(8.68)' is printed above it (directly below the first scheme) and '(8.69)' below the third scheme. It is filed under 8.68 because it starts from exactly the same drawn molecular ion as the first scheme (a saturated cyclohexane ring) whereas the third scheme starts from the unsaturated cyclohexene alkaloid, and because the prose pairs exactly two equations (8.68 and 8.69) with the two Figure 8.1 spectra. Downstream users should treat the equation id as 8.68(b) with that caveat. Substrate instantiation: the book draws two wavy bonds (rest of the alkaloid) on the carbocycle; they are capped with H here, giving 1-methyl-octahydro-1H-indol-5-ol, so ms_context.precursor_mz 155.1299 is curator-computed for that instantiation and is NOT printed by the book. m/z 96 IS printed. No percentage is printed anywhere on this page, so no relative_intensity is recorded. Note that m/z 96 is an EVEN-electron ion (C6H10N+); the 'OE+.' base peaks the prose refers to are m/z 83 (Equation 8.68a) and m/z 125 (Equation 8.69)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.68b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 189,
+        "equation": "8.68"
+      },
+      "confidence": 0.6,
+      "curator_note": "No MØD rule is cross-linked: rule_index.json 'by_equation' has no key '8.68' (its chapter-8 keys stop at 8.14), so no Rule.fromDFS encoding claims this scheme. No cross-link is asserted and no rule was tested against this substrate."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 155.1299,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_96",
+      "species_id": "methylene_pyrrolinium_ion_mz96",
+      "step_id": "step_h_transfer_and_beta_cleavage",
+      "observed_mz": 96.0802,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

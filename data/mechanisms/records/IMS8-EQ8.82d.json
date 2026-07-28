@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS8-EQ8.82d",
+  "species": [
+    {
+      "species_id": "alkoxy_radical_oxonium_ion",
+      "mapped_smiles": "[CH3:8][CH:7]([O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "aldehyde_protonated_ester_ion",
+      "mapped_smiles": "[CH:7](=[O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "R_radical",
+      "mapped_smiles": "[CH3:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "alkoxy_radical_oxonium_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "aldehyde_protonated_ester_ion",
+        "R_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_loss_of_R_from_alkoxy",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82d",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_loss_of_R_from_alkoxy",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Middle horizontal arrow of Equation 8.82, labelled 'a, -R.': the alkoxy-radical / protonated-ester ion made in Equation 8.82a undergoes a textbook radical-site alpha cleavage at the carbinol carbon, expelling R. and forming the aldehyde C(7)=O(9); the charge stays on the protonated methoxy oxygen O(11), which is untouched. Book draws 2 arc(s) for this branch, both single-barb fishhooks and both SOLID: (i) from the radical dot on O(9) curving down into the C(7)-O(9) bond (encoded as move <1>) and (ii) from the R-C(7) bond curving up into the same C(7)-O(9) bond (move <2>). Move <3>, the second homolysis hook that puts the other C(7)-R electron on the departing radical R., is an implicit hook required for electron balance (not drawn on the page). NOTE ON THE SAME PANEL: a third, DASHED fishhook is printed there, running from the C(7)-(CH2)n bond into the C(7)-O(9) bond; it does NOT belong to this step but to the competing 'a, -RCHO' branch drawn downwards from the same panel (record IMS8-EQ8.82e), which is why the book dashes it. INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82d",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82d",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. IMS_4_9 (the generic 'radical induced (alpha-)cleavage for a saturated site') was checked against this step and does NOT match: its DFS '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' breaks the C1-C2 bond, which is NOT incident to C3, the atom that forms the new pi bond with the radical site, and its product keeps an unpaired electron on [_A+.]5 in addition to the new double bond (spin non-conservation). It also requires the radical site to be the charge site, whereas here the odd electron sits on a NEUTRAL alkoxy oxygen while the charge sits on a remote oxonium. IMS_4_13_1 is the concrete version of the same reaction for a charged ether oxygen and is inapplicable for the same reason. Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI (the reacting ion is the rH-isomerized molecular ion of Equation 8.82a, same m/z)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 174.125,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_R_d",
+      "species_id": "aldehyde_protonated_ester_ion",
+      "step_id": "step_alpha_loss_of_R_from_alkoxy",
+      "observed_mz": 159.1016,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

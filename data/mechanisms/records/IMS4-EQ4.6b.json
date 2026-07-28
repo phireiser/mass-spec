@@ -1,0 +1,177 @@
+{
+  "mechanism_id": "IMS4-EQ4.6b",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH2:1]([1H:5])[CH2:2][O+:3]=[CH2:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:1]=[CH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_formaldehyde",
+      "mapped_smiles": "[1H:5][O+:3]=[CH2:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethylene",
+        "protonated_formaldehyde"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 55,
+        "equation": "4.6",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.85,
+      "curator_note": "adduct corrected to null (convention G): the species undergoing this reaction is an EVEN-ELECTRON cation (charge +1, radical_electrons 0) - a fragment/secondary-fragmentation precursor - NOT the [M]+. radical molecular ion. Even-electron oxocarbenium ion decomposing by REARRANGEMENT with charge RETENTION: a beta H (H5) of the ethyl group transfers to oxygen while ethylene forms and the C2-O bond breaks, giving neutral ethylene + protonated formaldehyde HO(+)=CH2 (charge stays on O). Book draws 0 curved arrows (plain arrow + '(rearrangement, charge retention)' label); the two double-barbed moves (C1-H(beta) pair -> C1=C2 pi; C2-O pair -> new O-H bond) are curator-supplied and fully balanced."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.6b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.6"
+      },
+      "confidence": 0.7,
+      "curator_note": "rule_index cross-links equation 4.6 to IMS_4_6_row2, but that DFS is MIS-ENCODED: its product [C]1(H2,H3){=}[C+]5(H6,H4).[H]7[O+]8{=}[C]9 carries TWO positive charges (+2 total vs +1 reactant) and a valence-4 [C+]5 carbon. It violates charge/valence conservation (the conservation guardrail would drop it). This record encodes the book's balanced reaction directly. See rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.6"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 31.0178 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 59.0491,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "protonated_formaldehyde",
+      "step_id": "step_hydrogen_rearrangement",
+      "observed_mz": 31.0178,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

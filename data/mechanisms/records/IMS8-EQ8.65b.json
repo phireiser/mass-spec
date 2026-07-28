@@ -1,0 +1,288 @@
+{
+  "mechanism_id": "IMS8-EQ8.65b",
+  "species": [
+    {
+      "species_id": "methylcyclohexanone_molecular_ion",
+      "mapped_smiles": "[O+:1]=[C:2]1[CH:3]([CH3:8])[CH2:4][CH2:5][CH2:6][CH:7]1[1H:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[O+:1]#[C:2][CH:7]([1H:9])[CH2:6][CH2:5][CH2:4][CH:3][CH3:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "rearranged_alpha_acyl_radical_ion",
+      "mapped_smiles": "[O+:1]#[C:2][CH:7][CH2:6][CH2:5][CH2:4][CH:3]([1H:9])[CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylcyclohexanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "ring_opened_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "rearranged_alpha_acyl_radical_ion"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_hydrogen_rearrangement",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 187,
+        "equation": "8.65",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s) on the centre (six-membered ring) structure of Equation 8.65; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 starts at the printed '+.' on the oxygen (the C=O is drawn intact, so the odd electron is localized on O, convention B) and its barb points into the C(2)-O(1) bond; drawn arc 2 has its tail on the ring bond C(2)-C(3) - the bond joining the carbonyl carbon to the alpha carbon that carries the CH2R substituent - and its barb points into that same C-O bond, which therefore rises from double to triple (acylium). The undrawn move 3 carries the second electron of the cleaved C(2)-C(3) bond onto C(3); the book does not draw that hook, it simply prints the resulting radical dot on that carbon in the next structure. Because the carbonyl carbon is IN the ring, this alpha cleavage only OPENS the ring - no mass is lost yet - giving the distonic acylium/alkyl radical ion the page draws in the second row. The page draws an equilibrium (a down and an up arrow), hence reversible=true. Map numbers: 1 = the carbonyl O, 2 = the carbonyl C, 3 = the alpha carbon that bears the CH2R side chain and is cleaved off the carbonyl carbon, 4, 5 and 6 = the remaining ring CH2 groups, 7 = the other alpha carbon (the one on which the book draws an explicit H in the next structure), 8 = the side-chain carbon (R = H instantiation, so CH2R = CH3), 9 = that drawn hydrogen."
+    },
+    {
+      "evidence_id": "evidence_step_hydrogen_rearrangement",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 187,
+        "equation": "8.65",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s) on the second-row (ring-opened) structure; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 has its tail on the explicitly printed C(7)-H(9) sigma bond (the book writes that H out, on the carbon next to the acylium) and its barb points to the gap between that H and the radical carbon, i.e. into the FORMING C(3)-H(9) bond; drawn arc 2 has its tail on the radical dot printed on C(3) and its barb points to the same gap. The two barbs meet there, which is exactly the two electrons the new C-H bond needs. The undrawn move 3 carries the second electron of the broken C(7)-H(9) bond onto C(7) - that is where the book prints the radical dot in the common bottom structure. Net effect: the hydrogen hops from the carbon alpha to the acylium onto the former radical carbon and the unpaired electron migrates the other way, ending up alpha to C#O+ where it is stabilized as the ionized-ketene resonance form (the page's text: hydrogen rearrangement 'forming very stable (Table 8.3) enamine or ketene intermediates'). The book draws only the localized acyl-radical form, which is what is encoded (convention C). In this six-membered-ring case the radical carbon C(3) is the 6th carbon counted from the acylium carbon, which is exactly the position of the middle one of the three explicit hydrogens the book prints in the common bottom structure. Equilibrium arrows are drawn here too, hence reversible=true."
+    },
+    {
+      "evidence_id": "evidence_mechanism_scheme",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.65b",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 187,
+        "equation": "8.65",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.65 prints THREE parallel schemes side by side - the molecular ions of a 2-(2-R-ethyl)cyclopentanone (left), a 2-(R-methyl)cyclohexanone (centre) and a 2-R-cycloheptanone (right) - each sitting above an equilibrium arrow pair that leads to its ring-opened distonic ion, and all three then lead by further equilibrium arrow pairs to ONE common structure drawn once at the bottom of the figure. This record is the CENTRE (six-membered ring) scheme; the left and right schemes are records IMS8-EQ8.65a and IMS8-EQ8.65c. The three substrates are isomers (the side chain shortens as the ring grows), so all three converge on the same ion, which is why the book draws the product only once. In that bottom structure the book prints THREE explicit hydrogens, on the 5th, 6th and 7th carbon counted from the acylium carbon: they mark which position received the transferred H in the five-, six- and seven-membered-ring case respectively, and the 'R'' printed there is the same terminal group as 'R' (it always ends up on the 7th carbon). Conventions (B)/(F): R is generic on the page, so this record instantiates R = H, which makes the substrate 2-methylcyclohexanone (C7H12O); the precursor SMILES localizes the charge and the odd electron on the oxygen exactly where the page prints '+.'."
+    },
+    {
+      "evidence_id": "evidence_mechanism_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.65b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 187,
+        "equation": "8.65"
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.65 - no MOD Rule.fromDFS encodes this alpha,rH sequence of a cyclic-ketone molecular ion, so no cross-link is asserted. The two nearest indexed candidates were CHECKED against this substrate and BOTH fail. (i) IMS_4_27_1 ('[_A]1[C]2([_A]3){=}[O+.]4>>[_A]1.[_A]3[C]2{#}[O+]4') has the right topology for step 1 and its left pattern matches (RDKit, SMARTS [*]-[#6](-[*])=[O+] -> 1 match), but its right-hand side carries no radical at all, so L->R spin goes 1->0; the conservation guardrail in src/data_generation/rules/__init__.py drops it at import - verified by running that import in the container, which prints 'inductive cleavage even electron 4.27 step 1 alpha §R1R3  [spin 1->0]' in the dropped list - so the rule is not even live. (ii) IMS_4_14 ('[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]') IS live and its left pattern DOES match this substrate (RDKit, SMARTS [#6](-[#6]-[#6])(-[#6]-[#6])=[O+] -> 2 matches on the 2-methylcyclohexanone molecular ion), but the rule is MIS-ENCODED relative to the book: loading it in MOD gives left edges {0-1, 0-3, 0=O, 1-2, 3-4} and right edges {0-4, 0#O, 1-2, 3-4}, i.e. it deletes BOTH bonds from the carbonyl carbon to its two alpha carbons and creates a NEW bond from the carbonyl carbon to a beta carbon (a skeletal rearrangement; on a cyclic substrate it contracts the ring), and the carbonyl oxygen is not in the rule context (vertex id 5 on the left, 6 on the right; context = {0,1,2,3,4}), so the rule formally deletes and re-creates the O. It therefore does not describe Equation 8.65. This corroborates, independently, the IMS_4_14 mis-encoding already noted on record IMS8-EQ8.58a. For step 2 there is no candidate at all: every indexed 'rH' rule (IMS_4_33_rH, IMS_4_37_rH, IMS_4_38_rH, IMS_4_40_rH, IMS_4_45_rH, IMS_8_7_1, IMS_8_9_1_CH3, ...) delivers the hydrogen to a HETEROATOM radical-cation site, whereas Equation 8.65 abstracts H onto a CARBON radical site. ms_context: the page names no CAD/MI/CI experiment - it is ordinary EI-spectrum discussion in Section 8.9 and the book's spectra are the standard 70 eV EI - so EI / 70 eV / [M]+. is used; precursor_mz 112.0883 is the curator-computed monoisotopic m/z of the C7H12O molecular ion for the chosen R = H instantiation, not a number printed on the page."
+    },
+    {
+      "evidence_id": "evidence_peak_112",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_112",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 187,
+        "equation": "8.65"
+      },
+      "confidence": 0.4,
+      "curator_note": "Convention (F): Equation 8.65 prints NO m/z and NO intensity anywhere (R and R' are generic), so status is 'inferred', detected is false and relative_intensity is omitted. observed_mz 112.0883 is the curator-computed monoisotopic m/z of C7H12O(+.) for the chosen R = H instantiation (2-methylcyclohexanone), i.e. it derives from that instantiation and is not a measured number. Note also that BOTH drawn steps are isomerizations - no neutral is lost - so the rearranged ion is isobaric with the molecular ion and contributes no peak of its own; this entry records the computed mass of the drawn species, not an observation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 112.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_112",
+      "species_id": "rearranged_alpha_acyl_radical_ion",
+      "step_id": "step_hydrogen_rearrangement",
+      "observed_mz": 112.0883,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "mechanism_id": "IMS8-EQ8.57",
+  "species": [
+    {
+      "species_id": "methylpyrrolidine_radical_cation",
+      "mapped_smiles": "[NH+:1]1[CH2:2][CH:3]([CH3:6])[CH2:4][CH2:5]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_iminium_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[NH+:1][CH2:5][CH2:4][CH:3][CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propene_neutral",
+      "mapped_smiles": "[CH2:4]=[CH:3][CH3:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "aminomethylene_iminium_radical_cation",
+      "mapped_smiles": "[CH2:2]=[NH+:1][CH2:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["methylpyrrolidine_radical_cation"]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": ["ring_opened_iminium_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["propene_neutral", "aminomethylene_iminium_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_alkene_loss",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 182, "equation": "8.57", "figure": null, "panel": null, "section": null},
+      "confidence": 0.8,
+      "curator_note": "First arrow of Equation 8.57, labelled 'alpha'. Generic scheme: a pyrrolidine ring carrying R on nitrogen and R' on the ring carbon two bonds away from N (position 3, as drawn: the R'-bearing vertex is bonded to the N-adjacent vertex, not to N itself). The molecular ion is n-ionized at nitrogen ('+.' drawn over N); alpha-cleavage forms the N=C2 iminium head and breaks the C2-C3 ring bond, giving the ring-opened distonic ion CH2=N+(R)-CH2CH2-.CH(R') that the page draws as the middle structure (radical dot on the R'-bearing carbon). Book draws 2 arcs: move <1> is the small drawn fishhook from the N+. odd electron into the forming N=C2 pi bond and move <2> is the large drawn fishhook from the breaking C2-C3 sigma bond into that same pi bond; move <3> (the other C2-C3 sigma electron onto C3) is an implicit homolysis hook required for electron balance (not drawn on the page, although the product radical dot is shown). INSTANTIATION: R = H, R' = CH3 (3-methylpyrrolidine, M+. m/z 85.089), the first of the two substitution patterns tabulated under the equation; the m/z values encoded here therefore derive from that curator-chosen instantiation."
+    },
+    {
+      "evidence_id": "ev_step_alpha_alkene_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_alkene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 182, "equation": "8.57", "figure": null, "panel": null, "section": null},
+      "confidence": 0.8,
+      "curator_note": "Second arrow of Equation 8.57, also labelled 'alpha': the C3 radical of the ring-opened ion forms the C3=C4 pi bond and the C4-C5 bond breaks, expelling the neutral alkene CH2=CH-R' (propene for R' = CH3, drawn at the right of the equation) and leaving the odd-electron ion .CH2-N+(R)=CH2 - m/z 43, 100% for R = H, R' = CH3; the page also tabulates R = CH3, R' = H : m/z 57, 80% (the same ion skeleton with an N-methyl, m/z 57.058). Book draws 2 arcs, both terminating on the forming C3=C4 bond: move <1> (the C3 radical's odd electron, drawn from the dot) and move <2> (one electron of the breaking C4-C5 sigma bond); move <3> (the other C4-C5 electron onto C5) is an implicit homolysis hook required for electron balance (not drawn on the page, although the product radical dot on the N-CH2 is shown). DELOCALIZATION: the surrounding text states that in such ions the unpaired electron is stabilized by allylic resonance, .CR2-Y+=CR'2 <-> CR2=Y+-CR'2; one localized form is encoded consistently (radical on C5, iminium N1=C2), which is the form drawn on the page."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.57",
+      "support_type": "curator_inferred",
+      "locator": {"page": 182, "equation": "8.57", "figure": null, "panel": null, "section": null},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.57 (its chapter-8 keys stop at 8.14); no MØD rule variable is cross-linked to this scheme. The only indexed ring-fragmentation family, IMS_8_6_1..IMS_8_6_4, works on an all-carbon cyclooctadiene-type ring with no heteroatom, so it does NOT describe this nitrogen alpha ring-opening and is not cross-linked. The page prints the two tabulated abundances as bare percentages without naming the experiment; they are the book's standard 70 eV EI values (the text cites Duffield et al. 1965 for the pyrrolidine spectrum), and ms_context is set accordingly."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 85.0886,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_oe_ion_m43",
+      "species_id": "aminomethylene_iminium_radical_cation",
+      "step_id": "step_alpha_alkene_loss",
+      "observed_mz": 43.0417,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

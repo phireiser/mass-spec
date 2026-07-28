@@ -1,0 +1,226 @@
+{
+  "mechanism_id": "IMS8-EQT8.2q",
+  "species": [
+    {
+      "species_id": "propyl_acetate_radical_cation",
+      "mapped_smiles": "[CH2:1]([1H:9])[CH:2]([1H:8])[CH2:3][O+:4]=[C:5]([O:6])[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_radical",
+      "mapped_smiles": "[CH2:1][CH:2]=[CH2:3]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_acetic_acid",
+      "mapped_smiles": "[O:6]([1H:8])[C:5](=[O+:4][1H:9])[CH3:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "propyl_acetate_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_radical",
+        "protonated_acetic_acid"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_double_rH",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "double_hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              9
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_2rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_double_rH",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 168,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.75,
+      "curator_note": "Table 8.2 (printed p.168), second example row: OE+. reactant type alpha-i-i, charge-RETENTION, printed over a SINGLE arrow as '2rH' -- the double hydrogen rearrangement of an n-propyl ester. The book draws no intermediate, so the whole transformation is encoded as one formal arrow step. LOCALISATION (convention B): the printed reactant is drawn with the positive charge on the ESTER oxygen (map 4, written with the C=O+ double bond to the acyl carbon) and the odd electron on the CARBONYL oxygen (map 6, written as a singly bound O with a dot); the mapped_smiles reproduces that resonance form rather than the more common =[O+.] carbonyl form. The first H (map 8) sits on C-beta of the propyl chain and is transferred to the carbonyl O through the classical six-membered ester McLafferty ring (O(carbonyl), C(acyl), O(ester), C-alpha, C-beta, H) -- the hexagon actually drawn on the page. The second H (map 9) is encoded on C-gamma and is transferred to the ester O+ while the C-alpha-O bond leaves to form the C-alpha=C-beta pi bond. *** DRAWING DISCREPANCY (disclosed, not silently resolved) *** The two halves of this compressed table sketch do not agree, and the record follows the PRODUCT half. Measured on the native embedded scan (pypdf page.images[0], 1400x2016, rotated upright): the reactant's alkyl vertex at (1054,809) carries exactly three bonds -- a 32 px line up-right ending 4 px from the first 'H' label, a 34 px line right-down ending 2 px from the second 'H' label, and a 47 px vertical bond down to the vertex at (1055,856) that bonds on to the ester O+ at (1092,874). C-C bonds in this drawing are 44-48 px and bonds to atom labels 32-35 px, so BOTH short lines are C-H bonds: the printed reactant skeleton has only TWO alkyl carbons (an ethyl ester, m/z 88) and draws BOTH migrating hydrogens on the same terminal carbon; nothing is drawn beyond that vertex. The printed NEUTRAL product, by contrast, is unambiguously the three-carbon allyl radical (vertical C=C at x1258-1267/y822-867 plus a separate single bond up-right to a radical dot at (1305,792)), which with the even-electron m/z 61 ion requires a C5H10O2 (m/z 102) precursor and requires the two hydrogens to come from DIFFERENT carbons (C-beta and C-gamma). The book's own full treatment of this reaction, eq 4.46 (p.82, record IMS4-EQ4.46), draws n-propyl acetate with exactly that beta/gamma pair, so the table sketch is read here as an abbreviation that is short one chain carbon, and the record encodes n-propyl acetate. Corroboration that the omission is in the BOOK and not in this reading: the German-edition inside-cover rule h2Transiton_1 ([H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8), whose comment cites Gl. 4.46, transcribes precisely the two-carbon, both-H-on-one-carbon geometry printed here. Consequence for the arcs: the second transfer's arc is drawn springing from a C-H bond of the SAME vertex that donates the first H, whereas move 4 sources it from the C-gamma-H bond of the propyl chain. DELOCALISATION (convention C): the hydrocarbon product is the ALLYL radical, drawn on the page with the dot at one chain terminus; one localised form is chosen here, with the odd electron on C-gamma (map 1) and the double bond between map 2 and map 3. ARC TYPES: the two arcs of the first transfer are single-barbed fishhooks, the two arcs of the second transfer are full double-barbed arrowheads (verified by zooming the scan), so moves 4 and 5 carry electron_count 2. Book draws 4 arcs; moves 1,2,4,5 are drawn, move 3 is an implicit homolysis hook required for electron balance (not drawn on the page); it is written as landing on C-gamma (map 1) rather than on C-beta because the observed product is the allyl radical -- the formal allylic relocation of the odd electron is the price of encoding the concerted '2rH' as a single step."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2q",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 168,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.45,
+      "curator_note": "No MØD rule is indexed to 'Table 8.2'; this row repeats the Chapter 4 reaction Gl. 4.46 and is chemistry-verified against that rule family. FIRST HALF -- SAME REACTION, BUT THE RULE DOES NOT EMBED: IMS_4_46_rH_1 ([H]1[C]2[C]3([H]4)[C]5[O]6[C]7([C]8){=}[O+.]9>>[H]1[C]2[C.]3[C]5[O+]6[C]7([C]8){=}[O]9[H]4) is the book's own eq-4.46 encoding of this first transfer -- C-beta H to the carbonyl oxygen with the charge relocating onto the ester oxygen, i.e. the chemistry of moves 1-3 -- but its LEFT graph requires the charge and the odd electron together on the carbonyl oxygen ({=}[O+.]9), while this page (and hence this record, per convention B) draws them already separated: + on the ester oxygen, dot on the carbonyl oxygen. The pattern therefore cannot match the record's precursor; it matches the OTHER resonance form, which is where the record's own charge-localisation note applies. h2Transiton_1 ([H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8) has the same left-side charge/radical placement and likewise does not embed -- but note that its H-donor geometry (BOTH migrating hydrogens on one carbon, two alkyl carbons) is exactly the geometry this table page draws, which is the corroboration cited in the step note for the drawing discrepancy. SECOND HALF -- NO LIVE RULE. IMS_4_46_rH_2 and IMS_4_46_rH_2_ are the only rules with the book's product partition (even-electron protonated acid + three-carbon hydrocarbon radical) but BOTH are dropped at import time by the conservation guardrail (charge 0->1 and 0->2: their left graphs write the protonated carbonyl as neutral [O]8[H]9 instead of [O+]8[H]9), and even if repaired their hydrocarbon product [C]2[C.]3[C]4 forms no C=C, so it is not the allyl radical. MISMATCH of the live substitute (its H-donor geometry is the printed one, but its product partition is not): h2Transiton_3 ([C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1>>[C]2{=}[C]4.[H]3[_A+.]5{=}[C]6([C]7)[_A]8[H]1) takes BOTH hydrogens from C-beta, so it yields a closed-shell alkene plus an odd-electron oxygen-centred ion -- the opposite partition to the page, which puts the odd electron on the departing allyl radical and gives an even-electron m/z 61 ion. h2Transiton_2 is only the charge-migration step and does not by itself describe the row."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 102.0675,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_protonated_acid",
+      "species_id": "protonated_acetic_acid",
+      "step_id": "step_double_rH",
+      "observed_mz": 61.0284,
+      "hydrogen_shift": 2,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

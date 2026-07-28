@@ -1,0 +1,132 @@
+{
+  "mechanism_id": "IMS8-EQ8.30d",
+  "species": [
+    {
+      "species_id": "exo_ether_protonated_bicycloketone",
+      "mapped_smiles": "[O:2]=[C:1]1[CH2:11][CH2:10][CH:9]2[CH:4]([OH+:5][CH2:6][CH3:7])[CH2:8][CH:3]12",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "bicyclic_keto_carbocation",
+      "mapped_smiles": "[O:2]=[C:1]1[CH2:11][CH2:10][CH:9]2[CH+:4][CH2:8][CH:3]12",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethanol_loss",
+      "mapped_smiles": "[OH:5][CH2:6][CH3:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["exo_ether_protonated_bicycloketone"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["bicyclic_keto_carbocation", "ethanol_loss"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_ethanol_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_d",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_ethanol_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 159, "equation": "8.30", "figure": null, "panel": "d", "section": "8.3 Steric factors"},
+      "confidence": 0.7,
+      "curator_note": "exo head-to-tail isomer (d), here protonated on the ETHER oxygen (drawn as O5(+)(H)(C2H5); the ketone C1=O2 is left free because the exo geometry prevents the intramolecular O...H+...O chelation that stabilises the endo isomer (c)). Arrow label 'i' (inductive cleavage): the C4-O5 bond breaks heterolytically, ethanol departs with the bonding pair, and C4 becomes a secondary bicyclic carbocation, giving (MH - C2H5OH)+ as the base peak (100%). Book draws 1 arc (the C4-O5 bond breaking toward the departing ethanol). One move, fully drawn. Precursor connectivity is the head-to-tail regiochemistry of (c)/(d) (ethoxy carbon C4 adjacent to the fusion carbon C9 remote from the carbonyl); the product ion (MH - C2H5OH)+ is written only as a formula label on the page, so no product structure is drawn -- the bare C4 carbocation shown here is the curator's minimal faithful representation."
+    },
+    {
+      "evidence_id": "ev_mech_830d",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.30d",
+      "support_type": "curator_inferred",
+      "locator": {"page": 159, "equation": "8.30", "figure": null, "panel": "d", "section": "8.3 Steric factors"},
+      "confidence": 0.9,
+      "curator_note": "No MØD rule cross-links this scheme: rule_index.json by_equation has no entry for 8.30 (it covers only 4.x and 8.1-8.14). The page prints '100%' for (MH - C2H5OH)+; its m/z 109.0648 (C7H9O+) is a curator computation (MH+ 155.107 minus C2H6O 46.042). The related endo isomer (c) is drawn as a very stable proton-chelated MH+ ([O...H+...OEt], 100%) that does NOT fragment and carries no reaction arrows, so it is not encoded as a mechanism record. Termont et al. 1977 as cited."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 155.1067,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_mh_minus_etoh_109",
+      "species_id": "bicyclic_keto_carbocation",
+      "step_id": "step_inductive_ethanol_loss",
+      "observed_mz": 109.0648,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

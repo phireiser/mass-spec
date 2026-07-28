@@ -1,0 +1,138 @@
+{
+  "mechanism_id": "IMS8-EQ8.7d",
+  "species": [
+    {
+      "species_id": "but_1_ene_complex",
+      "mapped_smiles": "[CH2:1]=[CH:2][CH2:3][CH3:4]",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetaldehyde_enol_radical_cation",
+      "mapped_smiles": "[CH2:5]=[CH:6][O+:7][1H:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "sec_butyl_cation",
+      "mapped_smiles": "[CH2:1]([1H:8])[CH+:2][CH2:3][CH3:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "vinyloxy_radical",
+      "mapped_smiles": "[CH2:5]=[CH:6][O:7]",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_complex_1",
+      "species_ids": [
+        "but_1_ene_complex",
+        "acetaldehyde_enol_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_complex_2",
+      "species_ids": [
+        "sec_butyl_cation",
+        "vinyloxy_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_intracomplex_proton_transfer",
+      "from_state": "state_complex_1",
+      "to_state": "state_complex_2",
+      "step_class": "proton_transfer",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": { "type": "bond", "atom_maps": [1, 2] },
+          "target": { "type": "bond", "atom_maps": [1, 8] },
+          "electron_count": 2
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [7, 8] },
+          "target": { "type": "lone_pair", "atom_maps": [7] },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_intracomplex_proton_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 144,
+        "equation": "8.7",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation (Random or hidden rearrangements)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Equation 8.7, row 2 (first bracketed ion-molecule complex, arrows drawn inside the bracket). Intra-complex proton transfer: the 1-butene C=C pi attacks the enol O-H proton (forming a new C-H bond, giving a sec-butyl cation) while the O-H bonding pair collapses onto oxygen as a new lone pair, leaving a neutral vinyloxy radical CH2=CH-O.. Book draws 2 arc(s), both full (double-barbed, 2-electron) curved arrows, and BOTH are drawn (moves 1,2); no implicit hook. DRAWN COMPLEX: reactant and product are square-bracketed non-covalent ion-molecule complexes; encoded here as two-species states {1-butene, CH2=CH-OH+.} -> {sec-butyl cation, CH2=CH-O.} since a proton-bound/ion-dipole complex is not a single valid mapped SMILES. The oxygen radical count is unchanged (O+. -> O.), so the arrow check reports a soft lone-pair note on atom 7 (the 2 e- arriving on O form a lone pair, not two radicals) -- this is expected and advisory. The species undergoing reaction is the isomerized molecular-ion complex (composition C6H12O, m/z 100)."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.7d",
+      "support_type": "computationally_supported",
+      "locator": { "page": 144, "equation": "8.7" },
+      "confidence": 0.4,
+      "curator_note": "Cross-link (PARTIAL): MØD rule IMS_8_7_4 (rule_name 'Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 3 process 1'). DFS: [C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9 >> [C]1[C]2([H]9)[C+]3[C]4[H]7.[C]5{=}[C]6[O.]8. The rule is a COLLAPSED NET transformation applied to the distonic ion (their C3 radical), folding the beta-cleavage (step c) AND this proton transfer AND an additional carbonyl-H (their H7) migration onto the butyl chain into a single rule; it also places the + on the former gamma carbon and produces the vinyloxy radical [C]5{=}[C]6[O.]8. This record encodes only the drawn intra-complex proton transfer (OH proton -> alkene), so it corresponds to IMS_8_7_4 at finer granularity and does not reproduce the rule's extra H7 exchange -- listed in rule_mismatches as a granularity/scope difference, not a geometry error. The vinyloxy radical product matches the rule."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "low-energy electron ionization (ion-molecule complex)",
+    "electron_energy_ev": null,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

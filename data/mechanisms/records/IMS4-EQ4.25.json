@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS4-EQ4.25",
+  "species": [
+    {
+      "species_id": "acetone_canonical_resonance_cation",
+      "mapped_smiles": "[CH3:1][C+:2]([CH3:3])[O:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_cation",
+      "mapped_smiles": "[CH3+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetyl_radical",
+      "mapped_smiles": "[CH3:3][C:2]=[O:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "acetone_canonical_resonance_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyl_cation",
+        "acetyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              1
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_book",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 65,
+        "equation": "4.25",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.8,
+      "curator_note": "Generic carbonyl scheme (R, R', CR2): no m/z or intensity printed. The text says electron-pair attraction to the charge site yields the canonical resonance structure R2C+-O• and that 'inductive cleavage of this then gives the alkyl ion and acyl radical'; this canonical form is used here as the precursor. Book draws 1 arc on this canonical form: a single fishhook at the C-R bond. Encoded moves <1> and <2> both originate at that C-R bond (the drawn fishhook), and move <3> (O odd electron into the new C=O pi bond) is an implicit hook required for electron balance, not drawn on this form. (A separate full 2-electron arrow is drawn on the molecular-ion resonance form R2C=O+• shown to its left.) Instantiated as acetone (R=R'=CH3): products CH3+ + CH3-C•=O are the exact complements of the acetone alpha-cleavage of Eq 4.14 (CH3• + CH3CO+), as the text notes. m/z 15.0235 for CH3+ is curator-computed from this instantiation, not printed in the book."
+    },
+    {
+      "evidence_id": "evidence_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.25",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 65,
+        "equation": "4.25",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.9,
+      "curator_note": "Cross-linked MØD variables: IMS_4_25_2 (used here) and IMS_4_25_1. MATCH - IMS_4_25_2 '[_A]1[C+]2([_A]3)[O.]4>>[_A+]1.[_A]3[C.]2{=}[O]4' exactly describes this step: the C-R bond (incident to the carbonyl carbon, map 2) cleaves, R leaves as a cation, the carbonyl carbon becomes a radical and the C=O double bond reforms; the cleaved bond IS incident to the pi-forming atom (geometrically correct). IMS_4_25_1 '[C]1[C]2([C]3){=}[O+.]4>>[C+]1.[C]3[C.]2{=}[O]4' encodes the same net transformation starting from the molecular-ion resonance form (C=O+•)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0419,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_methyl_cation",
+      "species_id": "methyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 15.0235,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

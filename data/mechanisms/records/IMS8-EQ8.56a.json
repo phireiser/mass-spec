@@ -1,0 +1,132 @@
+{
+  "mechanism_id": "IMS8-EQ8.56a",
+  "species": [
+    {
+      "species_id": "tetrahydropyran_radical_cation",
+      "mapped_smiles": "[O+:1]1[CH2:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[O+:1][CH2:6][CH2:5][CH2:4][CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["tetrahydropyran_radical_cation"]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": ["ring_opened_distonic_ion"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": 0.8,
+      "curator_note": "First (left-most) arrow of Equation 8.56, labelled 'alpha'. Tetrahydropyran (oxane) molecular ion, n-ionized at the ring oxygen (the page draws '+.' over the O), ring-opens by radical-site alpha-cleavage: the C2-C3 ring bond (beta to O) breaks while the O=CH2 oxocarbenium head forms, giving the ring-opened distonic ion .CH2CH2CH2CH2-O+=CH2 drawn to the right of the arrow (an isomerised molecular ion, still C5H10O+., m/z 86; the page prints no m/z or % for it). Book draws 1 arc; move <2> (one electron of the breaking C2-C3 sigma bond into the forming O=C2 pi bond) is the drawn fishhook; move <1> (the odd electron of O+. into that same forming pi bond) and move <3> (the other C2-C3 sigma electron onto C3, the new radical site) are implicit hooks required for electron balance (not drawn on the page, although the product radical dot on C3 is shown). Contrast Eq. 8.49 (p. 178), where the heteroatom-radical hook IS drawn."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.56a",
+      "support_type": "curator_inferred",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.56 (its chapter-8 keys stop at 8.14); no MØD rule variable is cross-linked to this scheme. The only indexed ring-opening family, IMS_8_6_1..IMS_8_6_4 ('stepwise symetric openchained intermediate product'), acts on an all-carbon cyclooctadiene-type ring ([C]1[C]2{=}[C]3[C]4[C]5[C+.]6([C]7{=}[C]8){-}1 >> open chain) with no heteroatom and no C=O formation, so it does NOT describe this heteroatom alpha ring-opening and is deliberately not cross-linked. The page prints abundances as bare percentages without naming the experiment; they are the book's standard 70 eV EI values (running head '8 / Detailed Mechanisms of Ion Fragmentation'), and ms_context is set accordingly."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ring_opened_m86",
+      "species_id": "ring_opened_distonic_ion",
+      "step_id": "step_alpha_ring_opening",
+      "observed_mz": 86.0726,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.3
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

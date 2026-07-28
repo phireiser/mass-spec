@@ -1,0 +1,241 @@
+{
+  "mechanism_id": "IMS8-EQ8.120",
+  "species": [
+    {
+      "species_id": "tetraacetyl_glycosyl_cation",
+      "mapped_smiles": "[CH+:1]1[CH:2]([O:8][C:9](=[O:10])[CH3:11])[CH:3]([O:12][C:13](=[O:14])[CH3:15])[CH:4]([O:16][C:17](=[O:18])[CH3:19])[CH:5]([CH2:6][O:20][C:21](=[O:22])[CH3:23])[O:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "triacetyl_oxonium_145",
+      "mapped_smiles": "[CH3:11][C:9](=[O:10])[O+:8]([C:13](=[O:14])[CH3:15])[C:17](=[O:18])[CH3:19]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetoxymethyl_pyranone_neutral",
+      "mapped_smiles": "[CH:1]1=[CH:2][C:3](=[O:12])[CH:4]([OH:16])[CH:5]([CH2:6][O:20][C:21](=[O:22])[CH3:23])[O:7]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "tetraacetyl_glycosyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "triacetyl_oxonium_145",
+        "acetoxymethyl_pyranone_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_re_double_acetyl_migration",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination_with_group_migration",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              13
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              12,
+              13
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              12
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              16,
+              17
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              17
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              16
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_re_double_acetyl_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.120",
+        "figure": null,
+        "panel": "single reaction arrow labelled 're'",
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.35,
+      "curator_note": "ARCS ACTUALLY DRAWN: ZERO. Equation 8.120 shows the sugar, an arrow labelled 're', and the product formula (CH3C(=O))3O+ -- no curved arrow, no fishhook, no neutral product. All five moves are curator-constructed. SUBSTRATE READ FROM THE DRAWING (zoomed): a pyranose hexagon whose top-right vertex is the ring oxygen; going round, C5 carries CH2OAc, C4 carries AcO, C3 carries OAc, C2 carries OAc, and each of those four carbons also has a plain-line bond stub (its hydrogen). The ANOMERIC vertex (right) carries NOTHING: no acetoxy, no hydrogen stub and no printed charge symbol. Since the sentence introducing Equations 8.117-8.120 states that these are reactions of EE+ ions, and the product drawn is a cation, the substrate is transcribed as the tetra-O-acetyl glycosyl (oxocarbenium) cation C14H19O9+, m/z 331.10 -- i.e. [M-OAc]+ of the pentaacetate -- with the charge localised on the anomeric carbon (convention C: the carbenium resonance form is chosen and used consistently; the oxocarbenium form C1=O+(ring) describes the same ion). This is an INTERPRETATION of a bare vertex, and if the book instead meant a neutral 1,5-anhydro tetraacetate the charge bookkeeping of the whole equation would have to change. PRODUCT READ FROM THE DRAWING: '(CH3C(=O))3O+', an oxygen carrying three acetyl groups, C6H9O4+ = m/z 145.05. WHAT IS CURATOR-ASSIGNED: which acetyls move and what the neutral is. Encoded here: the C2 ester oxygen (map 8) becomes the central oxonium oxygen and collects the acetyl groups of C3 (map 13) and C4 (map 17), while the C6 acetate is left untouched; the C2-O bond breaks with its electrons forming a C1=C2 double bond (glycal-type elimination), the freed C3 oxygen closes to a ketone and the freed C4 oxygen takes the C3 hydrogen, giving the closed-shell neutral C8H10O5 (186.05). The neutral is not drawn by the book, and a different (equally balanced) choice of which two acetyls migrate would give an isomeric neutral. ENCODING OF THE HYDROGEN TRANSFER: hydrogens are implicit in the mapped SMILES (RDKit's parser deletes mapped [H] atoms, so an H cannot carry an atom map here), so the C3-H -> O(C4)-H shift is encoded as a two-electron atom->atom move (map 3 -> map 16), the convention already used in this corpus, e.g. IMS4-EQ4.33. The heavy-atom bond ledger is complete on its own: every sigma/pi bond that changes order is accounted for by a bond->bond or lone-pair move."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.120",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.120",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.120' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. No rule in the set performs an acyl migration between two oxygens: the ester/acetate rules that exist cleave an O-acyl bond to give an acylium plus an alkoxy/alkyl fragment, which is a different transformation from transferring an acetyl group onto another ester oxygen while the ion stays intact. The double migration of Equation 8.120 has no representative to test."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_145",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.120",
+        "figure": null,
+        "panel": null,
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.120 prints no m/z and no abundance. observed_mz 145.0495 is the curator-computed monoisotopic mass of the drawn product ion C6H9O4+, and the precursor m/z 331.1024 in ms_context is computed from the transcribed tetraacetyl glycosyl cation. Status 'inferred', detected=false, no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 331.1024,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_145",
+      "species_id": "triacetyl_oxonium_145",
+      "step_id": "step_re_double_acetyl_migration",
+      "observed_mz": 145.0495,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

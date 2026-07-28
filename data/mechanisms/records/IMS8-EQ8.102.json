@@ -1,0 +1,525 @@
+{
+  "mechanism_id": "IMS8-EQ8.102",
+  "species": [
+    {
+      "species_id": "methylbutanoic_acid_molecular_ion",
+      "mapped_smiles": "[1H:8][CH2:4][CH:3]([CH3:5])[CH2:2][C:1](=[O+:6])[OH:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_h_ion",
+      "mapped_smiles": "[CH2:4][CH:3]([CH3:5])[CH2:2][C+:1]([O:6][1H:8])[OH:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylcyclopropane_component",
+      "mapped_smiles": "[CH2:2]1[CH:3]([CH3:5])[CH2:4]1",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "dihydroxycarbene_radical_cation_component",
+      "mapped_smiles": "[C+:1]([O:6][1H:8])[OH:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "rearranged_distonic_ion",
+      "mapped_smiles": "[CH2:2][CH2:4][CH:3]([CH3:5])[C+:1]([O:6][1H:8])[OH:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_neutral_loss",
+      "mapped_smiles": "[CH2:2]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "propene_1_1_diol_radical_cation",
+      "mapped_smiles": "[CH3:5][CH:3]=[C:1]([OH:7])[O+:6][1H:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylbutanoic_acid_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_h_ion"
+      ]
+    },
+    {
+      "state_id": "state_complex",
+      "species_ids": [
+        "methylcyclopropane_component",
+        "dihydroxycarbene_radical_cation_component"
+      ]
+    },
+    {
+      "state_id": "state_rearranged_distonic",
+      "species_ids": [
+        "rearranged_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethylene_neutral_loss",
+        "propene_1_1_diol_radical_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_ring_closure_carboxyl_detachment",
+      "from_state": "state_distonic",
+      "to_state": "state_complex",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_carboxyl_reattachment",
+      "from_state": "state_complex",
+      "to_state": "state_rearranged_distonic",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage_ethylene_loss",
+      "from_state": "state_rearranged_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_102",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 211,
+        "equation": "8.102",
+        "figure": null,
+        "panel": "first (double-headed, equilibrium) arrow, labelled 'gamma-rH'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "SUBSTRATE. Page 211 (this scan = PDF page 223) opens directly with Equation 8.102; there is no prose on the page itself. The set-up sentence is on page 209: 'However, the radical site created can initiate a competitive skeletal rearrangement producing a stable 1,1-enediol ion (Equation 8.102, Audier and Sozzi 1984, Weiske and Schwarz 1986).' The drawn molecular ion is 3-methylbutanoic (isovaleric) acid, numbered by the book as C-2 (the alpha CH2), C-3 (the methine), C-4 (the methyl written 'H2C-H', i.e. the gamma-H donor) and C-4' (the second methyl); the carboxyl carbon is left unnumbered. ATOM MAPS: 1 = carboxyl C, 2 = C-2, 3 = C-3, 4 = C-4, 5 = the book's C-4' (renumbered because atom maps must be integers), 6 = the carbonyl oxygen that carries the printed '+.' and receives the gamma hydrogen, 7 = the hydroxyl oxygen, 8 = the migrating gamma hydrogen, written [1H:8] so that RDKit keeps it explicit and it can carry a map (ordinary protium, not a label drawn by the book). LOCALIZATION (convention B): the precursor SMILES puts the charge AND the odd electron on the carbonyl oxygen, ...C(=[O+:6])[OH:7] - two bonds on O+ means one unpaired electron in RDKit - exactly where the page prints '+.', so the arrows have a real origin. ARC COUNT (convention D): Book draws 1 arc for this step - a single-barbed fishhook whose tail sits on the C-4-H bond and whose barb points at the ionized carbonyl oxygen (the classic 1,5-H / six-membered transition array). Move <1> is that drawn arc. Moves <2,3> are implicit hooks required for electron balance and are NOT drawn on the page: <2> pairs the oxygen's odd electron into the new O-H bond and <3> is the homolysis hook that drops the second C-H electron back onto C-4, which is what actually makes the '.CH2' radical the book prints in the product structure. Move <4> is also implicit: the book draws the product carboxyl as a DELOCALIZED [C(OH)2]+ group (two OH's, a '+' beside the carbon and a plain curved line - no arrowhead - joining the two C-O bonds), so this record localizes it as the dihydroxycarbenium ion (C+ with two single C-O bonds, convention C); move <4> is the heterolytic shift of the C=O pi pair onto O-6 that converts the oxocarbenium C(=O(+)H)(OH) produced by moves <1-3> into that drawn carbenium. The oxocarbenium is the resonance partner and would need no move <4>; the drawn form is the one encoded. The step is drawn with EQUILIBRIUM arrows (reversible = true). Expect one advisory '(soft)' line on atom 6: RDKit counts radical electrons only, so a lone pair delivered by move <4> reads as a +/-2 parity offset. [CORRECTIONS 2026-07-28, verified at native scan resolution (pypdf page.images[0], cropped+2x). (1) DASHED-BOND COUNT: an earlier version of this note said the three-membered ring's 'C-4, C-2 and C-3 vertices are joined by DASHED lines', implying all three. Only TWO are dashed - the C4...C2 and C3...C2 bonds - while the C4-C3 bond is a SOLID line (it continues on to C-4'). The ring is drawn as a partially-formed cyclopropane, not a fully dotted one. (2) BRACKET LOCALIZATION IS A CURATOR CHOICE, not the drawing: the book draws the dihydroxycarbene fragment as a plain 'C' bearing two OH bonds with NO charge symbol and NO radical dot on it; the '+.' is printed OUTSIDE the bracket, applying to the whole bracketed assembly. Encoding it as [C+] with the odd electron placed elsewhere is the localization this schema requires (a mapped SMILES cannot carry a charge that floats over a bracket), and it is flagged here rather than presented as drawn. (3) MS-CONTEXT: p211 prints NO ionization conditions for Eq 8.102. electron_energy_ev 70.0 / activation_method '70 eV EI' are the book's STANDING convention applied as a chapter default, NOT data for this equation - the only nearby '70 eV' belongs to the 3-methylbutanal sentence carried over from p210 and is unrelated to this scheme.]"
+    },
+    {
+      "evidence_id": "ev_step_ring_closure_8_102",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_closure_carboxyl_detachment",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 211,
+        "equation": "8.102",
+        "figure": null,
+        "panel": "second (plain) arrow, to the bracketed intermediate",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.5,
+      "curator_note": "DRAWN INTERMEDIATE, DISCLOSED (convention G). The page draws a bracketed species with '+.' printed OUTSIDE the bracket: a three-membered ring whose C-4, C-2 and C-3 vertices are joined by DASHED lines (C-3 still carries the 4' methyl) standing next to a separately drawn, fully bonded C(OH)2 unit that is bonded to nothing - i.e. an ion-neutral complex of methylcyclopropane and dihydroxycarbene in which the carboxyl carbon has left C-2 and the ring is only partially formed. Because the ring bonds are dashed and the charge/odd electron are drawn delocalized over the whole bracket, the intermediate has NO unique Lewis structure and cannot be transcribed literally. This record encodes the drawn connectivity (full cyclopropane ring C-2/C-3/C-4 + detached C(OH)2) and localizes the charge and odd electron on the carbene carbon, [C+:1]([O:6][1H:8])[OH:7] (a dihydroxycarbene radical cation, m/z 46.005), because that is the assignment that makes both flanking steps balance as ordinary three-fishhook radical-site processes. The partner localization the dashes literally suggest - neutral :C(OH)2 next to a methylcyclopropane RADICAL CATION - is not writable as a localized SMILES, since a cyclopropane radical cation is delocalized over the ring (one elongated C-C bond). ARC COUNT (convention D): Book draws 0 arcs for this step; it is shown only as a plain straight reaction arrow, so all three encoded moves are curator-supplied and none is drawn on the page. They are the canonical radical-site sequence: <1> the C-4 odd electron and <2> one electron of the C-1-C-2 bond make the new C-2-C-4 ring bond, while <3> is the homolysis hook that leaves the second C-1-C-2 electron on the carboxyl carbon. NET EFFECT: the protonated-carboxyl group migrates off C-2; page 209 names this class of process for the butanoic-acid analogue ('a 1,2-migration of the protonated carboxyl group ... effectively exchange carbon positions 2- and 4-'), and Equation 8.101 on page 210 labels the corresponding arrow 'rC 1,2'."
+    },
+    {
+      "evidence_id": "ev_step_reattachment_8_102",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_carboxyl_reattachment",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 211,
+        "equation": "8.102",
+        "figure": null,
+        "panel": "third arrow, the vertical arrow leading down from the bracketed intermediate",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.5,
+      "curator_note": "The vertical arrow from the bracket down to the rearranged distonic ion. Comparing the two drawn structures fixes the net change unambiguously: in the bracket the ring is C-2/C-3/C-4 and the carboxyl unit is free; below it the chain is C-1(OH)2(+)-C-3(-4' methyl)-C-4-C-2(.), i.e. the carboxyl carbon has re-bonded to C-3 (not to the C-2 it came from) and the ring bond C-2-C-3 has opened, leaving the odd electron on C-2. That is exactly the 2/4 carbon exchange the text describes: the ethylene finally expelled is built from C-2 and C-4, while the ion retains C-1, C-3 and C-4'. ARC COUNT (convention D): Book draws 0 arcs for this step (plain vertical reaction arrow), so all three encoded moves are curator-supplied and none is drawn on the page: <1> the odd electron of the carbene carbon and <2> one electron of the ring C-2-C-3 bond form the new C-1-C-3 bond, and <3> is the homolysis hook that puts the second ring-bond electron on C-2, generating the primary radical the page draws as 'CH2(.)'. The charge stays on C-1, which the page again prints as the delocalized [C(OH)2]+ group (two OH's, a '+', and a plain curved line without an arrowhead joining the two C-O bonds); it is localized here as the dihydroxycarbenium, consistently with the previous states."
+    },
+    {
+      "evidence_id": "ev_step_alpha_8_102",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 211,
+        "equation": "8.102",
+        "figure": null,
+        "panel": "fourth arrow (right-to-left), from the rearranged distonic ion to 'CH2=CH2 + the 1,1-enediol ion'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "The final, right-to-left arrow of Equation 8.102: radical-site (alpha) cleavage of the rearranged distonic ion expels ethylene built from C-4 and C-2 - the page labels the two carbons of the drawn 'CH2=CH2' exactly '4' and '2' - and leaves the 1,1-enediol ion CH3-CH=C(OH)2(+.), drawn with the labels 3 and 4' on its two carbons. Page 209 names this product: 'a stable 1,1-enediol ion'. ARC COUNT (convention D): Book draws 2 arcs for this step, both single-barbed fishhooks: arc one starts at the odd-electron dot of the 'CH2(.)' (C-2), loops left over the label '2' and puts its barb on the C-2-C-4 bond; arc two starts on the C-3-C-4 bond, loops counter-clockwise and puts its barb on the same C-2-C-4 bond. Moves <1,2> are those two drawn arcs (they make the C-2=C-4 pi bond of ethylene). Move <3> is an implicit homolysis hook required for electron balance (not drawn on the page): it routes the second electron of the cleaving C-3-C-4 bond into the forming C-1=C-3 pi bond. Move <4> is likewise implicit - one electron of an O-6 lone pair completes that C-1=C-3 pi bond, which is what moves the charge off C-1 (it becomes a neutral, four-bonded carbon) and leaves the '+.' on oxygen. A third curved line IS printed inside the carboxyl group of this structure (from the upper C-OH bond, around the '+', to the lower C-OH bond) but it carries NO arrowhead: it is McLafferty's delocalization notation for the [C(OH)2]+ group, not a mechanistic arc, and it is not counted among the 2 arcs. LOCALIZATION (convention C): the product ion is drawn as CH3-CH=C(OH)2 with '+.' floating above the whole structure, so the charge and odd electron are localized here on one oxygen, [CH3:5][CH:3]=[C:1]([OH:7])[O+:6][1H:8] (O+ with two bonds = one unpaired electron), which preserves the drawn C-3=C-1 double bond; the distonic partner CH3-CH(.)-C(OH)2(+) is the same ion in its other resonance form and is NOT the form encoded. Expect one advisory '(soft)' line on atom 6, since move <4> takes a lone-pair electron and RDKit counts only radical electrons."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_102",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.102",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 211,
+        "equation": "8.102",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.102' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering). Candidates were CHECKED with RDKit substructure tests against this record's instantiated substrates, not assumed. STEP 1 (gamma-rH): the whole rH family is written for a carbonyl carbon that bears a CARBON substituent or an ester oxygen, so none of it can match a free carboxylic ACID. IMS_4_33_rH '[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3' fails twice: SMARTS '[#6]-[#6;!H0]-[#6]-[#6]-[#6](-[#6])=[O+]' gives 0 matches on the precursor because (i) the carbonyl carbon's second substituent here is the hydroxyl OXYGEN, not [C]7, and (ii) the rule also demands a carbon [C]1 beyond the gamma donor, whereas C-4 is a terminal methyl; even the relaxed '[#6;!H0]-[#6]-[#6]-[#6](-[#6])=[O+]' gives 0. IMS_4_45_rH and esterMcLafferty_rH need an ester oxygen inside the chain ('[#6]-[#6;!H0]-[#6]-[#8]-[#6](-[#6])=[O+]' -> 0 matches). IMS_8_7_1 needs an aldehyde CH ('...[#6;H1]=[O+]' -> 0). STEPS 2-3 (skeletal rearrangement through the ion-neutral complex): NO rule in the index performs a carbon-skeleton rearrangement of this kind - there is no 'rC 1,2' rule at all. The nearest relatives are IMS_8_7_* ('Hydrogen exchange occurring in a Ion-Molecule-Complex', which exchanges H, not C) and IMS_4_37_rd, which does close a ring at a radical site but expels water; family resemblance only, NOT a match. STEP 4 (alpha cleavage of the distonic ion): IMS_4_33_alpha_1 '[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2{=}[C]3.[C.]4[C]5([C]6){=}[O+]7[H]8' has the RIGHT geometry (the cleaved C3-C4 bond is incident to the carbon that ends up doubly bonded to the radical site) but cannot match this ion: it requires a ketone-type [C]6 on the carbonyl carbon, an intact C=O(+)H oxocarbenium and a carbon substituent on the radical carbon, whereas here the carbonyl carbon carries two OH's, the localized form is the dihydroxycarbenium (SMARTS '[#6]=[O+]' -> 0 matches on the rearranged distonic ion; '[C+](-[OX2])-[OX2]' -> 1 match) and the radical carbon is a terminal CH2. IMS_4_33_alpha_2, the only rule that targets the drawn ENOL product, is additionally MIS-ENCODED: its right-hand side '...>>[C]1[C]2{=}[C]3.[C.]4{=}[C]5([C]6)[O+.]7[H]8' writes BOTH a radical on C4 and the C4=C5 double bond and an [O+.]7, i.e. one unpaired electron on the left but two on the right - non-conserving, so the conservation guardrail in rules/__init__.py drops it at import. Listed in rule_mismatches."
+    },
+    {
+      "evidence_id": "ev_peak_74_8_102",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_74",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 211,
+        "equation": "8.102",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE FOR THIS EQUATION (conventions F and G). Equation 8.102 is drawn without a single m/z or percentage, and the surrounding prose quotes no abundance for it, so every species is detected=false, the one peak assignment has status 'inferred' and relative_intensity is omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the drawn substrate 3-methylbutanoic acid, C5H10O2: M+. 102.0675 -> loss of C2H4 (28.0313, the ethylene assembled from C-2 and C-4) -> 1,1-enediol ion C3H6O2(+.) 74.0362. TWO TRAPS ON THIS PAGE, BOTH AVOIDED: (1) the sentence that runs from page 209 onto page 210, 'A similar rearrangement in ionized 3-methylbutanal yields 42% (M - C2H4)+. at 70 eV, but this is the base peak of the spectrum at 12 eV (Maccoll and Mruzek 1986)', reports 42% for 3-methylbutanAL (M = 86, M-C2H4 = 58), NOT for the acid of Equation 8.102, so that 42% is deliberately not stored here. (2) The lower two thirds of page 211 is the peak table and bar spectrum of 'Unknown 8.10', an exercise for a different, unidentified compound (base peak m/z 61, ions up to m/z 179); its m/z 74 = 12. entry is unrelated to this mechanism and is likewise not used. NOTE that 74 is the mass the NORMAL McLafferty channel of this acid does not give: simple gamma-H transfer plus alpha,beta cleavage would expel propene and give the ene-1,1-diol ion at m/z 60; m/z 74 is diagnostic of the skeletal rearrangement drawn here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 102.0675,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_74",
+      "species_id": "propene_1_1_diol_radical_cation",
+      "step_id": "step_alpha_cleavage_ethylene_loss",
+      "observed_mz": 74.0362,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

@@ -1,0 +1,432 @@
+{
+  "mechanism_id": "IMS8-EQ8.110",
+  "species": [
+    {
+      "species_id": "ethyl_3_phenylpropanoate_molecular_ion",
+      "mapped_smiles": "[CH3:5][CH2:4][O:3][C:1](=[O+:2])[CH2:6][CH:7]([1H:14])[c:8]1[cH:9][cH:10][cH:11][cH:12][cH:13]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_protonated_ester_benzylic_radical",
+      "mapped_smiles": "[CH3:5][CH2:4][O:3][C:1](=[O+:2][1H:14])[CH2:6][CH:7][c:8]1[cH:9][cH:10][cH:11][cH:12][cH:13]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "o_protonated_4_phenyl_2_oxetanone",
+      "mapped_smiles": "[1H:14][O+:2]1[C:1](=[O:3])[CH2:6][CH:7]1[c:8]2[cH:9][cH:10][cH:11][cH:12][cH:13]2",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH3:5][CH2:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hydroxy_benzyl_cation_protonated_benzaldehyde",
+      "mapped_smiles": "[1H:14][O+:2]=[CH:7][c:8]1[cH:9][cH:10][cH:11][cH:12][cH:13]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ketene",
+      "mapped_smiles": "[O:3]=[C:1]=[CH2:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethyl_3_phenylpropanoate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_protonated_ester_benzylic_radical"
+      ]
+    },
+    {
+      "state_id": "state_lactone_149",
+      "species_ids": [
+        "o_protonated_4_phenyl_2_oxetanone",
+        "ethyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products_107",
+      "species_ids": [
+        "hydroxy_benzyl_cation_protonated_benzaldehyde",
+        "ketene",
+        "ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_beta_hydrogen",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              14
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              14
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_ethyl_radical_loss",
+      "from_state": "state_distonic",
+      "to_state": "state_lactone_149",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_retro_2plus2_ketene_loss",
+      "from_state": "state_lactone_149",
+      "to_state": "state_products_107",
+      "step_class": "retro_2plus2_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_110",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_beta_hydrogen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.110",
+        "figure": null,
+        "panel": "row 1, first arrow, labelled 'r H'",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.85,
+      "curator_note": "SUBSTRATE READ FROM THE DRAWING: the leftmost structure is C6H5-CH2-CH2-C(=O)-O-C2H5 (ethyl 3-phenylpropanoate / ethyl hydrocinnamate, C11H14O2), drawn n-ionized at the ESTER CARBONYL oxygen - the book prints '+.' directly above that oxygen, which carries the double bond down to the acyl carbon and is joined to the OC2H5 written at the lower left. The mass ladder confirms the assignment: M+. 178 - 29 (C2H5.) = the printed m/z 149, and 149 - 42 (ketene) = the printed m/z 107. THIS STEP: the explicitly drawn H sits on the BENZYLIC (beta) carbon and is transferred to the oxonium oxygen through the five-membered ring the book draws (O, C(=O), C(alpha)H2, C(beta)H2, H), giving the distonic ion the centre structure prints: HO(+)=C(OC2H5)-CH2-C.(H)C6H5, an O-protonated ester with the odd electron now on the benzylic carbon (the book marks it with a dot there). ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks that converge on the forming O-H bond - arc 1 starts at the odd-electron dot of the '+.' on the oxygen and its barb points down onto the hydrogen; arc 2 starts on the C(beta)-H bond and its barb points left onto the oxygen. Moves <1,2> are those two drawn arcs (both transcribed with the new O-H bond as target, which is the bond they jointly build); move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it leaves the second electron of the cleaving C(beta)-H bond on the benzylic carbon, which is what actually creates the radical the centre structure prints as a dot. LOCALIZATION (convention B): the precursor SMILES puts the charge and the odd electron explicitly on the carbonyl oxygen ([O+:2] carrying only the double bond = one unpaired electron in RDKit), so arc 1 has a real origin, exactly as the book localizes it. ATOM-MAP NOTE: the migrating hydrogen is written [1H:14] so that RDKit keeps it explicit and it can carry an atom map; it is ordinary protium, not a label the book draws."
+    },
+    {
+      "evidence_id": "ev_step_rd_8_110",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_ethyl_radical_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.110",
+        "figure": null,
+        "panel": "row 1, second arrow, labelled '- C2H5.'",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.110, SECOND arrow, labelled '- C2H5.'. The benzylic radical of the distonic ion displaces the ethyl group and the ion closes to the four-membered ring the book prints under this arrow as 'm/z 149, 3%'. STRUCTURE AS DRAWN: that row-2 structure is a beta-lactone protonated on the RING oxygen - the top-left ring vertex is written 'HO' with a '+' over the O and carries BOTH ring bonds, the bottom-left ring vertex carries a plain exocyclic C=O, the top-right vertex bears C6H5 and the bottom-right vertex is a CH2. So the ring is O(+)(H)-C(=O)-CH2-CH(C6H5), i.e. O-protonated 4-phenyl-2-oxetanone (C9H9O2+, 149.060), and the H-bearing ring oxygen is the FORMER CARBONYL oxygen (map 2) while the exocyclic C=O is the former alkoxy oxygen (map 3) that has just lost its ethyl. The record follows that drawn connectivity atom for atom. ARC COUNT (convention D): Book draws 4 arc(s), all single-barbed fishhooks. Arc 1 starts at the radical dot on the benzylic carbon and sweeps left; arc 2 starts on the C(1)=O(2) double bond and sweeps up and right; those two meet barb-to-barb in the empty space midway between O(2) and C(7), i.e. on the forming O(2)-C(7) ring bond. Arc 3 leaves that SAME point on the C(1)=O(2) double bond (arcs 2 and 3 share one origin - the two electrons of the pi bond splitting) and sweeps down and left with its barb onto the C(1)-O(3) bond; arc 4 comes up from under the 'C2H5' label, i.e. off the C2H5-O(3) bond, with its barb also onto the C(1)-O(3) bond, which thereby becomes the new C=O. Moves <1,2,3,4> are those four drawn arcs; move <5> is an implicit homolysis hook required for electron balance (not drawn on the page) - it carries the second electron of the cleaving O(3)-C2H5 bond onto the ethyl carbon, which is what makes the C2H5. radical the arrow label announces. SPECTATOR NOTE: the ethyl radical released here is carried unchanged into the next state so that step 3 balances atom for atom."
+    },
+    {
+      "evidence_id": "ev_step_retro_8_110",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_2plus2_ketene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.110",
+        "figure": null,
+        "panel": "row 2, unlabelled arrow",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.110, THIRD arrow (row 2, unlabelled): the m/z 149 ion (printed '3%') splits into the two species the book prints to the right of that arrow, 'HO(+)=CHC6H5' over '+' over 'O=C=CH2', labelled 'm/z 107, 44%'. This is a retro-[2+2] of the four-membered ring: the ring O(2)-C(1) bond and the ring C(6)-C(7) bond break while the C(1)=C(6) bond of ketene and the O(2)=C(7) bond of the protonated benzaldehyde form. ARC COUNT (convention D): Book draws 2 arc(s) inside the ring. Arc 1 originates on the left ring bond O(2)-C(1) (drawn with the usual perpendicular tick where an arc leaves a bond) and its head points onto the bottom ring bond C(1)-C(6); arc 2 originates on the right ring bond C(6)-C(7) and its head points up-left onto the top ring bond O(2)-C(7). NO move is implicit here - the two drawn arcs already account for all four bonds that change. BARB STYLE (honest limitation): the underlying scan is ~208 dpi at page size, so the two arrowheads cannot be resolved as half- versus full-barbed. They are transcribed as two-electron (double-barbed) moves because this step runs from a closed-shell even-electron cation to two closed-shell products; a one-electron reading of the same two arcs would leave unpaired electrons that neither printed product has."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_110",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.110",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 216,
+        "equation": "8.110",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.110' key - its chapter-8 index stops at 8.14 (German-edition numbering) - so nothing was authored for this equation. The nearest family relatives were CHECKED with RDKit substructure matching against this record's own instantiated species, not merely assumed (convention E). (i) IMS_4_45_rH '[C]1[C]2([H]3)[C]4[O]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[O]5[C]6([C]7){=}[O+]8[H]3' is the only ester rH-to-carbonyl-oxygen rule in the set and is conservation-clean (so it is live), but its left pattern '[#6]-[#6]-[#6]-[#8]-[#6](-[#6])=[O+]' gives 0 matches against this precursor, while the same pattern with the outermost carbon deleted ('[#6]-[#6]-[#8]-[#6](-[#6])=[O+]') matches exactly once. That pins the failure precisely: the rule demands an H-donor carbon on the O-ALKYL chain (O5-C4-C2(H3)), i.e. it abstracts a hydrogen from the alcohol side of the ester, whereas equation 8.110 transfers a beta hydrogen from the ACYL side (the benzylic carbon). Ethyl 3-phenylpropanoate has no carbon beyond the ethyl CH3, so the rule cannot fire, and if it could it would move the wrong hydrogen. Listed in rule_mismatches. (ii) IMS_4_45_alpha '[C]1[C.]2[C]3[O]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2[C]3.[O+.]4{=}[C]5([C]6)[O+]7[H]8' is the only distonic-ester displacement rule; it gives 0 matches against this record's distonic intermediate, it separates the fragments instead of closing the beta-lactone ring the book draws, and it is not live anyway - its right side carries two '+' labels (charge 1->2), so the conservation guardrail in rules/__init__.py drops it at import. (iii) The two ring-closing displacement rules, IMS_4_42_rd '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2' and 'substituion' '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2', have the right topology in spirit (an ionized site attacks along the chain and expels a radical) but neither matches: IMS_4_42_rd needs a chlorine (0 matches), and 'substituion' needs the ATTACKING atom to be a radical cation '[_A+.]', whereas in this distonic intermediate the charge sits on oxygen map 2 (no unpaired electron) and the unpaired electron sits on carbon map 7 (no charge) - an explicit atom-by-atom scan finds no atom that is both, so the rule's key atom simply does not exist here. (iv) No rule in the set encodes a retro-[2+2] of a four-membered lactone, so step 3 has no candidate at all."
+    },
+    {
+      "evidence_id": "ev_peaks_8_110",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_149",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 216,
+        "equation": "8.110",
+        "figure": null,
+        "panel": "captions under the row-2 structures",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.85,
+      "curator_note": "MEASUREMENTS PRINTED ON THE PAGE: 'm/z 149, 3%' under the beta-lactone ion and 'm/z 107, 44%' under 'HO(+)=CHC6H5'. Those are the only two numbers equation 8.110 prints; both are transcribed as relative_intensity 0.03 and 0.44 with status 'proposed', and both ions are marked detected=true. The page states no electron energy and no m/z for the molecular ion; ms_context.precursor_mz 178.0988 is the curator-computed monoisotopic M+. of C11H14O2 (RDKit ExactMolWt, electron-mass corrected) for the structure read off the drawing, and the 70 eV / EI setting follows the book's default EI convention for such abundance quotations rather than an explicit statement on this page. observed_mz values 149.0597 and 107.0491 are the exact monoisotopic masses of C9H9O2+ and C7H7O+, consistent to the integer m/z the book prints."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 178.0988,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_149",
+      "species_id": "o_protonated_4_phenyl_2_oxetanone",
+      "step_id": "step_rd_ethyl_radical_loss",
+      "observed_mz": 149.0597,
+      "relative_intensity": 0.03,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    },
+    {
+      "peak_id": "peak_107",
+      "species_id": "hydroxy_benzyl_cation_protonated_benzaldehyde",
+      "step_id": "step_retro_2plus2_ketene_loss",
+      "observed_mz": 107.0491,
+      "relative_intensity": 0.44,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

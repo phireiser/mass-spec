@@ -1,0 +1,268 @@
+{
+  "mechanism_id": "IMS8-EQ8.2e",
+  "species": [
+    {
+      "species_id": "hexan_2_one_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH:2]([1H:8])[CH2:3][CH2:4][C:5](=[O+:6])[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_H_ion",
+      "mapped_smiles": "[CH3:1][CH:2][CH2:3][CH2:4][C:5](=[O+:6][1H:8])[CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propene_radical_cation",
+      "mapped_smiles": "[CH3:1][CH:2][CH2+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetone_enol_neutral",
+      "mapped_smiles": "[CH2:4]=[C:5]([CH3:7])[O:6][1H:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexan_2_one_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_H_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "propene_radical_cation",
+        "acetone_enol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_H_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_1_6",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_e_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_H_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 138,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "Eq. 8.2, vertical 'rH' interconversion (Eo=0.6)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Same gamma-H rearrangement to the distonic ion 6.2 as in record IMS8-EQ8.2d (shared precursor step for both McLafferty branches). Book draws 0 electron-pushing arcs: Eq. 8.2 is a thermochemical fragmentation map (log k printed above each reaction arrow, heats of formation printed below each species), not a curved-arrow figure. All electron moves here are curator-inferred from the mechanism-type label printed under the reaction arrow; none is drawn on the page. Three fishhooks: O6 odd electron -> forming O6-H8 bond; one C2-H8 electron -> O6-H8 bond; the other C2-H8 electron -> C2 (new gamma radical). H8 written [1H] to stay an atom-mapped node."
+    },
+    {
+      "evidence_id": "ev_step_e_ind",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_1_6",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 138,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "Eq. 8.2, arrow 1.6, inductive (charge-migration McLafferty)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Charge-migration branch: the charge is carried away on the olefin, giving the propene radical cation C3H6+. (m/z 42, 2%) plus the neutral acetone enol CH2=C(OH)CH3 (-1.8). Book draws 0 electron-pushing arcs: Eq. 8.2 is a thermochemical fragmentation map (log k printed above each reaction arrow, heats of formation printed below each species), not a curved-arrow figure. All electron moves here are curator-inferred from the mechanism-type label printed under the reaction arrow; none is drawn on the page. TWO double-barbed (heterolytic) arrows: move<1> the whole beta C3-C4 sigma pair becomes the new C4=C5 pi bond; move<2> the C5=O6 pi pair collapses onto O6 as a lone pair, neutralising O+ to the neutral enol oxygen. C3 is thereby stripped of its bonding electrons and becomes the propene cation centre while the odd electron stays on C2 -- encoded as the localised CH3-CH(.)-CH2+ form of propene+. (its C2=C3 alkene resonance partner is the same ion)."
+    },
+    {
+      "evidence_id": "ev_mech_e",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.2e",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "IMS_chap8_examples.py (IMS_8_2_bidirectional_down, IMS_8_2_ind_1_6)"
+      },
+      "confidence": 0.55,
+      "curator_note": "Step 1 = IMS_8_2_bidirectional_down (verified, see record d). Step 2 cross-links to IMS_8_2_ind_1_6, which cleaves the correct beta bond (their C7-C10 = my C3-C4) and forms the neutral enol (their C10=C13 ... [O]18[H]19 = my C4=C5-O6H8). PARTIAL MISMATCH (localisation): its propene fragment '[C+.]5(H6)[C]7(H8)(H9)' places charge AND radical together on their C5 (my C2) and leaves their C7 (my C3) a bare .CH2 -- i.e. a doubly-spin form, not the single-radical CH3-CH(.)-CH2+ encoded here. Same connectivity and same net C3H6+. ion; only the spin/charge localisation differs."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_42",
+      "species_id": "propene_radical_cation",
+      "step_id": "step_inductive_1_6",
+      "observed_mz": 42.0464,
+      "relative_intensity": 0.02,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

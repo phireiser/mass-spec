@@ -1,0 +1,306 @@
+{
+  "mechanism_id": "IMS8-EQ8.78",
+  "species": [
+    {
+      "species_id": "methyl_heptanoate_molecular_ion",
+      "mapped_smiles": "[CH3:10][CH2:9][CH2:8][CH2:7][CH2:6][CH2:5][C:1](=[O+:2])[O:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ion_radical_at_delta_carbon",
+      "mapped_smiles": "[CH3:10][CH2:9][CH:8][CH2:7][CH2:6][CH2:5][C:1](=[OH+:2])[O:3][CH3:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ion_radical_at_alpha_carbon",
+      "mapped_smiles": "[CH3:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5][C:1](=[OH+:2])[O:3][CH3:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_methyl_acrylate_ion",
+      "mapped_smiles": "[CH2:6]=[CH:5][C:1](=[OH+:2])[O:3][CH3:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "butyl_radical",
+      "mapped_smiles": "[CH3:10][CH2:9][CH2:8][CH2:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyl_heptanoate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_intermediate_1",
+      "species_ids": [
+        "distonic_ion_radical_at_delta_carbon"
+      ]
+    },
+    {
+      "state_id": "state_intermediate_2",
+      "species_ids": [
+        "distonic_ion_radical_at_alpha_carbon"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_methyl_acrylate_ion",
+        "butyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_1_delta_to_carbonyl_oxygen",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate_1",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_2_alpha_to_delta_carbon",
+      "from_state": "state_intermediate_1",
+      "to_state": "state_intermediate_2",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_intermediate_2",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH1_8_78",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_delta_to_carbonyl_oxygen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 195,
+        "equation": "8.78",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements -- 'Three bonds cleaved' (methyl esters)"
+      },
+      "confidence": 0.85,
+      "curator_note": "First arrow of the three-arrow sequence, labelled 'r H'. The drawn precursor is the methyl ester molecular ion laid out as a pseudo-cycle: the carbonyl oxygen carries the printed '+' and a separate '.', and the hydrogen that migrates is written as an explicit H letter on the chain carbon FIVE atoms from the carbonyl oxygen -- counting the drawn vertices, the donor is the delta carbon (map 8), so the transfer array O=C-Calpha-Cbeta-Cgamma-Cdelta...H is a SEVEN-membered transition state, not the classic six-membered gamma-H McLafferty. The same carbon's neighbour further out (map 9, the epsilon carbon) is drawn with a bracketed '(H)', the book's marker for an alternative donor site; the running text says this ion 'can be formed by initial H transfer from a variety of sites', so the seven-membered array encoded here is the one actually drawn, not the only one meant. ARCS ACTUALLY DRAWN FOR THIS STEP: TWO. (i) a fishhook that starts on the Cdelta-H bond, loops clockwise below the H and ends with a barb pointing up into the gap between the H and the oxygen; (ii) a fishhook that starts at the '.' of the '+.' on the oxygen, arcs up and to the left and ends with a barb pointing back into that same gap -- the two heads converge where the new O-H bond forms. Book draws 2 arc(s); NEITHER is encoded literally and no move is a homolysis hook here: the third electron (the one that stays behind on Cdelta and becomes its odd electron) is implicit, i.e. not drawn on the page. ENCODING NOTE (honest divergence, same convention as record IMS8-EQ8.72): RDKit folds a mapped explicit [H] back into implicit valence (verified on this project's container), so neither the broken C-H bond nor the formed O-H bond exists in the mapped topology; the two drawn arcs and the implicit third electron collapse to the single observable change 'the odd electron leaves the carbonyl oxygen and appears on the delta carbon', which is what move <1> states. No heavy-atom bond order changes in this step."
+    },
+    {
+      "evidence_id": "ev_step_rH2_8_78",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_2_alpha_to_delta_carbon",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 195,
+        "equation": "8.78",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements -- 'Three bonds cleaved' (methyl esters)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Second arrow, again labelled 'r H'. The drawn intermediate carries the radical dot on the delta carbon (map 8) and the migrated hydrogen on the oxygen ('H-O+', charge printed without a dot), and a second explicit H letter is drawn on the ALPHA carbon (map 5) with its bond to that carbon shown. The second hydrogen therefore travels in the OPPOSITE direction to the first -- from the alpha carbon (which stays with the ion) to the delta carbon (which leaves with the neutral) -- exactly what the running text describes: 'these are transferred in different directions to the opposite products'. The array Calpha-Cbeta-Cgamma-Cdelta...H is a five-membered (1,4-H shift) transition state. ARCS ACTUALLY DRAWN FOR THIS STEP: TWO. (i) a fishhook starting at the radical dot on Cdelta, curving right and down, head pointing toward the incoming hydrogen; (ii) a large fishhook starting at the Calpha-H bond at the bottom of the drawn ring, sweeping left and up, head pointing at the same region -- the two heads converge where the new Cdelta-H bond forms. Book draws 2 arc(s); NEITHER is encoded literally and there is no homolysis hook in this step: the electron that stays on Calpha and becomes its odd electron is implicit, i.e. not drawn on the page. As in step 1, RDKit's implicit-hydrogen model erases both the broken and the formed C-H bond, so the two drawn arcs plus that implicit electron collapse to the one observable change encoded as move <1>: the odd electron moves from the delta carbon to the alpha carbon. No heavy-atom bond order changes in this step."
+    },
+    {
+      "evidence_id": "ev_step_alpha_8_78",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 195,
+        "equation": "8.78",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements -- 'Three bonds cleaved' (methyl esters)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Third arrow, labelled 'alpha'. The drawn intermediate has the radical dot on the alpha carbon (map 5) and the protonated carbonyl written 'HO+' with its double bond to the ester carbon. ARCS ACTUALLY DRAWN FOR THIS STEP: TWO. (i) a fishhook from the radical dot on Calpha, arcing left with its barb on the Calpha-Cbeta bond (the forming pi bond); (ii) a fishhook that starts on the Cbeta-Cgamma bond, arcs over to the right and ends with a barb pointing down onto that same Calpha-Cbeta bond. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) -- it carries the second electron of the cleaved Cbeta-Cgamma bond onto Cgamma, which the page simply prints as the terminal dot of the neutral radical product. THE THIRD BOND CLEAVED: with Cdelta-H (step 1) and Calpha-H (step 2), the Cbeta-Cgamma bond broken here is the third, which is the point of the 'Three bonds cleaved' subsection -- the net result is an EVEN-ELECTRON product ion plus an odd-electron neutral radical, the mirror image of an ordinary McLafferty rearrangement. RESONANCE (convention C): the printed ion CH2=CH-C(=O(+)H)-OCH3 is one localized form of the resonance-stabilized 'RHC=CH-CR'=Y+' ion named in the text; its partner (+)CH2-CH=C(OH)-OCH3 is NOT drawn on the page, and the arrows here produce exactly the drawn form. INSTANTIATION (convention F): the page prints only 'R' for the chain terminus, and the drawn skeleton has five chain carbons between R and the ester carbon; taking R = CH3 makes the substrate methyl heptanoate (M+. m/z 144.1145), the product ion protonated methyl acrylate CH2=CH-C(=O(+)H)OCH3 (m/z 87.0441) and the neutral the n-butyl radical (57.0704). NO m/z AND NO INTENSITY ARE PRINTED anywhere in equation 8.78 -- the percentages on this page (40%, 15%, 55%) all belong to OTHER compounds discussed in the running prose (iso-C3H7OCOC3H7, iso-C3H7CH2OH, CH3CH(OH)CH(CH3)C(=O)CH2C4H9+.) and none of them is this scheme -- so every species carries detected=false, the peak carries status 'inferred' with no relative_intensity, and 87.0441 is a curator-computed monoisotopic m/z for the chosen instantiation, not a measured value. hydrogen_shift is 0 because the two migrating hydrogens travel in opposite directions and cancel: the ion has the same formula it would have from a plain Cbeta-Cgamma homolysis with charge retention, and only its electron count (EE+ instead of OE+.) differs."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_78",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.78",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.78",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json 'by_equation')"
+      },
+      "confidence": 0.45,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.78. Every candidate was checked against the DFS (which bond is cleaved, which bond gains order, whether the cleaved bond is incident to the pi-forming atom) rather than assumed, and NO rule reproduces any of the three drawn steps. STEP 1 (delta-H, 7-membered array, to an ESTER carbonyl oxygen): the only 7-membered H-transfer rule is hTransition_saturated_4 '[H]1[C]2[C]3[C]4[C]5[C]6([H]7){=}[_A+.]8>>[C.]2[C]3[C]4[C]5[C]6([H]7){=}[_A+]8[H]1', whose ring size is right but which demands an explicit hydrogen ON the acyl carbon ('[C]6([H]7)'), i.e. an aldehyde; a methyl ester carbonyl carbon bears the chain, =O and OCH3 and has no H, so the rule cannot match this substrate at all. hTransition_unsaturated '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1' does not constrain the acyl carbon's other substituents and therefore DOES match methyl heptanoate's molecular ion, but it transfers the GAMMA hydrogen through a six-membered array -- a different hydrogen from the one the page draws. esterMcLafferty_rH '[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7>>[C.]2[C]3[O]4[C]5({=}[O+]6[H]1)[C]7', IMS_4_45_rH and h2Transiton_1 all take the hydrogen from the ALKOXY side of the ester (donor carbon beta to the ester oxygen); equation 8.78 takes it from the ACYL chain, so their connectivity is wrong for this scheme. STEP 2 (1,4-H shift from the alpha carbon onto a carbon radical): the only rule of that shape is hTransition_saturated_2 '[H]1[C]2[C]3([_A+]4)[C]5[C.]6>>[C.]2[C]3([_A+]4)[C]5[C]6([H]1)', which has the right 1,4 topology but requires the carbon NEXT to the donor to carry a charged substituent '[_A+]4' as a DIRECT substituent ('_A' is an element wildcard that all '_A' sites in a rule unify to, not necessarily a heteroatom); here that neighbour is the ester carbon (a carbon, with the charge one bond further out on its oxygen), so the rule does not match. IMS_8_2_bidirectional_up is a back-transfer from the oxygen, not from the alpha carbon. STEP 3 (alpha cleavage that leaves the new C=C ON THE ION and expels an ALKYL RADICAL): every alpha-cleavage rule of this family does the opposite -- hTransition_unsaturated_alpha '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C]1{=}[C]2.[C.]3[C]4{=}[_A+]5[H]6', IMS_4_33_alpha_1 and esterMcLafferty_alpha all put the newly formed alkene in the NEUTRAL fragment and keep the odd electron on the ion (an ordinary McLafferty, OE+. ion + closed-shell alkene), whereas 8.78 produces an EE+ ion carrying the alkene plus an odd-electron alkyl radical. CONCLUSION: all three steps of equation 8.78 are UNCOVERED by the current MØD rule set; the closest families are listed above with the reason each fails."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 144.1145,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ee_product_ion",
+      "species_id": "protonated_methyl_acrylate_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 87.0441,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

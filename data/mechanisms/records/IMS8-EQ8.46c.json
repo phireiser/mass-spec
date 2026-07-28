@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS8-EQ8.46c",
+  "species": [
+    {
+      "species_id": "hexyloxymethylene_oxocarbenium",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][O+:1]=[CH2:2]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "n_hexyl_cation",
+      "mapped_smiles": "[CH2+:7][CH2:8][CH2:9][CH2:10][CH2:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "formaldehyde",
+      "mapped_smiles": "[O:1]=[CH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexyloxymethylene_oxocarbenium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "n_hexyl_cation",
+        "formaldehyde"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              1
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 176,
+        "equation": "8.46",
+        "figure": null,
+        "panel": null,
+        "section": "8 Detailed Mechanisms of Ion Fragmentation (Eq. 8.46, two-step path: i-cleavage of the oxocarbenium)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Second stage of the two-step path in Eq. 8.46: inductive (i) cleavage of the even-electron oxocarbenium C6H13-O(+)=CH2 (m/z 115) losing neutral formaldehyde O=CH2 to give the n-hexyl cation C6H13(+) (m/z 85). The charge site draws the C7-O1 bonding pair onto oxygen; the C7-O1 sigma bond breaks heterolytically and the surviving O1=C2 double bond becomes neutral formaldehyde. Book draws 0 electron-pushing arcs: the vertical 'i' pathway arrow between the m/z-115 and m/z-77% species carries the neutral loss '-O=CH2'; no curved arrow is drawn. The text calls this the 'two-step pathway' to the same m/z-85 ion. Encoded as ONE double-barbed (2-electron) heterolytic arrow onto O1; the validator's soft 'lone pair rather than radicals' note on atom 1 is expected (the arriving pair is a lone pair completing formaldehyde's carbonyl oxygen)."
+    },
+    {
+      "evidence_id": "ev_mech_c",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.46c",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.46",
+        "figure": null,
+        "panel": null,
+        "section": "rule_index.json by_equation has no entry for 8.46"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MØD rule is cross-linked: rule_index.json has no by_equation entry for 8.46. The precursor here is the m/z-115 oxocarbenium FRAGMENT ion (adduct null, not the [M]+. molecular ion); precursor_mz 115.1112 is its curator-computed monoisotopic value. The product C6H13+ (m/z 85.1006) is the SAME peak as in IMS8-EQ8.46b (relative_intensity 0.77 is the combined 70 eV EI abundance of C6H13+ from both the one-step i-cleavage and this two-step route). ms_context activation is consecutive 70 eV EI source fragmentation, NOT a CAD/MI experiment."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI (consecutive source fragmentation of the m/z-115 oxocarbenium)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 115.1112,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85",
+      "species_id": "n_hexyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 85.1006,
+      "relative_intensity": 0.77,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

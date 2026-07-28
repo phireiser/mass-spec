@@ -1,0 +1,375 @@
+{
+  "mechanism_id": "IMS8-EQ8.58a",
+  "species": [
+    {
+      "species_id": "cyclobutanone_radical_cation",
+      "mapped_smiles": "[C:1]1(=[O+:2])[CH2:3][CH2:4][CH2:5]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:3][CH2:4][CH2:5][C:1]#[O+:2]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acylium_radical_form",
+      "mapped_smiles": "[CH2:5][C:1]#[O+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ketene_radical_cation",
+      "mapped_smiles": "[CH2:5]=[C:1]=[O+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclobutanone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "ring_opened_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethene_neutral",
+        "acylium_radical_form"
+      ]
+    },
+    {
+      "state_id": "state_products_ketene_form",
+      "species_ids": [
+        "ethene_neutral",
+        "ketene_radical_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage_alkene_loss",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_resonance_to_ketene",
+      "from_state": "state_products",
+      "to_state": "state_products_ketene_form",
+      "step_class": "resonance_delocalization",
+      "semantics": "resonance_interconversion",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 183,
+        "equation": "8.58",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s) on the first (leftmost) structure; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the odd electron of the n-ionized oxygen (the printed '+.' sits on O, the C=O double bond drawn intact) into the C(1)-O(2) bond; drawn arc 2 = a fishhook from the ring C(1)-C(3) sigma bond into that same C-O bond, which therefore rises from double to triple (acylium). The undrawn move 3 carries the second electron of the cleaved C(1)-C(3) bond onto C(3); the book instead simply prints the resulting radical dot on that carbon in the next structure. Because the carbonyl carbon is IN the four-membered ring, this alpha cleavage only OPENS the ring - no mass is lost yet - giving the distonic acylium/alkyl-radical ion .CH2CH2CH2-C(triple bond)O+. The precursor mapped_smiles localizes charge and odd electron on oxygen exactly as printed. Map numbers: 1 = carbonyl C, 2 = O, 3 = the alpha carbon that is cleaved off C1 (bears R2, drawn at the left of the diamond), 4 = the CH2 between the two alpha carbons (bottom of the diamond), 5 = the alpha carbon retained by the acyl group (right of the diamond)."
+    },
+    {
+      "evidence_id": "evidence_step_alkene_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_alkene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 183,
+        "equation": "8.58",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s) on the second (ring-opened) structure; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the radical dot on C(3) into the forming C(3)=C(4) pi bond; drawn arc 2 = a fishhook from the C(4)-C(5) sigma bond into that same forming pi bond. The undrawn move 3 carries the second electron of C(4)-C(5) onto C(5) - the book prints that radical as the dot next to 'R2' in the drawn product. Net result of this second alpha cleavage (the page labels both arrows 'alpha'): loss of the neutral olefin R2C=CH2 (here ethene, m/z 28, not printed) and retention of the charge on the acyl fragment."
+    },
+    {
+      "evidence_id": "evidence_step_resonance",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_resonance_to_ketene",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 183,
+        "equation": "8.58",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book draws 0 arc(s) here: it prints a double-headed resonance arrow linking the drawn product .R2C-C(triple bond)O+ with the ionized-ketene form R2C=C=O(+.) (the '+.' printed on the oxygen, R and R on the terminal carbon). All three encoded moves are curator-supplied bookkeeping for that resonance interconversion (radical electron of C5 into the C1-C5 bond, one electron of the C1-O triple bond into the same bond, the other back onto O). Convention (C): the fragmentation steps above are written to the LOCALIZED acylium/alkyl-radical form the book draws first, and this step converts it to the ketene form the book draws second; the two are one and the same ion, so only the ketene form is flagged detected."
+    },
+    {
+      "evidence_id": "evidence_mechanism_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.58a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 183,
+        "equation": "8.58"
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.58 - no MOD Rule.fromDFS encodes this cyclobutanone double-alpha-cleavage, so no cross-link is asserted. The nearest indexed generic carbonyl alpha-cleavage rule, IMS_4_14 (DFS '[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]'), was CHECKED against this substrate and does NOT apply, on two counts. (i) Its left pattern needs two distinct 2-carbon branches on the carbonyl carbon; in cyclobutanone both alpha carbons share the SAME beta carbon, so an injective match is impossible - verified with RDKit, SMARTS [#6](-[#6]-[#6])(-[#6]-[#6])=[O+] gives 0 matches on [C:1]1(=[O+:2])[CH2:3][CH2:4][CH2:5]1. (ii) Independently, IMS_4_14 is MIS-ENCODED: loading it in MOD gives left edges (C1-C2, C1-C4, C1=O) and right edges (C1-C5, C1#O), i.e. it breaks BOTH bonds to the carbonyl carbon and bonds the acylium to C5 (the terminal carbon of the retained chain) rather than to C4, a skeletal rearrangement that also over-fills C5's valence. This is a corpus-level finding beyond the present page (the existing IMS4-EQ4.14 record's note asserts the acylium 'retains the other' ethyl unchanged, which the GML does not support). ms_context: the page prints no electron energy; the scheme sits in ordinary EI-spectrum discussion (Figure 8.4 on the same page is an EI mass spectrum) and the book's spectra are the standard 70 eV EI, so EI/70 eV/[M]+. is used. precursor_mz 70.0413 is the curator-computed monoisotopic m/z of the cyclobutanone molecular ion for the printed R = H instantiation, not a number printed on the page."
+    },
+    {
+      "evidence_id": "evidence_peak_42",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_42",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 183,
+        "equation": "8.58"
+      },
+      "confidence": 0.9,
+      "curator_note": "The page prints, directly under the scheme, 'R = H : m/z 42, 100%'. relative_intensity 1.0 is that printed base-peak percentage; observed_mz 42.0100 is the curator-computed monoisotopic m/z of the C2H2O(+.) ketene radical cation, consistent with the printed nominal 42."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 70.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_42",
+      "species_id": "ketene_radical_cation",
+      "step_id": "step_resonance_to_ketene",
+      "observed_mz": 42.01,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "mechanism_id": "IMS8-EQ8.1c",
+  "species": [
+    {
+      "species_id": "methallyl_cation",
+      "mapped_smiles": "[CH2:2]=[CH:3][CH+:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopropenyl_cation",
+      "mapped_smiles": "[CH+:2]1[CH:3]=[CH:4]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methane",
+      "mapped_smiles": "[CH4:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methallyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "cyclopropenyl_cation",
+        "methane"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_methane_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_methane_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 137,
+        "equation": "8.1",
+        "section": "8.1 Unimolecular ion decompositions"
+      },
+      "confidence": 0.7,
+      "curator_note": "adduct corrected to null (convention G): the species undergoing this reaction is an EVEN-ELECTRON cation (charge +1, radical_electrons 0) - a fragment/secondary-fragmentation precursor - NOT the [M]+. radical molecular ion. Eq 8.1, consecutive dissociation of the top pathway: the C4H7+ (1-methylallyl) cation, arrow labeled 'rH' (rate 2.5), loses neutral CH4 to give C3H3+ (dHf/IE 11.1(6.6)) + CH4 (dHf -0.8). This is the C4H7+ -> C3H3+ + CH4 step the running text on this page calls out explicitly. Book draws 0 curved arcs (net summary equation). Mechanism reconstructed for electron balance: the methyl (C5) departs as CH4, taking a hydrogen from the vinyl terminus (C2), and the three surviving carbons close to the aromatic cyclopropenyl cation. Two curved (2-electron) arrows carry the heavy-atom skeleton: (1) the C2=C3 pi electrons shift to form the new C3=C4 pi bond, (2) the C4-C5 sigma bond's electrons close the C2-C4 ring bond while methyl leaves. The accompanying H transfer C2->C5 (which completes CH4) cannot be atom-mapped -- RDKit folds mapped explicit H into implicit valence -- so it appears only as the H-count change written into the SMILES (C2: =CH2 -> ring =CH; C5: CH3 -> CH4) and is not carried by an explicit arrow; the two encoded arrows already reproduce every heavy-atom bond-order change exactly. The charge relocates C4 -> C2 as drawn (aromatic cyclopropenyl cation)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.1c",
+      "support_type": "computationally_supported",
+      "locator": {
+        "equation": "8.1",
+        "section": "src/data_generation/rules/ (IMS_8_1_var1_step3)"
+      },
+      "confidence": 0.6,
+      "curator_note": "Cross-linked MOD rule IMS_8_1_var1_step3 ('monomolecular ion-cleavage 8.1 rH 2.5'). Its DFS '[C]1([H]2){=}[C]3([H]4)[C+]5([H]6)([H]7)[C]8([H]9)([H]10)([H]11) >> [C]1([H]2):[C+]3([H]4):[C]5([H]6):1 . [H]7[C]8([H]9)([H]10)([H]11)' performs the SAME net transformation: it closes an aromatic three-membered cyclopropenyl cation (the ':1' ring over their C1/C3/C5) and expels CH4 (their C8 plus the migrated H7). CONNECTIVITY MATCHES. Representation differences: the MOD rule writes the product ring with aromatic bonds (':') whereas this record uses a RDKit-valid Kekule form ([CH+]1[CH]=[CH]1), and the MOD rule (being a term graph) can atom-map the migrating H while this JSON record cannot."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_C3H3",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 137,
+        "equation": "8.1"
+      },
+      "confidence": 0.7,
+      "curator_note": "Book prints '(35%)' adjacent to the C3H3+ + CH4 products of this branch. observed_mz 39.0229 is the curator-computed electron-mass-corrected monoisotopic m/z of C3H3+ (m/z 39). Note the same m/z 39 ion is also produced by the middle pathway's H2-loss step (C3H5+ -> C3H3+ + H2); the printed (35%) is the C3H3+ abundance, its channel split not resolved on the page."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 70.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C3H3",
+      "species_id": "cyclopropenyl_cation",
+      "step_id": "step_methane_loss",
+      "observed_mz": 39.0229,
+      "relative_intensity": 0.35,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

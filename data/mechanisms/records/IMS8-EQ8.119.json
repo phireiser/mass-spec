@@ -1,0 +1,244 @@
+{
+  "mechanism_id": "IMS8-EQ8.119",
+  "species": [
+    {
+      "species_id": "trimethoxy_oxocarbenium_ion",
+      "mapped_smiles": "[CH3:2][O:1][CH2:3][CH:4]([O:5][CH3:6])[CH:7]=[O+:8][CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "dimethoxycarbenium_ion_75",
+      "mapped_smiles": "[CH3:2][O:1][CH:7]=[O+:8][CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_vinyl_ether_neutral",
+      "mapped_smiles": "[CH2:3]=[CH:4][O:5][CH3:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "trimethoxy_oxocarbenium_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "dimethoxycarbenium_ion_75",
+        "methyl_vinyl_ether_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_re_methoxyl_migration_with_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination_with_group_migration",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_re_methoxyl_migration_with_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.119",
+        "figure": null,
+        "panel": "the four arcs on the left-hand structure; the reaction arrow is labelled 're'",
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book draws 4 arc(s); moves <1,2,3,4> are drawn, move <5> is an implicit hook required for electron balance (not drawn on the page). ARC GEOMETRY AS READ FROM THE SCAN (zoomed to 14x): (1) a long arc whose tail sits on the CH=+OCH3 double bond and whose head points down-left into the empty space between the CH3O oxygen and that CH -- the forming O-C bond; (2) an arc whose tail is on the CH3O-CH2 bond and whose head points up-right into the SAME space, so two heads meet on the forming O-C bond; (3) a second arc from the CH3O-CH2 bond whose head points down-right onto the middle of the H2C-CH bond; (4) an arc whose tail is on the CH-CH (vertical) bond and whose head points down-left onto the same H2C-CH midpoint -- the two heads there make the characteristic 'W'. Two heads per new bond means single-electron arcs, so all four are encoded with electron_count 1. THE IMPLICIT FIFTH HOOK: as drawn, the C=+O pi bond gives up one electron (arc 1) and the C-C bond gives up only one (arc 4), yet the product the book prints, CH3O-CH=+OCH3, still has a full C=O and no C-C bond. The balance is restored by exactly one further single-electron move -- the second electron of the breaking C-C bond returning into the C=+O pi system -- which the book does not draw. It is encoded here as move 5. SUBSTRATE: the drawing is CH3O-CH2-CH(OCH3)-CH=+OCH3 (C6H13O3+, m/z 133.09), a permethylated-carbohydrate oxocarbenium; the products drawn are CH2=CHOCH3 and CH3O-CH=+OCH3 (m/z 75)."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.119",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.119",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.119' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. The nearest candidates in the set are the even-electron oxonium rules IMS_8_11 ('Field Rule 8.11 rH') and IMS_8_12 ('8.12 ind'), which were CHECKED by reading their DFS strings out of rule_index.json (no RDKit run was needed - the patterns are decisive). IMS_8_11 is '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11) >> [C]1([H]2)([H]3)[C]5([H]6)([H]7) . [H]4[O+]8{=}[C]9([H]10)([H]11)' and IMS_8_12 is NOT the same left-hand side -- the first draft of this note said it was, and that is corrected here against the rule source. IMS_8_12 is '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14) >> [C]1([H]2)([H]3)([H]4)[C+]5([H]6)([H]7) . [O]8{=}[C]9([H]10)[C]11([H]12)([H]13)([H]14)': its oxocarbenium carbon carries ONE H plus a methyl, not two H, and it cleaves heterolytically to [C+]5 plus the neutral carbonyl. Neither left-hand side matches this substrate, so the conclusion is unchanged. Both require a CARBON chain C1-C5 on the single-bonded side of the oxonium oxygen; in this substrate that position is the O-methyl (map 9), which has no further carbon, so neither left-hand side even matches. More fundamentally, one transfers a hydrogen and the other simply heterolyses the C-O bond; neither forms a NEW bond between a remote alkoxy oxygen and the oxocarbenium carbon, which is the whole content of Equation 8.119. Neither is a match; nothing else in the set migrates a heteroatom substituent."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_75",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.119",
+        "figure": null,
+        "panel": null,
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.119 prints the two product structures only -- no m/z and no abundance appear anywhere on it (the neighbouring Equation 8.114, on the previous page, is where the book labels this same dimethoxycarbenium ion 'm/z 75'). observed_mz 75.0441 is the curator-computed monoisotopic mass of C3H7O2+; status 'inferred', detected=false, no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 133.0859,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_75",
+      "species_id": "dimethoxycarbenium_ion_75",
+      "step_id": "step_re_methoxyl_migration_with_elimination",
+      "observed_mz": 75.0441,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

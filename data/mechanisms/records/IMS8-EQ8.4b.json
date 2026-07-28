@@ -1,0 +1,148 @@
+{
+  "mechanism_id": "IMS8-EQ8.4b",
+  "species": [
+    {
+      "species_id": "butyl_methyl_ketone_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][C:5](=[O+:6])[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acylium_ion",
+      "mapped_smiles": "[CH3:7][C:5]#[O+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "butyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butyl_methyl_ketone_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["acylium_ion", "butyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 141,
+        "equation": "8.4",
+        "section": "8.2 Product stability -- Charge competition in OE(+.) decompositions: Stevenson's Rule"
+      },
+      "confidence": 0.9,
+      "curator_note": "Eq 8.4, second branch, arrow labeled 'alpha'; instantiated with x = n-butyl. Radical-site (alpha) cleavage driven by the carbonyl oxygen radical cation: the odd electron on O6 forms the second C5-O6 pi bond (acylium CH3-C(triple bond)O+, m/z 43) while the C(butyl)-C(=O) sigma bond breaks and the butyl group departs as the neutral radical .C4H9. The page tabulates: n = 100%, s = 100%, t = 35% -- the acylium dominates for n-/s-butyl but is overtaken by t-C4H9+ once the tert-butyl-cation IE (6.7 eV) drops below that of the acetyl fragment (printed 7.0 eV). Book draws 0 arcs (summary equation); the three balanced fishhooks (O6 odd electron -> C5-O6 pi, upgrading C=O to the C(triple)O of the acylium; one electron of the C4-C5 bond -> that same pi; the second electron of C4-C5 -> the departing butyl radical) are the standard radical-site alpha-cleavage flow, reconstructed here. This is the direct homolog of the acetone alpha-cleavage of Eq 4.13 (the schema example)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.4b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 141, "equation": "8.4"},
+      "confidence": 0.1,
+      "curator_note": "Cross-linked MOD rule IMS_8_4 (equation 8.4). MISMATCH: the rule's substrate is an ETHER (no carbonyl), and it cleaves a C-C bond to give a butyl radical cation plus an oxygen cation, RHS charge +2 -- charge-non-conserving and dropped by the conservation guardrail. It forms NO acylium (there is no C=O to upgrade to C(triple)O) and therefore does not reproduce this alpha branch at all. See rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_acylium",
+      "support_type": "explicitly_reported",
+      "locator": {"page": 141, "equation": "8.4"},
+      "confidence": 0.9,
+      "curator_note": "Book prints '100%' relative abundance under CH3CO+ for x = n (also 100% for s, 35% for t). observed_mz 43.0178 is the curator-computed electron-mass-corrected monoisotopic m/z of C2H3O+ (acylium); the page prints only the % abundances and the fragment IE (7.0 eV), no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+.",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acylium",
+      "species_id": "acylium_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 43.0178,
+      "relative_intensity": 1.0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

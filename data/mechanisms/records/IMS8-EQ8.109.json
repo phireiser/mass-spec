@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.109",
+  "species": [
+    {
+      "species_id": "bromophenyl_pyridyl_ethylene_molecular_ion",
+      "mapped_smiles": "[CH2:8]=[C:7]([C:1]1=[C:2]([Br:15])[CH:3]=[CH:4][CH:5]=[CH:6]1)[C:10]1=[N+:9][CH:14]=[CH:13][CH:12]=[CH:11]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylidene_pyrido_isoindolium_ion",
+      "mapped_smiles": "[CH2:8]=[C:7]1[C:10]2=[N+:9]([CH:14]=[CH:13][CH:12]=[CH:11]2)[C:2]2=[C:1]1[CH:6]=[CH:5][CH:4]=[CH:3]2",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "bromine_radical",
+      "mapped_smiles": "[Br:15]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "bromophenyl_pyridyl_ethylene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylidene_pyrido_isoindolium_ion",
+        "bromine_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rd_ring_closure_loss_of_X",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              15
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              15
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              15
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rd_8_109",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_ring_closure_loss_of_X",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 215,
+        "equation": "8.109",
+        "figure": null,
+        "panel": "single arrow labelled '- X.'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "TEXT ON THE PAGE: 'The proximity of two aromatic rings leads to very facile displacement decompositions such as the one in Equation 8.109 (Schubert, Grützmacher 1980).' WHAT THE BOOK DRAWS: the precursor is 1-(2-halophenyl)-1-(2-pyridyl)ethylene enclosed in square brackets with '+.' outside the bracket - i.e. the charge and odd electron are assigned to the WHOLE molecule, not to a drawn atom. The reaction arrow is labelled '- X.'. The product is the tetracyclic ring-closed cation: the pyridine nitrogen is now bonded to the benzene carbon that carried X, creating a five-membered ring (benzene ipso C - C(=CH2) - pyridine C2 - N - benzene ortho C), the exocyclic =CH2 is retained, and a bare '+' is printed under the nitrogen. ARC COUNT (convention D): Book draws 0 arc(s). There is NO curved arrow, fishhook or barb in Equation 8.109; only the two structures and the '- X.' arrow label are printed. All three encoded moves <1,2,3> are therefore IMPLICIT, supplied by the curator for electron balance and not drawn on the page: <1> the nitrogen's odd electron into the forming N-C2 bond, <2> one electron of the breaking C2-X sigma bond into that same forming bond, <3> the second electron of the C2-X bond onto X, which is what makes the X. that the arrow label names. This 'radical site attacks, radical leaves' bookkeeping is the section's rd (radical-site displacement) pattern, the same one drawn explicitly with fishhooks in Equation 8.108 immediately above; the book leaves it implicit here. LOCALIZATION (conventions B and C): because the '+.' sits outside the bracket the curator had to localize it. The odd electron is placed in the nitrogen n orbital ([N+:9] carrying one sigma bond to C14 and one double bond to C10 = one unpaired electron in RDKit), which is both the lowest-IE site of the molecule and the atom that must attack, so move <1> has a real origin. KEKULE CHOICE: the two rings are written in exactly the Kekule form the book draws - in the pyridine the double bond runs from N to the SUBSTITUTED carbon (N9=C10, then C11=C12 and C13=C14), and in the benzene the double bond lies along the C1=C2 bond that becomes the ring-fusion bond (then C3=C4 and C5=C6). The identical bond orders are kept in the product, so the only bond changes intended by the step are the C2-Br cleavage and the N9-C2 formation; no ring is deliberately re-kekulized. VALIDATOR ARTEFACT (expected, soft): the arrow check nevertheless reports six '(soft) (aromatic/delocalised)' +/-0.5 bond-order notes on the six pyridine ring bonds (maps 9-10, 10-11, 11-12, 12-13, 13-14, 9-14). They are a perception artefact, not a missing arrow: RDKit refuses to aromatize the n-ionized precursor ring (an N+ carrying an unpaired electron) and keeps the written Kekule orders 1/2, but it does aromatize the closed-shell N-aryl pyridinium of the product to uniform order 1.5, so every ring bond appears to move by half an order. No electron moves are missing - the six deltas sum to zero around the ring. INSTANTIATION (convention F): the figure writes only 'X' and the prose never names the halogen, so X = Br is a CURATOR CHOICE made to give computable masses (with X = Cl the precursor would be 215.0496 instead, and the product ion is unchanged at 180.0802 either way). MS CONTEXT (convention G): page 215 names no ionization or activation method and no electron energy; the reacting species is the whole-molecule odd-electron radical cation drawn in brackets with '+.', so ms_context uses the convention-G molecular-ion default (EI, adduct [M]+., 70 eV). The 70 eV figure is the book's standing convention, NOT a number printed on this page."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_109",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.109",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 215,
+        "equation": "8.109",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MØD rule is cross-linked. rule_index.json 'by_equation' has no '8.109' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering). The displacement rules were CHECKED against this record's instantiated precursor, not assumed (convention E). (i) IMS_4_42_rd, DFS '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2', is the closest thing in the rule base: it closes a FIVE-membered ring by attack of the radical site on the carbon four atoms away, which is the same ring size as the closure drawn here (N9-C10-C7-C1-C2). It still cannot fire: the rule hard-wires the radical site to CHLORINE and the leaving group to CARBON, i.e. the two roles are exactly swapped relative to Equation 8.109, where nitrogen attacks and a halogen leaves; and every bond in its pattern is a single bond, whereas the chain here is aromatic/olefinic (N9=C10, C7=CH2 exocyclic with C1=C2 in the ring). RDKit confirms zero matches for '[#6]~[#6]~[#6]~[#6]~[#6]~[Cl]' (no chlorine in the substrate at all). (ii) 'substituion' in IMS_bookCover.py, DFS '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' (live via the 'rearrangements' export, IMS_bookCover.py:484), has the right role assignment but closes a THREE-membered ring, not the five-membered ring drawn here, and its two '_A' slots are the same MØD term variable and therefore unify to one element, whereas the attacking atom is N and the leaving atom is a halogen. Its single-bond backbone also fails on this substrate: '[Br]-[#6]-[#6]-[#6]' -> 0 matches (the Br-bearing carbon sits on the C1=C2 double bond); only the bond-order-agnostic form '[Br]~[#6]~[#6]~[#6]' matches (3 hits), which is not what the DFS demands. CONCLUSION: the aryl/heteroaryl proximity displacements of Section 8.11 are entirely unrepresented in the MØD rule base; encoding them needs ring-protected, bond-order-agnostic rules with independent element slots (the same requirement noted for the aromatic-fragmentation rules elsewhere in the project)."
+    },
+    {
+      "evidence_id": "ev_peak_8_109",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_180",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 215,
+        "equation": "8.109",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): page 215 prints no m/z and no abundance for Equation 8.109; the halogen is left generic as 'X'. The product species is therefore detected=false and the peak assignment has status 'inferred' with relative_intensity omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the CHOSEN instantiation X = Br (79Br): M+. C13H10BrN+. 258.9986 -> ring-closed cation C13H10N+ 180.0802 + Br. 78.9183. The precursor m/z depends on that arbitrary choice (X = Cl would give 215.0496); the product ion m/z 180.0802 does not, since X is lost."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 258.9986,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_180",
+      "species_id": "methylidene_pyrido_isoindolium_ion",
+      "step_id": "step_rd_ring_closure_loss_of_X",
+      "observed_mz": 180.0802,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

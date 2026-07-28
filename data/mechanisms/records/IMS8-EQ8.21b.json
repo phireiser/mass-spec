@@ -1,0 +1,171 @@
+{
+  "mechanism_id": "IMS8-EQ8.21b",
+  "species": [
+    {
+      "species_id": "steroid_ene_aminium_radical_cation",
+      "mapped_smiles": "[CH:6]1=[CH:7][CH2:8][C:9]2([CH3:13])[CH:10]([CH2:11]1)[CH2:14][CH2:15][CH:16]1[CH:17]2[CH2:18][CH2:19][C:20]2([CH3:22])[CH:21]1[CH2:23][CH2:24][CH:25]2[CH2:26][NH2+:27]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "n_methylacetamide_enol",
+      "mapped_smiles": "[C:1]([O:2][1H:12])([CH3:3])=[N:4][CH3:5]",
+      "role": "spectator",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "steroid_ene_radical",
+      "mapped_smiles": "[CH:6]1=[CH:7][CH2:8][C:9]2([CH3:13])[CH:10]([CH2:11]1)[CH2:14][CH2:15][CH:16]1[CH:17]2[CH2:18][CH2:19][C:20]2([CH3:22])[CH:21]1[CH2:23][CH2:24][CH:25]2",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyleniminium_ion",
+      "mapped_smiles": "[CH2:26]=[NH2+:27]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_complex",
+      "species_ids": ["steroid_ene_aminium_radical_cation", "n_methylacetamide_enol"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["steroid_ene_radical", "methyleniminium_ion", "n_methylacetamide_enol"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_complex",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [27]},
+          "target": {"type": "bond", "atom_maps": [26, 27]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [25, 26]},
+          "target": {"type": "bond", "atom_maps": [26, 27]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [25, 26]},
+          "target": {"type": "atom", "atom_maps": [25]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_21b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 154, "equation": "8.21", "figure": null, "panel": "bottom-right -> bottom-left (arrow labelled alpha)", "section": "8 / Detailed Mechanisms of Ion Fragmentation"},
+      "confidence": 0.8,
+      "curator_note": "Step 3 of Equation 8.21 (the reaction arrow is labelled 'alpha'). Text: after the gamma-H/beta-cleavage (record IMS8-EQ8.21a) 'the molecule of N-methylacetamide enol remains in the vicinity of the ion and moves across the steroid skeleton to form a stabilized hydrogen-bond complex with the 20-amino group. This eventually dissociates by alpha-cleavage to form the ion at m/z 103.' The precursor here is the ion-neutral complex of the steroid-ene aminium radical cation (n-ionized 20-amine, -CH2-NH2+.) hydrogen-bonded to the neutral enol (drawn bottom-right as -CH2-NH....H+....N=C(OH)CH3). alpha-cleavage breaks the C17-C20 bond (map25-map26) beta to the aminium nitrogen and forms the C20=N iminium double bond (map26=map27), expelling the neutral steroid radical (radical at C17, map25) and giving the methyleniminium ion CH2=NH2+ (m/z 30). ARC COUNT (convention D): the book draws 2 arcs at the -CH2-NH group, both single-barbed fishhooks that FORM the new C=N pi bond -- one from the aminium N odd electron (encoded move 1: atom(27)->bond(26,27)) and one from a C17-C20 bonding electron (encoded move 2: bond(25,26)->bond(26,27)). Book draws 2 arc(s); moves <1,2> are drawn, move <3> (the second C17-C20 bonding electron onto the departing steroid radical C17, bond(25,26)->atom(25)) is an implicit homolysis hook required for electron balance (not drawn on the page -- the neutral steroid radical is not drawn as a separate product at all). NON-COVALENT COMPLEX (convention G): the observed ion m/z 103 is drawn as a proton-bound complex, HO-C(CH3)=N(CH3)....H+....HN=CH2, i.e. the N-methylacetamide enol (73.0528) hydrogen-bonded through a shared proton to methanimine; it is NOT a single covalent species, so it is encoded here as its net components -- the methyleniminium cation (map26,27; 30.0333) plus the neutral enol spectator (73.0528), whose masses sum to the m/z 103.0860 (nominal 103) printed under the structure. The extra bridging proton is the aminium's own N-H engaged in the H-bond to the enol nitrogen; no separate proton transfer is needed for the covalent alpha-cleavage. CHARGE/RADICAL (convention B): charge and odd electron localized on the 20-amino nitrogen per the aminium radical cation (see record a). SUBSTRATE (convention F): same curator-chosen 20-aminomethyl-androstene realization as record a; the steroid backbone is a spectator to the alpha-cleavage."
+    },
+    {
+      "evidence_id": "ev_migration_8_21b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.21b",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 154, "equation": "8.21", "figure": null, "panel": "top-right -> bottom-right (vertical arrow bearing the label 8.21)", "section": null},
+      "confidence": 0.6,
+      "curator_note": "DRAWN INTERMEDIATE STEP NOT ENCODED AS AN ELEMENTARY STEP (disclosure per convention G). Between record a and this record the page draws a second arrow (the vertical arrow that carries the equation number 8.21): the neutral N-methylacetamide enol 'moves across the steroid skeleton' (indicated by a long dashed curved arrow sweeping from the enol nitrogen up to the 20-amino group) and forms a 'stabilized hydrogen-bond complex' with the 20-amino group (drawn as -CH2-NH....H+....N=C(OH)CH3 with two dotted H-bond lines and the '+' on the bridging H). This migration/complexation changes NO covalent bonds -- it is a conformational / ion-dipole rearrangement of the ion-neutral complex -- so it has zero electron-pushing arcs and cannot be represented as an ElementaryStep (the schema requires >=1 electron_move). It is therefore folded into the boundary between records a and b: the covalent species entering this alpha-cleavage (state_complex) is identical to the species leaving record a, merely reorganized in space so the enol nitrogen sits next to the 20-amino group. The text stresses this remote-group approach is the low-energy path ('other pathways...would require much more energy, either to bend the rigid steroid skeleton or to cleave several C-C' bonds)."
+    },
+    {
+      "evidence_id": "ev_mech_8_21b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.21b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 154, "equation": "8.21", "figure": null, "panel": null, "section": null},
+      "confidence": 0.9,
+      "curator_note": "NO MØD rule is cross-linked: rule_index.json by_equation has no '8.21' key, so there is no Rule.fromDFS encoding for this equation and nothing to verify against. rule_mismatches: none (nothing to compare against)."
+    },
+    {
+      "evidence_id": "ev_peak_103",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_mz_103",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 154, "equation": "8.21", "figure": null, "panel": "bottom-left", "section": null},
+      "confidence": 0.7,
+      "curator_note": "The book prints 'm/z 103' under the bottom-left structure (a nominal, printed mass) but no relative intensity, so relative_intensity is omitted (convention F). observed_mz 103.0860 is the curator-computed monoisotopic m/z of the drawn proton-bound complex C4H11N2O+ = methyleniminium CH2=NH2+ (30.0333) + N-methylacetamide enol (73.0528). The peak is attached to the methyleniminium ion because that is the charge-carrying covalent species; the true detected ion is the enol...H+...HN=CH2 proton-bound complex (see step evidence, convention G)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 360.3130,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_mz_103",
+      "species_id": "methyleniminium_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 103.0860,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "observed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

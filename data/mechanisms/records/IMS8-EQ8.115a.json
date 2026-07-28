@@ -1,0 +1,241 @@
+{
+  "mechanism_id": "IMS8-EQ8.115a",
+  "species": [
+    {
+      "species_id": "steroid_tms_molecular_ion",
+      "mapped_smiles": "[CH3:19][C:10]12[CH2:1][CH2:2][C:3](=[O+:25])[CH:4]=[C:5]1[CH2:6][CH2:7][CH:8]3[CH:9]2[CH2:11][CH2:12][C:13]4([CH3:18])[CH:14]3[CH2:15][CH2:16][CH:17]4[CH:20]([CH3:21])[CH2:22][CH2:23][CH2:24][O:26][Si:27]([CH3:28])([CH3:29])[CH3:30]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_a_enone_ion_124",
+      "mapped_smiles": "[CH3:19][CH:10]1[CH2:1][CH2:2][C:3](=[O+:25])[CH2:4][C:5]1=[CH2:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "cd_ring_diene_neutral",
+      "mapped_smiles": "[CH2:7]=[C:8]1[CH:9]=[CH:11][CH2:12][C:13]2([CH3:18])[CH:17]([CH:20]([CH3:21])[CH2:22][CH2:23][CH2:24][O:26][Si:27]([CH3:28])([CH3:29])[CH3:30])[CH2:16][CH2:15][CH:14]12",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "steroid_tms_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ring_a_enone_ion_124",
+        "cd_ring_diene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_b_cleavage_double_h_transfer",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "double_hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_b_cleavage_double_h_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.115",
+        "figure": null,
+        "panel": "left-hand product of the single reaction arrow, labelled 'm/z 124, 100%'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.5,
+      "curator_note": "ARCS ACTUALLY DRAWN: ZERO. Equation 8.115 is drawn as one plain reaction arrow from the steroid to two products joined by the word 'and'; no curved arrow, fishhook or reaction-type label appears anywhere on it, and no intermediate is drawn. All five moves encoded here are therefore CURATOR-CONSTRUCTED to balance the transformation the book asserts; none is drawn. SUBSTRATE READ FROM THE DRAWING: a 4-en-3-one steroid (ring A labelled 'A', C3=O, C4=C5, angular methyls at C10 and C13) whose side chain is CH(CH3)-CH2-CH2-CH2-OSi(CH3)3, i.e. the TMS ether of a 24-hydroxy-cholan-4-en-3-one (C27H46O2Si, M+. m/z 430.33). The charge and odd electron are localised on the ring-A carbonyl oxygen (n-ionisation, convention B), which is exactly where the book prints '+.' on the product. PRODUCT READ FROM THE DRAWING: a cyclohexanone ring labelled 'A' carrying (i) '+.' on the carbonyl oxygen, (ii) a methyl on the ring carbon adjacent to (iii) an exocyclic =CH2; no ring C=C is drawn. That is C8H12O+. = ring A + C19 + C6, m/z 124.088, and it carries TWO more hydrogens than the corresponding piece of the intact steroid (C4 becomes CH2, C10 becomes CH), so the drawn ion REQUIRES a double hydrogen transfer. WHAT IS CURATOR-ASSIGNED: the two H donors. The book gives no labelling data and draws no arrows, so C8 (-> C4) and C11 (-> C10) were chosen because they are the only donors that (a) make the first transfer a proper 6-centre retro-ene through the existing bond framework C4=C5-C6-C7-C8-H, and (b) leave a closed-shell neutral. Moves 1-3 are that retro-ene (C4=C5 pi -> C5=C6; C6-C7 sigma -> C7=C8; C8-H -> C4-H); moves 4-5 are the 4-centre beta-hydrogen transfer that severs C9-C10 (C9-C10 sigma -> C9=C11; C11-H -> C10-H). ENCODING OF THE HYDROGEN TRANSFERS: hydrogens are implicit in the mapped SMILES (RDKit's parser deletes mapped [H] atoms, so an H cannot carry an atom map here), so each hydrogen shift is encoded as a two-electron atom->atom move from the donor heavy atom to the acceptor heavy atom - the convention already used in this corpus, e.g. IMS4-EQ4.33. The heavy-atom bond ledger is complete on its own: every sigma/pi bond that changes order is accounted for by a bond->bond move.The neutral that results, C19H34OSi with C7=C8 and C9=C11, is NOT drawn by the book. PRECURSOR CHARGE STATE IS NOT DRAWN (disclosed): the substrate is printed as a NEUTRAL molecule -- no bracket, no '+.' anywhere on it (re-checked on the native scan of printed p. 219); only the two PRODUCTS carry '+.'. The precursor's ionisation site is therefore a curator localisation carried back from the drawn product, not something the page draws. BOOK-ASSERTED INTERMEDIATE, DELIBERATELY NOT ENCODED: the running text on printed p. 218 states verbatim 'the long-range rearrangement of Equation 8.115 proceeds through an ion-molecule complex and gives rise to a base peak of the spectrum (Longevialle 1987)' (quotation verified on the scan). This record encodes the single concerted step the page DRAWS; the ion-molecule complex is asserted only in prose, with no structure drawn for it, so it is left unencoded -- and the Longevialle 1987 attribution, previously missing, is recorded here."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.115a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.115",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.115' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. The rule set contains no multi-centre steroid ring-cleavage rule and no double-hydrogen-transfer rule; the rules called 'the retro-ene/RDA-type rules that exist (IMS_4_44/4_45 family)' in the first draft of this note are nothing of the kind, and that justification is WITHDRAWN (checked against the rule source): IMS_4_44_ind / IMS_4_44_rH are chloroalkane displacement rules (rule_name 'displacement reaction 4.44 ind' / '4.44 rH', left graphs built on [Cl+.] and [Cl..]) and IMS_4_45_rH / IMS_4_45_alpha act on an ester oxonium ('[C]1[C]2([H]3)[C]4[O]5[C]6([C]7){=}[O+.]8'); no cyclohexene and no retro-Diels-Alder appears in any of them. The set's ACTUAL retro-DA rules are IMS_4_31_alpha1 / IMS_4_31_alpha2 and IMS_4_32_alpha / IMS_4_32_ind (plus wikipedia dielsAdler_1/2a/2b); each opens a single cyclohexene in one step and none can express the two independent sigma cleavages (C6-C7 and C9-C10) plus two H transfers required here. The no-cross-link CONCLUSION is unchanged and is in fact stronger than the original argument: a grep over src/data_generation/rules/ finds ZERO occurrences of 'Si' in any DFS string, so the trimethylsilyl ether at the heart of this equation cannot be written in the rule corpus at all."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_124",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 219,
+        "equation": "8.115",
+        "figure": null,
+        "panel": "italic label under the left product",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.9,
+      "curator_note": "THE PAGE PRINTS 'm/z 124, 100%' under this product, so the abundance is a printed datum (relative_intensity 1.0, detected=true). observed_mz is the curator-computed monoisotopic value for C8H12O+. (124.0883), which rounds to the printed nominal 124. The page does not state the ionisation conditions for Eq 8.115; 70 eV EI is assumed from the chapter context alone and is recorded in ms_context on that basis, not on a printed statement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 430.3262,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_124",
+      "species_id": "ring_a_enone_ion_124",
+      "step_id": "step_ring_b_cleavage_double_h_transfer",
+      "observed_mz": 124.0883,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 2,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

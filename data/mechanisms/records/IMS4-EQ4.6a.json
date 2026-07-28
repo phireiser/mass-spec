@@ -1,0 +1,159 @@
+{
+  "mechanism_id": "IMS4-EQ4.6a",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3]=[CH2:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde",
+      "mapped_smiles": "[O:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "formaldehyde"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 55,
+        "equation": "4.6",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.85,
+      "curator_note": "adduct corrected to null (convention G): the species undergoing this reaction is an EVEN-ELECTRON cation (charge +1, radical_electrons 0) - a fragment/secondary-fragmentation precursor - NOT the [M]+. radical molecular ion. Even-electron ethyl-oxocarbenium ion CH3CH2-O(+)=CH2 decomposing by charge-MIGRATION: heterolytic C2-O bond cleavage puts the charge on the ethyl carbon (ethyl cation) and the bonding pair onto O as a lone pair, giving neutral formaldehyde. Book draws 0 curved arrows (a plain reaction arrow with a '(charge migration)' label); the single double-barbed move <1> (C2-O bond pair -> O lone pair) is curator-supplied for a complete balanced flow."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.6a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.6"
+      },
+      "confidence": 0.7,
+      "curator_note": "Cross-links to IMS_4_6_row1: [C]1(H2,H3,H4)[C]5(H6,H7){-}[O+]8{=}[C]9(H10,H11) >> [C]1(H2,H3,H4)[C+]5(H6,H7).[O]8{=}[C]9(H10,H11). MATCH: cleaves the C5-O8 bond, gives the ethyl cation (C1-C5+) + neutral formaldehyde, exactly the book's charge-migration path."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.6"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 29.0386 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 59.0491,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 29.0386,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

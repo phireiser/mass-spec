@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS8-EQ8.46b",
+  "species": [
+    {
+      "species_id": "dihexyl_ether_molecular_ion",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][O+:1][CH2:2][CH2:3][CH2:4][CH2:5][CH2:6][CH3:13]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "n_hexyl_cation",
+      "mapped_smiles": "[CH2+:7][CH2:8][CH2:9][CH2:10][CH2:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "n_hexyloxy_radical",
+      "mapped_smiles": "[O:1][CH2:2][CH2:3][CH2:4][CH2:5][CH2:6][CH3:13]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dihexyl_ether_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "n_hexyl_cation",
+        "n_hexyloxy_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              1
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 176,
+        "equation": "8.46",
+        "figure": null,
+        "panel": null,
+        "section": "8 Detailed Mechanisms of Ion Fragmentation (Eq. 8.46, inductive branch)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Inductive (i) cleavage of the O-ionized di-n-hexyl ether molecular ion: the charge site O1(+) draws the C7-O1 sigma bonding pair fully onto oxygen, so the C7-O1 bond breaks heterolytically to give the n-hexyl cation C6H13(+) (m/z 85, 77%) and the neutral n-hexyloxy radical .O-C6H13 (the odd electron stays on O1). Book draws 0 electron-pushing arcs: the 'i' label sits on a reaction-pathway arrow with the radical loss '-.OC6H13' written beside it; no curved arrow is drawn. Encoded as ONE double-barbed (2-electron) heterolytic arrow: the C7-O1 bonding pair moves onto O1 (becomes an O1 lone pair), leaving C7 as the primary carbocation. The validator's soft note 'lone pair rather than radicals' on atom 1 is expected: the arriving pair is a lone pair, not two radicals."
+    },
+    {
+      "evidence_id": "ev_mech_b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.46b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.46",
+        "figure": null,
+        "panel": null,
+        "section": "rule_index.json by_equation has no entry for 8.46"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MØD rule is cross-linked: rule_index.json has no by_equation entry for 8.46. Detected-ion m/z 85.1006 is the curator-computed monoisotopic value for C6H13+ (electron mass subtracted); printed abundance 77% (relative_intensity 0.77) is a 70 eV EI value. This i-cleavage of the OE(+.) molecular ion is the one-step route to C6H13+; the two-step route (via the m/z-115 oxocarbenium) is IMS8-EQ8.46c and feeds the SAME m/z-85 peak."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 186.1973,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85",
+      "species_id": "n_hexyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 85.1006,
+      "relative_intensity": 0.77,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

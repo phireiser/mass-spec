@@ -1,0 +1,161 @@
+{
+  "mechanism_id": "IMS8-EQ8.2g",
+  "species": [
+    {
+      "species_id": "n_butyl_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2+:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_butyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "ethylene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_3_1",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_g",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_3_1",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 138,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "Eq. 8.2, arrow 3.1, inductive (secondary: C4H9+ -> C2H5+ + C2H4)"
+      },
+      "confidence": 0.8,
+      "curator_note": "adduct corrected to null (convention G): the species undergoing this reaction is an EVEN-ELECTRON cation (charge +1, radical_electrons 0) - a fragment/secondary-fragmentation precursor - NOT the [M]+. radical molecular ion. precursor_mz corrected to the m/z of the ion that actually undergoes the drawn reaction (convention G: the reacting species sets adduct + precursor_mz); it previously carried the neutral molecule's molecular-ion m/z, which describes the parent EI experiment rather than this step's precursor (sibling record IMS8-EQ8.1c already used the reacting-ion convention). (was 100.0883, now 57.0693 = n_butyl_cation.) Secondary fragmentation of the m/z-57 n-butyl cation: inductive cleavage of the C2-C3 bond expels ethylene and gives the ethyl cation C2H5+ (m/z 29, 20%). Book draws 0 electron-pushing arcs: Eq. 8.2 is a thermochemical fragmentation map (log k printed above each reaction arrow, heats of formation printed below each species), not a curved-arrow figure. All electron moves here are curator-inferred from the mechanism-type label printed under the reaction arrow; none is drawn on the page. ONE double-barbed arrow: the C2-C3 sigma pair becomes the new C3=C4 pi bond of ethylene, moving the charge from C4 onto C2 (the ethyl cation)."
+    },
+    {
+      "evidence_id": "ev_mech_g",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.2g",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "IMS_chap8_examples.py (IMS_8_2_ind_3_1)"
+      },
+      "confidence": 0.6,
+      "curator_note": "Cross-linked to IMS_8_2_ind_3_1. Correct cleavage (their C5-C8 = my C2-C3) and charge migration to the ethyl cation (their C5+ = my C2+), but the ethylene fragment is written '[C]8[C]11' with a SINGLE C-C bond (each carbon divalent) instead of the C=C double bond; this record uses genuine ethylene C3=C4. Bond-order under-specification only."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 57.0693,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_29",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_3_1",
+      "observed_mz": 29.0386,
+      "relative_intensity": 0.2,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

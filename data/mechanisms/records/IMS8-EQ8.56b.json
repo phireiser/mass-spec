@@ -1,0 +1,132 @@
+{
+  "mechanism_id": "IMS8-EQ8.56b",
+  "species": [
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[O+:1][CH2:6][CH2:5][CH2:4][CH2:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_neutral",
+      "mapped_smiles": "[CH2:2]=[O:1]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "tetramethylene_distonic_c4h8",
+      "mapped_smiles": "[CH2+:6][CH2:5][CH2:4][CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ring_opened_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["formaldehyde_neutral", "tetramethylene_distonic_c4h8"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_ch2o_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 6]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_inductive_ch2o_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_ch2o_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": 0.7,
+      "curator_note": "Upper branch of Equation 8.56, on the reaction arrow labelled 'i' (inductive / charge-site cleavage) leaving the ring-opened distonic ion .CH2CH2CH2CH2-O+=CH2: the oxocarbenium O1-C6 bond breaks heterolytically with both electrons migrating to the charge-bearing oxygen, expelling neutral formaldehyde (printed as 'O=CH2') and leaving the hydrocarbon C4H8+. ion at m/z 56, 55%. Book draws 0 arcs for this branch (only the italic 'i' reaction arrow); the single double-barbed arrow encoded here is curator-supplied for electron balance. DRAWN-STRUCTURE DISCLOSURE: the page draws the m/z 56 ion as a four-membered ring with THREE solid bonds and a DOTTED 1,4-bond, '+' on one terminus and '.' on the other, i.e. the tetramethylene distonic radical cation +CH2CH2CH2CH2. caught on the way to the cyclobutane radical cation. A partial (dotted) bond has no SMILES representation, so the open-chain distonic form that the arrow actually produces is encoded and the incipient ring closure is disclosed here."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.56b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.56 (its chapter-8 keys stop at 8.14); no MØD rule variable is cross-linked to this scheme. The only indexed ring-opening/ring-fragmentation family, IMS_8_6_1..IMS_8_6_4, is an all-carbon cyclooctadiene rule with no heteroatom and no C-O heterolysis, so it does NOT match this inductive CH2O loss. The page prints abundances as bare percentages without naming the experiment; they are the book's standard 70 eV EI values, and ms_context is set accordingly. The species undergoing this step is the ring-opened isomer of the molecular ion (same C5H10O+. composition, m/z 86), so adduct is kept as [M]+•."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c4h8_m56",
+      "species_id": "tetramethylene_distonic_c4h8",
+      "step_id": "step_inductive_ch2o_loss",
+      "observed_mz": 56.0621,
+      "relative_intensity": 0.55,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

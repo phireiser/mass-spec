@@ -1,0 +1,170 @@
+{
+  "mechanism_id": "IMS8-EQ8.55d",
+  "species": [
+    {
+      "species_id": "hexa_1_3_diene_radical_cation",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH+:1][CH:6][CH2:5][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "pentadienyl_cation",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH+:1][CH:6]=[CH2:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["hexa_1_3_diene_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["pentadienyl_cation", "methyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_methyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_methyl",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.55, BOTTOM row, the 'alpha' arrow drawn right-to-left: allylic (radical-site) alpha-cleavage of the rearranged 1,3-hexadiene radical cation expels a methyl radical (written 'CH3.' on the page) and leaves the resonance-stabilised pentadienyl cation. Book draws 0 arc(s) on this step (only the 'alpha'-labelled reaction arrow and the two products); moves <1,2,3> are curator-supplied hooks required for electron balance, none of them drawn. Encoded flow: radical site C6 -> forming pi C6=C5; one electron of the sigma C5-C4 -> that forming pi; the second electron of C5-C4 -> C4 (the departing CH3.). RESONANCE (convention C): the book draws the cation with the charge on the TERMINAL carbon that used to carry the methyl (CH2=CH-CH=CH-CH2+); the arrows as encoded produce the other resonance form, with the charge on the central carbon C1 (CH2=CH-CH(+)-CH=CH2), because the odd electron at C6 is consumed by the new C5=C6 pi bond while the positive charge stays where record IMS8-EQ8.55c left it. Both are the same delocalised pentadienyl cation C5H7+."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.55d",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.2,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.55; no MOD rule variable is cross-linked. The generic alkene alpha-cleavage rules (IMS_4_12_1/2, IMS_4_15_1_1/1_2) that would cover an allylic C-CH3 cleavage write the ionised alkene as a SINGLE carbon carrying both charge and spin ('[C+.]'), keeping the C=C bond intact - a form RDKit cannot represent for carbon (it would need five bonds on a cation) and therefore not the localisation used here; they also belong to the known Ch. 4 geometry-bug family (the cleaved bond is not incident to the pi-forming atom). RDKit substructure test of IMS_4_30's LHS '[#6;v3;+0]-[#6]-[#6]-[#6;v3;+1]-[#6]=[#6]' against this precursor gives 0 matches. No MOD rule reproduces the 8.55 methyl-loss step."
+    },
+    {
+      "evidence_id": "ev_peak_c5h7",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_c5h7",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.4,
+      "curator_note": "observed_mz 67.0542 is the curator-computed monoisotopic m/z of C5H7+ (electron-mass corrected). The page prints NO m/z and NO abundance for this ion: the only percentages on the page ('80%', '25%', '<=5%') belong to C4H6+., and the 'C5H8+.' named in the text below the scheme is a different, even-electron-loss ion (m/z 68) from the methylcyclohexene/cycloheptene isomers. Hence detected=false, status 'inferred', no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 82.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c5h7",
+      "species_id": "pentadienyl_cation",
+      "step_id": "step_alpha_methyl_loss",
+      "observed_mz": 67.0542,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

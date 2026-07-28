@@ -1,0 +1,148 @@
+{
+  "mechanism_id": "IMS8-EQ8.3d",
+  "species": [
+    {
+      "species_id": "butyl_methyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][O+:5][CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methoxymethylene_oxocarbenium",
+      "mapped_smiles": "[CH2:4]=[O+:5][CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "propyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butyl_methyl_ether_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["methoxymethylene_oxocarbenium", "propyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 141,
+        "equation": "8.3",
+        "section": "8.2 Product stability -- Charge competition in OE(+.) decompositions: Stevenson's Rule"
+      },
+      "confidence": 0.9,
+      "curator_note": "Eq 8.3 row 2, second branch, arrow labeled 'alpha'. Radical-site (alpha) cleavage driven by the ether oxygen radical cation: the odd electron on O5 forms the new C4=O5 pi bond (methoxymethylene oxocarbenium CH2=O(+)-CH3, m/z 45) while the C3-C4 sigma bond breaks and the propyl group departs as the neutral radical .C3H7. The printed IE for forming this resonance-stabilized cation is 6.9 eV, far below IE(C3H7.)=8.1 eV, so per Stevenson's rule charge migration to the oxocarbenium overwhelmingly wins (100% vs the 4% C3H7+ inductive branch 8.3c). Book draws 0 arcs (summary equation); the three fishhooks (O5 odd electron -> C4=O5 pi; one electron of the C3-C4 bond -> the same pi; the second electron of that bond -> the departing propyl radical) are the standard balanced radical-site alpha-cleavage flow, reconstructed here. DELOCALIZATION: CH2=O(+)-CH3 is the oxocarbenium resonance form of (+)CH2-O-CH3; the double-bonded form is the one encoded."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.3d",
+      "support_type": "curator_inferred",
+      "locator": {"page": 141, "equation": "8.3"},
+      "confidence": 0.25,
+      "curator_note": "Cross-linked MOD rule IMS_8_3_alpha (equation 8.3). It correctly cleaves the C-C bond and forms the CH2=O(+) oxocarbenium, matching this alpha branch on the ion side; BUT it simultaneously emits the propyl fragment as a cation C3H7(+) rather than the neutral radical .C3H7, so its RHS carries charge +2 -- charge-non-conserving and dropped by the conservation guardrail. The alpha bond change (form C4=O5, break C3-C4) matches this record; the charge/spin bookkeeping does not. See rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_oxocarbenium",
+      "support_type": "explicitly_reported",
+      "locator": {"page": 141, "equation": "8.3"},
+      "confidence": 0.9,
+      "curator_note": "Book prints '100%' relative abundance under CH2=OCH3+ (base of this competition). observed_mz 45.0335 is the curator-computed electron-mass-corrected monoisotopic m/z of C2H5O+; the page prints only the % abundance and the fragment IE (6.9 eV), no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+.",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 88.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_oxocarbenium",
+      "species_id": "methoxymethylene_oxocarbenium",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 45.0335,
+      "relative_intensity": 1.0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

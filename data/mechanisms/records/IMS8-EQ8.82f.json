@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS8-EQ8.82f",
+  "species": [
+    {
+      "species_id": "distonic_protonated_ester_ion",
+      "mapped_smiles": "[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_methyl_acrylate_ion",
+      "mapped_smiles": "[CH2:3]=[CH:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_radical",
+      "mapped_smiles": "[CH2:4][CH2:5][CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_protonated_ester_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_methyl_acrylate_ion",
+        "alkyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_alpha_backbite",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement_alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82f",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_alpha_backbite",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Left column of Equation 8.82, vertical arrow labelled 'r H, a': the distonic ion .CH2-(CH2)n-1-C(=O)-O(+)(H)CH3 back-bites -- its terminal primary radical C(6) abstracts the explicitly drawn H from the carbon alpha to the ester carbonyl, C(2), through a six-membered transition state (with n = 5: C6-C5-C4-C3-C2 plus the H), and the resulting C(2) radical then alpha-cleaves the C(3)-C(4) bond to give the drawn products, the alkyl radical CH3(CH2)n-3. (n-propyl for n = 5) and the even-electron protonated methyl acrylate CH2=CH-C(=O)-O(+)(H)CH3. Book draws 4 arc(s), all single-barb fishhooks: (i) the long hook from the 'H2C.' radical dot to the alpha C-H, (ii) a hook from that C-H bond pointing back left (the H leaving with one electron), (iii) a second hook from the same C-H bond down into the C(2)-C(3) bond, and (iv) a hook from the C(3)-C(4) bond up into the C(2)-C(3) bond. Arcs (i)-(iii) all involve the migrating hydrogen, which cannot carry an atom map, so at heavy-atom level they collapse into the single move <1> = the odd electron flowing from C(6) into the forming C(2)=C(3) pi bond; arc (iv) is move <2>. Move <3>, the hook that leaves the other C(3)-C(4) electron on C(4) as the drawn neutral radical, is an implicit homolysis hook required for electron balance (not drawn on the page). INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82f",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82f",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. hTransition_saturated_2 '[H]1[C]2[C]3([_A+]4)[C]5[C.]6>>[C.]2[C]3([_A+]4)[C]5[C]6([H]1)' is the only indexed rule that transfers an H onto a CARBON radical terminus, but it was checked and does not match: it is a 1,4-shift whose onium [_A+] hangs off the middle of the donor-acceptor chain, whereas here the charge sits on the ester oxygen OUTSIDE the five-atom H-transfer chain, the shift is a 1,5-shift, and the rule performs no C-C cleavage at all (its partner hTransition_saturated_2_alpha then cleaves the bond next to the charged site, not the bond beta to the carbonyl). Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI (consecutive fragmentation of the m/z-130 distonic ion)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 130.0988,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acrylate_87",
+      "species_id": "protonated_methyl_acrylate_ion",
+      "step_id": "step_rH_alpha_backbite",
+      "observed_mz": 87.0441,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

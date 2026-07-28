@@ -1,0 +1,195 @@
+{
+  "mechanism_id": "IMS4-EQ4.41",
+  "species": [
+    {
+      "species_id": "methyl_salicylate_radical_cation",
+      "mapped_smiles": "[1H:1][O:2][c:3]1[cH:4][cH:5][cH:6][cH:7][c:8]1[C:9](=[O:10])[O+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ortho_effect_rH_intermediate",
+      "mapped_smiles": "[O:2][c:3]1[cH:4][cH:5][cH:6][cH:7][c:8]1[C:9](=[O:10])[O+:11]([1H:1])[CH3:12]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ortho_oxidoaryl_acylium_distonic_ion",
+      "mapped_smiles": "[O:2][c:3]1[cH:4][cH:5][cH:6][cH:7][c:8]1[C:9]#[O+:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methanol_neutral_loss",
+      "mapped_smiles": "[O:11]([1H:1])[CH3:12]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["methyl_salicylate_radical_cation"]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": ["ortho_effect_rH_intermediate"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ortho_oxidoaryl_acylium_distonic_ion", "methanol_neutral_loss"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [1, 11]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [11]},
+          "target": {"type": "bond", "atom_maps": [1, 11]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_elimination",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [9, 11]},
+          "target": {"type": "lone_pair", "atom_maps": [11]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "lone_pair", "atom_maps": [10]},
+          "target": {"type": "bond", "atom_maps": [9, 10]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 78, "equation": "4.41", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.8,
+      "curator_note": "Ortho-effect hydrogen rearrangement (rH): the alkoxy O+. abstracts the ortho Y-H through a six-membered transition state, transferring H to oxygen and leaving the radical on Y. Book draws 2 arc(s); moves 1,2 are drawn (one electron of the Y-H bond to Y giving the radical site, and the other Y-H electron carrying the migrating H toward the alkoxy O+.), move 3 is an implicit homolysis hook (the O+. odd electron pairing into the new O-H bond) required for electron balance (not drawn on the page). The migrating hydrogen (map 1) is written as [1H] - ordinary protium with its isotope pinned, NOT deuterium - solely so RDKit's default parser retains it as a mapped atom (a plain mapped [H] is stripped by removeHs), letting the O-H and new O-H bond changes be bookkept."
+    },
+    {
+      "evidence_id": "evidence_step_elimination",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 78, "equation": "4.41", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.8,
+      "curator_note": "Inductive loss of HOR (labelled 'i' beside the -HOR arrow): the protonated ester C-O(alkyl) bond breaks heterolytically and the acylium C#O+ forms. Book draws 1 arc(s); move 1 is drawn (full double-barbed arrow moving the C-O(ester) bond pair onto the protonated alkoxy oxygen, expelling neutral HOR), move 2 is an implicit arc (carbonyl-oxygen lone pair forming the third bond of the C#O+ acylium) required for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.41",
+      "support_type": "computationally_supported",
+      "locator": {"page": 78, "equation": "4.41", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.7,
+      "curator_note": "Cross-linked MOD rules for eq 4.41: IMS_4_41_rH (H migration to the unsaturated hetero-structure with cleavage of the neighbouring X-H bond) encodes step_rH; its DFS cleaves [_A]-[H] and forms [O+]-[H] with the radical moving to _A, matching step_rH with _A instantiated as the ortho phenolic O. IMS_4_41_ind1 encodes step_elimination: its DFS cleaves the ester C-[O+] bond and forms the aryl C#O+ acylium while expelling H-O-R, matching this step exactly. IMS_4_41_ind2 encodes the SAME loss of HOR but written as the resonance/quinoid ketene form (structure 4 on the page: Y=C exocyclic, ring +. , C=C=O); it faithfully describes the drawn resonance partner of the acylium product I chose here (structure 3). All three DFS bond changes were verified by inspection; no mismatch found."
+    },
+    {
+      "evidence_id": "evidence_peak_inferred",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_distonic_acylium",
+      "support_type": "curator_inferred",
+      "locator": {"page": 78, "equation": "4.41", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.6,
+      "curator_note": "The page scheme is generic (Y, R) and prints no m/z. m/z 120.020 (C7H4O2+.) is computed for the chosen instantiation Y=OH, R=CH3 (methyl salicylate); precursor m/z 152.046 is likewise instantiation-derived. This instantiation corresponds to the real, prominent loss-of-CH3OH fragment (m/z 120) in the EI spectrum of methyl salicylate, but the value here is curator-computed, not read from the book. Resonance note (convention C): the product ion is drawn in two forms on the page; the localized acylium form (structure 3) is encoded, its ketene/quinoid resonance partner (structure 4) is not a separate species."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 152.0462,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_distonic_acylium",
+      "species_id": "ortho_oxidoaryl_acylium_distonic_ion",
+      "step_id": "step_elimination",
+      "observed_mz": 120.0200,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

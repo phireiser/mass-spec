@@ -1,0 +1,142 @@
+{
+  "mechanism_id": "IMS8-EQ8.48",
+  "species": [
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[O+:1][CH2:5][CH2:4][CH2:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopropane_neutral",
+      "mapped_smiles": "[CH2:3]1[CH2:4][CH2:5]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "heteroalkene_radical_cation",
+      "mapped_smiles": "[CH2:2]=[O+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ring_opened_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["cyclopropane_neutral", "heteroalkene_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_heteroalkene",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [3, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "bond", "atom_maps": [3, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_heteroalkene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_heteroalkene",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 178, "equation": "8.48", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.5,
+      "curator_note": "Upper branch off the ring-opened distonic ion, labelled 'alpha', giving the small heteroalkene radical cation CH2=Y+. (formaldehyde radical cation, m/z 30, for Y=O); the complementary neutral (C3H6) is NOT drawn on the page. Book draws 0 electron arcs for this branch (only the 'alpha'-labelled reaction arrow and the product ion CH2=Y+.). This is charge retention on the heteroatom fragment and, unlike the ethylene-loss branch (8.50), it is NOT a single radical-site alpha-cleavage of the drawn distonic ion (the radical and the C-O bond that must break are 1,3-related); semantics is therefore net_fragmentation. The 3 fishhooks encoded here are curator-supplied for electron balance and depict a plausible single-step route (intramolecular homolytic substitution: the tail radical closes onto the carbon bearing the O, expelling CH2=O+. and forming the C-C bond of the neutral). Cyclopropane is the curator-chosen closed-shell C3H6 neutral (1,3-ring closure of the two radical termini, no H-transfer needed); propene would require an undrawn H-shift."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.48",
+      "support_type": "curator_inferred",
+      "locator": {"page": 178, "equation": "8.48", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.48; no MØD rule variable is cross-linked to this scheme."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 72.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_heteroalkene",
+      "species_id": "heteroalkene_radical_cation",
+      "step_id": "step_alpha_heteroalkene",
+      "observed_mz": 30.0100,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

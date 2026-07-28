@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS4-EQ4.14",
+  "species": [
+    {
+      "species_id": "pentan_3_one_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][C:3](=[O+:4])[CH2:5][CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propanoyl_cation",
+      "mapped_smiles": "[CH3:6][CH2:5][C:3]#[O+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentan_3_one_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "propanoyl_cation",
+        "ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_4_14",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 59,
+        "equation": "4.14",
+        "figure": null,
+        "panel": null,
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book draws 3 arc(s); moves <1,2,3> are all drawn on the page and none is implicit: (1) a fishhook from the odd electron on the n-ionized oxygen (the printed '+.' sits on O, the C=O double bond is drawn intact) into the C(3)-O(4) bond, (2) a fishhook from the C(2)-C(3) sigma bond into that same C-O bond (its barb lands next to the first, so the C-O bond receives two electrons and rises from double to triple), and (3) a fishhook from the C(2)-C(3) sigma bond back onto the departing C2H5 group. The precursor SMILES localizes the charge and the odd electron on the oxygen exactly as printed. Only one of the two equivalent ethyl groups is shown reacting; the acylium retains the other."
+    },
+    {
+      "evidence_id": "evidence_mod_4_14",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.14",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.14",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py:292 (IMS_4_14)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Cross-linked MOD rule variable: IMS_4_14, DFS '[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]'. Verified against this scheme rather than asserted: the DFS cleaves the C1-C2 bond (carbonyl carbon to the alpha carbon of one ethyl) and raises the C1-O bond from double to triple, i.e. the cleaved sigma bond IS incident to the atom that gains bond order, matching the two bond changes encoded here; the departing ethyl is written [C.]2[C]3 (radical) and the charge stays on oxygen, as in the book. RDKit check: the rule's left-hand pattern [#6](-[#6]-[#6])(-[#6]-[#6])=[O+] matches the instantiated precursor [CH3:1][CH2:2][C:3](=[O+:4])[CH2:5][CH3:6] (True). The rule survives the conservation guardrail (kept at import)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_57",
+      "species_id": "propanoyl_cation",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 57.0335,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.95
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

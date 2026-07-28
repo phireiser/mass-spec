@@ -1,0 +1,242 @@
+{
+  "mechanism_id": "IMS8-EQT8.2n",
+  "species": [
+    {
+      "species_id": "hexanal_radical_cation",
+      "mapped_smiles": "[CH:1](=[O+:6])[CH2:2][CH2:3][CH:4]([1H:10])[CH2:7][CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_enol_radical_cation",
+      "mapped_smiles": "[CH2:2][CH:1]=[O+:6][1H:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "but_1_ene",
+      "mapped_smiles": "[CH2:3]=[CH:4][CH2:7][CH3:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexanal_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_enol_radical_cation",
+        "but_1_ene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_mclafferty",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "mclafferty_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 167,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3 (Two bonds cleaved; OE+. alpha-alpha(re))"
+      },
+      "confidence": 0.8,
+      "curator_note": "Table 8.2 (p.167, Two bonds cleaved, OE+. alpha-alpha with H rearrangement) = the McLafferty rearrangement. Book draws 4 fishhook arcs; moves 1,2 (O+. abstracts the gamma-H) and moves 4,5 (the gamma-radical drives beta-cleavage) are drawn, move 3 (the C(gamma)-H electron staying on C(gamma)) and move 6 (the C(alpha)-C(beta) electron staying on C(alpha)) are the implicit homolysis hooks required for electron balance (not drawn). The product is drawn in the book as [.CH2-C(R')=O]+ (a distonic radical cation, radical on the former alpha-carbon); the book's box omits the O-H that the transferred gamma-H must produce, so as literally drawn it is short one H -- encoded here as the mass-balanced distonic ion [.CH2-CH=OH]+ (C2H4O), isomeric with the enol radical cation. Charge-retention channel drawn; charge migration (RHC=CH2+.) is the drawn alternative. Migrating gamma-H carried as isotope [1H:10]. Instantiation = hexanal radical cation (R'=H, R=ethyl); no m/z / intensity printed -- m/z curator-computed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2n",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.7,
+      "curator_note": "Chemistry-verified cross-link (same bond-order/charge/spin changes) to the MØD McLafferty pair IMS_8_7_1 (gamma-H rearrangement: ...{=}[O+.]>>...[C.]...{=}[O+][H]) then IMS_8_7_2 / IMS_8_7_3 (beta-cleavage giving alkene + enol radical cation [C]{=}[C][O+.][H]); MØD splits the concerted book scheme into rH + alpha steps and draws the enol tautomer (radical on O) rather than the distonic form (radical on C-alpha) drawn here -- the two are isomeric C2H4O+. products. Same reaction as the detailed record IMS8-EQ8.7 (also hexanal). Charge-migration channel = MØD IMS_8_7_5 (alkene radical cation [C]{=}[C+.]) / IMS_8_7_4. Not RDKit substructure-tested (DFS is a MØD reaction rule, not a SMARTS)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_enol",
+      "species_id": "distonic_enol_radical_cation",
+      "step_id": "step_mclafferty",
+      "observed_mz": 44.0257,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

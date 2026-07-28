@@ -1,0 +1,356 @@
+{
+  "mechanism_id": "IMS8-EQ8.99",
+  "species": [
+    {
+      "species_id": "methionine_ester_molecular_ion",
+      "mapped_smiles": "[NH2+:1][CH:2]([C:3](=[O:4])[O:5][CH3:6])[CH:7]([1H:11])[CH2:8][S:9][CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methoxycarbonyl_radical",
+      "mapped_smiles": "[C:3](=[O:4])[O:5][CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylthiopropyl_iminium_ion",
+      "mapped_smiles": "[NH2+:1]=[CH:2][CH:7]([1H:11])[CH2:8][S:9][CH3:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_iminium_ion",
+      "mapped_smiles": "[NH2+:1]=[CH:2][CH:7]=[CH2:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methanethiol",
+      "mapped_smiles": "[1H:11][S:9][CH3:10]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methionine_ester_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_iminium",
+      "species_ids": [
+        "methylthiopropyl_iminium_ion",
+        "methoxycarbonyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_iminium_ion",
+        "methanethiol",
+        "methoxycarbonyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_iminium",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_thiol_elimination",
+      "from_state": "state_iminium",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_8_99",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 208,
+        "equation": "8.99",
+        "figure": null,
+        "panel": "first arrow, labelled '- ROC.'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.99, FIRST arrow (leftmost structure -> centre structure). The book draws the precursor as the amine-n-ionized molecular ion of a methionine ester, H2N(+.)-CH(COOR)CH2CH2SCH3, with '+.' printed on the nitrogen; the arrow is labelled with its neutral loss '- ROC.', i.e. the alkoxycarbonyl radical .C(=O)OR. This is textbook radical-site alpha-cleavage: the N-C(alpha) bond becomes the iminium double bond while the C(alpha)-COOR sigma bond cleaves homolytically. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks, converging with their barbs pointing DOWN onto the N-C(alpha) bond, i.e. onto the forming N=C pi bond: arc 1 starts at the odd-electron dot of the '+.' on nitrogen, arc 2 starts on the vertical C(alpha)-COOR bond. Moves <1,2> are those two drawn arcs; move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it routes the second electron of the cleaving C(alpha)-COOR bond onto the ester carbon, which is what actually makes the .COOR radical the arrow label announces. LOCALIZATION (convention B): the precursor SMILES carries the charge and the odd electron explicitly on nitrogen ([NH2+:1] with three bonds = one unpaired electron in RDKit), so arc 1 has a real origin. INSTANTIATION (convention F): the scheme is generic in R; this record uses R = CH3, i.e. methionine methyl ester (C6H13NO2S, M+. m/z 163.0662), so the expelled radical is .COOCH3 (59.0133) and the iminium is CH3SCH2CH2CH=NH2(+) (C4H10NS+, m/z 104.0528). ATOM-MAP NOTE: the hydrogen that migrates in the second step is tagged [1H:11] so RDKit keeps it explicit and it can carry an atom map; it is an ordinary protium, not a label the book draws."
+    },
+    {
+      "evidence_id": "ev_step_rH_8_99",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_thiol_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 208,
+        "equation": "8.99",
+        "figure": null,
+        "panel": "second arrow, labelled 'r H'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.99, SECOND arrow (labelled 'r H'): the even-electron (EE+) iminium ion H2N(+)=CH-CH2-CH2-SCH3 eliminates methanethiol to give the conjugated allyl iminium H2N(+)=CH-CH=CH2, exactly as the book prints the products under the arrow ('H2N(+)=CHCH=CH2 + HSCH3'). SET-UP SENTENCE (runs from page 207 onto this page): 'Finally, hydrogen rearrangement can occur in an EE+ ion to a site that has neither a charge nor a multiple bond (Equations 4.45, 8.99, and 8.100; see Site receptivity in this section and extensive examples by Zahorszky 1988, 1989).' Here that receptor site is the SULFUR: it is uncharged and singly bonded, and the charge stays on the remote iminium nitrogen throughout. CONNECTIVITY AS DRAWN: the centre structure is written 'H2N(+)=CH-CH-CH2' with one H drawn explicitly above the middle carbon and SCH3 drawn above the terminal carbon, i.e. the beta carbon (map 7) is the H donor and the gamma carbon (map 8) carries the sulfur; the beta H goes to S, the C(beta)=C(gamma) pi bond forms and the C(gamma)-S bond breaks, which is the only assignment that produces the printed allyl product. ARC COUNT (convention D): Book draws 4 arc(s), all single-barbed fishhooks, in a diamond of two converging pairs. Upper pair -> the forming H-S bond (a hook off the C(beta)-H bond sweeping up-right, and the long arc that starts at the two lone-pair dots drawn above S and sweeps left over the top); lower pair -> the forming C(beta)=C(gamma) pi bond (a hook off the same C(beta)-H bond and a hook off the C(gamma)-S bond, both with barbs pointing down onto the horizontal C-C bond). Moves <1,2,3,4> are those four drawn arcs; move <5> is an implicit homolysis hook required for electron balance (not drawn on the page) - it returns the second electron of the cleaving C(gamma)-S bond to sulfur as a lone pair, which is what leaves S with its neutral two-bond/two-lone-pair valence in HSCH3. NOTE that McLafferty's four-fishhook drawing is bookkeeping-equivalent to the two-double-barbed-arrow concerted 1,2-elimination (C-H pair -> C=C, C-S pair -> S-H); the record transcribes the hooks he actually drew. SPECTATOR: the .COOCH3 radical released in step 1 is carried unchanged through both states so that step 2 balances atom-for-atom; it takes no part in this step."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_99",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.99",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 208,
+        "equation": "8.99",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MØD rule is cross-linked. rule_index.json 'by_equation' has no '8.99' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering) and no rule in src/data_generation/rules/ contains a sulfur atom at all, so nothing in the rule set can encode the C-S cleavage / HSCH3 loss of step 2. Candidates for step 1 were CHECKED, not assumed. (i) IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' is the generic radical-site alpha-cleavage. Its left pattern DOES match this record's instantiated precursor (RDKit substructure test with '[#6]-[#6]-[#6](-[#6])-[#7+]' -> exactly one hit, atom-maps C1=8, C2=7, C3=2, C4=3, A5=1), but it would CLEAVE THE C8-C7 BOND while forming the N1=C2 pi bond: the cleaved bond is NOT incident to the pi-forming carbon, so the rule expels .CH2SCH3 from the gamma position instead of the alpha .COOR the book draws. This is the known Chapter-4 geometry defect, and the rule is additionally NOT LIVE: the conservation guardrail in rules/__init__.py drops it at import ('radical induced (alpha-)clevage for a saturated site 4.9 §R1R3R4Y5 [spin 1->2]' - its product keeps '+.' on the heteroatom while also creating [C.], i.e. two unpaired electrons from one). Listed in rule_mismatches. (ii) IMS_4_43_ '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+.]8([H]9)[C]10([H]11)([H]12)[C]13([H]14)([H]15)[H]16>>...[N+]8([H]9){=}[C]10([H]11)([H]12).[C.]13(...)' is the only amine alpha-cleavage in the set and has the CORRECT geometry (the cleaved C10-C13 bond is incident to the pi-forming carbon C10), but it cannot match here: it requires the nitrogen to carry TWO carbon substituents (diethylamine), whereas this precursor's nitrogen carries two hydrogens and one carbon - RDKit substructure test of '[#6]-[#7+]-[#6]' against the precursor returns 0 matches. (iii) IMS_4_43_rH '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+]8([H]9){=}[C]10([H]11)([H]12)>>[C]1([H]2)([H]3){=}[C]5([H]6)([H]7).[N+]8([H]4)([H]9){=}[C]10([H]11)([H]12)' is an EE+ iminium H-rearrangement and is the nearest family relative of step 2, but it transfers the H TO THE NITROGEN and expels an alkene by cleaving the N-C bond, i.e. the opposite receptor site from the one the running text singles out for 8.99 ('a site that has neither a charge nor a multiple bond'); it also does not match ('[CH3]-[CH2]-[N+]=[CH2]' -> 0 matches against the iminium intermediate, whose iminium carbon bears one H and whose nitrogen bears two). Family resemblance only, NOT a match."
+    },
+    {
+      "evidence_id": "ev_peaks_8_99",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_56",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 208,
+        "equation": "8.99",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): page 208 prints no m/z and no intensity anywhere - equation 8.99 is drawn entirely generically (R, COOR, ROC.) and the surrounding prose quotes no abundances for it. Every species is therefore detected=false, both peak assignments have status 'inferred' and relative_intensity is omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the chosen instantiation R = CH3 (methionine methyl ester): M+. 163.0662 -> [after loss of .COOCH3, 59.0133] iminium C4H10NS+ 104.0528 -> [after loss of CH3SH, 48.0034] allyl iminium C3H6N+ 56.0495. They are not numbers printed by the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 163.0662,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_104",
+      "species_id": "methylthiopropyl_iminium_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 104.0528,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    },
+    {
+      "peak_id": "peak_56",
+      "species_id": "allyl_iminium_ion",
+      "step_id": "step_rH_thiol_elimination",
+      "observed_mz": 56.0495,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

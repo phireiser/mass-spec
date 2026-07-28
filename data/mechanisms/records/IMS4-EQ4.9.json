@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS4-EQ4.9",
+  "species": [
+    {
+      "species_id": "n_methylethylamine_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][NH+:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyleneiminium_ion",
+      "mapped_smiles": "[CH2:2]=[NH+:3][CH3:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_methylethylamine_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyleneiminium_ion",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 57,
+        "equation": "4.9",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Generic scheme R-CR2-YR(+.) -> R. + CR2=YR(+), reaction arrow labelled alpha. Book draws 2 arc(s); moves <1,2> are drawn (the odd electron on Y into the forming C=Y bond, and one electron of the R-CR2 sigma bond into that same bond), move <3> is an implicit homolysis hook required for electron balance (not drawn on the page; the book simply writes R. as a product). Instantiated by the curator as Y = NH, R = CH3 (N-methylethylamine molecular ion, n-ionized at nitrogen -- the site the book ranks highest for radical-site initiation: N > S, O, pi, R. > Cl, Br > H). The page prints no m/z, no intensity and no specific compound for this scheme."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.9",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 57,
+        "equation": "4.9"
+      },
+      "confidence": 0.2,
+      "curator_note": "rule_index cross-links equation 4.9 to IMS_4_9 ([C]1[C]2[C]3([C]4)[_A+.]5 >> [C.]1.[C]2[C]3([C]4){=}[_A+.]5). VERIFIED MISMATCH, not support: (i) the DFS chain is C1-C2-C3(C4)-Y5, so the cleaved bond C1-C2 is NOT incident to the atom C3 that forms the new pi bond -- one carbon too far from Y, whereas the book's alpha-carbon carries both the leaving R and Y (the intended DFS was almost certainly [C]1[C]2([C]3)([C]4)[_A+.]5, i.e. a missing branch parenthesis); (ii) the product keeps [_A+.], so the rule invents a second unpaired electron (spin 1 -> 2) instead of pairing the radical into the pi bond. Checked in the container: the rule matches neither acetone, diethyl ether nor this amine ion; on 2-methoxy-2-methylbutane M+. it does fire and yields [CH2]C(C)(C)=[O+.]C -- a pentavalent carbon and a di-radical product. It is also dropped at assembly time by the conservation guardrail in rules/__init__.py ('4.9 ... [spin 1->2]'), so no live rule reproduces this equation. All m/z values in this record are curator-computed from the chosen instantiation."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_iminium",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 57,
+        "equation": "4.9"
+      },
+      "confidence": 0.5,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic scheme; 44.0495 is the curator-computed monoisotopic m/z of CH2=N(H)+-CH3 for the chosen instantiation (electron-mass corrected, matching utils.term_transfers.exact_mass_from_term). Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 59.073,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_iminium",
+      "species_id": "methyleneiminium_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 44.0495,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

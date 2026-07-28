@@ -1,0 +1,181 @@
+{
+  "mechanism_id": "IMS8-EQ8.49",
+  "species": [
+    {
+      "species_id": "cyclic_ether_radical_cation",
+      "mapped_smiles": "[O+:1]1[CH2:2][CH2:3][CH2:4][CH2:5]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[O+:1][CH2:5][CH2:4][CH2:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_neutral",
+      "mapped_smiles": "[CH2:2]=[O:1]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_carbenium_c3h6",
+      "mapped_smiles": "[CH2+:5][CH2:4][CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["cyclic_ether_radical_cation"]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": ["ring_opened_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["formaldehyde_neutral", "distonic_carbenium_c3h6"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 178, "equation": "8.49", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.8,
+      "curator_note": "Generic scheme: a cyclic heteroatom (Y) OE+. radical cation, n-ionized at Y, ring-opens by alpha-cleavage of a ring C-C bond (beta to Y) to a ring-opened distonic ion (Y=CH2 oxocarbenium head, primary carbon radical tail). Instantiated with Y=O as tetrahydrofuran (oxolane) radical cation to give a parseable structure; the book draws a generic ring with a rounded bottom and the label Y, so ring size and heteroatom are not specified. Book draws 2 arcs: a small fishhook from the Y radical (+.) into the forming Y=C pi bond (move 1) and a large fishhook from the breaking ring C-C sigma bond into that same forming pi bond (move 2); move 3 (the other electron of the C-C sigma bond onto the new radical carbon) is an implicit homolysis hook required for electron balance (not drawn on the page but the product radical dot is shown)."
+    },
+    {
+      "evidence_id": "ev_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 178, "equation": "8.49", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.6,
+      "curator_note": "Second step on the main (8.49) line, labelled 'i' (inductive/charge-site cleavage): the oxocarbenium O+-C bond of the distonic ion breaks heterolytically with both electrons migrating to the charge-bearing heteroatom, expelling neutral CH2=Y (formaldehyde for Y=O) and leaving a distonic carbenium radical cation (+CH2-CH2-CH2., m/z 42 for Y=O). Book draws 0 electron arcs for this step (only the 'i'-labelled reaction arrow); the single double-barbed arrow encoded here is curator-supplied for balance. DISCLOSED DRAWN INTERMEDIATE/PRODUCT NOT ENCODED: the figure then draws one further arrow closing this open distonic carbenium into a cyclic hydrocarbon OE+. (the half-moon 'D'-shape ring with +.); that terminal product is a delocalised radical cation with no clean localised Kekule structure (2c-1e ring bond) and its ring size/unsaturation is schematic, so it is described here but not encoded as a species."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.49",
+      "support_type": "curator_inferred",
+      "locator": {"page": 178, "equation": "8.49", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.49 (nor 8.48/8.50); no MØD rule variable is cross-linked to this scheme. The generic ring-opening alpha-cleavage resembles heteroatom radical-site alpha-cleavage rules but none is indexed to this equation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 72.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c3h6_distonic",
+      "species_id": "distonic_carbenium_c3h6",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 42.0464,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

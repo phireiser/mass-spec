@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS8-EQ8.2h",
+  "species": [
+    {
+      "species_id": "pentanoyl_acylium_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][C:5]#[O+:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "n_butyl_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "carbon_monoxide",
+      "mapped_smiles": "[C-:5]#[O+:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentanoyl_acylium_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "n_butyl_cation",
+        "carbon_monoxide"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_2_7",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_h",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_2_7",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 138,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "Eq. 8.2, arrow 2.7, inductive (secondary: C4H9CO+ -> C4H9+ + CO)"
+      },
+      "confidence": 0.8,
+      "curator_note": "adduct corrected to null (convention G): the species undergoing this reaction is an EVEN-ELECTRON cation (charge +1, radical_electrons 0) - a fragment/secondary-fragmentation precursor - NOT the [M]+. radical molecular ion. precursor_mz corrected to the m/z of the ion that actually undergoes the drawn reaction (convention G: the reacting species sets adduct + precursor_mz); it previously carried the neutral molecule's molecular-ion m/z, which describes the parent EI experiment rather than this step's precursor (sibling record IMS8-EQ8.1c already used the reacting-ion convention). (was 100.0883, now 85.0642 = pentanoyl_acylium_cation.) Secondary fragmentation of the m/z-85 acylium: inductive loss of CO regenerates the n-butyl cation C4H9+ (m/z 57). The page prints heats of formation for this arrow but NO abundance percentage, so no relative intensity is recorded (the m/z-57 peak itself is 10% via arrow 2.1). Book draws 0 electron-pushing arcs: Eq. 8.2 is a thermochemical fragmentation map (log k printed above each reaction arrow, heats of formation printed below each species), not a curved-arrow figure. All electron moves here are curator-inferred from the mechanism-type label printed under the reaction arrow; none is drawn on the page. ONE double-barbed arrow: the C4-C5 sigma pair collapses onto C5 as the CO carbon lone pair, leaving C4 as the butyl cation (soft lone-pair note expected on C5)."
+    },
+    {
+      "evidence_id": "ev_mech_h",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.2h",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "IMS_chap8_examples.py (IMS_8_2_ind_2_7)"
+      },
+      "confidence": 0.5,
+      "curator_note": "Cross-linked to IMS_8_2_ind_2_7. MISMATCH: the rule's reactant '...[C+]11(...)[C]14[O+]15' is a malformed acylium -- it carries TWO positive charges (C11+ and O15+) and a divalent carbene carbon C14 single-bonded to both C11 and O15, i.e. it is not the singly-charged C4H9-C#O+ (m/z 85) drawn on the page. The correct acylium is encoded here. Listed in rule_mismatches."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 85.0642,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_57",
+      "species_id": "n_butyl_cation",
+      "step_id": "step_inductive_2_7",
+      "observed_mz": 57.0699,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS4-EQ4.23",
+  "species": [
+    {
+      "species_id": "n_butyl_chloride_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][Cl+:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "n_butyl_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "chlorine_radical",
+      "mapped_smiles": "[Cl:5]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_butyl_chloride_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "n_butyl_cation",
+        "chlorine_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_book",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 65,
+        "equation": "4.23",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.85,
+      "curator_note": "1-Chlorobutane molecular ion, charge and odd electron localized on chlorine (drawn +•). Book draws 1 arc: a straight full (2-electron) arrow above the CH2-Cl bond pointing at Cl. move <1> is drawn and is the complete electron flow (C-Cl bonding pair to Cl); no implicit move is required, giving C4H9+ (m/z 57, 3%) + •Cl. NOTE: the printed base peak is (M-HCl)+• [100%] and C3H7+ [30%] is also listed; these dominant ions are NOT depicted by this arrow (their pathways are discussed in Section 4.9 / the text) and are not encoded here."
+    },
+    {
+      "evidence_id": "evidence_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.23",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 65,
+        "equation": "4.23",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.9,
+      "curator_note": "Cross-linked MØD variables: IMS_4_23_1, IMS_4_23_2. MISMATCH - neither encodes the drawn C-Cl inductive cleavage to C4H9+ + •Cl. IMS_4_23_1 '...>>[C+]1[C]2[C]3[C]4.[H]5[Cl+.]6' encodes HCl loss and IMS_4_23_2 '...>>[C+]1[C]2[C]3.[C]4[H]5[Cl+.]6' encodes CH2Cl loss to C3H7+; BOTH retain chlorine as [Cl+.] on the product side, giving a doubly-charged (+2) right-hand side that is charge-non-conserving."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 92.0393,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c4h9_cation",
+      "species_id": "n_butyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 57.0704,
+      "relative_intensity": 0.03,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "observed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

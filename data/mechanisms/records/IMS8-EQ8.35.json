@@ -1,0 +1,218 @@
+{
+  "mechanism_id": "IMS8-EQ8.35",
+  "species": [
+    {
+      "species_id": "enol_dihydroxycarbenium_precursor",
+      "mapped_smiles": "[C+:1]([OH:9])([OH:10])[C:2](=[CH2:3])[CH2:4][CH2:5][C:6]([2H:15])([2H:16])[CH2:7][CH2:8][CH3:11]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "remote_carbocation_intermediate",
+      "mapped_smiles": "[C:1]([OH:9])([OH:10])=[C:2]([CH2:3][2H:15])[CH2:4][CH2:5][C+:6]([2H:16])[CH2:7][CH2:8][CH3:11]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_oxocarbenium_product",
+      "mapped_smiles": "[CH2+:4][C:2]([CH2:3][2H:15])=[C:1]([OH:9])[OH:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "deuterio_pentene_neutral",
+      "mapped_smiles": "[CH2:5]=[C:6]([2H:16])[CH2:7][CH2:8][CH3:11]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "enol_dihydroxycarbenium_precursor"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "remote_carbocation_intermediate"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_oxocarbenium_product",
+        "deuterio_pentene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_d_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [6, 15]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [3, 15]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_beta_cleavage",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "beta_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [4, 5]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [5, 6]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH_8_35",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_d_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 163,
+        "equation": "8.35",
+        "figure": null,
+        "panel": null,
+        "section": "8.4 Reaction initiation at radical or charge sites (gamma-H rearrangement of EE+ ions, Kraft and Spiteller 1967, arrow labelled 'rH')"
+      },
+      "confidence": 0.8,
+      "curator_note": "gamma-D rearrangement (arrow 'rH') of an even-electron (EE+) ion, a deuterium-labelling scheme (Kraft and Spiteller 1967) that the text calls a 'gamma-H rearrangement to an unsaturated group with beta-cleavage' closely similar to the OE+. Equations 4.33/4.35/4.36. Because the ion is CLOSED-SHELL, all arrows are double-barbed (2-electron), NOT the three-fishhook radical push of the OE+. analogues. The migrating atom is a DEUTERIUM (real experimental label), written [2H] and atom-mapped (map 15) so its C-D bond can be referenced; a second, spectator D (map 16) sits on the same gamma-carbon (the book draws the gamma-carbon as a -CD2- with one D up-right, one D down-left). The unsaturated group receiving the D is the exocyclic methylene C(=CH2) (map 2 = map 3). Through the drawn six-membered ring the gamma-D (map 15) transfers to the methylene carbon (map 3, becoming the -CH2D / 'DCH2' of the product), the C2=C3 methylene pi bond shifts to the C1-C2 bond (forming the (HO)2C=C enol double bond), and the charge relays from the dihydroxycarbenium carbon (map 1) to the gamma-carbon (map 6, now a +). ARC COUNT: Book draws 2 arc(s) on the precursor - the large sweeping arc from the gamma-D to the CH2 methylene (move <1>, the C-D bonding pair migrating as a hydride, bond 6-15 -> bond 3-15) and the small arc at the methylene/'+' carbon (move <2>, the C2=C3 pi pair -> the C1-C2 bond). Both drawn arcs are encoded; no implicit hook is needed (closed-shell 2-electron process). LOCALIZATION (convention C): the cation is a delocalized allyl/oxocarbenium; the precursor is written in the single localized form with the '+' on the dihydroxycarbenium carbon (map 1, protonated-carboxyl / carboxylic-acid-enol cation) and a genuine C(=CH2) methylene at map 2 - the form these arrows consume. The book draws the resonance partner (formal '+' on the central carbon, C=C to the C(OH)2). INSTANTIATION: the chain length (n-propyl terminus, two CH2 between the gamma-CD2 and the methylene) is transcribed as drawn; the parent is a 2-substituted acrylic-acid EE+ fragment, C9H15D2O2+, m/z 159.135 (curator-computed, no m/z printed on the page)."
+    },
+    {
+      "evidence_id": "evidence_step_beta_8_35",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 163,
+        "equation": "8.35",
+        "figure": null,
+        "panel": null,
+        "section": "8.4 Reaction initiation at radical or charge sites (beta-cleavage of the rearranged EE+ ion, arrow labelled 'i')"
+      },
+      "confidence": 0.8,
+      "curator_note": "beta-cleavage (arrow 'i') of the rearranged carbocation. The '+' now sits on the former gamma-carbon (map 6); beta-scission cleaves the Calpha-Cbeta bond (map4-map5) and forms the Cbeta=Cgamma double bond (map5-map6), expelling the neutral alkene CH2=C(D)-CH2CH2CH3 (2-deuterio-1-pentene, C5H9D, keeping the spectator D map 16) and leaving the charge on the allyl/oxocarbenium fragment (map 4 now a primary cation). ARC COUNT: Book draws 1 arc(s) - the single curved arrow on the intermediate running from the Calpha-Cbeta bond up to the '+' on the gamma-carbon; it is the one double-barbed (2-electron) move encoded here. The cleaved Calpha-Cbeta bond IS incident to Cbeta, one of the two atoms of the new Cbeta=Cgamma pi bond - correct beta-scission geometry. DELOCALIZATION (convention C): the product cation is the delocalized allyl/oxocarbenium [CH2-C(CH2D)-C(OH)2]+; it is written in the single localized form these arrows produce, with the '+' on the terminal CH2 (map 4) and the C(OH)2=C enol double bond (map1=map2) retained. The book draws the resonance partner (CH2=C, '+' delocalized onto the C(OH)2). The product m/z 88.050 (C4H6DO2+) is curator-computed (no m/z printed on the page)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_8_35",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.35",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.35",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json by_equation)"
+      },
+      "confidence": 0.7,
+      "curator_note": "NO MOD rule is assigned to Equation 8.35 (rule_index.json 'by_equation' has no 8.35 entry). Cross-link checked, not asserted: the closely-related rules IMS_4_35_rHalpha ('[C]1[C]2([H]3)[C]4[C]5[C]6{=}[N+.]8...>>...[C.]5[C]6{=}[N+]8([H]3)...') and IMS_4_33_rH/alpha_1/alpha_2 encode the ODD-ELECTRON (OE+., note the [N+.]/radical products and the three-fishhook H-migration) gamma-H rearrangement with beta-cleavage. Equation 8.35 is the EVEN-ELECTRON (EE+) counterpart: closed-shell throughout, two-electron arrows, no radical anywhere - so those OE+. rules do NOT match this substrate's electron count and would not fire on it. The text itself flags this scheme as only 'closely similar' to Eqs 4.33/4.35/4.36 and notes the incidence with EE+ ions is much lower than with OE+. ions (Zollinger and Seibl 1985). MS context: an EE+ fragment ion (not the [M]+. molecular ion), studied via metastable/EE+ rearrangement; adduct null. All m/z here (precursor 159.135, product 88.050, ethylene-analogue neutral 71.084) are curator-computed from the transcribed instantiation because the page prints no m/z or intensity (it is a D-labelling mechanism scheme)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "metastable-ion (MI) decomposition",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 159.1349,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_88",
+      "species_id": "allyl_oxocarbenium_product",
+      "step_id": "step_beta_cleavage",
+      "observed_mz": 88.0503,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

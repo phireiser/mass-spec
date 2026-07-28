@@ -1,0 +1,163 @@
+{
+  "mechanism_id": "IMS8-EQ8.39",
+  "species": [
+    {
+      "species_id": "n_propyl_cation",
+      "mapped_smiles": "[CH2+:1][CH:2]([1H:8])[CH3:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "isopropyl_cation",
+      "mapped_smiles": "[CH2:1]([1H:8])[CH+:2][CH3:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "n_propyl_radical_spectator",
+      "mapped_smiles": "[CH2:4][CH2:5][CH3:13]",
+      "role": "spectator",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_propyl_cation",
+        "n_propyl_radical_spectator"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "isopropyl_cation",
+        "n_propyl_radical_spectator"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_hydride_shift",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydride_shift",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 170,
+        "equation": "8.39",
+        "section": "8.2 (random rearrangements of alkyl ions)"
+      },
+      "confidence": 0.6,
+      "curator_note": "Generic scheme (R, R') instantiated with R = R' = CH3: the primary n-propyl cation CH3-CH2-CH2(+) isomerizes to the secondary isopropyl cation CH3-CH(+)-CH3 by a 1,2-hydride shift, while the .CH2CH2R' fragment (here .CH2CH2CH3, n-propyl radical) is a NET SPECTATOR -- it is drawn associated to the ion throughout but is identical on both sides of the net reaction. Book draws 0 electron-pushing arcs: equation 8.39 links four structures with plain reaction arrows and dotted (....) non-covalent associations only. The single encoded move (H8 bonding pair, electron_count 2, from the C2-H bond to a new C1-H bond) is curator-supplied to balance the net isomerization RCH2CH2(+) -> RCH(+)CH3 and is NOT drawn as an arrow on the page. DRAWN INTERMEDIATES DISCLOSED (encoding convention G): the book draws (i) a non-covalent ion-radical complex RCH2CH2(+)....CH2CH2R' and (ii) a proton-bridged, edge-protonated-cyclopropane-like intermediate R-CH(-CH2-)....H(+)....CH2CH2R'; both are non-covalent species that cannot be single mapped_smiles, so they are described here but not encoded as intermediate states. This is a 'random rearrangement' (Wendelboe et al. 1981) that scrambles H/C between the two fragments and makes alkyl-ion abundances ambiguous as indicators of structure."
+    },
+    {
+      "evidence_id": "evidence_mechanism",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.39",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 170,
+        "equation": "8.39"
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.39 -- no MØD Rule.fromDFS encodes this random-rearrangement / 1,2-hydride-shift scheme; no cross-link is asserted. ms_context.precursor_mz (43.0537) is the instantiated n-propyl-cation m/z for the chosen R = CH3, not a value printed in the book; adduct is null because the reacting species is a fragment alkyl cation, not the intact molecular ion."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_43",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 170,
+        "equation": "8.39"
+      },
+      "confidence": 0.5,
+      "curator_note": "No m/z or intensity is printed for this generic scheme. observed_mz 43.0537 is the curator-computed monoisotopic m/z of the C3H7(+) product (isopropyl cation) for the chosen R = CH3 instantiation; status 'inferred', not a measured value, and relative_intensity is omitted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 43.0537,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_43",
+      "species_id": "isopropyl_cation",
+      "step_id": "step_hydride_shift",
+      "observed_mz": 43.0537,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "mechanism_id": "IMS8-EQ8.73",
+  "species": [
+    {
+      "species_id": "heptan_2_one_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[CH2:4][CH2:5][CH2:6][CH2:7][CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_enone_ion",
+      "mapped_smiles": "[CH2:5]=[CH:4][C:1]([CH3:3])=[OH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_radical_neutral",
+      "mapped_smiles": "[CH3:8][CH2:7][CH2:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["heptan_2_one_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["protonated_enone_ion", "alkyl_radical_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_h_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "atom", "atom_maps": [7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 6]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 6]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [7]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rHH_8_73",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.73",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (r H/H)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.73, whose reaction arrow is labelled 'r H/H'. The drawn precursor is R-CH(H)-CH2-CH2-CH(H')-C(R')=Y(+.): the n-ionized carbonyl heteroatom carries the printed '+.', the two migrating hydrogens are written out as explicit letters H (on the remote, R-bearing carbon) and H' (on the carbon alpha to C=Y), and the C-C bond that is cleaved is marked with a WAVY line -- it is the bond between the second and third chain carbons counted from the R end. Book draws 2 arc(s), and NEITHER is a fishhook: they are plain straight arrows indicating atom transfers -- one from H pointing across to Y, one from H' pointing back up the chain towards the R-bearing end. No curved electron arrows appear anywhere in this scheme, so all four encoded electron moves are curator-supplied. Products as printed: the neutral radical 'R(H').CH2.' -- i.e. the alkyl group that has PICKED UP H', with the odd electron on its terminal carbon -- plus the EVEN-electron conjugated ion CH2=CH-C(R')=YH+. ENCODING NOTE (honest divergence): neither migrating hydrogen can be atom-mapped (RDKit folds a mapped explicit H into implicit valence), so each transfer is written as the electron relocation it produces at the heavy-atom level. Move <1> = the H -> Y transfer (net: the odd electron moves from O(2) to the donor carbon C(7)). Moves <2,3> = homolysis of the wavy-marked C(5)-C(6) bond, one electron staying on C(6) as the drawn neutral radical and one going into the new C(4)=C(5) pi bond. Move <4> = a bookkeeping composite for the H' transfer: C(4)'s share of the broken C(4)-H' bond completes that pi bond while the odd electron on C(7) is consumed forming the new C(7)-H' bond; with the hydrogens folded away this appears as one fishhook from C(7) into the forming pi bond. READING OF THE SECOND ARROW (stated because it is the one ambiguous feature of the figure): the arrowhead sits between the two chain carbons on the R side, so it could be read as delivering H' to either of them; the product label 'R(H')' plus the fact that the drawn neutral shows only ONE explicit carbon after 'R(H')' -- the one carrying the radical dot -- fixes the reading used here, H' onto the R-bearing carbon C(7) with the odd electron ending on the terminal carbon C(6). INSTANTIATION: Y = O, R = CH3, R' = CH3, i.e. heptan-2-one (the figure draws five chain carbons, one more than Equation 8.70); the ion is protonated methyl vinyl ketone CH2=CH-C(CH3)=OH+ (m/z 71.0491) and the neutral is the n-propyl radical. NO PRINTED NUMBERS on p.191: detected=false, status 'inferred', no relative_intensity; the m/z is the curator's computed value for this instantiation. Note that the ion's net hydrogen_shift is 0 -- it gains the H that went to Y and loses H' from the alpha carbon."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_73",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.73",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.73",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.73, and no rule in the index implements the r H/H pattern (two hydrogens migrating in OPPOSITE directions, one to the charge site and one to the departing alkyl, with an even-electron ion and an odd-electron neutral as products). The nearest indexed families were checked and are NOT cross-linked: the h2Transiton_* rules send BOTH hydrogens to the heteroatom end (that is Equation 8.72's r 2H, not this reaction); IMS_8_2_bidirectional_up/down '[C]1...[C.]5([H]6)...{=}[O+]18([H]19)>>...[C]5([H]6)([H]19)...{=}[O+.]18' merely run the single gamma-H transfer back and forth on one and the same ion rather than delivering a second hydrogen to a departing fragment; and the hTransition_* families move a single hydrogen only. So this scheme is currently unmodelled by the MOD rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 114.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_conjugated_ee_ion",
+      "species_id": "protonated_enone_ion",
+      "step_id": "step_h_h_rearrangement",
+      "observed_mz": 71.0491,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

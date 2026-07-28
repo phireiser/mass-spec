@@ -1,0 +1,252 @@
+{
+  "mechanism_id": "IMS4-EQ4.32",
+  "species": [
+    {
+      "species_id": "phenylcyclohexene_molecular_ion",
+      "mapped_smiles": "[CH:2]1([C:1]2=[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]2)[CH2:3][CH2:4][CH+:5][CH:6][CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_radical_cation",
+      "mapped_smiles": "[C:1]1([CH:2][CH2:3][CH2:4][CH+:5][CH:6]=[CH2:7])=[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "styrene_radical_cation",
+      "mapped_smiles": "[C:1]1([CH:2][CH2+:3])=[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "butadiene_neutral_loss",
+      "mapped_smiles": "[CH2:4]=[CH:5][CH:6]=[CH2:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "phenylcyclohexene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "ring_opened_distonic_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "styrene_radical_cation",
+        "butadiene_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha1_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_charge_migration",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha1_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 70,
+        "equation": "4.32",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (retro-Diels-Alder)"
+      },
+      "confidence": 0.85,
+      "curator_note": "First alpha-cleavage (ring opening) of the stepwise retro-Diels-Alder of a 4-R-cyclohexene molecular ion - the SAME ring-opening step shared with eq 4.31; the book draws it once (top row of p.70) and the ring-opened distonic radical cation is the common branch point marked with the '|||' (identical-structure) sign between eqs 4.31 and 4.32. ARC COUNT: the book draws 3 arc(s) and all three are printed - a fully drawn 3-fishhook alpha-cleavage. Move <1> (top-right fishhook next to the dot) = the odd electron on the pi-ionized alkene carbon (map 6) into the forming C6=C7 pi bond; move <2> (large central arc across the top of the ring) = one electron of the breaking C2-C7 ring sigma bond into that same forming pi bond; move <3> (small top-left fishhook next to R) = the other electron of the C2-C7 bond onto the R-bearing carbon (map 2). LOCALIZATION (convention B/C): the alkene radical cation is drawn localized as C5(+)-C6(.) (cation map 5, odd electron map 6); the neutral C=C sat between maps 5 and 6. Instantiated as R=C6H5 (4-phenylcyclohexene), map 1 = phenyl ipso carbon."
+    },
+    {
+      "evidence_id": "evidence_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_charge_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 70,
+        "equation": "4.32",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (retro-Diels-Alder, charge migration)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Inductive (charge-migration) cleavage on the same ring-opened distonic radical cation (eq 4.32, arrow labelled 'i'): the C5(+) charge induces heterolytic cleavage of the C3-C4 bond, both electrons flowing into the new C4=C5 pi bond. ARC COUNT: the book draws 1 arc - a single double-barbed (full arrowhead) curved arrow at the bottom of the intermediate, from the C3-C4 bond sweeping toward the cation. Move <1> (electron_count 2) fully accounts for the step: the map3-map4 bond is broken heterolytically and the map4-map5 bond gains one order, so no implicit hook is needed. Charge MIGRATES from map 5 to map 3: the R-bearing fragment (Ph-CH(.)-CH2(+), the styrene radical cation, m/z 104) keeps the charge and neutral 1,3-butadiene (maps 4-7) leaves. PRINTED INTENSITIES for the R-fragment ion: R=H <5% (IE 10.5); R=C6H5 100% (IE of the styrene fragment 8.4). This record instantiates R=C6H5, hence relative_intensity 1.0 - m/z 104 is the base peak of 4-phenylcyclohexene, phenyl stabilising the migrated charge."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.32",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.32",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MOD rules IMS_4_32_alpha and IMS_4_32_ind. VERIFIED against their DFS. IMS_4_32_alpha '[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7' is BYTE-IDENTICAL to IMS_4_31_alpha1 - the shared ring-opening first alpha cleavage (step_alpha1_ring_opening); it breaks ring bond map2-map7, forms C6=C7 and moves the radical map6->map2. IMS_4_32_ind '[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7>>[C]1[C.]2[C+]3.[C]4{=}[C]5[C]6{=}[C]7' cleaves map3-map4, forms the C4=C5 pi bond and moves the charge from map5 to map3 while the radical stays on map2 - exactly step_inductive_charge_migration; the products are the [C.]2[C+]3 R-fragment radical cation (charge retained on the phenyl-bearing map1/2/3 fragment) plus neutral butadiene [C]4{=}[C]5[C]6{=}[C]7. The cleaved map3-map4 bond is incident to map4, which forms the new C4=C5 bond, so the inductive rule is correctly encoded (no mismatch). R=C6H5 instantiation as in eq 4.31 (map1 = phenyl ipso); the generic rules use a bare carbon handle at map1."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 158.1090,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_104",
+      "species_id": "styrene_radical_cation",
+      "step_id": "step_inductive_charge_migration",
+      "observed_mz": 104.0621,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

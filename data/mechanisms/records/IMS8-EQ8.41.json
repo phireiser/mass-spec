@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.41",
+  "species": [
+    {
+      "species_id": "ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_radical_AB",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "oxocarbenium_CeqD",
+      "mapped_smiles": "[CH2:2]=[O+:3][CH2:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "alkyl_radical_AB",
+        "oxocarbenium_CeqD"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_arrows",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 171,
+        "equation": "8.41",
+        "figure": null,
+        "panel": null,
+        "section": "8.7 Radical-site initiation (one bond cleaved without rearrangement)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Generic scheme 8.41: OE+. AB-C-D --alpha--> AB. + C=D+ (radical-site initiation, charge retention on D). Book draws 2 arcs; move 1 is drawn (D's odd electron [+. on D, right fishhook] -> forming C=D pi bond) and move 2 is drawn (one electron of the AB-C sigma bond [left arc] -> forming C=D pi bond); move 3 is an implicit homolysis hook (the other AB-C electron -> departing AB radical), required for electron balance and NOT drawn on the page (AB. is simply written as a product). Reactivity scale printed under the scheme: N > S, O, pi, R. > Cl, Br > H (radical-site donating ability)."
+    },
+    {
+      "evidence_id": "evidence_step_instantiation",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 171,
+        "equation": "8.41",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.41 is fully generic (letters AB, C, D) and prints NO m/z and NO intensity. Instantiated here on diethyl-ether radical cation (D=O, the heteroatom site) so the arrows have real atoms and the cross-linked MOeD rule IMS_4_13_1 matches atom-for-atom: AB=CH3 (map1, leaves as CH3.), C=CH2 (map2, alpha carbon), D=O (map3, radical/charge site bearing the spectator ethyl maps 4/5). Detected ion m/z 59.0491 (C3H7O+, ethoxymethylene oxocarbenium) and precursor m/z 74.0726 are curator-computed monoisotopic values from this instantiation, NOT numbers read from the page; species are flagged detected=false / peak status inferred accordingly. ms_context reflects the standard EI molecular-ion (M+.) context of the generic alpha-cleavage; this page (Section 8.7) shows no CAD/MI/CI experiment."
+    },
+    {
+      "evidence_id": "evidence_mech_modrules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.41",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 171,
+        "equation": "8.41",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.41 has NO MOeD rule of its own (rule_index by_equation[\"8.41\"] = null); the text cites Equations 4.13-4.15 as the concrete alpha-cleavage cases. VERIFIED cross-link: IMS_4_13_1 (dfs [C]1..[C]5[O+.]8[C]9..>> [C.]1 . [C]5{=}[O+]8[C]9..) is the charge-RETENTION alpha cleavage of the same saturated ether radical cation this record instantiates: it cleaves the AB-C sigma bond (1-5), forms the C=D pi bond (5=8), the cleaved bond IS incident to the pi-forming alpha carbon (atom 5) -> correct alpha-cleavage geometry, matches scheme 8.41 as drawn. IMS_4_13_2 is the charge-MIGRATION sibling (product [C+]5{-}[O]8, charge moves to carbon, O neutral) corresponding to the Stevenson's-rule alternative discussed in the surrounding text (Eq 8.40); it is NOT the pathway drawn in 8.41. IMS_4_14 (C=O+. >> C#O+) is the analogous alpha cleavage at an UNSATURATED heteroatom (double->triple, acylium), the same reaction type one bond order higher, not the single->double form drawn here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_oxocarbenium",
+      "species_id": "oxocarbenium_CeqD",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 59.0491,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

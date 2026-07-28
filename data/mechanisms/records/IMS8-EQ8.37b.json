@@ -1,0 +1,176 @@
+{
+  "mechanism_id": "IMS8-EQ8.37b",
+  "species": [
+    {
+      "species_id": "diethyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_oxocarbenium",
+      "mapped_smiles": "[CH2:2]=[O+:3][CH2:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "diethyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyl_radical",
+        "ethyl_oxocarbenium"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [3]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [1]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_8_37b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 169,
+        "equation": "8.37",
+        "figure": null,
+        "panel": null,
+        "section": "8.6 Sigma-bond dissociation (sigma)"
+      },
+      "confidence": 0.6,
+      "curator_note": "Equation 8.37, line 2 of 3: 'OE+.  A(+)BCD  --sigma-->  A. + B=C(+)D'. Unlike line 1 (simple homolysis to a saturated carbenium), this branch expels a radical A. AND forms a NEW double bond B=C in the product, with the '+' drawn ON the doubly-bonded atom C. ARC COUNT (convention D): the book draws 0 curved arrows/fishhooks - a straight sigma-labelled net reaction arrow only. The 3 encoded electron_moves are IMPLICIT (reconstructed for balance, not drawn) and constitute a canonical radical-site alpha-cleavage (convention A, three fishhooks): move <1> the radical-site odd electron on the heteroatom (map 3) forms the new B=C pi bond (bond 2-3); move <2> one electron of the cleaving A-B sigma bond (bond 1-2) also enters that forming pi bond (bond 2-3); move <3> the other electron of the A-B sigma bond goes to the departing radical A (atom 1). MASS-BALANCE FINDING (why this is not a pure hydrocarbon): a saturated alkane radical cation CnH(2n+2)+. undergoing a SINGLE sigma-bond homolysis can only give a SATURATED carbenium CpH(2p+1)+ - forming a C=C double-bond cation CpH(2p-1)+ would require losing two extra H. So line 2, drawn as a saturated linear A-B-C-D chain yet producing a double-bond cation B=C(+)D, cannot be a pure C/H species; the '+' localized on a doubly-bonded atom is the signature of an oxo-/imino-carbenium (or acylium). INSTANTIATION (convention F): instantiated as the classic alpha-cleavage of the DIETHYL ETHER radical cation, mapping A=CH3 (map 1, leaves as .CH3), B=CH2 (map 2), C=O (map 3, the heteroatom that bears the '+' -> ethyl oxocarbenium CH2=O(+)-CH2CH3), D=OCH2CH3's ethyl (maps 4,5). This reproduces the drawn graph A-B-C-D and 'A. + B=C(+)D' exactly and is mass-balanced (C4H10O+. -> .CH3 + C3H7O+). Curator-computed detected ion m/z 59.0491 (C3H7O+); derives from this instantiation, NOT from the page (the page prints no m/z or intensity). LOCALIZATION note (conventions B/C): for an ether the radical cation physically localizes +/. on oxygen (n-ionization), so the precursor SMILES places them on O (map 3); the generic scheme instead draws the '+' on the A-B sigma region, a schematic delocalized picture. No resonance ambiguity in the product oxocarbenium."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_8_37b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.37b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.37",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json by_equation)"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MOD rule is indexed for Equation 8.37 (rule_index.json 'by_equation' stops at 8.14; no 8.37 key). No cross-link is asserted. The encoded step is a heteroatom alpha-cleavage forming an oxocarbenium; MOD's chapter-8 rules (IMS_8_*) do include alpha/inductive fragmentations but none is keyed to 8.37, and the diethyl-ether instantiation here is a curator choice made to satisfy mass balance for the generic line-2 scheme rather than a book-named substrate. m/z 59.0491 (C3H7O+) is curator-computed from the diethyl-ether instantiation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_oxocarbenium",
+      "species_id": "ethyl_oxocarbenium",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 59.0491,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

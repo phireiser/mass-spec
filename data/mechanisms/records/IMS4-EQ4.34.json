@@ -1,0 +1,161 @@
+{
+  "mechanism_id": "IMS4-EQ4.34",
+  "species": [
+    {
+      "species_id": "distonic_charge_migration_form",
+      "mapped_smiles": "[CH3:3][C+:1]([OH:2])[CH2:4][CH2:5][CH:6][CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propene_radical_cation",
+      "mapped_smiles": "[CH3:7][CH:6][CH2+:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetone_enol_neutral",
+      "mapped_smiles": "[CH2:4]=[C:1]([OH:2])[CH3:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_charge_migration_form"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "propene_radical_cation",
+        "acetone_enol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_i_4_34",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 72,
+        "equation": "4.34",
+        "figure": null,
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (charge migration)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 1 arc; move <1> is drawn and fully accounts for the step (no implicit hook needed because the cleavage is heterolytic). The single two-electron (double-barbed) arrow runs from the C(4)-C(5) sigma bond (the beta C-C bond) into the forming C(1)=C(4) pi bond, regenerating the neutral acetone enol and leaving the beta-carbon C(5) as a carbocation. This is the charge-migration ('i', inductive) branch of the same distonic intermediate that Eq 4.33 forms: the page draws the precursor as the localized carbocation resonance form (charge drawn on the former carbonyl carbon C(1)+, oxygen a neutral -OH, radical drawn on the gamma-carbon C(6)), obtained from the molecular ion by the gamma-H rearrangement (rH, shown at the top of the page) followed by the vertical charge-migration arrow. The detected ion is the propene radical cation, drawn as the distonic form R-CH(.)-CH2(+) (radical on C(6), + on C(5)); its resonance forms are CH3-CH(+)-CH2(.) and [CH3-CH=CH2]+. -- the arrow produces exactly the drawn distonic form. Instantiated with R = CH3, giving propene+. at m/z 42 (IE = 9.7 eV, 5%); for R = C6H5 the migration product is styrene+. at m/z 104 (IE = 8.4 eV) and becomes the base peak (100%)."
+    },
+    {
+      "evidence_id": "evidence_mod_4_34",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.34",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.34",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py (IMS_4_34_rH, IMS_4_34_ind)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked MOD rule variables, verified against this scheme rather than asserted. IMS_4_34_rH DFS '[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C+]6([C]7)[O]8[H]3' produces the charge-migration resonance form used here as the precursor: gamma-H(3) migrates to oxygen, but the product localizes the positive charge on the former carbonyl carbon C(6) (written [C+]) with a NEUTRAL hydroxyl O(8)-H(3) and the radical on the gamma-carbon C(2) -- exactly the [C+](-OH) form drawn at the bottom-left of the page (C6/C1 = carbonyl carbon, C2/C6 = gamma-carbon). IMS_4_34_ind DFS '[C]1[C.]2[C]3[C]4[C+]5([C]6)[O]7[H]8>>[C]1[C.]2[C+]3.[C]4{=}[C]5([C]6)[O]7[H]8' matches the inductive step: the beta C(3)-C(4) sigma bond cleaves heterolytically toward the carbocation, the C(4)=C(5) enol double bond forms (neutral acetone enol), the beta-carbon C(3) becomes the cation and the gamma-carbon C(2) keeps its radical -- the distonic alkene radical cation. Mapping: their C4/C5 (alpha-carbon / carbonyl carbon) = my C4/C1 forming the C(1)=C(4) pi bond, their C3 (beta-carbon) = my C5 becoming the cation. Both rules survive the L->R conservation guardrail (radical count 1 preserved throughout)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_42",
+      "species_id": "propene_radical_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 42.0464,
+      "relative_intensity": 0.05,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.5c",
+  "species": [
+    {
+      "species_id": "butyl_vinyl_ether_radical_cation",
+      "mapped_smiles": "[CH2:3][CH:2]=[O+:1][CH2:4][CH:5]([1H:9])[CH2:6][CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butene_radical_cation",
+      "mapped_smiles": "[CH2+:4][CH:5][CH2:6][CH3:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetaldehyde_neutral",
+      "mapped_smiles": "[1H:9][CH2:3][CH:2]=[O:1]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "butyl_vinyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butene_radical_cation",
+        "acetaldehyde_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_mclafferty_alpha_i",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty_alpha_i",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 142,
+        "equation": "8.5",
+        "figure": null,
+        "panel": null,
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.8,
+      "curator_note": "Eq 8.5, lower scheme, alpha-i channel (arrow labelled 'ai'). n-butyl vinyl ether molecular ion (C6H12O, isomeric with hexanal). McLafferty-type gamma-H transfer to the terminal vinyl carbon followed by C-O cleavage; the C4H8 alkene retains the charge (IE(butene)=9.6 eV < IE(acetaldehyde)=10.2 eV printed -> butene dominates, 55%). Book draws 4 fishhook arcs (terminal-C gamma-H abstraction; ring C=C formation; C-O cleavage). Moves 1-3 (H transfer) are drawn; move 4 encodes the charge-retaining alkene ('i' inductive/heterolytic 2-electron C-O cleavage, the O-C4 pair collapsing to an O lone pair to give neutral acetaldehyde) and is not a separately drawn arc. Precursor written as the distonic oxa-allyl resonance form .CH2-CH=O(+)- (odd electron on the terminal carbon, as the page draws it; positive charge on O); butene localized as its distonic + on C4 / odd-e on C5 form. m/z curator-computed; 55% printed. [RECHECK 2026-07-24: arc count corrected 3->4 per a zoomed re-read; the gamma-H abstraction is drawn as TWO barbs (O-radical->H and the gamma C-H bond electron->O-H), not one.]"
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.5c",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 142,
+        "equation": "8.5",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "Cross-link: M\u00d8D rule IMS_8_5_2 (src/data_generation/rules/IMS_chap8_examples.py). Its skeleton matches this scheme (gamma-H transfer, C-O cleavage, C=C alkene + C=O carbonyl, charge on the C4H8 butene) BUT the rule is MIS-ENCODED: the ether oxygen is over-valent (valence 4, two spurious H) and the adjacent carbon is over-valent (valence 5), giving reactant C6H15O rather than butyl vinyl ether C6H12O; its two product fragments total +2 / 2 radicals versus the +1/1 reactant, violating charge and spin conservation (guardrail-dropped). Not RDKit-substructure-testable (over-valent, not a valid molecule)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_56",
+      "species_id": "butene_radical_cation",
+      "step_id": "step_mclafferty_alpha_i",
+      "observed_mz": 56.0621,
+      "relative_intensity": 0.55,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "observed",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

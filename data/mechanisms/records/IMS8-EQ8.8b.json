@@ -1,0 +1,476 @@
+{
+  "mechanism_id": "IMS8-EQ8.8b",
+  "species": [
+    {
+      "species_id": "methyloxirane_molecular_ion_O_ionized",
+      "mapped_smiles": "[CH2:1]([1H:5])[C:2]1([1H:6])[O+:3][CH2:4]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ring_opened_oxocarbenium",
+      "mapped_smiles": "[CH2:1]([1H:5])[C:2]([1H:6])=[O+:3][CH2:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_vinyl_ether_radical_cation",
+      "mapped_smiles": "[CH2:1]=[C:2]([1H:6])[O+:3][CH2:4][1H:5]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetyl_cation_mz43",
+      "mapped_smiles": "[CH2:1]([1H:6])[C:2]#[O+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH2:4][1H:5]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyloxirane_molecular_ion_O_ionized"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_ring_opened_oxocarbenium"
+      ]
+    },
+    {
+      "state_id": "state_enol_ether",
+      "species_ids": [
+        "methyl_vinyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetyl_cation_mz43",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "ring_opening",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_to_enol_ether",
+      "from_state": "state_distonic",
+      "to_state": "state_enol_ether",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_rH_methyl_loss",
+      "from_state": "state_enol_ether",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 145,
+        "equation": "8.8",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (hidden rearrangements)"
+      },
+      "confidence": 0.85,
+      "curator_note": "PRODUCTIVE PATH, step 1 (the main rightward arrow of eq 8.8). Ionized methyloxirane (n-ionized at oxygen, O+. localized per convention B) opens its ring: the O radical drives cleavage of the epoxide C-C bond (map 2 - map 4) to form the ring-opened distonic oxocarbenium CH3-CH=O(+)-CH2. (a primary carbon radical, map 4). This is a radical-site (alpha-type) cleavage: the bond broken (C2-C4) is incident to C2, the same atom on which the new C2=O3 pi bond forms. ARC COUNT: the book draws 3 arcs on the ring structure -- move <1> = O odd electron (map 3) into the forming C2=O3 pi bond; move <2> = one C2-C4 sigma electron into that pi bond; move <3> = the other C2-C4 electron onto the terminal carbon (map 4). All three fishhooks are drawn. Same nominal mass (m/z 58) as the precursor -- an isomerization, not detected as a separate peak."
+    },
+    {
+      "evidence_id": "evidence_step_rH_to_enol_ether",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_to_enol_ether",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 145,
+        "equation": "8.8",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (hidden rearrangements)"
+      },
+      "confidence": 0.8,
+      "curator_note": "PRODUCTIVE PATH, step 2 (the reversible 'rH' equilibrium arrow, drawn as two half-arrows). The primary carbon radical of the distonic ion (map 4) abstracts a gamma-H (map 5) from the methyl group (map 1); coupled to this the C1=C2 pi bond forms and the C2=O3 pi bond opens, relocating the radical onto oxygen to give the more stable methyl vinyl ether (methoxyethylene) radical cation CH2=CH-O(+.)-CH3. ARC COUNT: the book draws 3 arcs in the middle structure -- a large arc carrying the H (map 5) from carbon 1 over to the radical carbon (map 4), a fishhook forming C1=C2, and an arc opening C2=O3 onto oxygen. For complete electron balance this is encoded as 5 fishhooks: moves <1,2> build the new C4-H5 bond (C4 odd electron + one C1-H5 electron), move <3> routes the other C1-H5 electron into the new C1=C2 pi bond, move <4> routes one C2=O3 pi electron into C1=C2, and move <5> puts the other C2=O3 pi electron onto oxygen as the new radical. Moves <3> (the second half of the H-transfer) and <4> are the parts condensed into the drawn arcs; no arc is fabricated. Reversible (drawn with a two-way arrow)."
+    },
+    {
+      "evidence_id": "evidence_step_rH_methyl_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 145,
+        "equation": "8.8",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (hidden rearrangements)"
+      },
+      "confidence": 0.8,
+      "curator_note": "PRODUCTIVE PATH, step 3 (the downward 'rH' arrow from the enol-ether ion). A second hydrogen rearrangement: the vinyl H (map 6) shifts from C2 to C1 while the C1=C2 pi bond and an oxygen lone pair build the C2#O3 triple bond and the O3-CH3 (map 4) bond homolyzes, expelling a methyl radical (map 4) and giving the very stable acetyl (acylium) cation CH3-C#O(+), m/z 43 (35% of the 70-eV spectrum; loss of methyl). ARC COUNT: the book draws 3 arcs on the enol-ether structure -- one in the H/C=C region (left), one in the C-O region (centre), and one from oxygen out to CH3 (right, the O-CH3 homolysis expelling .CH3). For complete electron balance this is encoded as 7 arrows: moves <1,2> shift the C1=C2 pi into the C2-O3 bond (first new pi of the triple bond), move <3> is the oxygen lone pair (a full 2-electron arrow) forming the second new pi, moves <4,5> homolyze O3-C4 (one electron onto the departing methyl radical, one back onto oxygen to pair its radical into a lone pair), and moves <6,7> carry H6 from C2 to C1. The three printed arcs are the drawn subset; the remaining arrows (lone-pair pi donation and the completion of the H-transfer/homolysis) are the implicit balance, not fabricated arcs."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.8b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.8",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap8_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MØD rules IMS_8_8_1, IMS_8_8_2, IMS_8_8_2b, IMS_8_8_3; ALL VERIFIED against their DFS (my map: C1=orig methyl, C2=orig ring CH, O3=oxygen, C4=orig ring CH2; the DFS use their own numbering). step_ring_opening = IMS_8_8_1 '[C]1(H)(H)(H)[C]5(H)[O+.]7[C]8(H)(H){-}5 >> [C]1(H)(H)(H)[C]5(H){=}[O+]7[C.]8(H)(H)': removes the {-}5 epoxide C5-C8 ring bond, forms C5=O7, C8 becomes the radical -- exactly the ring opening (their C5=my C2, C8=my C4, O7=my O3). MATCH. step_rH_to_enol_ether = IMS_8_8_2 '[C]1(H2)(H3)(H4)[C]5(H6){=}[O+]7[C.]8(H9)(H10) >> [C]1(H2)(H3){=}[C]5(H6)[O+.]7[C]8(H9)(H10)(H4)': H4 migrates from methyl C1 to C8, C1=C5 forms, O7 becomes the radical -- exactly this step (their H4=my map 5). MATCH; IMS_8_8_2b is the same interconversion written in the reverse direction (this step is flagged reversible). step_rH_methyl_loss = IMS_8_8_3 '[C]1(H2)(H3){=}[C]4(H5)[O+.]6[C]7(H8)(H9)(H10) >> [C]1(H2)(H3)(H5)[C]4{#}[O+]6.[C.]7(H8)(H9)(H10)': H5 migrates from C4 to C1, C4#O6 triple bond forms, the O6-C7 bond breaks releasing .CH3 (C7) -- exactly this step (their C4=my C2, O6=my O3, C7=my C4, H5=my map 6). MATCH. No geometry mismatches were found for the eq 8.8 rules."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_43_acetyl",
+      "species_id": "acetyl_cation_mz43",
+      "step_id": "step_rH_methyl_loss",
+      "observed_mz": 43.0178,
+      "relative_intensity": 0.35,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

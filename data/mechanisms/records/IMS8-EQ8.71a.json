@@ -1,0 +1,198 @@
+{
+  "mechanism_id": "IMS8-EQ8.71a",
+  "species": [
+    {
+      "species_id": "butan_1_ol_molecular_ion",
+      "mapped_smiles": "[CH3:4][CH2:3][CH2:2][CH2:1][OH+:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_intermediate",
+      "mapped_smiles": "[CH2:4][CH2:3][CH2:2][CH2:1][OH2+:5]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclobutane_neutral",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "hy_radical_cation",
+      "mapped_smiles": "[OH2+:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butan_1_ol_molecular_ion"]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": ["distonic_oxonium_intermediate"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["cyclobutane_neutral", "hy_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_h_rearrangement_to_saturated_y",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_ring_closure_charge_retention",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [4]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_71a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_rearrangement_to_saturated_y",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.71",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.9,
+      "curator_note": "First (left-hand) arrow of Equation 8.71 -- the SATURATED-Y counterpart of 8.71's neighbour 8.70. The drawn precursor is acyclic: R-CH(H)-(CH2)n-CH(R')-Y with the printed '+.' on Y and only a SINGLE bond from Y to the carbon (compare 8.70, where the same position is drawn as a C=Y double bond); the chain is drawn as a curve so that the H and Y meet in a cyclic transfer array, and the middle structure is drawn open (no ring bond between the two end carbons yet). Book draws 2 arc(s), both single-barbed fishhooks meeting at the forming Y...H bond: <a> from the odd electron printed on Y towards the H, <b> from the C-H bond into that forming Y-H bond; the third hook (the other C-H electron back onto the donor carbon) is an implicit homolysis hook required for electron balance (not drawn on the page, though the middle structure already shows the radical dot on that carbon and a bare '+' on Y). ENCODING NOTE: the migrating H cannot be atom-mapped (RDKit folds a mapped explicit H into implicit valence), so the one encoded move is the net heavy-atom consequence of the three hooks: the odd electron moves from Y(5) to the donor carbon C(4). INSTANTIATION: Y = OH, R = R' = H, i.e. butan-1-ol, which is the compound the book itself uses for this scheme on p.193 ('The mass spectrum of butanol+. shows equivalent abundances of the alpha-cleavage product CH2=O+H ... and (M - H2O)+.'; 'D(-> H2O + c-C4H8) = 0.6 eV'). With that instantiation the drawn transfer array is the six-membered H-O-C1-C2-C3-C4 ring and the H comes from C4."
+    },
+    {
+      "evidence_id": "ev_step_displacement_8_71a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_closure_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.71",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (charge retention branch)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Upper branch of Equation 8.71, labelled 'charge retention'. Book draws 0 arc(s) for this step (only the labelled straight reaction arrow), so all three encoded moves are curator-supplied. They produce exactly the drawn products: the page prints a CLOSED ring bearing R -- a bond appears between the two chain ends that were not bonded in the precursor or in the middle structure -- plus 'HY+.'. So the neutral is the ring and the ion is HY+., the charge staying where the first step put it. Moves: <1> the carbon radical's odd electron and <2> one electron of the breaking C(1)-Y bond form the new C(1)-C(4) ring bond; <3> the second electron of that C-Y bond returns to Y, which becomes the odd-electron ion HY+.. The p.193 text confirms both the step and the ring: 'without the unsaturation to the Y group bearing the rearranged hydrogen, subsequent cleavage at that C-Y+H bond is favored. This leads to YH+. (charge retention) or .(CH2)n+ (charge migration) products ... five- or six-membered-ring formation ... is favored if ring closure gives the corresponding cyclopropane+. or cyclobutane+. ions'. NOTE ON R': the page draws R' on the Y-bearing carbon in the precursor and in the middle structure but omits it from both product rings; atom balance requires it to stay on the ring, and the instantiation R' = H makes the omission moot. NO PRINTED NUMBERS: generic scheme, no m/z and no abundance printed anywhere on p.191; detected=false, status 'inferred', no relative_intensity. m/z 18.0100 (H2O+.) is the curator's computed value for the butan-1-ol instantiation, not a book datum."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_71a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.71a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.71",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.71, but two chapter-4 rules encode this exact two-step sequence and were verified against their DFS. (1) Step 1 = IMS_4_37_rH / IMS_4_38_rH '[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9>>[C]1[C]2[C.]3[C]5[C]6[C]7[O+]8([H]4)[H]9': the H4 on the remote carbon C3 moves to the n-ionized alcohol oxygen O8, which becomes a closed-shell -O+H2 head, and the odd electron is left on C3 -- exactly the drawn distonic intermediate, with the same 6-membered transfer array (H, O8, C7, C6, C5, C3). IMS_4_40_rH is the halide analogue ('[Cl+.]7 >> [Cl+]7[H]4'), matching the alternative reading of Y as a halogen (HY = HCl). (2) Step 2 = IMS_4_37_rd '[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9>>[C]1[C]2[C]3[C]4[C]5[C]6{-}3.[O+.]7([H]8)[H]9': the radical carbon C3 forms a new ring bond to C6 ('{-}3'), the C6-O7 bond is cleaved, and H2O leaves as the odd-electron cation -- the same bond broken, the same bond formed, the same charge/spin outcome as encoded here, and a four-membered (cyclobutane) ring. CAVEAT, stated rather than papered over: both rule patterns carry two EXTRA carbons (C1, C2) on the H-donor carbon, i.e. they require R = C2H5 or larger (1-hexanol), so neither pattern actually matches the butan-1-ol instantiation used here (R = H) even though the chemistry is identical."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_hy_ion",
+      "species_id": "hy_radical_cation",
+      "step_id": "step_ring_closure_charge_retention",
+      "observed_mz": 18.0100,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS4-EQ4.29",
+  "species": [
+    {
+      "species_id": "protonated_ephedrine",
+      "mapped_smiles": "[c:1]1([cH:2][cH:3][cH:4][cH:5][cH:6]1)[CH:7]([OH:8])[CH:9]([CH3:10])[NH2+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "hydroxy_secondary_carbocation_mz135",
+      "mapped_smiles": "[c:1]1([cH:2][cH:3][cH:4][cH:5][cH:6]1)[CH:7]([OH:8])[CH+:9][CH3:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methylamine",
+      "mapped_smiles": "[NH2:11][CH3:12]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_ephedrine"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "hydroxy_secondary_carbocation_mz135",
+        "methylamine"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 67,
+        "equation": "4.29",
+        "figure": "4.5",
+        "panel": null,
+        "section": "4.7 Charge-site initiation (inductive cleavage, i)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Charge-site-initiated (inductive, 'i') cleavage of the protonated ephedrine [M+H]+ (m/z 166) drawn in Eq. 4.29: C6H5-CHOH-CHCH3-N(+)H2CH3 -> C6H5-CHOH-(+)CHCH3 + H2N-CH3. Book draws 1 arc; move <1> is drawn -- a single full (double-barbed, two-electron) curved arrow from the C9-N11 sigma bond onto N11. No implicit homolysis hook is required: inductive cleavage is heterolytic, so this one two-electron arrow fully balances the flow -- the C-N bonding pair becomes an N lone pair (N+ -> neutral CH3NH2) and the carbon C9 that loses the bond becomes the m/z 135 carbocation. The C9 cation the book draws is the localized secondary cation (stabilized by the beta-hydroxyl / homoconjugation, not itself benzylic); Kekule/aromatic form of the intact phenyl ring is retained unchanged."
+    },
+    {
+      "evidence_id": "evidence_mechanism",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.29",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 67,
+        "equation": "4.29",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.3,
+      "curator_note": "rule_index.json cross-links equation 4.29 to the single MØD rule IMS_4_29 (DFS: ...[C]7([H]8)[O]9([H]10)[C]11([H]12)[C]13([H]14)([H]15)([H]16)[N+]17([H]18)([H]19)[C]20... >> ...[C+]11...[C]13... . [N]17...[C]20...). VERIFIED MISMATCH, not support: (1) the DFS linearization bonds N17 to the CH3 carbon C13 (H14-H16), making C13 pentavalent (C11, N17, 3 H) -- MOD tolerates this graph but it is not ephedrine; (2) the cleaved bond is C13-N17, yet the new (+) is placed on C11, so the broken bond is NOT incident to the charge-bearing atom (same class of geometry defect as IMS_4_11/4_9); the book instead cleaves the C-N bond and puts the (+) on that very carbon; (3) O9 is written as an ether bridge (two C-neighbors, C7 and C11) rather than ephedrine's terminal hydroxyl (one C-neighbor), so the LHS cannot subgraph-match real ephedrine at the oxygen. The reaction TYPE (heterolytic C-N inductive cleavage -> carbocation + CH3NH2 loss) is correct, but IMS_4_29 does not reproduce this substrate. Listed in rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_135",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 67,
+        "equation": "4.29",
+        "figure": "4.5",
+        "panel": "CI (CH4) spectrum",
+        "section": null
+      },
+      "confidence": 0.8,
+      "curator_note": "This is a chemical-ionization (CH4 reagent) reaction, not EI: the precursor is the even-electron protonated molecule [M+H]+ (m/z 166, labeled '166 MH+' in the lower CI panel), so the precursor is charge +1 / radical 0 (NOT [M]+.); ms_context is set to CI accordingly (deviating from the EI template to stay faithful to the figure). The m/z 135 fragment is labeled in the CI spectrum and named in the surrounding text ('the small peak produced in the CI spectrum at m/z 135'); it is a small, genuinely observed peak but no numeric intensity is printed, so relative_intensity is omitted. observed_mz 135.0804 is the curator-computed monoisotopic m/z of C9H11O+ (electron-mass corrected); the book prints only the nominal integer 135."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization (CH4 reagent gas)",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 166.1226,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_135",
+      "species_id": "hydroxy_secondary_carbocation_mz135",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 135.0804,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.42a",
+  "species": [
+    {
+      "species_id": "ethylamine_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][NH2+:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methaniminium_ion",
+      "mapped_smiles": "[CH2:2]=[NH2+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylamine_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methaniminium_ion",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 172,
+        "equation": "8.42",
+        "figure": null,
+        "panel": null,
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.85,
+      "curator_note": "Upper (alpha) branch of the generic branching scheme R-CH2-Y(+.) -> R. + CH2=Y(+). Book draws 0 electron-pushing arc(s); the page shows only two labeled reaction arrows (alpha up, sigma down) off a brace, so all 3 encoded moves are implicit fishhooks required for electron balance (not drawn on the page): move 1 = radical site Y(N) odd electron into the forming C2=N3 pi bond, move 2 = one C1-C2 sigma electron into that pi bond, move 3 = the other C1-C2 sigma electron onto departing R (C1) as the methyl radical. GENERIC scheme (R, Y): instantiated as R=CH3, Y=NH2 (ethylamine radical cation, N-ionized, the top radical-site N > S,O,pi per the page); all m/z are curator-computed for this instantiation, none are printed in the book."
+    },
+    {
+      "evidence_id": "evidence_peak_iminium",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_methaniminium",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 172,
+        "equation": "8.42",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "m/z 30.0338 is the monoisotopic mass of CH2=NH2(+) computed for the chosen R=CH3/Y=NH2 instantiation; the book prints no m/z or intensity for this generic scheme, hence detected=false and status inferred with no relative_intensity."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.42a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 172,
+        "equation": "8.42",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "No MOD rule is cross-linked: rule_index.json by_equation['8.42'] is null, so this generic alpha/sigma competition scheme has no German-edition Rule.fromDFS encoding indexed to equation 8.42. Not asserting a cross-link to any analogous alpha-cleavage rule."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 45.0573,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_methaniminium",
+      "species_id": "methaniminium_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 30.0338,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

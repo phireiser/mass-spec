@@ -1,0 +1,277 @@
+{
+  "mechanism_id": "IMS8-EQ8.85c",
+  "species": [
+    {
+      "species_id": "protonated_methyl_isopropyl_ether",
+      "mapped_smiles": "[CH3:3][CH:1]([CH2:2][1H:7])[O+:4]([1H:6])[CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "isopropyl_cation",
+      "mapped_smiles": "[CH3:3][CH+:1][CH2:2][1H:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methanol",
+      "mapped_smiles": "[O:4]([1H:6])[CH3:5]",
+      "role": "spectator",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "n_propyl_cation",
+      "mapped_smiles": "[CH3:3][CH:1]([1H:7])[CH2+:2]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_methyl_n_propyl_ether",
+      "mapped_smiles": "[CH3:3][CH:1]([1H:7])[CH2:2][O+:4]([1H:6])[CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_methyl_isopropyl_ether"
+      ]
+    },
+    {
+      "state_id": "state_complex_isopropyl",
+      "species_ids": [
+        "isopropyl_cation",
+        "methanol"
+      ]
+    },
+    {
+      "state_id": "state_complex_n_propyl",
+      "species_ids": [
+        "n_propyl_cation",
+        "methanol"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_methyl_n_propyl_ether"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_complex_formation",
+      "from_state": "state_precursor",
+      "to_state": "state_complex_isopropyl",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_1_2_hydride_shift",
+      "from_state": "state_complex_isopropyl",
+      "to_state": "state_complex_n_propyl",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_complex_collapse",
+      "from_state": "state_complex_n_propyl",
+      "to_state": "state_products",
+      "step_class": "ion_neutral_complex_recombination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_85c_1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_complex_formation",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": "left vertical double arrow (top-left to middle-left)",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "Equation 8.85, LEFT vertical double arrow (first of the three drawn equilibria of the left/bottom branch). Step 1 of 3: the C1-O4 bond of protonated methyl isopropyl ether stretches into the drawn ion-neutral complex 'CH2(H)-CH(CH3)...O(+)(H)CH3' (dashed C...O bond, the labile methyl H drawn out). That complex is non-covalent and is APPROXIMATED here by the fully separated pair isopropyl cation + methanol, because a partial bond has no RDKit bond order; nothing drawn on the page is silently dropped - the complex is disclosed here. Book draws 0 arc(s): Equation 8.85 contains NO curved electron-pushing arrows at all - it is drawn with straight reaction/equilibrium arrows plus dashed 'partial bond' strokes that denote the loose bonds of the ion-neutral complexes. The single encoded move <1> (the C1-O4 pair onto the oxygen) is reconstructed for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "ev_step_8_85c_2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_1_2_hydride_shift",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": "lower-left vertical double arrow (middle-left to bottom-left)",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "Equation 8.85, LOWER-LEFT vertical double arrow. Step 2 of 3: inside the ion-neutral complex the isopropyl cation isomerises to the n-propyl cation - the page redraws the complex at the bottom left as 'CH2(+)...O(H)CH3' over 'CH2' over 'CH3', i.e. the '+' has moved to a TERMINAL carbon and the oxygen is now drawn neutral. MECHANISM: 1,2-hydride shift, the H7-C2 sigma pair migrating to the carbenium centre C1 so that the charge lands on C2. The migrating hydrogen is the same [1H:7] atom that Equation 8.85b transfers to oxygen, which is why the page draws it explicitly in the middle-left structure. Methanol is carried through as a spectator so the complex is represented at both ends of the step. Book draws 0 arc(s): Equation 8.85 contains NO curved electron-pushing arrows at all - it is drawn with straight reaction/equilibrium arrows plus dashed 'partial bond' strokes that denote the loose bonds of the ion-neutral complexes. The encoded move <1> is reconstructed for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "ev_step_8_85c_3",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_complex_collapse",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": "bottom horizontal double arrow",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "Equation 8.85, BOTTOM horizontal double arrow. Step 3 of 3: the n-propyl-cation / methanol complex collapses to the covalent oxonium ion drawn at the bottom right, protonated methyl n-propyl ether CH3CH2CH2-O(+)(H)-CH3 (the page draws the C-O bond solid here and the '+' back on the oxygen). MECHANISM: an oxygen lone pair forms the new O4-C2 bond. NET EFFECT of steps 1-3: the drawn skeletal isomerisation of protonated methyl ISOPROPYL ether into protonated methyl n-PROPYL ether, both C4H11O+ at m/z 75.0804, which is how the page shows that C-H bonds of either propyl isomer become available for the proton transfer of Equation 8.85b. Book draws 0 arc(s): Equation 8.85 contains NO curved electron-pushing arrows at all - it is drawn with straight reaction/equilibrium arrows plus dashed 'partial bond' strokes that denote the loose bonds of the ion-neutral complexes. The encoded move <1> is reconstructed for electron balance (not drawn on the page). CONTEXT: the p.199 text introduces Equation 8.85 with 'In the absence of activating functional groups in EE ions, proton-exchange reactions can proceed in ion-molecule complexes (Equations 8.14, 8.85; Terlouw et al. 1986; Bowen 1991); demonstration of such pathways usually requires D-labeling. Here both the hydrogen lability and site receptivity' [continues on p.200] 'are determined by the relative proton affinities of the donor and acceptor sites: PA(C3H6, CH3OH) = 7.8, 7.9 eV. Note that the competitive dissociations of such a proton-bound isomer of (AB + H)+ produce AH+ and BH+, whose mass sum equals AB + 2.' The reacting ion is therefore the protonated molecule (AB+H)+ of methyl isopropyl ether, C4H11O+, curator-computed monoisotopic m/z 75.0804; the page prints no m/z for it. The two percentages printed on the page (40%, 60%) are the BRANCHING abundances of the two competing dissociation channels, not 70 eV EI relative intensities."
+    },
+    {
+      "evidence_id": "ev_mech_8_85c",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.85c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.85",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.85, so no MØD rule is cross-linked. Candidates checked and REJECTED: IMS_8_10 ('[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>...[C+]5....[O]8{=}[C]9...') and IMS_8_12 both require an OXOCARBENIUM precursor - the left side pins a DOUBLE bond [O+]8{=}[C]9 - whereas Equation 8.85 starts from a protonated ether whose O+ carries three single bonds (C, H, CH3); the pattern cannot match this substrate even though the bond that breaks (C-O, heterolytic, charge retained on carbon) is of the same inductive type. IMS_8_14_1/_1b (the proton-bound-complex rH pair) are additionally atom-unbalanced (their product half carries an extra methyl copy-pasted from IMS_8_13). The IMS_8_7_* 'hydrogen exchange in an ion-molecule complex' family operates on odd-electron ketone/enol systems, not on a protonated ether. Equation 8.85 is unmodelled by the current rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "unspecified - the page names no ionization or activation experiment; the reacting ion is the protonated molecule (AB+H)+ of methyl isopropyl ether discussed in the p.199/200 text (Terlouw et al. 1986; Bowen 1991). ionization_method 'CI' is the curator's inference for how an (AB+H)+ ion is made, NOT a statement printed on the page",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 75.0804,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_isomerized_MH",
+      "species_id": "protonated_methyl_n_propyl_ether",
+      "step_id": "step_complex_collapse",
+      "observed_mz": 75.0804,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

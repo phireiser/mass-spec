@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS4-EQ4.13",
+  "species": [
+    {
+      "species_id": "diethyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethoxymethylene_cation",
+      "mapped_smiles": "[CH2:2]=[O+:3][CH2:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "diethyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethoxymethylene_cation",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 57,
+        "equation": "4.13",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.95,
+      "curator_note": "Concrete example: the diethyl ether molecular ion, n-ionized at oxygen, CH3-CH2-O(+.)-C2H5 -> .CH3 + CH2=O(+)-C2H5 (spectrum in Figure 3.9). Book draws 3 arc(s); moves <1,2,3> are ALL drawn on the page -- the odd electron on O into the forming C=O bond, one electron of the CH3-CH2 sigma bond into that same bond, and the second electron of that sigma bond onto the departing methyl -- so no implicit hook is required. DELOCALISATION: the book adds the resonance partner (+)CH2-OC2H5 in parentheses; the oxocarbenium form CH2=O(+)-C2H5 is the one encoded here and the two are the same ion."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.13",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 57,
+        "equation": "4.13"
+      },
+      "confidence": 0.95,
+      "curator_note": "Cross-linked MØD rules IMS_4_13_1 and IMS_4_13_2 (both atom-explicit for diethyl ether). VERIFIED by applying each rule to the O-ionized diethyl ether term graph in the container: IMS_4_13_1 gives C=[O+]CC + [CH3.], exactly the step encoded here (cleaves C1-C5, forms C5=O8, quenches the O radical); IMS_4_13_2 gives CCO[CH2+] + [CH3.], i.e. the resonance partner (+)CH2-OC2H5 the book prints in parentheses, emitted as a separate localized graph because MØD has no delocalisation. Both conserve atoms, charge and spin and survive the conservation guardrail."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_59",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 57,
+        "equation": "4.13"
+      },
+      "confidence": 0.9,
+      "curator_note": "The page prints '50% (COH3+ = 100%)' under the product ion: this alpha-cleavage ion is 50% relative to the base peak, which is CH2=OH+ at m/z 31 rather than the molecular ion. observed_mz 59.0491 is the curator-computed monoisotopic m/z of C3H7O+ (electron-mass corrected); only the 50% intensity is printed in the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_59",
+      "species_id": "ethoxymethylene_cation",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 59.0491,
+      "relative_intensity": 0.5,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

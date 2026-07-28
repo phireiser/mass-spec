@@ -1,0 +1,230 @@
+{
+  "mechanism_id": "IMS8-EQ8.68a",
+  "species": [
+    {
+      "species_id": "n_ionized_1_methyl_octahydroindol_5_ol",
+      "mapped_smiles": "[CH3:2][N+:1]1[CH2:3][CH2:4][CH:5]2[CH2:11][CH:9]([OH:10])[CH2:8][CH2:7][CH:6]12",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylpyrrolinium_distonic_ion_mz83",
+      "mapped_smiles": "[CH3:2][N+:1]1=[CH:6][CH:5][CH2:4][CH2:3]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "cyclobutanol_neutral",
+      "mapped_smiles": "[CH2:7]1[CH2:11][CH:9]([OH:10])[CH2:8]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_ionized_1_methyl_octahydroindol_5_ol"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylpyrrolinium_distonic_ion_mz83",
+        "cyclobutanol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_double_ring_cleavage_to_mz83",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_double_ring_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_double_ring_cleavage_to_mz83",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 189,
+        "equation": "8.68",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book draws 4 arc(s); moves <1,2,3,4> are drawn, move <5> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = the fishhook printed immediately after 'CH3N+.', carrying the nitrogen odd electron into the N(1)-C(6) bond; drawn arc 2 = the large arc that loops left round C(6), tail on the C(6)-C(7) ring bond and fishhook head on that same N(1)-C(6) bond, so N=C(6) rises to a double bond; drawn arcs 3 and 4 are the two fishhooks inside the carbocycle whose heads converge on the same point (the geometric centre of the hexagon), one with its tail on C(6)-C(7) and one with its tail on C(5)-C(11) -- they build the NEW C(7)-C(11) sigma bond, which is why the book prints the neutral as a closed four-membered ring and not as an open diradical. The undrawn move 5 puts the second electron of the cleaved C(5)-C(11) bond on C(5); the book simply prints the radical dot there in the product. NOTE ON THE ARC-3/ARC-4 TARGET: in a regular hexagon the midpoints of all three long diagonals coincide, so the two arrowheads alone cannot distinguish C(7)...C(11) from C(6)...C(9) or C(5)...C(8); the drawn PRODUCT (a cyclobutane ring bearing OH and the two wavy substituents) fixes the new bond as C(7)-C(11)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_instantiation",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.68a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 189,
+        "equation": "8.68",
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.7,
+      "curator_note": "GENERIC SCHEME, INSTANTIATED. The book draws the substrate as a partial structure: an N-methylpyrrolidine cis-fused to a cyclohexane that carries OH and TWO WAVY BONDS (rest of the alkaloid). Those wavy bonds are capped with H here, giving 1-methyl-octahydro-1H-indol-5-ol; ms_context.precursor_mz 155.1299 is therefore a curator-computed value for that instantiation, NOT a number printed by the book. m/z 83 IS printed on the page. The two-headed resonance arrow on the page shows two localized forms of the m/z 83 ion: the left form (N+=C6, radical on C5) is the one the arrows actually produce and is the form encoded here; the right form (aminium N+., ring C6=C5) is the one that carries the printed 'm/z 83' label. The surrounding prose calls the OE+. the base peak of the corresponding Figure 8.1 spectrum but prints no percentage on this page, so no relative_intensity is recorded. EQUATION NUMBERING: '(8.68)' is printed at the right margin directly below THIS scheme; the second scheme on the page (recorded as IMS8-EQ8.68b) carries no printed number and is grouped with 8.68 because it starts from the same molecular ion and because the prose pairs exactly two equations (8.68, 8.69) with the two Figure 8.1 spectra."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.68a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 189,
+        "equation": "8.68"
+      },
+      "confidence": 0.6,
+      "curator_note": "No MØD rule is cross-linked: rule_index.json 'by_equation' has no key '8.68' (its chapter-8 keys stop at 8.14), so no Rule.fromDFS encoding claims this scheme. No cross-link is asserted and no rule was tested against this substrate."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 155.1299,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_83",
+      "species_id": "methylpyrrolinium_distonic_ion_mz83",
+      "step_id": "step_double_ring_cleavage_to_mz83",
+      "observed_mz": 83.0724,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "mechanism_id": "IMS8-EQ8.15a",
+  "species": [
+    {
+      "species_id": "protonated_phenyl_3_butenyl_ether",
+      "mapped_smiles": "[OH+:7]([CH2:9][CH:10]([1H:20])[CH:11]=[CH2:12])[c:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_phenol",
+      "mapped_smiles": "[OH+:7]([1H:20])[c:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "butadiene_neutral",
+      "mapped_smiles": "[CH2:9]=[CH:10][CH:11]=[CH2:12]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_phenyl_3_butenyl_ether"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_phenol",
+        "butadiene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              20
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              20
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 148,
+        "equation": "8.15",
+        "section": "8.x Proton-bound complexes in CI: protonated phenyl 3-butenyl ether"
+      },
+      "confidence": 0.8,
+      "curator_note": "The book (eq 8.15) DRAWS a proton-bound complex [PhO...H...butadiene] as the intermediate from the methane-CI [M+H]+ ion of phenyl 3-butenyl ether; the non-covalent complex is NOT separately encoded (partial bonds not RDKit-representable) - this record encodes the net rH reaction precursor->protonated phenol (100%). 0 electron-pushing arcs drawn (only 'rH' reaction arrows). Equation 8.15, branch giving protonated phenol (labelled 100% on the page). Protonated phenyl 3-butenyl ether (C6H5-O+(H)-CH2CH2CH=CH2, the MH+ from exothermic methane CI) rearranges by rH ('rH' on the reaction arrow) to a proton-bound complex [phenol...H+...butadiene] (drawn explicitly on the page) which splits, here leaving the proton on phenol (PA 8.5 eV) -> protonated phenol PhOH2+ (m/z 95) + neutral 1,3-butadiene. INTERMEDIATE OMITTED: the drawn proton-bound complex is a non-covalent ion-neutral complex, not cleanly representable as a covalent SMILES, so this record encodes the NET rearrangement as one formal-arrow step. Book draws 0 electron-pushing arcs (reaction-level scheme with reaction arrows and a branch point); both encoded moves are reconstructed for electron balance (not drawn on the page): move <1> routes a C10-H20 sigma pair (a beta H of the butenyl chain) into the forming C9=C10 pi bond of butadiene, move <2> routes the O7-C9 sigma pair into the new O7-H20 bond that makes PhOH2+. A 1,4-hydrogen shift/1,2-elimination across the O-CH2-CH2 unit; closed-shell throughout. The migrating H is written as isotope-tagged [1H:20] so RDKit preserves its atom map; the original O-proton (H on O7) is implicit and non-migrating in this branch."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.15a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 148,
+        "equation": "8.15"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD rule is cross-linked: rule_index by_equation['8.15'] is null. In src/data_generation/rules/IMS_chap8_examples.py the comment 'Gl. 8.15' (line ~650) is present but no Rule.fromDFS follows it -- the equation was never encoded. rule_mismatches: none (nothing to compare against)."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_PhOH2",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 148,
+        "equation": "8.15"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book prints '100%' under the protonated-phenol product. observed_mz 95.0486 is the curator-computed monoisotopic m/z of PhOH2+ (C6H7O+, electron-mass corrected); the page prints the relative abundance (100% -> relative_intensity 1.0) but no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "electron_energy_ev": null,
+    "precursor_mz": 149.0955,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_PhOH2",
+      "species_id": "protonated_phenol",
+      "step_id": "step_hydrogen_rearrangement",
+      "observed_mz": 95.0486,
+      "relative_intensity": 1.0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

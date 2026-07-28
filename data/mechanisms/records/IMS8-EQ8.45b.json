@@ -1,0 +1,140 @@
+{
+  "mechanism_id": "IMS8-EQ8.45b",
+  "species": [
+    {
+      "species_id": "neopentyl_alcohol_radical_cation",
+      "mapped_smiles": "[CH3:4][C:1]([CH3:5])([CH3:6])[CH2:2][OH+:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_formaldehyde",
+      "mapped_smiles": "[CH2:2]=[OH+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "tert_butyl_radical",
+      "mapped_smiles": "[CH3:4][C:1]([CH3:5])[CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["neopentyl_alcohol_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["protonated_formaldehyde", "tert_butyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 175, "equation": "8.45", "figure": null, "panel": null, "section": "8.8"},
+      "confidence": 0.8,
+      "curator_note": "Path labeled 'alpha' (radical-site alpha cleavage) of Eq 8.45. Book draws 0 electron-pushing arcs: the scheme shows only the labeled 'alpha' reaction arrow from the molecular ion to the products, no fishhooks. All three moves are implicit, required for electron balance (not drawn on the page): move <1> the oxygen odd electron forms the C2=O3 pi bond, move <2> one electron of the breaking C1-C2 sigma bond completes that pi bond, move <3> the other sigma electron departs with the tert-butyl radical (C1). Canonical three-fishhook alpha cleavage; precursor n-ionized at O per the book's (CH3)3C-CH2-O(+.)H drawing. Product is the oxygen-stabilized even-electron cation CH2=O(+)H. m/z 31.0178 is the curator-computed monoisotopic value; the page prints the 15% abundance but no m/z."
+    },
+    {
+      "evidence_id": "evidence_mechanism",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.45b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 175, "equation": "8.45", "figure": null, "panel": null, "section": "8.8"},
+      "confidence": null,
+      "curator_note": "Equation 8.45 has no entry in data/mechanisms/rule_index.json 'by_equation' (keys run 4.3-4.46 and 8.1-8.14 only); no MOD rule cross-link exists for this alpha cleavage."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 88.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_31",
+      "species_id": "protonated_formaldehyde",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 31.0178,
+      "relative_intensity": 0.15,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed"
+  }
+}

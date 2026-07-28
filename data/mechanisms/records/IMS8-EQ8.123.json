@@ -1,0 +1,445 @@
+{
+  "mechanism_id": "IMS8-EQ8.123",
+  "species": [
+    {
+      "species_id": "triphenyl_phosphate_molecular_ion",
+      "mapped_smiles": "[O+:2]=[P:1]([O:3][C:20]1=[C:21]([1H:41])[CH:22]=[CH:23][CH:24]=[CH:25]1)([O:4][C:10]2=[C:11]([1H:40])[CH:12]=[CH:13][CH:14]=[CH:15]2)[O:5][C:30]3=[C:31]([1H:42])[CH:32]=[CH:33][CH:34]=[CH:35]3",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "phosphoric_acid",
+      "mapped_smiles": "[O:2]([1H:40])[P:1](=[O:4])([O:3][1H:41])[O:5][1H:42]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "triphenylene_radical_cation",
+      "mapped_smiles": "[C:10]12[C+:11]([CH:12]=[CH:13][CH:14]=[CH:15]1)[C:20]3=[C:21]([C:30]4=[C:31]([CH:32]=[CH:33][CH:34]=[CH:35]4)2)[CH:22]=[CH:23][CH:24]=[CH:25]3",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "triphenyl_phosphate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "triphenylene_radical_cation",
+        "phosphoric_acid"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_h3po4_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              40
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              40
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              40
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              40
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              20
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              20
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              20
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              20
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              41
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              21,
+              41
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              41
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              21,
+              41
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              21,
+              30
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              30
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              21,
+              30
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              30
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              42
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              31,
+              42
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              42
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              31,
+              42
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              31,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              31,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_123",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h3po4_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 221,
+        "equation": "8.123",
+        "figure": null,
+        "panel": "single reaction arrow; reactant drawn with eight curved arcs and six dashed bonds",
+        "section": "8.11 Elimination of small stable species"
+      },
+      "confidence": 0.8,
+      "curator_note": "SUBSTRATE AND PRODUCTS READ FROM THE DRAWING: triphenyl phosphate drawn with P at the centre, the phosphoryl oxygen at the upper left carrying '+.', and the three P-O-C6H5 ester arms splayed left, upper right and lower right; the products printed to the right of the arrow are phosphoric acid (drawn HO-P(=O)(OH)-OH) and triphenylene carrying '+.' in the middle of its central ring. The facing page (p. 220) introduces it: 'The elimination of H3PO4 from triphenyl phosphate must involve a multiplicity of such steps (Equation 8.123).' NET CHANGE: three C(ipso)-O ester bonds and three C(ortho)-H bonds break, three new aryl-aryl C-C bonds close the central ring of triphenylene, three hydrogens land on oxygen, and the P=O double bond moves from the phosphoryl oxygen (which becomes an OH) to the ester oxygen of the left-hand ring (which becomes the new P=O); C18H15O4P+. 326.070 = H3PO4 97.977 + C18H12+. 228.093. ARC COUNT (convention D): Book draws 8 arc(s), plus FIVE dashed lines marking bonds being made: TWO H...O (left-ring H to the '+.' phosphoryl oxygen; bottom H to the lower-right ester oxygen) and THREE C...C (left-ring ortho -> top-right-ring ipso; top-right-ring ortho -> bottom-right-ring ipso, drawn vertically; bottom-right-ring ortho -> left-ring ipso). The first draft of this note claimed six (three H...O); re-measured on the native scan (pypdf page.images[0], 1375x2016, crops at 6x-10x), the THIRD hydrogen -- the one on the top-right ring, near native (345,845) -- has NO dashed line: its transfer to the oxygen above it is marked by a curved arrow alone. The chemistry is unchanged and still requires three H transfers (three C-H broken, three O-H made -> H3PO4), so the missing dash is a drawing economy, not a different mechanism. The eight drawn arcs are moves <1> (from the odd electron of the '+.' phosphoryl oxygen towards the H...O dashed line), <2> (from the C-H bond of the left-hand ring up to that same oxygen), <4>, <8> and <12> (each from an O-C(ipso) ester bond onto the dashed C...C line it helps to form), <6> and <10> (each from a C-H bond up to the ester oxygen that keeps that hydrogen), and <14> (from the P=O bond down onto the P-O bond of the left-hand ester, the pi-bond relocation). The remaining NINE moves <3,5,7,9,11,13,15,16,17> are implicit hooks required for electron balance and are NOT drawn on the page: they route the second electron of each homolysed C-H bond into the new C-C bond (<3,7,11>), the second electron of each cleaved C-O bond into the O-H bond that oxygen keeps (<5,9>) or into the new P=O pi bond (<13>), the second electron of the old P=O pi bond back onto its oxygen (<15>), and finally one electron of the aryl pi system onto that same oxygen (<16>) with its partner left on the carbon (<17>). BARB STYLE: at the ~208 dpi of this scan the eight heads cannot be resolved as half- versus full-barbed; all seventeen moves are transcribed as one-electron fishhooks, because the precursor is an odd-electron radical cation and the printed product pair (closed-shell H3PO4 plus an aryl radical cation) can only be reached by a one-electron redistribution. MOVES <16,17> ARE THE CHARGE MIGRATION AND ARE THE CURATOR'S, NOT THE BOOK'S: the eight drawn arcs on their own would leave the charge and the odd electron on the phosphorus fragment (H3PO4+. plus neutral triphenylene), the opposite of what the book prints. The book's own justification for the direction it draws is on the facing page - 'A prime driving force for such eliminations is the stability of the product ion ... particularly aromatic rings, to increase the resonance stabilization of the ionic product' - i.e. the ionization energy of the arene is far below that of H3PO4, so the charge ends up on the arene. LOCALIZATION (conventions B/C): the reactant SMILES puts the charge and the odd electron on the phosphoryl oxygen ([O+:2] with one double bond = one unpaired electron in RDKit) exactly where the book prints '+.'; the product triphenylene radical cation is inherently delocalized and is localized here in one arbitrary Kekule/spin form, with the odd electron on atom map 10 and the positive charge on the adjacent atom map 11, both in the ring that lost its ester oxygen, the other two rings being left fully benzenoid. ARROW-CHECK NOTE: the bookkeeping reports soft advisories on the delocalised ring bonds (RDKit gives them order 1.5) and on the phosphoryl oxygen, whose formal non-bonding population rises by one while its radical count falls by one - expected when a radical site is converted into a closed-shell lone pair, not a defect."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_123",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.123",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 221,
+        "equation": "8.123",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.05,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED, and none can be. rule_index.json 'by_equation' has no key '8.123' (its chapter-8 keys stop at '8.14'), and a scan of all 154 rule DFS strings finds NO rule containing phosphorus at all (the substring query '[P' matches 0 entries; so does '[S'), so no existing rule can even bind this substrate. The closest thing in the set to a hydrogen-rearrangement-plus-elimination is the 'hTransition_*' / 'h2Transiton_*' family, but those are aliphatic single-H shifts to a C or O radical site and cannot express the triple aryl-aryl coupling drawn here. Checked with RDKit on this record's own precursor (convention E): '[#8+]' -> 1 match (the phosphoryl oxygen, as intended), '[#6+]' -> 0, '[#7+]' -> 0, and the generic 'substituion' skeleton proxy '[!#1]-[#6]-[#6]-[!#1+]' -> 0 matches, so even the element-agnostic rules do not apply. This equation is entirely unmodelled by the current MOD rule set."
+    },
+    {
+      "evidence_id": "ev_peaks_8_123",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_228",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 221,
+        "equation": "8.123",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): equation 8.123 prints structures only - no m/z, no abundance - and the surrounding prose gives none either. The triphenylene radical cation is therefore detected=false with status 'inferred' and no relative_intensity. 228.0928 is a curator-computed monoisotopic m/z (RDKit ExactMolWt of C18H12, electron-mass corrected) for the structure the book draws; the precursor value 326.0697 is the same computation for C18H15O4P+., and the neutral loss H3PO4 is 97.9769. MS-CONTEXT ASSUMPTION (disclosed): ms_context.activation_method '70 eV EI' and electron_energy_ev 70.0 are the Chapter-8 house default, NOT printed on this page -- the page names no ionisation or activation conditions. Only the ion type (the drawn '+.' / '+') is source-backed."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 326.0697,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_228",
+      "species_id": "triphenylene_radical_cation",
+      "step_id": "step_h3po4_elimination",
+      "observed_mz": 228.0928,
+      "relative_intensity": null,
+      "hydrogen_shift": -3,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

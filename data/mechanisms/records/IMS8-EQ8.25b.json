@@ -1,0 +1,213 @@
+{
+  "mechanism_id": "IMS8-EQ8.25b",
+  "species": [
+    {
+      "species_id": "tricyclodecanone_radical_cation",
+      "mapped_smiles": "[C:9]1(=[O+:11])[CH:1]2[CH:2]3[CH2:3][CH2:4][CH2:5][CH:6]3[CH:7]([CH:8]1[1H:12])[CH2:10]2",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopentadienol_radical_cation",
+      "mapped_smiles": "[C:9]1(=[CH:1][CH2:10][CH:7]=[CH:8]1)[O+:11][1H:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopentene_neutral",
+      "mapped_smiles": "[CH:2]1=[CH:6][CH2:5][CH2:4][CH2:3]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "tricyclodecanone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "cyclopentadienol_radical_cation",
+        "cyclopentene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_retro_da",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "retro_diels_alder",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_da",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 156,
+        "equation": "8.25",
+        "section": "OE+. rearrangements: gamma-H/beta-cleavage; ketosteroid/tricyclic stereochemistry (< 1.8 A gamma-H rule)"
+      },
+      "confidence": 0.8,
+      "curator_note": "This is the REJECTED exo path: on the page the reaction arrow from panel (b) to the intermediate is CROSSED OUT (a large X). The exo-isomer cannot bring its gamma-H within 1.8 A of the carbonyl, so it does NOT give the m/z 82 ion. Encoded with support_type=contradicted and peak status=rejected; detected=false; no intensity. 0 electron-pushing arcs are drawn on panel (b) itself (structure + crossed arrow). PRECURSOR: an endo/exo pair of stereoisomeric ketones drawn as bicyclic/tricyclic cages; they are the dicyclopentadiene-derived tricyclo[5.2.1.0^2,6]decan-one (a norbornane fused to a cyclopentane, C10H14O). The exact carbonyl position and the endo/exo configuration are read from a schematic 3D drawing and are DISCLOSED as uncertain; the constitutional SMILES here places the carbonyl on the two-carbon bridge (C9) of the norbornane unit. Stereochemistry (endo vs exo) is NOT encoded in the SMILES, yet it is the whole point of Eq 8.25: the text (Djerassi/Tokes 1966; Kingston 1974; Herzschuh 1983) states the gamma-H must be < 1.8 A from C=O, so ONLY the endo-isomer (a) undergoes the tandem gamma-H/beta-cleavage rearrangement. NET REACTION: C10H14O+. -> cyclopentadienol radical cation (hydroxycyclopentadiene C5H6O+., m/z 82) + cyclopentene (C5H8). TWO-STEP TANDEM DRAWN BY THE BOOK, COLLAPSED HERE: the page draws (i) a gamma-H rearrangement (arrow labelled 'rH', 3 arcs on the ketone panel) to an explicitly-drawn BRACKETED enol radical-cation intermediate (a cis-fused bis-cyclopentane dienol, [ ]+.), then (ii) a retro-Diels-Alder / beta-cleavage (second 'rH', ~4 arcs on the bracketed intermediate) that splits the two rings. This record encodes the NET fragmentation as ONE net_fragmentation step (the drawn enol intermediate is real and covalent but is not separately encoded here); ~7 fishhook arcs are drawn across the two-step scheme, whereas the NET bond changes are 4 closed-shell 2-electron shifts. RADICAL/CHARGE LOCALISATION (convention C): the odd electron is a SPECTATOR of the net bond changes (it starts and ends on oxygen); the book draws the product +. delocalised over the ring, but this record localises the hole on the enol oxygen (O+., an oxygen-centred resonance form of the hydroxycyclopentadiene radical cation). H-PROVENANCE CAVEAT: in the collapsed net the transferred (hydroxyl) H is formally sourced from C8 (alpha in this atom numbering); the book's stepwise mechanism transfers a gamma-H (1,5) in the first rH step - a net atom-map cannot preserve the stepwise H provenance, so the encoded H-source is a bookkeeping artefact of the collapse, not a claim that C8 is the gamma-carbon. [record = panel b (exo isomer, does NOT react)]"
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.25b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 156,
+        "equation": "8.25"
+      },
+      "confidence": 0.1,
+      "curator_note": "No MOD rule is cross-linked: rule_index by_equation has no entry for '8.25'. The tandem gamma-H / retro-Diels-Alder fragmentation of the tricyclodecanone is not among the encoded German-edition rules."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_cyclopentadienol",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 156,
+        "equation": "8.25"
+      },
+      "confidence": 0.7,
+      "curator_note": "observed_mz 82.0413 is the curator-computed monoisotopic m/z of the hydroxycyclopentadiene (cyclopentadienol) radical cation C5H6O+. (electron-mass corrected). status 'rejected': the book crosses out the exo-isomer path; the m/z 82 ion is NOT formed from panel (b). No intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": null,
+    "precursor_mz": 150.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_cyclopentadienol",
+      "species_id": "cyclopentadienol_radical_cation",
+      "step_id": "step_retro_da",
+      "observed_mz": 82.0413,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "rejected",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

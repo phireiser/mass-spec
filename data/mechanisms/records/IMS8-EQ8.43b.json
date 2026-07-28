@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS8-EQ8.43b",
+  "species": [
+    {
+      "species_id": "carbonyl_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]=[O+:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "formyl_radical",
+      "mapped_smiles": "[CH:3]=[O:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "carbonyl_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "formyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 173,
+        "equation": "8.43",
+        "figure": null,
+        "panel": null,
+        "section": "8.8 Charge-site reactions (one bond cleaved without rearrangement)"
+      },
+      "confidence": 0.65,
+      "curator_note": "GENERIC SCHEME, lower (unsaturated / pi-ionized) form of eq 8.43. The book prints the odd-electron ion as AB-C=D with the charge+radical (+.) on the doubly-bonded terminal atom D and a single arrow labelled 'i' to AB+ + .CD; no atoms, m/z or intensities are given. Instantiation chosen by the curator: the pi-ionized propanal radical cation CH3CH2-CH=O(+.) (map 3 = C-of-scheme = carbonyl carbon, map 4 = D = O carrying charge+radical; AB = ethyl, maps 1-2). Inductive (charge-site) cleavage of the CH2-CH sigma bond (bond 2-3) gives the ethyl cation CH3CH2+ (AB+) and the neutral formyl radical .CH=O (.CD), the standard localized radical form with the odd electron on C and the C=O double bond retained. ARC COUNT: the book draws 1 arc (a single full/double-barbed charge-site arrow from the AB-C sigma bond toward the ionized C=D). That single drawn arc is a charge-controlled simplification; move <1> and move <2> are BOTH implicit and neither is literally drawn as a fishhook. Electron balance to a NEUTRAL radical + even-electron cation requires the breaking sigma pair to split homolytically: move <1> routes one sigma electron to C (map 3) to become the odd electron of the formyl radical, and move <2> routes the other sigma electron to O (map 4) to pair the O radical into a lone pair (O goes +. -> neutral); the ethyl fragment leaves with no electrons as AB+. The arrow-checker flags atom 4 as a soft 'lone pair rather than radicals' note, which is exactly this pairing."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.43b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 173,
+        "equation": "8.43",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.45,
+      "curator_note": "No MØD rule is indexed for eq 8.43 (rule_index.json by_equation has no '8.43' entry); nothing to cross-link and no rule_mismatch to report. Encoding is curator-inferred: charge-site inductive cleavage of a pi-ionized carbonyl-type odd-electron ion, giving the alkyl cation and the neutral acyl/formyl radical (the charge-migration counterpart of alpha-cleavage, which would instead keep the charge on the acyl fragment as an acylium)."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ab_cation",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 173,
+        "equation": "8.43",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "m/z 29.0386 is the monoisotopic mass of the ethyl cation C2H5+ from the curator's chosen instantiation of the generic AB+ fragment; it is NOT printed on the page. Generic scheme with no printed m/z or intensity, hence status 'inferred', detected=false, no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ab_cation",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 29.0386,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

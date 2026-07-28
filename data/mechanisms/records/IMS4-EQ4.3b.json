@@ -1,0 +1,168 @@
+{
+  "mechanism_id": "IMS4-EQ4.3b",
+  "species": [
+    {
+      "species_id": "propane_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH3:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_cation",
+      "mapped_smiles": "[CH3+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "propane_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_radical",
+        "methyl_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 54,
+        "equation": "4.3",
+        "figure": null,
+        "panel": null,
+        "section": "4.4"
+      },
+      "confidence": 0.9,
+      "curator_note": "Eq 4.3, path (b): ethyl radical + methyl cation (less favored). Section 4.4 classification illustration: an odd-electron (OE+.) molecular ion cleaving ONE C-C bond gives an even-electron (EE+) fragment ion + a neutral radical. The book draws STRAIGHT reaction arrows only (arcs_drawn=0); the two electron_moves are the implied sigma homolysis, not drawn fishhooks. Propane has two equivalent C-C bonds; C2-C3 chosen. No m/z or intensity is printed (competing paths, 'equal only by coincidence', Stevenson's Rule)."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.3b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.3",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.7,
+      "curator_note": "Cross-linked MOD variable: IMS_4_3_var2 (path 4.3b). Its bond-change semantics match (same C2-C8 homolysis; radical retained on ethyl, charge to methyl). Same reactant caveat as 4.3a: the MOD reactant is a hypervalent central [C+.] graph abstraction; this record uses the neutral propane skeleton + fields + an `external` hole electron (convention of eqs 4.5/4.8)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 44.0621,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ch3",
+      "species_id": "methyl_cation",
+      "step_id": "step_sigma_cleavage",
+      "observed_mz": 15.0229,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

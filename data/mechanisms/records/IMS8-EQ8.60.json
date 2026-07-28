@@ -1,0 +1,262 @@
+{
+  "mechanism_id": "IMS8-EQ8.60",
+  "species": [
+    {
+      "species_id": "methyl_hydroxycyclohexene_molecular_ion",
+      "mapped_smiles": "[C:1]1([OH+:2])([CH3:3])[CH2:4][CH:5]=[CH:6][CH2:7][CH2:8]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butadiene_neutral_loss",
+      "mapped_smiles": "[CH2:4]=[CH:5][CH:6]=[CH2:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetone_enol_radical_cation_mz58",
+      "mapped_smiles": "[CH2:8]=[C:1]([CH3:3])[OH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyl_hydroxycyclohexene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butadiene_neutral_loss",
+        "acetone_enol_radical_cation_mz58"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha2_ring_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "retro_diels_alder",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha2_ring_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 185,
+        "equation": "8.60",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.60: the molecular ion of 4-methyl-4-hydroxycyclohexene (1-methylcyclohex-3-en-1-ol), drawn as a hexagon whose top vertex carries H3C and OH with '+.' printed over the OH, the ring double bond drawn on the lower-left edge, undergoes the alpha^2 cleavage written on the reaction arrow to give neutral 1,3-butadiene (drawn as CH2=CH-CH=CH2) plus the ionised enol CH2=C(OH)CH3+. drawn with '+.' over its OH. Book draws 7 arc(s), every one a single-barbed fishhook. SIX of them run around the ring and ARE the six encoded moves: (a) a short arc crossing over the substituted ring carbon, drawn in the free wedge between the H3C and OH bonds = one electron of the breaking sigma bond map1-map4 into the forming pi bond map1=map8 [move 1] (the same 'arc across the central atom' idiom the book uses under the carbonyl carbon in Equation 8.59); (b) an arc from that same map1-map4 bond down the left of the ring into the map4-map5 bond [move 2]; (c) an arc from the drawn ring double bond map5=map6 up into that same map4-map5 bond [move 3]; (d) an arc from map5=map6 across the bottom of the ring into the map6-map7 bond [move 4]; (e) an arc from the breaking sigma bond map7-map8 into that map6-map7 bond [move 5]; (f) an arc from map7-map8 up the right of the ring into the forming pi bond map1=map8 [move 6]. That set is exactly balanced: the two sigma bonds (map1-map4, map7-map8) and the pi bond (map5=map6) release six electrons and the three new pi bonds (map1=map8, map4=map5, map6=map7) take them up; the oxygen is a spectator that keeps its charge AND its odd electron, exactly as the product is printed. The SEVENTH drawn arc is the big fishhook that starts at the '+.' over the OH, curls to the right and comes back with its barb on the C-O bond: that is the book's alpha-initiation flourish for the stepwise reading of alpha^2 (first alpha cleavage -> ring-opened oxocarbenium HO+=C(CH3)-, second alpha cleavage -> butadiene + the distonic .CH2-C(CH3)=OH+, which is the resonance partner of the drawn CH2=C(OH)CH3+.). It is deliberately NOT encoded: combined with the six ring arcs it would give the carbinol carbon five bonds, so the two are alternative pictures of the same net alpha^2 reaction rather than parts of one flow. Map numbers: 1 = carbinol carbon, 2 = the ionised OH oxygen, 3 = its methyl, 4 = the ring CH2 between carbon 1 and the alkene, 5 and 6 = the two alkene CH's of the drawn double bond, 7 = the remaining ring CH2, 8 = the ring CH2 bonded to carbon 1 that ends up as the =CH2 of the enol ion."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.60",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 185,
+        "equation": "8.60",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.5,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.60 (its chapter-8 keys stop at 8.14) and NO MOD rule variable is cross-linked to this scheme. CHECKED AND REJECTED, by RDKit substructure test against the precursor [C:1]1([OH+:2])([CH3:3])[CH2:4][CH:5]=[CH:6][CH2:7][CH2:8]1: (i) the retro-Diels-Alder pair IMS_4_31_alpha1 / IMS_4_32_alpha (identical DFS '[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7') requires seven carbons with the charge on one ring carbon and the odd electron on the next - SMARTS '[#6]-[#6]1-[#6]-[#6]-[#6;+1]-[#6;v3;+0]-[#6]-1' gives 0 matches, because here charge and spin sit on the OXYGEN of the n-ionised OH and the ring carbons are all neutral and closed-shell; (ii) IMS_4_30 ('Ring spaltung generell', '[C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>...') likewise 0 matches for SMARTS '[#6;v3;+0]-[#6]-[#6]-[#6;+1]-[#6]=[#6]'; (iii) the IMS_8_6_1..IMS_8_6_4 ring-cleavage family needs a ring carbon written '[C+.]' - SMARTS '[#6;+1;v3]' gives 0 matches. The alcohol/ether alpha-cleavage rules cannot fire either: IMS_4_26_1 ('[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6') needs a CH2 carbinol carbon and a second heavy substituent on the oxygen - SMARTS '[*]-[#6;H2]-[O+]-[*]', 0 matches (here the carbinol carbon is quaternary and the oxygen carries H) - and IMS_4_13_1/IMS_4_13_2 need a dialkyl ether oxygen, SMARTS '[#6]-[#6]-[O+](-[#6])', 0 matches. No MOD rule encodes the alpha^2 ring cleavage of a tertiary cyclohexenol radical cation. ms_context: the page names no experiment and no electron energy; the discussion is of ordinary EI mass spectra in section 8.9 (book standard 70 eV EI), so EI / 70 eV / [M]+. is used. precursor_mz 112.0883 is the curator-computed monoisotopic m/z of the C7H12O+. molecular ion, not a printed number; note it happens to be numerically close to, but chemically unrelated to, the m/z 112 product of Equation 8.59 (C8H16+., 112.1247)."
+    },
+    {
+      "evidence_id": "evidence_peak_58",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_58",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 185,
+        "equation": "8.60",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "NO m/z and NO percentage is printed for the drawn ion. The running text immediately above the scheme states: 'In 4-methyl-4-hydroxycyclohexene the corresponding CH2=C(OH)CH3+. (neutral IE = 8.6 eV) is the most abundant, with only 10% C4H6+. (Equation 8.60).' relative_intensity 1.0 encodes that verbal statement - the book says this ion is the most abundant peak, i.e. the base peak - and is NOT a printed number; status is 'proposed' and detected=true rests on that explicit statement of abundance, not on a printed value. observed_mz 58.0413 is the curator-computed monoisotopic, electron-mass-corrected m/z of C3H6O+.. The only percentage the sentence prints, 10%, belongs to the COMPLEMENTARY charge distribution C4H6+. (butadiene keeping the charge, m/z 54.0464); that channel is not drawn in Equation 8.60 - the page draws butadiene as the neutral - so it is not encoded here and its 10% is deliberately not attached to any species of this record."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 112.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58",
+      "species_id": "acetone_enol_radical_cation_mz58",
+      "step_id": "step_alpha2_ring_cleavage",
+      "observed_mz": 58.0413,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

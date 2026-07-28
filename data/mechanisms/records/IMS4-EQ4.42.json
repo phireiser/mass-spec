@@ -1,0 +1,151 @@
+{
+  "mechanism_id": "IMS4-EQ4.42",
+  "species": [
+    {
+      "species_id": "chloroalkane_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][CH2:5][Cl+:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tetramethylene_chloronium_ion",
+      "mapped_smiles": "[CH2:2]1[CH2:3][CH2:4][CH2:5][Cl+:6]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "expelled_alkyl_radical_R",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["chloroalkane_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["tetramethylene_chloronium_ion", "expelled_alkyl_radical_R"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_displacement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [2, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [2, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_displacement",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 78, "equation": "4.42", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.8,
+      "curator_note": "Radical-site displacement/cyclization (rd): the terminal chlorine radical cation Cl+. forms a new C-Cl bond to the delta-carbon, displacing an alkyl radical R. and producing a five-membered divalent chloronium ion. Book draws 2 arc(s); moves 2,3 are drawn (the two electrons of the breaking C-R bond: one squiggle-arc into the forming C-Cl bond, one arc onto the departing R.), move 1 is an implicit homolysis hook (the Cl+. odd electron pairing into the new C-Cl bond) required for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.42",
+      "support_type": "computationally_supported",
+      "locator": {"page": 78, "equation": "4.42", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.7,
+      "curator_note": "Cross-linked MOD rule IMS_4_42_rd. Its DFS [C]1[C]2[C]3[C]4[C]5[Cl+.]6 >> [C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2 cleaves the C1-C2 bond, forms the Cl6-C2 bond (closing a five-membered C2-C3-C4-C5-Cl ring), moves the radical from Cl to C1, and turns Cl+. into a closed-shell divalent Cl+. This matches the encoded step exactly with the generic chain instantiated as 1-chloropentane (R=CH3). Verified: the cleaved C-R bond and the newly formed C-Cl bond are both incident to the same ring carbon; no mismatch."
+    },
+    {
+      "evidence_id": "evidence_peak_inferred",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_chloronium",
+      "support_type": "curator_inferred",
+      "locator": {"page": 78, "equation": "4.42", "figure": null, "panel": null, "section": "4.9"},
+      "confidence": 0.6,
+      "curator_note": "The page scheme is generic (R) and prints no m/z. m/z 91.030 (C4H8(35Cl)+) is computed for the R=CH3 instantiation (1-chloropentane radical cation, precursor m/z 106.054, likewise instantiation-derived). The book text on this page states this cyclic (divalent) chloronium ion accounts for the largest peak in the spectra of appropriate 1-chloro- and 1-bromoalkanes, but no specific m/z is printed; the value here is curator-computed."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 106.0538,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_chloronium",
+      "species_id": "tetramethylene_chloronium_ion",
+      "step_id": "step_displacement",
+      "observed_mz": 91.0304,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "mechanism_id": "IMS8-EQ8.59",
+  "species": [
+    {
+      "species_id": "trimethylcyclohexanone_molecular_ion",
+      "mapped_smiles": "[C:1]1(=[O+:2])[CH2:3][C:4]([CH3:8])([CH3:9])[CH2:5][CH:6]([CH3:10])[CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "carbon_monoxide_neutral_loss",
+      "mapped_smiles": "[C-:1]#[O+:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "trimethylcyclopentane_radical_cation_mz112",
+      "mapped_smiles": "[CH2+:3][C:4]([CH3:8])([CH3:9])[CH2:5][CH:6]([CH3:10])[CH2:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "trimethylcyclohexanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "carbon_monoxide_neutral_loss",
+        "trimethylcyclopentane_radical_cation_mz112"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_co_loss_alpha_inductive",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage_inductive_co_loss",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_co_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_co_loss_alpha_inductive",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 185,
+        "equation": "8.59",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "RE-EXTRACTED 2026-07-28 at native scan resolution (pypdf page.images[0], 1375x2016, cropped and upscaled 9x on the arrowheads) after this record was quarantined for unfaithfulness. Eq 8.59: the 3,3,5-trimethylcyclohexanone molecular ion (C9H16O+., '+.' printed on the carbonyl O) loses CO and contracts to the 1,1,3-trimethylcyclopentane radical cation, m/z 112, 25% (both printed under the product). The reaction arrow is labelled 'i, a' - the book itself declares the step to be BOTH inductive and alpha, and the drawing matches that: it is a MIXED arrow set, not a uniform one. ARC COUNT: 4 arcs are drawn. (1) a single-barbed fishhook from the odd electron of the O '+.' curving down into the C1-O bond = move <1>; (2) the RIGHT-hand arc, tail on the C1-C7 ring bond (C7 = the alpha CH2 on the methyl-bearing side), single-barbed, head pointing left at the C1-O bond = move <2>; (3) the in-ring arc beneath the carbonyl carbon, depicting closure of the new C3...C7 bond that forms the five-membered ring; (4) the LEFT-hand arc, tail on the C1-C3 ring bond (C3 = the alpha CH2 adjacent to the gem-dimethyl carbon C4), whose head is a FULL two-barbed arrowhead = the 'i' (inductive, 2-electron) move <4>, which drops the C1-C3 bonding PAIR onto C1 and leaves C3 as the cation. CORRECTION vs the quarantined version: that version (a) called all four arcs single-barbed fishhooks and (b) put the 2-electron move on the C1-C7 bond, which swapped the charge and radical termini relative to the drawing. Both are fixed here; the discarded 'HONEST READING' paragraph, which argued the printed arc set was 'over-specified/informal', was an artefact of that miscount and has been removed. Move <3> (the second electron of the C1-C7 bond onto C7, giving the radical terminus) is an implicit homolysis hook required for electron balance - the page draws the ring-closure arc rather than this hook. PRODUCT ENCODING (disclosed): the page draws the CLOSED 1,1,3-trimethylcyclopentane ring in brackets with '+.', but a saturated carbocycle radical cation has no valid localized mapped SMILES (every ring CH2 already has four bonds), so the ring-OPEN distonic form is encoded, with the charge on C3 and the odd electron on C7 exactly as the drawn arrows place them; the ring-closing bond itself is not encoded because it cannot be balanced from the one remaining odd electron. CO leaves as [C-]#[O+], the standard closed-shell encoding. m/z 112.1247 is curator-computed for the instantiated product; the page prints the nominal 'm/z 112, 25%', so relative_intensity 0.25 IS a printed value."
+    },
+    {
+      "evidence_id": "evidence_species_product_localization",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "species",
+      "target_id": "trimethylcyclopentane_radical_cation_mz112",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 185,
+        "equation": "8.59",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.7,
+      "curator_note": "LOCALIZATION (convention C), disclosed because the encoded structure differs from the drawn one by one bond. The page draws the m/z 112 product as a CLOSED 1,1,3-trimethylcyclopentane ring inside brackets carrying '+.', i.e. a sigma-delocalised saturated-hydrocarbon radical cation. Such an ion has one valence electron FEWER than its closed-shell skeleton needs (47 for a C8H16 framework that wants 48), so with every ring bond intact there is NO RDKit-parseable way to localise the charge and the odd electron: any localisation must open one bond (unlike the ionised C=C of Equation 8.55, where the hole sits in a pi bond and the ring can stay closed). This record therefore localises the hole in the very C(3)-C(7) bond that the drawing shows as newly formed, giving the distonic acyclic ion .CH2-C(CH3)2-CH2-CH(CH3)-CH2+ - the immediate product of the drawn 'i, alpha' sequence, the ring-opened form of the same C8H16+. ion, same formula and same m/z 112.1247. The fourth drawn arc (the one running under the carbonyl carbon) is precisely the ring closure that this localisation leaves open."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.59",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 185,
+        "equation": "8.59",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.59 (its chapter-8 keys stop at 8.14). CROSS-LINK (verified, not asserted): the generic chapter-4 pair IMS_4_27_1 ('inductive cleavage even electron 4.27 step 1 alpha', DFS '[_A]1[C]2([_A]3){=}[O+.]4>>[_A]1.[_A]3[C]2{#}[O+]4') and IMS_4_27_2 ('4.27 step 2 inductive', DFS '[_A]1[C]2{#}[O+]3>>[_A+]1.[C]2[O]3') describe exactly the drawn 'i, alpha' sequence - alpha cleavage of a ketone radical cation to an acylium, then inductive expulsion of CO leaving R+ - which this record encodes as one step. RDKit substructure test: IMS_4_27_1's left pattern as SMARTS '[*]-[#6](-[*])=[O+]' gives 1 match on the precursor, and IMS_4_27_2's '[*]-[#6]#[O+]' gives 1 match on the ring-opened acylium intermediate [CH2:3]C(CH3)2CH2CH(CH3)[CH2:7][C:1]#[O+:2]. CAVEATS, both verified in the container: (i) IMS_4_27_1 is NOT live - importing src.data_generation.rules prints 'conservation guard dropped ... inductive cleavage even electron 4.27 step 1 alpha [spin 1->0]' (135 live fragmentation rules remain), because its right side writes the departing R as '[_A]1' without the odd electron; only IMS_4_27_2 survives, so the MOD support for this equation covers the 'i' half only. (ii) IMS_4_27_2 writes the expelled CO as '[C]2[O]3', a C-O SINGLE bond, whereas the electron bookkeeping used here (and the acylium it comes from) requires :C(triple bond)O: = [C-]#[O+]; MOD does not track valence, so the rule still conserves atoms/charge/spin. (iii) MISMATCH: the nearest indexed 'alpha cleavage of a ketone' rule IMS_4_14 ('[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]') IS live and DOES match this substrate (SMARTS '[#6](-[#6]-[#6])(-[#6]-[#6])=[O+]', 1 match), but its right side keeps bonds 2-3, 4-5, 5-1 and 1#O: it breaks BOTH bonds at the carbonyl carbon and forms a NEW C5-C1 bond, a skeletal rearrangement that also over-fills C5. It is recorded as a rule mismatch, not a cross-link (same defect already reported for Equations 4.14 and 8.58). (iv) IMS_4_25_1 ('[C]1[C]2([C]3){=}[O+.]4>>[C+]1.[C]3[C.]2{=}[O]4') is live and also matches (1 match) but encodes the COMPLEMENTARY inductive cleavage - R+ plus a neutral acyl radical, no CO loss - so it is not this reaction. ms_context: the page names no experiment and no electron energy for this scheme; it sits in the ordinary EI-spectrum discussion of section 8.9 and the book's spectra are the standard 70 eV EI, so EI / 70 eV / [M]+. is used. precursor_mz 140.1196 is the curator-computed monoisotopic m/z of the C9H16O+. molecular ion, not a printed number."
+    },
+    {
+      "evidence_id": "evidence_peak_112",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_112",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 185,
+        "equation": "8.59",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.9,
+      "curator_note": "The page prints 'm/z 112, 25%' directly under the bracketed product ion of Equation 8.59; relative_intensity 0.25 is that printed percentage. observed_mz 112.1247 is the curator-computed monoisotopic, electron-mass-corrected m/z of C8H16+., consistent with the printed nominal 112. (The other '25%' on this page, in the running text below, belongs to the C2H4O+. ion of 4-hydroxycyclohexene and is unrelated to this equation.)"
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 140.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_112",
+      "species_id": "trimethylcyclopentane_radical_cation_mz112",
+      "step_id": "step_co_loss_alpha_inductive",
+      "observed_mz": 112.1247,
+      "relative_intensity": 0.25,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "mechanism_id": "IMS8-EQ8.7a",
+  "species": [
+    {
+      "species_id": "hexanal_radical_cation",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:8])[CH2:3][CH2:2][CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_radical_cation",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4][CH2:3][CH2:2][CH:1]=[O+:7][1H:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexanal_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_gamma_radical_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_transfer",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": { "type": "radical_orbital", "atom_maps": [7] },
+          "target": { "type": "bond", "atom_maps": [7, 8] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [4, 8] },
+          "target": { "type": "bond", "atom_maps": [7, 8] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [4, 8] },
+          "target": { "type": "atom", "atom_maps": [4] },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 144,
+        "equation": "8.7",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation (Random or hidden rearrangements; hydrogen exchange in an ion-molecule complex)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.7, first step (arrow labelled 'rH'). The n-hexanal molecular ion, n-ionized at the carbonyl oxygen (drawn O+.), transfers its gamma-H to oxygen through a 6-membered TS, giving the distonic radical cation: odd electron now on the gamma carbon, oxygen protonated (H-O+=CH). Book draws 2 arc(s): the large arc from the gamma C-H toward oxygen and the fishhook of the O+. odd electron are drawn; move <3> (the second electron of the breaking gamma C-H bond remaining on the gamma carbon as the new radical) is an implicit homolysis hook -- the resulting radical dot is drawn on the product but not as its own arc. Electron balance: the forming O-H bond receives 2 e- (moves 1,2); the breaking gamma C-H bond routes both its electrons (move 2 into O-H, move 3 onto the gamma carbon). This is the common entry step for both the high-energy (Eq 8.7 row 1) and low-energy (Eq 8.7 rows 2-3) channels."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.7a",
+      "support_type": "computationally_supported",
+      "locator": { "page": 144, "equation": "8.7" },
+      "confidence": 0.9,
+      "curator_note": "Cross-link: MØD rule IMS_8_7_1 (src/data_generation/rules/IMS_chap8_examples.py, rule_name 'Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 1 rH'). DFS: [C]1[C]2[C]3([H]4)[C]5[C]6[C]7([H]8){=}[O+.]9 >> [C]1[C]2[C.]3[C]5[C]6[C]7([H]8){=}[O+]9[H]4. VERIFIED consistent: the rule cleaves the gamma C-H (their H4 = this record's 1H8), forms the O-H bond, deposits the radical on the gamma carbon (their C3) and quenches the O+. radical to a closed-shell protonated carbonyl O+ -- exactly the bond/charge/spin change encoded here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

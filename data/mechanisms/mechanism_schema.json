@@ -1,0 +1,804 @@
+{
+  "$defs": {
+    "AssignmentStatus": {
+      "enum": [
+        "observed",
+        "proposed",
+        "inferred",
+        "rejected"
+      ],
+      "title": "AssignmentStatus",
+      "type": "string"
+    },
+    "CurationRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "record_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Record Version",
+          "type": "integer"
+        },
+        "extraction_method": {
+          "title": "Extraction Method",
+          "type": "string"
+        },
+        "review_status": {
+          "default": "unreviewed",
+          "enum": [
+            "unreviewed",
+            "machine_checked",
+            "expert_reviewed",
+            "verified_against_source"
+          ],
+          "title": "Review Status",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "modified_at": {
+          "format": "date-time",
+          "title": "Modified At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "extraction_method"
+      ],
+      "title": "CurationRecord",
+      "type": "object"
+    },
+    "ElectronLocation": {
+      "additionalProperties": false,
+      "description": "Source or target of a curved-arrow/fishhook electron move.",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/LocationType"
+        },
+        "atom_maps": {
+          "default": [],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atom Maps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "ElectronLocation",
+      "type": "object"
+    },
+    "ElectronMove": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/ElectronLocation"
+        },
+        "target": {
+          "$ref": "#/$defs/ElectronLocation"
+        },
+        "electron_count": {
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Electron Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source",
+        "target",
+        "electron_count"
+      ],
+      "title": "ElectronMove",
+      "type": "object"
+    },
+    "ElementaryStep": {
+      "additionalProperties": false,
+      "description": "A directed edge in the mechanism DAG.",
+      "properties": {
+        "step_id": {
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "from_state": {
+          "title": "From State",
+          "type": "string"
+        },
+        "to_state": {
+          "title": "To State",
+          "type": "string"
+        },
+        "step_class": {
+          "minLength": 1,
+          "title": "Step Class",
+          "type": "string"
+        },
+        "semantics": {
+          "$ref": "#/$defs/StepSemantics",
+          "default": "physical_elementary_step"
+        },
+        "electron_moves": {
+          "items": {
+            "$ref": "#/$defs/ElectronMove"
+          },
+          "minItems": 1,
+          "title": "Electron Moves",
+          "type": "array"
+        },
+        "reaction_smirks": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reaction Smirks"
+        },
+        "reversible": {
+          "default": false,
+          "title": "Reversible",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "step_id",
+        "from_state",
+        "to_state",
+        "step_class",
+        "electron_moves"
+      ],
+      "title": "ElementaryStep",
+      "type": "object"
+    },
+    "EnergyValue": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "minimum": 0,
+          "title": "Value",
+          "type": "number"
+        },
+        "unit": {
+          "enum": [
+            "eV",
+            "NCE",
+            "kJ/mol"
+          ],
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ],
+      "title": "EnergyValue",
+      "type": "object"
+    },
+    "EvidenceLink": {
+      "additionalProperties": false,
+      "description": "Links a source to a specific claim instead of attaching one coarse\nreference string to the complete mechanism.",
+      "properties": {
+        "evidence_id": {
+          "minLength": 1,
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "target_type": {
+          "$ref": "#/$defs/EvidenceTarget"
+        },
+        "target_id": {
+          "title": "Target Id",
+          "type": "string"
+        },
+        "support_type": {
+          "$ref": "#/$defs/SupportType"
+        },
+        "locator": {
+          "$ref": "#/$defs/SourceLocator"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "curator_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Curator Note"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "source_id",
+        "target_type",
+        "target_id",
+        "support_type",
+        "locator"
+      ],
+      "title": "EvidenceLink",
+      "type": "object"
+    },
+    "EvidenceTarget": {
+      "enum": [
+        "mechanism",
+        "step",
+        "species",
+        "peak_assignment"
+      ],
+      "title": "EvidenceTarget",
+      "type": "string"
+    },
+    "LocationType": {
+      "enum": [
+        "atom",
+        "bond",
+        "lone_pair",
+        "radical_orbital",
+        "external"
+      ],
+      "title": "LocationType",
+      "type": "string"
+    },
+    "MSContext": {
+      "additionalProperties": false,
+      "properties": {
+        "ionization_method": {
+          "title": "Ionization Method",
+          "type": "string"
+        },
+        "polarity": {
+          "$ref": "#/$defs/Polarity"
+        },
+        "adduct": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adduct"
+        },
+        "activation_method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Activation Method"
+        },
+        "collision_energy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EnergyValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "electron_energy_ev": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Electron Energy Ev"
+        },
+        "precursor_mz": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precursor Mz"
+        },
+        "precursor_charge": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precursor Charge"
+        },
+        "instrument_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instrument Type"
+        }
+      },
+      "required": [
+        "ionization_method",
+        "polarity"
+      ],
+      "title": "MSContext",
+      "type": "object"
+    },
+    "MechanismState": {
+      "additionalProperties": false,
+      "description": "A node in the mechanism DAG.",
+      "properties": {
+        "state_id": {
+          "minLength": 1,
+          "title": "State Id",
+          "type": "string"
+        },
+        "species_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Species Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "state_id",
+        "species_ids"
+      ],
+      "title": "MechanismState",
+      "type": "object"
+    },
+    "PeakAssignment": {
+      "additionalProperties": false,
+      "properties": {
+        "peak_id": {
+          "minLength": 1,
+          "title": "Peak Id",
+          "type": "string"
+        },
+        "species_id": {
+          "title": "Species Id",
+          "type": "string"
+        },
+        "step_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Id"
+        },
+        "observed_mz": {
+          "exclusiveMinimum": 0,
+          "title": "Observed Mz",
+          "type": "number"
+        },
+        "relative_intensity": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Intensity"
+        },
+        "hydrogen_shift": {
+          "default": 0,
+          "title": "Hydrogen Shift",
+          "type": "integer"
+        },
+        "isotope_offset": {
+          "default": 0,
+          "title": "Isotope Offset",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/AssignmentStatus",
+          "default": "proposed"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "peak_id",
+        "species_id",
+        "observed_mz"
+      ],
+      "title": "PeakAssignment",
+      "type": "object"
+    },
+    "Polarity": {
+      "enum": [
+        "positive",
+        "negative"
+      ],
+      "title": "Polarity",
+      "type": "string"
+    },
+    "SourceLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "equation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Equation"
+        },
+        "figure": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Figure"
+        },
+        "panel": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Panel"
+        },
+        "section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section"
+        }
+      },
+      "title": "SourceLocator",
+      "type": "object"
+    },
+    "SourceReference": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_type": {
+          "$ref": "#/$defs/SourceType"
+        },
+        "citation": {
+          "minLength": 1,
+          "title": "Citation",
+          "type": "string"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "isbn": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Isbn"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_type",
+        "citation"
+      ],
+      "title": "SourceReference",
+      "type": "object"
+    },
+    "SourceType": {
+      "enum": [
+        "journal_article",
+        "book",
+        "book_chapter",
+        "database",
+        "thesis",
+        "software_output",
+        "expert_annotation",
+        "other"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    },
+    "Species": {
+      "additionalProperties": false,
+      "description": "A chemically relevant species.\n\nThe mapped SMILES defines atom/bond topology and atom-map identities.\nThe separate charge and radical_electrons fields are authoritative for\nthe electronic state.",
+      "properties": {
+        "species_id": {
+          "minLength": 1,
+          "title": "Species Id",
+          "type": "string"
+        },
+        "mapped_smiles": {
+          "minLength": 1,
+          "title": "Mapped Smiles",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/SpeciesRole"
+        },
+        "charge": {
+          "title": "Charge",
+          "type": "integer"
+        },
+        "radical_electrons": {
+          "minimum": 0,
+          "title": "Radical Electrons",
+          "type": "integer"
+        },
+        "spin_multiplicity": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spin Multiplicity"
+        },
+        "detected": {
+          "default": false,
+          "title": "Detected",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "species_id",
+        "mapped_smiles",
+        "role",
+        "charge",
+        "radical_electrons"
+      ],
+      "title": "Species",
+      "type": "object"
+    },
+    "SpeciesRole": {
+      "enum": [
+        "precursor_ion",
+        "intermediate",
+        "product_ion",
+        "neutral_loss",
+        "neutral_radical",
+        "reagent",
+        "spectator"
+      ],
+      "title": "SpeciesRole",
+      "type": "string"
+    },
+    "StepSemantics": {
+      "enum": [
+        "physical_elementary_step",
+        "formal_arrow_step",
+        "net_fragmentation",
+        "resonance_interconversion"
+      ],
+      "title": "StepSemantics",
+      "type": "string"
+    },
+    "SupportType": {
+      "enum": [
+        "explicitly_reported",
+        "author_proposed",
+        "textbook_proposed",
+        "experimentally_supported",
+        "computationally_supported",
+        "curator_inferred",
+        "contradicted"
+      ],
+      "title": "SupportType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Minimal unified PMechDB/RMechDB-style mechanism record with:\n- atom-mapped species,\n- one- and two-electron moves,\n- a mechanism DAG,\n- MS metadata and peak assignments,\n- structured provenance,\n- curation/version data,\n- basic chemistry validation.",
+  "properties": {
+    "mechanism_id": {
+      "minLength": 1,
+      "title": "Mechanism Id",
+      "type": "string"
+    },
+    "species": {
+      "items": {
+        "$ref": "#/$defs/Species"
+      },
+      "minItems": 1,
+      "title": "Species",
+      "type": "array"
+    },
+    "states": {
+      "items": {
+        "$ref": "#/$defs/MechanismState"
+      },
+      "minItems": 2,
+      "title": "States",
+      "type": "array"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/ElementaryStep"
+      },
+      "minItems": 1,
+      "title": "Steps",
+      "type": "array"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/SourceReference"
+      },
+      "minItems": 1,
+      "title": "Sources",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceLink"
+      },
+      "minItems": 1,
+      "title": "Evidence",
+      "type": "array"
+    },
+    "ms_context": {
+      "$ref": "#/$defs/MSContext"
+    },
+    "peak_assignments": {
+      "items": {
+        "$ref": "#/$defs/PeakAssignment"
+      },
+      "title": "Peak Assignments",
+      "type": "array"
+    },
+    "curation": {
+      "$ref": "#/$defs/CurationRecord"
+    }
+  },
+  "required": [
+    "mechanism_id",
+    "species",
+    "states",
+    "steps",
+    "sources",
+    "evidence",
+    "ms_context",
+    "curation"
+  ],
+  "title": "MechanismRecord",
+  "type": "object"
+}

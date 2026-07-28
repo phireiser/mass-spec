@@ -1,0 +1,208 @@
+{
+  "mechanism_id": "IMS8-EQ8.70a",
+  "species": [
+    {
+      "species_id": "hexan_2_one_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[CH2:4][CH2:5][CH2:6][CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_h_intermediate",
+      "mapped_smiles": "[CH3:3][C:1](=[OH+:2])[CH2:4][CH2:5][CH:6][CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "enol_radical_cation",
+      "mapped_smiles": "[CH2:4]=[C:1]([CH3:3])[OH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alkene_neutral",
+      "mapped_smiles": "[CH2:5]=[CH:6][CH3:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["hexan_2_one_molecular_ion"]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": ["distonic_gamma_h_intermediate"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["enol_radical_cation", "alkene_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_beta_cleavage_charge_retention",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [2]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_70a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.70",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.9,
+      "curator_note": "First (left-hand) arrow of Equation 8.70. The page draws the generic acyclic precursor as the six-membered transition-state array Y(+.)=C(R')-CH2-CH2-CH2(-H): the n-ionized unsaturated heteroatom Y carries the printed '+.', the C=Y double bond is drawn intact, and the gamma-hydrogen is written out as an explicit H. Book draws 2 arc(s), both single-barbed fishhooks that terminate in the forming Y...H region: move <a> from the odd electron on Y towards the gamma-H (the arc that starts at the printed dot and sweeps over the H), and move <b> from the gamma C-H bond into that same forming Y-H bond; a third hook (the second C-H electron dropping back onto the gamma carbon) is an implicit homolysis hook required for electron balance (not drawn on the page, although the middle structure is drawn with its radical dot already on the gamma carbon and the '+' alone on Y). ENCODING NOTE (honest divergence from the drawing): the migrating hydrogen cannot be atom-mapped -- RDKit folds a mapped explicit H into implicit valence -- so the C-H and O-H bonds do not exist in the mapped SMILES and none of the three hooks is separately expressible. The single encoded move is the net heavy-atom consequence of all three: the odd electron relocates from Y(2) to the gamma-carbon C(6), which is exactly the distonic radical ion the page draws. INSTANTIATION: Y = O, R' = CH3, R = CH3, i.e. hexan-2-one, the same compound the book itself uses for this scheme in Equation 8.74 and in the p.192-193 discussion ('the delta-Hf values for 2-hexanone+. and its counterpart distonic radical ion are 6.5 and 6.2 eV')."
+    },
+    {
+      "evidence_id": "ev_step_alpha_8_70a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.70",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (charge retention branch)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Upper branch of Equation 8.70, labelled 'charge retention'. Book draws 0 arc(s) for this step -- the branch is shown only as a labelled straight reaction arrow from the distonic intermediate to the two drawn products, so all five encoded moves are curator-supplied and none is drawn on the page. They reproduce exactly the structures the page prints: the neutral alkene R-CH=CH2 (moves <1,2>: the gamma-radical electron and one electron of the breaking C(4)-C(5) bond form the C(5)=C(6) pi bond) and the odd-electron enol ion CH2=C(R')-YH(+.) (moves <3,4>: the second electron of the cleaved C(4)-C(5) bond plus one electron of the C(1)=Y pi bond form the new C(1)=C(4) pi bond; move <5>: the remaining C=Y pi electron becomes the odd electron on Y). The page draws the charge and the odd electron ON Y ('H-Y' with '+.' above it) and the C=C towards the carbonyl carbon, so that localized form is what is encoded here. RESONANCE: p.192 gives the partner explicitly -- 'the product of Equation 8.70 is the resonance-stabilized CH2=CR-YH+ <-> .CH2-CHR=Y+ ion' -- i.e. the distonic form with the radical on C(4) and the charge on Y; that form is NOT encoded, the drawn enol form is. NO PRINTED NUMBERS: the scheme is generic (R, R', Y) and the page prints neither m/z nor an abundance, so the product ion is recorded detected=false with peak status 'inferred' and no relative_intensity; m/z 58.0413 is the curator's computed value for the chosen hexan-2-one instantiation (the well-known base-ish peak of 2-hexanone), not a book datum."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_70a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.70a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.70",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py, IMS_chap8_examples.py"
+      },
+      "confidence": 0.8,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.70 (its chapter-8 keys stop at 8.14), so no rule is labelled with this equation. Cross-links below were checked against the DFS strings, not asserted. (1) EXACT for step 1: IMS_4_33_rH '[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3' -- same substrate (R on the gamma carbon C2, the H3 donor; O8 n-ionized; C6=O8 kept), same product (H3 on O8, charge on O8, odd electron on the gamma carbon), i.e. their C2/C6/O8 = my C(6)/C(1)/O(2). IMS_4_45_rH is the ester analogue of the same rule. (2) PARTIAL for step 2: IMS_4_33_alpha_1 '[C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2{=}[C]3.[C.]4[C]5([C]6){=}[O+]7[H]8' cleaves the bond that IS incident to the pi-forming atom and gives the correct masses, but it produces the DISTONIC resonance form (radical on the alpha carbon, C=O retained) rather than the enol form drawn on p.191; it is therefore a resonance partner of, not identical to, the encoded product. (3) MISMATCHES -- the two rules that do target the drawn enol form are both mis-encoded: IMS_4_33_alpha_2 '...>>[C]1[C]2{=}[C]3.[C.]4{=}[C]5([C]6)[O+.]7[H]8' writes BOTH a radical on C4 and the C4=C5 double bond, raising the unpaired-electron count from 1 to 2, and IMS_8_2_alpha_0_6 (indexed under equation 8.2, and instantiated on exactly this hexan-2-one distonic ion) writes '...[C]10([H]11)([H]12){=}[C]13([C]14([H]15)([H]16)([H]17)){=}[O+.]18([H]19)' in which C13 carries =C10, =O18 and C14 -- a pentavalent carbon. The enol ion requires a C-O SINGLE bond once the new C=C is formed; neither rule reproduces the structure the page draws."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_enol_oe_ion",
+      "species_id": "enol_radical_cation",
+      "step_id": "step_beta_cleavage_charge_retention",
+      "observed_mz": 58.0413,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

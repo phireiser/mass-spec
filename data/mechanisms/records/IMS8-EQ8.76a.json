@@ -1,0 +1,243 @@
+{
+  "mechanism_id": "IMS8-EQ8.76a",
+  "species": [
+    {
+      "species_id": "octan_4_one_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH:2]([1H:10])[CH2:3][CH2:4][C:5](=[O+:6])[CH2:7][CH2:8][CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propene_neutral",
+      "mapped_smiles": "[CH3:1][CH:2]=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "pentan_2_one_enol_ion_distonic",
+      "mapped_smiles": "[CH2:4][C:5](=[O+:6][1H:10])[CH2:7][CH2:8][CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "octan_4_one_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "propene_neutral",
+        "pentan_2_one_enol_ion_distonic"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_mclafferty",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "mclafferty_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_mclafferty",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 194,
+        "equation": "8.76",
+        "figure": null,
+        "panel": "upper scheme (generic R-CH2CH2CH2-CO-C3H7 alkanone, arrows labelled rH then alpha)",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation -- Consecutive rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Six-centre McLafferty rearrangement of the carbonyl-n-ionized alkanone molecular ion: the gamma H (H10, on C2) is transferred to the ionized carbonyl oxygen O6, the C2=C3 pi bond forms and the C3-C4 (beta) bond cleaves, expelling the neutral alkene R-CH=CH2 and leaving the distonic enol ion (=O6(H10)+ retained as an oxocarbenium, odd electron on the alpha carbon C4). Book draws 4 arcs; moves <1,2,3,4> are drawn (<1> the O6 odd-electron hook into the forming O6-H10 bond, <2> one C2-H10 electron into that same forming O6-H10 bond, <3> the other C2-H10 electron into the forming C2=C3 pi bond, <4> one C3-C4 electron into that same forming pi bond), move <5> is an implicit homolysis hook required for electron balance (not drawn on the page) -- it deposits the second C3-C4 electron on C4, which the page shows only as the dot on the product's CH2. The page labels the transformation with two consecutive arrows (rH, then alpha) but draws NO intermediate structure and places all four arcs on the single precursor drawing; because drawn arc <3> sends a C-H electron straight into the forming C=C (rather than leaving a gamma radical), the arc set cannot be split across the two labelled arrows without inventing an undrawn intermediate, so it is encoded here as one net formal_arrow_step. Convention (C): the product ion is drawn by the book in its localized distonic/oxocarbenium resonance form (HO+= double bonded to the carbonyl carbon, dot on the terminal CH2) and is encoded in exactly that form, not as the neutral-enol resonance partner CH2=C(OH)-C3H7 +.. The '=' (identity) sign printed after the products states that this product ion is the same species that is redrawn as the precursor of the lower scheme (record IMS8-EQ8.76b)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.76a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 194,
+        "equation": "8.76",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "NO MOD rule is indexed for equation 8.76: rule_index.json by_equation has no '8.76' key (chapter-8 rule coverage stops at 8.14), so there is no authored cross-link for this scheme. Verified nearest encodings (checked against their DFS, not merely asserted): the pair IMS_4_33_rH + IMS_4_33_alpha_1 (indexed to equation 4.33) reproduces exactly the bond changes drawn here. IMS_4_33_rH DFS [C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3 maps onto this substrate as C1=R(CH3), C2=gamma C2, H3=H10, C4=beta C3, C5=alpha C4, C6=carbonyl C5, C7=propyl C7, O8=O6 -- gamma H to the ionized carbonyl O, radical to the gamma carbon. IMS_4_33_alpha_1 DFS [C]1[C.]2[C]3[C]4[C]5([C]6){=}[O+]7[H]8>>[C]1[C]2{=}[C]3.[C.]4[C]5([C]6){=}[O+]7[H]8 then forms the gamma=beta pi bond, cleaves the beta-alpha bond that IS incident to the pi-forming atom, and yields precisely the drawn distonic product. These two rules are indexed to equation 4.33, NOT to 8.76, so they are chemically equivalent encodings rather than a curated cross-link. Sibling IMS_4_33_alpha_2 (same reactant pattern, product [C]1[C]2{=}[C]3.[C.]4{=}[C]5([C]6)[O+.]7[H]8) does NOT describe this scheme and is itself spin-non-conserving: it goes from one unpaired electron (C.2) to two (C.4 and O+.7) with zero net bond-order change."
+    },
+    {
+      "evidence_id": "evidence_peak_inferred",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_enol_ion_86",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 194,
+        "equation": "8.76",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "Generic scheme (R is not specified; only the C3H7 acyl substituent is drawn): the page prints NO m/z and NO intensity for 8.76. m/z 86.0726 is the curator-computed monoisotopic mass of the distonic pentan-2-one enol ion (C5H10O+., 86.0726 after subtracting the electron mass), NOT a measured value. It derives from the chosen instantiation R = CH3, i.e. octan-4-one, M+. = 128.1196; note that the product ion does not contain R, so its m/z is the same for any R, whereas the precursor m/z and the neutral alkene (propene, 42.0470 for R = CH3) do depend on the instantiation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_enol_ion_86",
+      "species_id": "pentan_2_one_enol_ion_distonic",
+      "step_id": "step_mclafferty",
+      "observed_mz": 86.0726,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "mechanism_id": "IMS8-EQ8.14a",
+  "species": [
+    {
+      "species_id": "ethyl_methyleneoxocarbenium",
+      "mapped_smiles": "[CH2:1]([1H:4])[CH2:5][O+:8]=[CH2:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:1]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_formaldehyde",
+      "mapped_smiles": "[1H:4][O+:8]=[CH2:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethyl_methyleneoxocarbenium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethylene_neutral",
+        "protonated_formaldehyde"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 148,
+        "equation": "8.14",
+        "section": "8.x Proton-bound complexes / hydrogen rearrangement (rH) in even-electron ions"
+      },
+      "confidence": 0.8,
+      "curator_note": "EXPERIMENTAL CONTEXT: metastable-ion (MI) decomposition of the mass-selected even-electron ion C2H5O+=CH2 (m/z 59). The book (eq 8.14) DRAWS a proton-bound complex [C2H4...H...O=CH2] as the intermediate; it is a non-covalent complex and is NOT separately encoded as a discrete mapped species (partial bonds are not RDKit-representable) - this record encodes the net rH reaction precursor->products. The MI spectrum shows HO-CH2+ as a major peak (this channel). 0 electron-pushing arcs drawn (only 'rH' reaction arrows). Equation 8.14, favored (upper) branch. The even-electron oxocarbenium ion C2H5-O+=CH2 (ethyl methyleneoxocarbenium, m/z 59) rearranges by rH (labelled 'rH' on the reaction arrow) to a proton-bound complex [C2H4...H...O=CH2]+ (drawn as an explicit intermediate on the page) that dissociates to neutral ethylene C2H4 + protonated formaldehyde HO+=CH2 (the hydroxymethyl cation, m/z 31). The text states this HO-CH2+ 'represents a major peak' in the MI spectrum of C2H5O=CH2+ and that no C2H5+ is seen. INTERMEDIATE OMITTED: the drawn proton-bound complex is a non-covalent ion-neutral complex, not cleanly representable as a covalent SMILES with defined bond orders, so this record encodes the NET rearrangement (precursor -> C2H4 + HO+=CH2) as a single formal-arrow step; this matches the granularity of MOD rule IMS_8_14_2. Book draws 0 electron-pushing arcs (a reaction-level scheme using reaction arrows labelled rH); both encoded moves are reconstructed for electron balance (not drawn on the page): move <1> routes the C1-H4 sigma pair (a beta H of the ethyl group) into the forming C1=C5 pi bond of ethylene, move <2> routes the C5-O8 sigma pair into the new O8-H4 bond of protonated formaldehyde. A 1,4-hydrogen shift (H-C1-C5-O8) through a 4-membered transfer array; closed-shell throughout (no radicals). The reaction is drawn as an equilibrium (reversible=true)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.14a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 148,
+        "equation": "8.14"
+      },
+      "confidence": 0.4,
+      "curator_note": "Cross-linked MOD rules for equation 8.14 (rule_index by_equation['8.14'] = IMS_8_14_1, IMS_8_14_1b, IMS_8_14_2). IMS_8_14_2 is the match for THIS favored branch: its DFS is [C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11) >> [C]1([H]2)([H]3)[C]5([H]6)([H]7) . [H]4[O+]8{=}[C]9([H]10)([H]11) -- same precursor C2H5O+=CH2, same bond changes (C5-O8 cleaved, H4 transferred from C1 to O8) and mass/charge (C3H7O+ -> C2H4 + CH3O+). CAVEAT (bond order): IMS_8_14_2 leaves the ethylene fragment C1-C5 as a SINGLE bond (no {=}), i.e. it does NOT form the C=C pi bond and encodes ethylene as a valence-incomplete/biradical CH2-CH2; my record forms the correct closed-shell CH2=CH2. Listed in rule_mismatches. IMS_8_14_1 and IMS_8_14_1b (the proton-bound-complex forward/back rH rules) are BROKEN: their product half was copy-pasted from IMS_8_13 (it carries an extra methyl carbon C11), so IMS_8_14_1 maps C3H7O+ -> C4H9O+ and IMS_8_14_1b maps C4H9O+ -> C3H7O+ -- neither conserves atoms, and both would be dropped by the conservation guardrail. Listed in rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_HOCH2",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 148,
+        "equation": "8.14"
+      },
+      "confidence": 0.6,
+      "curator_note": "observed_mz 31.0173 is the curator-computed monoisotopic m/z of HO+=CH2 (CH3O+, electron-mass corrected). The page (Eq 8.14 figure) prints NO m/z and NO percentage; the surrounding text merely calls HO-CH2+ 'a major peak'. status 'inferred', relative_intensity omitted (no printed intensity)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "metastable-ion (MI) decomposition via a proton-bound intermediate",
+    "electron_energy_ev": null,
+    "precursor_mz": 59.0486,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_HOCH2",
+      "species_id": "protonated_formaldehyde",
+      "step_id": "step_hydrogen_rearrangement",
+      "observed_mz": 31.0173,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

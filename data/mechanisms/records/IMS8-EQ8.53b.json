@@ -1,0 +1,249 @@
+{
+  "mechanism_id": "IMS8-EQ8.53b",
+  "species": [
+    {
+      "species_id": "cyclic_oe_molecular_ion",
+      "mapped_smiles": "[OH+:1][CH:2]1[CH2:3][CH2:4][CH2:5][CH2:6][CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[OH+:1]=[CH:2][CH2:7][CH2:6][CH2:5][CH2:4][CH2:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_first_loss",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "shortened_distonic_ion",
+      "mapped_smiles": "[OH+:1]=[CH:2][CH2:7][CH2:6][CH2:5]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alkene_second_loss",
+      "mapped_smiles": "[CH2:5]=[CH2:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_c2h4o",
+      "mapped_smiles": "[CH2:7][CH:2]=[OH+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["cyclic_oe_molecular_ion"]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": ["ring_opened_distonic_ion"]
+    },
+    {
+      "state_id": "state_after_ethylene_loss",
+      "species_ids": ["ethylene_first_loss", "shortened_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ethylene_first_loss", "alkene_second_loss", "distonic_oxonium_c2h4o"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_loss_c2h4",
+      "from_state": "state_ring_opened",
+      "to_state": "state_after_ethylene_loss",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_loss_cnh2n",
+      "from_state": "state_after_ethylene_loss",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 7]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 7]},
+          "target": {"type": "atom", "atom_maps": [7]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 179, "equation": "8.53", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.8,
+      "curator_note": "Shared first step of the 'OE+.' block (identical in IMS8-EQ8.53a and IMS8-EQ8.54): radical-site alpha-cleavage of the n-ionized exocyclic substituent Y opens the carbocycle to the distonic ion Y+=CH-CH2-...-CH2. . Book draws 2 arc(s) on the left-hand cyclic structure; moves <1,2> are drawn (fishhook from the '+.' on Y into the forming Y=C pi bond, fishhook from the ring C-C bond into that same pi bond) and move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). INSTANTIATION (B/F): Y = OH, six-membered carbocycle = cyclohexanol molecular ion C6H12O+. m/z 100.0883, charge and odd electron localised on oxygen as printed; the OH hydrogen is the curator's minimal completion of the book's bare 'Y'."
+    },
+    {
+      "evidence_id": "ev_step_c2h4",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_loss_c2h4",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 179, "equation": "8.53", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.6,
+      "curator_note": "ALTERNATIVE branch of Eq 8.53: the page prints 'or' and a second reaction arrow labelled 'alpha, -C2H4' leaving the SAME ring-opened distonic ion, drawn as a separate route to the same final ion, which is why it is recorded separately from IMS8-EQ8.53a. Textbook radical-site alpha-cleavage at the tail: the terminal radical forms a C=C pi bond with its neighbour, the next C-C sigma bond breaks and neutral ethylene is expelled, leaving the radical two carbons further along the chain. Book draws 0 arc(s) for this step - only the labelled reaction arrow and the shortened 'bucket' product - so moves <1,2,3> are all curator-supplied and reproduce the standard three-fishhook alpha-cleavage exactly (move 3 is the homolysis hook onto the new radical carbon)."
+    },
+    {
+      "evidence_id": "ev_step_cnh2n",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_loss_cnh2n",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 179, "equation": "8.53", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.5,
+      "curator_note": "Second half of the 'or' branch: the arrow is labelled 'alpha, -CnH2n' and ends at the same .CH2-CH=Y+ ion that the direct branch (IMS8-EQ8.53a) reaches. Book draws 0 arc(s) here; moves <1,2,3> are curator-supplied standard alpha-cleavage fishhooks (move 3 being the homolysis hook that leaves the odd electron on the carbon alpha to Y+=CH). AMBIGUITY DISCLOSED: the book writes the neutral only as the formula 'CnH2n', which fits both an alkene and a cycloalkane; it is encoded here as the alkene produced by a plain radical-site alpha-cleavage (n = 2 for the cyclohexanol instantiation, i.e. a second ethylene), the reading that keeps this step the same reaction type as the preceding '-C2H4' arrow. If instead the intended neutral is the carbocycle of the direct branch, the step is the homolytic ring closure encoded in IMS8-EQ8.53a. For the instantiation the intermediate is C4H8O+. m/z 72.0570 and the final ion C2H4O+. m/z 44.0257."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.53b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 179, "equation": "8.53", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": null,
+      "curator_note": "CROSS-LINK CHECKED - NO MATCHING RULE. rule_index.json 'by_equation' has no entry for 8.53. IMS_bookCover.py's hTransition_saturated_2 ('# siehe 8.53') and hTransition_saturated_2_alpha ('RE-AUTHORED from Gl. 8.53 (book p. 179 ...)') cite this equation but do not encode it: both require the onium to be SINGLE-bonded to a saturated carbon next to the radical, and the alpha rule cleaves the C-Y bond expelling [_A+.] as the ion while keeping the carbons neutral - the opposite partition to the one drawn here (Y stays in the ion, the carbons leave as neutral CnH2n). RDKit substructure tests of both left-hand patterns against the instantiated ring-opened ion return 0 matches. Logged as a mismatch, not as support. MS CONTEXT: the reacting species is the odd-electron molecular ion, so adduct '[M]+.'; the page prints no electron energy (70 eV is the book's standing EI condition, not a datum on this page). PEAK: 44.0257 is COMPUTED from the curator's cyclohexanol instantiation; the page prints no m/z and no intensity, hence status 'inferred', detected=false, relative_intensity omitted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c2h4o_distonic",
+      "species_id": "distonic_oxonium_c2h4o",
+      "step_id": "step_alpha_loss_cnh2n",
+      "observed_mz": 44.0257,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

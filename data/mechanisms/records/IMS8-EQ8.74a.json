@@ -1,0 +1,134 @@
+{
+  "mechanism_id": "IMS8-EQ8.74a",
+  "species": [
+    {
+      "species_id": "hexan_2_one_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[CH2:4][CH2:5][CH2:6][CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_radical_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[OH+:2])[CH2:4][CH2:5][CH:6][CH3:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["hexan_2_one_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["distonic_radical_ion"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_74a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 192,
+        "equation": "8.74",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements, subsection 'Two bonds cleaved'"
+      },
+      "confidence": 0.9,
+      "curator_note": "LEFT-HAND half of Equation 8.74 (the page carries two schemes: the acyclic ketone on the left and the cyclic alcohol on the right, both feeding the SAME distonic ion drawn in the middle; the two reaction arrows point INWARD at it -- the right-hand one points leftwards. The cyclic branch is recorded separately as IMS8-EQ8.74b). SUBSTRATE, read off the drawing: a six-carbon chain CH3-CH2-CH2-CH2-C(=O)-CH3 laid out as the six-membered rearrangement array; the carbonyl oxygen carries the printed '+.' and the gamma-hydrogen (on the carbon that bears the terminal methyl) is written out as an explicit H. This is hexan-2-one, which the running text on this very page names -- 'the delta-Hf values for 2-hexanone+. and its counterpart distonic radical ion are 6.5 and 6.2 eV' -- so the instantiation is the book's own, not the curator's. PRODUCT as drawn: 'HO' with a '+' above it, doubly bonded to the chain carbon, and a radical dot on the gamma carbon, i.e. the distonic radical ion CH3-.CH-CH2-CH2-C(CH3)=OH+ (charge and unpaired electron at nonadjacent sites, exactly what the following paragraph calls a distonic radical ion). ARROWS: Book draws 2 arc(s), both single-barbed fishhooks that converge on the forming O...H bond -- move <a> starts at the odd electron printed as '+.' on the oxygen and sweeps left/down into that region, move <b> starts at the gamma C-H bond and sweeps right/up into the same region; a third hook (the second C-H electron dropping back onto the gamma carbon) is an implicit homolysis hook required for electron balance (not drawn on the page, although the middle structure is already drawn with its radical dot on the gamma carbon). ENCODING NOTE (honest divergence from the drawing, same convention as records IMS8-EQ8.70a / IMS8-EQ8.73): the migrating hydrogen cannot be atom-mapped -- RDKit folds a mapped explicit H into implicit valence -- so the C-H and O-H bonds simply do not exist in the mapped SMILES and none of the three hooks is separately expressible. The single encoded move is the exact net heavy-atom consequence of all three: the odd electron relocates from O(2) to the gamma carbon C(6). REVERSIBILITY: encoded reversible=false because the page draws a single forward arrow here; the book treats the transfer as reversible elsewhere (Equation 8.2, mirrored by the MOD pair IMS_8_2_bidirectional_up/down). NO PRINTED NUMBERS: p.192 prints no m/z and no abundance for this scheme, so the product is recorded detected=false with peak status 'inferred' and no relative_intensity; m/z 100.0883 is the curator's computed monoisotopic value for C6H12O+. and is in any case NOT an independently observable peak -- the distonic ion is isobaric with the hexan-2-one molecular ion it isomerizes from."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_74a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.74a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.74",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py, IMS_chap8_examples.py"
+      },
+      "confidence": 0.9,
+      "curator_note": "rule_index.json 'by_equation' has NO key '8.74' (its chapter-8 keys stop at 8.14), so no rule is labelled with this equation; the cross-links below were verified against the DFS strings atom by atom, not asserted. (1) EXACT, and on this very substrate: IMS_8_2_bidirectional_down '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+.]19>>[C]1([H]2)([H]3)([H]4)[C.]5([H]6)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[C]14([C]15([H]16)([H]17)([H]18)){=}[O+]19([H]7)' is fully instantiated hexan-2-one: its C14=my C(1) (carbonyl), O19=my O(2), C15=my C(3), C11=my C(4), C8=my C(5), C5=my C(6) (the gamma carbon that ends up as [C.]5), C1=my C(7). Left side ionizes O (O+ with only the C=O bond -> one unpaired electron), right side moves H7 to the oxygen and leaves the odd electron on the gamma carbon -- identical to the encoded step. IMS_8_2_bidirectional_up is the same rule run backwards (distonic -> molecular ion). (2) EXACT, generic form: IMS_4_33_rH '[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8>>[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3' -- same bond changes with the chain left generic; RDKit substructure test of its left-hand connectivity ([#6]-[#6;!H0]-[#6]-[#6]-[#6](-[#6])=[O+]) against the encoded precursor SMILES MATCHES. IMS_8_7_1 is the same pattern with one more chain carbon, and IMS_4_45_rH is its ester analogue -- both are family members rather than this exact reaction. (3) NOT cross-linked: IMS_4_34_rH shares the left-hand side but writes the charge onto the carbon ([C+]6[O]8[H]3, an isomeric charge distribution the page does not draw), and the alpha-cleavage continuations IMS_4_33_alpha_1/alpha_2 belong to the SECOND bond cleavage (Equation 8.70), which Equation 8.74 deliberately does not show."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_distonic_oe_ion",
+      "species_id": "distonic_radical_ion",
+      "step_id": "step_gamma_h_rearrangement",
+      "observed_mz": 100.0883,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

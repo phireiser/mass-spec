@@ -1,0 +1,112 @@
+{
+  "mechanism_id": "IMS8-EQ8.1f",
+  "species": [
+    {
+      "species_id": "pent_1_ene_radical_cation",
+      "mapped_smiles": "[CH2:1][CH+:2][CH2:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_pentyl_ion",
+      "mapped_smiles": "[CH3:1][CH+:2][CH2:3][CH2:4][CH2:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["pent_1_ene_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["distonic_pentyl_ion"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_h_shift_1_5",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_shift_1_5",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 137,
+        "equation": "8.1",
+        "section": "8.1 Unimolecular ion decompositions"
+      },
+      "confidence": 0.75,
+      "curator_note": "Eq 8.1, lower-left double-arrow equilibrium labeled 'rH' with delta(dHf) = 0.3 eV, connecting the middle structure (pent-1-ene molecular ion, (30%), dHf/IE 9.3(9.5)) and the bottom structure -- a distonic radical cation explicitly drawn with the radical (.) on one terminal carbon, the charge (+) on the carbon bearing a methyl at the other end, and the transferring H flagged (dHf 9.6). This is an isomerization, not a fragmentation: a 1,5-hydrogen shift converts the alkene radical cation into the distonic ion .CH2-CH2-CH2-CH(+)-CH3. Book draws 0 curved arcs on this page. A faithful 1,5-H ATOM transfer needs 3 fishhooks; the migrating H cannot be atom-mapped (RDKit folds mapped explicit H into implicit valence), so only the surviving heavy-atom change is encoded -- the odd electron relocating from the terminal C1 to the terminal C5 (single fishhook atom(1)->atom(5)); the H migrates the opposite way (C5->C1) and is written implicitly in the SMILES (C1: .CH2 -> CH3; C5: CH3 -> .CH2). LOCALIZATION (convention C): pent-1-ene is drawn by McLafferty as an intact alkene with a delocalized (+.); encoded as the opened distonic form with the odd electron on the terminal C1 (so it can abstract the far H) and the charge on C2. The distonic PRODUCT matches the book's bottom drawing directly. Page draws an equilibrium (reversible)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.1f",
+      "support_type": "computationally_supported",
+      "locator": {
+        "equation": "8.1",
+        "section": "src/data_generation/rules/ (IMS_8_1_var3_step1)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Cross-linked MOD rule IMS_8_1_var3_step1 ('monomolecular ion-cleavage 8.1 rH 0.3'), verified against this scheme. Its DFS '1-pentene >> [C.]2([H]3)([H]4)[C]5..[C]8..[C+]11([H]12)[C]13([H]14)([H]15)([H]1)' moves H1 from the terminal methyl C2 to the terminal alkene carbon C13, leaves the odd electron on C2 (now .CH2) and the charge on the internal alkene carbon C11 -- i.e. the SAME distonic ion .CH2-CH2-CH2-CH(+)-CH3 encoded here (their C2/C11/C13 = my C5/C2/C1, read from opposite ends). CONNECTIVITY, radical site, and charge site all MATCH. The MOD term graph atom-maps the migrating H (index 1); this JSON record cannot, hence the single net odd-electron arrow."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 70.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

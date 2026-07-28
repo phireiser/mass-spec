@@ -1,0 +1,251 @@
+{
+  "mechanism_id": "IMS4-EQ4.38a",
+  "species": [
+    {
+      "species_id": "hexanol_molecular_ion_O_ionized",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]([1H:8])[CH2:4][CH2:5][CH2:6][OH+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_C_radical_oxonium",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2:4][CH2:5][CH2:6][OH+:7][1H:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hexene_distonic_radical_cation_mz84",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2:4][CH2:5][CH2+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "water_neutral_loss",
+      "mapped_smiles": "[OH:7][1H:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexanol_molecular_ion_O_ionized"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "distonic_C_radical_oxonium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "hexene_distonic_radical_cation_mz84",
+        "water_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_i_inductive_water_loss_charge_migration",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 76,
+        "equation": "4.38",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (Hydrogen rearrangement to a saturated heteroatom with adjacent cleavage)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Same six-membered H-rearrangement as eq 4.37 (the lower 'rH' arrow of the shared scheme on p.76), reproduced here as the first step of the charge-migration channel eq 4.38. The alcohol is n-ionized at oxygen (O+. localized, convention B); the delta C-H (map 3) is abstracted by the oxygen radical. ARC COUNT: the book draws 3 arc(s) and all three fishhooks are printed -- move <1> = O odd electron (map 7) into the forming O7-H8 bond; move <2> = one C3-H8 sigma electron into that O-H bond; move <3> = the other C3-H8 electron onto carbon map 3. Product = the distonic ion with a carbon radical (map 3) and a -O+H2 oxonium (map 6-O7). Instantiated for 1-hexanol (M = C6H14O, m/z 102), whose C2H5 terminus is drawn explicitly in this branch."
+    },
+    {
+      "evidence_id": "evidence_step_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_i_inductive_water_loss_charge_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 76,
+        "equation": "4.38",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (charge migration, inductive cleavage 'i')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Charge-migration ('i', inductive) water loss of eq 4.38: the C6-O bond of the oxonium ionizes heterolytically, both bonding electrons going to oxygen so that neutral HOH departs and the charge migrates onto carbon map 6 (a carbenium ion); the carbon radical on map 3 is untouched, giving the distonic hydrocarbon radical cation C6H12+. at m/z 84 (11%). ARC COUNT: the book draws 1 arc -- a single full (double-barbed) arrow from the C6-O7 bond onto the oxygen (drawn as the arc looping off 'HOH+'), so no implicit hook is needed; move <1> carries electron_count 2. (The arrow checker reports a soft note that the +2 electrons landing on oxygen form a lone pair rather than two radicals -- expected for a heterolytic cleavage.)"
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.38a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.38",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MOD rules IMS_4_38_rH and IMS_4_38_ind; VERIFIED against their DFS. IMS_4_38_rH (identical DFS to IMS_4_37_rH) '[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9 >> [C]1[C]2[C.]3[C]5[C]6[C]7[O+]8([H]4)[H]9' = step_rH_hydrogen_rearrangement (H4 = my map 8 migrates C3 -> O8, my map 7). IMS_4_38_ind '[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9 >> [C]1[C]2[C.]3[C]4[C]5[C+]6.[O]7([H]8)[H]9' breaks C6-O7, makes C6 a carbenium ([C+]6), releases neutral water ([O]7) and leaves the C3 radical intact -- exactly step_i_inductive_water_loss_charge_migration. A fourth rule, hTransition_saturated_2 (src/data_generation/rules/IMS_bookCover.py), is also filed under eq 4.38 in the index but its DFS '[H]1[C]2[C]3([_A+]4)[C]5[C.]6 >> [C.]2[C]3([_A+]4)[C]5[C]6([H]1)' describes a CARBON radical (map6) abstracting an H from a carbon (map2) with a generic charged substituent [_A+] as a spectator -- NOT the oxygen-radical-driven rH drawn on p.76 -- so it does not match this scheme's H-transfer (listed in rule_mismatches)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 102.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_84",
+      "species_id": "hexene_distonic_radical_cation_mz84",
+      "step_id": "step_i_inductive_water_loss_charge_migration",
+      "observed_mz": 84.0934,
+      "relative_intensity": 0.11,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

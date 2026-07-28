@@ -1,0 +1,165 @@
+{
+  "mechanism_id": "IMS8-EQ8.37a",
+  "species": [
+    {
+      "species_id": "n_butane_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH2+:3][CH3:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "n_butane_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_radical",
+        "ethyl_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [2]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_8_37a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 169,
+        "equation": "8.37",
+        "figure": null,
+        "panel": null,
+        "section": "8.6 Sigma-bond dissociation (sigma)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.37, line 1 of 3: 'OE+.  AB(+)CD  --sigma-->  AB. + CD+  or  AB+ + .CD'. Generic sigma-bond dissociation of an odd-electron (OE+.) molecular ion: the central C-C sigma bond, drawn carrying the '+' (a 2-centre/1-electron loose sigma bond in the radical cation, per the text 'On dissociation of such a weakened C-C sigma-bond, one of the carbon atoms will bear the charge, and the other will bear the radical site'), homolyses. Either fragment can retain the charge (the 'or': AB.+CD+ vs AB++.CD), the balance set by bond polarization / Stevenson's Rule. ARC COUNT (convention D): the book draws 0 curved arrows/fishhooks - equation 8.37 is a net reactant->products scheme written with a straight sigma-labelled reaction arrow, not an arrow-pushing diagram. The 2 encoded electron_moves are IMPLICIT (reconstructed for electron balance, not drawn): move <1> routes one electron of the cleaving C2-C3 sigma bond OUT of the system (external = the EI ionization hole, since the drawn skeleton is neutral and the +/. live in the fields), move <2> routes the other C2-C3 electron onto C2 to make the ethyl radical; C3 is left electron-deficient -> ethyl cation. This is the delocalized-bond localization convention used for pure-hydrocarbon sigma dissociation in IMS4-EQ4.3. INSTANTIATION (convention F): the scheme is generic (A,B,C,D undefined; NO m/z or intensity printed). Instantiated as the n-BUTANE radical cation cleaving the central C2-C3 bond - the very bond the text singles out ('in the butane cation the lowest-energy structure has a very long C(2)-C(3) bond, 2.02 A'). Butane's C2-C3 cleavage is SYMMETRIC, so both polarizations of the 'or' give the same product pair (ethyl cation + ethyl radical); this single record therefore covers both branches. Curator-computed detected ion m/z 29.0386 (C2H5+); this derives from the chosen instantiation, not from the page. LOCALIZATION (convention B): charge/radical are carried in the species fields against a neutral butane skeleton rather than drawn on a specific atom, because the book localizes the '+' on the sigma BOND (a 2c-1e species) which has no valence-correct single-atom SMILES form."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_8_37a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.37a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.37",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json by_equation)"
+      },
+      "confidence": 0.6,
+      "curator_note": "NO MOD rule is indexed for Equation 8.37 (rule_index.json 'by_equation' has entries only through 8.14; there is no 8.37 key). No cross-link is asserted. The mechanistically analogous chapter-4 sigma dissociation of propane (Eq 4.3, records IMS4-EQ4.3a/b) is encoded by MOD variables IMS_4_3_var1/var2, but those are keyed to 4.3, not to this equation, and describe propane rather than butane. m/z 29.0386 (C2H5+) is curator-computed from the R=butane instantiation because the page prints no m/z and no intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c2h5",
+      "species_id": "ethyl_cation",
+      "step_id": "step_sigma_cleavage",
+      "observed_mz": 29.0386,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "mechanism_id": "IMS8-EQ8.84c",
+  "species": [
+    {
+      "species_id": "ion_S1_2hydroxy_3methylpentan_2_yl",
+      "mapped_smiles": "[CH3:1][C+:2]([OH:7])[C:3]([1H:8])([CH3:6])[CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ion_S4_2hydroxy_3methylpentan_3_yl",
+      "mapped_smiles": "[CH3:1][C:2]([OH:7])([1H:8])[C+:3]([CH3:6])[CH2:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ion_S1_2hydroxy_3methylpentan_2_yl"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ion_S4_2hydroxy_3methylpentan_3_yl"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_1_2_H_shift",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_84c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_1_2_H_shift",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 199,
+        "equation": "8.84",
+        "figure": null,
+        "panel": "LEFT vertical double arrow, labelled '1, 2-H'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.84 is a six-membered cycle of drawn equilibria between six isomeric even-electron C6H13O+ ions; this record is the LEFT vertical double arrow, labelled '1, 2-H' of that cycle. STRUCTURES (read off the drawing, charges localized exactly where the '+' is printed): reactant = CH3-C(+)(OH)-CH(CH3)-CH2CH3, 2-hydroxy-3-methylpentan-2-yl cation (top-left structure); product = CH3-CH(OH)-C(+)(CH3)-CH2CH3, 2-hydroxy-3-methylpentan-3-yl cation (bottom-left structure). MECHANISM: the hydrogen H8 migrates as a hydride with its bonding pair from C3 to the carbenium centre C2; the charge ends up on C3. Book draws 0 arc(s): the page carries NO curved electron-pushing arrows anywhere in Equation 8.84 - only straight double-headed equilibrium arrows carrying the italic labels '1, 2-H'. The encoded move(s) <1> are therefore reconstructed for electron balance (not drawn on the page): a single two-electron (double-barbed) shift of the migrating group's sigma bonding pair from the migration origin to the migration terminus, which is exactly what converts the drawn reactant into the drawn product. The transferred hydrogen is written as an isotope-tagged explicit atom [1H:8] so it can carry an atom map (RDKit folds a plain mapped H into the implicit valence). RESONANCE (convention C): the book draws this alpha-hydroxy cation as a trivalent carbenium with a plain C-OH single bond and the '+' printed next to that carbon; that drawn (localized carbenium) form is what is encoded. Its oxocarbenium resonance partner CH(=OH+) (C=O double bond, charge on oxygen) is the more familiar way to write the same ion but is NOT the form drawn here. The scheme is drawn as an equilibrium in both directions (reversible=true); the direction encoded here is the one that follows the reading order of the figure. EXPERIMENTAL CONTEXT: Equation 8.84 is a purely structural isomerisation network; the page prints NO m/z, NO percentage and names NO experiment for it (the p.197 text only says 'In EE+ ions hydrogen migrations are often accompanied by skeletal rearrangements that produce several intermediates, each with a hydrogen whose transfer is energetically favorable (Equation 8.84; Weiss et al. 1987)', continued on p.199 with '...regardless of their nature in the original EE+ ion; such decompositions show low regiospecificity'). The reacting species is therefore an even-electron C6H13O+ FRAGMENT ion (m/z 101.0961, curator-computed monoisotopic), not a molecular ion: ms_context adduct is null and no electron energy is claimed. Both ions of this step are C6H13O+ isomers of the same mass, so the step produces no new peak; the peak assignment is 'inferred' with no relative_intensity."
+    },
+    {
+      "evidence_id": "ev_mech_8_84c",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.84c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.84",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.84, so no MØD rule is cross-linked. Candidates were checked and REJECTED: (i) the term-mode 'charge migration' rule (src/data_generation/rules/migration.py) hops only the '+' decoration across an unchanged bond and moves no atom, so applied to this reactant it would leave the migrating group/hydrogen where it is and produce a valence-wrong species, not the drawn product; (ii) the hTransition_* family delivers a hydrogen onto an unsaturated or saturated HETEROATOM receptor site with concomitant cleavage, not a 1,2-shift between two carbons of an intact even-electron ion; (iii) no rule in the index performs a 1,2-ALKYL migration at all. Equation 8.84 is unmodelled by the current rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "unspecified - the page names no ionization or activation experiment; the reacting species is an even-electron C6H13O+ fragment ion (Weiss et al. 1987)",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 101.0961,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C6H13O_c",
+      "species_id": "ion_S4_2hydroxy_3methylpentan_3_yl",
+      "step_id": "step_1_2_H_shift",
+      "observed_mz": 101.0961,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

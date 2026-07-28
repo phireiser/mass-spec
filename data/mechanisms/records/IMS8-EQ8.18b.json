@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS8-EQ8.18b",
+  "species": [
+    {
+      "species_id": "oxonium_ee_cation",
+      "mapped_smiles": "[CH3:1][OH+:2][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "alcohol_radical_cation",
+      "mapped_smiles": "[CH3:1][OH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_radical",
+      "mapped_smiles": "[CH2:4][CH3:5]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "oxonium_ee_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "alcohol_radical_cation",
+        "alkyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_homolytic_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "homolytic_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_homolytic_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 150,
+        "equation": "8.18",
+        "section": "8.x Bond lability / heterolytic vs homolytic dissociation at an EE+ site"
+      },
+      "confidence": 0.9,
+      "curator_note": "adduct corrected to null: the precursor is an even-electron oxonium ion (charge +1, radical_electrons 0), not the [M]+. molecular ion. Equation 8.18, bottom row labelled 'homolytic' (bond marked 'strong'): the same generic even-electron oxonium ion R'(O+H)-R dissociates homolytically to give the alcohol radical cation R'OH+. and the neutral alkyl radical .R. Book draws 2 arc(s); moves <1,2> are BOTH drawn -- two single-barbed fishhooks that split the O-R bonding pair, one electron staying on oxygen (giving the O+. radical cation) and one going to the departing R (giving .R). No implicit hook is required: the two fishhooks fully produce the two odd-electron products. GENERIC scheme: R'=CH3 and R=C2H5 are a curator-chosen instantiation (protonated methyl ethyl ether, C3H9O+); the book prints no specific structures, m/z, or intensities. Text: 'homolytic bond cleavage forms two odd-electron products, and so usually requires much more energy' -- the higher-energy ('strong' bond) path, disfavoured relative to the heterolytic route (Eq. 8.18a) but discussed as important for reactions such as RY+-H -> RY+. + .H (Eq. 8.19)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.18b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 150,
+        "equation": "8.18"
+      },
+      "confidence": 0.9,
+      "curator_note": "NO MØD rule is cross-linked: rule_index.json by_equation['8.18'] is null (no IMS_8_18 variables exist). This generic homolytic bond dissociation at an EE+ site has no MØD Rule.fromDFS encoding in src/data_generation/rules/. rule_mismatches: none (nothing to compare against)."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_alcohol_radical_cation",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 150,
+        "equation": "8.18"
+      },
+      "confidence": 0.6,
+      "curator_note": "observed_mz 32.0257 is the curator-computed monoisotopic m/z of the instantiated alcohol radical cation CH3OH+. (CH4O+., electron-mass corrected), NOT a measured value: Equation 8.18 is a generic scheme and the page prints no m/z and no intensity. status 'inferred', relative_intensity omitted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 61.0648,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_alcohol_radical_cation",
+      "species_id": "alcohol_radical_cation",
+      "step_id": "step_homolytic_cleavage",
+      "observed_mz": 32.0257,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

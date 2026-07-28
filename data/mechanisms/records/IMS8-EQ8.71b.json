@@ -1,0 +1,188 @@
+{
+  "mechanism_id": "IMS8-EQ8.71b",
+  "species": [
+    {
+      "species_id": "butan_1_ol_molecular_ion",
+      "mapped_smiles": "[CH3:4][CH2:3][CH2:2][CH2:1][OH+:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_intermediate",
+      "mapped_smiles": "[CH2:4][CH2:3][CH2:2][CH2:1][OH2+:5]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tetramethylene_radical_cation",
+      "mapped_smiles": "[CH2+:1][CH2:2][CH2:3][CH2:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hy_neutral",
+      "mapped_smiles": "[OH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butan_1_ol_molecular_ion"]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": ["distonic_oxonium_intermediate"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["tetramethylene_radical_cation", "hy_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_h_rearrangement_to_saturated_y",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_cy_cleavage_charge_migration",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_71b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_rearrangement_to_saturated_y",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.71",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.9,
+      "curator_note": "Same first step as IMS8-EQ8.71a: the two branches of Equation 8.71 share the drawn distonic intermediate. Book draws 2 arc(s), both single-barbed fishhooks converging on the forming Y...H bond (<a> from the odd electron printed on the singly-bonded, n-ionized Y towards the H; <b> from the C-H bond into that forming Y-H bond); the third hook, the other C-H electron returning to the donor carbon, is an implicit homolysis hook required for electron balance (not drawn on the page, although the middle structure already carries the radical dot). ENCODING NOTE: the migrating H cannot be atom-mapped (RDKit folds a mapped explicit H into implicit valence); the single encoded move is the net heavy-atom result, the odd electron moving from Y(5) to the donor carbon C(4). INSTANTIATION: Y = OH, R = R' = H, i.e. butan-1-ol -- the book's own example for this scheme on p.193."
+    },
+    {
+      "evidence_id": "ev_step_migration_8_71b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_cy_cleavage_charge_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.71",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (charge migration branch)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Lower branch of Equation 8.71, labelled 'charge migration'. Book draws 0 arc(s) for this step (only the labelled straight reaction arrow), so the single encoded move is curator-supplied: the C(1)-Y bonding pair drops onto Y as a lone pair, discharging it to neutral HY and leaving the hydrocarbon with the charge, while the odd electron stays on C(4) where the first step put it. DRAWN vs ENCODED STRUCTURE (disclosed, not silently dropped): the page draws the charge-migration hydrocarbon product as a CLOSED ring with '+.' printed beside it. A saturated C4H8 ring radical cation cannot be written as a localized mapped SMILES (every ring CH2 already has four bonds, so no ring atom can carry the extra charge/radical symbols), so what is encoded is the ring-OPEN distonic form (+)CH2-CH2-CH2-CH2(.) of the same C4H8+. ion. This is not an invention: the p.193 text writes precisely this species for the charge-migration channel -- 'This leads to YH+. (charge retention) or .(CH2)n+ (charge migration) products' -- and then adds that 'five- or six-membered-ring formation of the .(CH2)n+ charge-migration product (n = 3 or 4) is favored if ring closure gives the corresponding cyclopropane+. or cyclobutane+. ions'. The ring-closing step itself is not encoded because forming that C-C bond from the one remaining odd electron cannot be balanced with drawn arrows. NO PRINTED NUMBERS: generic scheme, nothing printed on p.191; detected=false, status 'inferred', no relative_intensity. m/z 56.0621 is the curator's computed value for the butan-1-ol instantiation, i.e. the (M - H2O)+. ion that p.193 discusses as c-C4H8+., not a book datum."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_71b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.71b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.71",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.71; the cross-links below were read off the DFS strings. (1) Step 1 = IMS_4_37_rH / IMS_4_38_rH '[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9>>[C]1[C]2[C.]3[C]5[C]6[C]7[O+]8([H]4)[H]9' -- the H moves to the ionized alcohol oxygen, the odd electron is left on the donor carbon: exactly the drawn intermediate. (2) Step 2 = IMS_4_38_ind '[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9>>[C]1[C]2[C.]3[C]4[C]5[C+]6.[O]7([H]8)[H]9' -- an exact match for what is encoded here: the C-O bond is heterolysed, water leaves NEUTRAL, the carbon that bore the oxygen becomes a cation and the odd electron stays on the remote carbon, i.e. the same ring-open distonic hydrocarbon ion. The follow-on rule IMS_4_38_ind_2 then cleaves that ion further. (3) The ring-CLOSED alternative the page draws is encoded in the halide analogue IMS_4_40_ind '[C]1[C]2[C.]3[C]4[C]5[Cl+]6[H]7>>[C]1[C]2[C]3[C]4[C+.]5{-}3.[Cl]6[H]7', which does form the ring bond ('{-}3') and writes the cyclic ion with charge AND odd electron on one ring carbon ('[C+.]5'); MOD term graphs have no implicit hydrogens and no valence check, so that structure is expressible there but has no RDKit SMILES -- which is exactly why the ring-open form is encoded in this record. CAVEAT: as in IMS8-EQ8.71a, all of these rule patterns carry two extra carbons on the donor carbon (R = C2H5 or larger), so they do not literally match the butan-1-ol instantiation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_hydrocarbon_oe_ion",
+      "species_id": "tetramethylene_radical_cation",
+      "step_id": "step_cy_cleavage_charge_migration",
+      "observed_mz": 56.0621,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

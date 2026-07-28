@@ -1,0 +1,355 @@
+{
+  "mechanism_id": "IMS8-EQ8.118",
+  "species": [
+    {
+      "species_id": "bis_silyl_sulfone_molecular_ion",
+      "mapped_smiles": "[c:1]1([cH:2][cH:3][cH:4][cH:5][cH:6]1)[S:7](=[O+:8])(=[O:9])[C:10]([Si:11]([CH3:12])([CH3:13])[CH3:14])([CH2:15][CH2:16][c:17]2[cH:18][cH:19][cH:20][cH:21][cH:22]2)[CH2:23][CH2:24][CH2:25][CH2:26][CH2:27][CH2:28][S:29][CH2:30][CH2:31][Si:32]([CH3:33])([CH3:34])[CH3:35]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "phenyl_bis_silyloxy_sulfonium",
+      "mapped_smiles": "[c:1]1([cH:2][cH:3][cH:4][cH:5][cH:6]1)[S+:7]([O:8][Si:11]([CH3:12])([CH3:13])[CH3:14])[O:9][Si:32]([CH3:33])([CH3:34])[CH3:35]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "thiacyclodecane_radical_neutral",
+      "mapped_smiles": "[C:10]1([CH2:15][CH2:16][c:17]2[cH:18][cH:19][cH:20][cH:21][cH:22]2)[CH2:23][CH2:24][CH2:25][CH2:26][CH2:27][CH2:28][S:29][CH2:30][CH2:31]1",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "bis_silyl_sulfone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "phenyl_bis_silyloxy_sulfonium",
+        "thiacyclodecane_radical_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_re_double_silyl_migration",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination_with_group_migration",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              32
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              31,
+              32
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              32
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              31,
+              32
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              31
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              31
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              31
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              31
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_re_double_silyl_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.118",
+        "figure": null,
+        "panel": "single reaction arrow labelled 're'; the reactant is bracketed with '+.'",
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.4,
+      "curator_note": "ARCS ACTUALLY DRAWN: ZERO. Equation 8.118 (attributed on the page to Wood et al. 1992) shows only the bracketed radical cation, an arrow labelled 're', and the product ion; no curved arrow, fishhook or neutral product is printed. Every one of the twelve moves encoded here is therefore curator-constructed. SUBSTRATE READ FROM THE DRAWING: C6H5SO2- on a quaternary carbon that also carries Si(CH3)3, a -CH2CH2C6H5 branch and a chain of six CH2 groups (counted vertex by vertex on the zoomed scan) running to a thioether S, then -CH2CH2Si(CH3)3; C29H48O2S2Si2, M+. m/z 548.26. PRODUCT READ FROM THE DRAWING: C6H5-S(+)(OSi(CH3)3)2 -- both trimethylsilyl groups have moved onto the two sulfonyl oxygens and the S-C bond has gone; C12H23O2SSi2+, m/z 287.10. WHAT IS CURATOR-ASSIGNED AND WHY: (i) the ionisation site. The book brackets the whole ion with '+.'; convention B requires it localised, and it is placed on one sulfonyl oxygen (n-ionisation), which is the oxygen that then captures the first silyl group. (ii) The neutral, which the book does not draw at all. Removing both silyl groups and the S-C bond leaves THREE open valences (two on the quaternary carbon, one on the silyl-bearing terminal CH2); spin conservation forbids leaving them as a triradical (a doublet ion cannot give a doublet ion plus a quartet neutral), so two of them are paired here as a new C-C bond, giving a ten-membered thioether ring carrying the phenethyl group and one unpaired electron (C17H25S., 261.17). Any other pairing (e.g. a 1,2-H shift to give an alkene plus a terminal radical) balances equally well; the ring was chosen because it needs no additional hydrogen migration. The neutral is an inference, not a reading of the page."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.118",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.118",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.118' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. As for 8.117, no rule pattern in the set contains silicon, so no silyl migration can be matched; in addition no rule in the set forms a new carbon-carbon bond between two remote radical sites."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_287",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.118",
+        "figure": null,
+        "panel": null,
+        "section": "8.11 Other rearrangements -- 'EE+ ions can also undergo such group migrations with elimination' (Eqs 8.117-8.120)"
+      },
+      "confidence": 0.35,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.118 prints no m/z and no abundance. m/z 287.0953 is the curator-computed monoisotopic mass of the drawn product ion C12H23O2SSi2+, and the precursor m/z 548.2629 in ms_context is likewise computed from the transcribed structure -- it depends on the chain length read off the drawing (six CH2 between the quaternary carbon and the thioether sulfur). Status 'inferred', detected=false, no relative_intensity. MS-CONTEXT ASSUMPTION (disclosed): ms_context.activation_method '70 eV EI' and electron_energy_ev 70.0 are the Chapter-8 house default, NOT printed on this page -- the page names no ionisation or activation conditions. Only the ion type (the drawn '+.' / '+') is source-backed. BOOK'S PROSE vs ITS OWN DRAWING (disclosed): the sentence introducing this block calls Equations 8.117-8.120 examples of 'EE+ ions', yet eq 8.118's substrate is drawn inside a bracket closed with '+.' (verified at 9x on the native scan of printed p. 219) -- an ODD-electron molecular ion. The record follows the DRAWING (charge 1 + radical 1, adduct [M]+.), not the prose."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 548.2629,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_287",
+      "species_id": "phenyl_bis_silyloxy_sulfonium",
+      "step_id": "step_re_double_silyl_migration",
+      "observed_mz": 287.0953,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

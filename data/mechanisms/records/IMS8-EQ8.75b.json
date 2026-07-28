@@ -1,0 +1,164 @@
+{
+  "mechanism_id": "IMS8-EQ8.75b",
+  "species": [
+    {
+      "species_id": "hydroxy_methyl_pentanone_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[CH2:4][C:5]([CH3:7])([CH3:8])[OH:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "enol_radical_cation_from_carbinol_end",
+      "mapped_smiles": "[CH2:7]=[C:5]([CH3:8])[OH+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetone_enol_neutral",
+      "mapped_smiles": "[CH2:4]=[C:1]([CH3:3])[OH:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["hydroxy_methyl_pentanone_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["enol_radical_cation_from_carbinol_end", "acetone_enol_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_methyl_charge_migration",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "atom", "atom_maps": [7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [7]},
+          "target": {"type": "bond", "atom_maps": [5, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "lone_pair", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "lone_pair", "atom_maps": [2]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_75b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_methyl_charge_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 193,
+        "equation": "8.75",
+        "figure": null,
+        "panel": "lower scheme",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "LOWER of the two schemes printed under the single equation number (8.75) on printed page 193 (PDF page 205); same substrate as the upper scheme, 4-hydroxy-4-methyl-2-pentanone+. , but here the hydroxyl is drawn intact as 'HO-' and the migrating H is drawn on ONE OF THE C5 METHYL GROUPS (the six-membered ring is H, C7, C5, C4, C1, O2). The running text names this route 'methyl-H rearrangement' and says it 'produces the same CH2=C(CH3)-OH+. ion by charge migration'. Products as printed: the ion is drawn on the LEFT, '+.' written on its 'HO' -- i.e. the charge/odd electron sit on the FORMER HYDROXYL oxygen, on the fragment that was NOT ionized (charge MIGRATION) -- and the neutral drawn on the right is the acetone ENOL, HO-C(CH3)=CH2. That assignment is confirmed by the following sentence, which contrasts the two channels through 'dHf(acetone) - dHf(acetone enol) = -0.4 eV' for the NEUTRAL species: the upper scheme expels neutral acetone, this one expels the less stable neutral enol. ARROWS ACTUALLY DRAWN: the page draws 2 arc(s), both single-barbed fishhooks, both belonging to the hydrogen transfer only -- arc (i) starts on the methyl C7-H bond and sweeps right with its barb towards the ionized carbonyl oxygen, arc (ii) starts at the '+.' dot on that oxygen and sweeps left with its barb at the migrating H. Nothing is drawn on the C4-C5 bond, on the C1=O2 pi bond, or at the hydroxyl oxygen. ENCODING (honest divergence): the migrating hydrogen cannot carry an atom map (RDKit folds a mapped explicit [H:n] into implicit valence -- verified in the project container), so both drawn fishhooks collapse into the single heavy-atom move <1> (one electron passes from O2 to the donor carbon C7: O2 spends its odd electron on the new O-H bond, the electron left by the homolysed C7-H bond stays on C7). Moves <2>-<5> are IMPLICIT, required for electron balance and for the drawn products but NOT drawn on the page: <2> is the C7 radical entering the forming C5=C7 pi bond, <3> is one non-bonding electron of the hydroxyl oxygen O6 completing that pi bond -- this is the step that actually moves the charge and the odd electron onto O6, exactly where the book prints '+.' -- and <4>+<5> are the charge-migrating cleavage proper: the C4-C5 sigma pair leaves HETEROLYTICALLY towards C4 (a double-barbed arrow, electron_count 2) to build the C1=C4 pi bond of the neutral enol, while the C1=O2 pi pair localises as a lone pair on O2, which is what discharges that oxygen to neutral. Because moves <4>,<5> are two-electron arrows, the gate reports two '(soft) ... consistent with a lone pair rather than radicals' notes on atoms 2 and 6: the checker compares arrow bookkeeping against RADICAL counts only, whereas O2 truly trades its odd electron for a lone pair (net non-bonding +1, as encoded) and O6 truly trades one lone-pair electron for the odd electron of the product ion (net non-bonding -1, as encoded). The encoding is the physically correct one; the soft notes are the known lone-pair blind spot of the checker. RESONANCE (convention C): the ion is encoded in the O-localised form the book draws, CH2=C(CH3)-OH+. , not in its distonic partner .CH2-C(CH3)=OH+ and not in the carbenium form .CH2-C+(CH3)-OH that the MOD rule set produces (see the mod_rules evidence). INTENSITY: the printed '20%' abundance for 'C3H6O+. (m/z 58)' is the TOTAL m/z 58 abundance; both Equation 8.75 channels give this same ion, and the same sentence states that D-labelling (Henneberg 1982) shows charge RETENTION (scheme IMS8-EQ8.75a) is favoured. 0.20 is therefore an UPPER BOUND for this charge-migration channel, not a measured branch intensity; status is 'proposed' for that reason. The page does not restate the ionizing energy; standard 70 eV EI is assumed per the book's convention."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_75b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.75b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.75",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "PARTIAL cross-link -- verified against the DFS strings, not asserted. rule_index.json 'by_equation' has no key '8.75' (its chapter-8 keys stop at 8.14; the MOD names follow the German-edition numbering), but the generic two-stage pair hTransition_unsaturated + hTransition_unsaturated_inductive does reproduce this scheme's connectivity change. STAGE 1, hTransition_unsaturated: '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1' -- with C2=C7, C3=C5, C4=C4, C5=C1, _A6=O2 this is exactly the drawn methyl-H transfer (H to the ionized carbonyl O, radical left on the donor methyl carbon), i.e. encoded move <1>. VERIFIED by RDKit substructure search: the left side rendered as '[#1][#6][#6][#6][#6]=[O+]' matches this precursor 6 times, all six hits being hydrogens of the two C5-methyls -- so the rule fires on precisely the drawn path (and, being carbon-restricted, never on the hydroxyl path of scheme 8.75a). STAGE 2, hTransition_unsaturated_inductive: '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C.]1[C+]2.[C]3{=}[C]4[_A]5[H]6' -- the neutral fragment it emits, [C]3{=}[C]4[_A]5[H]6 = CH2=C(CH3)-OH, is exactly the neutral acetone enol the book draws, and the cleaved bond is the drawn C4-C5 bond, so the charge-migration regiochemistry is right. MISMATCH TO RECORD, stated plainly: the ion the rule emits is '[C.]1[C+]2', i.e. the carbenium/distonic form .CH2-C+(CH3)-OH with a SINGLE C5-C7 bond and the charge on carbon, whereas the book draws the closed enol radical cation CH2=C(CH3)-OH+. with a C5=C7 double bond and '+.' on the oxygen. The two differ by the oxygen-lone-pair donation encoded here as move <3>; no rule in the index performs that closure, so the MOD product is one bond order and one charge site away from the printed ion. Also checked and NOT used: hTransition_unsaturated_alpha ('[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C]1{=}[C]2.[C.]3[C]4{=}[_A+]5[H]6') is the charge-RETENTION partner (it keeps the charge on the carbonyl half) and therefore models the opposite branch, not this one; the IMS_8_2_* family is hard-wired to 2-hexanone; esterMcLafferty_rH needs an ester oxygen in the ring (0 substructure hits here)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.0832,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58_enol_charge_migration",
+      "species_id": "enol_radical_cation_from_carbinol_end",
+      "step_id": "step_rH_methyl_charge_migration",
+      "observed_mz": 58.0413,
+      "relative_intensity": 0.2,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

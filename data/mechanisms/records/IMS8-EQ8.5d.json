@@ -1,0 +1,242 @@
+{
+  "mechanism_id": "IMS8-EQ8.5d",
+  "species": [
+    {
+      "species_id": "butyl_vinyl_ether_radical_cation",
+      "mapped_smiles": "[CH2:3][CH:2]=[O+:1][CH2:4][CH:5]([1H:9])[CH2:6][CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetaldehyde_radical_cation",
+      "mapped_smiles": "[1H:9][CH2:3][CH:2]=[O+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "but_1_ene_neutral",
+      "mapped_smiles": "[CH2:4]=[CH:5][CH2:6][CH3:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "butyl_vinyl_ether_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetaldehyde_radical_cation",
+        "but_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_mclafferty_alpha_alpha",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty_alpha_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 142,
+        "equation": "8.5",
+        "figure": null,
+        "panel": null,
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.8,
+      "curator_note": "Eq 8.5, lower scheme, alpha-alpha channel (arrow labelled 'aa'). Radical-driven McLafferty-type rearrangement of the n-butyl vinyl ether molecular ion: the terminal-vinyl odd electron abstracts the gamma-H, the resulting C-radical drives C-O cleavage, and the C2H4O acetaldehyde fragment retains charge+radical (keto acetaldehyde, IE=10.2 eV printed; higher IE than butene so only 20%). Book draws 4 fishhook arcs (terminal-C gamma-H abstraction; C4=C5 pi formation; C-O cleavage); moves 1,4,6 correspond to those, moves 2,3,5 are the implicit partner homolysis/pairing hooks (not drawn). Precursor written as the distonic oxa-allyl resonance form .CH2-CH=O(+)- (odd electron on the terminal carbon as drawn); acetaldehyde radical cation localized with +. on oxygen. m/z curator-computed; 20% printed. [RECHECK 2026-07-24: arc count corrected 3->4 per a zoomed re-read; the gamma-H abstraction is drawn as TWO barbs (O-radical->H and the gamma C-H bond electron->O-H), not one.]"
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.5d",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 142,
+        "equation": "8.5",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "Cross-link: M\u00d8D rule IMS_8_5_2. Same caveat as the alpha-i record: skeleton matches (gamma-H transfer, C-O cleavage, alkene + carbonyl) but the rule is over-valent (ether O valence 4, adjacent C valence 5; reactant C6H15O) and non-conserving (products +2 / 2 radicals vs +1/1), hence chemically invalid and guardrail-dropped. IMS_8_5_2 localizes the charge on the butene, i.e. the alpha-i (not this alpha-alpha) outcome."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_44",
+      "species_id": "acetaldehyde_radical_cation",
+      "step_id": "step_mclafferty_alpha_alpha",
+      "observed_mz": 44.0257,
+      "relative_intensity": 0.2,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "observed",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

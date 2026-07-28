@@ -1,0 +1,267 @@
+{
+  "mechanism_id": "IMS8-EQ8.86a",
+  "species": [
+    {
+      "species_id": "dimethoxy_carbenium_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][C+:3]([O:7][CH3:8])[CH:4]([1H:11])[CH2:5][CH2:6][O:9][CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "enol_ether_methyloxonium_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][C:3]([O:7][CH3:8])=[CH:4][CH2:5][CH2:6][O+:9]([1H:11])[CH3:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclic_oxocarbenium_2_ethyl",
+      "mapped_smiles": "[CH3:1][CH2:2][C:3]1=[CH:4][CH2:5][CH2:6][O+:7]1[CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methanol_loss_a",
+      "mapped_smiles": "[CH3:10][O:9][1H:11]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethoxy_carbenium_ion"
+      ]
+    },
+    {
+      "state_id": "state_enol_ether_oxonium",
+      "species_ids": [
+        "enol_ether_methyloxonium_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "cyclic_oxocarbenium_2_ethyl",
+        "methanol_loss_a"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_proton_transfer_to_remote_ether",
+      "from_state": "state_precursor",
+      "to_state": "state_enol_ether_oxonium",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_displacement_of_methanol",
+      "from_state": "state_enol_ether_oxonium",
+      "to_state": "state_products",
+      "step_class": "displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              9
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_8_86a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_proton_transfer_to_remote_ether",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 200,
+        "equation": "8.86",
+        "figure": null,
+        "panel": "left branch, first 'r H' arrow",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.86 (printed page 200), introduced by the sentence at the top of the page: 'In bi- or multifunctional compounds the charge-bearing group can activate adjacent C-H bonds for specific proton transfer (Záhorszky 1988, Equation 8.86).' The reacting ion is drawn at the head of the scheme TWICE, joined by a double-headed RESONANCE arrow: the methoxy-oxocarbenium form CH3-O(+)=C(C2H5)- (left) and the localized carbenium form CH3-O-C(+)(C2H5)- (right, '+' printed under the carbon). Convention C: this record localizes the ion as the CARBENIUM form (charge on C(3), neutral ether oxygen O(7)) because that is the form BOTH reacting conformers below the resonance arrow are drawn in and the only form from which the drawn arrows make sense; the resonance pair itself is not encoded as a step. STRUCTURE (concrete, no R groups): CH3CH2-C(+)(OCH3)-CH2CH2CH2-OCH3, C8H17O2(+); the neutral molecule it comes from is NOT drawn on the page. Below the resonance arrow the same ion is redrawn in a folded conformation with the C(4)-H written out explicitly and the remote OCH3 folded back next to it. Book draws 2 arcs; moves <1,2> are BOTH drawn and no implicit hook is needed (a proton transfer is complete with two two-electron arrows): <1> a full double-barbed arrow whose tail is on the explicitly drawn C(4)-H bond and whose head points at the C(3)-C(4) bond next to the '+', i.e. the C-H pair becomes the C(3)=C(4) pi bond; <2> a full arrow from the remote methoxy oxygen O(9) with its head on that hydrogen, i.e. an O(9) lone pair captures the proton. Net result, exactly as drawn in the second left-hand structure: the neutral enol ether CH3CH2-C(OCH3)=CH-CH2CH2-O(+)(H)CH3, the charge having moved from C(3) to O(9). The migrating hydrogen is carried as an explicit, atom-mapped [1H:11] so that the bond bookkeeping is exact; the isotope label is a mapping device only, NOT a deuterium-labeling claim (the page prints no labeled masses, although the preceding text notes that demonstrating such pathways 'usually requires D-labeling')."
+    },
+    {
+      "evidence_id": "ev_step_rd_8_86a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_displacement_of_methanol",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 200,
+        "equation": "8.86",
+        "figure": null,
+        "panel": "left branch, 'r d' arrow",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Second (lower) step of the left branch, the vertical arrow labelled 'r d' (McLafferty's displacement symbol). Book draws 2 arcs; moves <1,2> are BOTH drawn and no implicit hook is needed: <1> the long arrow whose tail sits on the enol-ether oxygen O(7) (the 'CH3O' at the left of the structure) and whose head points at C(6), the carbon that carries the methyloxonium group, i.e. an O(7) lone pair attacks C(6) and closes the five-membered ring O(7)-C(3)=C(4)-C(5)-C(6); <2> the short curl drawn at the oxonium, tail on the C(6)-O(9) bond and head on O(9), i.e. that bond pair is left on the oxygen and neutral CH3OH departs. This is an intramolecular nucleophilic (anchimeric) displacement in an EVEN-ELECTRON ion - there is no radical site anywhere in this scheme, so McLafferty's 'rd' here means displacement in the general sense and not the radical-site-initiated displacement of Chapter 4. The drawn product is the cyclic oxocarbenium (O-methylated 2-ethyl-4,5-dihydrofuran cation), ring O(7)-C(3)(=C(4))-C(4)-C(5)-C(6) with the methyl on the ring oxygen, plus CH3OH, printed with '70%' underneath."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_86a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.86a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.86",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "NO MØD rule is cross-linked. rule_index.json 'by_equation' has no key '8.86' (its chapter-8 keys stop at 8.14, the German-edition numbering). Checked rather than assumed: (i) every indexed hydrogen-transfer family (hTransition_saturated_*, hTransition_unsaturated*, IMS_4_37_rd, IMS_4_45/4_46_rH*) requires an ODD-electron receptor or donor site ([_A+.] or [C.]) and therefore cannot match this even-electron carbenium; (ii) the only even-electron rH rules in the index are the 'Field rules' IMS_8_11 / IMS_8_13 / IMS_8_14_1 / IMS_8_14_2 (e.g. IMS_8_11 '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7).[H]4[O+]8{=}[C]9([H]10)([H]11)') and IMS_4_44_rH; all of them transfer the proton to an oxygen/halogen that is already part of the charged (or leaving) group and expel an alkene or HX, whereas Equation 8.86 transfers the proton from the carbon activated by the carbenium to a REMOTE, neutral ether oxygen with no fragment leaving in that step. (iii) The indexed 'displacement' rules IMS_4_42_rd / IMS_4_43_ / IMS_4_44_ind / IMS_4_45_alpha / IMS_4_46_* are all radical-site processes on odd-electron ions and do not describe the anchimeric ring closure of the second step. Both steps of this route are therefore UNMODELLED by the current MØD rule set."
+    },
+    {
+      "evidence_id": "ev_mech_numbers_8_86a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.86a",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 200,
+        "equation": "8.86",
+        "figure": null,
+        "panel": "left branch product",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "The ONLY number the page prints for this route is '70%', set under the cyclic-oxocarbenium product of the left branch (the right branch carries '30%'). Convention G/F: 70% is a BRANCHING abundance between the two competing routes of the same m/z-145 even-electron ion (compare Equation 8.85 on p.199, where the same style of 40%/60% labels two competing channels of a protonated ether), NOT a 70 eV EI relative intensity and not a peak height in any printed spectrum; it is stored as relative_intensity 0.70 only because the page prints it. NO m/z value is printed anywhere in Equation 8.86: precursor_mz 145.1223 (C8H17O2+) and observed_mz 113.0961 (C7H13O+, loss of CH3OH, 32.0262) are curator-computed monoisotopic values for the concretely drawn structure, with the electron mass subtracted. The page also names no ionization or activation experiment for this ion; section 8.10 discusses decompositions of even-electron (EE+) fragment ions and states that demonstrating such pathways 'usually requires D-labeling', so ms_context.adduct is null (the reacting ion is NOT [M]+.) and electron_energy_ev is left null instead of assuming 70 eV."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "unimolecular dissociation of an even-electron (EE+) fragment ion; the page names no ionization/activation experiment (D-labeling study, Záhorszky 1988)",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 145.1223,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_113_route_a",
+      "species_id": "cyclic_oxocarbenium_2_ethyl",
+      "step_id": "step_rd_displacement_of_methanol",
+      "observed_mz": 113.0961,
+      "relative_intensity": 0.7,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

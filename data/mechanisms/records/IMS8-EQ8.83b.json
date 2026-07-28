@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS8-EQ8.83b",
+  "species": [
+    {
+      "species_id": "benzylic_cation_enol_radical",
+      "mapped_smiles": "[CH3:1][C:2]([O:8])=[CH:3][CH2:4][CH2:5][CH2:6][CH+:7][c:11]1[cH:12][cH:13][cH:14][cH:15][cH:16]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dienol_radical_cation",
+      "mapped_smiles": "[CH3:1][C:2]([OH:8])=[CH:3][CH:4][CH2+:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "styrene",
+      "mapped_smiles": "[CH2:6]=[CH:7][c:11]1[cH:12][cH:13][cH:14][cH:15][cH:16]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "benzylic_cation_enol_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "dienol_radical_cation",
+        "styrene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_inductive_styrene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement_inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_83b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_inductive_styrene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.83",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.83, second (vertical) arrow, labelled 'r H, i'. Products drawn: 'C6H5CH=CH2' (styrene, neutral) plus a bracketed '+.' radical cation of the conjugated dienol CH2=CH-CH=C(OH)-CH3. Book draws 2 arc(s) in the intermediate panel: (i) a SINGLE-BARB fishhook running from the explicitly drawn C(4)-H bond up to the oxygen radical dot -- the H atom transfer that makes the enol O-H (a 1,4-shift, five-membered array) -- and (ii) a FULL, double-barbed arrow whose tail is on the C(5)-C(6) bond and whose head points at the C(6)-C(7) bond next to the '+', i.e. the charge-site-driven ('i') cleavage in which the C-C bonding pair moves in to make the styrene double bond. Move <1> encodes arc (i) at heavy-atom level as the odd electron relocating from O(8) to C(4), because the migrating H cannot carry an atom map; move <2> encodes arc (ii) directly. Both drawn arcs are encoded and no implicit move is needed -- the arrow gate reproduces every bond-order and radical change exactly. RESONANCE CHOICE (convention C): the book prints the product ion as the fully conjugated dienol inside a bracket with '+.' outside, which has no closed-shell Lewis structure; the localized form recorded here, (+)CH2-CH(.)-CH=C(OH)-CH3, is the resonance structure that these two arrows actually produce (the cation lands on the carbon that loses its bond to the departing styrene, the odd electron on the carbon that gave up its H). STRUCTURE: Equation 8.83 is drawn CONCRETELY (no R groups): the bracketed radical cation is C6H5-CH2-CH2-CH2-CH=CH-C(=O)-CH3, i.e. 7-phenylhept-3-en-2-one (C13H16O, M+. m/z 188.1196); the drawn C=C is trans but stereochemistry is not encoded in the mapped SMILES. The p.197 text introduces it as 'Long-range migrations of activated hydrogen atoms can also occur in compounds with alpha,beta-unsaturation (Equation 8.83; compare with Equation 8.9), or even longer-chain enones (Liedtke et al. 1972)'. NO m/z and NO percentage is printed for Equation 8.83, so every mass here is a curator-computed monoisotopic value and both product species are detected=false."
+    },
+    {
+      "evidence_id": "ev_mech_8_83b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.83b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.83",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.83, so no MOD rule is cross-linked. hTransition_unsaturated_inductive '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C.]1[C+]2.[C]3{=}[C]4[_A]5[H]6' is the closest indexed pattern (an 'i' cleavage of an H-transferred ion) but was checked and does NOT match: it starts from a CARBON radical with the charge on the onium heteroatom and ends with the charge on the carbon skeleton and a neutral heteroatom, i.e. the mirror image of this step, whose reactant already has the cation on carbon and the radical on a neutral oxygen, and whose neutral loss is the alkene formed AT the charge site rather than at the radical site. Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI (the reacting ion is the rH-isomerized molecular ion of Equation 8.83a, same m/z)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 188.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_dienol_84",
+      "species_id": "dienol_radical_cation",
+      "step_id": "step_rH_inductive_styrene_loss",
+      "observed_mz": 84.057,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "mechanism_id": "IMS8-EQ8.98",
+  "species": [
+    {
+      "species_id": "protonated_propanal",
+      "mapped_smiles": "[CH2:1]([1H:6])[CH:2]([1H:5])[CH:3]=[OH+:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "hydroxypropan_2_ylium",
+      "mapped_smiles": "[CH2:1]([1H:6])[CH+:2][CH:3]([1H:5])[OH:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_oxonium",
+      "mapped_smiles": "[CH2:1]=[CH:2][CH:3]([1H:5])[OH+:4][1H:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_cation",
+      "mapped_smiles": "[CH2:1]=[CH:2][CH+:3][1H:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "water_neutral_loss",
+      "mapped_smiles": "[OH:4][1H:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_protonated_aldehyde",
+      "species_ids": [
+        "protonated_propanal"
+      ]
+    },
+    {
+      "state_id": "state_carbenium",
+      "species_ids": [
+        "hydroxypropan_2_ylium"
+      ]
+    },
+    {
+      "state_id": "state_oxonium",
+      "species_ids": [
+        "allyl_oxonium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_cation",
+        "water_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_1_2_hydride_shift",
+      "from_state": "state_protonated_aldehyde",
+      "to_state": "state_carbenium",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_proton_transfer_to_hydroxyl",
+      "from_state": "state_carbenium",
+      "to_state": "state_oxonium",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_i_water_loss",
+      "from_state": "state_oxonium",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_98_rH_1_2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_2_hydride_shift",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 207,
+        "equation": "8.98",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.98, top row: the horizontal reaction arrow labelled 'r H' above and '1, 2' below, CH3CH2CH=OH+ -> CH3-CH(+)-CH2OH. CONCRETE SUBSTRATE: the book prints both structures in full, so nothing had to be instantiated. The reacting ion is the protonated aldehyde (MH+ of propanal, C3H7O+); the running text introduces the scheme as 'the ubiquitous loss of water from protonated aldehydes and ketones is preceded by hydrogen or skeletal rearrangements that move the positive charge site away from the C-OH group (Equation 8.98)'. CHARGE/RADICAL (convention B): the printed '+' sits on the oxygen of the oxocarbenium (=OH+) on the left and on the central carbon on the right, and the mapped_smiles localize them exactly there; the ion is closed-shell (even-electron) at every stage of Equation 8.98 and no radical appears anywhere in the scheme. REACTION AS DRAWN: a 1,2-hydride shift -- H5 migrates with its bonding pair from C2 to the carbinol carbon C3 while the C3=O4 pi pair collapses onto oxygen, leaving the carbenium centre on C2. ARC COUNT: Book draws 0 arc(s) for this step; no curved arrow is printed on the top row at all -- the transformation is conveyed only by the 'r H' / '1, 2' label over the reaction arrow. Moves <1> and <2> are therefore curator-inferred from the drawn reactant and product structures rather than transcribed from drawn arcs; both are two-electron (heterolytic) arrows and no implicit homolysis hook exists, because an even-electron ion has no odd electron to push. ENCODING DEVICE: the migrating hydrogens are written as isotope-labelled explicit atoms [1H:5] and [1H:6] so that RDKit keeps them as mapped vertices (a plain [H:5] is folded back into the heavy atom's implicit-H count and every arrow touching it becomes untranscribable); 1H is protium, so this device changes no mass. MS CONTEXT (convention G), disclosed because it is partly inferred: page 207 does NOT name an ionization technique for Equation 8.98 -- it identifies the reactant only as a 'protonated aldehyde', i.e. an MH+ ion, and the whole of section 8.10's EE+ discussion is about MH+ ions (the same page names 'methane CI' explicitly, though for the different vicinal-aminoalcohol example two paragraphs later, and the cited sources -- Bowen and Williams 1980, Audier et al. 1980, Wolfschuetz et al. 1982a,b -- are studies of protonated species). ms_context is therefore set to the protonated-molecule template: adduct '[M+H]+', ionization_method 'CI', activation_method 'chemical ionization', electron_energy_ev null, precursor_mz 59.0491 = MH+ of propanal (M 58.0419). It is emphatically NOT 70 eV EI of an [M]+. radical cation: no odd-electron species occurs anywhere in this scheme. The two intermediates are isomerized MH+ ions of the same composition and the same m/z 59.0491, not fragments, which is why the adduct label is kept for the whole cascade."
+    },
+    {
+      "evidence_id": "ev_step_8_98_rH_to_oxygen",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_proton_transfer_to_hydroxyl",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 207,
+        "equation": "8.98",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.9,
+      "curator_note": "Equation 8.98, middle of the scheme: the vertical arrow labelled 'r H' leading into the folded drawing, plus the two arcs inside that drawing. WHAT THE FOLDED DRAWING IS: not a new species. 'CH2(-H) ... CH-CH2-O-H' redraws the SAME ion the first step produced (CH3-CH(+)-CH2OH) in the conformation that makes the H-transfer geometry visible, so it is encoded as this step's reactant state and NOT as an extra intermediate. The book does not print a '+' on that folded structure -- the carbenium centre is implied by the trivalent 'CH' -- and the mapped_smiles makes it explicit (convention B). REACTION AS DRAWN: a 1,4- (gamma-) proton transfer through a five-membered arrangement (H6, C1, C2, C3, O4): the methyl C1-H6 bonding pair moves into the forming C1=C2 pi bond, quenching the carbenium centre, while an oxygen lone pair captures the departing proton, giving the oxonium CH2=CH-CH2-OH2+. The text motivates it: 'the newly formed carbocationic center activates protons in adjacent positions for transfer onto the basic hydroxyl group'. ARC COUNT: Book draws 2 arc(s), both full double-barbed (two-electron) arrows, and both are transcribed verbatim: move <1> is the arc whose tail sits on the C1-H bond and whose head lands on the C1-C2 bond (the forming pi bond), move <2> is the arc that starts at the oxygen and sweeps up and to the left onto the migrating hydrogen. No implicit hook is required -- the two drawn arcs already balance the step. TWO HONEST QUALIFICATIONS: (i) the head of drawn arc <2> points at the hydrogen atom itself rather than at the O-H bond; it is encoded as lone_pair(O4) -> bond(O4,H6), which is the bond that actually forms; (ii) neither arc is a fishhook (zoomed inspection shows two full barbs on each head), consistent with an even-electron ion."
+    },
+    {
+      "evidence_id": "ev_step_8_98_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_i_water_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 207,
+        "equation": "8.98",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.98, bottom of the scheme: the short vertical arrow labelled with an italic 'i' (inductive cleavage), CH2=CH-CH2-OH2+ -> CH2---CH---CH2(+) + H2O. REACTION AS DRAWN: heterolysis of the C3-O4 bond of the oxonium with both electrons staying on oxygen, expelling neutral water and leaving the allyl cation. ARC COUNT: Book draws 0 arc(s) for this step -- only the italic 'i' on the arrow -- so move <1> is curator-inferred from the drawn reactant and products; it is a single two-electron heterolysis, with no fishhook and no implicit homolysis hook. DELOCALISATION (convention C): the book prints the product as CH2 ==== CH ==== CH2 with dashed half-bonds and one '+' over the central carbon, i.e. the fully delocalised allyl cation. This record commits to ONE localised form, CH2=CH-CH2(+) (C1=C2 double bond, charge on C3), and the arrows produce exactly that form; the mirror form (+)CH2-CH=CH2 is the same species by resonance and is what the dashed drawing averages. MASSES AND INTENSITIES (convention F): page 207 prints NO m/z and NO intensity anywhere for Equation 8.98, so every mass in this record is curator-computed from the instantiated structures (protonated propanal C3H7O+ 59.0491; the two isomeric C3H7O+ intermediates are at the same mass; allyl cation C3H5+ 41.0386; water 18.0106). Consequently every species carries detected=false and the single peak assignment carries status 'inferred' with no relative_intensity."
+    },
+    {
+      "evidence_id": "ev_mech_8_98_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.98",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.98",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.7,
+      "curator_note": "MOD CROSS-LINK, verified by running the candidate rules against this record's instantiated substrates inside the project container (mod.Graph.fromSMILES -> utils.term_from_graph, LabelType.Term / LabelRelation.Specialisation, utils.apply_constraints, dg.build().apply) -- not asserted from the DFS alone (convention E). rule_index.json 'by_equation' has NO entry for 8.98 (the Chapter 8 index stops at 8.14), so nothing is cross-linked by equation id; the links below were found by reading DFS strings and were then TESTED. (1) STEP 3 MATCHES IMS_4_28_2 ('inductive cleavage even electron 4.28 step 2 inductive §R1', src/data_generation/rules/IMS_chap4_examples.py): '[_A]1[O+]2([H]3)([H]4) >> [_A+]1 . [O]2([H]3)([H]4)'. Applied to the instantiated oxonium C=CC[OH2+] it yields 2 derivations producing exactly 'C=C[CH2+]' + 'O' -- the same bond change as the drawn 'i' arrow (C-O heterolysis, both electrons to oxygen, charge migrating to carbon), with the cleaved bond incident to the atom that becomes the cation. Confirmed match. (Note: IMS_4_28_1, the protonation half of Eq. 4.28, is commented out of the active rule list because its left side is disconnected and MOD applies it bimolecularly; irrelevant here, since Equation 8.98 starts from an ion that is already protonated.) (2) STEPS 1 AND 2 HAVE NO MOD RULE. Tested against the instantiated reactants CC[CH]=[OH+] (protonated propanal) and C[CH+]CO (1-hydroxypropan-2-ylium): IMS_4_28_2, IMS_4_20, IMS_4_21, IMS_8_11, IMS_8_13 and IMS_8_14_2 all give 0 derivations. This is a coverage gap rather than a mis-encoding: the library contains no 1,2-hydride-shift rule at all, and the rules that do move an H onto oxygen (the Field rules IMS_8_11/8_13/8_14_2 and the hTransition_* family) either start from an odd-electron site (a heteroatom radical cation or a distonic carbon radical, absent throughout Equation 8.98) or simultaneously cleave the C-O bond and expel a fragment, whereas step 2 breaks no heavy-atom bond at all. (3) DEFECT FOUND, reported as a rule mismatch: IMS_4_20 ('inductive cleavage even electron 1 4.20 §R1Y2'), '[_A]1[_A+]2[H]3([H]4) >> [_A+]1 . [_A]2[H]3([H]4)', is the generic form of exactly this step-3 reaction (R-YH2+ -> R+ + YH2), yet it produces 0 derivations on this record's oxonium. Its two occurrences of the term variable '_A' must unify to the same element, while its own '§R1Y2' generalization constraint demands a carbon rest at position 1 and a HETEROatom at position 2; the two requirements contradict each other, so the rule can never fire on the C-O motif it depicts. A same-element control, C[CH2+], is likewise 0 derivations (there vetoed by the Y2 heteroatom constraint), so the rule is inert on both sides of the contradiction. IMS_4_28_2, which spells the oxygen out as [O+], is the working encoding of the same chemistry. (4) ALSO CHECKED AND REJECTED: src/data_generation/rules/dehydration.py (dehydration_carboxyl and the three ortho variants) encodes intramolecular water loss, but dehydration_carboxyl requires a CARBOXYL carbon bearing both =O and -OH and the ortho variants require a phenolic O-H donor; the substrate here is a primary alcohol / oxonium with neither, and that module's own docstring records that plain alcohol dehydration 'remains deferred'. Steps 2+3 taken together are precisely the deferred general R-OH -> alkene + H2O chemistry, which makes Equation 8.98 a candidate template if that rule is ever authored. [CORRECTION 2026-07-28, verified in-container from IMS_4_20's own GML: the stated root cause for IMS_4_20 producing 0 derivations is WRONG. Its GML context is node 2 = H with TWO edges (edge 1-2 '_A+ - H' AND edge 2-3 'H - H'), i.e. the DFS '[_A+]2[H]3([H]4)' was written with a single parenthesised branch and therefore CHAINS the hydrogens (_A+ - H - H) instead of branching them; it should be '[_A+]2([H]3)([H]4)'. The rule thus demands a HYDROGEN OF DEGREE 2, which no molecule graph can ever supply, so IMS_4_20 is DEAD FOR EVERY SUBSTRATE — independent of any _A-unification or term-variable argument. The _A-unification concern is real but is only a SECOND, downstream blocker. Note also that sub_group/§R1Y2 is a build-time rightPredicate evaluated by dg.build().execute with the strategy, so a bare b.apply test never evaluates it and it cannot have vetoed anything in the original test. This is a genuine MOD corpus bug, logged as a rule mismatch.]"
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 59.0491,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_41_allyl",
+      "species_id": "allyl_cation",
+      "step_id": "step_i_water_loss",
+      "observed_mz": 41.0386,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

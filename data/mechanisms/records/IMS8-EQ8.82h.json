@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS8-EQ8.82h",
+  "species": [
+    {
+      "species_id": "protonated_methyl_acrylate_ion",
+      "mapped_smiles": "[CH2:3]=[CH:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acrylium_ion_mz55",
+      "mapped_smiles": "[CH2:3]=[CH:2][C:1]#[O+:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methanol",
+      "mapped_smiles": "[CH3:12][OH:11]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_methyl_acrylate_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acrylium_ion_mz55",
+        "methanol"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_loss_of_methanol_55",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              10
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82h",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_loss_of_methanol_55",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Bottom row of Equation 8.82, horizontal arrow labelled 'i': the protonated methyl acrylate ion CH2=CH-C(=O)-O(+)(H)CH3 formed in the preceding 'r H, a' step loses CH3OH to give the printed products 'CH3OH + CH2=CHC(triple bond)O(+)' with 'm/z 55' printed under the ion -- the ONLY numerical datum anywhere in Equation 8.82. Book draws 1 arc: a FULL (double-barbed, two-electron) arrow from the C(1)-O(11) bond up to the protonated methoxy oxygen (move <1>). Move <2>, the carbonyl O(10) lone pair closing the acylium C(1)#O(10)+ triple bond, is an implicit two-electron arrow required for electron balance (not drawn on the page). The observed_mz 55.0178 is the computed monoisotopic m/z of C3H3O+ and agrees with the printed integer 'm/z 55'; NO percentage/abundance is printed, so no relative_intensity is recorded. The m/z 55 ion is independent of R and of n -- it is the diagnostic ion this whole scheme is drawn to explain -- so it is the one product on the page whose mass is not an artefact of the curator's instantiation. INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82h",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82h",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. Same finding as 8.82g: IMS_4_41_ind1 encodes exactly this protonated-ester -> acylium + methanol cleavage but with the Equation 4.41 ring-plus-radical skeleton hard-coded into its left-hand pattern, so it cannot match CH2=CH-C(=O)-O(+)(H)CH3 (VERIFIED by RDKit substructure match: the rule's left graph spans 12 mapped atoms -- 11 heavy plus the ester proton -- and requires both a six-membered ring and a radical centre, whereas this ion has 6 heavy atoms, no ring and no radical; the ring-bearing SMARTS returns no match, the bare protonated-ester core does). IMS_4_27_2 '[_A]1[C]2{#}[O+]3>>[_A+]1.[C]2[O]3' acts on an acylium and is the wrong direction. Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI (consecutive fragmentation of the m/z-87 protonated methyl acrylate ion)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 87.0441,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_55",
+      "species_id": "acrylium_ion_mz55",
+      "step_id": "step_inductive_loss_of_methanol_55",
+      "observed_mz": 55.0178,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

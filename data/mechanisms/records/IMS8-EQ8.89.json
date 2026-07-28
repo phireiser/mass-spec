@@ -1,0 +1,276 @@
+{
+  "mechanism_id": "IMS8-EQ8.89",
+  "species": [
+    {
+      "species_id": "dimethyloctane_molecular_ion",
+      "mapped_smiles": "[CH3:5][CH:3]([CH3:6])[CH:1]([CH3:4])[CH:2]([1H:20])[CH2:7][CH2:8][CH2:9][CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "heptan_2_yl_cation",
+      "mapped_smiles": "[CH3:4][CH+:1][CH:2]([1H:20])[CH2:7][CH2:8][CH2:9][CH3:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "isopropyl_radical",
+      "mapped_smiles": "[CH3:5][CH:3][CH3:6]",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "heptene_radical_cation",
+      "mapped_smiles": "[CH3:4][CH+:1][CH:2][CH2:7][CH2:8][CH2:9][CH3:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propane_neutral",
+      "mapped_smiles": "[CH3:5][CH:3]([1H:20])[CH3:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethyloctane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ion_molecule_complex",
+      "species_ids": [
+        "heptan_2_yl_cation",
+        "isopropyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "heptene_radical_cation",
+        "propane_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_dissociation",
+      "from_state": "state_precursor",
+      "to_state": "state_ion_molecule_complex",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_hydrogen_transfer",
+      "from_state": "state_ion_molecule_complex",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              20
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              20
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              20
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              20
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_sigma",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_dissociation",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 203,
+        "equation": "8.89",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.89, FIRST arrow (structure 1 -> structure 2). Set-up sentence, running across pages 202/203: 'Hydrogen-transfer reactions can even occur in OE+. ions formed by sigma-ionization, which formally do not contain coordinatively unsaturated receptors. For example (Figure 8.8), the terminal isopropyl groups of 2-methylnonane and 2,3-dimethyl-octane are clearly indicated by the important (M - C3H8)+. ions ... This hydrogen transfer between two formally saturated parts is made possible in an ion-molecule complex with an elongated central C-C bond (Wendelboe et al. 1981) that removes coordinational saturation from the receptor part (Equation 8.89).' ARC COUNT (convention D): Book draws 0 arc(s) on this arrow (a plain reaction arrow; the '+.' is printed as a superscript on the central carbon, straddling the ionized C1-C3 bond); moves <1,2> are BOTH curator-supplied for electron balance (not drawn on the page): move <1> routes one electron of the ionized central C1-C3 sigma bond to EXTERNAL (the EI ionization hole), move <2> routes the other onto C3, giving .CH(CH3)2 and leaving C1 as the carbenium. LOCALIZATION CAVEAT (convention B): a saturated-alkane sigma radical cation has no valence-correct localized Lewis/RDKit structure - its odd electron occupies the one-electron C-C bond and sits on no single atom - so the precursor mapped_smiles is the neutral C10H22 skeleton while charge=1/radical_electrons=1 are carried in the species fields, exactly the convention already used in IMS4-EQ4.7 and IMS8-EQ8.38a. INTERMEDIATE DISCLOSED (convention G): the book draws structure 2 as an ION-MOLECULE COMPLEX, C1(+) ... .C3H(CH3)2 with a DOTTED (elongated) central C-C bond; a non-covalent complex is not representable as one mapped SMILES, so it is encoded as the two-species state {heptan-2-yl cation, isopropyl radical} that remain associated (held by ion-dipole forces) rather than separating - the same treatment as IMS8-EQ8.7c."
+    },
+    {
+      "evidence_id": "evidence_step_htransfer",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 203,
+        "equation": "8.89",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.89, SECOND arrow (structure 2 -> structure 3): inside the ion-molecule complex the isopropyl radical abstracts a hydrogen from the carbon adjacent to the carbenium centre ('RHC--H'), expelling propane, HCH(CH3)2, and leaving the alkene radical cation, i.e. the (M - C3H8)+. ion the text attributes to a terminal isopropyl group. ARC COUNT (convention D, RE-CHECKED 2026-07-28 at native scan resolution): Book draws 2 arc(s), two DISJOINT single-barbed fishhooks (a clear blank gap separates them). Arc 1 = the large loop whose tail sits on the breaking C2-H20 bond, sweeping up and over the H with its barb pointing down toward the forming-bond region. Arc 2 = a separate lower stroke that starts just below arc 1's barb and curves down to the odd electron drawn on C3 of .CH(CH3)2; moves <1> and <2> are BOTH drawn (arc 1 and arc 2 respectively); only move <3> is an implicit hook required for electron balance (not drawn on the page). Move <2> pairs the isopropyl odd electron into the forming C3-H20 bond. CORRECTION: an earlier version of this note claimed only 1 arc was drawn and called move <2> implicit; native-resolution inspection shows two separate fishhooks. It also said the breaking C2-H20 bond is 'drawn part-dashed as RHC---H' - it is NOT: that bond is a continuous SOLID line (the ragged top edge is antialiasing), and the only genuinely dashed bond in the structure is the central C...CH(CH3)2 bond. move <3> leaves the second electron of the broken C2-H20 bond on C2 as the odd electron of the product radical cation. LOCALIZATION (convention C): the book draws the product as a full C1=C2 double bond carrying a '+.' superscript on the RHC carbon. That drawing has no valence-consistent SMILES - with both alkene carbons tetravalent it IS the neutral alkene - because the ion is a pi-ionized alkene whose C1-C2 bond holds only three electrons (formal order 1.5). ONE localized resonance form is encoded, chosen minimal-motion: the charge stays on C1 (the carbenium carbon of the complex) and the odd electron sits on C2, precisely where move <3> leaves the leftover sigma electron; the partner form (charge on C2, radical on C1) is the same ion and is not separately encoded. Consequently the encoded C1-C2 bond order does not change in this step (1 -> 1), which is why no arrow feeds it."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.89",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 203,
+        "equation": "8.89"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD rule is cross-linked: rule_index.json by_equation has no '8.89' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering), and grep over src/data_generation/rules/ finds neither a 'Gl. 8.89' comment nor any Rule.fromDFS for this equation. rule_mismatches: none (nothing to compare against). Nearest relatives are the generic sigma-cleavage encodings IMS_4_7 / sigma_lowIE - NEITHER of which can actually match this substrate: sigma_lowIE (IMS_bookCover.py:9) is '[_A+.]1[I]2 >> [_A.]1 . [I+]2' and REQUIRES an explicit IODINE partner, so it cannot touch an alkane C-C bond at all, and IMS_4_7 is a linear-chain pattern whose charge/radical placement differs. They are cited as family resemblance only, NOT as matches (eq 4.7), which cover step 1 (C-C sigma homolysis with the charge kept on the more substituted carbon) but NOT the intra-complex hydrogen transfer that actually makes the (M - C3H8)+. ion. MS CONTEXT (convention G): the species undergoing the drawn reaction is the neutral alkane molecular ion M+. (adduct [M]+., precursor_mz 142.1716 for C10H22); page 203 prints no ionization conditions for eq 8.89 itself, but the reference spectra it points to are the book's standard 70-eV EI spectra (Figure 8.8, page 202), hence EI / 70 eV. The surrounding text stresses that this channel belongs to LOW-internal-energy, long-lived ions: 'in low-energy, simple-cleavage decompositions, the cation and radical fragments do not necessarily fly away in the direction of the original sigma-bond, but rather can slip along each other, being bound by ion-dipole interaction; this increases the probability for hydrogen transfer'."
+    },
+    {
+      "evidence_id": "evidence_peak_98",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_M_minus_C3H8",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 202,
+        "equation": "8.89",
+        "figure": "8.8"
+      },
+      "confidence": 0.5,
+      "curator_note": "INSTANTIATION (convention F): equation 8.89 is drawn generically (R, CH(CH3)2, plain unlabelled bonds) and page 203 prints NO m/z and NO intensity for it, so detected=false, status 'inferred' and relative_intensity is omitted. The curator instantiated it with 2,3-DIMETHYLOCTANE, one of the two compounds the running text names for exactly this reaction (the other is 2-methylnonane; both are C10H22, M+. m/z 142, and Figure 8.8 on the PRECEDING page 202 prints their EI spectra with the (M - C3H8)+. peak at m/z 98 circled in both). Atom mapping of the drawing onto 2,3-dimethyloctane: the central drawn carbon = C-3 of the chain (map 1; its two unlabelled drawn bonds are the 3-methyl, map 4, and a hydrogen), the H-donor 'RHCH' carbon = C-4 (map 2, with R = n-butyl, maps 7-10), CH(CH3)2 = C-2 with its two methyls (maps 3, 5, 6), and the transferred hydrogen is written as isotope-tagged [1H:20] so RDKit preserves its atom map. observed_mz 98.1090 is the curator-computed monoisotopic m/z of C7H14+. (electron-mass corrected) for THIS instantiation, not a number printed on page 203; the co-product is propane (44.0626), and 142.1716 - 44.0626 = 98.1090 balances. STRUCTURAL CAVEAT: the generic drawing gives the central carbon four drawn bonds, whereas in both compounds the text names it is three-coordinate plus H (in 2-methylnonane that carbon is a CH2), so one drawn plain bond stands for hydrogen in this instantiation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 142.1716,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_C3H8",
+      "species_id": "heptene_radical_cation",
+      "step_id": "step_hydrogen_transfer",
+      "observed_mz": 98.109,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

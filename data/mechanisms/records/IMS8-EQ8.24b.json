@@ -1,0 +1,229 @@
+{
+  "mechanism_id": "IMS8-EQ8.24b",
+  "species": [
+    {
+      "species_id": "chloronorbornanone_radical_cation",
+      "mapped_smiles": "[CH:1]12[C:2](=[O+:8])[CH2:3][CH:4]([CH2:5][CH:6]1[Cl:9])[CH2:7]2",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopentenylacetyl_cation",
+      "mapped_smiles": "[C:2](#[O+:8])[CH2:3][CH:4]1[CH2:5][CH:6]=[CH:1][CH2:7]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "chlorine_radical",
+      "mapped_smiles": "[Cl:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "chloronorbornanone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "cyclopentenylacetyl_cation",
+        "chlorine_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_cl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_cl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 156,
+        "equation": "8.24",
+        "section": "Stereochemical control of Cl. loss from stereoisomeric chloronorbornanones (OE+. fragmentation)"
+      },
+      "confidence": 0.75,
+      "curator_note": "EI molecular-ion (OE+.) fragmentation. Equation 8.24 shows FOUR stereoisomeric chloro-bicyclo[2.2.1]heptan-2-one (chloronorbornanone) radical cations - panels (a) 80%, (b) 2%, (c) 14%, (d) 4% - all losing Cl. to a COMMON even-electron acylium ion drawn at the centre, (cyclopent-3-en-1-yl)acetyl cation [cyclopentenyl-CH2-C#O]+ (C7H9O+, m/z 109). This record is panel (b) (2% yield of the Cl-loss channel). The large spread of yields is the point of the figure: the fragmentation is STEREOCHEMICALLY controlled. STEREOCHEMISTRY IS NOT ENCODED in the mapped_smiles - panels (a)-(d) share the SAME constitution (Cl on the ring carbon C6 adjacent to the alpha-cleaving bridgehead C1) and differ only in endo/exo and syn/anti configuration, which a plain constitutional SMILES cannot capture. The four records therefore carry identical precursor/product SMILES and differ only in the printed yield and this note. MECHANISM (net, no H migration): the ionized carbonyl initiates alpha-cleavage of the C1-C2 ring bond to build the acylium C2#O8; the released radical relays to form the ring C1=C6 double bond while the C6-Cl bond homolyzes and Cl. departs. Net C7H9ClO+. -> C7H9O+ + Cl.. Book draws 0 electron-pushing arcs on panel (b) - only the chloroketone structure and the '-Cl. 2%' label. The electron-pushing mechanism is drawn once, on panel (a); all 5 encoded moves are carried over from panel (a) (reconstructed for electron balance)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.24b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 156,
+        "equation": "8.24"
+      },
+      "confidence": 0.1,
+      "curator_note": "No MOD rule is cross-linked: rule_index by_equation has no entry for '8.24'. This chloronorbornanone -> cyclopentenylacetyl-cation skeletal rearrangement is not among the encoded German-edition rules."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_acylium",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 156,
+        "equation": "8.24"
+      },
+      "confidence": 0.7,
+      "curator_note": "observed_mz 109.0648 is the curator-computed monoisotopic m/z of the (cyclopent-3-en-1-yl)acetyl cation C7H9O+ (electron-mass corrected). The page prints the yield '2%' for panel (b); relative_intensity=0.02. The m/z value is curator-computed (the central common ion carries no printed m/z)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": null,
+    "precursor_mz": 144.0336,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acylium",
+      "species_id": "cyclopentenylacetyl_cation",
+      "step_id": "step_cl_loss",
+      "observed_mz": 109.0648,
+      "relative_intensity": 0.02,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

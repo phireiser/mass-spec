@@ -1,0 +1,284 @@
+{
+  "mechanism_id": "IMS8-EQ8.87",
+  "species": [
+    {
+      "species_id": "exo_4_tert_butyladamantan_2_one_molecular_ion",
+      "mapped_smiles": "[O+:1]=[C:2]1[CH:3]2[CH2:9][CH:8]3[CH2:7][CH:6]([CH2:10]2)[CH:5]([C:12]([CH2:13][1H:20])([CH3:14])[CH3:15])[CH:4]1[CH2:11]3",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_protonated_carbonyl_primary_C_radical",
+      "mapped_smiles": "[O+:1]([1H:20])=[C:2]1[CH:3]2[CH2:9][CH:8]3[CH2:7][CH:6]([CH2:10]2)[CH:5]([C:12]([CH2:13])([CH3:14])[CH3:15])[CH:4]1[CH2:11]3",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "M_minus_C4H8_distonic_ion",
+      "mapped_smiles": "[O+:1]([1H:20])=[C:2]1[CH:3]2[CH2:9][CH:8]3[CH2:7][CH:6]([CH2:10]2)[CH:5][CH:4]1[CH2:11]3",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "isobutene_neutral",
+      "mapped_smiles": "[CH2:13]=[C:12]([CH3:14])[CH3:15]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_molecular_ion",
+      "species_ids": [
+        "exo_4_tert_butyladamantan_2_one_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic_intermediate",
+      "species_ids": [
+        "distonic_protonated_carbonyl_primary_C_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "M_minus_C4H8_distonic_ion",
+        "isobutene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_delta_rH_to_carbonyl_oxygen",
+      "from_state": "state_molecular_ion",
+      "to_state": "state_distonic_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              20
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              20
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              20
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              20
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              13
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage_isobutene_loss",
+      "from_state": "state_distonic_intermediate",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              13
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              12,
+              13
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              12,
+              13
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              12
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_87_delta_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_delta_rH_to_carbonyl_oxygen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 201,
+        "equation": "8.87",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.87, FIRST panel and first horizontal arrow, labelled 'delta-r H'. SUBSTRATE: the p.201 text names it explicitly -- 'delta-hydrogen transfer is operative in the elimination of isobutene from exo-tert-butyladamantanone, which proceeds through a seven-membered transition state (Lightner and Wijekoon 1985, Equation 8.87); note that no other competitive hydrogen transfers are possible, because of the molecule's rigid geometry. The endo-isomer loses only C4H9.' The drawn cage is adamantan-2-one carrying a tert-butyl group on the ring carbon TWO bonds from the carbonyl carbon (one bold-wedge and one hashed-wedge methyl mark the exo configuration), i.e. exo-4-tert-butyladamantan-2-one, C14H22O, M+. m/z 206.1665. Atom maps: 1 = carbonyl O, 2 = C2 (carbonyl C), 4 = C3 (alpha, bridgehead), 5 = C4 (beta, bears the tert-butyl), 12 = the quaternary tert-butyl C (gamma), 13 = the delta methyl that donates the H, 20 = the migrating H (written [1H:20] so RDKit keeps it as a mapped atom). The transition-state ring O(1)-C(2)-C(4)-C(5)-C(12)-C(13)-H(20) contains SEVEN atoms, exactly as the text states. STEREOCHEMISTRY: the exo relative configuration drawn with the wedges is NOT encoded in the mapped SMILES (corpus convention); it is what makes this delta transfer geometrically possible, and its absence is why the endo isomer instead loses C4H9. (B) LOCALIZATION: the book prints '+.' directly on the carbonyl oxygen, so the precursor is written n-ionized at oxygen, [O+:1]=[C:2] (O with two bonds -> charge +1 and one odd electron); the product panel prints 'HO' with a '+' over the oxygen and a radical dot on the CH2, i.e. a DISTONIC ion whose charge sits on the three-coordinate protonated-carbonyl oxygen (closed shell there) and whose odd electron sits on the primary carbon C(13). ARCS: Book draws 1 arc -- a single-barbed FISHHOOK whose tail sits on the drawn H-CH2 bond and whose head (one barb only, verified at 22x magnification) points at the oxygen. Move <1> (one electron of the C(13)-H(20) bond delivered to the forming O-H bond) is that drawn arc; move <2> (the oxygen's own odd electron pairing into the same forming O-H bond) and move <3> (the implicit homolysis hook that leaves the odd electron on C(13) as the drawn .CH2) are required for electron balance but are NOT drawn on the page. NO m/z and NO percentage is printed for either the molecular ion or this intermediate, so both are detected=false."
+    },
+    {
+      "evidence_id": "ev_step_8_87_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_isobutene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 201,
+        "equation": "8.87",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.87, SECOND panel and second horizontal arrow, labelled 'alpha'. The drawn intermediate carries the radical on the primary carbon C(13) ('.CH2') and the charge on the protonated carbonyl oxygen; alpha cleavage at that carbon radical breaks the C(5)-C(12) bond -- the bond between the adamantane ring carbon and the quaternary tert-butyl carbon -- forming the C(12)=C(13) double bond of isobutene and leaving the odd electron on the ring carbon C(5). The charged fragment is therefore the distonic ion 'protonated-carbonyl oxygen + ring carbon radical', C10H14O+., which the book writes simply as (M - C4H8)+., 100%. ARCS: Book draws 2 arcs, both single-barbed fishhooks -- one whose tail starts at the radical dot of .CH2 and whose head points onto the forming C(12)=C(13) bond, and one whose tail sits on the C(5)-C(12) bond (the near-vertical line from the quaternary carbon up to the ring) and whose head points onto the same forming C(12)=C(13) bond. Moves <1,2> are those two drawn arcs; move <3> (the second electron of the breaking C(5)-C(12) sigma bond dropping onto the ring carbon C(5) as a radical) is the implicit homolysis hook required for electron balance and is NOT drawn on the page -- the book indicates it only by writing the products. The '100%' printed to the right of (M - C4H8)+. is the only intensity on this scheme; the electron energy is not printed on the page, so the 70 eV EI value in ms_context is the chapter-default convention, not a page datum. m/z values (206.1665 for M+., 150.1039 for (M - C4H8)+., 56.0626 for the neutral isobutene) are curator-computed monoisotopic values; the book prints none of them."
+    },
+    {
+      "evidence_id": "ev_mech_8_87_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.87",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.87",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.87 (chapter-8 keys stop at 8.14), so NO MOD rule is cross-linked. The two nearest generic encodings were checked against the instantiated substrate by RDKit substructure match and BOTH FAIL. (1) STEP 1: hTransition_saturated_4 ('H transition receptor site saturated rH §Y8', IMS_bookCover.py) '[H]1[C]2[C]3[C]4[C]5[C]6([H]7){=}[_A+.]8>>[C.]2[C]3[C]4[C]5[C]6([H]7){=}[_A+]8[H]1' is the right topology -- a delta-H transfer along a five-carbon chain to a doubly-bonded charged-radical heteroatom, i.e. the seven-membered transition state of Equation 8.87 -- but its left side demands an explicit hydrogen [H]7 on the sp2 carbon [C]6, which restricts it to ALDEHYDES. The carbonyl carbon of 4-tert-butyladamantan-2-one is a ring ketone carbon with no hydrogen, and the corresponding SMARTS [#1]-[#6]-[#6]-[#6]-[#6]-[#6](-[#1])=[O+] gives 0 matches on the precursor, while the same query with the sp2 hydrogen removed gives 24 matches (the delta path of 8.87 among them). The rule is a coverage gap for ketones, not a match. (2) STEP 2: hTransition_unsaturated_alpha '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C]1{=}[C]2.[C.]3[C]4{=}[_A+]5[H]6' cleaves the bond one carbon closer to the carbonyl than Equation 8.87 does: its chain is C.-C-C-C=O+ (0 matches on the distonic intermediate) whereas the 8.87 chain is C.-C-C-C-C=O+ (1 match). hTransition_saturated_4_alpha '[C.]1[C]2[C]3[C]4([H]5){=}[O+]7[C]8>>[C]1[C]2[C]3{-}1.[C]4([H]5){=}[O+.]7[C]8' is not an alpha cleavage at all -- its right side closes a three-membered carbocycle (a radical-site DISPLACEMENT, the Equation 4.37 pattern) and it too requires an aldehyde/ester-type [H]5 (or [C]8) on the sp2 carbon. Equation 8.87 is therefore UNMODELLED by the current MOD rule set in both of its steps."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 206.1665,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_150_M_minus_C4H8",
+      "species_id": "M_minus_C4H8_distonic_ion",
+      "step_id": "step_alpha_cleavage_isobutene_loss",
+      "observed_mz": 150.1039,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

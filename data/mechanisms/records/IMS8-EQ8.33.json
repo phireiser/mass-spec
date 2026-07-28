@@ -1,0 +1,161 @@
+{
+  "mechanism_id": "IMS8-EQ8.33",
+  "species": [
+    {
+      "species_id": "distonic_hexyl_radical_cation",
+      "mapped_smiles": "[CH2:1][CH2:2][CH2:3][CH2:4][CH2:5][CH2+:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_butyl_radical_cation",
+      "mapped_smiles": "[CH2:1][CH2:2][CH2:3][CH2+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:5]=[CH2:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_hexyl_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_butyl_radical_cation",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 162,
+        "equation": "8.33",
+        "figure": null,
+        "panel": null,
+        "section": "Limitation of the concept of radical/charge-site initiation"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.33 draws the full cyclohexane decomposition as a charge-site pathway: neutral cyclohexane --(-e-)--> cyclohexane radical cation (drawn as an intact ring bearing '+.') --(sigma)--> ring-opened 1,6-distonic hexyl radical cation (ring drawn open on the right side, radical '.' on one terminus and '+' on the other) --(i)--> product. Only the ENCODED step (the 'i', inductive/charge-site cleavage) carries a drawn electron arc. The ionization and the sigma ring-opening are NOT encoded because the intact C6H12 molecular ion cannot be given a localized RDKit-parseable SMILES (a closed ring with all 12 H is neutral closed-shell; its '+.' is a delocalized 2-centre-1-electron sigma hole), so the mechanism is encoded starting from the ring-opened distonic hexyl radical cation that the '+.'/'.' arc actually acts on; that species is an isomer of the cyclohexane M+. (both C6H12, m/z 84). Book draws 1 arc (a double-barbed, 2-electron curved arrow whose tail sits on the C4-C5 sigma bond and whose head points at the C5-C6 bond); move <1> is exactly that drawn arrow. No implicit homolysis hook is needed: the charge-site inductive cleavage is a single 2-electron heterolytic process (C4-C5 bonding pair shifts to form the C5=C6 pi bond of ethylene, charge migrates C6->C4). The page prints no m/z or intensity for THIS (cyclohexane) scheme; the adjacent text mentions a 'substantial peak at m/z 56' but attributes it to the spectrum of 2-methyl[pentane], not to the drawn cyclohexane scheme."
+    },
+    {
+      "evidence_id": "evidence_mechanism",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.33",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 162,
+        "equation": "8.33",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "Equation 8.33 has NO dedicated MØD rule (rule_index by_equation['8.33'] is null). The text cross-references Equation 4.30 (the radical-site analog of the same cyclic-ion decomposition), whose rule is IMS_4_30 with DFS [C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6. CROSS-LINK VERIFIED AS A MISMATCH: IMS_4_30 operates on a different substrate (a hexadienyl distonic ion already bearing a C5=C6 double bond and a remote C4 cation), cleaves the C2-C3 bond, and expels butadiene (C3=C4-C5=C6) to leave an ionized-ethylene fragment (C1.-C2+, m/z 28). Scheme 8.33's drawn 'i' step instead starts from an all-single-bond 1,6-distonic hexyl ion, cleaves C4-C5, forms C5=C6, and expels neutral ethylene to leave the C4H8+. ion at m/z 56. Different substrate, different cleaved bond, different products -> IMS_4_30 does NOT encode this scheme and is recorded in rule_mismatches."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 84.0934,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_56",
+      "species_id": "distonic_butyl_radical_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 56.0621,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS8-EQ8.113",
+  "species": [
+    {
+      "species_id": "protonated_syn_benzaldoxime",
+      "mapped_smiles": "[cH:1]1[cH:2][cH:3][cH:4][cH:5][c:6]1/[CH:7]=[N:8]/[OH2+:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "phenyl_nitrilium_carbenium_form",
+      "mapped_smiles": "[cH:1]1[cH:2][cH:3][cH:4][cH:5][c:6]1[N:8]=[CH+:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "water",
+      "mapped_smiles": "[OH2:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_syn_benzaldoxime"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "phenyl_nitrilium_carbenium_form",
+        "water"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rd_phenyl_migration",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rd_8_113",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_phenyl_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 218,
+        "equation": "8.113",
+        "figure": null,
+        "panel": "single arrow, labelled 'rd'",
+        "section": "Displacement reactions (rd) - 'Even \"hidden\" displacements can occur' paragraph, printed p. 216"
+      },
+      "confidence": 0.85,
+      "curator_note": "SUBSTRATE READ FROM THE DRAWING (top of printed p. 218): a benzene ring whose ipso carbon goes down-right to a carbon written 'C'; that carbon carries an H drawn below it and is double bonded (horizontal '=') to 'N'; the nitrogen carries, down-right, an 'OH2' whose oxygen bears a drawn '+'. The reaction arrow is labelled 'rd'. The products printed to the right are a benzene ring bonded to 'N', that N double bonded to 'CH' with a '+' drawn ABOVE THE CARBON of that CH, and, separately, '+ H2O'. THE TEXT THAT INTRODUCES IT is on printed p. 216 (a verso, two printed pages back -- printed p. 217 in between is the full-page Figure 8.9): 'Even \"hidden\" displacements can occur. In the loss of water from CI-protonated oximes, H2O is displaced by the migration of the phenyl group to the protonated hydroxyl (Equation 8.113; Maquestiau et al. 1980). Only syn-isomers were found to undergo this type of reaction.' So the drawn species is the CI-PROTONATED benzaldoxime, PhCH=N-OH2+, an even-electron [M+H]+ - NOT a 70 eV EI molecular ion (convention G); ms_context is therefore CI / [M+H]+ / activation 'chemical ionization' with electron_energy_ev null. ARC COUNT (convention D): Book draws 2 arc(s). Arc 1 starts on the bond between the ring ipso carbon and the 'C' of C=N, sweeps clockwise over the top and its head points down at the nitrogen - the phenyl group migrating with its bonding pair from carbon to nitrogen. Arc 2 is the small hook to the lower right: it starts on the N-O bond and curls down-right with its head pointing at the oxygen - the N-O bonding pair leaving with the oxygen, which is what expels the neutral water. Moves <1,2> ARE THE TWO DRAWN ARCS; NO move is implicit here - the reaction is entirely even-electron (heterolytic), both arcs are transcribed as two-electron moves, and together they account for every bond that changes (C(ipso)-C7 broken, C(ipso)-N8 formed, N8-O9 broken). A one-electron (fishhook) reading is excluded because precursor and both products are closed-shell: a homolytic reading would create unpaired electrons that none of the three printed species has. LOCALIZATION (convention B): the precursor mapped_smiles puts the charge on the oxygen exactly where the book draws it ([OH2+:9]: three bonds, no unpaired electron), so arc 2 has a real origin, and there is no radical anywhere in this record. RESONANCE (convention C): the book draws the product ion as Ph-N=CH with the '+' over the CARBON, i.e. the azomethine/carbenium resonance form, and that is exactly the form encoded ([N:8]=[CH+:7], a six-electron carbon). Its partner form is the phenyl nitrilium ion Ph-N+#CH (charge on nitrogen, C#N triple bond); the arrows as drawn produce the carbon-charged form, so that form is the one recorded. STEREOCHEMISTRY: the drawing places the phenyl and the OH2 on OPPOSITE sides of the C=N (phenyl up-left on carbon, OH2 down-right on nitrogen), which is the anti arrangement that lets the phenyl migrate to the nitrogen; this is transcribed as a defined trans C=N in the mapped SMILES ('/[CH:7]=[N:8]/'). The book calls the reactive isomer the 'syn' isomer (old aldoxime nomenclature, which references the C-H rather than the C-phenyl); the record encodes the GEOMETRY DRAWN and does not re-derive the syn/anti label."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_113",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.113",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 218,
+        "equation": "8.113",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.113' key - the chapter-8 rule set stops at equation 8.14 (German-edition numbering), so nothing in src/data_generation/rules/ was authored for this scheme. The three displacement ('rd') rules that exist were CHECKED with RDKit against this record's own precursor SMILES (convention E) and all three fail, for the same structural reason: (i) 'substituion' [_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2 requires a heteroatom carrying BOTH a positive charge and an unpaired electron ([_A+.]) and expels a radical; SMARTS '[!#6;!#1]~[#6]~[#6]~[#7,#8;+]' gives 0 matches on PhCH=N-OH2+, and an explicit scan finds exactly one charged atom (the oxonium O) with 0 radical electrons, so the odd-electron site the rule needs does not exist. (ii) IMS_4_42_rd '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2' needs a chlorine radical cation: SMARTS '[#6]-[#6]-[#6]-[#6]-[Cl+]' gives 0 matches (no halogen in the substrate). (iii) IMS_4_43_ needs an N-H amine radical cation: SMARTS '[#6]-[#6]-[#7+](-[#1])-[#6]-[#6]' gives 0 matches on the H-added molecule. The failure is systematic, not accidental: every rd rule in the set is an ODD-ELECTRON, radical-site displacement that expels a radical, whereas equation 8.113 is a purely EVEN-ELECTRON heterolytic displacement on a CI-protonated molecule that expels closed-shell water. No rule in the set performs an ARYL migration to a heteroatom either. Nothing is claimed as a match; this equation is currently unmodelled by the MOD rule base."
+    },
+    {
+      "evidence_id": "ev_peak_8_113",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_104",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 218,
+        "equation": "8.113",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): equation 8.113 prints no m/z and no abundance for either the precursor or the product - the only quantitative statement anywhere near it is prose ('the loss of water from CI-protonated oximes'). Both ions therefore carry detected=false, the peak assignment has status 'inferred' and relative_intensity is omitted. The numbers here are CURATOR-COMPUTED monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the concrete substrate the book draws, benzaldoxime: [M+H]+ C7H8NO+ = 122.0600 (ms_context.precursor_mz) and, after loss of H2O (18.0106), the product ion C7H6N+ = 104.0495. They are not values printed by the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 122.06,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_104",
+      "species_id": "phenyl_nitrilium_carbenium_form",
+      "step_id": "step_rd_phenyl_migration",
+      "observed_mz": 104.0495,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

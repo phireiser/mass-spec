@@ -1,0 +1,170 @@
+{
+  "mechanism_id": "IMS8-EQ8.55b",
+  "species": [
+    {
+      "species_id": "ring_opened_allyl_distonic_ion",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH+:1][CH2:6][CH2:5][CH2:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butadiene_radical_cation",
+      "mapped_smiles": "[CH2:6][CH+:1][CH:2]=[CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:4]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ring_opened_allyl_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["butadiene_radical_cation", "ethylene_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ethylene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [4]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 6]},
+          "target": {"type": "bond", "atom_maps": [4, 5]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 6]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ethylene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.55, UPPER 'alpha' branch off the ring-opened distonic ion: the second half of the stepwise retro-Diels-Alder. Radical site C4 -> forming pi C4=C5 (the expelled neutral ethylene); one electron of the sigma C5-C6 -> that forming pi; the second electron of C5-C6 -> C6, so the charge-bearing four-carbon fragment leaves as the diene radical cation ('+ C2H4' is written next to it on the page). Book draws 0 arc(s) on this branch (only the 'alpha'-labelled arrow, the bracketed diene+. and '+ C2H4'); moves <1,2,3> are curator-supplied hooks required for electron balance, none of them drawn. The text above the scheme motivates the branch: 'This retro-Diels-Alder reaction now produces (Equation 8.55) a resonance stabilized diene+. in place of the olefin+. product of Equation 8.48, lowering the IE of the corresponding neutral by ~1 eV.' RESONANCE (convention C): the book draws the product as the fully conjugated butadiene radical cation CH2=CH-CH=CH2 in brackets with '+.'; the arrows as encoded produce the localised form .CH2-CH(+)-CH=CH2 (charge stays on C1, where the drawn allyl cation was localised in record IMS8-EQ8.55a; the odd electron lands on C6). Both are localisation/resonance forms of the same delocalised C4H6+. ion - a radical cation cannot be written with two intact pi bonds in RDKit-parseable SMILES."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.55b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.2,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.55; no MOD rule variable is cross-linked. CHECKED, AND THE ONE RULE THAT DOES MATCH DISAGREES WITH THE BOOK: IMS_4_30 ('Ring spaltung generell', eq 4.30, DFS '[C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6') matches this exact precursor - RDKit substructure test of its LHS as SMARTS '[#6;v3;+0]-[#6]-[#6]-[#6;v3;+1]-[#6]=[#6]' against [CH2:3]=[CH:2][CH+:1][CH2:6][CH2:5][CH2:4] gives 1 match (C4-C5-C6-C1-C2-C3) - and it cleaves the SAME sigma bond (C5-C6), but it distributes the products the other way round: charge and odd electron stay on the two-carbon fragment (ionised ethylene .CH2-CH2+, C2H4+., m/z 28) and butadiene leaves NEUTRAL, i.e. the complement of the branch drawn in 8.55, whose ion is C4H6+. (80% on this page). The 7-carbon rules IMS_4_31_alpha2 and IMS_4_32_ind do encode this alpha-cleavage geometry correctly, but they cannot match here: RDKit substructure test of their LHS '[#6]-[#6;v3;+0]-[#6]-[#6]-[#6;v3;+1]-[#6]=[#6]' against the same precursor gives 0 matches (they require an extra C substituent on the terminal radical carbon). No MOD rule reproduces the book's 8.55 upper branch."
+    },
+    {
+      "evidence_id": "ev_peak_c4h6",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_c4h6",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "The page prints the abundance in the running text below the scheme: 'the C4H6+. abundance from cyclohexene is 80%, versus 25% from methylenecyclopentane and <=5% from methylcyclopentenes' -> relative_intensity 0.80. observed_mz 54.0464 is the curator-computed monoisotopic m/z of C4H6+. (electron-mass corrected); the page prints no m/z, and no ionisation conditions are restated on this page (70 eV EI is the chapter default, not a page statement)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 82.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c4h6",
+      "species_id": "butadiene_radical_cation",
+      "step_id": "step_alpha_ethylene_loss",
+      "observed_mz": 54.0464,
+      "relative_intensity": 0.8,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

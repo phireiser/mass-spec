@@ -1,0 +1,375 @@
+{
+  "mechanism_id": "IMS8-EQ8.64",
+  "species": [
+    {
+      "species_id": "trimethylcyclohexanone_molecular_ion",
+      "mapped_smiles": "[O+:1]=[C:2]1[CH:3]([1H:11])[C:4]([CH3:8])([CH3:9])[CH2:5][CH:6]([CH3:10])[CH2:7]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_acylium",
+      "mapped_smiles": "[O+:1]#[C:2][CH:3]([1H:11])[C:4]([CH3:8])([CH3:9])[CH2:5][CH:6]([CH3:10])[CH2:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "h_shifted_distonic_acylium",
+      "mapped_smiles": "[O+:1]#[C:2][CH:3][C:4]([CH3:8])([CH3:9])[CH2:5][CH:6]([CH3:10])[CH2:7][1H:11]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "unsaturated_acylium_83",
+      "mapped_smiles": "[O+:1]#[C:2][CH:3]=[C:4]([CH3:8])[CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "isobutyl_radical",
+      "mapped_smiles": "[CH2:5][CH:6]([CH3:10])[CH2:7][1H:11]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "trimethylcyclohexanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_distonic_acylium"
+      ]
+    },
+    {
+      "state_id": "state_h_shifted",
+      "species_ids": [
+        "h_shifted_distonic_acylium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "unsaturated_acylium_83",
+        "isobutyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_h_rearrangement",
+      "from_state": "state_ring_opened",
+      "to_state": "state_h_shifted",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_butyl_loss",
+      "from_state": "state_h_shifted",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_ring_opening_8_64",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.64",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (\"Three bonds cleaved\")"
+      },
+      "confidence": 0.85,
+      "curator_note": "Substrate is the 3,3,5-trimethylcyclohexanone molecular ion; the page prints '+.' on the carbonyl oxygen with the C=O drawn intact, so the precursor mapped_smiles localizes charge and odd electron on O(1) (O+ with a double bond and no other ligand carries the one unpaired electron). Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the odd electron on O(1) into the C(2)-O(1) bond; drawn arc 2 = a fishhook from the ring C(2)-C(7) sigma bond into that same C-O bond, which therefore rises from double to triple (acylium). The undrawn move 3 carries the second electron of the cleaved ring bond onto C(7); the book prints the radical dot there in the next structure. The cleaved bond is in the ring, so this step only OPENS the ring, giving the distonic acylium .CH2-CH(CH3)-CH2-C(CH3)2-CH2-C(triple bond)O+. Map numbers: 1 = O, 2 = carbonyl C, 3 = the retained alpha CH2 (later H donor), 4 = the gem-dimethyl quaternary carbon, 5 = the CH2 between it and C(6), 6 = the methine bearing the lone ring methyl, 7 = the alpha carbon cleaved off the carbonyl, 8/9 = the gem-dimethyl methyls, 10 = the C(6) methyl, 11 = the migrating hydrogen (isotope-tagged [1H:11] so it can carry an atom map; RDKit folds an untagged mapped H into implicit valence)."
+    },
+    {
+      "evidence_id": "evidence_step_rH_8_64",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.64",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (\"Three bonds cleaved\")"
+      },
+      "confidence": 0.85,
+      "curator_note": "The arrow is labelled 'rH' on the page. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the radical dot on the terminal carbon C(7) reaching left to the hydrogen the book writes out explicitly as 'H' on C(3); drawn arc 2 = a fishhook from that C(3)-H bond back to C(7), into the C(7)-H bond being formed. The undrawn move 3 leaves the second electron of the old C(3)-H bond on C(3), where the next structure simply shows the dot. Net: a 1,5-hydrogen shift (six-membered transition state C7-C6-C5-C4-C3 plus the H) that moves the radical site next to the acylium carbon while the terminal CH2. becomes CH3."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_loss_8_64",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_butyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.64",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (\"Three bonds cleaved\")"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the radical on C(3) into the forming C(3)=C(4) pi bond; drawn arc 2 = a fishhook from the C(4)-C(5) sigma bond into that same pi bond. The undrawn move 3 puts the second electron of the cleaved C(4)-C(5) bond on C(5); the book just draws the expelled fragment with its dot, an isobutyl (2-methylpropyl) radical, C4H9.. Products: the conjugated acylium (CH3)2C=CH-C(triple bond)O+ at m/z 83 (100%, the ion labelled on the page) plus C4H9.. Three bonds have been cleaved in total (the ring C-C, the C-H and this C-C), matching the 'Three bonds cleaved' heading under which the page places this equation, and the product is the heteroatom-stabilized EE+ ion the text says is 'quite useful for structural characterization'. The migrating hydrogen [1H:11] departs with the isobutyl radical, so the ion is one hydrogen lighter than a hypothetical H-free two-bond ring cleavage would give; that is recorded as hydrogen_shift = -1."
+    },
+    {
+      "evidence_id": "evidence_mod_8_64",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.64",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.64",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.64 (chapter-8 keys stop at 8.14); no MOD rule variable is cross-linked. The obvious candidate for the first step is the generic carbonyl alpha-cleavage IMS_4_14 (DFS '[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]'), and it was CHECKED, not assumed. Its LEFT pattern DOES match this substrate (RDKit: SMARTS [#6](-[#6]-[#6])(-[#6]-[#6])=[O+] -> 1 match, mapping the two branches onto the two ring directions), but the rule is MIS-ENCODED and therefore does not describe this alpha-cleavage: on the left C(1) is bonded to C(2) and C(4), while on the right the acylium carbon C(1) is written bonded to C(5) - so besides breaking the intended C(1)-C(2) bond it also breaks C(1)-C(4) and invents a new C(1)-C(5) bond, i.e. it cleaves a bond that is not the drawn one and re-bonds the acylium to the wrong carbon. The same defect is recorded for equation 8.58. No indexed rule covers the subsequent 1,5-rH between two carbons of a distonic acylium, nor the final beta C-C cleavage (IMS_4_33_alpha_1 is the closest charge-retention alpha step but is authored for an enol oxocarbenium with the charge on a hydroxyl oxygen, not for an acylium). The page prints '100%' beside m/z 83 as a bare percentage without naming the experiment; it is the book's standard 70 eV EI value (running head '8 / Detailed Mechanisms of Ion Fragmentation') and ms_context is set accordingly."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 140.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_83",
+      "species_id": "unsaturated_acylium_83",
+      "step_id": "step_alpha_butyl_loss",
+      "observed_mz": 83.0491,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "mechanism_id": "IMS4-EQ4.46",
+  "species": [
+    {
+      "species_id": "propyl_acetate_molecular_ion",
+      "mapped_smiles": "[CH2:1]([1H:9])[CH:2]([1H:8])[CH2:3][O:4][C:5](=[O+:6])[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_radical_oxocarbenium",
+      "mapped_smiles": "[CH2:1]([1H:9])[CH:2][CH2:3][O:4][C:5](=[O+:6][1H:8])[CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_radical_neutral",
+      "mapped_smiles": "[CH2:1][CH:2]=[CH2:3]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_acetic_acid",
+      "mapped_smiles": "[O:4]([1H:9])[C:5](=[O+:6][1H:8])[CH3:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "propyl_acetate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_radical_oxocarbenium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_radical_neutral",
+        "protonated_acetic_acid"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_first",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_second",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH_first",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_first",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 82,
+        "equation": "4.46",
+        "figure": null,
+        "panel": "first H-transfer (shown in eq 4.45, feeds eq 4.46 via the resonance equilibrium)",
+        "section": "4 / Basic Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.85,
+      "curator_note": "First (gamma) hydrogen rearrangement producing the distonic radical-cation intermediate, identical to the rH step of eq 4.45: gamma H (H8, on C2) transfers to the carbonyl oxygen O6, radical to C2, carbonyl becomes protonated-carbonyl oxocarbenium. This first transfer is drawn in the eq-4.45 panel (3 arcs, fully depicted radical-site HAT); moves <1,2,3> encode it. Eq 4.46 itself begins from the resulting distonic ion, drawn in its left panel as the charge-migrated resonance form (charge on the ester O, radical on gamma C, carbonyl drawn as a neutral =O-H); the vertical equilibrium arrow on the page marks that resonance. Within eq 4.46's own figure no arcs are drawn for this first transfer."
+    },
+    {
+      "evidence_id": "evidence_step_rH_second",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_second",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 82,
+        "equation": "4.46",
+        "figure": null,
+        "panel": "left distonic ion -> rH -> products",
+        "section": "4 / Basic Mechanisms of Ion Fragmentation"
+      },
+      "confidence": 0.8,
+      "curator_note": "Second (delta) hydrogen rearrangement with fragmentation (McLafferty +1 / double H transfer): the delta H (H9, on C1) is delivered to the ester oxygen O4 while the beta C3-O4 bond cleaves, expelling a neutral allyl radical (CH2=CH-CH2., odd electron on Cdelta=C1) and leaving the even-electron protonated carboxylic acid [R'C(OH)2]+ (both oxygens protonated, oxocarbenium on O6). Book draws 2 arcs on the charge-migrated resonance form (eq 4.46, left panel): arc A (delta C-H -> ester O) corresponds to move <3>, arc B (beta C-O bond -> gamma radical carbon) corresponds to move <2>. Moves <1,4,5> are implicit homolysis/pi-forming hooks required for electron balance (not drawn on the page): <1> the gamma radical initiating the C2=C3 pi bond, <4> the delta C1-H9 homolysis leaving the radical on Cdelta, <5> completion of the O4-H9 bond from the second electron of the cleaving C3-O4 bond."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.46",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 82,
+        "equation": "4.46",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.55,
+      "curator_note": "Cross-linked MOD rules (rule_index by_equation 4.46): IMS_4_46_rH_1, IMS_4_46_rH_2, IMS_4_46_rH_2_. IMS_4_46_rH_1 is the first (gamma) transfer but its product [H]1[C]2[C.]3[C]5[O+]6[C]7([C]8){=}[O]9[H]4 encodes the charge-migrated resonance form with a valence-broken oxygen: O9 is written neutral while carrying a C=O double bond AND an O-H bond (3 bonds, should be O+), and the charge sits on the ester O6; my step_rH_first instead uses the chemically valid oxocarbenium resonance form drawn in eq 4.45. IMS_4_46_rH_2 [H]1[C]2[C.]3[C]4[O]5[C]6([C]7){=}[O]8[H]9>>[C]2[C.]3[C]4.[H]1[O+]5{=}[C]6([C]7)[O]8[H]9 matches step_rH_second in substance (second H to the ester O, C-O cleavage, protonated-acid oxocarbenium + a 3-carbon neutral radical) but leaves the neutral fragment without its allyl C=C double bond (radical shown static on the gamma carbon). MISMATCH on IMS_4_46_rH_2_: its product [C]2[C.]3[C]4.[H]1[O+]5[C]6([C]7){=}[O+]8[H]9 carries TWO formal positive charges (O5+ and O8+) on the protonated-acid fragment (product charge +2 vs reactant +1) -- not charge-balanced; it is the second resonance form of the protonated acid (the two forms are drawn at the bottom-right of the page) but the charge is double-counted."
+    },
+    {
+      "evidence_id": "evidence_peak_inferred",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_protonated_acid",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 82,
+        "equation": "4.46",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.55,
+      "curator_note": "Generic scheme (R, R'): the book prints no m/z and no intensity for 4.46. m/z 61.0284 is RDKit-computed monoisotopic mass for the protonated acetic acid (even-electron [CH3C(OH)2]+) from the chosen concrete instantiation R=CH3, R'=CH3 (propyl acetate, M+. = 102.0675); it is not a measured value. Neutral co-product is the allyl radical (41.0391). This McLafferty +1 ion is one mass unit above the single-transfer acid radical cation of eq 4.45 (60.0206)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 102.0675,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_protonated_acid",
+      "species_id": "protonated_acetic_acid",
+      "step_id": "step_rH_second",
+      "observed_mz": 61.0284,
+      "relative_intensity": null,
+      "hydrogen_shift": 2,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.55
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "mechanism_id": "IMS8-EQ8.2i",
+  "species": [
+    {
+      "species_id": "acetone_enol_radical_cation",
+      "mapped_smiles": "[CH2:4]=[C:5]([CH3:7])[O+:6][1H:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetyl_cation",
+      "mapped_smiles": "[CH3:7][C:5]#[O+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH2:4][1H:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "acetone_enol_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetyl_cation",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_2_0",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_2_0",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 138,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "Eq. 8.2, arrow 2.0, rH (secondary: acetone enol+. -> CH3CO+ + .CH3)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Secondary fragmentation of the m/z-58 acetone enol radical cation: an H-rearrangement ('rH') tautomerises it (O-H hydrogen H8 migrates from O6 back onto the terminal C4) and a methyl radical is lost, giving the acetylium CH3-C#O+ (m/z 43). No abundance % is printed for this arrow (dHf only). This is the enol-ion -> acetone-ketone-ion -> acylium + .CH3 route drawn as a single arrow; the intermediate acetone radical cation is NOT drawn, so it is not added as a state. Book draws 0 electron-pushing arcs: Eq. 8.2 is a thermochemical fragmentation map (log k printed above each reaction arrow, heats of formation printed below each species), not a curved-arrow figure. All electron moves here are curator-inferred from the mechanism-type label printed under the reaction arrow; none is drawn on the page. FIVE fishhooks producing the drawn O-centred enol -> acylium change: move<1> (2e) the C4=C5 pi pair captures the incoming H8 as the new C4-H8 bond; move<2> (2e) the O6-H8 pair feeds into the forming C5#O6+ triple bond; move<3> one C4-C5 (sigma) electron becomes the radical on the departing methyl C4; move<4> the other C4-C5 electron feeds the C5#O6+ bond; move<5> the O6 odd electron completes the C5#O6+ triple bond. Net: H8 relocates O6->C4, C4 leaves as .CH3, and C5-O6 goes single->triple."
+    },
+    {
+      "evidence_id": "ev_mech_i",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.2i",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "IMS_chap8_examples.py (IMS_8_2_rH_2_0)"
+      },
+      "confidence": 0.5,
+      "curator_note": "Cross-linked to IMS_8_2_rH_2_0. It captures the same net change (H10=my H8 migrates to their C1=my C4, which departs as the methyl radical [C.]1(H2)(H3)(H10); the acetyl fragment their C4(-C5)-O9 = my C5(-C7)-O6 remains as the cation) BUT is doubly mis-encoded: its reactant enol writes the central carbon (their C4=my C5) with FIVE bonds (=C1, -C5, =O9) -- pentavalent -- and its product acylium '[C]4...[O+]9' has a SINGLE C-O bond (divalent C, no C#O+ triple). This record encodes the RDKit-valid O-centred enol and the true acylium. Listed in rule_mismatches."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_43",
+      "species_id": "acetyl_cation",
+      "step_id": "step_rH_2_0",
+      "observed_mz": 43.0178,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

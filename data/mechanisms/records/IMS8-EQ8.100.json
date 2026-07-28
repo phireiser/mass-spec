@@ -1,0 +1,341 @@
+{
+  "mechanism_id": "IMS8-EQ8.100",
+  "species": [
+    {
+      "species_id": "butan_2_ol_molecular_ion",
+      "mapped_smiles": "[1H:2][O+:1][CH:3]([CH3:4])[CH2:5][CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH2:5][CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_acetaldehyde",
+      "mapped_smiles": "[1H:2][O+:1]=[CH:3][CH3:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methane",
+      "mapped_smiles": "[1H:2][CH3:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "formyl_cation",
+      "mapped_smiles": "[CH:3]#[O+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "butan_2_ol_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_oxocarbenium",
+      "species_ids": [
+        "protonated_acetaldehyde",
+        "ethyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "formyl_cation",
+        "methane",
+        "ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_oxocarbenium",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_methane_loss",
+      "from_state": "state_oxocarbenium",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_8_100",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 208,
+        "equation": "8.100",
+        "figure": null,
+        "panel": "first arrow, labelled '- R.' over 'alpha'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.100, FIRST arrow (leftmost structure -> centre structure), labelled '- R.' above and 'alpha' below. The book draws the precursor as the oxygen-n-ionized molecular ion of a secondary alcohol, R-CH(CH3)-O(+.)H, with '+.' printed just above the oxygen; alpha-cleavage expels R. and gives the oxocarbenium CH3-CH=O(+)-H drawn in the centre. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks, converging on the C-O bond, i.e. on the forming C=O(+) pi bond: arc 1 starts at the odd-electron dot of the '+.' on oxygen, loops up and comes back down with its barb on the C-O bond; arc 2 is the large loop below the chain whose tail sits on the R-CH sigma bond and whose barb points up onto the same C-O bond. Moves <1,2> are those two drawn arcs; move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it routes the second electron of the cleaving C-R bond onto R, which is what actually makes the R. radical printed above the arrow. LOCALIZATION (convention B): the precursor SMILES puts the charge and the odd electron explicitly on oxygen ([O+:1] with two bonds = one unpaired electron in RDKit), so arc 1 has a real origin. INSTANTIATION (convention F): the scheme is generic in R; this record uses R = C2H5, i.e. butan-2-ol (C4H10O, M+. m/z 74.0726), so the expelled radical is C2H5. (29.0391) and the oxocarbenium is CH3CH=OH(+) (protonated acetaldehyde, C2H5O+, m/z 45.0335 - the base peak of the 70 eV EI spectrum of butan-2-ol, although page 208 itself prints no abundance). ATOM-MAP NOTE: the hydroxyl hydrogen, which migrates in the second step, is tagged [1H:2] so RDKit keeps it explicit and it can carry an atom map; it is ordinary protium, not a label the book draws."
+    },
+    {
+      "evidence_id": "ev_step_rH_8_100",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_methane_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 208,
+        "equation": "8.100",
+        "figure": null,
+        "panel": "second arrow, labelled 'r H'",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.100, SECOND arrow (labelled 'r H'): the even-electron (EE+) oxocarbenium CH3-CH=O(+)-H loses methane to give the formyl cation, exactly as the book prints the products to the right of the arrow ('CH4 + HC(triple bond)O(+)'). SET-UP SENTENCE (runs from page 207 onto this page): 'Finally, hydrogen rearrangement can occur in an EE+ ion to a site that has neither a charge nor a multiple bond (Equations 4.45, 8.99, and 8.100; see Site receptivity in this section and extensive examples by Zahorszky 1988, 1989).' Here that receptor site is the METHYL CARBON: it is uncharged and saturated, and the proton moves onto it from the charged oxygen, the opposite of the usual H-to-heteroatom direction. Bond changes: the O-H bond breaks, the CH3-H bond forms, the CH3-C bond breaks and the C=O bond becomes the C(triple bond)O(+) of the formyl cation. ARC COUNT (convention D): Book draws 4 arc(s), all single-barbed fishhooks, in a symmetric diamond. Two tails sit on the left vertical H3C-C bond and two on the right vertical H-O bond; the upper pair's barbs point UP into the gap between H3C and H (the forming CH3-H bond) and the lower pair's barbs point DOWN onto the HC=O bond (the forming third C-O bond). Moves <1,2,3,4> are exactly those four drawn arcs and NOTHING is implicit here: both electrons of each breaking bond are routed by a drawn hook, so the arrows alone balance the step. McLafferty's four-fishhook drawing is bookkeeping-equivalent to the concerted two-double-barbed-arrow version (CH3-C pair -> CH3-H, O-H pair -> C(triple)O); the record transcribes the hooks he actually drew. CONTEXT: the running text on this page ties this channel to 'product stability ... analogous to alkane eliminations from protonated ketones (Harrison 1983)' - the sentence is written for 8.97, but the same acylium/alkane driving force is what makes CH4 loss from a hydroxycarbenium competitive. SPECTATOR: the ethyl radical released in step 1 is carried unchanged through both states so that step 2 balances atom-for-atom; it takes no part in this step."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_100",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.100",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 208,
+        "equation": "8.100",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MØD rule is cross-linked. rule_index.json 'by_equation' has no '8.100' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering). Candidates were CHECKED against this record's instantiated substrates, not assumed. STEP 1: (i) IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5', the generic radical-site alpha-cleavage, does match the precursor's connectivity (RDKit substructure test with '[#6]-[#6]-[#6](-[#6])-[O+]' -> exactly one hit, atom-maps C1=6, C2=5, C3=3, C4=4, A5=1) but would CLEAVE THE C6-C5 BOND - the terminal CH3-CH2 bond of the ethyl group - while forming the O1=C3 pi bond, i.e. it cleaves a bond that is not incident to the pi-forming carbon and expels .CH3 instead of the .C2H5 the book draws. Known Chapter-4 geometry defect; the rule is additionally NOT LIVE, since the conservation guardrail in rules/__init__.py drops it at import ('radical induced (alpha-)clevage for a saturated site 4.9 §R1R3R4Y5 [spin 1->2]'). Listed in rule_mismatches. (ii) IMS_4_26_1 '[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6>>[_A.]1.[C]2([H]3)([H]4){=}[O+]5[_A]6' has exactly the RIGHT alpha-cleavage geometry (the cleaved _A1-C2 bond is incident to the pi-forming carbon C2) and is conserving, but it cannot match a secondary alcohol: it demands a carbinol carbon bearing TWO explicit hydrogens (RDKit test of '[*]-[CH2]-[O+]-[*]' against the precursor -> 0 matches; the carbinol carbon here carries CH3, C2H5, H and O), and because both wildcard slots are written with the SAME variable '_A' they must unify to the same element, whereas here the leaving group is carbon and the second oxygen substituent is hydrogen. (iii) IMS_4_13_1, the other correctly-shaped alpha-cleavage, is hard-wired to diethyl ether ('[CH3]-[CH2]-[O+]-[CH2]-[CH3]' -> 0 matches). STEP 2: no rule expels an ALKANE. The nearest family is the Field-rule set for EE+ oxocarbenium ions, IMS_8_11 / IMS_8_13 / IMS_8_14_2, but those run the H the other way (H from a carbon TO the oxygen, expelling an ALKENE) and neither matches this ion ('[CH3]-[CH2]-[O+]=[CH2]' and '[CH3]-[CH2]-[O+]=[CH]-[CH3]' -> 0 matches against CH3CH=OH+, whose oxygen carries a hydrogen, not an alkyl chain). Family resemblance only, NOT a match. Independently noted while reading those DFS strings: IMS_8_11, IMS_8_13 and IMS_8_14_2 write their expelled alkene as '[C]1([H]2)([H]3)[C]5([H]6)([H]7)', a C-C SINGLE bond between two CH2 groups, i.e. a formal 1,2-biradical rather than ethylene - a pre-existing defect unrelated to this page."
+    },
+    {
+      "evidence_id": "ev_peaks_8_100",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_29",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 208,
+        "equation": "8.100",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): page 208 prints no m/z and no intensity anywhere - equation 8.100 is drawn generically (R, R.) and the surrounding prose quotes no abundances for it. Every species is therefore detected=false, both peak assignments have status 'inferred' and relative_intensity is omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the chosen instantiation R = C2H5 (butan-2-ol): M+. 74.0726 -> [after loss of C2H5., 29.0391] CH3CH=OH+ 45.0335 -> [after loss of CH4, 16.0313] HC(triple)O+ 29.0022. They are not numbers printed by the book. Note that m/z 29 for the formyl cation is isobaric-in-nominal-mass with C2H5+ (29.0386) and with the expelled ethyl radical of this very instantiation; only the exact masses separate them."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 74.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_45",
+      "species_id": "protonated_acetaldehyde",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 45.0335,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    },
+    {
+      "peak_id": "peak_29",
+      "species_id": "formyl_cation",
+      "step_id": "step_rH_methane_loss",
+      "observed_mz": 29.0022,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

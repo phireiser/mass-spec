@@ -1,0 +1,176 @@
+{
+  "mechanism_id": "IMS8-EQ8.31a",
+  "species": [
+    {
+      "species_id": "mh_permethyl_pentofuranoside",
+      "mapped_smiles": "[CH3:8][OH+:7][CH:1]1[O:6][CH:4]([CH2:5][O:13][CH3:14])[CH:3]([O:11][CH3:12])[CH:2]1[O:9][CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclic_oxocarbenium",
+      "mapped_smiles": "[CH:1]1=[O+:6][CH:4]([CH2:5][O:13][CH3:14])[CH:3]([O:11][CH3:12])[CH:2]1[O:9][CH3:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methanol_loss",
+      "mapped_smiles": "[CH3:8][OH:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "mh_permethyl_pentofuranoside"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "cyclic_oxocarbenium",
+        "methanol_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_methanol_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_methanol_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 160,
+        "equation": "8.31",
+        "figure": null,
+        "panel": "ribo",
+        "section": null
+      },
+      "confidence": 0.75,
+      "curator_note": "RIBO panel (MH+ from permethylated ribofuranose; 76%). Book draws 1 arc; move <2> (C1-O7 heterolysis, both electrons routed onto the departing methanol oxygen) is the single arc drawn at the anomeric carbon; move <1> (ring-O6 lone pair -> C1=O6 oxocarbenium pi bond) is an implicit bond-forming arc required for electron balance (not drawn on the page). The anomeric OCH3 oxygen is drawn protonated (O+ with an added H), i.e. the proton sits on the leaving group. The printed 76% is the relative abundance of the (MH-CH3OH)+ methanol-loss channel for the ribo isomer, which eliminates methanol more readily than the arabo isomer (stereospecific). Charge-site (inductive) 1,1-elimination of methanol from the protonated permethylated pentofuranoside [M+H]+: the ring-oxygen (O6) lone pair forms the C1=O6 oxocarbenium pi bond (anchimeric assistance) while the C1-O7 bond to the protonated anomeric methoxy breaks heterolytically, both of its electrons departing with the neutral methanol. Encoded as two double-barbed (2e) moves; the arrow_check reports the O6 and O7 changes as advisory '(soft)' lone-pair notes, which is expected for heterolytic lone-pair chemistry. Structure encoded as a FLAT/representative furanose skeleton: ribo and arabo are C-2 epimeric diastereomers, but the scan's wedge/hash stereochemistry cannot be assigned to an absolute configuration with confidence, so absolute stereochemistry is not encoded; the electron-pushing is identical for both diastereomers and only the drawn proton disposition and the abundance differ."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.31a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 160,
+        "equation": "8.31",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": null,
+      "curator_note": "No MOD rule in data/mechanisms/rule_index.json maps to Equation 8.31 (only '8.3' is indexed, an unrelated equation). This even-electron [M+H]+ heterolytic 1,1-elimination of methanol is not represented among the current radical-cation MOD fragmentation rules; no cross-link asserted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 207.1227,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_175",
+      "species_id": "cyclic_oxocarbenium",
+      "step_id": "step_methanol_elimination",
+      "observed_mz": 175.0965,
+      "relative_intensity": 0.76,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

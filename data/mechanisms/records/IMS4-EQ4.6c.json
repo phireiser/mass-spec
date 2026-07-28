@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS4-EQ4.6c",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH3:1][CH2:2][O+:3]=[CH2:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_cation",
+      "mapped_smiles": "[O+:3]=[CH2:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_radical",
+        "formaldehyde_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_dissociation",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_dissociation",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 55,
+        "equation": "4.6",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.6,
+      "curator_note": "adduct corrected to null (convention G): the species undergoing this reaction is an EVEN-ELECTRON cation (charge +1, radical_electrons 0) - a fragment/secondary-fragmentation precursor - NOT the [M]+. radical molecular ion. UNFAVORED path (crossed by the even-electron rule): homolytic C2-O cleavage of the even-electron oxocarbenium ion would give an ethyl radical + the formaldehyde radical cation O=CH2+. -- i.e. an OE+ ion from an EE+ ion, which requires the energetically costly separation of an electron pair, so the book labels it '(unfavored)'. Book draws 0 curved arrows; the two fishhooks (one electron of the C2-O bond to each fragment) are curator-supplied for balance."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.6c",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.6"
+      },
+      "confidence": 0.6,
+      "curator_note": "Cross-links to IMS_4_6_row3: ...>> [C]1(H2,H3,H4)[C.]5(H6,H7).[O]8{=}[C+.]9(H10,H11). MATCH: homolytic C5-O8 cleavage -> ethyl radical + formaldehyde radical cation, exactly the drawn (unfavored) path. The rule faithfully encodes a pathway the textbook marks as disfavored."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.6"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 30.0100 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 59.0491,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "formaldehyde_cation",
+      "step_id": "step_sigma_dissociation",
+      "observed_mz": 30.01,
+      "status": "rejected",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.108",
+  "species": [
+    {
+      "species_id": "butenoyl_piperidide_molecular_ion",
+      "mapped_smiles": "[N+:1]1([C:2](=[O:3])[CH:4]=[CH:5][CH3:6])[CH2:10][CH2:11][CH2:12][CH2:13][CH2:14]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "azetinone_piperidinium_ion",
+      "mapped_smiles": "[O:3]=[C:2]1[CH:4]=[CH:5][N+:1]12[CH2:10][CH2:11][CH2:12][CH2:13][CH2:14]2",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "butenoyl_piperidide_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "azetinone_piperidinium_ion",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rd_cyclization_to_nitrogen",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rd_8_108",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_cyclization_to_nitrogen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 215,
+        "equation": "8.108",
+        "figure": null,
+        "panel": "single arrow labelled 'rd'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "TEXT ON THE PAGE: 'Equation 8.108 (Levsen et al. 1977) was shown to involve cyclization to nitrogen, not oxygen; note that a vinylic bond is cleaved.' The scheme is a single reaction arrow labelled 'rd' (radical-site displacement); the products R. and the bicyclic ion are printed to the right of the arrow. WHAT THE BOOK DRAWS: an N-acylpiperidine whose acyl group carries a vinyl chain, R-CH=CH-C(=O)-N(piperidine), with '+.' printed directly on the ring nitrogen (n-ionization at N); the product is the SAME piperidine nitrogen now also bonded to the carbon that carried R, i.e. a 4-membered 2-azetinone ring (N-CH=CH-C(=O)- back to N) spiro-fused at N to the intact piperidine, with a bare '+' on N, plus a free R.. The new bond is made to NITROGEN, not to the carbonyl oxygen - that is exactly the point the sentence makes - and the bond that breaks is the R-C bond at an sp2 (vinylic) carbon, the second point the sentence makes. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks (half-arrowheads), whose barbs converge in the open space between the ring nitrogen and the R-bearing vinyl carbon, i.e. onto the forming N-C bond: the LEFT arc has its tail on the R-C sigma bond just right of the 'R' label and loops up and over to the right; the RIGHT arc has its tail on the odd-electron dot of the '+.' on nitrogen and loops up and back to the left. Moves <1,2> are those two drawn arcs (move <1> = the nitrogen odd electron into the forming N-C bond, move <2> = one electron of the breaking R-C bond into the same forming bond); move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it carries the second electron of the R-C bond onto R, which is what actually makes the R. radical the book prints as a product. LOCALIZATION (convention B): the precursor SMILES puts the charge and the odd electron explicitly on the nitrogen ([N+:1] with three sigma bonds = one unpaired electron in RDKit), exactly where the book prints '+.', so move <1> has a real origin. INSTANTIATION (convention F): the scheme is generic in R; this record uses R = CH3, i.e. 1-(piperidin-1-yl)but-2-en-1-one (C9H15NO, M+. m/z 153.1143), the smallest alkyl that reproduces the drawn vinylic C-C cleavage; the book names no specific R and prints no masses. GEOMETRY CHECK: the encoded ring closure is N(map 1)-C(map 5), giving the 4-membered ring maps 1-2-4-5, which is the ring drawn in the product; the C=O and the C4=C5 double bond are untouched, and the piperidine ring is a spectator. MS CONTEXT (convention G): page 215 names no ionization or activation method and no electron energy; the reacting species is the whole-molecule odd-electron radical cation drawn with '+.', so ms_context uses the convention-G molecular-ion default (EI, adduct [M]+., 70 eV). The 70 eV figure is the book's standing convention, NOT a number printed on this page."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_108",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.108",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 215,
+        "equation": "8.108",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MØD rule is cross-linked. rule_index.json 'by_equation' has no '8.108' key (its chapter-8 index runs 8.1-8.14 only, German-edition numbering). The two displacement rules in the rule base were CHECKED against this record's instantiated precursor, not assumed (convention E). (i) 'substituion' in IMS_bookCover.py, DFS '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' (live via the 'rearrangements' export, IMS_bookCover.py:484), is the generic radical-site displacement and has the right ROLE assignment (radical site attacks, leaving group departs as a radical) but the wrong RING SIZE: it closes a 3-membered ring A4-C2-C3, whereas Equation 8.108 closes the 4-membered azetinone ring N-C(=O)-CH=CH. Its 3-atom pattern does match this substrate twice by connectivity (RDKit: SMARTS '[#7+]-[#6]-[#6]-[#6]' -> 2 matches), but both matches run INTO THE PIPERIDINE RING (N1-C10-C11-C12 and N1-C14-C13-C12) and would expel a ring carbon fragment as an aziridinium - a different reaction from the one drawn. It cannot reach the acyl chain at all, because the rule writes plain single bonds '[C]2[C]3' while the chain the book cleaves contains the C4=C5 DOUBLE bond (the 'vinylic bond' of the caption). Independently, its two '_A' slots are one and the same MØD term variable and therefore unify to a single element, so the radical site and the displaced group would both have to be nitrogen, whereas here they are N and C. (ii) IMS_4_42_rd, DFS '[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>[C.]1.[C]2[C]3[C]4[C]5[Cl+]6{-}2', is the only rule named 'rd' but is hard-wired to a CHLORINE radical site and an all-single-bond 5-carbon chain (RDKit: '[#6]~[#6]~[#6]~[#6]~[#6]~[Cl]' -> 0 matches; this substrate contains no halogen). CONCLUSION: no MØD rule performs nitrogen-centred displacement onto a vinylic carbon; encoding this equation would need a new rule with an explicit sp2 (double-bond) neighbour and independent element slots for the radical site and the leaving group."
+    },
+    {
+      "evidence_id": "ev_peak_8_108",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_138",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 215,
+        "equation": "8.108",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): page 215 prints no m/z and no abundance for Equation 8.108 - the scheme is drawn generically ('R', 'R.') and no percentage appears anywhere in the surrounding prose for it. The product species is therefore detected=false and the peak assignment has status 'inferred' with relative_intensity omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the CHOSEN instantiation R = CH3: M+. C9H15NO+. 153.1143 -> azetinone-piperidinium C8H12NO+ 138.0908 + CH3. 15.0235. Both numbers move with the choice of R and are not values printed by the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 153.1143,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_138",
+      "species_id": "azetinone_piperidinium_ion",
+      "step_id": "step_rd_cyclization_to_nitrogen",
+      "observed_mz": 138.0908,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

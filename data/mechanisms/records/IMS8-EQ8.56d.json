@@ -1,0 +1,142 @@
+{
+  "mechanism_id": "IMS8-EQ8.56d",
+  "species": [
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[O+:1][CH2:6][CH2:5][CH2:4][CH2:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_c3h6o",
+      "mapped_smiles": "[CH2:5][CH2:6][O+:1]=[CH2:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["ring_opened_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ethylene_neutral", "distonic_oxonium_c3h6o"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ethylene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ethylene_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": 0.7,
+      "curator_note": "Lower branch of Equation 8.56, on the reaction arrow labelled 'alpha' leaving the ring-opened distonic ion .CH2CH2CH2CH2-O+=CH2: radical-site alpha-cleavage in which the tail radical (C3) forms the C3=C4 pi bond and the C4-C5 bond breaks, expelling neutral ethylene (printed to the left of the product as 'C2H4 +') and leaving the distonic oxonium ion .CH2CH2-O+=CH2 at m/z 58, 1%. Book draws 0 arcs for THIS branch: the two arcs visible on the m/z 58 structure belong to its subsequent step (encoded separately as IMS8-EQ8.56e), so all three fishhooks encoded here are curator-supplied for electron balance."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.56d",
+      "support_type": "curator_inferred",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.56; no MØD rule variable is cross-linked to this scheme. This is the six-membered-ring (tetrahydropyran) analogue of the four-/five-membered-ring branch encoded as IMS8-EQ8.50 (Eq. 8.50, p. 178), which uses the same three-fishhook radical-site alpha-cleavage pattern. The species undergoing this step is the ring-opened isomer of the molecular ion (C5H10O+., m/z 86), so adduct is kept as [M]+•. The page prints abundances as bare percentages without naming the experiment; they are the book's standard 70 eV EI values."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c3h6o_m58",
+      "species_id": "distonic_oxonium_c3h6o",
+      "step_id": "step_alpha_ethylene_loss",
+      "observed_mz": 58.0413,
+      "relative_intensity": 0.01,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

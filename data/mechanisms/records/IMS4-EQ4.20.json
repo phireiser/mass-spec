@@ -1,0 +1,176 @@
+{
+  "mechanism_id": "IMS4-EQ4.20",
+  "species": [
+    {
+      "species_id": "protonated_ethanol",
+      "mapped_smiles": "[CH3:4][CH2:1][OH2+:2]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:4][CH2+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "water",
+      "mapped_smiles": "[OH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_ethanol"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "water"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 64,
+        "equation": "4.20",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.85,
+      "curator_note": "adduct corrected to null: the precursor is an EVEN-ELECTRON cation (charge +1, radical_electrons 0), NOT the [M]+. radical molecular ion. (70 eV EI is retained as the book's standing condition under which such EE+ ions are formed, but the page prints no per-scheme ionization conditions.) Eq 4.20, EE+ (even-electron closed-shell cation) inductive cleavage R-YH2+ -> R+ + YH2. Page draws 1 double-barbed arc pulling the C-Y bonding pair onto Y+ (heterolysis); the single encoded 2-electron move reproduces it. Instantiated as protonated ethanol (Y=O, YH2=H2O)."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.20",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.20",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.8,
+      "curator_note": "MOD rule IMS_4_20 (DFS [_A]1[_A+]2[H]3([H]4)>>[_A+]1.[_A]2[H]3([H]4)) MATCHES: the R-Y single bond is cleaved heterolytically, both electrons to the Y+ centre (atom2), which becomes neutral YH2, while R (atom1) departs as the cation. Note: the equation index ALSO links hTransition_unsaturated, an H-transfer rule ([H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>...) that describes a McLafferty-type H rearrangement onto an unsaturated radical-cation receptor, NOT this inductive cleavage -- see rule_mismatches."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_R_cation",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 64,
+        "equation": "4.20",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "m/z 29.0391 (C2H5+) computed from the protonated-ethanol instantiation, NOT printed on the page; generic (R,Y) scheme with no m/z or intensity given."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 47.0497,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_R_cation",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 29.0391,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T07:02:57.650534Z",
+    "modified_at": "2026-07-24T07:02:57.650535Z"
+  }
+}

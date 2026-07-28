@@ -1,0 +1,212 @@
+{
+  "mechanism_id": "IMS8-EQT8.2l",
+  "species": [
+    {
+      "species_id": "cyclobutanol_radical_cation",
+      "mapped_smiles": "[CH2:1]1[CH:2]([OH+:6])[CH2:3][CH2:4]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "vinyl_alcohol_radical_cation",
+      "mapped_smiles": "[CH2:1]=[CH:2][OH+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclobutanol_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "vinyl_alcohol_radical_cation",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_retro_2plus2",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "retro_ring_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_2plus2",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 167,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3 (Two bonds cleaved; OE+. alpha-alpha)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Table 8.2 (p.167, Two bonds cleaved, OE+. row): two alpha cleavages (alpha-alpha), charge-retention channel A=D+. + B-C. Book draws a 4-fishhook diamond inside the ring (all 4 arcs drawn): the two ring bonds Cd-Ca and Cb-Cc each split, one electron to the forming Ca=Cb pi and one to the forming Cc=Cd pi -- concerted retro-[2+2]. The O+. odd electron is a spectator (unchanged). The book also lists a charge-migration alternative (i-alpha -> A=D + B-C+.) not drawn concretely. Instantiation = cyclobutanol radical cation; no m/z / intensity printed -- m/z curator-computed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2l",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MØD rule indexed to Table 8.2 (see note in EQT8.2a). No rule encodes this 4-membered-ring retro-[2+2]; IMS_4_30 encodes a retro-Diels-Alder of a six-membered ring (giving a diene + distonic ion) -- a related but distinct two-bond ring cleavage, not a match."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 72.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_vinyl_alcohol",
+      "species_id": "vinyl_alcohol_radical_cation",
+      "step_id": "step_retro_2plus2",
+      "observed_mz": 44.0257,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

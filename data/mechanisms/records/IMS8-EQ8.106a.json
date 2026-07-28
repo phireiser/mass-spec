@@ -1,0 +1,228 @@
+{
+  "mechanism_id": "IMS8-EQ8.106a",
+  "species": [
+    {
+      "species_id": "ethoxy_methoxypropane_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][O:3][CH2:4][CH2:5][CH2:6][O+:7][CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dimethyl_ether_radical_cation",
+      "mapped_smiles": "[CH3:1][O+:7][CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tetrahydrofuran_neutral",
+      "mapped_smiles": "[CH2:2]1[O:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethoxy_methoxypropane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "dimethyl_ether_radical_cation",
+        "tetrahydrofuran_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_re_elimination_charge_on_AD",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_106a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_re_elimination_charge_on_AD",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 213,
+        "equation": "8.106",
+        "figure": null,
+        "panel": "left-hand product set (the branch before 'or')",
+        "section": "8.11 Other rearrangements, sub-heading 'Elimination:'"
+      },
+      "confidence": 0.7,
+      "curator_note": "Equation 8.106 is the only scheme under the sub-heading 'Elimination:'. It is drawn with four labelled atoms: A sits above B and is bonded to it, D sits above C and is bonded to it, B and C are joined by the U-arc that stands for the rest of the ion, and '+(.)' is printed above D (the parentheses around the dot are McLafferty's way of saying the ion may be even- or odd-electron). The arrow is labelled 're' and TWO product sets are printed, separated by the word 'or': (branch 1) 'A-D' with '+(.)' above D, plus 'B-C' drawn with a new straight bond and the U-arc still joining them; (branch 2) the same two fragments with '+(.)' moved onto C of the B-C fragment. THIS RECORD IS BRANCH 1 (charge retained by the ejected A-D fragment); branch 2 is record IMS8-EQ8.106b. So: the A-B and C-D bonds break, the A-D and B-C bonds form, the interior chain closes into a ring - exactly the definition the book gives on p. 214, 'the cleavage of two bonds to eject an interior fragment (\"elimination, re\")'. ARC COUNT (convention D): Book draws 0 arc(s) for this scheme - the page prints no curved arrows or fishhooks anywhere in 8.106 (the vertical A-B and C-D lines are plain bonds; the apparent point at the top of the A-B line is the serif of the bold letter A, checked at 6x). All four moves encoded here are curator-supplied to make the drawn products electron-balanced: each of the two breaking bonds contributes one electron to each of the two forming bonds, so no atom's radical population changes and the charge/odd electron stays on D, which is exactly what branch 1 shows. (The German-edition cover chart draws the same reaction, 'Eliminierung (re), Tabelle 8.4', with two arcs and with the charge on the ejected R-YR fragment, i.e. branch 1.) INSTANTIATION (convention F): the page prints no m/z and no intensity. This record uses A = CH3, B and C = chain CH2 groups, D = the methoxy oxygen carrying the charge and odd electron, and puts a second oxygen inside the interior chain so that BOTH branches of the 'or' have a localizable charge site: the precursor is the 1-ethoxy-3-methoxypropane molecular ion, CH3CH2-O-CH2CH2CH2-O(+.)-CH3 (C6H14O2, m/z 118.0983), which ejects tetrahydrofuran (72.0575) as the cyclized interior fragment and keeps the charge on the dimethyl ether radical cation (CH3)2O(+.) (m/z 46.0408). LOCALIZATION (convention B): the charge and odd electron are written explicitly on the methoxy oxygen ([O+:7] with two bonds = one unpaired electron in RDKit), the atom the book marks '+(.)'. The page's own closing paragraph supplies the MS context: 'such a wide range of internal energies (>15 eV) is deposited in molecular ions formed by 70-eV electron ionization'."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_106a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.106a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 213,
+        "equation": "8.106",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_bookCover.py"
+      },
+      "confidence": 0.2,
+      "curator_note": "NO LIVE MØD rule is cross-linked; rule_index.json has no '8.106' key. There IS, however, a DISABLED rule for exactly this reaction: IMS_bookCover.py lines 438-451 contain 'elimination = mod.Rule.fromDFS( # siehe Tab. 8.4 ... \"[_A]1[C]2\" \".\" \"[C]3[_A+]4[_A]5\" >> \"[C]2\" \".\" \"[C]3{-}2.[_A]1[_A]4[_A+]5\", name = \"Elimination §R1S2-3R4Y5\")', preceded by '# TODO: check if elimination is correct, verify with book' and commented out in full, including its entry '# elimination,' in the rearrangements list - so it never enters the rule set and does not appear in rule_index.json. CHECKED against the book figure: its bond bookkeeping IS Equation 8.106 (A1-C2 and C3-A4 cleaved, C2-C3 and A1-A4 formed, matching A-B/C-D broken and B-C/A-D formed), but three things do not match this page: (1) its left side is written as TWO DISCONNECTED components ('[_A]1[C]2' . '[C]3[_A+]4[_A]5'), i.e. it is authored as a bimolecular rule pairing two separate species, whereas 8.106 is intramolecular - A-B and C-D are held together by the drawn U-arc, which is the whole point of 'ejecting an interior fragment'; (2) the charge migrates from A4 to the substituent A5 in its product ('[_A+]4' -> '[_A+]5'), whereas the page keeps the charge on D (branch 1) or moves it to the ring (branch 2); (3) it is even-electron only ('[_A+]', no dot) while the page's '+(.)' notation covers both EE+ and OE+. ions. Additionally all its '_A' placeholders unify to the same element (documented in IMS_bookCover.py: 'every placeholder in one rule must unify to the SAME element'), so A1, A4 and A5 would all have to be, e.g., oxygen - the instantiation drawn here (A = carbon, D = oxygen) could not match it. Listed in rule_mismatches."
+    },
+    {
+      "evidence_id": "ev_peak_8_106a",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_46",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 213,
+        "equation": "8.106",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.106 is drawn with letters only (A, B, C, D) and page 213 prints no m/z and no abundance. m/z 46.0408 ((CH3)2O+., C2H6O+.) is curator-computed with RDKit ExactMolWt, electron-mass corrected, for the chosen instantiation (precursor 118.0983, neutral THF 72.0575). Status 'inferred', detected=false, relative_intensity omitted. Which branch of the 'or' is actually observed is decided by the ionization energies of the two fragments, not by the arrows: for this instantiation IE(THF) ~ 9.4 eV lies below IE(dimethyl ether) ~ 10.0 eV, so branch 2 (record IMS8-EQ8.106b) would in fact be favoured - the book prints both because either can dominate."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 118.0983,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_46",
+      "species_id": "dimethyl_ether_radical_cation",
+      "step_id": "step_re_elimination_charge_on_AD",
+      "observed_mz": 46.0408,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

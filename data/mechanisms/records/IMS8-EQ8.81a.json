@@ -1,0 +1,211 @@
+{
+  "mechanism_id": "IMS8-EQ8.81a",
+  "species": [
+    {
+      "species_id": "methyl_6_phenylhexanoate_alkoxy_O_ionized",
+      "mapped_smiles": "[cH:21]1[cH:22][cH:23][cH:24][cH:25][c:20]1[CH:6]([1H:10])[CH:5]([1H:11])[CH2:4][CH2:3][CH2:2][C:1](=[O:7])[O+:8][CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_benzylic_radical_O_protonated_ester",
+      "mapped_smiles": "[cH:21]1[cH:22][cH:23][cH:24][cH:25][c:20]1[CH:6][CH:5]([1H:11])[CH2:4][CH2:3][CH2:2][C:1](=[O:7])[O+:8]([1H:10])[CH3:9]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "phenyl_hexenal_radical_cation",
+      "mapped_smiles": "[cH:21]1[cH:22][cH:23][cH:24][cH:25][c:20]1[CH:6]=[CH:5][CH2:4][CH2:3][CH2:2][C:1]([1H:11])=[O+:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "methanol_neutral",
+      "mapped_smiles": "[O:8]([1H:10])[CH3:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["methyl_6_phenylhexanoate_alkoxy_O_ionized"]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": ["distonic_benzylic_radical_O_protonated_ester"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["phenyl_hexenal_radical_cation", "methanol_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_epsilon_H_to_alkoxy_O",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [8]},
+          "target": {"type": "bond", "atom_maps": [8, 10]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 10]},
+          "target": {"type": "bond", "atom_maps": [8, 10]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 10]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_methanol_displacement",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 11]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 11]},
+          "target": {"type": "bond", "atom_maps": [1, 11]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "lone_pair", "atom_maps": [7]},
+          "target": {"type": "bond", "atom_maps": [1, 11]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 8]},
+          "target": {"type": "atom", "atom_maps": [8]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_epsilon_H_to_alkoxy_O",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 197, "equation": "8.81", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.75,
+      "curator_note": "First half of Equation 8.81 (arrow labelled 'rH'). The drawn substrate is a fatty-acid methyl ester carrying a phenyl group at C-6 (the running text: 'very useful for identifying substitution at C-6 in fatty-acid methyl esters'); as drawn the phenyl-bearing carbon also carries an explicit H and no further chain, i.e. methyl 6-phenylhexanoate, and that concrete instantiation is what is encoded here. The molecular ion is drawn n-ionized on the ESTER ALKOXY oxygen ('+.' printed on the O of OCH3), not on the carbonyl oxygen, and the benzylic epsilon-H is transferred to it through the large (7-membered) ring transition state that the page draws; the text calls this 'an epsilon-H rearrangement'. Book draws 2 arcs; moves <1,2> are drawn (a fishhook from the O+. odd electron pointing at the migrating H, and a fishhook from the benzylic C-H bond pointing at the O), move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - the second C-H electron stays on C-6, which is why the next structure is drawn with a '.' on the benzylic carbon. Product is the distonic ion: benzylic radical plus a closed-shell trialkyl/protonated oxonium O+(H)(CH3)C(=O)."
+    },
+    {
+      "evidence_id": "ev_step_rd",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_methanol_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 197, "equation": "8.81", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.6,
+      "curator_note": "Second half of Equation 8.81 (arrow labelled 'rd', McLafferty's radical-site displacement). Net change read off the two drawn structures: the benzylic radical closes to the C5=C6 double bond, the H on C-5 migrates to the ester carbon C-1 through a six-membered arrangement, and the O-protonated methoxy group leaves as neutral CH3OH, so the charge and the odd electron end up on the (former) carbonyl oxygen of the drawn (M - CH3OH)+. enal ion. Book draws 5 arcs; moves <1,2,3,4,5> are ALL drawn - no implicit hook is needed. Arc-by-arc: <1> fishhook from the '.' on C-6 to the C5-C6 bond; <2> fishhook from the C5-H bond to the same forming pi bond; <3> long fishhook from the C5-H bond sweeping across the ring toward C-1 (the migrating H with one electron); <4> long arc drawn with its tail on/under the C1=O carbonyl bond and its head pointing at the migrating H - encoded as a nonbonding electron of the carbonyl oxygen entering the new C1-H bond, because the drawn product retains a full C=O double bond and puts '+.' on that oxygen; taking arc <4>'s tail literally as the C=O pi pair would reduce the C=O bond order, which the drawn product does not show; <5> arrow with a solid (two-barbed) head from the C1-O(methyl) bond to that oxygen - encoded as the full 2-electron heterolysis that the drawn CLOSED-SHELL neutral HOCH3 requires (a homolytic split would give CH3OH+.). Chemical caveat: this is a heavily concerted depiction (pi-bond formation, H migration and C-O cleavage in one step); the book gives no intermediate for it, so no intermediate state is invented here."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.81a",
+      "support_type": "curator_inferred",
+      "locator": {"page": 197, "equation": "8.81", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.81 (its chapter-8 keys stop at 8.14, the German-edition numbering), so no MØD rule variable is cross-linked to this scheme. Verified rather than assumed: the only chapter-8 ester rules in the index, IMS_8_9_1_OCH3 and IMS_8_9_2_OCH3, encode an H rearrangement onto the CARBONYL O+. of an alpha,beta-unsaturated methyl ester followed by alpha cleavage to the dienol ion ([_A]1[C]2[C]3([H]4)[C]5{=}[C]6[C]7([O]8[C]9...){=}[O+.]13 >> ... [O+.]13([H]4)); they neither ionize the alkoxy oxygen nor break the C(acyl)-OCH3 bond, so they do NOT describe Equation 8.81 and are not cross-linked. Loss of CH3OH from an ester is not represented by any indexed rule."
+    },
+    {
+      "evidence_id": "ev_peak_note",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_M_minus_CH3OH",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 197, "equation": "8.81", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.6,
+      "curator_note": "The page prints NO numeric m/z and NO intensity anywhere in Equation 8.81. The prose states that the epsilon-H rearrangement yields '(M - CH3OH)+. and (M - 76)+. peaks (Meyerson and Leitch 1966) that are very useful for identifying substitution at C-6 in fatty-acid methyl esters', which is the book's assertion that the ion is observed; detected=true rests on that sentence only. observed_mz 174.1039 is curator-computed (C12H14O+., monoisotopic mass of the cation with the electron mass subtracted) for the drawn methyl 6-phenylhexanoate instantiation (M+. = 206.1301), NOT a measured value from the book, and relative_intensity is therefore omitted. For a longer 6-phenyl fatty-acid ester the loss is still CH3OH (32) but the absolute m/z shifts. The page itself names no ionization or activation experiment and prints no electron energy; ms_context follows the book's standard 70 eV EI convention for an intact molecular ion."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 206.1301,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_CH3OH",
+      "species_id": "phenyl_hexenal_radical_cation",
+      "step_id": "step_rd_methanol_displacement",
+      "observed_mz": 174.1039,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

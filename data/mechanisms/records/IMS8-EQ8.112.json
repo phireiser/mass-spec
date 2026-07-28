@@ -1,0 +1,305 @@
+{
+  "mechanism_id": "IMS8-EQ8.112",
+  "species": [
+    {
+      "species_id": "acetamidopropyl_methylpiperidine_molecular_ion",
+      "mapped_smiles": "[CH3:7][CH:2]1[CH2:3][CH2:4][CH2:5][CH2:6][N+:1]1[CH2:8][CH2:9][CH2:10][NH:11][C:12](=[O:13])[CH3:14]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclic_iminium_acetamidopropyl",
+      "mapped_smiles": "[CH:2]1=[N+:1]([CH2:6][CH2:5][CH2:4][CH2:3]1)[CH2:8][CH2:9][CH2:10][NH:11][C:12](=[O:13])[CH3:14]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "tetrahydropyridine",
+      "mapped_smiles": "[CH:2]1=[N:1][CH2:6][CH2:5][CH2:4][CH2:3]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_tetrahydro_oxazinium",
+      "mapped_smiles": "[CH3:14][C:12]1=[O+:13][CH2:8][CH2:9][CH2:10][NH:11]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "acetamidopropyl_methylpiperidine_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_iminium",
+      "species_ids": [
+        "cyclic_iminium_acetamidopropyl",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyl_tetrahydro_oxazinium",
+        "tetrahydropyridine",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_iminium",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_amide_oxygen_displacement",
+      "from_state": "state_iminium",
+      "to_state": "state_products",
+      "step_class": "displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              13
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              13
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_8_112",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.112",
+        "figure": null,
+        "panel": "first arrow, labelled '- R.' over 'alpha'",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.85,
+      "curator_note": "SUBSTRATE READ FROM THE DRAWING: a piperidine ring whose nitrogen is the bottom vertex and carries '+.', with a substituent R on the ring carbon ALPHA to that nitrogen and, on the nitrogen itself, a chain -CH2CH2CH2-NH-C(=O)-CH3 (the amide oxygen is drawn with its two lone-pair dots). The running text introduces this equation as the case where 'the EE+ precursor is bifunctional, so that the site of the charge moves (Equation 8.112; Seiler and Hesse 1968)'. THIS STEP: textbook radical-site alpha-cleavage - the N-C(alpha) bond becomes the iminium double bond while the C(alpha)-R bond cleaves homolytically, and the arrow is labelled with both its neutral loss '- R.' and the reaction type 'alpha'. The centre structure the book prints is the cyclic iminium with the C=N drawn on that same ring bond and '+' on the nitrogen. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks converging with their barbs onto the N-C(alpha) ring bond, i.e. onto the forming N=C pi bond: arc 1 starts at the odd-electron dot of the '+.' on the nitrogen and sweeps up-left; arc 2 starts on the R-C(alpha) bond, below and to the left, and sweeps down-right. Moves <1,2> are those two drawn arcs; move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it routes the second electron of the cleaving C(alpha)-R bond onto R, which is what actually makes the R. radical the arrow label announces. LOCALIZATION (convention B): the precursor SMILES carries the charge and the odd electron explicitly on the ring nitrogen ([N+:1] with three bonds = one unpaired electron in RDKit), so arc 1 has a real origin. INSTANTIATION (convention F): the scheme is generic in R; this record uses R = CH3, i.e. 1-(3-acetamidopropyl)-2-methylpiperidine (C11H22N2O, M+. m/z 198.173), so the expelled radical is .CH3 (15.023) and the iminium is C10H19N2O+ (m/z 183.149)."
+    },
+    {
+      "evidence_id": "ev_step_rd_8_112",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_amide_oxygen_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 216,
+        "equation": "8.112",
+        "figure": null,
+        "panel": "second arrow, labelled 'rd'",
+        "section": "8.11 Displacement reactions (rd)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.112, SECOND arrow, labelled 'rd'. This is the step the running text describes as the charge site MOVING in a bifunctional EE+ precursor: the amide oxygen at the far end of the trimethylene chain displaces the iminium nitrogen from the carbon attached to it. The book prints the two products explicitly - a neutral six-membered cyclic imine (2,3,4,5-tetrahydropyridine, drawn as the ring with an uncharged N and one C=N) and a six-membered oxygen/nitrogen ring drawn with '+' on the ring OXYGEN, a double bond from that oxygen down to the carbon that carries the CH3, and N-H at the bottom, i.e. the O-alkylated acetamide 2-methyl-3,4,5,6-tetrahydro-1,3-oxazin-1-ium (C5H10NO+). ARC COUNT (convention D): Book draws 2 arc(s). Arc 1 starts at the two lone-pair dots drawn above the amide oxygen and sweeps left, its head pointing at the chain carbon that is bonded to the iminium nitrogen - the nucleophilic attack that closes the new six-membered ring (O, that carbon, the two further chain carbons, the amide N, the amide C). Arc 2 starts on the N-CH2 bond just below the iminium nitrogen and curls up-left, its head pointing back at the nitrogen - the bonding pair leaving with the nitrogen, which is what neutralizes it and produces the printed cyclic imine. NO move is implicit here: the two drawn arcs account for both bonds that change. BARB STYLE: at the ~208 dpi native resolution of this scan the two heads cannot be resolved as half- versus full-barbed, but both are transcribed as two-electron (pair) moves - arc 1 demonstrably originates at a drawn LONE PAIR, and both printed products are closed-shell even-electron species, so a one-electron reading would create unpaired electrons that neither product has. ARROW-CHECK NOTE: the record's arrow bookkeeping reports two SOFT advisories for this step ('consistent with a lone pair rather than radicals') because a two-electron move into or out of a non-bonding orbital changes a lone-pair population, not a radical count; that is expected for a heterolytic displacement and is not a defect. INSTANTIATION: R = CH3 is carried through from step 1, so the methyl radical released there is kept as a spectator in both states of this step to keep it balanced atom for atom; it takes no part in the reaction."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_112",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.112",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 216,
+        "equation": "8.112",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.112' key (chapter-8 rules stop at 8.14, German-edition numbering). The plausible candidates were CHECKED with RDKit against this record's own instantiated species (convention E), and both fail. (i) IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' is the generic radical-site alpha-cleavage at a heteroatom. Its left pattern '[#6]-[#6]-[#6](-[#6])-[#7+]' DOES match this precursor, exactly once, as C(map 4)-C(map 3)-C(map 2)(-C(map 7))-N(map 1). But the rule then CLEAVES THE BOND BETWEEN ITS ATOMS 1 AND 2 - here the ring C4-C3 bond, two carbons away from the nitrogen - while forming the N=C(map 2) pi bond, so the cleaved bond is NOT incident to the carbon that forms the new double bond: it would tear the piperidine ring open and expel a ring carbon instead of the R. the book draws. This is the known chapter-4 geometry defect. The rule is additionally NOT LIVE: its product carries both '[C.]' and '[_A+.]', i.e. two unpaired electrons made from one, so the conservation guardrail in rules/__init__.py drops it at import (spin 1->2). Listed in rule_mismatches. (ii) IMS_4_43_ '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[N+.]8([H]9)[C]10([H]11)([H]12)[C]13([H]14)([H]15)[H]16>>...[N+]8([H]9){=}[C]10([H]11)([H]12).[C.]13(...)' is the only amine alpha-cleavage with the CORRECT geometry (the cleaved C10-C13 bond is incident to the pi-forming carbon C10) and it is conservation-clean, so it is live - but it cannot fire here: it requires the nitrogen to carry a HYDROGEN, and this tertiary ring nitrogen carries none. The RDKit test is explicit: the full left pattern '[#6]-[#6]-[#7+](-[#1])-[#6]-[#6]' gives 0 matches and the N-H requirement on its own ('[#7+]-[#1]') gives 0 matches, while the bare carbon skeleton '[#6]-[#6]-[#7+]-[#6]-[#6]' matches 5 times - so the N-H is exactly and solely what fails. Listed in rule_mismatches. (iii) For the rd step: 'substituion' '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' matches the iminium's connectivity six times, but always with the iminium NITROGEN as the attacking '[_A+.]' atom, and that nitrogen has no unpaired electron (an explicit scan of the iminium finds no atom that is both charged and radical); the rule would also close a three-membered ring and expel a radical, whereas equation 8.112 closes a SIX-membered ring in a purely even-electron heterolytic displacement in which nothing leaves as a radical. IMS_4_43_rH, the only other EE+ rule for iminium ions, gives 0 matches ('[#6]-[#6]-[#7+](-[#1])=[#6]') and in any case transfers a hydrogen rather than performing a displacement. No rule in the set encodes an amide-oxygen displacement."
+    },
+    {
+      "evidence_id": "ev_peaks_8_112",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_100",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 216,
+        "equation": "8.112",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): equation 8.112 is drawn entirely generically (the substituent is printed as 'R') and neither the scheme nor the surrounding prose gives any m/z or abundance for it. Every species is therefore detected=false, both peak assignments have status 'inferred' and relative_intensity is omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the chosen instantiation R = CH3, i.e. 1-(3-acetamidopropyl)-2-methylpiperidine: M+. C11H22N2O 198.1727 -> [after loss of .CH3, 15.0235] cyclic iminium C10H19N2O+ 183.1492 -> [after loss of neutral tetrahydropyridine C5H9N, 83.0735] oxazinium C5H10NO+ 100.0757. They are not numbers printed by the book; a different R changes the first two of them."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 198.1727,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_183",
+      "species_id": "cyclic_iminium_acetamidopropyl",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 183.1492,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    },
+    {
+      "peak_id": "peak_100",
+      "species_id": "methyl_tetrahydro_oxazinium",
+      "step_id": "step_rd_amide_oxygen_displacement",
+      "observed_mz": 100.0757,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

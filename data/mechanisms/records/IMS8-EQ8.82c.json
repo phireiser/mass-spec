@@ -1,0 +1,148 @@
+{
+  "mechanism_id": "IMS8-EQ8.82c",
+  "species": [
+    {
+      "species_id": "protonated_aldehyde_ester_ion",
+      "mapped_smiles": "[CH:7](=[OH+:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[O:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "aldehyde_protonated_ester_ion",
+      "mapped_smiles": "[CH:7](=[O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_aldehyde_ester_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "aldehyde_protonated_ester_ion"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_proton_transfer",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_proton_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Right-hand column of Equation 8.82, arrow labelled 'r H' pointing down from the top-right panel. Reactant: the even-electron oxocarbenium HC(=O(+)H)-(CH2)n-C(=O)-OCH3; product: the neutral aldehyde OHC-(CH2)n- with the ester now protonated on its methoxy oxygen, drawn 'H-O(+)(CH3)'. This is a PROTON transfer inside one ion, not an H-atom transfer: the ion is even-electron throughout. Book draws 2 arc(s), both FULL (double-barbed, two-electron) arrows: (i) one from the O(9)-H bond curling back onto O(9) (the bonding pair becoming a lone pair, releasing the proton) and (ii) one from the explicitly drawn lone pair (the ':' printed above the methoxy oxygen) reaching left toward that proton. Both drawn arrows begin or end on the migrating proton, which cannot carry an atom map (RDKit folds a mapped explicit H into implicit valence), so they are encoded as the one net heavy-atom-level move they produce: move <1> = the two-electron formal transfer from O(11) to O(9) (equivalently, the proton moves the other way). No implicit move is needed; the arrow gate sees no heavy-atom bond-order change, only the charge relocation, and reports the expected soft lone-pair parity notes on both oxygens. INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82c",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. No indexed rule performs an intramolecular proton transfer between two oxygens of an even-electron ion: IMS_8_11 / IMS_8_13 ('Field Rule ... rH') move an H onto an oxocarbenium but SPLIT the ion into two fragments in the same rule, and the hTransition_* families all start from an odd-electron onium site and leave a carbon radical. Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI (consecutive fragmentation of the m/z-159 oxocarbenium)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 159.1016,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_isomer_159",
+      "species_id": "aldehyde_protonated_ester_ion",
+      "step_id": "step_rH_proton_transfer",
+      "observed_mz": 159.1016,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

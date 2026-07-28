@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS4-EQ4.17c",
+  "species": [
+    {
+      "species_id": "methyl_3_hexanol_molecular_ion",
+      "mapped_smiles": "[CH3:4][CH2:3][CH2:2][C:1]([CH3:7])([CH2:5][CH3:6])[OH+:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "propyl_ethyl_hydroxycarbenium_mz101",
+      "mapped_smiles": "[CH3:4][CH2:3][CH2:2][C:1]([CH2:5][CH3:6])=[OH+:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyl_3_hexanol_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "propyl_ethyl_hydroxycarbenium_mz101",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_loss_methyl",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_4_17c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_loss_methyl",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 61,
+        "equation": "4.17",
+        "figure": "Figure 4.2 (mass spectrum of 3-methyl-3-hexanol)",
+        "panel": "loss of CH3*, product printed third (lower right): [C3H7C(C2H5)=OH]+ m/z 101, 10%",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book draws 2 arc(s) for this pathway; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). ARC COUNT, verified by zooming the scan: FOUR arcs are printed on the one structure - one SOLID fishhook from the odd electron drawn as '+.' on the hydroxyl oxygen, ending with a half-arrowhead (barb) on the C-O bond, and THREE DASHED fishhooks, one from each alpha C-C bond, all ending with a barb on that same C-O bond. This record takes the two arcs of the C-CH3 channel: the shared solid oxygen hook (move 1) and the dashed arc that descends from the vertical C(1)-CH3 bond to the barb sitting above the C-O bond (move 2). The electron that departs with the methyl radical is NOT drawn. LOCALIZATION (convention B): the charge and the odd electron are drawn on oxygen, and the precursor SMILES writes that literally as [OH+:8] with two bonds and one unpaired electron. Methyl loss is the slowest of the three competing alpha cleavages, 10% versus 50% (C2H5* loss) and 100% (C3H7* loss); the corresponding m/z 101 peak in Figure 4.2 is drawn as a very small peak labelled '101 alpha', noticeably weaker than a tenth of the base peak, so the printed 10% should be read as the book's rounded relative rate rather than a measurement read off that figure."
+    },
+    {
+      "evidence_id": "evidence_mod_4_17c",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.17c",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.17",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py:437-455 (IMS_4_17_3)"
+      },
+      "confidence": 0.5,
+      "curator_note": "Cross-linked MOD rule variable: IMS_4_17_3 '[C]1([C]2[C]3[C]4)([C]5[C]6)([C]7)([O+.]8)>>[C]2[C]3[C]4[C]1([C]5[C]6)[O+.]8.[C]7'. VERIFIED, not asserted. (i) Left side is the same tertiary-carbinol pattern as the other 4.17 variants and matches this record's precursor exactly: RDKit substructure test of the equivalent SMARTS [#6]([#6][#6][#6])([#6][#6])([#6])[O+] returns True with a single match mapping the rule's 2-4/5-6/7/8 onto propyl/ethyl/methyl/oxygen. The product retains propyl and ethyl on C1 and expels C7, so this is the methyl-loss, m/z 101 channel. (ii) Right side is MIS-ENCODED relative to the book exactly as its two siblings are: the oxygen remains [O+.]8 SINGLY bonded to C1, so the C=O(+) pi bond the arrows form is never created and the odd electron is left on oxygen, and the leaving methyl is written [C]7 instead of [C.]7. The ion's formula and m/z are right (C6H13O, +1, m/z 101) but it is emitted as an odd-electron species with a three-coordinate unlabelled carbinol carbon rather than the drawn even-electron oxocarbenium [C3H7C(C2H5)=OH]+. The conservation guardrail passes it because atoms, total charge (+1 -> +1) and total unpaired count (1 -> 1) are numerically unchanged. Re-authoring all three as '...[C]1{=}[O+]8 . [C.]x' would make them faithful to the equation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_101",
+      "species_id": "propyl_ethyl_hydroxycarbenium_mz101",
+      "step_id": "step_alpha_cleavage_loss_methyl",
+      "observed_mz": 101.0961,
+      "relative_intensity": 0.1,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.95
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

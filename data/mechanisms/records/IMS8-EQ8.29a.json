@@ -1,0 +1,142 @@
+{
+  "mechanism_id": "IMS8-EQ8.29a",
+  "species": [
+    {
+      "species_id": "cis_diacetate_mh",
+      "mapped_smiles": "[CH2:2]1[CH:1]([O:7][C:8](=[O:9])[CH3:10])[CH2:6][CH2:5][CH2:4][CH:3]1[O:11][C:12](=[OH+:13])[CH3:14]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_dioxanylium",
+      "mapped_smiles": "[C+:8]1([CH3:10])[O:7][CH:1]2[CH2:2][CH:3]([O:9]1)[CH2:4][CH2:5][CH2:6]2",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetic_acid_loss",
+      "mapped_smiles": "[CH3:14][C:12](=[O:11])[OH:13]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["cis_diacetate_mh"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["methyl_dioxanylium", "acetic_acid_loss"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_anchimeric_displacement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "neighboring_group_participation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [8, 9]},
+          "target": {"type": "bond", "atom_maps": [9, 3]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 11]},
+          "target": {"type": "bond", "atom_maps": [11, 12]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [12, 13]},
+          "target": {"type": "atom", "atom_maps": [13]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_anchimeric_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 159, "equation": "8.29", "figure": null, "panel": "a", "section": "8.3 Steric factors"},
+      "confidence": 0.75,
+      "curator_note": "cis-1,3-cyclohexanediol diacetate protonated on one acetate carbonyl (arrow label 'id'). Neighbouring-group participation: the OTHER (neutral) acetate's carbonyl oxygen O9 displaces the protonated acetate from ring carbon C3, expelling it as neutral acetic acid and closing a 2-methyl-1,3-dioxan-2-ylium (acetoxonium) bridge across the cis-1,3-diaxial positions C1/C3. Book draws 2 arcs: (i) the neutral-acetate carbonyl pi (C8=O9) forming the new O9-C3 bond, and (ii) the ester oxygen O11 of the leaving acetate forming that fragment's new C12=O11 carbonyl. Move <3> (the protonated carbonyl pi C12=O13 collapsing to an O13 lone pair, which neutralises O13-H+ to the acetic-acid hydroxyl) is an implicit heterolytic step required for electron balance (not drawn on the page). The product cation is drawn with '+' on the central bridge carbon C8 (localised carbenium O-C+-O form chosen here; it is resonance-delocalised over O7/O9 as the two oxocarbenium forms)."
+    },
+    {
+      "evidence_id": "ev_mech_a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.29a",
+      "support_type": "curator_inferred",
+      "locator": {"page": 159, "equation": "8.29", "figure": null, "panel": "a", "section": "8.3 Steric factors"},
+      "confidence": 0.9,
+      "curator_note": "No MØD rule cross-links this scheme: rule_index.json by_equation has no entry for 8.29 (it covers only 4.x and 8.1-8.14). Detected-ion m/z 141.0910 (C8H13O2+) is a curator computation from the chosen cis-1,3-diacetate instantiation; the page prints no m/z or intensity for equation 8.29."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 201.1121,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acetoxonium_141",
+      "species_id": "methyl_dioxanylium",
+      "step_id": "step_anchimeric_displacement",
+      "observed_mz": 141.0910,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

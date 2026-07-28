@@ -1,0 +1,289 @@
+{
+  "mechanism_id": "IMS8-EQ8.116",
+  "species": [
+    {
+      "species_id": "distonic_ion_left",
+      "mapped_smiles": "[CH2:1][CH2:2][CH:3]=[OH+:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopropanol_radical_cation",
+      "mapped_smiles": "[CH:3]1([OH+:4])[CH2:1][CH2:2]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ion_right",
+      "mapped_smiles": "[CH2:2][CH2:1][CH:3]=[OH+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_ion_left"
+      ]
+    },
+    {
+      "state_id": "state_cyclic",
+      "species_ids": [
+        "cyclopropanol_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_ion_right"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_closure",
+      "from_state": "state_precursor",
+      "to_state": "state_cyclic",
+      "step_class": "radical_site_cyclization",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_ring_opening",
+      "from_state": "state_cyclic",
+      "to_state": "state_products",
+      "step_class": "ring_opening",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_closure",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.116",
+        "figure": null,
+        "panel": "left equilibrium (double) arrow",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "ARCS ACTUALLY DRAWN: ZERO. Equation 8.116 consists of three structures joined by two double-headed EQUILIBRIUM arrows; no curved arrow or fishhook is drawn, so all three moves of this step are curator-constructed (they are the canonical three-fishhook radical ring closure: the C1 radical electron into the forming C1-C3 bond, one electron of the C3=O pi bond into that same forming bond, and the second pi electron onto oxygen, which is where the book's '+.' sits on the cyclic structure). WHAT THE PAGE DRAWS: '.CH2CH2CH=+OH' on the left, the cyclopropane ring with a 'CHOH' apex and '+.' written outside the structure in the middle, and 'H+O=CHCH2CH2.' on the right. The middle structure is drawn by the book, so it is encoded as a genuine intermediate state rather than an invention. Convention B/C: the book leaves the charge and odd electron of the cyclic ion unlocalised ('+.' outside the ring); they are localised here on the hydroxyl oxygen (O+. with two bonds), the n-ionised cyclopropanol form, so that the arrows have a real origin and terminus."
+    },
+    {
+      "evidence_id": "ev_step2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 219,
+        "equation": "8.116",
+        "figure": null,
+        "panel": "right equilibrium (double) arrow",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "ARCS ACTUALLY DRAWN: ZERO (see the first step). The right-hand structure the book prints, 'H+O=CHCH2CH2.', is the SAME connectivity as the left-hand one written in the opposite direction: the point of Equation 8.116 is that ring closure and re-opening of the OTHER ring bond permutes the two methylene groups, i.e. the interconversion is degenerate. That permutation is what the atom maps record here: the ring opens at C2-C3 instead of C1-C3, so the radical ends up on C2 while the carbon skeleton is unchanged. Three fishhooks, the exact reverse of step 1."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.116",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.116",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.116' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored for this equation. Nor is there any isomerisation rule in the set: every fragmentation rule in src/data_generation/rules/ takes a bond apart and the ionisation rules only add a charge/radical, so a degenerate ring-closure/ring-opening interconversion (no change in formula, charge or unpaired-electron count) has no representative to test."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_58",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 219,
+        "equation": "8.116",
+        "figure": null,
+        "panel": null,
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.116 prints no m/z and no abundance -- it is a structural interconversion scheme only. m/z 58.0413 is the curator-computed monoisotopic mass of C3H6O+. and is recorded with status 'inferred', detected=false and no relative_intensity. All three species have the same m/z, so no ion is distinguishable by mass here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58",
+      "species_id": "distonic_ion_right",
+      "step_id": "step_ring_opening",
+      "observed_mz": 58.0413,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

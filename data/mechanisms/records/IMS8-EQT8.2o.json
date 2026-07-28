@@ -1,0 +1,178 @@
+{
+  "mechanism_id": "IMS8-EQT8.2o",
+  "species": [
+    {
+      "species_id": "ethyl_methylene_oxocarbenium",
+      "mapped_smiles": "[CH2:1]=[O+:2][CH2:3][CH2:4][1H:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_formaldehyde",
+      "mapped_smiles": "[CH2:1]=[O+:2][1H:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethyl_methylene_oxocarbenium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_formaldehyde",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_onium",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "onium_reaction",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_onium",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 167,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3 (Two bonds cleaved; EE+ i-i(re))"
+      },
+      "confidence": 0.7,
+      "curator_note": "Table 8.2 (p.167, Two bonds cleaved, EE+ i-i with H rearrangement) = the onium reaction. H transfers from the carbon beta to O+ onto the oxygen, the O-C(alpha) bond cleaves, and the C(alpha)=C(beta) alkene is eliminated to give the protonated carbonyl. Book draws 0 curved arrows for this entry (net reactant->product only); both encoded 2-electron moves are implied by the transformation. The book draws the transferring H on the carbon adjacent to the O-CH2 (a 4-membered beta-H transfer, matching the drawn C(alpha)=C(beta) product); longer CnH2n chains would give the usual 6-membered gamma-H onium transfer. Migrating H carried as isotope [1H:10]. Instantiation = ethyl methyleneoxocarbenium (R=H); no m/z / intensity printed -- m/z curator-computed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2o",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.6,
+      "curator_note": "No MØD rule encodes the oxygen (oxocarbenium) onium reaction, but IMS_4_43_rH is the exact nitrogen analog: [C]([H])([H])[C]([H])([H])[N+]([H]){=}[C]([H])([H])>>[C]{=}[C].[N+]([H])([H]){=}[C] -- a beta-H transfer to an iminium N+ eliminating an alkene, the same EE+ H-rearrangement/alkene-loss pattern with N in place of O. Chemistry-verified (same bond changes); not RDKit substructure-tested."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 59.0491,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_prot_formaldehyde",
+      "species_id": "protonated_formaldehyde",
+      "step_id": "step_onium",
+      "observed_mz": 31.0178,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.55
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

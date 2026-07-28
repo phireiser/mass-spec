@@ -1,0 +1,243 @@
+{
+  "mechanism_id": "IMS8-EQ8.76b",
+  "species": [
+    {
+      "species_id": "pentan_2_one_enol_ion_distonic",
+      "mapped_smiles": "[CH2:1][C:2](=[OH+:3])[CH2:4][CH2:5][CH2:6][1H:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetone_enol_ion_distonic",
+      "mapped_smiles": "[CH2:1]([1H:7])[C:2](=[OH+:3])[CH2:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethene_neutral",
+      "mapped_smiles": "[CH2:5]=[CH2:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentan_2_one_enol_ion_distonic"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetone_enol_ion_distonic",
+        "ethene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_consecutive_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "mclafferty_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_consecutive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_consecutive_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 194,
+        "equation": "8.76",
+        "figure": null,
+        "panel": "lower scheme (the enol OE+. ion redrawn after the '=' identity sign, arrows labelled rH then alpha)",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation -- Consecutive rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Consecutive (second) six-centre rearrangement, now driven by the CARBON radical site of the distonic enol ion rather than by an ionized heteroatom: through a six-membered arrangement (C1 . . . H7-C6-C5-C4-C2-C1) the radical carbon C1 abstracts the H7 of the terminal methyl C6, the C5=C6 pi bond forms and the C4-C5 bond cleaves, expelling neutral ethene and leaving the distonic acetone enol ion (CH3-C(=O+H)-CH2., odd electron on C4). Book draws 4 arcs; moves <1,2,3,4> are drawn (<1> the C1 odd-electron hook into the forming C1-H7 bond, <2> one C6-H7 electron into that same forming C1-H7 bond, <3> the other C6-H7 electron into the forming C5=C6 pi bond, <4> one C4-C5 electron into that same forming pi bond), move <5> is an implicit homolysis hook required for electron balance (not drawn on the page) -- it deposits the second C4-C5 electron on C4, which the page shows only as the dot drawn on the product. As in the upper scheme the two labelled arrows (rH, then alpha) carry no drawn intermediate and the four arcs all sit on the single precursor drawing, so the transformation is encoded as one net formal_arrow_step. Convention (C): both the precursor and the product ion are drawn (and encoded) in the localized distonic/oxocarbenium resonance form -- HO+ double-bonded to the central carbon with the odd electron on a CH2 carbon -- not as the neutral-enol partners CH2=C(OH)R +.. The precursor of this scheme is, per the '=' sign printed at the end of the upper scheme, the very product ion of record IMS8-EQ8.76a."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.76b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 194,
+        "equation": "8.76",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MOD rule is indexed for equation 8.76 (rule_index.json by_equation has no '8.76' key; chapter-8 coverage stops at 8.14), and no existing rule was found that matches this scheme either. Rules checked against their DFS and REJECTED as cross-links: (i) IMS_4_33_rH / IMS_4_45_rH / esterMcLafferty_rH all require an ionized carbonyl {=}[O+.] as the H acceptor, whereas here the acceptor is a carbon radical and the oxygen is already the protonated oxocarbenium {=}[O+][H] -- they cannot match this precursor; (ii) hTransition_saturated_2 ([H]1[C]2[C]3([_A+]4)[C]5[C.]6>>[C.]2[C]3([_A+]4)[C]5[C]6([H]1)) does transfer H to a carbon radical but through a three-bond (five-membered, H included) arrangement, while this scheme needs a four-bond (six-membered) one, and it also does not cleave the C-C bond; (iii) the 8.2 distonic-ion rules (IMS_8_2_bidirectional_up, IMS_8_2_alpha_0_6) act on a hexanone-derived distonic ion whose radical carbon is three bonds from the carbonyl carbon, not on the alpha-CH2 radical drawn here, so they do not match this substrate. The rH+alpha bond changes of this scheme are therefore currently unencoded in the MOD rule set."
+    },
+    {
+      "evidence_id": "evidence_peak_inferred",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_acetone_enol_ion_58",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 194,
+        "equation": "8.76",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "The page prints NO m/z and NO intensity for 8.76. m/z 58.0413 is the curator-computed monoisotopic mass of the distonic acetone enol ion (C3H6O+., electron mass subtracted); the precursor value 86.0726 (C5H10O+.) and the neutral loss (ethene, 28.0313) are likewise computed, not measured. Unlike the upper scheme this lower scheme is fully specified by the book (no generic R), so the masses do not depend on any curator instantiation -- only their status as measurements does: they are inferred, not reported."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI (consecutive dissociation of an EI-formed OE+. rearrangement ion, not a mass-selected precursor)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acetone_enol_ion_58",
+      "species_id": "acetone_enol_ion_distonic",
+      "step_id": "step_consecutive_rearrangement",
+      "observed_mz": 58.0413,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

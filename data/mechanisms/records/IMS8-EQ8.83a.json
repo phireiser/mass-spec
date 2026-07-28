@@ -1,0 +1,181 @@
+{
+  "mechanism_id": "IMS8-EQ8.83a",
+  "species": [
+    {
+      "species_id": "phenyl_enone_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:8])[CH:3]=[CH:4][CH2:5][CH2:6][CH2:7][c:11]1[cH:12][cH:13][cH:14][cH:15][cH:16]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "benzylic_cation_enol_radical",
+      "mapped_smiles": "[CH3:1][C:2]([O:8])=[CH:3][CH2:4][CH2:5][CH2:6][CH+:7][c:11]1[cH:12][cH:13][cH:14][cH:15][cH:16]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "phenyl_enone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "benzylic_cation_enol_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_to_beta_carbon",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_83a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_to_beta_carbon",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.83",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.83, first (horizontal) arrow, labelled 'r H'. The reactant is drawn as the intact neutral enone skeleton inside a bracket with '+.' outside it (delocalized notation, no localized charge or radical printed on any atom); one of the two hydrogens of the BENZYLIC carbon C(7) is written out explicitly. The product panel localizes both: a '+' is printed next to the benzylic carbon C(7) and a radical dot on the oxygen, the transferred H is written out on C(4), and the double bond has moved from C(3)=C(4) to C(3)=C(2), i.e. the ion is now the distonic benzylic-cation / enol-oxygen-radical C6H5-CH(+)-CH2-CH2-CH2-CH=C(O.)-CH3. The migration is a 1,4-shift from C(7) to C(4) (five-membered array counting the H). Book draws 1 arc: a FULL, double-barbed (two-electron) arrow from the explicitly drawn benzylic C-H down onto the C(3)=C(4) double bond -- a HYDRIDE migration onto the beta carbon, which is what leaves the benzylic carbon as a cation. Move <1> is that drawn arc, encoded at heavy-atom level as a two-electron relocation from C(7) to C(4) because the migrating H cannot carry an atom map (RDKit folds a mapped explicit H into implicit valence); the gate reports it as soft lone-pair-parity notes on C(7)/C(4). Moves <2,3> are the implicit conjugate push required for electron balance (not drawn on the page): the C(3)=C(4) pi pair shifting to C(2)=C(3), and the C(2)=O pi pair dropping onto the oxygen, which is what converts the drawn O into the neutral enol radical. RESONANCE CHOICE (convention C): the bracketed delocalized reactant is localized here as the n-ionized carbonyl C(2)=O(8)+. -- the same localization the corpus uses for Equation 8.9 -- so that the odd electron never moves and only the charge migrates, from the oxygen to the benzylic carbon. The alternative localization (the resonance form with the cation already on the beta carbon C(4) and a neutral O radical) would make the single drawn hydride arc sufficient on its own; it is not used because it would print a charge on a carbon the book draws as part of an intact C=C. STRUCTURE: Equation 8.83 is drawn CONCRETELY (no R groups): the bracketed radical cation is C6H5-CH2-CH2-CH2-CH=CH-C(=O)-CH3, i.e. 7-phenylhept-3-en-2-one (C13H16O, M+. m/z 188.1196); the drawn C=C is trans but stereochemistry is not encoded in the mapped SMILES. The p.197 text introduces it as 'Long-range migrations of activated hydrogen atoms can also occur in compounds with alpha,beta-unsaturation (Equation 8.83; compare with Equation 8.9), or even longer-chain enones (Liedtke et al. 1972)'. NO m/z and NO percentage is printed for Equation 8.83, so every mass here is a curator-computed monoisotopic value and both product species are detected=false."
+    },
+    {
+      "evidence_id": "ev_mech_8_83a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.83a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.83",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.83, so no MOD rule is cross-linked. hTransition_unsaturated '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1' was checked and does NOT describe this step: it delivers the H onto the unsaturated HETEROATOM site (giving an onium plus a carbon radical, the Equation 8.9 pattern), whereas Equation 8.83 delivers it onto the beta CARBON of the enone and produces a benzylic cation plus an oxygen radical. The indexed 8.9 rules (IMS_8_9_1_CH3/_OCH3), which the p.197 text explicitly asks the reader to compare with, share the alpha,beta-unsaturated substrate but again move the H to oxygen. Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 188.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_isomerized_M",
+      "species_id": "benzylic_cation_enol_radical",
+      "step_id": "step_rH_to_beta_carbon",
+      "observed_mz": 188.1196,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

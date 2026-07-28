@@ -1,0 +1,127 @@
+{
+  "mechanism_id": "IMS8-EQ8.9b",
+  "species": [
+    {
+      "species_id": "molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH:5]=[CH:6][C:7](=[O+:8])[CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "keto_primary_cation",
+      "mapped_smiles": "[CH2+:2][CH2:3][CH:5]=[CH:6][C:7](=[O:8])[CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_radical_R",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_molecular_ion",
+      "species_ids": ["molecular_ion"]
+    },
+    {
+      "state_id": "state_products_rejected",
+      "species_ids": ["keto_primary_cation", "alkyl_radical_R"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_direct_cleavage",
+      "from_state": "state_molecular_ion",
+      "to_state": "state_products_rejected",
+      "step_class": "sigma_dissociation_charge_migration",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {"source": {"type": "bond", "atom_maps": [1, 2]}, "target": {"type": "atom", "atom_maps": [1]}, "electron_count": 1},
+        {"source": {"type": "bond", "atom_maps": [1, 2]}, "target": {"type": "atom", "atom_maps": [8]}, "electron_count": 1}
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rejected",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_direct_cleavage",
+      "support_type": "contradicted",
+      "locator": {"page": 146, "equation": "8.9", "figure": null, "panel": null, "section": "8 / Detailed Mechanisms of Ion Fragmentation"},
+      "confidence": 0.8,
+      "curator_note": "REJECTED pathway: the book crosses out this arrow (an X is drawn through it) and draws NO curved arrows for it -- only the net pieces are shown: R. + a PRIMARY carbocation (H2C+) bearing a neutral, non-conjugated carbonyl (the gamma-H is NOT rearranged). It is disfavored because the charge lands on an unstabilized primary carbon instead of being delocalized onto oxygen; the competing rH -> alpha route (record IMS8-EQ8.9) gives the resonance-stabilized C6H9O+ oxocarbenium of identical mass. Because no arcs are drawn, the electron flow encoded here is the curator's minimal balanced net reaction: the R-C bond breaks homolytically, one electron leaving with R. (move 1) while the second electron migrates to quench the O+. radical to a neutral carbonyl (move 2), leaving the positive charge on the primary carbon. Move 2 registers as a soft 'lone pair rather than radicals' note in the arrow checker (an electron pairs with the O radical: radical count 1 -> 0)."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.9b",
+      "support_type": "curator_inferred",
+      "locator": {"page": 146, "equation": "8.9", "figure": null, "panel": null, "section": null},
+      "confidence": 0.5,
+      "curator_note": "No MOD rule encodes this rejected pathway: rule_index by_equation 8.9 lists only IMS_8_9_1_* and IMS_8_9_2_*, which encode the FAVORED rH -> alpha dienol route (record IMS8-EQ8.9). Correctly, the disfavored primary-carbocation channel is absent from the rule set. m/z 97.0648 (C6H9O+) is computed from the curator's instantiation (R = CH3, X = CH3) and is not printed in the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 112.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_rejected_primary_cation",
+      "species_id": "keto_primary_cation",
+      "step_id": "step_direct_cleavage",
+      "observed_mz": 97.0648,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "rejected",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed"
+  }
+}

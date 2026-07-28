@@ -1,0 +1,224 @@
+{
+  "mechanism_id": "IMS4-EQ4.4b",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH2:1]1[CH:2]([OH+:3])[CH2:5][CH2:4]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "vinyl_alcohol",
+      "mapped_smiles": "[CH2:1]=[CH:2][OH:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_cation",
+      "mapped_smiles": "[CH2:4]=[CH2:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "vinyl_alcohol",
+        "ethylene_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_retro_2plus2",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "retro_2plus2_cleavage",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_2plus2",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 55,
+        "equation": "4.4",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.75,
+      "curator_note": "Same retro-[2+2] cleavage of the cyclobutanol molecular ion, but CHARGE MIGRATION: the charge+odd electron end up on the ethylene fragment (H2C=CH2+.) and neutral vinyl alcohol leaves. Book draws 4 fishhook barbs (two per cleaved bond, bonds <1,4> and <2,5>) -- moves <1,2,3,4> are those drawn. Move <5> (O odd electron -> EXTERNAL) is a curator bookkeeping hook, NOT drawn: the ethylene radical cation is delocalised so it is written as its neutral skeleton with the +. recorded in the species charge/radical fields (per the sanctioned EQ4.7 convention), and move <5> balances the single-electron count as the O(+.) site is neutralised."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.4b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.4"
+      },
+      "confidence": 0.45,
+      "curator_note": "Cross-links to IMS_4_4_row2 (charge-migration partner of row1). Same MISMATCH as 4.4a: the DFS uses an O-in-ring oxolane precursor and cleaves an O-C bond, whereas the book is exocyclic-OH cyclobutanol cleaving two C-C bonds. See rule_mismatches. | RECHECK 2026-07-24: charge-MIGRATION row. The 4 drawn retro-/elimination barbs yield neutral-connectivity fragments; the +. resides on the ETHYLENE fragment, a delocalized pi radical cation with no localized Lewis structure. It is therefore carried in the charge/radical_electrons fields (neutral-skeleton SMILES), and the odd electron leaving the O is encoded as an `external` location -- the same non-localizable-radical-cation convention as eqs 4.3/4.5/4.8, NOT a literal second ionization. semantics set to net_fragmentation because the migration electron flow is not drawn."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.4"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 28.0308 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 72.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "ethylene_cation",
+      "step_id": "step_retro_2plus2",
+      "observed_mz": 28.0308,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "mechanism_id": "IMS8-EQ8.82a",
+  "species": [
+    {
+      "species_id": "hydroxy_ester_molecular_ion",
+      "mapped_smiles": "[CH3:8][CH:7]([OH:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[O+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alkoxy_radical_oxonium_ion",
+      "mapped_smiles": "[CH3:8][CH:7]([O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hydroxy_ester_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "alkoxy_radical_oxonium_ion"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_hydroxyl_to_ester_oxygen",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_hydroxyl_to_ester_oxygen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Top-left panel of Equation 8.82, arrow labelled 'r H' pointing down. The drawn molecular ion is R-CH(OH)-(CH2)n-C(=O)-OCH3 with the charge AND the odd electron printed as '+.' directly above the ester METHOXY oxygen (map 11) -- not above the carbonyl oxygen -- while the hydroxyl oxygen (map 9) is drawn neutral with its H. The product panel below shows that H sitting on the methoxy oxygen (drawn 'H-O(+)CH3') and a radical dot on the former hydroxyl oxygen (alkoxy radical), i.e. the hydroxyl H has migrated to the charge site through a large ring (with R = CH3, n = 5 the transition state counts 10 atoms; the p.197 text calls this 'such a larger-ring transition state (Equations 8.17, 8.82)' and attributes it to the high stability of the resulting neutral RCHO). Book draws 2 arc(s), BOTH single-barb fishhooks: (i) one starting on the hydroxyl O-H bond and sweeping right (the H leaving with one electron) and (ii) one starting at the '+.' odd electron on the methoxy oxygen and sweeping left toward that H (the odd electron pairing up with it). Both drawn arcs terminate on the migrating hydrogen, which cannot carry an atom map (RDKit folds a mapped explicit H into implicit valence), so they are encoded as the single heavy-atom-level move they produce: move <1> = the odd electron relocating from O(11) to O(9). Move <1> is therefore the encoded form of drawn arcs (i)+(ii); no implicit move is needed and the arrow gate reproduces both radical changes exactly. INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. Nearest indexed families were checked against the DFS and REJECTED: hTransition_saturated_1 '[H]1[C]2[C]3[C]4[C]5[_A+.]6>>[C.]2[C]3[C]4[C]5[_A+]6[H]1' moves the H from a CARBON donor (explicit [C]2, leaving a carbon radical) across a fixed four-carbon bridge, whereas here the donor is an OXYGEN (an alkoxy radical is produced) and the bridge is the whole (CH2)n chain plus the ester group; esterMcLafferty_rH '[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7>>...' likewise takes the H from a carbon and puts it on the CARBONYL oxygen, not on the alkoxy/methoxy oxygen that carries the '+.' here. So this reaction is currently unmodelled by the MOD rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 174.125,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_isomerized_molecular_ion",
+      "species_id": "alkoxy_radical_oxonium_ion",
+      "step_id": "step_rH_hydroxyl_to_ester_oxygen",
+      "observed_mz": 174.125,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "mechanism_id": "IMS8-EQ8.45a",
+  "species": [
+    {
+      "species_id": "neopentyl_alcohol_radical_cation",
+      "mapped_smiles": "[CH3:4][C:1]([CH3:5])([CH3:6])[CH2:2][OH+:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "neopentyl_cation",
+      "mapped_smiles": "[CH3:4][C:1]([CH3:5])([CH3:6])[CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "hydroxyl_radical",
+      "mapped_smiles": "[OH:3]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["neopentyl_alcohol_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["neopentyl_cation", "hydroxyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 175, "equation": "8.45", "figure": null, "panel": null, "section": "8.8"},
+      "confidence": 0.8,
+      "curator_note": "Path labeled 'i' (inductive / charge-site cleavage) of Eq 8.45. Book draws 0 electron-pushing arcs: the scheme shows only three labeled reaction arrows (i, alpha, sigma) from the molecular ion to competing products, no fishhooks. The single move <1> -- heterolytic cleavage of the C2-O3 bond with both bonding electrons going to oxygen -- is an implicit move required for electron balance (not drawn on the page). Precursor is the n-ionized molecular ion of neopentyl alcohol (2,2-dimethyl-1-propanol) with charge and odd electron localized on O per the book's (CH3)3C-CH2-O(+.)H drawing; the C-O bonding pair migrates to O, leaving the (CH3)3CCH2+ cation and the .OH radical (oxygen keeps its pre-existing odd electron, so its non-bonding population rises by 2 into a lone pair while the radical count is unchanged -- the soft lone-pair note is expected). m/z 71.0855 is the curator-computed monoisotopic value of (CH3)3CCH2+; the page prints the 1% abundance but no m/z."
+    },
+    {
+      "evidence_id": "evidence_mechanism",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.45a",
+      "support_type": "curator_inferred",
+      "locator": {"page": 175, "equation": "8.45", "figure": null, "panel": null, "section": "8.8"},
+      "confidence": null,
+      "curator_note": "Equation 8.45 has no entry in data/mechanisms/rule_index.json 'by_equation' (keys run 4.3-4.46 and 8.1-8.14 only); no MOD rule cross-link exists for this charge-site inductive cleavage."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 88.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_71",
+      "species_id": "neopentyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 71.0855,
+      "relative_intensity": 0.01,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed"
+  }
+}

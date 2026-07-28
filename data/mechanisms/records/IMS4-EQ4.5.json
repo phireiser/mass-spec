@@ -1,0 +1,251 @@
+{
+  "mechanism_id": "IMS4-EQ4.5",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH:4]([1H:5])[1H:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH3:1][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "vinyl_cation",
+      "mapped_smiles": "[CH2:3]=[CH+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "dihydrogen",
+      "mapped_smiles": "[1H:5][1H:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_radical",
+        "vinyl_cation",
+        "dihydrogen"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_three_bond_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "three_bond_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              6
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_three_bond_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 55,
+        "equation": "4.5",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.8,
+      "curator_note": "n-Butane molecular ion: simultaneous cleavage of THREE bonds gives an even-electron ion (C2H3+, vinyl cation) plus an ethyl radical and H2. The central C2-C3 bond breaks (ethyl radical), and the terminal methyl C4 loses two H (1,1) as H2 while the C3=C4 vinyl cation forms. Book draws 3 fishhook marks, one on each cleaved bond: the C2-C3 sigma bond <2,3> and the two C4-H bonds <4,5>,<4,6>. The full balanced flow needs 6 single-electron moves; the 3 extra hooks (second electron of C2-C3 -> C3=C4 pi; second electron of one C4-H -> H-H bond; and the ionisation electron of the other C4-H -> EXTERNAL) are implicit, not drawn. The saturated-alkane molecular ion has no closed integer-bond Lewis form, so the precursor SMILES is the NEUTRAL butane skeleton with charge=1/radical=1 in the species fields (EQ4.7 convention)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.5",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.5"
+      },
+      "confidence": 0.55,
+      "curator_note": "rule_index cross-links equation 4.5 to IMS_4_5: [C]1(H2,H3,H4)[C]5(H6,H7){-}[C+.]8(H10,H11)[C]12(H13,H14,H15) >> [C]1(H2,H3,H4)[C.]5(H6,H7).[C+]8(H10,H11)[C]12(H13).[H]14[H]15. Bond changes MATCH the book: cleave the C5-C8 (central C-C) bond, lose H14+H15 as H2 from the terminal methyl C12 (1,1), leaving the C2H3 cation. CAVEATS: the rule localises +. on a 4-coordinate carbon C8 (hypervalent, RDKit-invalid, hence the neutral-skeleton precursor here) and its C2H3+ product omits the C8=C12 double bond (no {=}), leaving C12 under-coordinated -- a mild encoding defect. Net transformation is faithful."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.5"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 27.0229 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "vinyl_cation",
+      "step_id": "step_three_bond_cleavage",
+      "observed_mz": 27.0229,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS4-EQ4.16",
+  "species": [
+    {
+      "species_id": "pentan_3_one_pi_ionized_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][C:3]([O+:4])[CH2:5][CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "monovalent_oxygen_cation_c4h7o",
+      "mapped_smiles": "[CH2:2]=[C:3]([O+:4])[CH2:5][CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentan_3_one_pi_ionized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "monovalent_oxygen_cation_c4h7o",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_disfavored_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_4_16",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_disfavored_alpha_cleavage",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 59,
+        "equation": "4.16",
+        "figure": null,
+        "panel": null,
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.85,
+      "curator_note": "The book CROSSES OUT the reaction arrow of equation 4.16 (a large X is printed over it): allylic-type cleavage is disfavored at a carbonyl double bond because the product's resonance stabilization requires positive charge on a MONOVALENT oxygen, the partner canonical form being the extremely unstable alpha-acylcarbonium ion (Dommroese 1987); the trivalent oxonium (acylium) route of equation 4.14 wins. The printed abundance is '0.5% (C3H5O+ = 100%)', i.e. this C4H7O+ ion is 0.5% of the m/z 57 acylium base peak of 3-pentanone, hence status 'rejected' with relative_intensity 0.005. ARC COUNT: Book draws 2 arc(s); moves <1,2> are drawn - the arc from the C(1)-C(2) sigma bond into the C(2)-C(3) bond and the arc from the odd electron of the pi-ionized carbonyl into that same C(2)-C(3) bond (their two barbs are printed side by side between CH2 and C) - and move <3>, the sigma-bond electron that leaves with the methyl, is an implicit homolysis hook required for electron balance (not drawn on the page; the book simply writes CH3. among the products). LOCALIZATION NOTE (convention B/C): the page draws the ionized carbonyl with a SINGLE C-O bond and one '+.' superscript between C and O. Split for balance and to match the text, the odd electron sits on the carbonyl carbon C(3) (the arrow's origin) and the charge on the monovalent oxygen O(4); the product written here, CH2=C(C2H5)-O(+), is the canonical form the arrows actually produce and the one printed on the left of the book's resonance arrow, its partner (+)CH2-C(C2H5)=O being drawn on the right."
+    },
+    {
+      "evidence_id": "evidence_mod_4_16",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.16",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "4.16",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py:376"
+      },
+      "confidence": 0.9,
+      "curator_note": "No MOD rule is cross-linked: rule_index.json has no 'by_equation' entry for 4.16, and the rule module states verbatim '# 4.16 not included as it is a negative example (example cleavage impossible)' (IMS_chap4_examples.py:376, repeated at the fragmentation list, line 1152). That is the intended state - the record is kept as a labelled negative/disfavored pathway, not as a generator rule. RDKit bookkeeping note: RDKit assigns the monovalent [O+] two radical electrons in both states (an artifact of its valence model); the change is zero, so the arrow bookkeeping is unaffected, and the declared electronic state (charge +1, 0 unpaired for the closed-shell product ion) is the chemically correct one."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.0726,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_71",
+      "species_id": "monovalent_oxygen_cation_c4h7o",
+      "step_id": "step_disfavored_alpha_cleavage",
+      "observed_mz": 71.0491,
+      "relative_intensity": 0.005,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "rejected",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

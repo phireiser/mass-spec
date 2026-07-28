@@ -1,0 +1,169 @@
+{
+  "mechanism_id": "IMS8-EQ8.75a",
+  "species": [
+    {
+      "species_id": "hydroxy_methyl_pentanone_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[CH2:4][C:5]([CH3:7])([CH3:8])[OH:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetone_enol_radical_cation",
+      "mapped_smiles": "[CH2:4]=[C:1]([CH3:3])[OH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetone_neutral",
+      "mapped_smiles": "[CH3:7][C:5](=[O:6])[CH3:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["hydroxy_methyl_pentanone_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["acetone_enol_radical_cation", "acetone_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_hydroxyl_charge_retention",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [2]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_75a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_hydroxyl_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 193,
+        "equation": "8.75",
+        "figure": null,
+        "panel": "upper scheme",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "UPPER of the two schemes printed under the single equation number (8.75) on printed page 193 (PDF page 205). Substrate named in the running text: 4-hydroxy-4-methyl-2-pentanone+. , (CH3)2C(OH)-CH2-CO-CH3, drawn with the '+.' written on the KETONE oxygen (n-ionized carbonyl) and with the hydroxyl drawn as a plain 'O' carrying an explicit 'H' -- the O-H hydrogen is the one that migrates. The gamma atom of the six-membered transfer ring is therefore the hydroxyl OXYGEN (ring: H, O6, C5, C4, C1, O2), not a carbon. Products as printed: neutral ACETONE (drawn as the ketone (CH3)2C=O) plus the ionized acetone ENOL, drawn 'H-O(+.)' bonded to a carbon carrying =CH2 and CH3 -- i.e. the charge stays on the half that was ionized (charge RETENTION), which the text says D-labelling (Henneberg 1982) shows to be the favoured route. ARROWS ACTUALLY DRAWN: the page draws 2 arc(s), both single-barbed fishhooks, and both belong to the hydrogen transfer only -- arc (i) starts on the hydroxyl O-H bond and sweeps right, its barb pointing towards the ionized carbonyl oxygen; arc (ii) starts at the '+.' dot on the carbonyl oxygen and sweeps left, its barb pointing at the migrating H. NOTHING is drawn on the C4-C5 bond or on the C1=O2 pi bond. ENCODING (honest divergence): the migrating hydrogen cannot carry an atom map -- RDKit folds a mapped explicit [H:n] back into implicit valence (verified in the project container: '[O:6][H:9]' parses to an O with TotalNumHs=1 and no H node), so the two drawn fishhooks collapse into the single heavy-atom move <1> (one electron passes from O2 to O6: O2 spends its odd electron on the new O-H bond while the electron left behind by the homolysed O6-H bond stays on O6). Moves <2>-<6> are IMPLICIT, i.e. required for electron balance and for the drawn products but NOT drawn on the page: <2>+<4> homolyse the C4-C5 sigma bond (one electron into the forming C5=O6 pi of acetone, one into the forming C1=C4 pi of the enol), <3> is the O6 radical electron completing the C5=O6 pi, and <5>+<6> homolyse the C1=O2 pi (one electron completing the C1=C4 pi, the other returning to O2 as its odd electron, which is why O2 keeps '+.' in the product). RESONANCE (convention C): the enol radical cation is encoded exactly in the O-localised Lewis form the book draws, CH2=C(CH3)-OH+. ; its distonic partner .CH2-C(CH3)=OH+ is not drawn and is not used here. INTENSITY: the prose immediately above the scheme states that the ion 'C3H6O+. (m/z 58)' is formed 'in 20% abundance', so relative_intensity 0.20 is a printed number, not a curator estimate -- but it is the TOTAL m/z 58 abundance, to which the lower scheme (IMS8-EQ8.75b, charge migration) also contributes; the same sentence says charge retention (this scheme) is favoured. The page does not restate the ionizing energy; standard 70 eV EI is assumed per the book's convention."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_75a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.75a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.75",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "NO MOD RULE CROSS-LINK. rule_index.json 'by_equation' has no key '8.75' at all (its chapter-8 keys stop at 8.14, because the MOD rule names follow the German-edition numbering), and no rule in 'entries' implements a HETEROATOM H-donor feeding an ionized carbonyl. Checked explicitly and REJECTED: hTransition_unsaturated '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1' -- its H-donor slot is [C], a carbon, so it cannot fire on the drawn hydroxyl O-H transfer; an RDKit substructure test of its left side ('[#1][#6][#6][#6][#6]=[O+]') on this precursor returns 6 hits, ALL of them the two C5-methyl hydrogens (i.e. the OTHER scheme, 8.75b), and never the hydroxyl H. The corresponding heteroatom-donor query '[#1][#8][#6][#6][#6]=[O+]' does match the substrate once (the hydroxyl H), confirming the geometry is fine and that only the RULE is missing. Also rejected: esterMcLafferty_rH (needs an ester O inside the transfer ring; 0 substructure hits here), IMS_4_41_rH (its generic [H][_A] donor is locked into an aromatic ortho-ester skeleton), IMS_4_33_rH/IMS_8_7_1 (carbon donor bearing a further carbon substituent), and the h2Transiton_* family (two hydrogens, r2H). This scheme is currently unmodelled by the MOD rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.0832,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58_enol_charge_retention",
+      "species_id": "acetone_enol_radical_cation",
+      "step_id": "step_rH_hydroxyl_charge_retention",
+      "observed_mz": 58.0413,
+      "relative_intensity": 0.2,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

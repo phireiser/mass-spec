@@ -1,0 +1,142 @@
+{
+  "mechanism_id": "IMS8-EQ8.56e",
+  "species": [
+    {
+      "species_id": "distonic_oxonium_c3h6o",
+      "mapped_smiles": "[CH2:5][CH2:6][O+:1]=[CH2:2]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral",
+      "mapped_smiles": "[CH2:5]=[CH2:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_radical_cation",
+      "mapped_smiles": "[CH2:2]=[O+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["distonic_oxonium_c3h6o"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ethylene_neutral", "formaldehyde_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_second_ethylene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 6]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_second_ethylene_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_second_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": 0.8,
+      "curator_note": "Last step drawn on the 8.56 line: the m/z 58 distonic oxonium ion .CH2CH2-O+=CH2 carries two fishhooks and an 'alpha'-labelled reaction arrow to 'CH2=O+. + C2H4, m/z 30, 5%'. A second radical-site alpha-cleavage: the tail radical (C5) forms the C5=C6 pi bond while the C6-O bond breaks, expelling neutral ethylene and leaving the formaldehyde radical cation. Book draws 2 arcs, both terminating on the forming C5=C6 bond: move <1> (the tail radical's odd electron, drawn from the dot) and move <2> (one electron of the breaking C6-O sigma bond, drawn from that bond); move <3> (the other C6-O electron onto oxygen, which becomes the radical site of CH2=O+.) is an implicit homolysis hook required for electron balance (not drawn on the page)."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.56e",
+      "support_type": "curator_inferred",
+      "locator": {"page": 182, "equation": "8.56", "figure": null, "panel": null, "section": null},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has no entry for 8.56; no MØD rule variable is cross-linked to this scheme. The species undergoing this step is an EI fragment ion (m/z 58), NOT the molecular ion, so adduct is null and precursor_mz is the fragment mass; the page names no CAD or MI experiment, so this is a consecutive decomposition inside the 70 eV EI source and the printed 5% is an ordinary EI abundance."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization (consecutive decomposition of an EI fragment ion)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ch2o_m30",
+      "species_id": "formaldehyde_radical_cation",
+      "step_id": "step_alpha_second_ethylene_loss",
+      "observed_mz": 30.0100,
+      "relative_intensity": 0.05,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

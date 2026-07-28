@@ -1,0 +1,165 @@
+{
+  "mechanism_id": "IMS8-EQ8.7b",
+  "species": [
+    {
+      "species_id": "distonic_gamma_radical_cation",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4][CH2:3][CH2:2][CH:1]=[O+:7][1H:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetaldehyde_enol_radical_cation",
+      "mapped_smiles": "[CH2:2]=[CH:1][O+:7][1H:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "but_1_ene_neutral",
+      "mapped_smiles": "[CH2:3]=[CH:4][CH2:5][CH3:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_gamma_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetaldehyde_enol_radical_cation",
+        "but_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_beta_cleavage_high_energy",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "beta_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": { "type": "radical_orbital", "atom_maps": [4] },
+          "target": { "type": "bond", "atom_maps": [3, 4] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [2, 3] },
+          "target": { "type": "bond", "atom_maps": [3, 4] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [2, 3] },
+          "target": { "type": "bond", "atom_maps": [1, 2] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [1, 7] },
+          "target": { "type": "bond", "atom_maps": [1, 2] },
+          "electron_count": 1
+        },
+        {
+          "source": { "type": "bond", "atom_maps": [1, 7] },
+          "target": { "type": "atom", "atom_maps": [7] },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage_high_energy",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 144,
+        "equation": "8.7",
+        "section": "8 / Detailed Mechanisms of Ion Fragmentation (Random or hidden rearrangements)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.7, row 1, right branch (arrow labelled 'high energy'). The distonic gamma-radical cation undergoes beta-cleavage of the C2-C3 (alpha-beta) bond, giving the acetaldehyde enol radical cation CH2=CH-OH+. (m/z 44, drawn top-right with +. localized on oxygen) plus neutral 1-butene, which SEPARATE. Book draws 0 arc(s) on the 'high energy' arrow -- it prints only the two separated products, no fishhooks. All 5 electron moves are the implicit, balanced radical retro-ene cascade that produces them: the gamma-radical (move 1) and one C2-C3 electron (move 2) make the new C3=C4 pi bond; the other C2-C3 electron (move 3) and one C1=O pi electron (move 4) make the new C1=C2 pi bond; the remaining C1=O pi electron (move 5) becomes the oxygen radical. Text: at 70 eV this gamma-H/beta-cleavage 'gives mainly C2H4O+. (100%) + 1-C4H8', because IE(CH2=CHOH)=9.2 eV < IE(1-butene)=9.6 eV so the charge stays with the enol. DELOCALISATION: the enol radical cation is drawn/encoded with +. on O; the resonance partner .CH2-CH=O(+)H is the same ion. This is the net outcome also captured by Eq 8.5 (page 142)."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.7b",
+      "support_type": "computationally_supported",
+      "locator": { "page": 144, "equation": "8.7" },
+      "confidence": 0.9,
+      "curator_note": "Cross-link: MØD rule IMS_8_7_2 (rule_name 'Hydrogen exchange occring in a Ion-Molecule-Complex 8.7 row 1 high energy'). DFS: [C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9 >> [C]1[C]2[C]3{=}[C]4.[C]5{=}[C]6([H]7)[O+.]8[H]9. VERIFIED consistent: the rule cleaves the bond between the radical-bearing carbon's beta neighbour (their C4-C5 = this record's C3-C2), forms the two new pi bonds (C3=C4 butene and C5=C6 enol in their numbering) and moves the radical from carbon to oxygen -- the same bond/charge/spin change encoded here. Their fragment [C]5{=}[C]6([H]7)[O+.]8[H]9 is the enol radical cation with +. on O, matching the drawn product."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_44",
+      "support_type": "explicitly_reported",
+      "locator": { "page": 144, "equation": "8.7" },
+      "confidence": 0.85,
+      "curator_note": "The text prints 'C2H4O+. (100%)' for this 70 eV gamma-H/beta-cleavage product; 100% -> relative_intensity 1.0 (base peak). observed_mz 44.0257 is the curator-computed monoisotopic m/z of C2H4O+. (electron-mass corrected); only the 100% is printed in the book."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_44",
+      "species_id": "acetaldehyde_enol_radical_cation",
+      "step_id": "step_beta_cleavage_high_energy",
+      "observed_mz": 44.0257,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

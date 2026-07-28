@@ -1,0 +1,290 @@
+{
+  "mechanism_id": "IMS8-EQ8.101a",
+  "species": [
+    {
+      "species_id": "butanoic_acid_molecular_ion",
+      "mapped_smiles": "[1H:7][CH2:4][CH2:3][CH2:2][C:1]([OH:5])=[O+:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "gamma_distonic_ion",
+      "mapped_smiles": "[CH2:4][CH2:3][CH2:2][C:1]([OH:5])=[O+:6][1H:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetic_acid_1_1_enediol_ion",
+      "mapped_smiles": "[CH2:2]=[C:1]([OH:5])[O+:6][1H:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:4]=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "butanoic_acid_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_gamma_distonic",
+      "species_ids": [
+        "gamma_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetic_acid_1_1_enediol_ion",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_H_transfer",
+      "from_state": "state_precursor",
+      "to_state": "state_gamma_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [4, 7]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [6, 7]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [4, 7]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [4]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [6]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [6, 7]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_mclafferty_cleavage",
+      "from_state": "state_gamma_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [4]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [3, 4]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [3, 4]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 6]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 6]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [6]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_gamma_8_101a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_H_transfer",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": "upper branch, the arrow labelled 'gamma' leaving the butanoic acid molecular ion",
+        "section": "8.10 Hydrogen rearrangements, Examples (butanoic acid)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Equation 8.101, the arrow labelled 'gamma'. The scheme starts from the butanoic acid molecular ion, drawn as a zig-zag chain with the carbons numbered 1 (COOH), 2, 3, 4 and a '+.' printed at the upper right of COOH. SET-UP (the Examples paragraph that introduces this equation begins on the facing page 209): 'The mass spectrum of butanoic acid, first studied by Happ and Stewart (1952), will be used to illustrate the multiplicity of competing reaction pathways possible for even a simple molecular ion. Its largest peaks above m/z 27 are due to the loss of ethylene (100%) and of methyl (25%); although the former is thermochemically favored, the pathways yielding the latter are complex (Equation 8.101; McAdoo et al. 1978). A favorable bond cleavage is available for the intermediate from the 1,5-H, but not the 1,4-H, transfer'. This 'gamma' arrow IS that 1,5-H transfer: the hydrogen on C-4 moves to the carbonyl oxygen through a six-membered transition state, giving the distonic ion the book draws with a radical dot on the terminal '.CH2' and the protonated carboxyl at the other end. ARC COUNT (convention D): Book draws 0 arc(s) for this step - the arrow carries only the Greek letter 'gamma'. The whole of Equation 8.101 contains exactly TWO drawn arcs and both of them sit on the PRODUCT of this step (see ev_step_alpha_8_101a). Moves <1,2,3> are therefore all implicit, required for electron balance and read off the two structures the book draws on either side of the arrow: the C4-H sigma pair splits, one electron going into the new O-H bond and one staying on C-4 as the radical the book prints as a dot, while the odd electron of the '+.' on oxygen pairs with the arriving electron to complete that O-H bond. LOCALIZATION (convention B): the precursor SMILES places the charge and the odd electron on the carbonyl oxygen, [C:1]([OH:5])=[O+:6] (an O+ with only a double bond carries one unpaired electron), exactly where McLafferty writes '+.' beside COOH; it is NOT a neutral closed-shell acid with the charge only in the JSON fields. ATOM-MAP NOTE: the migrating hydrogen is written [1H:7] - an isotope tag on ordinary protium, not a label the book draws - so RDKit keeps it as an explicit atom that can carry an atom map."
+    },
+    {
+      "evidence_id": "ev_step_alpha_8_101a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": "upper branch, the plain arrow from the gamma-distonic ion to 'CH2=C(OH)OH (+.) + C2H4'",
+        "section": "8.10 Hydrogen rearrangements, Examples (butanoic acid)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Equation 8.101, upper branch, the plain horizontal arrow from the gamma-distonic ion to the products 'CH2=C(OH)(OH)' (with '+.' at the upper right, beside the top OH) and 'C2H4'. ARC COUNT (convention D): Book draws 2 arc(s), and these are the ONLY arcs anywhere in Equation 8.101; both are single-barbed fishhooks drawn on the gamma-distonic structure. Arc 1 starts at the radical dot printed above the '.CH2' at the left-hand end, sweeps right, and its barb comes down on the C4-C3 bond (the bond rising from that CH2 to the apex vertex). Arc 2 is the loop drawn over the chain: its tail sits on the C3-C2 bond (the bond descending from the apex vertex to the valley vertex) and its barb points back to the left onto the same C4-C3 bond. So moves <1,2> are the two drawn arcs; moves <3,4,5> are implicit and are NOT drawn on the page - <3> is the homolysis hook that carries the second electron of the breaking C2-C3 bond onto C-2, and <4,5> take the C1=O6 pi pair apart so that the C1=C2 double bond of the drawn 1,1-enediol product can be formed and the odd electron ends up on the oxygen where the book prints '+.'. A two- or three-fishhook encoding would leave the drawn product unmade, which is why five moves are recorded even though two arcs are drawn. STEP CLASS: this is the carbon-carbon homolysis half of the McLafferty rearrangement; in McLafferty's own vocabulary it is a radical-site (alpha) cleavage driven by the C-4 radical, and the geometry is the canonical one - the bond that breaks (C2-C3) is incident to C-3, the atom that forms the new pi bond with the radical site C-4. DELOCALISATION (convention C): the book draws the protonated carboxyl of the intermediate as a DELOCALISED unit - a curved line carrying a '+' that spans both C-O bonds, McLafferty's notation for (HO)2C(+) - and it prints the product's charge and odd electron as a single '+.' beside the upper OH. This record commits to ONE localised form throughout: the intermediate as the oxocarbenium HO-C(=O(+)H)- (the form page 209 itself calls 'the protonated carboxyl group') and the product as HO-C(=CH2)-O(+.)H. The partner resonance structure of the intermediate is the dihydroxycarbenium (HO)2C(+)- with an empty p orbital on carbon; the MOD rule hTransition_unsaturated_bidirect encodes exactly that interconversion, and choosing the oxocarbenium form is what makes the C1=O6 pi pair available for moves <4,5>. THERMOCHEMISTRY GLOSS from page 209: this ethylene loss is 'thermochemically favored' over the methyl-loss channels of the lower branch."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_101a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.101a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_bookCover.py"
+      },
+      "confidence": 0.75,
+      "curator_note": "CROSS-LINKS WERE CHECKED, NOT ASSERTED (convention E): every claim below was tested with an RDKit substructure match of the rule's left-hand side against this record's instantiated substrates (hydrogens added). rule_index.json has NO '8.101' key at all - its chapter-8 index runs 8.1 to 8.14 only, German-edition numbering - so the rules cited here are the equation-independent generic ones in src/data_generation/rules/IMS_bookCover.py. (1) STEP 1 = hTransition_unsaturated, '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1' (name 'H transition receptor site unsaturated §Y6'). EXACT MATCH. Its LHS as SMARTS, '[#6;!H0]-[#6]-[#6]-[#6]=[O+;v2]', matches the butanoic acid molecular ion exactly once - at the gamma methyl - and matches none of the other structures in this record; the bond changes agree move for move with step_gamma_H_transfer (C(gamma)-H broken, O-H formed, radical left on the gamma carbon, C=O retained as the =O(+)H oxocarbenium). The rule is LIVE: importing src.data_generation.rules shows the conservation guardrail drops 28 fragmentation rules and this is not one of them (135 fragmentation + 15 ionization rules survive). (2) STEP 2 = hTransition_unsaturated_alpha, '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C]1{=}[C]2.[C.]3[C]4{=}[_A+]5[H]6' (§Y5). Its LHS SMARTS '[#6;v3]-[#6]-[#6]-[#6]=[O+;v3]-[#1]' matches the gamma-distonic ion of this record ONCE and matches nothing else on the page, and the bond it cleaves (C2-C3 in book numbering) and the alkene it forms (C3=C4) are EXACTLY the two arcs McLafferty draws - the rule even supplies the third, implicit homolysis hook. PARTIAL MISMATCH, disclosed rather than papered over: the rule's ionic product is the DISTONIC valence isomer .CH2-C(OH)=O(+)H, whereas page 210 draws the 1,1-enediol ion CH2=C(OH)2 (+.). Same formula C2H4O2(+.) and the same m/z 60.0206, but a different connectivity and a different charge/radical localisation, so the rule stops one valence isomerisation short of the drawn product. It is listed in rule_mismatches. (3) hTransition_unsaturated_bidirect, '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C.]1[C]2[C]3[C+]4[_A]5[H]6', also matches the gamma-distonic ion (same LHS) and encodes precisely the =O(+)H <-> (HO)2C(+) resonance that McLafferty draws as the curved '+' arc across the two C-O bonds, i.e. it is the machine counterpart of this record's convention-C localisation choice. (4) REJECTED AFTER TESTING, not assumed: IMS_4_33_rH '[C]1[C]2([H]3)[C]4[C]5[C]6([C]7){=}[O+.]8', the atom-explicit gamma-H rule, does NOT match - it demands a carbonyl carbon bearing a second CARBON (butanoic acid's C-1 bears OH) and a further carbon beyond the gamma position (butanoic acid's gamma carbon is the terminal methyl); RDKit gives 0 matches for '[#6]-[#6;!H0]-[#6]-[#6]-[#6](-[#6])=[O+]' against every structure here, and its partner IMS_4_33_alpha_2 is dropped by the guardrail anyway ('gamma H-migr. to unsat. group with beta cleavage 4.33 alpha 2 §R1 [spin 1->2]'). esterMcLafferty_rH '[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7' needs an ester oxygen inside the migration chain: 0 matches. IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5': 0 matches for '[#6]-[#6]-[#6](-[#6])-[O+]', and it is guardrail-dropped ('[spin 1->2]') in any case."
+    },
+    {
+      "evidence_id": "ev_peak_60_8_101a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_60",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 209,
+        "equation": "8.101",
+        "figure": null,
+        "panel": "running text, 'Examples' paragraph introducing Equation 8.101",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "MEASUREMENT PROVENANCE (convention F): page 210 itself prints NO m/z and NO percentage anywhere - Equation 8.101 is drawn as structures and process labels only. The 100% comes from the running 'Examples' paragraph that introduces this equation on the facing page 209: 'Its largest peaks above m/z 27 are due to the loss of ethylene (100%) and of methyl (25%)'. That is a 70 eV EI relative abundance and the ethylene-loss ion is the base peak, so relative_intensity = 1.0 and THIS evidence link's locator points at page 209, not 210. The m/z value 60.0206 is curator-computed (RDKit ExactMolWt, electron-mass corrected) for C2H4O2(+.) and is not a number the book prints. The ion is the ionised 1,1-enediol of acetic acid; the same page-209 paragraph notes that the low-energy scrambling drawn in the lower half of Equation 8.101 also scrambles the hydrogens INSIDE this CH2=C(OH)2(+.) product (McAdoo et al. 1985). Page 210's own first line, 'yields 42% (M - C2H4)+. at 70 eV, but this is the base peak of the spectrum at 12 eV (Maccoll and Mruzek 1986)', belongs to the PRECEDING discussion carried over from page 209 and is deliberately NOT used here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 88.0519,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_60",
+      "species_id": "acetic_acid_1_1_enediol_ion",
+      "step_id": "step_mclafferty_cleavage",
+      "observed_mz": 60.0206,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

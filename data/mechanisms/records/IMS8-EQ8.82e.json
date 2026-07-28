@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS8-EQ8.82e",
+  "species": [
+    {
+      "species_id": "alkoxy_radical_oxonium_ion",
+      "mapped_smiles": "[CH3:8][CH:7]([O:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_protonated_ester_ion",
+      "mapped_smiles": "[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[OH+:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "aldehyde_RCHO",
+      "mapped_smiles": "[CH3:8][CH:7]=[O:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "alkoxy_radical_oxonium_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_protonated_ester_ion",
+        "aldehyde_RCHO"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_loss_of_RCHO",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82e",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_loss_of_RCHO",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Left column of Equation 8.82, vertical arrow labelled 'a | -RCHO': the SAME alkoxy-radical / protonated-ester ion cleaves the other bond at the carbinol carbon, expelling the whole R-CHO aldehyde as a stable neutral (p.197: 'because of the high stability of the resulting neutral product RCHO') and leaving the drawn distonic ion .CH2-(CH2)n-1-C(=O)-O(+)(H)CH3, whose primary radical is printed as 'H2C.' at the far end of the chain. Book draws 2 arc(s) for this branch, both single-barb fishhooks: (i) the SOLID hook from the radical dot on O(9) into the C(7)-O(9) bond, which the panel shares with the competing '-R.' branch (encoded as move <1>), and (ii) the DASHED hook from the C(7)-C(6) bond into the C(7)-O(9) bond (move <2>) -- the book dashes it to mark it as the alternative of the two branches leaving this panel. Move <3>, the hook that puts the second C(6)-C(7) electron on C(6) to make the drawn primary radical, is an implicit homolysis hook required for electron balance (not drawn on the page). INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82e",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82e",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. Same negative result as 8.82d: IMS_4_9 / IMS_4_13_1 are the only generic saturated-site alpha cleavages in the index and both demand that the odd electron sit on the CHARGED site, while this cleavage is driven by a neutral alkoxy radical with the charge held on a remote oxonium; IMS_4_9 additionally cleaves a bond not incident to the pi-forming atom and does not conserve spin. Unmodelled."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI (the reacting ion is the rH-isomerized molecular ion of Equation 8.82a, same m/z)",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 174.125,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_RCHO",
+      "species_id": "distonic_protonated_ester_ion",
+      "step_id": "step_alpha_loss_of_RCHO",
+      "observed_mz": 130.0988,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

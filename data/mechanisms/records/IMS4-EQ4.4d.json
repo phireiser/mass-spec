@@ -1,0 +1,224 @@
+{
+  "mechanism_id": "IMS4-EQ4.4d",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH2:1]([1H:4])[CH2:2][O+:3][1H:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "water",
+      "mapped_smiles": "[1H:4][O:3][1H:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene_cation",
+      "mapped_smiles": "[CH2:1]=[CH2:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "water",
+        "ethylene_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_water_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "water_elimination",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_water_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 55,
+        "equation": "4.4",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.7,
+      "curator_note": "Same 1,2-water elimination from the ethanol molecular ion, CHARGE MIGRATION: neutral water leaves and the ethylene fragment keeps the charge+radical (H2C=CH2+.). Book draws 4 fishhook barbs on the two cleaved bonds <1,4> and <2,3> = moves <1..4>. Move <5> (O odd electron -> EXTERNAL) is a curator bookkeeping hook (not drawn) that neutralises the O site; the delocalised ethylene radical cation is written as its neutral skeleton with +. in the species fields (EQ4.7 convention)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.4d",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.4"
+      },
+      "confidence": 0.45,
+      "curator_note": "Cross-links to IMS_4_4_row4 (charge-migration partner of row3). Same 1,1-vs-1,2 water-H MISMATCH as 4.4c. See rule_mismatches. | RECHECK 2026-07-24: charge-MIGRATION row. The 4 drawn retro-/elimination barbs yield neutral-connectivity fragments; the +. resides on the ETHYLENE fragment, a delocalized pi radical cation with no localized Lewis structure. It is therefore carried in the charge/radical_electrons fields (neutral-skeleton SMILES), and the odd electron leaving the O is encoded as an `external` location -- the same non-localizable-radical-cation convention as eqs 4.3/4.5/4.8, NOT a literal second ionization. semantics set to net_fragmentation because the migration electron flow is not drawn."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.4"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 28.0308 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 46.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "ethylene_cation",
+      "step_id": "step_water_elimination",
+      "observed_mz": 28.0308,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

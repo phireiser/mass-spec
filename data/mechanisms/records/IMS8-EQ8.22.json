@@ -1,0 +1,219 @@
+{
+  "mechanism_id": "IMS8-EQ8.22",
+  "species": [
+    {
+      "species_id": "protonated_p_methoxymethyl_benzaldehyde",
+      "mapped_smiles": "[1H:12][O:2][CH+:1][c:3]1[cH:4][cH:5][c:6]([cH:7][cH:8]1)[CH2:9][O:10][CH3:11]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ipso_protonated_arenium_ion",
+      "mapped_smiles": "[C:3]1([1H:12])([CH:1]=[O:2])[CH+:4][CH:5]=[C:6]([CH2:9][O:10][CH3:11])[CH:7]=[CH:8]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "benzyl_acyloxonium_ion",
+      "mapped_smiles": "[1H:12][c:3]1[cH:4][cH:5][c:6]([cH:7][cH:8]1)[CH2:9][O+:10]([CH:1]=[O:2])[CH3:11]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "tropylium_ion",
+      "mapped_smiles": "[1H:12][c:3]1[cH:4][cH:5][c:6]([cH:7][cH:8]1)[CH2+:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_formate_neutral_loss",
+      "mapped_smiles": "[CH:1](=[O:2])[O:10][CH3:11]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["protonated_p_methoxymethyl_benzaldehyde"]
+    },
+    {
+      "state_id": "state_arenium",
+      "species_ids": ["ipso_protonated_arenium_ion"]
+    },
+    {
+      "state_id": "state_acyloxonium",
+      "species_ids": ["benzyl_acyloxonium_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["tropylium_ion", "methyl_formate_neutral_loss"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH",
+      "from_state": "state_precursor",
+      "to_state": "state_arenium",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [2, 12]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "bond", "atom_maps": [3, 12]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_ring_walk",
+      "from_state": "state_arenium",
+      "to_state": "state_acyloxonium",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 3]},
+          "target": {"type": "bond", "atom_maps": [3, 4]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "lone_pair", "atom_maps": [10]},
+          "target": {"type": "bond", "atom_maps": [1, 10]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_i",
+      "from_state": "state_acyloxonium",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [9, 10]},
+          "target": {"type": "lone_pair", "atom_maps": [10]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 155, "equation": "8.22", "figure": null, "panel": null, "section": "8.3"},
+      "confidence": 0.75,
+      "curator_note": "Step 'rH' of Eq 8.22 (Filges and Grutzmacher 1986): intramolecular proton transfer that converts the O-protonated aldehyde (drawn HC+-OH, a localized carbenium on the exocyclic carbon) into the ipso-protonated arenium (Wheland) ion in which the ring carbon that bore the formyl group is now sp3 and carries both the migrated H and a neutral CHO, with the + delocalized over the cyclohexadienyl ring. Book draws 0 curved electron-pushing arc(s) for this step: only the labelled 'rH' reaction arrow and the reactant/product structures are shown. Both encoded moves are therefore implicit and are required for electron balance (not drawn on the page): move 1 is the O-H bond pair collapsing into the exocyclic C=O pi bond (expelling the proton, regenerating the neutral carbonyl), move 2 is the ipso ring pi pair capturing that proton to form the new C(ipso)-H sigma bond, leaving the + on the adjacent ring carbon (localized here at the ortho position, map 4). The migrating hydrogen (map 12) is written [1H:12] - ordinary protium with its isotope pinned - solely so RDKit retains it as a mapped atom for O-H/C-H bond bookkeeping. Ring-bond order changes fall on aromatic bonds and are reported soft by the arrow gate."
+    },
+    {
+      "evidence_id": "evidence_step_ring_walk",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_walk",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 155, "equation": "8.22", "figure": null, "panel": null, "section": "8.3"},
+      "confidence": 0.6,
+      "curator_note": "Step 'r-CHO ring walk' of Eq 8.22: the neutral formyl group migrates around the aromatic ring through successive Wheland intermediates until it reaches the ring position bearing the methoxymethyl side chain, then is captured by the ether oxygen to give a benzylic acyloxonium ion (Ar-CH2-O+(CHO)(CH3), the O-formylated methyl ether). Book draws this as a SCHEMATIC cascade, not a complete curved-arrow set: 2 arc(s) are visible on the middle (arenium) structure - one solid intra-ring 'smile' arc under the '+' that denotes the delocalized cyclohexadienyl cation (a resonance/delocalization indicator, not a mechanistic fishhook) and one DOTTED curved arrow sweeping from the CHO/ipso region down to the methoxymethyl oxygen that indicates the net acyl migration. The individual 1,2-acyl-shift intermediates of the walk are NOT drawn. This record collapses the net electron flow of the whole cascade into two two-electron moves, required for electron balance: move 1 is the ipso C-CHO sigma pair returning to the ring to restore aromaticity (ipso de-acylation, momentarily liberating an acylium), move 2 is the ether-oxygen lone pair capturing that acyl carbon to form the new C-O bond and place the + on oxygen. Ring re-aromatization bonds are aromatic in the product and are reported soft by the arrow gate; the O lone-pair depletion is reported soft (lone pair, not radicals)."
+    },
+    {
+      "evidence_id": "evidence_step_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_i",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 155, "equation": "8.22", "figure": null, "panel": null, "section": "8.3"},
+      "confidence": 0.8,
+      "curator_note": "Step 'i' (inductive cleavage) of Eq 8.22: heterolytic cleavage of the benzylic C-O bond of the acyloxonium ion expels neutral methyl formate (HCOOCH3) and leaves the resonance-stabilized C7H7+ ion. Book draws 0 curved arc(s) for this step (only the labelled 'i' reaction arrow and the products 'C7H7+ + HCOOCH3'). The single encoded move (the benzylic C-O bond pair collapsing onto the oxonium oxygen, which becomes the neutral ester oxygen of methyl formate) is implicit and required for electron balance. The product cation is drawn/named C7H7+; encoded here as the localized benzyl cation (convention C: its tropylium resonance partner, the usual name for m/z 91, is not written as a separate species)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.22",
+      "support_type": "curator_inferred",
+      "locator": {"page": 155, "equation": "8.22", "figure": null, "panel": null, "section": "8.3"},
+      "confidence": 0.4,
+      "curator_note": "No MOD rule is cross-linked to Eq 8.22: rule_index.json by_equation['8.22'] is null (no Rule.fromDFS encoding carries this equation id), so there is no computational rule to verify against and no rule mismatch to report. This mechanism is textbook-proposed only. Note also that the precursor here is an EVEN-ELECTRON protonated ion ([M+H]+ of 4-(methoxymethyl)benzaldehyde, C9H11O2+, drawn HC+-OH with a bare '+'), not an odd-electron radical molecular ion; the species radical_electrons/spin fields reflect that (all closed-shell singlets)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 151.0754,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C7H7",
+      "species_id": "tropylium_ion",
+      "step_id": "step_i",
+      "observed_mz": 91.0542,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

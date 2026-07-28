@@ -1,0 +1,195 @@
+{
+  "mechanism_id": "IMS8-EQ8.40a",
+  "species": [
+    {
+      "species_id": "fluoroethane_radical_cation",
+      "mapped_smiles": "[CH3:1][CH:2]([1H:6])[F+:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ch3chf_fluoronium_cation",
+      "mapped_smiles": "[CH3:1][CH:2]=[F+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "hydrogen_radical",
+      "mapped_smiles": "[1H:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "fluoroethane_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ch3chf_fluoronium_cation",
+        "hydrogen_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_ch",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ch",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 170,
+        "equation": "8.40",
+        "section": "Electronegative groups"
+      },
+      "confidence": 0.9,
+      "curator_note": "Concrete: fluoroethane molecular ion CH3-CH2-F(+.) loses H. to give the fluoronium ion CH3-CH=F(+); this is the dominant of the two competing channels (100%, dH = 0.2 eV) and the H. lost comes from the F-bearing carbon (C2), so a C2=F(+) pi bond forms. The book explicitly frames this R(+.)R'Y -> R. + R'Y(+) pathway as the ground state of the products correlating with an EXCITED state of M(+.), and distinguishes it from initial heteroatom (inductive) ionization; charge+radical are localized on F here only to give the alpha-cleavage arrows a real origin (encoding convention B). Book draws 0 electron-pushing arcs: equation 8.40 is printed as a plain net-reaction line 'H(+)CH(CH3)F -> H. + CH3CH=F(+) (100%)'. All three moves <1,2,3> are curator-supplied to balance the alpha C-H homolysis and are NOT drawn on the page: (1) the F(+.) odd electron into the forming C2=F pi bond, (2) one electron of the C2-H sigma bond into that same pi bond, (3) the second C2-H electron onto the departing H.."
+    },
+    {
+      "evidence_id": "evidence_mechanism",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.40a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 170,
+        "equation": "8.40"
+      },
+      "confidence": 0.9,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.40 -- no MØD Rule.fromDFS encodes this alkyl-fluoride fluoronium formation. Related electronegative-group cleavage rules exist for neighbouring equations (IMS_8_3_alpha / IMS_8_3_ind for eq 8.3; IMS_8_4 for eq 8.4) but they encode ether alpha and inductive cleavages, not this scheme; no cross-link is asserted."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_47",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 170,
+        "equation": "8.40"
+      },
+      "confidence": 0.9,
+      "curator_note": "Book prints '(100%)' next to CH3CH=F(+) (the base of the two competing alkyl-fluoride cleavage channels; dH = 0.2 eV). observed_mz 47.0286 is the curator-computed monoisotopic m/z of C2H4F(+) (electron-mass corrected); only the 100% relative intensity is printed."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 48.0364,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_47",
+      "species_id": "ch3chf_fluoronium_cation",
+      "step_id": "step_alpha_cleavage_ch",
+      "observed_mz": 47.0286,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

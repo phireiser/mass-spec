@@ -1,0 +1,211 @@
+{
+  "mechanism_id": "IMS8-EQ8.92",
+  "species": [
+    {
+      "species_id": "ee_oxocarbenium_precursor",
+      "mapped_smiles": "[CH3:6][CH2:5][CH2:4][CH2:3][CH:1]=[O+:2][CH2:7][CH2:8][CH2:9][CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_vinyl_ether_ion",
+      "mapped_smiles": "[CH2:3]=[CH:1][OH+:2][CH2:7][CH2:8][CH2:9][CH3:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "propene_neutral",
+      "mapped_smiles": "[CH3:6][CH:5]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ee_oxocarbenium_precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_vinyl_ether_ion",
+        "propene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_six_ring_to_heteroatom",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_92",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_six_ring_to_heteroatom",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 205,
+        "equation": "8.92",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (EE+ ion rearrangements)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.92, the single horizontal reaction arrow labelled 'r H'. SHARED SUBSTRATE: Equations 8.92-8.95 are four competing decompositions of ONE AND THE SAME even-electron (EE+) ion. The figure block draws that ion's parent at its left edge -- the OE+. molecular ion R'(CH2)3CH(R)-Y(+.)-(CH2)3R\" with '+.' printed on Y -- and four reaction arrows labelled 'alpha' fanning out from it, one into each numbered equation. The parent carries 2 drawn fishhooks (one leaving the C-R sigma bond, one leaving the '+.' odd electron on Y, both converging on the forming C=Y(+) pi bond); the third, homolysis hook that releases R. is NOT drawn, R. is simply implied by the 'alpha' label. That alpha-cleavage is an unnumbered preamble shared by all four equations and is NOT encoded in this record, which covers only the numbered 'r H' arrow. INSTANTIATION (convention F): the scheme is generic in Y, R, R' and R\"; this record uses Y = O, R' = CH3, R\" = CH3 (and R = CH3 for the un-encoded parent), so the EE+ ion is the oxocarbenium CH3(CH2)3CH=O(+)-(CH2)3CH3 (C9H19O+, curator-computed monoisotopic m/z 143.1430; it would arise by loss of CH3. from butyl hexan-2-yl ether, M+. m/z 158.1665). Y = O is the assignment the drawing forces: Y carries exactly three bonds both before (=CH plus one alkyl) and after the reaction, with no fourth substituent drawn; the nitrogen case quoted in the running text (CH2=N(+)RCH2CH2CD2CH3, Equation 8.93) would require that extra substituent. NO m/z and NO intensity is printed anywhere on page 205, so every mass in this record is curator-computed, every species is detected=false and the peak status is 'inferred' (convention F). REACTION AS DRAWN: the EE+ ion is drawn inside a six-membered transition-state ring H...C(5)-C(4)-C(3)-C(1)=O(2) (map numbers of this record; the book's atoms are, in order, the carbon bearing R', the two middle CH2 groups, the sp2 carbon and Y). A hydrogen migrates from C5 to the heteroatom Y=O2, the C4-C3 bond is cleaved, the alkene double bond C5=C4 forms in the expelled neutral and the C1=O2 double bond migrates to C3=C1 -- the p. 205 text's 'the ring needs to be six-membered so that the double bond can move away from the H-receptor site (8.92 and 8.93)'. Products drawn: R'-CH=CH2 (here propene, C3H6, 42.0470) and HY(+)(-(CH2)3R\")(-CH=CH2) (here CH2=CH-O(+)(H)-(CH2)3CH3, C6H13O+, 101.0961). The receptor is Y, so the product ion is the O-protonated vinyl ether. ARC COUNT: the book draws 6 arc(s), all single-barb fishhooks, one across each position of the six-membered ring. They leave the three bonds that break, in pairs: the C5-H sigma bond sends one hook to the forming H-O2 bond and one to the forming C5=C4 pi bond; the C4-C3 sigma bond sends one hook to C5=C4 and one to C3=C1; the C1=O2 pi bond sends one hook to C3=C1 and one to the forming H-O2 bond. Two hooks visibly emanate from each of those three bond midpoints in the scan, which is what fixes this reading. Six single electrons = a balanced 6-electron cyclic shift; no arc is drawn as a double-barbed arrow. ENCODING LIMITATION: RDKit folds an atom-mapped explicit hydrogen back into its heavy atom's implicit-H count, so the migrating H cannot carry an atom map and every drawn hook that touches it is untranscribable as an ElectronMove. The moves below therefore re-express the drawn hooks at heavy-atom level; the H transfer itself is folded into the implicit-H counts of the two mapped atoms it moves between. Moves <1,2,3> are the three drawn hooks that do not touch the migrating H, transcribed verbatim: <1> C4-C3 -> C5-C4, <2> C4-C3 -> C3-C1, <3> C1-O2 -> C3-C1. Move <4> (C1-O2 -> C5-C4) is NOT a drawn arc: it is the re-decomposition that stands in for the three untranscribable hooks (C5-H -> H-O2, C5-H -> C5=C4, C1=O2 -> H-O2), routing directly into C5=C4 the electron that the page routes out of C1=O2 into H-O2. The heavy-atom bookkeeping is identical to the drawing (C4-C3 -2e, C5-C4 +2e, C3-C1 +2e, C1-O2 -2e) and no heavy-atom bond change is omitted, but move <4> must not be read as a fourth arc on the page."
+    },
+    {
+      "evidence_id": "ev_mech_8_92",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.92",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.92",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.92, 8.93, 8.94 or 8.95 -- the Chapter 8 index stops at 8.14 -- so NO MØD rule is cross-linked to this record and none is asserted to match. Candidate families were read out of rule_index.json and checked against their DFS before being REJECTED: every hTransition_* rule (e.g. hTransition_unsaturated '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6>>[C.]2[C]3[C]4[C]5{=}[_A+]6[H]1', hTransition_saturated_1/_3/_4, esterMcLafferty_rH, h2Transiton_1) starts from an ODD-electron site -- a heteroatom radical cation [_A+.] or a distonic [C.] radical -- and produces a carbon radical, whereas the ion reacting here is a closed-shell EE+ oxocarbenium and no radical exists at any point. The only indexed rules that do act on an EE+ oxocarbenium are the Field-rule pair IMS_8_11 (eq. 8.11) and IMS_8_13 (eq. 8.13), which are the mechanistic analogue of Equation 8.94 (H to the heteroatom + cleavage of the Y-C single bond + alkene expulsion). Two findings from checking them: (i) SCOPE -- IMS_8_11 '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7).[H]4[O+]8{=}[C]9([H]10)([H]11)' requires a terminal CH3 beta to the O(+) and a =CH2; an RDKit substructure test of its pattern '[CH3][CH2][O+]=[CH2]' against this record's instantiated precursor returns NO match (the O(+)-alkyl chain here is propyl, not ethyl, and the oxocarbenium carbon carries an alkyl chain, not two hydrogens). (ii) DEFECT -- in IMS_8_11, IMS_8_13 and IMS_8_14_2 the expelled alkene is written on the right-hand side as '[C]1([H]2)([H]3)[C]5([H]6)([H]7)', i.e. a C-C SINGLE bond between two CH2 groups. That is not ethylene but a formal 1,2-biradical: the pi bond the mechanism forms is missing, so those rules conserve atoms/charge/spin (and therefore survive the conservation guardrail) while producing an under-bonded neutral. The correct product term is '[C]1([H]2)([H]3){=}[C]5([H]6)([H]7)'. Any future MØD rule for 8.94/8.95 must form that pi bond explicitly."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 143.143,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_101",
+      "species_id": "protonated_vinyl_ether_ion",
+      "step_id": "step_rH_six_ring_to_heteroatom",
+      "observed_mz": 101.0961,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

@@ -1,0 +1,397 @@
+{
+  "mechanism_id": "IMS8-EQ8.91",
+  "species": [
+    {
+      "species_id": "dodecylamine_molecular_ion_N_ionized",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5]([1H:33])[CH:4]([1H:31])[CH2:3][CH2:2][CH:1]([1H:32])[NH2+:20]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ammonium_delta_carbon_radical",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5]([1H:33])[CH:4][CH2:3][CH2:2][CH:1]([1H:32])[NH2+:20][1H:31]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ammonium_alpha_carbon_radical",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5]([1H:33])[CH:4]([1H:32])[CH2:3][CH2:2][CH:1][NH2+:20][1H:31]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "branched_ammonium_primary_radical",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5]([1H:33])[CH:4]([1H:32])[CH2:3][CH:1]([CH2:2])[NH2+:20][1H:31]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alpha_methyl_ammonium_remote_carbon_radical",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5][CH:4]([1H:32])[CH2:3][CH:1]([CH2:2][1H:33])[NH2+:20][1H:31]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alpha_methylalkylamine_radical_cation",
+      "mapped_smiles": "[CH3:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH:5]([1H:31])[CH:4]([1H:32])[CH2:3][CH:1]([CH2:2][1H:33])[NH2+:20]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylidene_iminium_C2H6N_m44",
+      "mapped_smiles": "[CH2:2]([1H:33])[CH:1]=[NH2+:20]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "decyl_radical",
+      "mapped_smiles": "[CH2:3][CH:4]([1H:32])[CH:5]([1H:31])[CH2:6][CH2:7][CH2:8][CH2:9][CH2:10][CH2:11][CH3:12]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["dodecylamine_molecular_ion_N_ionized"]
+    },
+    {
+      "state_id": "state_after_rH_1_5_to_N",
+      "species_ids": ["distonic_ammonium_delta_carbon_radical"]
+    },
+    {
+      "state_id": "state_after_rH_1_4_C_to_C",
+      "species_ids": ["distonic_ammonium_alpha_carbon_radical"]
+    },
+    {
+      "state_id": "state_after_rC_1_2_shift",
+      "species_ids": ["branched_ammonium_primary_radical"]
+    },
+    {
+      "state_id": "state_after_rH_1_5_C_to_C",
+      "species_ids": ["alpha_methyl_ammonium_remote_carbon_radical"]
+    },
+    {
+      "state_id": "state_alpha_methylalkylamine_ion",
+      "species_ids": ["alpha_methylalkylamine_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ethylidene_iminium_C2H6N_m44", "decyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_1_5_delta_H_to_nitrogen",
+      "from_state": "state_precursor",
+      "to_state": "state_after_rH_1_5_to_N",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [4, 31]},
+          "target": {"type": "bond", "atom_maps": [20, 31]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [20]},
+          "target": {"type": "bond", "atom_maps": [20, 31]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 31]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_1_4_C_to_C",
+      "from_state": "state_after_rH_1_5_to_N",
+      "to_state": "state_after_rH_1_4_C_to_C",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 32]},
+          "target": {"type": "bond", "atom_maps": [4, 32]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [4]},
+          "target": {"type": "bond", "atom_maps": [4, 32]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 32]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rC_1_2_alkyl_shift",
+      "from_state": "state_after_rH_1_4_C_to_C",
+      "to_state": "state_after_rC_1_2_shift",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [2]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_1_5_C_to_primary_radical",
+      "from_state": "state_after_rC_1_2_shift",
+      "to_state": "state_after_rH_1_5_C_to_C",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [5, 33]},
+          "target": {"type": "bond", "atom_maps": [2, 33]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [2]},
+          "target": {"type": "bond", "atom_maps": [2, 33]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [5, 33]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_1_5_N_to_carbon_radical",
+      "from_state": "state_after_rH_1_5_C_to_C",
+      "to_state": "state_alpha_methylalkylamine_ion",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [20, 31]},
+          "target": {"type": "bond", "atom_maps": [5, 31]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [5]},
+          "target": {"type": "bond", "atom_maps": [5, 31]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [20, 31]},
+          "target": {"type": "atom", "atom_maps": [20]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage_to_m44",
+      "from_state": "state_alpha_methylalkylamine_ion",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "radical_orbital", "atom_maps": [20]},
+          "target": {"type": "bond", "atom_maps": [1, 20]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 20]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_1_5_to_N",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_5_delta_H_to_nitrogen",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.7,
+      "curator_note": "Arrow 1 of Equation 8.91, labelled 'rH 1,5'. The scheme is generic (R on a primary n-alkylamine drawn with five CH2/CH groups between R and NH2, ionized on nitrogen: '+.' over NH2). The text quantifies the resulting C2H6N+ ion as '<1% for hexylamine to 30% for dodecylamine (Figure 3.16)', so R = n-heptyl and the instantiation encoded here is 1-DODECYLAMINE; the atom numbering used throughout is C-1 = carbon bonded to N ... C-5, with map 20 = N. Book draws 1 arc: a single long fishhook from the explicitly drawn H on C-4 sweeping right to the N (move <1>). Move <2> (the N+. odd electron pairing into the forming N-H bond) and move <3> (the implicit homolysis hook that leaves the second C-H electron on C-4 as the '.' drawn in the next structure) are NOT drawn on the page; both are required for electron balance. DRAWING DEFECT DISCLOSED: the book labels the nitrogen of the next two structures '+NH2' even though the H just accepted makes it an ammonium; only from the fourth structure on does it write '+NH3'. Mass balance (the molecule cannot lose an H here) forces NH3+, and NH3+ is what is encoded."
+    },
+    {
+      "evidence_id": "ev_step_rH_1_4",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_4_C_to_C",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.65,
+      "curator_note": "Arrow 2 of Equation 8.91, labelled 'rH 1,4'. In the second structure the book draws an explicit vertical bond from the carbon ALPHA to nitrogen (C-1) down to an 'H' (checked at high magnification: the bond starts at the chain apex, not at the N) and an arc running from that H leftwards to the '.' on C-4; counting C-4(1)-C-3(2)-C-2(3)-C-1(4) confirms the printed '1,4' label, so the migrating H is a C-1 hydrogen and not the H that was just delivered to N. Book draws 1 arc; move <1> is drawn (the C1-H bond electron into the forming C4-H bond), moves <2,3> are the implicit pairing hook from the C-4 radical and the implicit homolysis hook that leaves the odd electron on C-1 (not drawn on the page) - the next structure shows that '.' on C-1."
+    },
+    {
+      "evidence_id": "ev_step_rC_1_2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rC_1_2_alkyl_shift",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.6,
+      "curator_note": "Arrow 3 of Equation 8.91, labelled 'r-C 1,2' - a CARBON-skeleton (1,2-alkyl) migration, which is what makes this a 'pseudo-alpha-cleavage' rather than a true alpha cleavage. Book draws 1 arc: its tail sits on the C2-C3 bond of the drawn chain and its head points at the radical carbon C-1, i.e. the C-3 alkyl group migrates from C-2 onto the adjacent radical centre C-1 and the odd electron is left behind on C-2 as the primary '.CH2' the next structure prints. Moves <1,2,3> encode that: one electron of the migrating C2-C3 sigma bond into the new C1-C3 bond (this is the drawn arc), the C-1 odd electron into the same new bond, and the second C2-C3 electron onto C-2; the last two are implicit hooks required for electron balance (not drawn on the page). Product as drawn: a chain carbon bearing NH3+, a CH2. branch and the R-substituted chain."
+    },
+    {
+      "evidence_id": "ev_step_rH_1_5_C_to_C",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_5_C_to_primary_radical",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.6,
+      "curator_note": "Arrow 4 of Equation 8.91, labelled 'rH 1,5'. In the fourth structure the book draws an explicit H on C-5 (the carbon next to R) and an arc from it to the primary '.CH2'; counting round the branch, CH2(1)-C1(2)-C3(3)-C4(4)-C5(5), reproduces the printed '1,5'. Book draws 1 arc = move <1>; moves <2,3> (the pairing hook from the CH2 radical and the implicit homolysis hook leaving the odd electron on C-5) are not drawn but are required for balance. The product the book prints - R-CH(.)-CH2-CH2-CH(NH3+)-CH3 - confirms both: the branch has become a methyl group and the radical sits on C-5."
+    },
+    {
+      "evidence_id": "ev_step_rH_1_5_N_to_C",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_5_N_to_carbon_radical",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.6,
+      "curator_note": "Arrow 5 of Equation 8.91, labelled 'rH 1,5'. Book draws 0 arcs here - the flow is read off the two drawn structures: the ammonium NH3+ hands one N-H back to the C-5 radical (N(1)-C1(2)-C3(3)-C4(4)-C5(5) = the printed 1,5) and the nitrogen ends as the '+.'-labelled NH2 of the alpha-methylalkylamine radical cation the book draws next. All three moves are therefore undrawn reconstructions: <1> one N-H bonding electron into the forming C5-H bond, <2> the C-5 odd electron into the same bond, <3> the second N-H electron back onto N as the new odd electron. Which of the three N-H hydrogens migrates is arbitrary (they are equivalent); the tracked atom [1H:31] - the same H taken from C-4 in step 1 - is used, purely for bookkeeping."
+    },
+    {
+      "evidence_id": "ev_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_to_m44",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.75,
+      "curator_note": "Final arrow of Equation 8.91, a bare vertical arrow labelled only 'alpha'. Book draws 0 arcs; the canonical three-fishhook alpha-cleavage encoding is reconstructed from the drawn products (R-CH2CH2-CH2. plus CH3CH=NH2+, 'm/z 44'): <1> the N+. odd electron into the forming C1=N pi bond, <2> one electron of the breaking C1-C3 sigma bond into that same pi bond, <3> the second C1-C3 electron onto C-3, which is the '.' drawn on the alkyl radical. The bond cleaved is the one between the amine-bearing carbon and the alkyl chain, so the drawn methyl stays with the charge - this is why the rearranged (alpha-methyl) skeleton gives C2H6N+ at m/z 44 instead of the CH2=NH2+ (m/z 30) of a normal primary amine alpha cleavage."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.91",
+      "support_type": "curator_inferred",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.91 (chapter-8 keys stop at 8.14), so nothing is cross-linked by equation id; candidates were verified against their DFS and by RDKit substructure tests on the instantiated ions. (i) STEP 1 is genuinely covered by the generic hTransition_saturated_1 ('[H]1[C]2[C]3[C]4[C]5[_A+.]6 >> [C.]2[C]3[C]4[C]5[_A+]6[H]1', src/data_generation/rules/IMS_bookCover.py): same 1,5 (6-membered TS) H transfer from a delta carbon to a SATURATED ionized heteroatom, and its pattern matches dodecylamine M+. (RDKit: True) with _A = N. (ii) STEP 2 (C-to-C 1,4 H transfer) is NOT covered: the only C-to-C transfer rule, hTransition_saturated_2 ('[H]1[C]2[C]3([_A+]4)[C]5[C.]6 >> [C.]2[C]3([_A+]4)[C]5[C]6([H]1)', equation 4.38), requires the onium substituent on the carbon ADJACENT to the H donor, whereas in Equation 8.91 the ammonium sits on the donor carbon itself; the pattern does not match the drawn distonic ion (RDKit: False). (iii) STEP 3 (r-C 1,2 alkyl migration) has NO counterpart anywhere in the rule set - a search of all 154 indexed rules found only hydrogen migrations, no carbon-skeleton 1,2 shift; this is a real coverage gap, and it is the step that defines the pseudo-alpha-cleavage. (iv) STEP 6: the generic heteroatom alpha-cleavage rule IMS_4_9 ('[C]1[C]2[C]3([C]4)[_A+.]5 >> [C.]1 . [C]2[C]3([C]4){=}[_A+.]5') does match the alpha-methylalkylamine ion as a PATTERN (RDKit: True) but does NOT describe the drawn reaction: the bond it breaks (C1-C2) is not incident to the atom that forms the new pi bond (C3), i.e. it cleaves one carbon too far from the heteroatom, and it leaves the odd electron on the product cation ('[_A+.]' with a double bond). Applied to the drawn ion it would expel the wrong radical and give a three-carbon nitrogen ion near m/z 58, not the printed m/z 44 C2H6N+ - listed as a rule mismatch (this is the known IMS_4_9-4_12 geometry defect)."
+    },
+    {
+      "evidence_id": "ev_peak_note",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_C2H6N_44",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 204, "equation": "8.91", "figure": null, "panel": null, "section": "8.10 Hydrogen rearrangements"},
+      "confidence": 0.7,
+      "curator_note": "The scheme prints 'm/z 44' under CH3CH=NH2+, so detected=true rests on a printed value; observed_mz 44.0495 is the monoisotopic C2H6N+ mass (electron mass subtracted) consistent with that nominal 44. relative_intensity 0.30 is NOT printed on the scheme: it is the running text on this same page, 'the C2H6N+ abundance increases from <1% for hexylamine to 30% for dodecylamine (Figure 3.16)', and it is therefore valid only for the dodecylamine instantiation encoded here; the book does not restate the normalisation basis at this point (Figure 3.16 abundances), so it is taken as percent of base peak with reduced confidence. The same sentence notes the ion 'becomes more prominent at low electron energies (Bowen and Maccoll 1985)', but no electron energy is printed for this scheme, so ms_context keeps the book's standard 70 eV EI convention for an intact molecular ion."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 185.2139,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C2H6N_44",
+      "species_id": "ethylidene_iminium_C2H6N_m44",
+      "step_id": "step_alpha_cleavage_to_m44",
+      "observed_mz": 44.0495,
+      "relative_intensity": 0.3,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

@@ -1,0 +1,366 @@
+{
+  "mechanism_id": "IMS8-EQ8.101c",
+  "species": [
+    {
+      "species_id": "beta_distonic_ion",
+      "mapped_smiles": "[CH3:4][C:3]([1H:8])[CH2:2][C:1]([OH:5])=[O+:6][1H:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "branched_distonic_ion",
+      "mapped_smiles": "[CH2:2][C:3]([1H:8])([CH3:4])[C:1]([OH:5])=[O+:6][1H:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isobutyric_1_1_enediol_ion",
+      "mapped_smiles": "[CH2:2]([1H:8])[C:3]([CH3:4])=[C:1]([OH:5])[O+:6][1H:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isobutyric_acid_molecular_ion",
+      "mapped_smiles": "[CH2:2]([1H:7])[C:3]([1H:8])([CH3:4])[C:1]([OH:5])=[O+:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_beta_distonic",
+      "species_ids": [
+        "beta_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_branched_distonic",
+      "species_ids": [
+        "branched_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_isobutyric_enediol",
+      "species_ids": [
+        "isobutyric_1_1_enediol_ion"
+      ]
+    },
+    {
+      "state_id": "state_isobutyric_acid_ion",
+      "species_ids": [
+        "isobutyric_acid_molecular_ion"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rC_1_2_carboxyl_migration",
+      "from_state": "state_beta_distonic",
+      "to_state": "state_branched_distonic",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [3]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 2]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [2]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_1_2_to_isobutyric_enediol",
+      "from_state": "state_branched_distonic",
+      "to_state": "state_isobutyric_enediol",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [2]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 8]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [3, 8]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 8]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [3, 8]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 6]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [1, 3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [1, 6]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [6]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_rH_1_4_to_isobutyric_acid_ion",
+      "from_state": "state_branched_distonic",
+      "to_state": "state_isobutyric_acid_ion",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [2]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 7]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [6, 7]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [2, 7]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [6, 7]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [6]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rC_8_101c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rC_1_2_carboxyl_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": "vertical arrow labelled 'r C' on the left and '1, 2' on the right, below the beta-distonic ion",
+        "section": "8.10 Hydrogen rearrangements, Examples (butanoic acid)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.101, the vertical arrow with 'r C' printed on its left and '1, 2' on its right, descending from the beta-distonic ion. Page 209 names the process: 'For low-energy, long-lived ions, a 1,2-migration of the protonated carboxyl group and further 1,2- and 1,4-H migrations effectively exchange carbon positions 2- and 4- and, to a lesser extent, C-2 through C-4 hydrogens, also scrambling the hydrogens in the CH2=C(OH)2 (+.) product (McAdoo et al. 1985)'. The protonated carboxyl - the unit McLafferty draws as 'HO ... C ... OH' with a curved line and a '+' spanning both C-O bonds - migrates from C-2 to the radical at C-3, leaving a new primary radical on C-2. The structure the book draws below the arrow is exactly that: the carboxyl on top, the central carbon carrying 'CH3' labelled 4 and '.CH2' labelled 2, and this record's atom maps reproduce that labelling (map 4 = the book's C-4 methyl, map 2 = the book's C-2, now the radical CH2). ARC COUNT (convention D): Book draws 0 arc(s); the arrow carries only 'r C' and '1, 2'. Moves <1,2,3> are all implicit - the standard homolytic bookkeeping of a 1,2-alkyl/acyl shift: the C-3 radical's odd electron makes half of the new C1-C3 bond, one electron of the old C1-C2 bond makes the other half, and the second electron of that bond stays behind on C-2 as the new radical. Nothing happens to the carboxyl's own bonds, so no C=O arrow is needed here. LOCALIZATION (conventions B and C): the migrating group is kept in the oxocarbenium form HO-C(=O(+)H)- throughout, the resonance partner of the drawn delocalised (HO)2C(+); page 209's own phrase 'the protonated carboxyl group' is what this localisation depicts."
+    },
+    {
+      "evidence_id": "ev_step_enediol_8_101c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_2_to_isobutyric_enediol",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": "left-hand pair of equilibrium half-arrows below the branched ion, to 'HO-C(OH)=C(CH3)CH3' with '+.'",
+        "section": "8.10 Hydrogen rearrangements, Examples (butanoic acid)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.101, the LEFT-hand equilibrium below the branched distonic ion, drawn as a pair of half-arrows (one pointing each way) to the structure 'HO-C(OH)=C(CH3)(CH3)' carrying '+.' at the upper right beside the top OH: the 2-methyl-1,1-enediol ion, i.e. the 1,1-enediol (enol) form of isobutyric acid, m/z 88. Bond changes: a hydrogen moves from C-3 to the primary radical on C-2, so C-2 becomes a methyl and the radical arrives on C-3, alpha to the protonated carboxyl, where it collapses into the drawn C1=C3 double bond and pushes the charge and the odd electron out onto the oxygen the book marks '+.'. ARC COUNT (convention D): Book draws 0 arc(s) on this equilibrium - it is a bare double arrow. All five moves are implicit: <1,2> make the new C2-H bond, <3> is the homolysis hook that puts the other C3-H electron into the forming C1=C3 pi bond, and <4,5> break the C1=O6 pi bond, one electron completing C1=C3 and one becoming the odd electron on oxygen. REVERSIBILITY: the book draws a two-way equilibrium, so reversible = true; the record stores only the forward direction as a graph edge because the schema forbids cycles in the mechanism state graph. The reverse direction is what IMS8-EQ8.101d uses to re-enter the branched ion with the radical on the OTHER methyl. RELATED TEXT (page 209): 'the radical site created can initiate a competitive skeletal rearrangement producing a stable 1,1-enediol ion (Equation 8.102, Audier and Sozzi 1984, Weiske and Schwarz 1986)'."
+    },
+    {
+      "evidence_id": "ev_step_keto_8_101c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_1_4_to_isobutyric_acid_ion",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": "right-hand pair of equilibrium half-arrows below the branched ion, to 'HO-C(=O)-CH(CH3)CH3' with '+.' on the carbonyl O and the methyls labelled 4 and 2",
+        "section": "8.10 Hydrogen rearrangements, Examples (butanoic acid)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.101, the RIGHT-hand equilibrium below the branched distonic ion, again a pair of half-arrows, to 'HO-C(=O)-CH(CH3)(CH3)' with '+.' printed on the carbonyl oxygen and the two methyls explicitly labelled 4 (left) and 2 (right): the ISOBUTYRIC (2-methylpropanoic) ACID MOLECULAR ION, m/z 88. Bond changes: the hydrogen that the very first (beta) transfer of this scheme deposited on the carboxyl oxygen simply goes back onto the primary radical at C-2, quenching it and restoring a genuine closed-shell carboxyl with the odd electron back on the carbonyl oxygen - an O-to-C 1,4-H migration (O6-C1-C3-C2). WHY THE BOOK DRAWS IT: in this ion the two methyls, the original C-2 and the original C-4, are constitutionally EQUIVALENT, and that equivalence is what completes the 2/4 carbon exchange page 209 describes ('further 1,2- and 1,4-H migrations effectively exchange carbon positions 2- and 4-'); the book underlines the point by printing the labels 4 and 2 on the two methyls of this one structure. ARC COUNT (convention D): Book draws 0 arc(s); the equilibrium is a bare double arrow. Moves <1,2,3> are implicit: the radical's odd electron and one electron of the breaking O-H bond make the new C2-H bond, and the second O-H electron stays on oxygen as the odd electron the book prints as '+.'. REVERSIBILITY: reversible = true (the book draws both arrows); only the forward edge is stored, to keep the state graph acyclic."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_101c",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.101c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD rule is cross-linked to any step of this record; verified, not assumed (convention E). rule_index.json has no '8.101' key. (1) THE SKELETAL STEP: all 154 indexed DFS strings were scanned and none relocates a carbon-carbon bond from one carbon to its neighbour, i.e. there is NO 1,2-alkyl/acyl migration rule in the set. Every rule whose name suggests a rearrangement moves a HYDROGEN (hTransition_*, h2Transiton_*, IMS_4_33/34/37-41/45/46_rH, IMS_8_1/8_2/8_7/8_8/8_9_*), and the only rules that alter a carbon skeleton do so by ring opening (IMS_8_8_1, IMS_8_6_*) or by dropping atoms (IMS_4_17), not by a 1,2-shift. Since the 1,2-migration of the protonated carboxyl is the step that actually causes the 2/4 carbon exchange, the whole scrambling manifold of Equation 8.101 is unrepresented in the MOD rule base - that is the substantive finding for this scheme. (2) THE 1,2-H SHIFT to the 1,1-enediol ion: restricting the same scan to the 39 rules that are strictly intramolecular on both sides of '>>' shows that every hydrogen-moving rule spans at least a 1,4 relationship; none moves H between adjacent atoms. (3) THE 1,4-H SHIFT back to the isobutyric acid ion has the right topology for the IMS_8_8_* acylium family, but those rules are hard-wired to an acyclic C-C-O(+.)-C oxonium skeleton: RDKit gives 0 matches for IMS_8_8_2b's LHS '[CH2]=[CH]-[O+]-[CH3]' and 0 for the generic '[#6]-[#6]-[O+]-[#6]' against every structure in this record, because the only O(+) here is a carboxyl oxygen bonded to one carbon and one hydrogen. Family resemblance only, NOT a match. (4) One relevant rule DOES exist for the localisation used throughout this record, though it is not a step of the mechanism: hTransition_unsaturated_bidirect '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6>>[C.]1[C]2[C]3[C+]4[_A]5[H]6' is exactly the =O(+)H <-> (HO)2C(+) resonance interconversion that McLafferty draws as the curved '+' arc across the two C-O bonds. It matches the linear gamma-distonic ion of IMS8-EQ8.101a but not the branched ion of this record (its LHS needs a three-carbon chain between the radical and the carbonyl carbon)."
+    },
+    {
+      "evidence_id": "ev_peaks_8_101c",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_88_isobutyric_enediol",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 210,
+        "equation": "8.101",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.3,
+      "curator_note": "NO MEASUREMENT IS AVAILABLE FOR THIS RECORD (convention F). Page 210 prints no m/z and no abundance, and the facing page 209 gives percentages only for the two FRAGMENT channels (ethylene loss 100%, methyl loss 25%). Every species in this record - the beta-distonic ion, the branched distonic ion, the 2-methyl-1,1-enediol ion and the isobutyric acid molecular ion - is an ISOMER of the butanoic acid molecular ion at the identical exact mass 88.0519, so none of them can be observed as a separate peak in the mass spectrum at all: they are structures inferred from labelling and thermochemical arguments (McAdoo et al. 1985), not resolved ions. All four species therefore carry detected = false and both peak assignments have status 'inferred' with relative_intensity omitted. The 88.0519 values are curator-computed (RDKit ExactMolWt, electron-mass corrected) for C4H8O2(+.), not numbers the book prints."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 88.0519,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_88_isobutyric_enediol",
+      "species_id": "isobutyric_1_1_enediol_ion",
+      "step_id": "step_rH_1_2_to_isobutyric_enediol",
+      "observed_mz": 88.0519,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.3
+    },
+    {
+      "peak_id": "peak_88_isobutyric_acid_ion",
+      "species_id": "isobutyric_acid_molecular_ion",
+      "step_id": "step_rH_1_4_to_isobutyric_acid_ion",
+      "observed_mz": 88.0519,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.3
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

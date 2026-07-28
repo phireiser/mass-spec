@@ -1,0 +1,242 @@
+{
+  "mechanism_id": "IMS8-EQ8.81b",
+  "species": [
+    {
+      "species_id": "phenyl_hexenal_radical_cation",
+      "mapped_smiles": "[cH:21]1[cH:22][cH:23][cH:24][cH:25][c:20]1[CH:6]=[CH:5][CH:4]([1H:12])[CH2:3][CH2:2][C:1]([1H:11])=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "phenylbutadiene_distonic_radical_cation",
+      "mapped_smiles": "[cH:21]1[cH:22][cH:23][cH:24][cH:25][c:20]1[CH:6]=[CH:5][CH:4][CH2+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "vinyl_alcohol_neutral",
+      "mapped_smiles": "[CH2:2]=[C:1]([1H:11])[O:7][1H:12]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "phenyl_hexenal_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "phenylbutadiene_distonic_radical_cation",
+        "vinyl_alcohol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_i_enol_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement_inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              12
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_i_enol_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 197,
+        "equation": "8.81",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "DETECTION CONSISTENCY: this precursor is the SAME ion as the product of IMS8-EQ8.81a (the (M-CH3OH)+. phenylhexenal radical cation, curator-computed m/z 174.1039), which the p197 text reports as an observed peak ('yielding (M-CH3OH)+. and (M-76)+. peaks ... very useful for identifying substitution at C-6'). detected is therefore set true here as well, matching 8.81a; it was previously false, which made the two records disagree about whether the same ion is observed. Bottom row of Equation 8.81, a SEPARATE scheme sharing the equation number: the page redraws the (M - CH3OH)+. enal ion of IMS8-EQ8.81a (the two structures are joined by the identity sign '|||' = 'is identical to') in a chair-like conformation and lets it dissociate further over an arrow labelled 'rH' above and 'i' below, giving the (M - 76)+. ion plus the enol CH2=CH-OH. The precursor is therefore the m/z 174 FRAGMENT ion, not the molecular ion (ms_context.adduct = null). Mechanism as drawn: the carbonyl O+. abstracts the gamma-H (on the allylic C-4) through the classic six-membered McLafferty arrangement, then the C2-C3 bond is cleaved heterolytically toward the enol so the charge MIGRATES to the hydrocarbon ('i'). Book draws 3 arcs; moves <1,2,5> are drawn - <1> fishhook from the O+. odd electron pointing at the gamma-H, <2> fishhook from the C4-H bond pointing at the O, <5> a full solid-headed (two-barbed) arrow from the C2-C3 bond to the forming C1=C2 bond; moves <3> and <4> are implicit and not drawn on the page: <3> is the implicit homolysis hook that leaves the second C4-H electron on C-4 (required for electron balance, and drawn in the product as the '.' on that carbon) and <4> is the carbonyl pi pair collapsing onto oxygen (required because the drawn neutral is the C-O SINGLE-bonded enol CH2=CH-OH with a neutral OH). The product ion is drawn LOCALIZED as a distonic species - '.' on the former gamma carbon (C-4) and '+' on the terminal CH2 that lost the enol (C-3) - and is encoded exactly in that drawn resonance form; it is one localized form of the delocalized 1-phenyl-1,3-butadiene radical cation C10H10+. that the mass label '(M - 76)+.' denotes."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.81b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 197,
+        "equation": "8.81",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.81 (chapter-8 keys stop at 8.14, German-edition numbering), so no MØD rule variable is cross-linked. Checked rather than assumed: IMS_8_9_1_CH3/IMS_8_9_1_OCH3 are the indexed 'rH onto C=O+.' rules, but their DFS builds a conjugated DIENOL ion (the H lands on the carbonyl O and the charge stays with the oxygenated fragment, no C-C cleavage in the same rule), whereas this step cleaves C2-C3 with charge migration to the hydrocarbon and expels the neutral enol; IMS_8_11/IMS_8_13 ('Field Rule' rH) transfer an H to an oxonium O+ of an already-cleaved ion and are also a different reaction. No indexed rule matches."
+    },
+    {
+      "evidence_id": "ev_peak_note",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_M_minus_76",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 197,
+        "equation": "8.81",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.6,
+      "curator_note": "The scheme labels the product ion '(M - 76)+.' and the prose calls it a peak ('yielding (M - CH3OH)+. and (M - 76)+. peaks (Meyerson and Leitch 1966)'), but NO numeric m/z and NO intensity is printed on the page; detected=true rests on those labels only and relative_intensity is omitted. observed_mz 130.0777 is curator-computed (C10H10+., monoisotopic mass of the cation with the electron mass subtracted) for the drawn methyl 6-phenylhexanoate instantiation whose M+. is 206.1301; 206.1301 - 76.0524 (CH3OH + C2H4O = 32.0262 + 44.0262) = 130.0777, consistent with the printed '(M - 76)' label. The page names no ionization or activation experiment for this consecutive dissociation: it is a source-formed EI fragment decomposing further, not a CAD or metastable-ion measurement, so activation_method says so explicitly and electron_energy_ev is left null."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "consecutive unimolecular dissociation of the source-formed (M - CH3OH)+• EI fragment ion (no CAD/MI experiment named on the page)",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 174.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_76",
+      "species_id": "phenylbutadiene_distonic_radical_cation",
+      "step_id": "step_rH_i_enol_loss",
+      "observed_mz": 130.0777,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

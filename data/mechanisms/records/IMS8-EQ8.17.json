@@ -1,0 +1,284 @@
+{
+  "mechanism_id": "IMS8-EQ8.17",
+  "species": [
+    {
+      "species_id": "hydroxy_ester_molecular_ion_carbonyl_O_ionized",
+      "mapped_smiles": "[CH3:3][CH:1]([O:2][1H:13])[CH2:4][CH2:5][CH2:6][CH2:7][CH2:8][C:9](=[O+:10])[O:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_alkoxy_radical_protonated_ester",
+      "mapped_smiles": "[CH3:3][CH:1]([O:2])[CH2:4][CH2:5][CH2:6][CH2:7][CH2:8][C:9](=[O+:10][1H:13])[O:11][CH3:12]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "aldehyde_neutral_from_carbinol",
+      "mapped_smiles": "[CH3:3][CH:1]=[O:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ester_distonic_OE_ion",
+      "mapped_smiles": "[CH2:4][CH2:5][CH2:6][CH2:7][CH2:8][C:9](=[O+:10][1H:13])[O:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hydroxy_ester_molecular_ion_carbonyl_O_ionized"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "distonic_alkoxy_radical_protonated_ester"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "aldehyde_neutral_from_carbinol",
+        "ester_distonic_OE_ion"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_hydroxyl_H_to_ester_carbonyl",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              13
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              13
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              13
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              13
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage_to_aldehyde",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_hydroxyl_H_to_ester_carbonyl",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 149,
+        "equation": "8.17",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (Neutral-product stability; -OH location in hydroxy fatty-acid methyl esters)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Eq 8.17, p.149, step 1 of 2. A hydroxy-substituted fatty-acid methyl ester, drawn as its molecular ion n-ionized at the ESTER carbonyl oxygen: the book prints '+.' on that carbonyl O (map 10), so the precursor SMILES carries =[O+:10] with one radical electron (convention B). 'Analogous' to eq 8.16, the reaction is a hydroxyl-H rearrangement: the carbonyl O radical abstracts the remote hydroxyl H (map 13, on carbinol O map 2) through a large-ring TS, giving the drawn distonic intermediate -- an alkoxy radical on the carbinol O ('.O', map 2) and a protonated ester carbonyl ('H-O+', map 10, now even-electron oxocarbenium). ARC COUNT: the book draws 0 electron arc(s) for this step -- it is denoted only by the 'rH' label over the first arrow (the drawn arcs on the intermediate belong to step 2). The three encoded fishhooks are the balanced H-atom-transfer flow implied by 'rH': move <1> the carbonyl-O odd electron (map 10) into the forming O10-H13 bond; move <2> one electron of the breaking O2-H13 bond into that same forming O10-H13 bond; move <3> the other O2-H13 electron onto oxygen map 2, its new alkoxy radical site. Net: H13 migrates O2 -> O10 and the odd electron migrates O10 -> O2; mass unchanged (still M+.). Instantiated R = CH3, n = 5 (methyl 7-hydroxyoctanoate, M+. = C9H18O3, m/z 174.1250) so the eventual charged fragment is exactly the printed m/z 130 member of the series."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_to_aldehyde",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 149,
+        "equation": "8.17",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (Neutral-product stability; -OH location in hydroxy fatty-acid methyl esters)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Eq 8.17, p.149, step 2 of 2. Radical-site (alpha) cleavage driven by the carbinol alkoxy radical (map 2): the C1-C4 bond alpha to the O radical breaks, the carbinol carbon closes to the aldehyde C1=O2 (neutral R-CHO), and the odd electron is expelled onto the chain carbon (map 4, '.CH2') giving the diagnostic ODD-ELECTRON ester ion. This ion (protonated methyl-ester carbonyl carrying a terminal chain radical) is the OE+. series the text cites at m/z 130, 144, 158, ..., 270 (differing by CH2), which locates the -OH substitution position. ARC COUNT: the book draws 2 arc(s) on the intermediate -- move <1> (the small fishhook off the '.O' radical dot on map 2) = the alkoxy odd electron into the forming C1=O2 pi bond; move <2> (the large curved arc sweeping from the C1-C4 bond up toward the carbinol carbon/oxygen) = one electron of the breaking C1-C4 sigma bond into that same forming C1=O2 pi bond. Move <3>, the other C1-C4 electron onto carbon map 4 (the odd electron of the departing/retained '.CH2' fragment), is an implicit homolysis hook required for electron balance (not drawn on the page -- the book simply writes '.(CH2)n' with a radical dot as the product). Instantiated R = CH3, n = 5: neutral = acetaldehyde CH3CHO (C2H4O, not detected); ion = .(CH2)5-C(=O+H)-OCH3 (C7H14O2+., computed monoisotopic m/z 130.0988; the book prints the nominal value 130)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.17",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.17",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MOD rule is indexed for eq 8.17 in data/mechanisms/rule_index.json (by_equation has no '8.17' key; checked 2026-07-26). Neither the hydroxyl-H rearrangement (step 1) nor the alkoxy-radical alpha-cleavage (step 2) has a cross-linked Rule.fromDFS encoding, so the electron flow is curator-derived from the printed two-arrow scheme and is NOT verified against any MOD rule."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 174.125,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_130",
+      "species_id": "ester_distonic_OE_ion",
+      "step_id": "step_alpha_cleavage_to_aldehyde",
+      "observed_mz": 130.0988,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

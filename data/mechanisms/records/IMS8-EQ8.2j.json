@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS8-EQ8.2j",
+  "species": [
+    {
+      "species_id": "propene_radical_cation",
+      "mapped_smiles": "[CH2:1]([1H:9])[CH:2][CH2+:3]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "allyl_cation",
+      "mapped_smiles": "[CH2:1]=[CH:2][CH2+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "hydrogen_atom",
+      "mapped_smiles": "[1H:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "propene_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "allyl_cation",
+        "hydrogen_atom"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_3_8",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_j",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_3_8",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 138,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "Eq. 8.2, arrow 3.8, alpha (secondary: C3H6+. -> C3H5+ + .H)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Secondary fragmentation of the m/z-42 propene radical cation: radical-site alpha cleavage expels a hydrogen atom (.H) and forms the resonance-stabilised allyl cation C3H5+ (m/z 41, 10%). The precursor is encoded in its CH3-CH(.)-CH2+ localisation (radical on C2, charge on C3); one C1-H (H9) is made explicit as the bond that breaks. Book draws 0 electron-pushing arcs: Eq. 8.2 is a thermochemical fragmentation map (log k printed above each reaction arrow, heats of formation printed below each species), not a curved-arrow figure. All electron moves here are curator-inferred from the mechanism-type label printed under the reaction arrow; none is drawn on the page. Canonical THREE fishhooks: move<1> C2 odd electron into the forming C1=C2 pi bond; move<2> one C1-H9 electron completes C1=C2; move<3> the other C1-H9 electron onto H9 (the departing H atom)."
+    },
+    {
+      "evidence_id": "ev_mech_j",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.2j",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.2",
+        "figure": null,
+        "panel": null,
+        "section": "IMS_chap8_examples.py (IMS_8_2_alpha_3_8)"
+      },
+      "confidence": 0.55,
+      "curator_note": "Cross-linked to IMS_8_2_alpha_3_8. It loses [H.]4 and forms a C3H5+ cation from their C3H6+. propene ion, matching the net reaction, but uses a different (multi-radical, non-alkene) localisation of both the propene cation and the product cation (their C1 and C5 end as divalent/radical carbons rather than the C1=C2 allyl double bond). Same connectivity and net ions; localisation differs from the allyl cation encoded here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_41",
+      "species_id": "allyl_cation",
+      "step_id": "step_alpha_3_8",
+      "observed_mz": 41.0386,
+      "relative_intensity": 0.1,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

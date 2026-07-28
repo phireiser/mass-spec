@@ -1,0 +1,158 @@
+{
+  "mechanism_id": "IMS8-EQ8.72",
+  "species": [
+    {
+      "species_id": "butyl_acetate_molecular_ion",
+      "mapped_smiles": "[CH3:3][C:1](=[O+:2])[O:4][CH2:5][CH2:6][CH2:7][CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_acid_ion",
+      "mapped_smiles": "[CH3:3][C:1]([OH:4])=[OH+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "alkenyl_radical_neutral",
+      "mapped_smiles": "[CH2:5]=[CH:6][CH:7][CH3:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butyl_acetate_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["protonated_acid_ion", "alkenyl_radical_neutral"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_double_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [6]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [7]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_r2H_8_72",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_double_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 191,
+        "equation": "8.72",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements (double-hydrogen rearrangement, r 2H)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.72, whose reaction arrow is labelled 'r 2H'. The drawn precursor is R-CH(H)-CH(H)-CH2-Y'-C(R')=Y(+.): the n-ionized carbonyl heteroatom Y carries the printed '+.', the two hydrogens that migrate are written out as explicit H letters on the two chain carbons, and the bond that is cleaved -- the alkyl C-Y' bond -- is marked with a WAVY line. Book draws 0 curved arc(s) / fishhooks; the only graphical mechanism markers are the two explicit H letters, the wavy cleavage mark and the 'r 2H' label, so every encoded move is curator-supplied. Products as printed: the odd-electron neutral .CnH2n-1 and the EVEN-electron ion HY'-CR'=YH+, which the page draws together with its resonance partner HY'=CR'-YH+ joined by a double-headed arrow (one localized form, HO-C(CH3)=OH+, is encoded consistently; the partner is not). ENCODING NOTE (honest divergence): both migrating hydrogens are invisible to the bond bookkeeping because RDKit folds a mapped explicit H into implicit valence, so each H transfer is written as the single electron relocation it produces at the heavy-atom level. Move <1> is the first rearrangement (H from C(6) to the carbonyl oxygen O(2) through the drawn six-membered array Y-C(1)-Y'(4)-C(5)-C(6)-H): net effect, the odd electron moves from O(2) to C(6). Moves <2,3> are the ensuing cleavage of the marked C(5)-Y'(4) bond with formation of the C(5)=C(6) pi bond. Move <4> is a bookkeeping composite for the second rearrangement: the second electron of the cleaved C-O bond and the electron of the second migrating hydrogen pair up in the new Y'-H bond, leaving the odd electron on C(7); since neither the C(7)-H nor the O(4)-H bond exists in the mapped SMILES, this shows up as one fishhook from the cleaved bond to C(7). INSTANTIATION: Y = Y' = O, R' = CH3, alkyl = n-butyl (R = CH3), i.e. n-butyl acetate, the textbook r2H case: the ion is the protonated acid CH3C(OH)2+ (m/z 61) and the neutral is the resonance-stabilized C4H7. radical. The page writes the neutral generically as .CnH2n-1, so the chain length is deliberately unspecified in the figure. NO PRINTED NUMBERS on p.191: detected=false, status 'inferred', no relative_intensity; m/z 61.0284 is computed for this instantiation."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_72",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.72",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "8.72",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py, rules/__init__.py generic families"
+      },
+      "confidence": 0.75,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.72. Verified cross-links: (1) the first hydrogen transfer is encoded exactly by esterMcLafferty_rH '[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7>>[C.]2[C]3[O]4[C]5({=}[O+]6[H]1)[C]7' and by IMS_4_45_rH (same rule with an R on the donor carbon): H from the carbon beta to the ester oxygen onto the ionized carbonyl oxygen, odd electron left on that carbon -- identical to move <1> here. (2) The generic double-hydrogen family h2Transiton_1/2/3 targets the whole r2H, and h2Transiton_1 '[H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8>>[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1' again matches move <1>. RULE MISMATCHES, reported rather than smoothed over: (a) h2Transiton_3 '[C.]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+]8[H]1>>[C]2{=}[C]4.[H]3[_A+.]5{=}[C]6([C]7)[_A]8[H]1' takes the SECOND hydrogen off the radical-bearing carbon itself (the page takes it from the next carbon along, the one drawn with the second explicit H), and it lands the odd electron on the ION ('[_A+.]5'), producing an odd-electron protonated-acid ion and a closed-shell alkene neutral -- the exact opposite of the page, which prints an EVEN-electron ion HY'-CR'=YH+ and an odd-electron neutral .CnH2n-1. Its atom/charge/spin COUNTS balance, so the conservation guardrail cannot catch it. (b) IMS_4_46_rH_2 '[H]1[C]2[C.]3[C]4[O]5[C]6([C]7){=}[O]8[H]9>>[C]2[C.]3[C]4.[H]1[O+]5{=}[C]6([C]7)[O]8[H]9' (indexed under equation 4.46) produces the right protonated-acid ion but its neutral fragment '[C]2[C.]3[C]4' forms NO pi bond at the carbon that lost the hydrogen, leaving an unsatisfied valence there instead of the CnH2n-1 unsaturation the page requires; MOD's H-explicit term graphs do not check valence, so this too survives the guardrail. (c) IMS_4_46_rH_1 '...>>[H]1[C]2[C.]3[C]5[O+]6[C]7([C]8){=}[O]9[H]4' puts the charge on the ester oxygen while leaving the carbonyl oxygen with a double bond AND a hydrogen, i.e. a neutral trivalent oxygen."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.0832,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_protonated_acid",
+      "species_id": "protonated_acid_ion",
+      "step_id": "step_double_hydrogen_rearrangement",
+      "observed_mz": 61.0284,
+      "hydrogen_shift": 2,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

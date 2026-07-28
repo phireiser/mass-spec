@@ -1,0 +1,301 @@
+{
+  "mechanism_id": "IMS8-EQ8.30a",
+  "species": [
+    {
+      "species_id": "protonated_ethoxy_bicycloketone",
+      "mapped_smiles": "[OH+:2]=[C:1]1[CH2:11][CH2:10][CH:9]2[CH2:8][CH:4]([O:5][CH2:6][CH3:7])[CH:3]12",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_oxocarbenium_enol",
+      "mapped_smiles": "[OH:2][C:1]1=[CH:3][CH:9]([CH2:8][CH:4]=[O+:5][CH2:6][CH3:7])[CH2:10][CH2:11]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_cyclopentenone",
+      "mapped_smiles": "[OH+:2]=[C:1]1[CH:3]=[CH:9][CH2:10][CH2:11]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethyl_vinyl_ether",
+      "mapped_smiles": "[CH2:8]=[CH:4][O:5][CH2:6][CH3:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_ethoxy_bicycloketone"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "ring_opened_oxocarbenium_enol"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_cyclopentenone",
+        "ethyl_vinyl_ether"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "ring_opening_fragmentation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_retro_ene_elimination",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "retro_ene_elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_ringopen",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 159,
+        "equation": "8.30",
+        "figure": null,
+        "panel": "a",
+        "section": "8.3 Steric factors"
+      },
+      "confidence": 0.7,
+      "curator_note": "MH+ of 7-ethoxybicyclo[3.2.0]heptan-2-one, protonated on the ketone (arrow label 'i'). Grob/retro-[2+2]-type ring opening of the cyclobutane: the C3-C4 bond (fusion carbon to ethoxy carbon) cleaves as the ring C1=C3 enol double bond forms and the ethoxy oxygen O5 lone pair closes the C4=O5+ oxocarbenium, relaying the charge from the ketone O2 to the ether O5. ARC COUNT (zoomed re-read): the book draws 2 arc(s): arc 1 = carbonyl pi (C1=O2) collapsing onto O2 (neutralising the protonated ketone to the enol OH) = move 1; arc 2 = the cyclobutane C3-C4 sigma bond forming the new ring C1=C3 double bond (arrowhead at the carbonyl carbon C1) = move 2. Move 3 (the ethoxy O5 lone pair forming C4=O5+ oxocarbenium) is an IMPLICIT hook required for electron balance -- it is NOT drawn on the page (the region around the ethoxy carbon C4 shows only a bold/hashed stereo wedge, no curved arrow). The H's on the fusion carbons are stereochemistry labels, not migrating: no atom changes its H count in this step. Scheme (b) is the trans/exo ring-fusion diastereomer of (a); with stereochemistry omitted it has identical connectivity and opens to the same intermediate, so it is not encoded as a separate record."
+    },
+    {
+      "evidence_id": "ev_step_retroene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_ene_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 159,
+        "equation": "8.30",
+        "figure": null,
+        "panel": null,
+        "section": "8.3 Steric factors"
+      },
+      "confidence": 0.75,
+      "curator_note": "Second 'i' step: the ring-opened oxocarbenium enol expels ethyl vinyl ether and reforms protonated cyclopent-2-enone (drawn 100%). A 4-arrow retro-ene/retro-Michael cascade: enol O2 lone pair -> C1=O2+ (reform protonated carbonyl); C1=C3 pi -> C3=C9 (new conjugated ring C=C); C9-C8 sigma -> C8=C4 (forms the vinyl ether C=C, cleaving C8-C9 to release the neutral); C4=O5+ pi -> O5 lone pair (neutralises the oxocarbenium to the ether oxygen). Book draws all 4 arcs in the central intermediate (arc at HO->C1, arc within the ring C=C toward C9, arc from the C9-C8 chain toward the oxocarbenium, and the small arc at =O5+-Et). No implicit hooks."
+    },
+    {
+      "evidence_id": "ev_mech_830a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.30a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 159,
+        "equation": "8.30",
+        "figure": null,
+        "panel": null,
+        "section": "8.3 Steric factors"
+      },
+      "confidence": 0.9,
+      "curator_note": "No MØD rule cross-links this scheme: rule_index.json by_equation has no entry for 8.30 (it covers only 4.x and 8.1-8.14). The page prints '100%' for protonated cyclopentenone (base peak); its m/z 83.0491 (C5H7O+) is a curator computation consistent with that assignment. The oxocarbenium/enol intermediate and its m/z are curator-inferred (no page datum). Precursor is the CI-generated protonated molecule [M+H]+ of the ethoxy bicyclic ketone (M = C9H14O2, 154.099; MH+ 155.107); Termont et al. 1977 as cited."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 155.1067,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_protonated_cyclopentenone_83",
+      "species_id": "protonated_cyclopentenone",
+      "step_id": "step_retro_ene_elimination",
+      "observed_mz": 83.0491,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

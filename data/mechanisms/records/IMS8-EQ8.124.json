@@ -1,0 +1,266 @@
+{
+  "mechanism_id": "IMS8-EQ8.124",
+  "species": [
+    {
+      "species_id": "protonated_nitrobenzene",
+      "mapped_smiles": "[C:1]1([N+:7](=[O:9])[O:8][1H:10])=[CH:2][CH:3]=[CH:4][CH:5]=[CH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_phenyl_nitrite",
+      "mapped_smiles": "[C:1]1([O+:8]([1H:10])[N:7]=[O:9])=[CH:2][CH:3]=[CH:4][CH:5]=[CH:6]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "phenol_radical_cation",
+      "mapped_smiles": "[C:1]1([O+:8][1H:10])=[CH:2][CH:3]=[CH:4][CH:5]=[CH:6]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "nitric_oxide",
+      "mapped_smiles": "[N:7]=[O:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_nitrobenzene"
+      ]
+    },
+    {
+      "state_id": "state_nitrite",
+      "species_ids": [
+        "protonated_phenyl_nitrite"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "phenol_radical_cation",
+        "nitric_oxide"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_phenyl_migration",
+      "from_state": "state_precursor",
+      "to_state": "state_nitrite",
+      "step_class": "phenyl_migration",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_no_loss",
+      "from_state": "state_nitrite",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rph_8_124",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_phenyl_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 221,
+        "equation": "8.124",
+        "figure": null,
+        "panel": "first arrow, labelled 'r Ph' (italic r)",
+        "section": "8.11 Elimination of small stable species"
+      },
+      "confidence": 0.8,
+      "curator_note": "SUBSTRATE IDENTIFIED BY THE TEXT, NOT GUESSED: the facing page (p. 220) ends '... Loss of NO may also occur from aromatic EE+ ions, such as protonated nitrobenzene (Crombie and Harrison 1988; Equation 8.124).' The drawing matches: a benzene ring bonded to N, the N carrying a doubly bonded O below it and, up to the right, an O drawn with '+' above it and an H, i.e. protonated nitrobenzene written in the pentavalent-nitrogen form C6H5-N(=O)=O(+)H. The arrow is labelled 'r Ph' (rearrangement by phenyl migration) and the product it points to is protonated phenyl nitrite: the ring now bonded to an O that carries '+', an H below it and -NO to its right. ARC COUNT (convention D): Book draws 1 arc, and it is FULL-barbed (a solid triangular head, hence a two-electron arrow): a short straight arrow whose tail sits on the C(ipso)-N bond and whose head points up and to the right, at the +OH oxygen. That single drawn arc is the migration itself. Move <2> is the one that corresponds to it (the C-N bonding pair leaving the C-N bond); move <1> is IMPLICIT and not drawn on the page. HONEST NOTE ON WHY THE ENCODING IS NOT A LITERAL TRANSCRIPTION OF THAT ONE ARC: read literally as 'C-N pair -> C-O bond', the drawn arc is not electron-balanced in the charge-separated Lewis structure RDKit requires - it would leave nitrogen at formal +2 and oxygen at -1. In the book's own pentavalent-nitrogen drawing the arc does balance, but only because a second, undrawn arc is implied there too (the N=O(+)H pi pair dropping onto nitrogen). The encoding used here keeps both bond changes explicit: an oxygen lone pair forms the new C-O bond (move <1>) while the C-N bonding pair becomes a nitrogen lone pair (move <2>), which is the same net 1,2-aryl shift. LOCALIZATION (conventions B/C): the book puts '+' on the hydroxyl oxygen and draws nitrogen with five bonds; RDKit rejects a neutral pentavalent nitrogen and silently renormalizes any attempt at it into [N+](=[OH+])[O-], so this record uses the ordinary charge-separated resonance form C6H5-[N+](=O)-OH (charge on nitrogen) for the precursor. That is the same species; only the resonance form differs, and the difference is disclosed here rather than hidden. For the product the book's localization IS reproduced exactly: the charge sits on the oxygen that now carries both the phenyl and the hydrogen. ARROW-CHECK NOTE: this step's two moves are two-electron moves into and out of non-bonding orbitals, so the bookkeeping emits the expected soft 'consistent with a lone pair rather than radicals' advisories on atoms 7 and 8."
+    },
+    {
+      "evidence_id": "ev_step_i_8_124",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_no_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 221,
+        "equation": "8.124",
+        "figure": null,
+        "panel": "second arrow, labelled 'i' (italic)",
+        "section": "8.11 Elimination of small stable species"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.124, SECOND arrow, labelled with an italic 'i' (McLafferty's symbol for charge-site-induced, inductive cleavage), pointing at two printed products: a benzene ring bearing 'OH' with '+.' written above that oxygen and, after the plus sign, 'NO.'. So the O-N bond of the protonated phenyl nitrite is cleaved and the charge stays with the phenol. ARC COUNT (convention D): Book draws 0 arc(s) for this step - the middle structure carries no curly arrows at all; both moves <1,2> are curator-supplied. TENSION WITH THE 'i' LABEL, DISCLOSED: a strictly inductive (heterolytic) cleavage of an even-electron ion would send the O-N bonding pair to one fragment and give a closed-shell cation, e.g. neutral C6H5OH plus NO+. The products the book actually DRAWS are an odd-electron phenol radical cation and an NO radical, which can only arise by HOMOLYSIS of the O-N bond, so that is what is encoded: one fishhook leaves an electron on nitrogen (giving NO.) and the other leaves an electron on oxygen (giving the phenol radical cation whose '+.' the book prints on that very oxygen). This is the even-electron-rule violation the facing-page text describes when it says 'Loss of NO may also occur from aromatic EE+ ions'; the driving force it gives is 'the much-higher resonance stabilization of ArO+ than of Ar+' together with 'the large enthalpic advantage of ~2 eV for the rearrangement loss of NO vs. simple cleavage loss of NO2'. step_class is kept as 'inductive_cleavage' because that is the book's own label for the arrow."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_124",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.124",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 221,
+        "equation": "8.124",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no key '8.124' (chapter-8 keys stop at '8.14'), and no rule in the set expels NO or migrates an aryl group. Candidates CHECKED with RDKit against this record's own species (convention E): (i) the nitrogen rules IMS_4_43_ '[C]1..[C]5..[N+.]8([H]9)[C]10..[C]13..>>' and IMS_4_43_rH both require an N-H on a charged nitrogen; the query '[#6]-[#6]-[#7+](-[#1])-[#6]-[#6]' gives 0 matches on protonated nitrobenzene, whose [N+] carries two oxygens and an aryl, no hydrogen and no carbon chain. (ii) IMS_4_29, the only rule whose product is a neutral amine leaving group, needs '[N+](H)(H)C'; '[#7+](-[#1])(-[#1])-[#6]' gives 0 matches. (iii) The generic 'substituion' rule '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' needs an atom that is both charged and radical; the proxy skeleton query '[!#1]-[#6]-[#6]-[!#1+]' gives 0 matches on either the precursor or the nitrite intermediate, and neither species has any atom carrying both a charge and an unpaired electron. (iv) No rule in the set produces a radical cation from an even-electron ion, which is exactly what the second step of this equation does, so the whole scheme lies outside the current rule set."
+    },
+    {
+      "evidence_id": "ev_peaks_8_124",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_94",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 221,
+        "equation": "8.124",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (conventions F/G): equation 8.124 prints structures and the two reaction labels only; no m/z and no abundance appear either in the scheme or in the prose, which says merely that aromatic nitro compounds show 'characteristic (M - NO)+ ... peaks'. The product ion is therefore detected=false with status 'inferred' and no relative_intensity. 94.0408 is a curator-computed monoisotopic m/z (RDKit ExactMolWt of C6H6O, electron-mass corrected) for the phenol radical cation the book draws; the precursor [C6H5NO2 + H]+ is 124.0388 by the same computation and the neutral radical lost is NO. 29.9980. MS CONTEXT (convention G): the reacting species is a PROTONATED MOLECULE, not [M]+., so ionization_method is 'CI', adduct is '[M+H]+', precursor_mz is the m/z of [M+H]+, and electron_energy_ev is null - the cited work (Crombie and Harrison 1988) is a chemical-ionization study and the page states no electron energy."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "chemical ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 124.0388,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_94",
+      "species_id": "phenol_radical_cation",
+      "step_id": "step_no_loss",
+      "observed_mz": 94.0408,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

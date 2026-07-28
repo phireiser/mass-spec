@@ -1,0 +1,274 @@
+{
+  "mechanism_id": "IMS4-EQ4.43",
+  "species": [
+    {
+      "species_id": "diethylamine_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:5][NH+:8][CH2:10][CH3:13]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_immonium_ion",
+      "mapped_smiles": "[CH3:1][CH2:5][NH+:8]=[CH2:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:13]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyleneiminium_ion",
+      "mapped_smiles": "[CH2:10]=[NH2+:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral_loss",
+      "mapped_smiles": "[CH2:1]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "diethylamine_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_after_alpha",
+      "species_ids": [
+        "ethyl_immonium_ion",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethylene_neutral_loss",
+        "methyleneiminium_ion",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_after_alpha",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              13
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              13
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              13
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_h_rearrangement",
+      "from_state": "state_after_alpha",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 80,
+        "equation": "4.43",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (EE+ H-rearrangement to an unsaturated heteroatom group)"
+      },
+      "confidence": 0.85,
+      "curator_note": "First (alpha) step of eq 4.43: the diethylamine molecular ion, drawn n-ionized at nitrogen (CH3CH2-N(+.)H-CH2CH3), undergoes alpha-cleavage of one ethyl Calpha-Cbeta bond to expel a methyl radical and form the N-ethyl methyleneimmonium ion CH3CH2-N(+)H=CH2 (m/z 58, the M-CH3 base peak of diethylamine). ARC COUNT: the book draws 3 arc(s) - a fully drawn 3-fishhook alpha-cleavage. move <1> = the nitrogen odd electron (the '+.' dot, map 8) into the forming N8=C10 pi bond; move <2> = one electron of the breaking C10-C13 (Calpha-Cbeta) sigma bond into that same N8=C10 pi bond (these two barbs land together on the N-CH2 bond, drawn as the 'vv' over N-CH2); move <3> = the other electron of the C10-C13 bond onto the departing methyl carbon (map 13), drawn as the rightmost hook terminating on CH3. LOCALIZATION (convention B): charge and odd electron are placed on N in the mapped SMILES ([NH+] with three sigma bonds = N(+.) radical cation), matching the '+.' the book draws over the nitrogen. The retained ethyl (maps 1,5) carries the hydrogen that migrates in the following step."
+    },
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 80,
+        "equation": "4.43",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (EE+ H-rearrangement, 'rH')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Second step of eq 4.43 (arrow labelled 'rH'): the even-electron N-ethyl immonium ion loses neutral ethylene by a four-centre beta-hydrogen rearrangement, giving CH2=NH2(+) (m/z 30). The book draws the immonium as a folded 4-membered transition state and shows 2 arc(s), both full (two-electron) arrows: arc(i) = the terminal Cbeta-H bonding pair migrating to the nitrogen (drawn 'H -> N(+)', forming the second N-H of the product iminium); arc(ii) = the N8-Calpha(map5) sigma bond electrons dropping into the forming Calpha=Cbeta (C1=C5) pi bond (drawn as the downward arc from the N-CH2 bond into the H2C-CH2 bond). ENCODING NOTE: only arc(ii) is transcribed as electron_move <1> (bond 5-8 -> bond 1-5); arc(i) terminates on the migrating hydrogen, which the validator's RDKit parse folds into implicit-H counts (atom-mapped H atoms are stripped in this build), so the C-H/N-H bond change is NOT separately encodable. The H migration is instead reflected in the heavy-atom implicit-H counts (C1 CH3 -> =CH2, N8 =NH -> =NH2+). No arc is omitted from the drawn figure's heavy-atom skeleton; the single encoded move exactly matches drawn arc(ii). PRINTED INTENSITY: none - this page prints no percentages or spectrum; the text states m/z 30 is 'the second largest peak in the spectrum of diethylamine' (a qualitative statement, not a printed %), so relative_intensity is omitted."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.43",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.43",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MOD rules IMS_4_43_ (alpha-cleavage) and IMS_4_43_rH (H-rearrangement). VERIFIED bond-by-bond against their DFS. IMS_4_43_ '[C]1(H..)[C]5(H..)[N+.]8(H)[C]10(H..)[C]13(H...)>>[C]1..[C]5..[N+]8(H){=}[C]10.. . [C.]13...' breaks the Calpha-Cbeta bond C10-C13, forms the N8=C10 pi bond and moves the nitrogen radical into that pi bond while C13 leaves as .CH3 - identical to step_alpha_cleavage; the cleaved C10-C13 bond IS incident to C10, the atom that forms the new N=C double bond, so the rule geometry is correct (no mismatch). IMS_4_43_rH '[C]1(H3)[C]5(H2)[N+]8(H){=}[C]10(H2)>>[C]1(H2){=}[C]5(H2) . [N+]8(H)(H){=}[C]10(H2)' transfers H4 from C1 to N8, forms C1=C5 (ethylene) and breaks the N8-C5 bond, leaving CH2=NH2+ - the same net change as step_h_rearrangement; the cleaved N8-C5 bond is incident to C5, which forms the new C1=C5 pi bond, so this rule is also correctly encoded (no mismatch). Both rules localise charge/radical exactly as the book draws (N-ionized molecular ion; even-electron immonium). Computed monoisotopic m/z (electron-corrected cations, RDKit ExactMolWt) are curator-derived: the page prints no numeric intensities."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 73.0886,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58",
+      "species_id": "ethyl_immonium_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 58.0651,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    },
+    {
+      "peak_id": "peak_30",
+      "species_id": "methyleneiminium_ion",
+      "step_id": "step_h_rearrangement",
+      "observed_mz": 30.0338,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

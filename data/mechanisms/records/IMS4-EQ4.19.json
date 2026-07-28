@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS4-EQ4.19",
+  "species": [
+    {
+      "species_id": "acetone_radical_cation",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:3])[CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_cation",
+      "mapped_smiles": "[CH3+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetyl_radical",
+      "mapped_smiles": "[CH3:4][C:2]=[O:3]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "acetone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyl_cation",
+        "acetyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 64,
+        "equation": "4.19",
+        "figure": null,
+        "panel": null,
+        "section": "4.7"
+      },
+      "confidence": 0.8,
+      "curator_note": "Eq 4.19, OE+. inductive cleavage of a doubly-bonded heteroatom system R2C=Y+. -> R+ + R-C.=Y (charge migrates to the departing alkyl; complementary to alpha-cleavage which keeps the charge as R-C#Y+ acylium). Book draws 2 resonance fishhooks depicting the OE+. <-> distonic R2C(+)-Y(.) resonance (one on the left structure at Y, one inside the parenthetical form at C); it does NOT draw the fragmentation arcs. The 2 encoded moves are the implicit cleavage electron flow (both from the breaking C1-C2 sigma bond: one electron to the acyl carbon C2 giving its radical, one to Y=O3 pairing off its odd electron), not drawn as cleavage arcs on the page. Instantiated as the acetone radical cation (Y=O), O-localized charge/radical."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.19",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "4.19",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "Eq 4.19 is indexed to MOD rules IMS_4_19_1 (DFS [_A]1([C]2)[_A]3{=}[_A+.]4>>[_A+]1.[C]2[_A.]3{=}[_A]4, form 1) and IMS_4_19_2 (DFS [_A]1([_A]3)[C+]4{=}[_A.]2>>[_A+]1.[_A]3[C.]4{=}[_A]2, form 2). VERIFIED MISMATCH: in both DFS the central atom (map 1) is bonded to two groups on the left and leaves with ZERO bonds on the right while a NEW bond forms between its two former neighbours (2-3 in _1, 3-4 in _2). That is a detach-and-rebond (methylene-loss / 1,2-migration), not the direct cleavage of one C-R bond incident to the pi-forming carbonyl carbon that eq 4.19 depicts. The rules do not describe this scheme; see rule_mismatches."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_R_cation",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 64,
+        "equation": "4.19",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.6,
+      "curator_note": "m/z 15.0235 (CH3+) computed from the acetone instantiation, NOT printed on the page; generic (R,Y) scheme with no m/z or intensity given."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0419,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_R_cation",
+      "species_id": "methyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 15.0235,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T07:02:57.650407Z",
+    "modified_at": "2026-07-24T07:02:57.650408Z"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.85b",
+  "species": [
+    {
+      "species_id": "protonated_methyl_isopropyl_ether",
+      "mapped_smiles": "[CH3:3][CH:1]([CH2:2][1H:7])[O+:4]([1H:6])[CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "propene",
+      "mapped_smiles": "[CH2:2]=[CH:1][CH3:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_methanol",
+      "mapped_smiles": "[O+:4]([1H:6])([1H:7])[CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "protonated_methyl_isopropyl_ether"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "propene",
+        "protonated_methanol"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_proton_transfer_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_85b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_proton_transfer_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": "middle row, right-hand reaction arrow (60% channel)",
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.85,
+      "curator_note": "Equation 8.85, LOWER-RIGHT reaction arrow: the drawn products are 'C3H6 + CH3OH2+' with '60%' printed underneath. NET REACTION ENCODED: protonated methyl isopropyl ether -> propene + protonated methanol, i.e. a 1,2-elimination in which the oxygen of the departing methanol takes the proton. MECHANISM (3 moves): <1> the C2-H7 sigma pair becomes the C1=C2 pi bond of propene; <2> the C1-O4 sigma pair drops onto the oxygen; <3> an oxygen lone pair captures the proton H7, giving CH3OH2+ (m/z 33.0335, curator-computed monoisotopic). The migrating hydrogen is written as an isotope-tagged explicit atom [1H:7] and the proton already on the oxygen as [1H:6], so both can carry atom maps. Book draws 0 arc(s): Equation 8.85 contains NO curved electron-pushing arrows at all - it is drawn with straight reaction/equilibrium arrows plus dashed 'partial bond' strokes that denote the loose bonds of the ion-neutral complexes. All three encoded moves are reconstructed for electron balance (not drawn on the page). DRAWN INTERMEDIATES DISCLOSED: the page reaches these products through TWO explicitly drawn non-covalent complexes that are not encoded as discrete species because partial bonds have no RDKit bond order - (i) the ion-neutral complex 'CH2(H)-CH(CH3)...O(+)(H)CH3' (dashed C...O, the labile methyl H drawn out), and (ii) the proton-bound complex '[CH2=CH-CH3 ... H(+) ... O(H)CH3]' in which the transferring proton is drawn between propene and methanol on two dotted lines with the '+' on that bridging H. The p.200 text explains the 60:40 split by the proton affinities PA(C3H6, CH3OH) = 7.8, 7.9 eV, i.e. the bridging proton is shared and the more basic partner keeps it. CONTEXT: the p.199 text introduces Equation 8.85 with 'In the absence of activating functional groups in EE ions, proton-exchange reactions can proceed in ion-molecule complexes (Equations 8.14, 8.85; Terlouw et al. 1986; Bowen 1991); demonstration of such pathways usually requires D-labeling. Here both the hydrogen lability and site receptivity' [continues on p.200] 'are determined by the relative proton affinities of the donor and acceptor sites: PA(C3H6, CH3OH) = 7.8, 7.9 eV. Note that the competitive dissociations of such a proton-bound isomer of (AB + H)+ produce AH+ and BH+, whose mass sum equals AB + 2.' The reacting ion is therefore the protonated molecule (AB+H)+ of methyl isopropyl ether, C4H11O+, curator-computed monoisotopic m/z 75.0804; the page prints no m/z for it. The two percentages printed on the page (40%, 60%) are the BRANCHING abundances of the two competing dissociation channels, not 70 eV EI relative intensities."
+    },
+    {
+      "evidence_id": "ev_mech_8_85b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.85b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.85",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.85, so no MØD rule is cross-linked. Candidates checked and REJECTED: IMS_8_10 ('[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>...[C+]5....[O]8{=}[C]9...') and IMS_8_12 both require an OXOCARBENIUM precursor - the left side pins a DOUBLE bond [O+]8{=}[C]9 - whereas Equation 8.85 starts from a protonated ether whose O+ carries three single bonds (C, H, CH3); the pattern cannot match this substrate even though the bond that breaks (C-O, heterolytic, charge retained on carbon) is of the same inductive type. IMS_8_14_1/_1b (the proton-bound-complex rH pair) are additionally atom-unbalanced (their product half carries an extra methyl copy-pasted from IMS_8_13). The IMS_8_7_* 'hydrogen exchange in an ion-molecule complex' family operates on odd-electron ketone/enol systems, not on a protonated ether. Equation 8.85 is unmodelled by the current rule set."
+    },
+    {
+      "evidence_id": "ev_peak_8_85b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_CH3OH2",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 199,
+        "equation": "8.85",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.7,
+      "curator_note": "The page prints '60%' under 'C3H6 + CH3OH2+': the printed branching abundance of this channel against the 40% channel of Equation 8.85a, NOT a 70 eV EI relative intensity. relative_intensity 0.6 stores the printed percentage; observed_mz 33.0335 is the curator-computed monoisotopic m/z of CH3OH2+ (CH5O+, electron-mass corrected) - the page prints no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "CI",
+    "polarity": "positive",
+    "adduct": "[M+H]+",
+    "activation_method": "unspecified - the page names no ionization or activation experiment; the reacting ion is the protonated molecule (AB+H)+ of methyl isopropyl ether discussed in the p.199/200 text (Terlouw et al. 1986; Bowen 1991). ionization_method 'CI' is the curator's inference for how an (AB+H)+ ion is made, NOT a statement printed on the page",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 75.0804,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_CH3OH2",
+      "species_id": "protonated_methanol",
+      "step_id": "step_proton_transfer_elimination",
+      "observed_mz": 33.0335,
+      "relative_intensity": 0.6,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

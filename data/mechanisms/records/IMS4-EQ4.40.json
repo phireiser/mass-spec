@@ -1,0 +1,167 @@
+{
+  "mechanism_id": "IMS4-EQ4.40",
+  "species": [
+    {
+      "species_id": "chloropentane_n_ionized",
+      "mapped_smiles": "[Cl+:1][CH2:2][CH2:3][CH:4]([1H:7])[CH2:5][CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_after_rH",
+      "mapped_smiles": "[Cl+:1]([1H:7])[CH2:2][CH2:3][CH:4][CH2:5][CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hydrogen_chloride_neutral",
+      "mapped_smiles": "[Cl:1][1H:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylcyclopropane_radical_cation",
+      "mapped_smiles": "[CH2+:2][CH2:3][CH:4][CH2:5][CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["chloropentane_n_ionized"]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": ["distonic_after_rH"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["hydrogen_chloride_neutral", "ethylcyclopropane_radical_cation"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [4, 7]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 7]},
+          "target": {"type": "bond", "atom_maps": [1, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 7]},
+          "electron_count": 1
+        }
+      ],
+      "reversible": false
+    },
+    {
+      "step_id": "step_ind",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 2
+        }
+      ],
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 77, "equation": "4.40", "section": "4.9 Radical site rearrangements"},
+      "confidence": 0.85,
+      "curator_note": "Radical-site hydrogen rearrangement in n-ionized 1-chloropentane: the Cl-centred odd electron abstracts a hydrogen three carbons away (a five-membered, i.e. not six-membered, transition state - the book stresses this), giving H-Cl+ and a secondary C-radical (the middle structure). Book draws 3 arcs; moves <1,2,3> are all drawn (small hook returning one C-H electron to the carbon, large S-sweep carrying the other C-H electron to the forming H-Cl bond, and the check-mark fishhook feeding the Cl radical electron into that H-Cl bond) - a fully depicted three-fishhook H-atom transfer, no implicit hook. The migrating hydrogen (map 7) is written as [1H] - ordinary protium with its isotope pinned, NOT deuterium - solely so RDKit's default parser retains it as a mapped atom (plain mapped [H] is stripped by removeHs), letting the C-H and H-Cl bond changes be bookkept."
+    },
+    {
+      "evidence_id": "ev_step_ind",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ind",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 77, "equation": "4.40", "section": "4.9 Radical site rearrangements"},
+      "confidence": 0.8,
+      "curator_note": "Charge-site (inductive) cleavage: the Cl+ charge site draws the C-Cl bonding pair onto chlorine, expelling neutral HCl and leaving the charge on the carbon skeleton - McLafferty's 'charge migration' path. Book draws 1 arc; move <1> is drawn, a single full (two-barbed) curved arrow from the C-Cl bond onto Cl (electron_count 2). The book draws the ionic product as ethylcyclopropane radical cation (m/z 70); a cyclopropane radical cation has no valence-valid two-electron Lewis structure (the three-membered ring cannot stay intact while carrying a localized charge + radical), so it is encoded here as the equivalent ring-opened 1,3-distonic radical cation - primary carbocation at the former C-Cl carbon (map 2) plus the secondary C-radical (map 4) - which the single inductive arrow produces exactly (same formula C5H10, m/z 70). Ring closure of that 1,3 radical/cation pair to the drawn cyclopropane is a subsequent radical-cation combination not separately drawn."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.40",
+      "support_type": "computationally_supported",
+      "locator": {"equation": "4.40"},
+      "confidence": 0.75,
+      "curator_note": "Cross-linked MØD rules IMS_4_40_rH and IMS_4_40_ind (rule_index by_equation 4.40). VERIFIED against their DFS: IMS_4_40_rH cleaves a C-H bond and forms the Cl-H bond, converting Cl+. to even-electron Cl+ and creating the C radical - identical bond changes to step_rH; it matches this substrate. IMS_4_40_ind cleaves the C-Cl bond to neutral HCl (both electrons to Cl - the same inductive move as step_ind) AND simultaneously forms the C3-C5 ring bond (cyclopropane) marking the former C-Cl carbon as [C+.]; that ring-closed radical cation is NOT a valence-valid localized structure (the C+. carbon retains its two hydrogens and gains the ring bond, i.e. a hypervalent centre) - MØD term-mode rewriting bypasses valence so the mass (C5H10, m/z 70) is still correct, but the localized Lewis structure is not. This record therefore encodes the valence-valid ring-opened 1,3-distonic resonance form of the same m/z-70 ion; the two agree on formula, HCl loss and net connectivity change but differ in the (chemically unrepresentable) placement of the ring bond vs the localized charge/radical. See rule_mismatches."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 106.0549,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_70",
+      "species_id": "ethylcyclopropane_radical_cation",
+      "step_id": "step_ind",
+      "observed_mz": 70.0777,
+      "relative_intensity": 1.0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed"
+  }
+}

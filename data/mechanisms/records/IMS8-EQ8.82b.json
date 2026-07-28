@@ -1,0 +1,207 @@
+{
+  "mechanism_id": "IMS8-EQ8.82b",
+  "species": [
+    {
+      "species_id": "hydroxy_ester_molecular_ion",
+      "mapped_smiles": "[CH3:8][CH:7]([OH:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[O+:11][CH3:12]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_aldehyde_ester_ion",
+      "mapped_smiles": "[CH:7](=[OH+:9])[CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O:10])[O:11][CH3:12]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "R_radical",
+      "mapped_smiles": "[CH3:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hydroxy_ester_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_aldehyde_ester_ion",
+        "R_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_loss_of_R",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_82b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_loss_of_R",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 198,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "8.10 Hydrogen rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Top horizontal arrow of Equation 8.82, labelled 'a, -R.' with '(alternative path)' printed under it: the same drawn molecular ion R-CH(OH)-(CH2)n-C(=O)-O(+.)CH3 loses R. by alpha cleavage at the carbinol carbon instead of first rearranging its hydroxyl H. The drawn product (top right) is the even-electron oxocarbenium HC(=O(+)H)-(CH2)n-C(=O)-OCH3: the charge is now printed on the FORMER HYDROXYL oxygen (which keeps its H) and the ester methoxy oxygen is drawn with an explicit lone-pair double dot, i.e. neutral and closed-shell. Book draws 0 arc(s) for this step (the two fishhooks visible in the left-hand panel belong to the 'r H' arrow that leaves the same panel downwards, Equation 8.82a); ALL FOUR encoded moves are curator-supplied for electron balance. Moves <1,2> are the homolysis of the C(7)-R(8) bond (one electron to the departing methyl radical, one into the forming C(7)=O(9) pi bond); move <3> is the O(9) lone-pair electron that completes that pi bond; move <4> is the electron that must travel from O(9) to the remote O(11) radical site to quench it, because the panel prints the odd electron on O(11) while the product prints the charge on O(9). HONEST CAVEAT: move <4> is a long-range (through-space) one-electron transfer and is not a chemically elementary arrow -- it is forced by transcribing the two DRAWN species literally. The chemically local reading of the same book arrow is that this 'alternative path' starts from the ion population ionized at the HYDROXYL oxygen, in which case the step is the textbook three-fishhook radical-site alpha cleavage (O(9)+. -> pi, plus the two C(7)-C(8) homolysis hooks) and gives exactly the same drawn products; that reading is not encoded here because it would contradict the '+.' that the page prints on O(11). INSTANTIATION (the scheme is generic in R and in the chain length n): R = CH3 and n = 5, i.e. methyl 7-hydroxyoctanoate CH3-CH(OH)-(CH2)5-C(=O)-OCH3 (C9H18O3, M+. m/z 174.1250). n = 5 is the smallest chain that makes the final 'rH, a' step of this same scheme proceed through the favoured six-membered transition state, and it keeps the book's (CH2)n-3 label meaningful ((CH2)2). NO m/z and NO percentage is printed anywhere in Equation 8.82 except 'm/z 55' on the last product; every other mass in these records is the curator's computed monoisotopic value for this instantiation, not a measured number."
+    },
+    {
+      "evidence_id": "ev_mech_8_82b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.82b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.82",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.82 (the index stops at 8.14 for Chapter 8), so no MOD rule is cross-linked to this record. The generic saturated-radical-site alpha cleavage IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' was checked and does NOT describe this step: (i) it cleaves the C1-C2 bond, which is not incident to C3, the atom that forms the new pi bond to the radical site, so the wrong bond breaks; (ii) its product keeps the odd electron on [_A+.]5 while also forming the C3=A5 double bond, i.e. two unpaired electrons out of a one-radical reactant (the conservation guardrail drops it); and (iii) it requires a CHARGED radical site [_A+.], whereas the site that drives this cleavage is a neutral/remote-charge oxygen. IMS_4_13_1 (the concrete ether-oxygen alpha cleavage) is likewise inapplicable: its radical site is the oxygen ADJACENT to the cleaved C-C bond and it carries the charge, which is not the geometry drawn here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 174.125,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_M_minus_R",
+      "species_id": "protonated_aldehyde_ester_ion",
+      "step_id": "step_alpha_loss_of_R",
+      "observed_mz": 159.1016,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

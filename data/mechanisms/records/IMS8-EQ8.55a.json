@@ -1,0 +1,161 @@
+{
+  "mechanism_id": "IMS8-EQ8.55a",
+  "species": [
+    {
+      "species_id": "cyclohexene_molecular_ion",
+      "mapped_smiles": "[CH+:1]1[CH:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_allyl_distonic_ion",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH+:1][CH2:6][CH2:5][CH2:4]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["cyclohexene_molecular_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["ring_opened_allyl_distonic_ion"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_opening_alpha",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [2]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [3, 4]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_opening_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.55, FIRST step (leftmost 'alpha' arrow): the cyclohexene molecular ion opens its ring by allylic (radical-site) alpha-cleavage to the ring-opened distonic ion drawn as an open hexagon with a delocalised allyl cation (curved inner line spanning three carbons, plus '+') at one chain end and a '.' at the other. Book draws 0 arc(s); moves <1,2,3> are curator-supplied hooks required for electron balance - NO electron-pushing arc is drawn on this branch (the page shows only the bracketed [M]+., the 'alpha'-labelled reaction arrow and the ring-opened product). Encoded flow: radical site C2 -> forming pi C2=C3; one electron of the ring sigma C3-C4 -> the same forming pi; the second electron of C3-C4 -> C4 (new primary radical). LOCALIZATION (convention C): the book draws the intact C=C with a bracketed '+.', so this record localises the ionised pi bond as C1(+)/C2(.) - exactly the localisation the MOD retro-Diels-Alder rules use ('[C+]5[C.]6' in IMS_4_31_alpha1 / IMS_4_32_alpha) - and the ring-opened allyl cation as C3=C2-C1(+); the partner resonance form C3(+)-C2=C1 is equally valid and is what the book's delocalised drawing covers. The prose above the scheme states that the ring 'possible a concerted, as well as a stepwise, dissociation of two ring bonds'; the scheme drawn (and encoded here) is the STEPWISE route through this distonic intermediate."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.55a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.2,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.55; no MOD rule variable is cross-linked to this equation. Nearest encodings: the Ch. 4 retro-Diels-Alder pair IMS_4_31_alpha1 and IMS_4_32_alpha (identical DFS '[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7'), which encode exactly this ring-opening geometry (radical site 6, new pi 6=7, cleaved ring bond 7-2 incident to the pi-forming atom 7, radical left on 2). VERIFIED MISMATCH FOR THIS SUBSTRATE: their left side needs SEVEN carbons - a six-ring PLUS an exocyclic C (atom 1) on the ring carbon that becomes the radical - so it cannot match unsubstituted cyclohexene (C6H10+., six carbons, no exocyclic C). RDKit substructure test of the rule LHS as SMARTS '[#6]-[#6]1-[#6]-[#6]-[#6;v3;+1]-[#6;v3;+0]-[#6]-1' against [CH+:1]1[CH:2][CH2:3][CH2:4][CH2:5][CH2:6]1: 0 matches (the weaker skeleton query '[#6]!@[#6]1[#6][#6][#6][#6][#6]1' also gives 0). Equation 8.55 is therefore not covered by any MOD rule."
+    },
+    {
+      "evidence_id": "ev_peak_distonic",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_distonic_82",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 181,
+        "equation": "8.55",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures"
+      },
+      "confidence": 0.3,
+      "curator_note": "observed_mz 82.0777 is the curator-computed monoisotopic m/z of the ring-opened C6H10+. distonic ion (an isomer of the molecular ion, electron-mass corrected). The page prints neither an m/z nor an abundance for it; status 'inferred', no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 82.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_distonic_82",
+      "species_id": "ring_opened_allyl_distonic_ion",
+      "step_id": "step_ring_opening_alpha",
+      "observed_mz": 82.0777,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.3
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

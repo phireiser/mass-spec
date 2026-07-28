@@ -1,0 +1,177 @@
+{
+  "mechanism_id": "IMS8-EQ8.44a",
+  "species": [
+    {
+      "species_id": "oxocarbenium_carbenium_form",
+      "mapped_smiles": "[CH3:1][CH2:2][O:3][CH2+:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_neutral",
+      "mapped_smiles": "[O:3]=[CH2:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "oxocarbenium_carbenium_form"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "formaldehyde_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 173,
+        "equation": "8.44",
+        "figure": null,
+        "panel": null,
+        "section": "8.8 Charge-site reactions (one bond cleaved without rearrangement)"
+      },
+      "confidence": 0.7,
+      "curator_note": "GENERIC SCHEME, upper (all-single-bond) form of eq 8.44. The book braces the two drawn forms together as resonance depictions of ONE even-electron ion (EE+); this record encodes the upper form AB-C-D with the charge (+) on the saturated terminal atom D and a full arrow labelled 'i' to AB+ + C=D. No atoms, m/z or intensities are printed. Instantiation chosen by the curator: the ethyl oxocarbenium ion drawn in its localized carbenium resonance form CH3CH2-O-CH2+ (map 3 = C-of-scheme = O, neutral, single-bonded; map 4 = D = terminal CH2 carbenium carrying the +; AB = ethyl, maps 1-2). Inductive cleavage: the CH2-O sigma bond (bond 2-3) breaks and its pair forms the new C=D (O=CH2) pi bond (bond 3-4), expelling the ethyl cation CH3CH2+ (AB+, charge migrates from D to AB) and neutral formaldehyde O=CH2 (C=D). ARC COUNT: the book draws 1 arc (a single full/double-barbed arrow from the AB-C sigma bond onto the C-D bond); move <1> IS that drawn arc, a single 2-electron sigma->pi move that fully accounts for the electron flow. The companion lower form is encoded as IMS8-EQ8.44b."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.44a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 173,
+        "equation": "8.44",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.55,
+      "curator_note": "No MØD rule is indexed for eq 8.44 (rule_index.json by_equation has no '8.44' entry); no cross-link to verify, no rule_mismatch to report. VERIFIED RELATED RULE: IMS_8_10 (eq 8.10, src/data_generation/rules/IMS_chap8_examples.py) realizes exactly this net transformation for the same ethyl-oxocarbenium substrate. Its DFS [C]1(H3)[C]5(H2)[O+]8{=}[C]9(H2) >> [C]1(H3)[C+]5(H2).[O]8{=}[C]9(H2) cleaves the C5-O8 bond, puts +1 on the ethyl carbon C5 and leaves neutral O8=C9 formaldehyde -> ethyl+ + O=CH2, identical products to this record. IMS_8_10 is drawn from the O+=CH2 (oxocarbenium) resonance form, i.e. the 8.44b partner of this braced pair; it is indexed under eq 8.10, not 8.44."
+    },
+    {
+      "evidence_id": "ev_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ab_cation",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 173,
+        "equation": "8.44",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "m/z 29.0386 is the monoisotopic mass of the ethyl cation C2H5+ from the curator's chosen instantiation of the generic AB+ fragment; it is NOT printed on the page. Generic scheme with no printed m/z or intensity, hence status 'inferred', detected=false, no relative_intensity."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 59.0491,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ab_cation",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 29.0386,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "mechanism_id": "IMS8-EQ8.104",
+  "species": [
+    {
+      "species_id": "distonic_methylaminium_radical_cation",
+      "mapped_smiles": "[CH3:1][NH2+:2][CH2:3][CH2:4][CH2:5][CH2:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "pyrrolidinium_ion",
+      "mapped_smiles": "[NH2+:2]1[CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "expelled_methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_methylaminium_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "pyrrolidinium_ion",
+        "expelled_methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rd_displacement_distonic",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_104",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_displacement_distonic",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 213,
+        "equation": "8.104",
+        "figure": null,
+        "panel": "second scheme under the sub-heading 'Displacement:'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.104 is the DISTONIC counterpart of 8.103 and is drawn accordingly: 'R' is joined by a horizontal bond to 'Y', Y carries a bare '+' (no dot) and sits at the top-left of the U-shaped chain, and the far (top-right) end of the chain carries a lone radical dot on carbon. The arrow is labelled 'rd' and the products are 'R. + [ring, with + over the Y that now sits in the ring]' - i.e. the carbon radical attacks the charged heteroatom and displaces R.. So the bond that breaks is Y-R and the bond that forms is Y-C(radical); the charge stays on Y throughout. ARC COUNT (convention D): Book draws 2 arc(s), both single-barbed fishhooks whose barbs converge downwards into the gap between Y and the radical carbon - onto the forming Y-C bond. Arc 1 has its tail on the R-Y bond; arc 2 has its tail at the radical dot on the far carbon. Moves <1,2> are those two drawn arcs (move 1 = the carbon odd electron, move 2 = one electron of the breaking Y-R bond); move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) - it puts the second electron of the breaking Y-R bond on R, producing the R. the book prints. INSTANTIATION (convention F): the page prints no m/z and no intensity. This record uses Y = NH2 and R = CH3, i.e. the distonic ion CH3-N(+)H2-CH2CH2CH2-CH2., an isomer (H already transferred from C to N) of the N-methylbutylamine molecular ion, m/z 87.1037; the displacement closes the six-electron-stable five-membered ring to give the pyrrolidinium ion C4H10N+ (m/z 72.0802) with loss of CH3. (15.0235). Y = NH2 was chosen because p. 214 names NH2 as the group whose rd cyclisations are favourable, but the choice is the curator's, not the book's. LOCALIZATION (convention B): the SMILES puts the charge on nitrogen as a four-coordinate closed-shell ammonium ([NH2+:2] with two heavy neighbours and two H) and the odd electron on the terminal carbon ([CH2:6] with one bond = one unpaired electron in RDKit), exactly where the book draws '+' and '.', so both drawn arcs have real origins."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_104",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.104",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 213,
+        "equation": "8.104",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MØD rule is cross-linked; rule_index.json has no '8.104' key (chapter-8 index runs 8.1-8.14 only). Candidates were CHECKED, not assumed. (i) hTransition_saturated_1_alpha (IMS_bookCover.py), DFS '[C.]1[C]2[C]3[C]4[_A+]5([H]6)>>[C]1[C]2[C]3[C]4{-}1.[_A+.]5([H]6)', has the same LEFT-hand situation - a carbon radical at one end of a chain and an even-electron onium at the other - and its pattern really does match this record's precursor (RDKit test '[#6&v3]-[#6]-[#6]-[#6]-[N+;H1,H2,H3]' -> exactly one hit, atom maps (6,5,4,3,2)). But its RIGHT-hand side does the opposite of Equation 8.104: it closes a CARBON-carbon ring ({-}1 bonds C4 to C1) and EXPELS the charge site as the radical cation [_A+.], i.e. applied here it would give cyclobutane + CH3NH2+., whereas 8.104 closes the C-N ring and expels the alkyl radical. Wrong bond formed, wrong fragment expelled - listed in rule_mismatches. (ii) IMS_4_42_rd ('[C]1[C]2[C]3[C]4[C]5[Cl+.]6>>...') is the correct rd geometry but is chlorine-specific and needs an ODD-electron halogen charge site; RDKit test of '[#6]-[#6]-[#6]-[#6]-[#6]-[Cl+]' against this precursor returns 0 matches. (iii) The generic 'substituion' rule ('[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2') fails twice over: its charge site is written '[_A+.]', an odd-electron heteroatom, while 8.104's Y+ is an even-electron onium with the radical on carbon, and all its '_A' placeholders unify to the same element, so the expelled group would have to be a heteroatom of the same element as Y rather than the alkyl R. drawn. No rule in the set encodes a distonic radical-site displacement."
+    },
+    {
+      "evidence_id": "ev_peak_8_104",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_72",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 213,
+        "equation": "8.104",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.104 is drawn generically in R and Y and page 213 prints no m/z and no abundance for it. m/z 72.0802 (C4H10N+, pyrrolidinium) is curator-computed with RDKit ExactMolWt, electron-mass corrected, for the chosen instantiation Y = NH2, R = CH3 (precursor m/z 87.1037, expelled CH3. 15.0235). Status is therefore 'inferred', detected=false and relative_intensity is omitted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 87.1037,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_72",
+      "species_id": "pyrrolidinium_ion",
+      "step_id": "step_rd_displacement_distonic",
+      "observed_mz": 72.0802,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

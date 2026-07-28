@@ -1,0 +1,211 @@
+{
+  "mechanism_id": "IMS4-EQ4.4c",
+  "species": [
+    {
+      "species_id": "precursor",
+      "mapped_smiles": "[CH2:1]([1H:4])[CH2:2][O+:3][1H:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "water_cation",
+      "mapped_smiles": "[1H:4][O+:3][1H:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:1]=[CH2:2]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "precursor"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "water_cation",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_water_elimination",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "water_elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_water_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 55,
+        "equation": "4.4",
+        "section": "4.4 Reaction classifications"
+      },
+      "confidence": 0.8,
+      "curator_note": "Ethanol molecular ion (n-ionised at O, +. on OH) losing water by 1,2-elimination: the beta H on the methyl carbon (H4) and the OH combine as H2O while C1=C2 (ethylene) forms. Charge RETENTION: water leaves as the radical cation HOH+.. Book draws 4 fishhook barbs -- a two-barbed homolysis mark on the cleaved C1-H(beta) bond <1,4> and on the cleaved C2-O bond <2,3>; all four encoded moves are drawn (each cleaved bond sends one electron to the forming C=C pi and one to the forming O-H bond of water). The O keeps its charge+radical."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.4c",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 55,
+        "equation": "4.4"
+      },
+      "confidence": 0.45,
+      "curator_note": "Cross-links to IMS_4_4_row3. VERIFY: the DFS ...[C]1(H2,H3,H4)[C]5(H6,H7)[O+.]8(H9) >> [C]1(H2,H3){=}[C]5(H6,H4).[H]7[O+.]8[H]9 takes the water H from C5 (the SAME carbon that bears the OH = a 1,1-elimination) and migrates H4 from C1 onto C5. The BOOK draws a 1,2-elimination (the eliminated H sits on the OTHER carbon, the methyl). Net products identical (H2O+. + ethylene) but different H bookkeeping / mechanism: partial MISMATCH, see rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_ion",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 55,
+        "equation": "4.4"
+      },
+      "confidence": 0.4,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic mechanistic scheme; 18.0100 is the curator-computed monoisotopic m/z (electron-mass corrected) of the indicated ion for the drawn instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 46.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "water_cation",
+      "step_id": "step_water_elimination",
+      "observed_mz": 18.01,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "mechanism_id": "IMS4-EQ4.37",
+  "species": [
+    {
+      "species_id": "hexanol_molecular_ion_O_ionized",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]([1H:8])[CH2:4][CH2:5][CH2:6][OH+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_C_radical_oxonium",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2:4][CH2:5][CH2:6][OH+:7][1H:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylcyclobutane_neutral",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]1[CH2:4][CH2:5][CH2:6]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "water_radical_cation",
+      "mapped_smiles": "[OH+:7][1H:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexanol_molecular_ion_O_ionized"
+      ]
+    },
+    {
+      "state_id": "state_intermediate",
+      "species_ids": [
+        "distonic_C_radical_oxonium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethylcyclobutane_neutral",
+        "water_radical_cation"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_hydrogen_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_displacement_charge_retention",
+      "from_state": "state_intermediate",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_hydrogen_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 76,
+        "equation": "4.37",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (Hydrogen rearrangement to a saturated heteroatom with adjacent cleavage)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Section 'Hydrogen rearrangement to a saturated heteroatom with adjacent cleavage', eq 4.37, p.76. The alcohol is n-ionized at oxygen: the odd electron and the charge are localized on O (drawn '+.OH'), so the precursor SMILES carries O+ with one radical electron (convention B). The six-membered transition state brings the delta C-H (map 3, the C2H5-bearing carbon) up to the oxygen radical. ARC COUNT: the book draws 3 arc(s) on the molecular ion and all three fishhooks are printed -- move <1> = the O odd electron (right-hand fishhook next to '+.OH', map 7) into the forming O7-H8 bond; move <2> = one electron of the breaking C3-H8 sigma bond (the large central arc that sweeps from the carbon toward the oxygen) into that same forming O-H bond; move <3> = the other C3-H8 electron (left-hand fishhook) onto carbon map 3, its new radical site. Net: H8 migrates C3 -> O7, giving a distonic ion with a carbon radical (map 3) and a -O+H2 oxonium (map 7), overall still C6H14O+. (mass unchanged). Instantiated for 1-hexanol (M = C6H14O, m/z 102), whose C2H5 terminus appears explicitly in the charge-migration branch (eq 4.38)."
+    },
+    {
+      "evidence_id": "evidence_step_rd",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_displacement_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 76,
+        "equation": "4.37",
+        "figure": null,
+        "panel": null,
+        "section": "4 / Basic Mechanisms of Ion Fragmentation (charge retention, radical-site displacement 'rd')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Charge-retention ('rd') branch of eq 4.37: the carbon radical (map 3) displaces water from the oxonium carbon (map 6) in a homolytic substitution (SHi), closing a cyclobutane ring (map3-map6 bond) and expelling the odd electron plus the charge together as HOH+. (m/z 18, drawn '< 3%'). The book draws the neutral hydrocarbon schematically as 'R--[square]' = R-cyclobutane; instantiated here as R = C2H5 -> ethylcyclobutane (C6H12, neutral, not detected). ARC COUNT: the book draws 2 arc(s) -- move <1> (fishhook off the radical dot on map 3) = the odd electron into the forming C3-C6 ring bond; move <2> (the large arc sweeping toward the O) = one electron of the breaking C6-O7 sigma bond into that same forming C-C bond. Move <3>, the other C6-O7 electron onto oxygen map 7 (the odd electron of the departing HOH+.), is an implicit homolysis hook required for electron balance (not drawn on the page -- the book simply writes HOH+. as a product). 'Charge retention' = the oxygen fragment keeps both the charge and the radical it carried at ionization."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.37",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.37",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to MOD rules IMS_4_37_rH and IMS_4_37_rd; VERIFIED against their DFS. IMS_4_37_rH '[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9 >> [C]1[C]2[C.]3[C]5[C]6[C]7[O+]8([H]4)[H]9' transfers the H (their H4 = my map 8) from the delta carbon (their C3 = my map 3) to the O radical cation (their O8 = my map 7), moving the odd electron O -> C and turning O+. into an oxonium -- exactly step_rH_hydrogen_rearrangement's bond changes (their chain C1..C7 corresponds to my maps 1,2,3,4,5,6 with O8 = my 7; their skipped index 4 is the H). IMS_4_37_rd '[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9 >> [C]1[C]2[C]3[C]4[C]5[C]6{-}3.[O+.]7([H]8)[H]9' forms the C3-C6 ring bond ('{-}3' on C6), breaks the C6-O7 bond and splits off HOH+. ([O+.]7) while the radical on C3 is quenched -- exactly step_rd_displacement_charge_retention. The cleaved C6-O bond is incident to C6, which is the atom that forms the new C3-C6 bond, so the rule is a correctly encoded radical displacement (no geometry mismatch). Both rule map numberings align 1:1 with this record."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 102.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_18",
+      "species_id": "water_radical_cation",
+      "step_id": "step_rd_displacement_charge_retention",
+      "observed_mz": 18.0106,
+      "relative_intensity": 0.03,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "mechanism_id": "IMS8-EQ8.67",
+  "species": [
+    {
+      "species_id": "piperidine_radical_cation",
+      "mapped_smiles": "[NH+:1]1[CH2:2][CH2:3][CH2:4][CH2:5][CH:6]1[1H:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_iminium_distonic_ion",
+      "mapped_smiles": "[CH2:2]=[NH+:1][CH:6]([1H:7])[CH2:5][CH2:4][CH2:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "vinyl_iminium_ion",
+      "mapped_smiles": "[CH2:2]=[NH+:1][CH:6]=[CH2:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH2:4][CH2:3][1H:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["piperidine_radical_cation"]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": ["ring_opened_iminium_distonic_ion"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["vinyl_iminium_ion", "ethyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [1]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "bond", "atom_maps": [1, 2]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [2, 3]},
+          "target": {"type": "atom", "atom_maps": [3]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rh_with_beta_cleavage",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [3, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 7]},
+          "target": {"type": "bond", "atom_maps": [3, 7]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [6, 7]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "bond", "atom_maps": [5, 6]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [4]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_alpha_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 188, "equation": "8.67", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.85,
+      "curator_note": "First arrow of Equation 8.67. CONCRETE scheme: the piperidine molecular ion, n-ionized at nitrogen ('+.' written next to the ring N, which also carries an explicit H). Atom maps: 1 = N, 2 = C2 (becomes the CH2 of the iminium head), 3 = C3 (becomes the radical terminus), 4 = C4, 5 = C5, 6 = C6 (the other N-adjacent carbon, which donates H map 7). Alpha-cleavage forms the N1=C2 iminium bond and breaks the C2-C3 ring bond, opening the ring to the distonic ion CH2=N+(H)-CH2CH2CH2-.CH2 that the page draws as the middle structure (radical dot on the far chain terminus). Book draws 2 arcs: the small fishhook leaving the N '+.' dot and hooking down onto the N-C2 bond (move <1>), and the large fishhook whose tail sits on the C2-C3 ring bond and whose barb points back at the forming N=C2 bond (move <2>); move <3>, the other C2-C3 sigma electron onto C3, is an implicit homolysis hook required for electron balance (not drawn on the page, although the product radical dot is shown)."
+    },
+    {
+      "evidence_id": "ev_step_rh_with_beta_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_with_beta_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 188, "equation": "8.67", "figure": null, "panel": null, "section": "8.9 Decompositions of cyclic structures"},
+      "confidence": 0.7,
+      "curator_note": "Second arrow of Equation 8.67, drawn on the folded ring-opened intermediate. The explicitly drawn H (map 7) on C6 - the carbon still bonded to N - is transferred across the folded chain to the C3 radical terminus, and the products printed on the page are the even-electron ion CH2=N+(H)-CH=CH2 labelled 'm/z 56' plus the ethyl radical drawn as H2C(.)-CH3, i.e. C2H5. loss. Book draws 2 arcs, both fishhooks: one whose tail sits on the C6-H bond and whose barb points across to the radical carbon (move <2>, one C6-H electron travelling with the H into the new C3-H bond), and one whose tail is at the radical dot on C3 and whose barb points back at the H (move <1>, the C3 odd electron into that same new bond). Moves <3,4,5> are implicit and required for electron balance (not drawn on the page): <3> the other C6-H electron into the forming C5=C6 pi bond, <4> one electron of the breaking C4-C5 sigma bond into that same pi bond, and <5> the other C4-C5 electron onto C4, which becomes the radical carbon of the expelled ethyl radical. COMPOSITE-STEP DISCLOSURE: the two DRAWN arcs by themselves only perform the 1,4-H shift and would stop at an undrawn C6-radical intermediate CH2=N+(H)-.CH-CH2CH2CH3; the beta-scission of C4-C5 that actually produces the printed products is not drawn as arcs and the book draws no structure for that intermediate, so - rather than invent an undrawn species - the H shift and the beta-scission are encoded as one composite step whose five moves reproduce exactly the products printed on the page."
+    },
+    {
+      "evidence_id": "ev_mech_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.67",
+      "support_type": "curator_inferred",
+      "locator": {"page": 188, "equation": "8.67", "figure": null, "panel": null, "section": null},
+      "confidence": null,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for 8.67 (its chapter-8 keys stop at 8.14), so no MOD rule variable is cross-linked. Candidates checked and REJECTED: (i) IMS_4_9 'radical induced (alpha-)clevage for a saturated site', DFS [C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5, is the only generic saturated-heteroatom alpha-cleavage rule in the index, but it cleaves C1-C2, a bond NOT incident to C3, the atom that forms the new pi bond to the heteroatom, so it does not describe the N1=C2 / C2-C3 bond change of this scheme; it also leaves [_A+.] on the product heteroatom while creating [C.]1 (one unpaired electron becomes two), failing the L->R spin conservation that the rules/__init__.py guardrail enforces, so it is auto-dropped from the fragmentation list anyway. (ii) IMS_8_6_1..IMS_8_6_4, the only indexed ring-fragmentation family, act on an all-carbon cyclooctadiene-type ring with no heteroatom and no H migration. (iii) hTransition_saturated_2 / hTransition_saturated_2_alpha move an H onto a carbon radical in a chain carrying a charged site, which is the closest analogue of the second step, but they deposit the resulting unsaturation and charge differently (they regenerate a [_A+.] heteroatom radical cation rather than the even-electron conjugated iminium printed here), so they are not cross-linked either. PROVENANCE OF THE MS CONTEXT: the page names no ionization conditions; it states only that for piperidine this C2H5. loss 'produces the second most-intense peak', which in this book means the standard 70 eV EI spectrum of the molecular ion, and ms_context is set accordingly."
+    },
+    {
+      "evidence_id": "ev_peak_m56",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_iminium_m56",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 188, "equation": "8.67", "figure": null, "panel": null, "section": null},
+      "confidence": 0.85,
+      "curator_note": "'m/z 56' is printed under the product ion on the page, so the ion is flagged detected=true and the assignment status is 'proposed'. NO percentage is printed for it - the running text only calls it 'the second most-intense peak' - so relative_intensity is deliberately omitted rather than guessed. observed_mz 56.0495 is the monoisotopic m/z of C3H6N+ (CH2=N+H-CH=CH2), consistent with the printed nominal 56 and with loss of C2H5. (29) from the m/z 85.089 molecular ion. The same text warns that much of the m/z 56 from piperidine could instead arise by H loss followed by RDA loss of C2H4 (Equation 8.61), i.e. this assignment is one of two competing routes to the peak."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 85.0886,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_iminium_m56",
+      "species_id": "vinyl_iminium_ion",
+      "step_id": "step_rh_with_beta_cleavage",
+      "observed_mz": 56.0495,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

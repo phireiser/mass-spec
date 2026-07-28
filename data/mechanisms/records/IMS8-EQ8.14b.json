@@ -1,0 +1,159 @@
+{
+  "mechanism_id": "IMS8-EQ8.14b",
+  "species": [
+    {
+      "species_id": "ethyl_methyleneoxocarbenium",
+      "mapped_smiles": "[CH3:1][CH2:5][O+:8]=[CH2:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_cation",
+      "mapped_smiles": "[CH3:1][CH2+:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "formaldehyde_neutral",
+      "mapped_smiles": "[O:8]=[CH2:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethyl_methyleneoxocarbenium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethyl_cation",
+        "formaldehyde_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 148,
+        "equation": "8.14",
+        "section": "8.x Proton-bound complexes / hydrogen rearrangement (rH) in even-electron ions"
+      },
+      "confidence": 0.8,
+      "curator_note": "EXPERIMENTAL CONTEXT: this C2H5+ + O=CH2 channel is CROSSED OUT on eq 8.14 (X through the lower arrow from the proton-bound complex): the MI spectrum of C2H5O+=CH2 shows NO C2H5+. Encoded with support_type=contradicted and peak status=rejected. adduct is not [M]+.: the precursor is the even-electron m/z 59 fragment ion. 0 electron-pushing arcs drawn. Equation 8.14, REJECTED (lower) branch: the reaction arrow leading to C2H5+ + O=CH2 is drawn CROSSED OUT (a large X over the arrow). McLafferty rejects this direct inductive (i) C-O cleavage of C2H5-O+=CH2 to the ethyl cation C2H5+ (m/z 29) plus neutral formaldehyde; the text confirms the MI spectrum of C2H5O=CH2+ 'shows no C2H5+'. Encoded here only to record the disfavored path (support_type contradicted, peak status rejected). Book draws 0 electron-pushing arcs; the single encoded move is reconstructed for electron balance (not drawn on the page): move <1> takes the C5-O8 bonding pair fully onto O8, neutralising the oxocarbenium O+ to a formaldehyde carbonyl oxygen and expelling C5 as the ethyl cation (charge migration to carbon). Closed-shell, even-electron heterolysis."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.14b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 148,
+        "equation": "8.14"
+      },
+      "confidence": 0.1,
+      "curator_note": "No MOD rule encodes this rejected channel. The three by_equation['8.14'] rules (IMS_8_14_1, IMS_8_14_1b, IMS_8_14_2) all pertain to the favored rH path / proton-bound complex (see IMS8-EQ8.14a), none to the direct C-O inductive cleavage giving C2H5+ + O=CH2. Consistent with the book crossing this path out, there is nothing to cross-link here."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_C2H5",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 148,
+        "equation": "8.14"
+      },
+      "confidence": 0.7,
+      "curator_note": "observed_mz 29.0380 is the curator-computed monoisotopic m/z of C2H5+ (electron-mass corrected). status 'rejected': the book explicitly crosses out this channel and states no C2H5+ is observed in the MI spectrum. No intensity printed; relative_intensity omitted."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "metastable-ion (MI) decomposition (channel not observed)",
+    "electron_energy_ev": null,
+    "precursor_mz": 59.0486,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C2H5",
+      "species_id": "ethyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 29.038,
+      "status": "rejected",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

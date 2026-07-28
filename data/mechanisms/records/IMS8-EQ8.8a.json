@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS8-EQ8.8a",
+  "species": [
+    {
+      "species_id": "methyloxirane_molecular_ion_O_ionized",
+      "mapped_smiles": "[CH3:1][CH:2]1[O+:3][CH2:4]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "C_protonated_oxirene_cation_mz43",
+      "mapped_smiles": "[CH:2]1=[O+:3][CH2:4]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyloxirane_molecular_ion_O_ionized"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyl_radical",
+        "C_protonated_oxirene_cation_mz43"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_rejected",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_rejected",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_rejected",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 145,
+        "equation": "8.8",
+        "figure": null,
+        "panel": null,
+        "section": "8.2 Product stability (hidden rearrangements)"
+      },
+      "confidence": 0.9,
+      "curator_note": "DISFAVORED / REJECTED PATH. Equation 8.8 (left branch): the downward arrow from ionized methyloxirane is CROSSED OUT (a large X) and labeled 'alpha'. The text states the loss of methyl (35% abundance) does NOT proceed by direct alpha-cleavage of the original methyl group to the C-protonated oxirene ion, because that oxirene is a high-energy strained-ring species (Turecek & McLafferty 1984). ARC COUNT: the book draws 0 electron-pushing arcs on this crossed-out branch -- it only shows the crossed-out arrow and the products H3C. + the ring cation. All three moves here are an IMPLICIT curator reconstruction of the balanced radical-site alpha-cleavage electron flow (none are drawn on the page): move <1> = O odd electron (map 3) into the forming C2=O3 pi bond; move <2> = one C1-C2 sigma electron into that pi bond; move <3> = the other C1-C2 electron onto the departing methyl carbon (map 1). The C-protonated oxirene is drawn as a three-membered ring with an endocyclic C=O(+) (double bond on the left edge) and a CH2; formula C2H3O+, computed m/z 43.0178 (NOT a measured value for this path -- the observed m/z 43, 35%, arises from the productive channel in record IMS8-EQ8.8b)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_absent",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.8a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.8",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap8_examples.py"
+      },
+      "confidence": 0.8,
+      "curator_note": "No MØD rule encodes this crossed-out direct alpha-cleavage. All four rule_index variables filed under eq 8.8 (IMS_8_8_1, IMS_8_8_2, IMS_8_8_2b, IMS_8_8_3) encode the PRODUCTIVE rearrangement channel (ring opening + two rH steps) captured in record IMS8-EQ8.8b -- consistent with the book crossing this direct path out."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_43_rejected",
+      "species_id": "C_protonated_oxirene_cation_mz43",
+      "step_id": "step_alpha_cleavage_rejected",
+      "observed_mz": 43.0178,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "rejected",
+      "confidence": 0.3
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "mechanism_id": "IMS8-EQ8.1b",
+  "species": [
+    {
+      "species_id": "pent_2_ene_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH+:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methallyl_cation",
+      "mapped_smiles": "[CH2:2]=[CH:3][CH+:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["pent_2_ene_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["methallyl_cation", "methyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "atom", "atom_maps": [3]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [2, 3]},
+          "electron_count": 1
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "atom", "atom_maps": [1]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 137,
+        "equation": "8.1",
+        "section": "8.1 Unimolecular ion decompositions"
+      },
+      "confidence": 0.85,
+      "curator_note": "Eq 8.1, top pathway: the pent-2-ene molecular ion (top structure, dHf/IE 8.7(9.0)) fragments by the arrow labeled 'alpha' (rate 1.0) to give the neutral methyl radical H3C. (dHf 1.5) plus the C4H7+ cation drawn as CH2=CH-CH(+)-CH3 (the 1-methylallyl / but-3-en-2-yl cation, (60%), dHf/IE 8.8(7.5)). This is allylic (alpha) cleavage: the C-C bond one removed from the ring double bond breaks, ejecting the ethyl-end methyl and leaving a resonance-stabilized allyl cation. Book draws 0 curved arcs on this page (energetics scheme). All 3 fishhooks are reconstructed for balance: (1) the odd electron on C3 forms the new C2=C3 pi bond, (2) one electron of the breaking C1-C2 sigma bond also forms that pi bond, (3) the other electron of C1-C2 departs with C1 as the methyl radical. LOCALIZATION (convention C): the page draws pent-2-ene as an intact alkene with a delocalized (+.); encoded as the opened distonic form (odd electron on C3, charge on C4) so the arrows have a real origin. The product 1-methylallyl cation is drawn by McLafferty exactly in this Kekule form (CH2=CH-CH(+)-CH3), one of its two resonance structures (partner +CH2-CH=CH-CH3)."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.1b",
+      "support_type": "computationally_supported",
+      "locator": {
+        "equation": "8.1",
+        "section": "src/data_generation/rules/ (IMS_8_1_var1_step2)"
+      },
+      "confidence": 0.55,
+      "curator_note": "Cross-linked MOD rule IMS_8_1_var1_step2 ('monomolecular ion-cleavage 8.1 alpha 1.0'). Its DFS cleaves the terminal C-C bond of the ethyl end (their C2-C5) to emit [C.]2 = .CH3 and a C4H7+ cation, i.e. the SAME net alpha-cleavage encoded here (loss of CH3. from pent-2-ene giving C4H7+), and the cleaved bond IS incident to a pi-forming carbon (their C5, which enters the new C5=C8 double bond) -- geometry consistent, no incidence mismatch. PARTIAL MISMATCH in the product representation: the MOD rule bundles an extra H-migration (H7 from C5 to C10) into the cleavage and writes the resulting cation over-valently, so its C4H7+ is an ambiguous/over-valent structure rather than the clean 1-methylallyl cation drawn in the book and encoded here."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_C4H7",
+      "support_type": "explicitly_reported",
+      "locator": {"page": 137, "equation": "8.1"},
+      "confidence": 0.85,
+      "curator_note": "Book prints '(60%)' relative abundance next to the C4H7+ cation. observed_mz 55.0542 is the curator-computed electron-mass-corrected monoisotopic m/z of C4H7+ (m/z 55); the page prints only the % abundance and dHf/IE (8.8(7.5) eV), no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 70.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C4H7",
+      "species_id": "methallyl_cation",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 55.0542,
+      "relative_intensity": 0.60,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

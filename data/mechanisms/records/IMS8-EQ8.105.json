@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS8-EQ8.105",
+  "species": [
+    {
+      "species_id": "oxo_pentyl_carbenium_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O:3])[CH2:4][CH2:5][CH2:6][CH2:7][CH2+:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acylium_ion",
+      "mapped_smiles": "[CH3:1][C:2]#[O+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclopentane_neutral",
+      "mapped_smiles": "[CH2:4]1[CH2:5][CH2:6][CH2:7][CH2:8]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "oxo_pentyl_carbenium_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acylium_ion",
+        "cyclopentane_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_charge_site_displacement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "charge_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_105",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_charge_site_displacement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 213,
+        "equation": "8.105",
+        "figure": null,
+        "panel": "third scheme under the sub-heading 'Displacement:'",
+        "section": "8.11 Other rearrangements"
+      },
+      "confidence": 0.55,
+      "curator_note": "WHAT THE PAGE ACTUALLY DRAWS. Equation 8.105 has the same skeleton as 8.103 but no radical anywhere: a 'Y' is joined by a horizontal bond to the top-left corner of the U-shaped chain, the top-right end of the chain carries a second 'Y' with a bare '+' above it, the arrow is labelled 'rd', and the products are printed as 'Y(+) + [ring]' - the FREE Y carries the superscript plus and the ring's Y carries NO charge (verified at 6x magnification: the space above the ring Y is blank, unlike 8.103 where a '+' is clearly printed there). ARC COUNT (convention D): Book draws 0 arc(s) for this scheme - no curved arrows or fishhooks are printed at all; both moves encoded here are curator-supplied to make the drawn products electron-balanced. WHAT THE BOOK SAYS IT IS: p. 215 (running text) - 'Charge-site-displacement reactions take place in EE+ ions (Equation 8.105)' - so the precursor is even-electron, and p. 216 adds 'Usually the EE+ precursor is bifunctional, so that the site of the charge moves (Equation 8.112...)'. Read together with the drawing, the charge MIGRATES to the expelled exterior group, which is only possible if the bonding pair of the C-Y(left) bond swings over to the electron-deficient charge site: move <1> is that 1,5-shift (double-barbed, 2 electrons, bond 2-4 -> new bond 4-8) and it simultaneously closes the ring and leaves the departing group without those electrons, i.e. as the cation. Move <2> is the lone-pair donation that converts the resulting sextet acyl cation into its acylium form (see the resonance note below). INSTANTIATION (convention F): the page prints no m/z and no intensity. Instantiating this drawing is not free of tension, and the choice is disclosed: for the ring atom to end up NEUTRAL after gaining a bond it must start as an electron-deficient (sextet) cation, and every heteroatom sextet cation (oxenium R-O+, nitrenium R-N+-H) is a formal triplet - which would contradict the book's own statement that 8.105 operates on EE+ ions. A carbenium charge site is the only sextet cation that is genuinely closed-shell, so this record instantiates the charge site as a primary carbenium and the expelled group as an acetyl group that leaves as the very stable acylium CH3CO+ (m/z 43.0173): CH3CO-CH2CH2CH2CH2-CH2(+) (m/z 113.0955) -> CH3CO(+) + cyclopentane (70.0783). Every species is closed-shell, as 'EE+' requires. RESONANCE (convention C): the expelled cation is written in the localized acylium form [CH3][C]#[O+]; move <2> is exactly the arrow that produces that form from the sextet acyl form CH3-C(+)=O, which is its resonance partner. CURATOR RESERVATION: the book's own worked example of 8.105 (Equation 8.112, p. 216, Seiler and Hesse 1968) shows the OPPOSITE charge outcome - there the neutral amide oxygen attacks, the expelled exterior part (the cyclic imine) is neutral and the newly formed ring carries the charge on O(+). The generic drawing on p. 213 therefore either depicts the charge-migration branch or is inconsistent with 8.112. This record transcribes p. 213 as drawn and flags the discrepancy rather than silently importing the 8.112 charge placement."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_105",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.105",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 213,
+        "equation": "8.105",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MØD rule is cross-linked; rule_index.json has no '8.105' key (chapter-8 index runs 8.1-8.14 only). Candidates were CHECKED. (i) IMS_4_42_rd and the book-cover 'substituion' rule are both radical-site displacements: their left patterns require a charge site written '[Cl+.]' / '[_A+.]', i.e. an ODD-electron heteroatom, whereas Equation 8.105 is explicitly an EE+ reaction (p. 215). RDKit test of '[#6]-[#6]-[#6]-[#6]-[#6]-[Cl+]' against this record's precursor returns 0 matches, and there is no heteroatom charge site at all in the instantiated substrate. (ii) IMS_4_37_rd ('[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9>>[C]1[C]2[C]3[C]4[C]5[C]6{-}3.[O+.]7([H]8)[H]9') also starts from a carbon radical and expels the onium, again the radical-site family and again the opposite fragment charged. No rule in src/data_generation/rules/ encodes an even-electron charge-site displacement in which the bonding pair migrates to the charge site and the exterior group leaves as a cation."
+    },
+    {
+      "evidence_id": "ev_peak_8_105",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_43",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 213,
+        "equation": "8.105",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.4,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): Equation 8.105 is drawn wholly generically (Y, Y+) and page 213 prints no m/z and no abundance. m/z 43.0173 (C2H3O+, acylium) is curator-computed with RDKit ExactMolWt, electron-mass corrected, for the chosen instantiation (precursor m/z 113.0955, neutral cyclopentane 70.0783). Status 'inferred', detected=false, relative_intensity omitted. Note that the ion here is the EXPELLED group, not the cyclic product - that is what the page draws, and it is the point flagged in the step note."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 113.0955,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_43",
+      "species_id": "acylium_ion",
+      "step_id": "step_charge_site_displacement",
+      "observed_mz": 43.0173,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

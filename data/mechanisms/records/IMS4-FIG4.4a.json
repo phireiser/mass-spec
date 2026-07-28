@@ -1,0 +1,204 @@
+{
+  "mechanism_id": "IMS4-FIG4.4a",
+  "species": [
+    {
+      "species_id": "diethylamine_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][NH+:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "iminium_ion_58",
+      "mapped_smiles": "[CH2:2]=[NH+:3][CH2:4][CH3:5]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "diethylamine_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "iminium_ion_58",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_ch3",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ch3",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 62,
+        "equation": null,
+        "figure": "4.4",
+        "panel": null,
+        "section": "Chapter 4 Basic Mechanisms of Ion Fragmentation; radical-site (alpha) cleavage of amines"
+      },
+      "confidence": 0.9,
+      "curator_note": "ARC COUNT / DRAWN-vs-INFERRED (convention D): Figure 4.4 is the diethylamine BAR SPECTRUM annotated with wavy cleavage-marks (which bond breaks -> which m/z) and the '58a' peak label; it draws 0 curved electron-pushing arrows. The 3-fishhook alpha-cleavage flow encoded here is curator-inferred from the book's own alpha attribution (the cleavage-mark + 'a' label), not transcribed from drawn arcs. Concrete example: diethylamine molecular ion, n-ionized at nitrogen, CH3CH2-N(+.)(H)-CH2CH3 (m/z 73, M+.). The alpha (Ca-Cb) bond cleaves with loss of .CH3 to give the iminium ion CH2=N(+)(H)-CH2CH3 at m/z 58, the base peak (labelled '58a' on the spectrum). Book draws 0 curved arrows for this step: the mechanism is shown by a squiggly bond-cleavage mark drawn across the CH3-C(alpha) bond with the retained-fragment mass '58' bracketed beneath it (McLafferty's cleavage notation, not electron-pushing arrows). All 3 electron moves are encoded here for electron balance (odd electron on N into the forming N=C pi bond; one electron of the breaking Ca-Cb sigma into that pi bond; the second electron of that sigma onto the departing methyl); NONE is drawn as an arc on the page."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-FIG4.4a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 62,
+        "equation": null,
+        "figure": "4.4",
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.9,
+      "curator_note": "Cross-linked MØD rule IMS_4_43_ (book eq 4.43, authored as 'displacement reaction' in the German-edition provenance). VERIFIED against this scheme: its DFS left pattern [C]1(H)(H)(H)[C]5(H)(H)[N+.]8(H)[C]10(H)(H)[C]13(H)(H)(H) is atom-for-atom the diethylamine radical cation used here, and its right side [C]1[C]5[N+]8(H){=}[C]10(H)(H) . [C.]13(H)(H)(H) is exactly the encoded step: it cleaves the Ca-Cb bond (C10-C13), forms the N8=C10 pi bond incident to the pi-forming alpha carbon, and migrates the radical from N to the departing methyl. The rule parses in the container to 1 left / 2 right components, consistent with a single fragmentation. Because diethylamine is symmetric the rule's C10/C13 correspond to either ethyl group. No mismatch: cleaved bond IS incident to the double-bond-forming atom."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_58",
+      "support_type": "explicitly_reported",
+      "locator": {
+        "page": 62,
+        "equation": null,
+        "figure": "4.4",
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.9,
+      "curator_note": "m/z 58 is the base peak of the diethylamine spectrum (Figure 4.4), explicitly labelled '58a' (alpha cleavage)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 73.0886,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58",
+      "species_id": "iminium_ion_58",
+      "step_id": "step_alpha_cleavage_ch3",
+      "observed_mz": 58.0651,
+      "relative_intensity": 1.0,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

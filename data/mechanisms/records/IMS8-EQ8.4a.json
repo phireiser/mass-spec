@@ -1,0 +1,143 @@
+{
+  "mechanism_id": "IMS8-EQ8.4a",
+  "species": [
+    {
+      "species_id": "butyl_methyl_ketone_radical_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2:4][C:5](=[O+:6])[CH3:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butyl_cation",
+      "mapped_smiles": "[CH3:1][CH2:2][CH2:3][CH2+:4]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "acetyl_radical",
+      "mapped_smiles": "[C:5](=[O:6])[CH3:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["butyl_methyl_ketone_radical_cation"]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": ["butyl_cation", "acetyl_radical"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [4, 5]},
+          "target": {"type": "atom", "atom_maps": [5]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "atom", "atom_maps": [5]},
+          "target": {"type": "atom", "atom_maps": [6]},
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 141,
+        "equation": "8.4",
+        "section": "8.2 Product stability -- Charge competition in OE(+.) decompositions: Stevenson's Rule"
+      },
+      "confidence": 0.85,
+      "curator_note": "Eq 8.4, first branch, arrow labeled 'i' (inductive); instantiated with x = n-butyl (n-butyl methyl ketone / 2-hexanone molecular ion). Cleavage of the C(butyl)-C(=O) bond with charge migration to the butyl fragment giving n-C4H9+ and loss of the neutral acetyl radical .COCH3. The page tabulates this branch for three butyl isomers: n = 10%, s = 30%, t = 100% (relative abundances), rising as the butyl-cation ionization energy falls (printed n-8.0, s-7.3, t-6.7 eV) -- Stevenson's rule: the more stable (lower-IE) butyl cation increasingly wins the charge. Book draws 0 arcs (summary equation); the flow is reconstructed as a heterolytic C4-C5 cleavage (both sigma electrons of bond 4-5 to the carbonyl carbon C5, butyl departs as C4H9+) followed by a one-electron shift from that incipient acyl carbanion to the adjacent O6, quenching the oxygen radical cation and leaving the odd electron on the acetyl carbon. LOCALIZATION at the carbonyl oxygen (n-ionization, lowest IE); the page prints (+.) over the C4H9-CO region."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.4a",
+      "support_type": "curator_inferred",
+      "locator": {"page": 141, "equation": "8.4"},
+      "confidence": 0.15,
+      "curator_note": "Cross-linked MOD rule IMS_8_4 (equation 8.4). MISMATCH on two counts: (1) SUBSTRATE -- the rule's DFS is an ETHER, CH3CH2CH2[CH2+.]-CH2-O-CH3 (a C-O-C linkage, no carbonyl), whereas Eq 8.4 is a KETONE C4H9-C(=O)-CH3; the C=O double bond is absent. (2) CONSERVATION -- it cleaves a C-C bond to give a butyl radical cation [C4H9](+.) (retaining BOTH charge and the odd electron) plus CH3CH2-O(+), so its RHS carries charge +2; charge/spin-non-conserving and dropped by the conservation guardrail. It produces neither the even-electron n-C4H9+ of this branch nor the acylium of the alpha branch (8.4b). See rule_mismatches."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_C4H9",
+      "support_type": "explicitly_reported",
+      "locator": {"page": 141, "equation": "8.4"},
+      "confidence": 0.85,
+      "curator_note": "Book prints '10%' relative abundance under x-C4H9+ for x = n (s = 30%, t = 100%). observed_mz 57.0699 is the curator-computed electron-mass-corrected monoisotopic m/z of C4H9+; the page prints only the % abundances and the fragment IE, no m/z."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+.",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_C4H9",
+      "species_id": "butyl_cation",
+      "step_id": "step_inductive_cleavage",
+      "observed_mz": 57.0699,
+      "relative_intensity": 0.10,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

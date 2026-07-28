@@ -1,0 +1,398 @@
+{
+  "mechanism_id": "IMS8-EQ8.122",
+  "species": [
+    {
+      "species_id": "azabenzanilide_molecular_ion",
+      "mapped_smiles": "[N+:1]1=[C:2]([N:7]([CH3:8])[C:9](=[O:10])[C:11]2=[C:12]([1H:17])[CH:13]=[CH:14][CH:15]=[CH:16]2)[CH:3]=[CH:4][CH:5]=[CH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclized_sigma_complex",
+      "mapped_smiles": "[CH3:8][N:7]1[C:2]2=[N+:1]([CH:6]=[CH:5][CH:4]=[CH:3]2)[C:12]3([1H:17])[C:11]([CH:16]=[CH:15][CH:14]=[CH:13]3)[C:9]1=[O:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dihydro_pyridobenzimidazolium_radical_cation",
+      "mapped_smiles": "[CH3:8][N:7]1[C:2]2=[N+:1]([CH:6]=[CH:5][CH:4]=[CH:3]2)[C:12]3([1H:17])[C:11]1[CH:16]=[CH:15][CH:14]=[CH:13]3",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "carbon_monoxide",
+      "mapped_smiles": "[C-:9]#[O+:10]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "pyridobenzimidazolium_cation",
+      "mapped_smiles": "[CH3:8][N:7]1[C:2]2=[N+:1]([CH:6]=[CH:5][CH:4]=[CH:3]2)[C:12]3=[C:11]1[CH:16]=[CH:15][CH:14]=[CH:13]3",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "hydrogen_atom",
+      "mapped_smiles": "[1H:17]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "azabenzanilide_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_sigma_complex",
+      "species_ids": [
+        "cyclized_sigma_complex"
+      ]
+    },
+    {
+      "state_id": "state_after_co_loss",
+      "species_ids": [
+        "dihydro_pyridobenzimidazolium_radical_cation",
+        "carbon_monoxide"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "pyridobenzimidazolium_cation",
+        "carbon_monoxide",
+        "hydrogen_atom"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ortho_cyclization",
+      "from_state": "state_precursor",
+      "to_state": "state_sigma_complex",
+      "step_class": "radical_site_cyclization",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_co_elimination",
+      "from_state": "state_sigma_complex",
+      "to_state": "state_after_co_loss",
+      "step_class": "carbon_monoxide_elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_hydrogen_atom_loss",
+      "from_state": "state_after_co_loss",
+      "to_state": "state_products",
+      "step_class": "hydrogen_atom_loss",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              12,
+              17
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              17
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              12,
+              17
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MOD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_cyclization_8_122",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ortho_cyclization",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 221,
+        "equation": "8.122",
+        "figure": null,
+        "panel": "top row, first (unlabelled) reaction arrow",
+        "section": "8.11 Elimination of small stable species"
+      },
+      "confidence": 0.85,
+      "curator_note": "SUBSTRATE READ FROM THE DRAWING (equation 8.122, first structure): a pyridine ring whose ring nitrogen carries '+.', substituted at C-2 by an amide nitrogen that bears a generic substituent 'R' and a benzoyl group (C=O drawn to a second, unsubstituted phenyl ring). The facing page (p. 220) names the class and the sequence: 'A variety of 2'-azabenzanilides were found (Broxton et al. 1977) to eliminate CO and then H after initial cyclization between the aromatic rings (Equation 8.122); the ring nitrogen provides a radical-like site for the initial attack, and the larger ring system formed provides stabilization for the unpaired electron as well as charge.' THIS STEP is that initial cyclization: the pyridine ring nitrogen (the ionization site) adds to the ORTHO carbon of the benzoyl phenyl ring, closing the six-membered ring N(py)-C2(py)-N(amide)-C(=O)-C(ipso)-C(ortho) that the book prints as the second structure and turning the phenyl ring into a cyclohexadienyl radical. ARC COUNT (convention D): Book draws 0 arc(s) - equation 8.122 is printed with plain reaction arrows only (the second carries the label '-CO') and no curly arrows appear anywhere in it; moves <1,2,3> are ALL curator-supplied for electron balance, none of them is drawn on the page. LOCALIZATION (convention B): the precursor SMILES puts the charge and the odd electron on the pyridine nitrogen ([N+:1] with three bond orders = one unpaired electron in RDKit), exactly where the book prints '+.', so move <1> has a real origin. DRAWING DEFECT DISCLOSED: the book's cyclized structure keeps the attacked benzo ring drawn with all THREE C=C while also giving the attacked carbon an explicit H and a new bond to N+, which makes that carbon pentavalent; the chemically consistent species - and the one encoded here - is the cyclohexadienyl radical. The book itself draws that correctly one row later, where the same ring carries only two C=C and the ring-fusion carbon is left without an H, i.e. as the radical centre. RESONANCE CHOICE (convention C): the cyclohexadienyl radical is delocalized over the ipso carbon and the two positions ortho/para to the new sp3 centre; this record localizes the odd electron on the carbon that carried the acyl group (atom map 11), because that is the form the book draws after CO loss and the form that makes the CO extrusion a clean two-electron process. INSTANTIATION (convention F): 'R' is generic on the page; this record uses R = CH3, i.e. N-methyl-N-(pyridin-2-yl)benzamide, C13H12N2O, M+. m/z 212.094. R = H (the parent 2'-azabenzanilide) would lower every mass by 14.016; no mass in this record is printed by the book."
+    },
+    {
+      "evidence_id": "ev_step_co_8_122",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_co_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 221,
+        "equation": "8.122",
+        "figure": null,
+        "panel": "top row, second arrow labelled '- CO'; its product is the first structure of the second row",
+        "section": "8.11 Elimination of small stable species"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 8.122, SECOND arrow, the only annotated one: it carries the neutral-loss label '- CO' and runs off the right edge of the first row into the structure that opens the second row. That structure is the ring-contracted product: the six-membered ring of the cyclized intermediate has become the five-membered imidazole ring N(py)-C2(py)-N(R)-C(aryl)-C(aryl)H, drawn fused to the pyridinium ring on one side and to a cyclohexadiene on the other, with the transferred H still explicit on the carbon bonded to N+. ARC COUNT (convention D): Book draws 0 arc(s); both moves <1,2> are curator-supplied for electron balance. Move <1> sends the amide N-C(=O) bonding pair into the C-O bond, making the third bond of carbon monoxide; move <2> sends the C(=O)-C(aryl) bonding pair into the new N-C(aryl) bond that closes the five-ring. Carbon monoxide is encoded in its standard charge-separated Lewis form [C-]#[O+] (net neutral, closed shell). The odd electron on atom map 11 is a spectator here, so the product remains the odd-electron ion it has to be."
+    },
+    {
+      "evidence_id": "ev_step_hloss_8_122",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_hydrogen_atom_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 221,
+        "equation": "8.122",
+        "figure": null,
+        "panel": "second row, unlabelled arrow between the dihydro and the aromatic structure",
+        "section": "8.11 Elimination of small stable species"
+      },
+      "confidence": 0.75,
+      "curator_note": "Equation 8.122, THIRD arrow (second row). The book leaves it completely unlabelled - there is no '- H.' over it - but the facing-page text supplies the meaning: the azabenzanilides '...eliminate CO and then H after initial cyclization...'. The hydrogen lost is the one the book draws explicitly on the ring-fusion carbon of the left-hand structure, and the right-hand structure is the fully aromatic tricycle (5-R-pyrido[1,2-a]benzimidazol-5-ium) with '+' on the bridgehead nitrogen and no odd electron, i.e. an even-electron ion. ARC COUNT (convention D): Book draws 0 arc(s); all three moves <1,2,3> are curator-supplied. Move <1> takes one electron of the C-H bond away with the departing hydrogen atom (the homolysis hook); moves <2> and <3> pair the other C-H electron with the odd electron of the adjacent radical carbon (map 11) to make the new pi bond that aromatizes the ring. STOICHIOMETRY CHECK: the left-hand structure carries one more hydrogen than the right-hand one, and an odd-electron ion losing H. must give an even-electron ion, which is exactly what the book prints. This is the 'larger ring system ... stabilization for the unpaired electron as well as charge' argument of the text."
+    },
+    {
+      "evidence_id": "ev_mech_mod_8_122",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.122",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 221,
+        "equation": "8.122",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.1,
+      "curator_note": "NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no key '8.122'; its chapter-8 keys stop at '8.14' (German-edition numbering: 154 rules, 57 equations). The closest candidates were CHECKED with RDKit against this record's own instantiated species (convention E) and every one of them fails. (i) IMS_4_27_1 '[_A]1[C]2([_A]3){=}[O+.]4>>[_A]1.[_A]3[C]2{#}[O+]4' is the generic rule that turns a C=O into a C{#}O, but it requires the carbonyl oxygen itself to be the charge-plus-radical site ('{=}[O+.]'). The cyclized intermediate here contains no [O+] whatsoever - the RDKit query '[#8+]' gives 0 matches on it, while '[#7+]' gives 1 (the pyridinium nitrogen) - so the rule cannot bind, and in any case its product is an acylium ion still attached to the substrate, not the free CO that equation 8.122 expels. (ii) IMS_4_14 '[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>...' and IMS_8_2_alpha_1_1, the other two rules that generate '{#}[O+]', carry the same '{=}[O+.]' requirement and likewise give 0 matches ('[#6]-[#6]-[#6](=[O+])(-[#6]-[#6])' -> 0). (iii) IMS_8_2_alpha_3_8 '[C]1([H]2)([H]3)([H]4)[C+.]5([H]6)[C]7([H]8)([H]9)>>...[H.]4' is the ONLY rule in the set that expels a hydrogen ATOM, but it needs a carbon that is simultaneously charged and radical; the post-CO ion has no charged carbon at all ('[#6+]' -> 0 matches) and the rule is an aliphatic 1,2-H loss, not the aromatization of a cyclohexadienyl radical. (iv) 'substituion' '[_A]1[C]2[C]3[_A+.]4>>[_A.]1.[C]2[C]3[_A+]4{-}2' shows a loose skeleton match (the proxy query '[!#1]-[#6]-[#6]-[!#1+]' hits twice in the cyclized intermediate) but it too demands a single atom that is both charged and radical, whereas here the charge (nitrogen, map 1) and the odd electron (carbon, map 11) sit on different atoms; it would also close a three-membered ring while expelling a radical. No rule encodes radical-site cyclization onto an arene, amide CO ring-contraction, or an aromatizing H. loss, so this record adds three reaction types the rule set does not model."
+    },
+    {
+      "evidence_id": "ev_peaks_8_122",
+      "source_id": "mod_rules",
+      "target_type": "peak_assignment",
+      "target_id": "peak_183",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 221,
+        "equation": "8.122",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MEASUREMENT ON THE PAGE (convention F): equation 8.122 is drawn generically (substituent printed as 'R') and neither the scheme nor the surrounding prose gives any m/z or abundance for it. Every species is therefore detected=false, both peak assignments have status 'inferred', and relative_intensity is omitted. The masses are curator-computed monoisotopic m/z (RDKit ExactMolWt, electron-mass corrected) for the chosen instantiation R = CH3: M+. C13H12N2O 212.0939 -> [- CO, 27.9949] C12H12N2+. 184.0990 -> [- H., 1.0078] C12H11N2+ 183.0911. They are not numbers printed by the book, and a different R shifts all three. MS-CONTEXT ASSUMPTION (disclosed): ms_context.activation_method '70 eV EI' and electron_energy_ev 70.0 are the Chapter-8 house default, NOT printed on this page -- the page names no ionisation or activation conditions. Only the ion type (the drawn '+.' / '+') is source-backed."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 212.0939,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_184",
+      "species_id": "dihydro_pyridobenzimidazolium_radical_cation",
+      "step_id": "step_co_elimination",
+      "observed_mz": 184.099,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    },
+    {
+      "peak_id": "peak_183",
+      "species_id": "pyridobenzimidazolium_cation",
+      "step_id": "step_hydrogen_atom_loss",
+      "observed_mz": 183.0911,
+      "relative_intensity": null,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-28T00:00:00Z",
+    "modified_at": "2026-07-28T00:00:00Z"
+  }
+}

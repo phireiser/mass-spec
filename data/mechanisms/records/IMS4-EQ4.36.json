@@ -1,0 +1,252 @@
+{
+  "mechanism_id": "IMS4-EQ4.36",
+  "species": [
+    {
+      "species_id": "pentylbenzene_localized_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]([1H:4])[CH2:5][CH2:6][C+:7]1[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_H_intermediate",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2:5][CH2:6][C+:7]1[CH:8]([1H:4])[CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "toluene_radical_cation",
+      "mapped_smiles": "[CH2:6][C+:7]1[CH:8]([1H:4])[CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "but_1_ene_neutral",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentylbenzene_localized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_H_intermediate"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "toluene_radical_cation",
+        "but_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [8]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [4, 8]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [3, 4]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [4, 8]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [3, 4]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [3]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_beta_cleavage_alpha",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [3]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [3, 5]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [5, 6]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [3, 5]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [5, 6]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [6]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH_4_36",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 73,
+        "equation": "4.36",
+        "figure": "3.7",
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (gamma-H rearrangement to an unsaturated group; phenylalkanes, Eq. 4.36)"
+      },
+      "confidence": 0.85,
+      "curator_note": "gamma-H rearrangement (labelled 'rH') in the molecular ion of a phenylalkane. Instantiated as n-pentylbenzene, C6H5-CH2CH2CH2CH2CH3 (M = C11H16, m/z 148); the drawn 'C2H5-||' neutral is but-1-ene (CH3CH2-CH=CH2), and the aromatic ring plays the role of the unsaturated group. Convention B/C: the true molecular ion is the DELOCALIZED aromatic radical cation (drawn on the page as the benzene circle with '+.' inside); the first (unlabelled, curved-arrow-free) reaction arrow localizes it to the reactive resonance structure used here -- an ipso-carbenium / ortho-radical cyclohexadienyl (charge on ipso C(7), odd electron on ortho C(8)); a single localized Kekule form is chosen and kept consistent throughout (see mod evidence for the IMS_4_36_ localization rule). The gamma-H (on C(3)) then transfers to the ortho radical carbon C(8) through the six-membered ring, relocating the radical to the gamma-carbon C(3). ARC COUNT: the intermediate is drawn with the full concerted McLafferty pushing (4 fishhook arcs total: 1 here for the H-transfer, 3 for the beta-cleavage). For THIS rH step: Book draws 1 arc -- the fishhook from the gamma C-H over to the ortho radical carbon C(8). Move <2> (one C(3)-H(4) electron into the forming C(8)-H(4) bond) is the drawn arc; move <1> (the C(8) odd electron into that forming C-H bond) and move <3> (the other C(3)-H(4) electron back onto the gamma-carbon C(3)) are implicit homolysis hooks for electron balance. ENCODING NOTE: migrating H (map 4) written [1H] so RDKit retains it as an atom-mapped node."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_4_36",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 73,
+        "equation": "4.36",
+        "figure": "3.7",
+        "panel": null,
+        "section": "4.9 Radical site rearrangements (beta-cleavage / charge retention, labelled 'alpha')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Radical-site beta-cleavage (arrow labelled 'alpha'): the gamma-carbon radical forms the C(3)=C(5) pi bond and cleaves the beta C(5)-C(6) sigma bond, expelling neutral but-1-ene ('C2H5-||') and giving the charge-retaining odd-electron ion. The detected ion (m/z 92) is encoded as the immediate distonic product .CH2-C(+)(ring) = a benzyl/toluene radical cation valence tautomer; its conventional form is the aromatic toluene radical cation C6H5-CH3+. (C7H8, m/z 92) -- same formula, same mass, resonance/tautomer partner (convention C). ARC COUNT: Book draws 3 arc(s) for this stage on the intermediate -- all three fishhooks are drawn: move <1> (gamma-radical C(3) into the forming C(3)=C(5) pi bond), move <2> (one beta C(5)-C(6) electron into that pi bond) and move <3> (the other C(5)-C(6) electron onto the benzylic alpha-carbon C(6), the new radical site). The cleaved C(5)-C(6) bond IS incident to C(5), a pi-forming atom -- correct McLafferty geometry. NOTE ON THE COMPETING BASE PEAK: the page prints '(m/z 91 = 100%) m/z 92, 60%'. m/z 91 (C7H7+, benzyl/tropylium, an EVEN-electron ion) is the base peak and arises from a COMPETING direct benzylic sigma-cleavage (loss of the C4H9 butyl radical), which is NOT the rearrangement drawn on this page and is not encoded here. The scheme drawn IS the McLafferty rearrangement, whose product is the OE+. ion m/z 92 (60%), assigned below."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_4_36",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.36",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.36",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py (IMS_4_36_, IMS_4_36__rHalpha)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Cross-linked to TWO MOD rules, VERIFIED against this scheme (not asserted); this record shares the rules' atom numbering (chain C1..C6, ring C7..C12, migrating H = index 4). (1) IMS_4_36_ '...[C]7:[C]8:[C]9:[C]10:[C]11:[C]12:7 >> ...[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7' is the CHARGE-LOCALIZATION step: it converts the delocalized aromatic radical cation into the ipso-carbenium (C7+) / ortho-radical (C8.) cyclohexadienyl form. This record folds that localization into the precursor species representation (the reactive resonance structure the book draws after its first arrow) rather than as a separate electron-move step, since the figure draws NO curved arrows on that first arrow -- it is a resonance/charge-localization, not a bond-breaking step. (2) IMS_4_36__rHalpha '[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7[C.]8... >> [C]1[C]2[C]3{=}[C]5.[C.]6[C+]7[C]8([H]4)...' FUSES my two steps (rH + alpha) into one transformation: it moves H(4) from the gamma-carbon C(3) to the ortho radical C(8), forms C(3)=C(5) (the but-1-ene pi bond), cleaves the beta C(5)-C(6) bond, leaves the radical on the benzylic alpha-carbon C(6) and keeps the charge on ipso C(7). The cleaved C(5)-C(6) bond IS incident to the pi-forming C(5) -- correct McLafferty geometry, NO rule mismatch. The MOD rules atom-map the migrating H (index 4); this record likewise keeps it (as [1H]). The competing benzylic cleavage giving the m/z 91 base peak has no dedicated rule under equation 4.36 and is not encoded here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 148.1247,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_92",
+      "species_id": "toluene_radical_cation",
+      "step_id": "step_beta_cleavage_alpha",
+      "observed_mz": 92.0621,
+      "relative_intensity": 0.60,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-25T00:00:00Z",
+    "modified_at": "2026-07-25T00:00:00Z"
+  }
+}

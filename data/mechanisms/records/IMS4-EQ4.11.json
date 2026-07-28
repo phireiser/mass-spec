@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS4-EQ4.11",
+  "species": [
+    {
+      "species_id": "acetone_radical_cation",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:3])[CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acetyl_cation",
+      "mapped_smiles": "[CH3:4][C:2]#[O+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "acetone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetyl_cation",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 57,
+        "equation": "4.11",
+        "section": "4.6 Radical-site initiation (alpha-cleavage)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Generic scheme for an unsaturated heteroatom, R-CR=Y(+.) -> R. + RC#Y(+). Book draws 2 arc(s); moves <1,2> are drawn (the odd electron on Y into the C=Y bond, and one electron of the R-C sigma bond into that same bond), move <3> is an implicit homolysis hook required for electron balance (not drawn on the page; R. is simply written as a product). Instantiated by the curator as Y = O with R = CH3 on the sp2 carbon, i.e. the acetone molecular ion n-ionized at oxygen, giving the acetyl (acylium) cation. The page prints no m/z, no intensity and no compound name for this scheme."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.11",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 57,
+        "equation": "4.11"
+      },
+      "confidence": 0.2,
+      "curator_note": "rule_index cross-links equation 4.11 to IMS_4_11 ([C]1[C]2[C]3{=}[_A+.]4 >> [C.]1.[C]2[C]3{#}[_A+]4). VERIFIED MISMATCH, not support: the DFS is a linear chain C1-C2-C3=Y4, so the cleaved bond C1-C2 is one carbon too far from the pi-forming atom C3, while the book's R sits directly on the carbon that bears =Y (the intended DFS was almost certainly [C]1[C]2([C]3){=}[_A+.]4 -- a missing branch parenthesis). Checked in the container: the rule does NOT match the acetone molecular ion at all; on 2-butanone M+. it fires but cleaves the CH3-CH2 bond and returns [CH2]C(C)#[O+], a pentavalent carbon. It conserves atoms, charge and spin, so the conservation guardrail keeps it live -- it is wrong rather than filtered. m/z values in this record are curator-computed from the instantiation."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_acylium",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 57,
+        "equation": "4.11"
+      },
+      "confidence": 0.5,
+      "curator_note": "No m/z or intensity is printed for this generic scheme; 43.0178 is the curator-computed monoisotopic m/z of CH3-C#O+ for the chosen acetone instantiation (electron-mass corrected). Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 58.0413,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acylium",
+      "species_id": "acetyl_cation",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 43.0178,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-23T00:00:00Z",
+    "modified_at": "2026-07-23T00:00:00Z"
+  }
+}

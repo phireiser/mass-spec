@@ -1,0 +1,173 @@
+{
+  "mechanism_id": "IMS4-EQ4.7",
+  "species": [
+    {
+      "species_id": "ethane_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH3:2]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_cation",
+      "mapped_smiles": "[CH3+:2]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methyl_cation",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_dissociation",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "isbn": "0-935702-25-3"
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_dissociation",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 56,
+        "equation": "4.7",
+        "section": "4.5 Sigma-bond dissociation"
+      },
+      "confidence": 0.85,
+      "curator_note": "Generic scheme R(+.)CR3 -> R. + (+)CR3: a saturated-alkane sigma C-C bond is ionized and dissociates, the charge going to the more-substituted carbon and the odd electron to the leaving alkyl radical. Instantiated by the curator as ETHANE (R = CR3 = CH3), the example the surrounding text discusses ('ionization of ethane increases the C-C bond length by ~30% and halves its bond dissociation energy'); by symmetry it gives CH3(+) + CH3(.). REPRESENTATION CAVEAT (honest): the saturated-alkane molecular ion is a sigma radical cation whose odd electron occupies the one-electron C-C bond and is NOT localizable on any single atom -- the book draws '+.' straddling the C-C bond, not on an atom. A CnH(2n+2) radical cation has no connected integer-bond Lewis/RDKit structure at all (37 valence electrons for ethane-> 6 two-electron bonds + 1 unpaired e-, i.e. one fewer bond than the 7 needed to connect 8 atoms), so the precursor mapped_smiles necessarily shows the NEUTRAL C-C skeleton (the real origin of the arrows) while the species charge=1/radical_electrons=1 fields record that it is the M+.. Book draws 0 curved arrows/fishhooks; the mechanism is denoted by the 'sigma' label over the reaction arrow. The two encoded moves are curator-supplied for a complete, balanced electron flow and map onto the book's own words: move <1> routes one electron of the C-C sigma bond to the leaving carbon (-> CH3.), move <2> routes the other sigma electron to EXTERNAL -- this IS the ionization the book states removes an electron 'from the saturated bond framework', leaving CH3(+). No arc is misrepresented as drawn."
+    },
+    {
+      "evidence_id": "evidence_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS4-EQ4.7",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": 56,
+        "equation": "4.7"
+      },
+      "confidence": 0.6,
+      "curator_note": "rule_index cross-links equation 4.7 to IMS_4_7 ([C+.]1[C]2[C]3[C]4[C]5 >> [C.]1.[C+]2[C]3[C]4[C]5) and to sigma_lowIE ([_A+.]1[I]2 >> [_A.]1.[I+]2). VERIFIED BOND-CHANGE MATCH: IMS_4_7 cleaves the C1-C2 sigma bond, sends atom1 [C+.] -> [C.] (the leaving neutral radical R.) and atom2 -> [C+] (the retained carbocation (+)CR3), which is exactly the book's R(+.)CR3 -> R. + (+)CR3. sigma_lowIE is the low-ionization-energy-heteroatom analogue (R-X, e.g. C-I) with the same topology _A(+.)-X -> _A. + X(+); it is a generalization, not a match for the all-carbon ethane case. MODEL-DIVERGENCE CAVEAT: both rules localize the '+.' on a carbon atom, which MOD's untyped graph model permits but RDKit rejects for a saturated alkane (the sibling explicit-H alkane rules IMS_4_3/IMS_4_8 place [C+.] on a 4-coordinate carbon, which RDKit refuses -- 'Explicit valence for atom C, 4, is greater than permitted'). The bond CHANGE the rules encode is faithful; only their atom-localized radical-cation precursor is not RDKit-representable, which is why this record's precursor mapped_smiles uses the neutral skeleton. All m/z values are curator-computed from the ethane instantiation."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_methyl_cation",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 56,
+        "equation": "4.7"
+      },
+      "confidence": 0.5,
+      "curator_note": "The page prints no m/z and no relative intensity for this generic scheme; 15.0229 is the curator-computed monoisotopic m/z of CH3(+) (electron-mass corrected) for the chosen ethane instantiation. Not a measurement."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 30.0464,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_methyl_cation",
+      "species_id": "methyl_cation",
+      "step_id": "step_sigma_dissociation",
+      "observed_mz": 15.0229,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-24T00:00:00Z",
+    "modified_at": "2026-07-24T00:00:00Z"
+  }
+}

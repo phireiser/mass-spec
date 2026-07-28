@@ -1,0 +1,178 @@
+{
+  "mechanism_id": "IMS8-EQT8.2m",
+  "species": [
+    {
+      "species_id": "cyclohexyl_cation",
+      "mapped_smiles": "[CH+:1]1[CH2:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclobutyl_cation",
+      "mapped_smiles": "[CH+:1]1[CH2:2][CH2:3][CH2:6]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:4]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclohexyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "cyclobutyl_cation",
+        "ethylene"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_ring_contraction",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "retro_ring_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_contraction",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 167,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "8.3 (Two bonds cleaved; EE+ i-i)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Table 8.2 (p.167, Two bonds cleaved, EE+ row): two inductive cleavages (i-i). Book draws 2 arcs (both drawn) sweeping the lower ring. Even-electron ring contraction of the cyclohexyl cation: C3-C4 bond -> C4=C5 pi (expelling ethylene) and C5-C6 bond -> new C3-C6 sigma (closing the cyclobutane); charge retained on the ring cation. The precise atoms expelled are schematic in the generic scheme; the encoded bonds reproduce the drawn cyclohexyl+ -> cyclobutyl+ + ethylene. No m/z / intensity printed -- m/z curator-computed."
+    },
+    {
+      "evidence_id": "ev_mech",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQT8.2m",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "Table 8.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.4,
+      "curator_note": "No MØD rule indexed to Table 8.2 (see note in EQT8.2a). No rule encodes this EE+ cyclohexyl->cyclobutyl ring contraction with ethylene loss."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": null,
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 83.0855,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_cyclobutyl",
+      "species_id": "cyclobutyl_cation",
+      "step_id": "step_ring_contraction",
+      "observed_mz": 55.0542,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}

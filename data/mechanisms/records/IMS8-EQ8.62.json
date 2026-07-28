@@ -1,0 +1,279 @@
+{
+  "mechanism_id": "IMS8-EQ8.62",
+  "species": [
+    {
+      "species_id": "dimethyltetrahydropyran_molecular_ion",
+      "mapped_smiles": "[CH3:7][C:2]1([CH3:8])[CH2:3][CH2:4][CH2:5][CH2:6][O+:1]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "alkyl_tetrahydropyrylium",
+      "mapped_smiles": "[CH3:7][C:2]1=[O+:1][CH2:6][CH2:5][CH2:4][CH2:3]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "r_prime_radical",
+      "mapped_smiles": "[CH3:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "acylium_ion",
+      "mapped_smiles": "[CH3:7][C:2]#[O+:1]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "cyclobutane_neutral",
+      "mapped_smiles": "[CH2:3]1[CH2:4][CH2:5][CH2:6]1",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethyltetrahydropyran_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_pyrylium",
+      "species_ids": [
+        "alkyl_tetrahydropyrylium",
+        "r_prime_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acylium_ion",
+        "cyclobutane_neutral",
+        "r_prime_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_pyrylium",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_ring_co_cleavage",
+      "from_state": "state_pyrylium",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              6
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_8_62",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.62",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (two bonds cleaved)"
+      },
+      "confidence": 0.85,
+      "curator_note": "GENERIC SCHEME, INSTANTIATED. The page draws a 2,2-disubstituted tetrahydropyran with the substituents written only as R and R'; no m/z and no intensity are printed anywhere in this equation. It is instantiated here as R = R' = CH3 (2,2-dimethyltetrahydropyran, M+. m/z 114.1039) purely so that the record carries a parseable structure - every mass in this record is curator-computed from that choice, not measured. The precursor mapped_smiles localizes charge and odd electron on the ring oxygen exactly as the printed '+.' does (O+ with two sigma bonds carries the one unpaired electron). Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 = a fishhook from the odd electron on O(1) into the O(1)-C(2) bond; drawn arc 2 = a fishhook from the exocyclic C(2)-R'(8) bond into that same O(1)-C(2) bond, which rises from single to double (cyclic oxocarbenium = 2-alkyltetrahydropyrylium). The undrawn move 3 puts the second electron of the cleaved C(2)-R' bond on R'; the book instead writes '- R'.' under the reaction arrow. Map numbers: 1 = ring O, 2 = C2, 3-6 = ring C3..C6 (C6 is the CH2 bonded to O), 7 = R (retained on the acylium), 8 = R' (expelled)."
+    },
+    {
+      "evidence_id": "evidence_step_cleavage_8_62",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_ring_co_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 186,
+        "equation": "8.62",
+        "figure": null,
+        "panel": null,
+        "section": "8.9 Decompositions of cyclic structures (two bonds cleaved)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book draws 2 arc(s) on the tetrahydropyrylium structure; moves <1,2> are both drawn and no implicit hook is needed - this is an even-electron, charge-site-driven flow and both arrowheads on the page are full (double-barbed) heads, hence electron_count 2. Drawn arc 1 starts on the ring C(2)-C(3) bond and points at the C(2)=O(1) bond, raising it to the acylium triple bond; drawn arc 2 starts on the ring O(1)-C(6) bond and points down-left into the interior of the ring, i.e. at the TRANSANNULAR C(3)-C(6) bond it creates. That new C-C bond is what turns the four remaining ring carbons into the plain square drawn as the neutral product: in skeletal notation the square is cyclobutane (C4H8), and the accompanying text describes the step as the 2-alkyltetrahydropyrylium ion 'dissociating at the C-O ring bond, yielding a stable acylium ion' (also cross-referenced to Equation 8.51; Zahorszky 1982). The reaction arrow itself carries NO letter label on the page; step_class is set to inductive_cleavage because the flow is initiated at the charge site, and that inference (not a printed label) is disclosed here. No m/z or abundance is printed for either product, so both are detected=false and the acylium peak is status 'inferred'."
+    },
+    {
+      "evidence_id": "evidence_mod_8_62",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.62",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "8.62",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.55,
+      "curator_note": "rule_index.json 'by_equation' has NO entry for equation 8.62 (chapter-8 keys stop at 8.14); no MOD rule variable is cross-linked. Candidates were CHECKED against the instantiated substrate with RDKit rather than asserted. (i) IMS_4_13_1 (DFS '[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)>>[C.]1([H]2)([H]3)([H]4).[C]5([H]6)([H]7){=}[O+]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)') has the right geometry for an ether alpha-cleavage (the cleaved C(1)-C(5) bond is incident to the pi-forming carbon C(5)) but is authored for diethyl ether and does NOT match: SMARTS [CH3][C;H2,H3][O+][C;H2,H3][CH3] gives 0 matches on the precursor. (ii) IMS_4_26_1 ('[_A]1[C]2([H]3)([H]4)[O+.]5[_A]6>>[_A.]1.[C]2([H]3)([H]4){=}[O+]5[_A]6') DOES match the substrate (SMARTS [#6][C;H2,H3][O+][#6], 1 match) but only at the UNSUBSTITUTED ring CH2 C(6), where it would break the C(5)-C(6) ring bond and open the ring - NOT the alpha-cleavage drawn here, which cleaves the exocyclic C(2)-R' bond. It cannot reproduce the drawn step because it requires two hydrogens on the alpha carbon and this alpha carbon is fully substituted (verified: SMARTS [O+][C;H2,H3][CH3] gives 0 matches). (iii) No rule encodes the second step (ring C-O cleavage with transannular C-C bond formation to cyclobutane): the nearest acylium-forming rule, IMS_8_8_3, acts on an acyclic oxonium and forms no new C-C bond. Because the scheme prints no measurement, the peak is status 'inferred' with no relative_intensity; ms_context is the book's standard 70 eV EI of the molecular ion, with precursor_mz computed from the R = R' = CH3 instantiation."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 114.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_acylium",
+      "species_id": "acylium_ion",
+      "step_id": "step_ring_co_cleavage",
+      "observed_mz": 43.0178,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-27T00:00:00Z",
+    "modified_at": "2026-07-27T00:00:00Z"
+  }
+}

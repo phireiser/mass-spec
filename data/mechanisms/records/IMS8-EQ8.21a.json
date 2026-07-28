@@ -1,0 +1,130 @@
+{
+  "mechanism_id": "IMS8-EQ8.21a",
+  "species": [
+    {
+      "species_id": "steroid_molecular_ion",
+      "mapped_smiles": "[C:1](=[O:2])([CH3:3])[N:4]([CH3:5])[CH:6]1[CH:7]([1H:12])[CH2:8][C:9]2([CH3:13])[CH:10]([CH2:11]1)[CH2:14][CH2:15][CH:16]1[CH:17]2[CH2:18][CH2:19][C:20]2([CH3:22])[CH:21]1[CH2:23][CH2:24][CH:25]2[CH2:26][NH2+:27]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "steroid_ene_aminium_radical_cation",
+      "mapped_smiles": "[CH:6]1=[CH:7][CH2:8][C:9]2([CH3:13])[CH:10]([CH2:11]1)[CH2:14][CH2:15][CH:16]1[CH:17]2[CH2:18][CH2:19][C:20]2([CH3:22])[CH:21]1[CH2:23][CH2:24][CH:25]2[CH2:26][NH2+:27]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "n_methylacetamide_enol",
+      "mapped_smiles": "[C:1]([O:2][1H:12])([CH3:3])=[N:4][CH3:5]",
+      "role": "intermediate",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": ["steroid_molecular_ion"]
+    },
+    {
+      "state_id": "state_complex",
+      "species_ids": ["steroid_ene_aminium_radical_cation", "n_methylacetamide_enol"]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_H_beta_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_complex",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {"type": "bond", "atom_maps": [7, 12]},
+          "target": {"type": "bond", "atom_maps": [2, 12]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [4, 6]},
+          "target": {"type": "bond", "atom_maps": [6, 7]},
+          "electron_count": 2
+        },
+        {
+          "source": {"type": "bond", "atom_maps": [1, 2]},
+          "target": {"type": "bond", "atom_maps": [1, 4]},
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_8_21a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_H_beta_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {"page": 154, "equation": "8.21", "figure": null, "panel": "top-left -> top-right", "section": "8 / Detailed Mechanisms of Ion Fragmentation (remote-group interactions in the steroid molecular ion; Longevialle 1984, 1987)"},
+      "confidence": 0.8,
+      "curator_note": "Step 1 of Equation 8.21, the 'gamma-H/beta-cleavage rearrangement of the 3-acetamido group' (text names it verbatim). The 3-(N-methylacetamido) steroid molecular ion undergoes a concerted McLafferty-type retro-ene: the amide carbonyl O (map2) abstracts the gamma-H (map12) borne by the ring carbon C2 (map7), the C=O pi shifts to C=N, and the amide N4-C3(ring, map6) bond is beta-cleaved, generating a ring C2=C3 double bond (map6=map7) and expelling the neutral enol of N-methylacetamide, H3C-C(OH)=N-CH3 (maps 1,2,3,4,5,12). ARC COUNT (convention D): the book draws 3 curved arcs on the acetamido group and all three are full (double-barbed) two-electron arrows -- (i) the C2-H12 bond curving to the carbonyl O (H transfer, encoded move 1: bond(7,12)->bond(2,12)); (ii) the N4-C6 amide bond curving up to form the ring C2=C3 double bond (beta-cleavage, encoded move 2: bond(4,6)->bond(6,7)); (iii) the C1=O2 pi curving to the C1-N4 bond to form C1=N4 of the enol (encoded move 3: bond(1,2)->bond(1,4)). All three moves are drawn; none is implicit. CHARGE/RADICAL (convention B): the book draws the reactant only as a bracketed [M]+. with the +. on the whole molecule and does NOT localize it; this record localizes the charge and odd electron on the remote 20-amino nitrogen (map27, drawn -CH2-NH2, n-ionized to the aminium radical cation -CH2-NH2+.), because that is the lowest-IE site and it is required to produce the alpha-cleavage drawn later on the same page (Eq 8.21 step 3 / record IMS8-EQ8.21b). Consequently the acetamido rearrangement here is an even-electron process on the neutral, remote portion of the radical cation -- hence three 2-electron arrows, no fishhooks. SUBSTRATE (convention F): the book does not name the exact steroid (only '3-acetamido' and '20-amino' on an androstane/gonane skeleton, from Longevialle 1984/1987); this record instantiates 3-(N-methylacetamido)-20-aminomethyl-androstane (flat, stereochemistry omitted; C23H40N2O+., m/z 360.3130), a curator-chosen realization of the drawn skeleton. This is a molecular-ion rearrangement (ion-neutral / ion-dipole complex chemistry); the enol 'remains in the vicinity of the ion' as an ion-neutral complex rather than separating -- hence both fragments are grouped in one product state and no fragment m/z is printed for this step."
+    },
+    {
+      "evidence_id": "ev_mech_8_21a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS8-EQ8.21a",
+      "support_type": "curator_inferred",
+      "locator": {"page": 154, "equation": "8.21", "figure": null, "panel": null, "section": null},
+      "confidence": 0.9,
+      "curator_note": "NO MØD rule is cross-linked: rule_index.json by_equation has no '8.21' key (the ch.8 index runs 8.1-8.14), so there is no Rule.fromDFS encoding for this equation and nothing to verify against. rule_mismatches: none (nothing to compare against)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "electron ionization",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 360.3130,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-26T00:00:00Z",
+    "modified_at": "2026-07-26T00:00:00Z"
+  }
+}
