@@ -20,21 +20,62 @@ from src.project_paths import shared_path
 #get_spectra = lambda smiles, name: get_spectra_from_pubchem(smiles)
 get_spectra = lambda smiles, name: get_spectra_by_smiles(smiles, shared_path("PARQUET_DIR_REL"))
 
+
+def _ground_truth_smiles(molecule: mod.Graph, smiles: "str | None") -> str:
+    """SMILES to look the reference spectrum up with.
+
+    **Always pass the molecule's original ``smiles``.** Reconstructing it from the term
+    graph (``graph_from_term(molecule).smiles``) silently loses the lookup for every
+    molecule whose store identity depends on stereochemistry: the term encoding
+    ``a(symbol, charge, radical)`` carries no stereo descriptors, so the round-tripped
+    SMILES canonicalises to a different InChIKey and
+    :func:`spect_jdx.get_spectra_by_smiles` (SMILES -> InChIKey -> CAS -> peaks) resolves
+    no CAS and returns ``[]``.
+
+    That failure is silent and total -- it zeroes the ground truth for BOTH arms of a
+    comparison, so a real difference shows up as "0.00 coverage, unmeasurable" rather than
+    as an error. Measured: sucrose 46 peaks by original SMILES vs **0** by round-trip,
+    glucose 94 vs **0**; riboflavin (no stereocentres) 49 vs 49, which is why only the
+    saccharides ever looked empty. With the lookup fixed, sucrose's migration coverage is
+    TPR 0.068 -> 0.270, previously invisible.
+
+    When ``smiles`` is None the round-trip is used for backward compatibility and the
+    caller is warned, so the silent-zero case becomes visible instead of being read as a
+    chemistry result.
+    """
+    if smiles:
+        return smiles
+    fallback = graph_from_term(molecule).smiles
+    print(
+        f"  [describe] WARNING: no original SMILES passed; looking the reference spectrum "
+        f"up with the term round-trip '{fallback}'. Stereochemistry is NOT preserved by "
+        f"the term encoding, so this returns NO peaks for stereo-dependent molecules "
+        f"(e.g. sugars) and the resulting coverage will read as 0.00. Pass smiles=... ."
+    )
+    return fallback
+
+
 def rule_usage(
     derivation_graph: mod.DG,
     molecule: mod.Graph,
-    rules: Iterable[mod.Rule]
+    rules: Iterable[mod.Rule],
+    smiles: "str | None" = None,
     ) -> pd.DataFrame:
     """Proxy to data-access function returning rule usage DataFrame."""
-    return build_rule_usage_df(derivation_graph, molecule, rules)
+    return build_rule_usage_df(derivation_graph, molecule, rules, smiles)
 
 
 def spectrum_statistic(
     derivation_graph: mod.DG,
-    molecule: mod.Graph
+    molecule: mod.Graph,
+    smiles: "str | None" = None,
     ) -> Dict[str, Any]:
-    """Summarize spectral overlap; metrics are computed in metrics module if needed."""
-    summary = summarize_spectrum_overlap(derivation_graph, molecule)
+    """Summarize spectral overlap; metrics are computed in metrics module if needed.
+
+    Pass ``smiles`` (the molecule's original SMILES) so the reference spectrum is found for
+    stereo-dependent molecules -- see :func:`_ground_truth_smiles`.
+    """
+    summary = summarize_spectrum_overlap(derivation_graph, molecule, smiles)
     # Preserve original keys while using pure overlap summary
     return {
         "Dice_max": overlap_coefficient(summary["MØD masses"], summary["ground_truth masses"]),
@@ -49,12 +90,19 @@ def spectrum_statistic(
 def build_rule_usage_df(
     derivation_graph: mod.DG,
     molecule: mod.Graph,
-    rules: Iterable[mod.Rule]
+    rules: Iterable[mod.Rule],
+    smiles: "str | None" = None,
     ) -> pd.DataFrame:
-    """Return DataFrame with rule id, name, active flag based on MOD vs ground_truth masses overlap."""
+    """Return DataFrame with rule id, name, active flag based on MOD vs ground_truth masses overlap.
+
+    ``smiles`` is the molecule's original SMILES; pass it so stereo-dependent molecules
+    resolve in the store (see :func:`_ground_truth_smiles`).
+    """
     all_active_rules = set()
 
-    ground_truth_spectra = get_spectra(graph_from_term(molecule).smiles, graph_from_term(molecule).name)
+    ground_truth_spectra = get_spectra(
+        _ground_truth_smiles(molecule, smiles), graph_from_term(molecule).name
+    )
     mod_spectrum_dict = get_spectra_from_mod_derivation_graph(derivation_graph)
     mod_spectrum_df = pd.DataFrame(mod_spectrum_dict, columns=["mass", "intensity", "rules"])
 
@@ -89,10 +137,17 @@ def build_rule_usage_df(
 
 def summarize_spectrum_overlap(
         derivation_graph: mod.DG,
-        molecule: mod.Graph
+        molecule: mod.Graph,
+        smiles: "str | None" = None,
         ) -> Dict[str, Any]:
-    """Return overlap summary without computing advanced metrics here."""
-    ground_truth_spectra = get_spectra(graph_from_term(molecule).smiles, graph_from_term(molecule).name)
+    """Return overlap summary without computing advanced metrics here.
+
+    ``smiles`` is the molecule's original SMILES; pass it so stereo-dependent molecules
+    resolve in the store (see :func:`_ground_truth_smiles`).
+    """
+    ground_truth_spectra = get_spectra(
+        _ground_truth_smiles(molecule, smiles), graph_from_term(molecule).name
+    )
     mod_spectrum_dict = get_spectra_from_mod_derivation_graph(derivation_graph)
 
     moel_masses_union, ground_truth_masses_union = set(), set()

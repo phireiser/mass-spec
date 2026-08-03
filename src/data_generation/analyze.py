@@ -50,11 +50,15 @@ with pd.option_context(
     'display.width', None,
     'display.max_colwidth', None
     ):
-    print(describe.rule_usage(dg, molecule_term, mod.inputRules).query("active == True"))
+    # Pass the ORIGINAL --smiles: the reference lookup canonicalises SMILES -> InChIKey ->
+    # CAS, and the term round-trip drops stereochemistry, which silently yields zero
+    # reference peaks for stereo-dependent molecules (sugars).
+    print(describe.rule_usage(dg, molecule_term, mod.inputRules, smiles=args.smiles)
+          .query("active == True"))
 
 print("\n\n")
 print("spectrum coverage")
-pprint(describe.spectrum_statistic(dg, molecule_term), width=120)
+pprint(describe.spectrum_statistic(dg, molecule_term, smiles=args.smiles), width=120)
 
 
 print("\n\n")
