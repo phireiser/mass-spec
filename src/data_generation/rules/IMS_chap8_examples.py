@@ -61,7 +61,7 @@ IMS_8_1_var2_step2 = mod.Rule.fromDFS(
     ">>"
     "[C+]1([H]2):[C]4([H]5):[C]6([H]7):1" # aromatic cyclopropenium (e(ar) ring); charge delocalised over ring; https://en.wikipedia.org/wiki/Cyclopropenium_ion
     "."
-    "[H]3[H]8", 
+    "[H]3[H]8",
     name =
     "monomolecular ion-cleavage"
 	" 8.1 rH 3.0"
@@ -217,8 +217,8 @@ IMS_8_2_alpha_0_6 = mod.Rule.fromDFS(
     "[C]1([H]2)([H]3)([H]4)[C.]5([H]6)[C]7([H]8)([H]9)"
     "[C]10([H]11)([H]12)[C]13([C]14([H]15)([H]16)([H]17)){=}[O+]18([H]19)"
     ">>"
-    "[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[C]7([H]8)([H]9)" 
-    "." 
+    "[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[C]7([H]8)([H]9)"
+    "."
     "[C]10([H]11)([H]12){=}[C]13([C]14([H]15)([H]16)([H]17)){=}[O+.]18([H]19)",
     name =
     "monomolecular ion-cleavage"
@@ -389,7 +389,7 @@ IMS_8_6_4 = mod.Rule.fromDFS(
 IMS_8_7_1 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C]3([H]4)[C]5[C]6[C]7([H]8){=}[O+.]9"
-    ">>" 
+    ">>"
     "[C]1[C]2[C.]3[C]5[C]6[C]7([H]8){=}[O+]9[H]4",
     name =
     "Hydrogen exchange occring in a Ion-Molecule-Complex"
@@ -400,7 +400,7 @@ IMS_8_7_1 = mod.Rule.fromDFS(
 IMS_8_7_2 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9"
-    ">>" 
+    ">>"
     "[C]1[C]2[C]3{=}[C]4"
     "."
     "[C]5{=}[C]6([H]7)[O+.]8[H]9",
@@ -414,7 +414,7 @@ IMS_8_7_2 = mod.Rule.fromDFS(
 IMS_8_7_3 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9"
-    ">>" 
+    ">>"
     "[C]1[C]2[C]3{=}[C]4"
     "."
     "[C]5{=}[C]6([H]7)[O+.]8[H]9", #H7 disapears in original
@@ -428,9 +428,9 @@ IMS_8_7_3 = mod.Rule.fromDFS(
 IMS_8_7_4 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9" # starting in row 1
-    ">>" 
+    ">>"
     "[C]1[C]2([H]9)[C+]3[C]4[H]7" # product in row 3
-    "." 
+    "."
     "[C]5{=}[C]6[O.]8",
     name =
     "Hydrogen exchange occring in a Ion-Molecule-Complex"
@@ -442,8 +442,8 @@ IMS_8_7_4 = mod.Rule.fromDFS(
 IMS_8_7_5 = mod.Rule.fromDFS(
     s =
     "[C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9"
-    ">>" 
-    "[C]1[C]2[=}[C+.]3[C]4"
+    ">>"
+    "[C]1[C]2{=}[C+.]3[C]4"
     "."
     "[H]7[C]5[C]6([H]9){=}[O]8",
     name =
@@ -456,7 +456,7 @@ IMS_8_7_5 = mod.Rule.fromDFS(
 IMS_8_8_1 = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3)([H]4)[C]5([H]6)[O+.]7[C]8([H]9)([H]10){-}5"
-    ">>" 
+    ">>"
     "[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[O+]7[C.]8([H]9)([H]10)",
     name =
     "rearangement with stable Acylium-Ion"
@@ -467,7 +467,7 @@ IMS_8_8_1 = mod.Rule.fromDFS(
 IMS_8_8_2 = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3)([H]4)[C]5([H]6){=}[O+]7[C.]8([H]9)([H]10)"
-    ">>" 
+    ">>"
     "[C]1([H]2)([H]3){=}[C]5([H]6)[O+.]7[C]8([H]9)([H]10)([H]4)",
     name =
     "rearangement with stable Acylium-Ion"
@@ -478,7 +478,7 @@ IMS_8_8_2 = mod.Rule.fromDFS(
 IMS_8_8_2b = mod.Rule.fromDFS(
     s =
     "[C]1([H]2)([H]3){=}[C]4([H]5)[O+.]6[C]7([H]8)([H]9)([H]10)"
-    ">>" 
+    ">>"
     "[C]1([H]2)([H]3)([H]10)[C]4([H]5){=}[O+]6[C.]7([H]8)([H]9)",
     name =
     "rearangement with stable Acylium-Ion"

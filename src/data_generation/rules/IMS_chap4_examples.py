@@ -160,15 +160,15 @@ IMS_4_6_row5 = mod.Rule.fromDFS(
 
 # Interpreation von Massenspektren Springer, Seite 58, Gl. 4.7 und Seite Einband
 IMS_4_7 = mod.Rule.fromDFS(
-	s = 
+	s =
 	"[C+.]1[C]2[C]3[C]4[C]5"
 	">>"
 	"[C.]1"	"." "[C+]2[C]3[C]4[C]5",
-	name = 
+	name =
 	"dissoziation of a sigma bond for alkans"
 	" 4.7"
 	" §R1R3R4R5"
-	
+
 )
 
 # Interpreation von Massenspektren Springer, Seite 59, Gl. 4.8
@@ -220,7 +220,7 @@ IMS_4_10 = mod.Rule.fromDFS(
 
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.11; oder Seite Einband, Alkene
 IMS_4_11 = mod.Rule.fromDFS(
-	s = 
+	s =
 	"[C]1[C]2[C]3{=}[_A+.]4"
 	">>"
 	"[C.]1" "." "[C]2[C]3{#}[_A+]4",
@@ -236,19 +236,17 @@ IMS_4_12_1 = mod.Rule.fromDFS(
 	"[C]1[C]2[C]3[C+.]4"
 	">>"
 	"[C.]1" "."  "[C]2{=}[C]3[C+]4",
-	name = 
+	name =
 	"radical induced (alpha-)clevage for a alkene charge left"
 	" 4.12_1"
 	" §R1"
 )
 
-IMS_4_12_2 = mod.Rule.fromDFS( 
-	s = 
+IMS_4_12_2 = mod.Rule.fromDFS(
+	s =
 	"[C]1[C]2[C+.]3[C]4"
 	">>"
-	"[C.]1"
-	"."
-	"[C]2{=}[C]3[C+]4",
+	"[C.]1" "." "[C]2{=}[C]3[C+]4",
 	name =
 	"radical induced (alpha-)clevage for a alkene charge right"
 	" 4.12_2"
@@ -262,7 +260,7 @@ IMS_4_13_1 = mod.Rule.fromDFS(
 	"[C]5([H]6)([H]7)"
 	"[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)"
 	">>"
-	"[C.]1([H]2)([H]3)([H]4)" 
+	"[C.]1([H]2)([H]3)([H]4)"
 	"."
 	"[C]5([H]6)([H]7){=}"
 	"[O+]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)",
@@ -278,7 +276,7 @@ IMS_4_13_2 = mod.Rule.fromDFS(
 	"[C]5([H]6)([H]7)"
 	"[O+.]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)"
 	">>"
-	"[C.]1([H]2)([H]3)([H]4)" 
+	"[C.]1([H]2)([H]3)([H]4)"
 	"."
 	"[C+]5([H]6)([H]7){-}"
 	"[O]8[C]9([H]10)([H]11)[C]12([H]13)([H]14)([H]15)",
@@ -447,7 +445,7 @@ IMS_4_17_3 = mod.Rule.fromDFS(
 	"([C]5[C]6)"
 	"[O+.]8"
 	"."
-	"[C]7", 
+	"[C]7",
 	name =
 	"radical induced (alpha-)clevage for a saturated site"
 	" 4.17_3"
@@ -471,7 +469,7 @@ IMS_4_19_1 = mod.Rule.fromDFS(
 	s =
 	"[_A]1([C]2)[_A]3{=}[_A+.]4"
 	">>"
-	"[_A+]1" "." "[C]2[_A.]3{=}[_A]4", 
+	"[_A+]1" "." "[C]2[_A.]3{=}[_A]4",
 	name =
 	"inductive cleavage odd electron 2"
 	" 4.19"
@@ -483,7 +481,7 @@ IMS_4_19_2 = mod.Rule.fromDFS(# Y on left side has unpaired electron
 	s =
 	"[_A]1([_A]3)[C+]4{=}[_A.]2"
 	">>"
-	"[_A+]1" "." "[_A]3[C.]4{=}[_A]2", 
+	"[_A+]1" "." "[_A]3[C.]4{=}[_A]2",
 	name =
 	"inductive cleavage odd electron 3"
 	" 4.19"
@@ -752,7 +750,7 @@ IMS_4_33_rH = mod.Rule.fromDFS(
 	">>"
 	"[C]1[C.]2[C]4[C]5[C]6([C]7){=}[O+]8[H]3",
 	name=
-    "gamma H-migr. to unsat. group with beta cleavage" 
+    "gamma H-migr. to unsat. group with beta cleavage"
     " 4.33 rH"
 	" §R1"
 )
@@ -765,7 +763,7 @@ IMS_4_33_alpha_1 = mod.Rule.fromDFS(
 	"."
 	"[C.]4[C]5([C]6){=}[O+]7[H]8",
 	name=
-    "gamma H-migr. to unsat. group with beta cleavage" 
+    "gamma H-migr. to unsat. group with beta cleavage"
     " 4.33 alpha 1"
 	" §R1"
 )
@@ -778,7 +776,7 @@ IMS_4_33_alpha_2 = mod.Rule.fromDFS(
 	"."
 	"[C.]4{=}[C]5([C]6)[O+.]7[H]8",
 	name=
-    "gamma H-migr. to unsat. group with beta cleavage" 
+    "gamma H-migr. to unsat. group with beta cleavage"
     " 4.33 alpha 2"
 	" §R1"
 )
@@ -790,7 +788,7 @@ IMS_4_34_rH = mod.Rule.fromDFS(
 	">>"
 	"[C]1[C.]2[C]4[C]5[C+]6([C]7)[O]8[H]3",
 	name=
-    "gamma H-migr. to unsat. group with beta cleavage" 
+    "gamma H-migr. to unsat. group with beta cleavage"
     " 4.34 rH"
 	" §R1"
 )
@@ -848,7 +846,7 @@ IMS_4_36__rHalpha = mod.Rule.fromDFS(
 	"."
 	"[C.]6[C+]7[C]8([H]4)[C]9{=}[C]10[C]11{=}[C]12{-}7",
 	name=
-    "gamma H-migr. to unsaturated group Odd electron Ion" 
+    "gamma H-migr. to unsaturated group Odd electron Ion"
     " 4.36 rH alpha"
 	""
 )
@@ -959,7 +957,7 @@ IMS_4_40_ind = mod.Rule.fromDFS(
     ">>"
     "[C]1[C]2[C]3[C]4[C+.]5{-}3" # charge somewhere in cycle
 	"."
-	"[Cl]6[H]7", 
+	"[Cl]6[H]7",
     name =
     "H-migration to unsat. hetroatom and clevage of neighb. bond"
     " 4.40 ind"
@@ -996,7 +994,7 @@ IMS_4_41_ind2 = mod.Rule.fromDFS(
     "[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12"
     ">>"
     "[_A]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({-}2){=}[C]8{=}[O+]9"
-	"." 
+	"."
 	"[O]10([H]11)[C]12",
     name =
     "H-migr to unsat. hetrostructur  and clevage of neighb. bond"
@@ -1050,8 +1048,8 @@ IMS_4_44_ind = mod.Rule.fromDFS(
     s =
     "[Cl+.]1[C]2([C]3([H]4)([H]5)([H]6))([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[Cl]14"
     ">>"
-    "[Cl.]1" 
-	"." 
+    "[Cl.]1"
+	"."
 	"[C]3([H]4)([H]5)([H]6)[C+]2([H]7)[C]8([H]9)([H]10)[C]11([H]12)([H]13)[Cl..]14",
     name =
     "displacement reaction"
@@ -1134,7 +1132,6 @@ IMS_chap4_examples = [
 
 	IMS_4_7,
     IMS_4_8,
-	IMS_4_9,
 	IMS_4_9,
 	IMS_4_10,
 	IMS_4_11,
