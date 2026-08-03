@@ -20,6 +20,12 @@ from .wikipedia import (
     wiki_fragmentation,
 )
 from .aromatic_ring_loss import aromatic_ring_loss_fragmentation
+from .migration import (
+    build_migration_rules,
+    CHARGE_MIGRATION_NAME,
+    RADICAL_MIGRATION_NAME,
+    MIGRATION_RULE_NAMES,
+)
 
 # TODO benzofuran forming fission (BFF)
 # TODO quinone methide (QM) fission
@@ -147,4 +153,8 @@ __all__ = [
     "wiki_fragmentation",
     "rearrangements",
     "aromatic_ring_loss_fragmentation",
+    "build_migration_rules",
+    "CHARGE_MIGRATION_NAME",
+    "RADICAL_MIGRATION_NAME",
+    "MIGRATION_RULE_NAMES",
 ]

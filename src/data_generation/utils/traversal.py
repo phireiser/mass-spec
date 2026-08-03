@@ -5,7 +5,7 @@ import collections
 from typing import List, Set, Optional, Iterable
 import mod
 from .compareability import ComparableVertex
-from .term_transfers import graph_from_term, decode_edge_label
+from .term_transfers import graph_from_term, decode_edge_label, parse_term_atom
 from .label_utils import mol_cleaned_label_str
 from .diag import _diag_log, _diag_inc
 
@@ -298,8 +298,192 @@ def saturated_path(
     return False
 
 
+# Bond orders that count as unsaturation for reactivity: double, triple, aromatic.
+# (Single ``-`` is the saturated bond charge wanders across; see the profit gate.)
+_UNSATURATED_BONDS = frozenset({"=", "#", ":"})
+
+
+def _reactive_atom_ids(term_graph: mod.Graph) -> "tuple[set, dict]":
+    """``(reactive_atom_ids, {id: (symbol, charge, radical)})`` for a term-mode graph.
+
+    A **reactive site** is an atom a fragmentation rule can actually use: it is itself a
+    heteroatom, or it bears an unsaturated bond (double/triple/aromatic), or it is adjacent
+    to such an atom (the alpha / allylic / benzylic shell where EI cleavages initiate).
+
+    Shared by the migration profit gate's per-derivation predicate
+    (:func:`charge_radical_on_reactive_site`) and its molecule-scope trigger
+    (:func:`reactive_heavy_fraction`). Keeping one definition is load-bearing: the trigger
+    predicts how much the predicate can prune, and that prediction is only meaningful while
+    both use the same notion of "reactive".
+    """
+    atoms = {}       # id -> (symbol, charge, radical)
+    for v in term_graph.vertices:
+        atoms[v.id] = parse_term_atom(v.stringLabel)
+    adj = {}         # id -> list of (neighbor_id, bond_char)
+    for e in term_graph.edges:
+        bt = decode_edge_label(e.stringLabel)
+        adj.setdefault(e.source.id, []).append((e.target.id, bt))
+        adj.setdefault(e.target.id, []).append((e.source.id, bt))
+
+    def is_hetero(i: int) -> bool:
+        s = atoms[i][0]
+        return s not in ("C", "H") and not s.startswith("_")
+
+    on_unsaturation = {
+        i for i in atoms
+        if any(bt in _UNSATURATED_BONDS for (_, bt) in adj.get(i, ()))
+    }
+
+    reactive_ids = set()
+    for i in atoms:
+        if is_hetero(i) or i in on_unsaturation:
+            reactive_ids.add(i)
+        # alpha / allylic / benzylic: one bond from a heteroatom or an unsaturation
+        elif any(j in on_unsaturation or is_hetero(j) for (j, _) in adj.get(i, ())):
+            reactive_ids.add(i)
+    return reactive_ids, atoms
+
+
+def reactive_heavy_fraction(term_graph: mod.Graph) -> float:
+    """Fraction of a molecule's HEAVY atoms that are reactive sites.
+
+    This is the migration profit gate's **prune ceiling**, and therefore the right
+    molecule-scope trigger for it: the gate admits a hop only onto a reactive site, so at
+    ``rf == 1.0`` every hop is admitted and the gate is (near) a no-op that costs a
+    per-derivation callback and prunes nothing, while at low ``rf`` most of the charge
+    positions the framework offers are inadmissible and the gate prunes hard.
+
+    Measured separation is wide and empty in between (neutral parent): saturated
+    hydrocarbons (decalin, octane, methylcyclohexane) 0.000, cholesterol 0.250,
+    progesterone 0.478 -- then nothing until toluene / glucose / sucrose / riboflavin at
+    1.000. Molecule *size* does NOT separate these (cholesterol 28 heavy vs riboflavin 27
+    vs sucrose 23 vs progesterone 23), which is why a size-only trigger misfires on the
+    hetero-dense molecules. ``frac_C_sp3`` also fails (sugars are fully sp3 like decalin).
+
+    Computed on the neutral parent, so it is a *near*- rather than strictly-provable
+    no-op predictor: a fragment can lose the neighbour that made an atom reactive, which
+    is the residual ~1% prune measured on toluene/glucose. Returns 1.0 for a graph with no
+    heavy atoms (nothing to gate).
+    """
+    reactive_ids, atoms = _reactive_atom_ids(term_graph)
+    heavy = [i for i, (symbol, _, _) in atoms.items() if symbol != "H"]
+    if not heavy:
+        return 1.0
+    return sum(1 for i in heavy if i in reactive_ids) / len(heavy)
+
+
+def charge_radical_on_reactive_site(term_graph: mod.Graph, want_charge: bool) -> bool:
+    """Does the migrated ``+`` (``want_charge``) / radical land on a *reactive* site?
+
+    The local, look-ahead-free predicate the migration **profit gate** uses to keep only
+    the charge/radical hops that reach a cleavable position (see
+    :func:`_reactive_atom_ids` for what counts as reactive), pruning the hops that merely
+    walk the decoration across a saturated sigma framework.
+
+    ``term_graph`` is a single term-mode product graph (``a(sym,charge,radical)``
+    vertices, ``e(order)`` edges -- e.g. one graph from ``derivation.right``).
+    ``want_charge`` selects which decoration's landing atom(s) to test: the charged
+    atom(s) for a charge hop, the radical atom(s) for a radical hop. Returns ``True``
+    vacuously when no atom carries the decoration (nothing to place), so a graph the
+    gate should not veto is never rejected on a technicality.
+
+    Pure function of the graph's labels -- no derivation-graph or cross-graph state --
+    which is exactly the scope a ``rightPredicate`` may inspect.
+    """
+    reactive_ids, atoms = _reactive_atom_ids(term_graph)
+
+    def reactive(i: int) -> bool:
+        return i in reactive_ids
+
+    hot = [
+        i for i, (_, charge, radical) in atoms.items()
+        if (charge >= 1 if want_charge else radical >= 1)
+    ]
+    # ``any``, not ``all``: a hop relocates exactly ONE decoration, but ``hot`` collects
+    # *every* atom carrying that decoration. Charge-separated species (nitro, N-oxide,
+    # ylides) plus per-site ``ei_molecular_ion`` legitimately carry a second ``+`` at net
+    # charge <= 1, and requiring all of them reactive vetoes the derivation over a position
+    # this rule cannot move -- measured on nitroethane as 26/115 charge-migration
+    # derivations spuriously rejected while the moved decoration *was* on a reactive site.
+    # ``any`` fails toward accepting (cost) rather than losing a fragment, and is identical
+    # on the single-decoration case that dominates (1052/1052 measured hops had one hot
+    # atom). ``not hot`` keeps the vacuous case accepting, as ``all([])`` did.
+    return not hot or any(reactive(i) for i in hot)
+
+
+# Process-global colour table for :func:`skeleton_key`. Colours are interned here so that
+# names are comparable ACROSS graphs -- two graphs only share a key if they refined to the
+# same colours, which is the whole point. It grows with the number of distinct local
+# environments seen, not with the number of species, so it stays small.
+_WL_COLOUR: "dict" = {}
+
+
+def skeleton_key(term_graph: mod.Graph, rounds: int = 3) -> tuple:
+    """Colour-refinement (Weisfeiler-Lehman) key of a term graph with the charge and radical
+    slots ERASED -- the projection ``species -> skeleton`` that collapses every
+    charge/radical placement variant of one structure onto a single key.
+
+    Returns ``(|V|, |E|, net_charge, n_radical, sorted_final_colours)``.
+
+    Used by :func:`~data_generation.core.predicates.migration_multiplicity_cap` to budget how
+    many decoration variants of one skeleton the derivation graph may retain.
+
+    The electron class ``(net_charge, n_radical)`` is deliberately part of the key rather
+    than erased with the placements: migration conserves both, so an odd-electron ion
+    (charge 1, radical 1) and an even-electron cation (charge 1, radical 0) on the same
+    skeleton can never interconvert. Merging them would let one electron class consume the
+    other's budget and prune variants that were never redundant with each other.
+
+    Isomorphism-invariant by construction, so it can never SPLIT one skeleton across two
+    budgets. It could in principle MERGE two skeletons (WL is incomplete), which would
+    over-prune silently -- measured against exact VF2 isomorphism on 7 molecules spanning
+    29-1165 species (acetone, ethyl acetate, toluene, cyclohexanol, naphthalene, 2-hexanone,
+    n-octane): **0 merges and 0 splits**, i.e. it reproduced the exact class count every
+    time. A cheaper degree/label fingerprint was measured too and rejected -- only ~25%
+    faster (both pay the same graph traversal) but merging 34-88% of species, which would
+    confound "cap too tight" with "key too coarse".
+
+    Cost is ~100-140 us uncached, which is why the caller memoises on ``mod.Graph.id``
+    (~0.45 us on a hit); ids are stable and never reused for a different structure.
+    """
+    symbols, adjacency = {}, {}
+    net_charge = n_radical = 0
+    for v in term_graph.vertices:
+        symbol, charge, radical = parse_term_atom(v.stringLabel)
+        symbols[v.id] = symbol
+        net_charge += charge
+        n_radical += radical
+    n_edges = 0
+    for e in term_graph.edges:
+        n_edges += 1
+        # The raw bond term (``e(p(0))``, ``e(ar)``, ...) is already a canonical comparable
+        # token, so it is used directly rather than decoded.
+        adjacency.setdefault(e.source.id, []).append((e.target.id, e.stringLabel))
+        adjacency.setdefault(e.target.id, []).append((e.source.id, e.stringLabel))
+
+    table = _WL_COLOUR
+
+    def intern(item):
+        colour = table.get(item)
+        if colour is None:
+            colour = table[item] = len(table)
+        return colour
+
+    labels = {i: intern(s) for i, s in symbols.items()}
+    for _ in range(rounds):
+        labels = {
+            i: intern((labels[i],
+                       tuple(sorted((bond, labels[j]) for j, bond in adjacency.get(i, ())))))
+            for i in labels
+        }
+    return (len(symbols), n_edges, net_charge, n_radical, tuple(sorted(labels.values())))
+
+
 # Public API re-exported by ``data_generation.utils``.
 __all__ = [
+    "charge_radical_on_reactive_site",
+    "reactive_heavy_fraction",
+    "skeleton_key",
     "vertex_by_id",
     "mol_neighbors",
     "mol_cleaned_label",

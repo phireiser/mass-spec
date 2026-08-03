@@ -1,0 +1,5 @@
+name,smiles,category
+cholesterol,CC(C)CCCC(C)C1CCC2C3CC=C4CC(O)CCC4(C)C3CCC12C,steroid
+progesterone,CC(=O)C1CCC2C3CCC4=CC(=O)CCC4(C)C3CCC12C,steroid_hormone
+sucrose,OC[C@H]1OC(O[C@H]2OC(CO)C(O)C(O)C2O)C(O)C(O)C1O,saccharide_control
+riboflavin,CC1=CC2=C(C=C1C)N(CC(O)C(O)C(O)CO)C1=NC(=O)NC(=O)C1=N2,aromatic_control

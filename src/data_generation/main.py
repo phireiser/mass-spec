@@ -10,7 +10,7 @@ from pathlib import Path
 import mod
 
 from src.data_generation import utils
-from src.data_generation.rules import fragmentation, ionization
+from src.data_generation.rules import fragmentation, ionization, build_migration_rules
 from src.data_generation.core import strategy
 from src.project_paths import shared_path
 
@@ -27,6 +27,50 @@ parser.add_argument("--frag-repeat", type=int, default=5,
                          "the molecules that OOM in forward, at the cost of dropping deep fragments; "
                          "~14%% of molecules still produce new fragments at rounds 4-5, so validate "
                          "peak coverage before lowering below 5.")
+parser.add_argument("--no-migration", action="store_true",
+                    help="Disable the fully delocalized charge model (charge/radical "
+                         "migration rules). Reproduces the localized per-site scheme; "
+                         "used for side-by-side baseline vs migration comparisons.")
+parser.add_argument("--migration-tail-min-heavy", type=int, default=18, metavar="N",
+                    help="Saturated-tail scoping, SIZE clause: a molecule is in the tail only if "
+                         "it has >= N heavy atoms. N<=0 disables tail scoping entirely (full "
+                         "migration for every molecule -- the configuration that TIMES OUT on "
+                         "steroids). Size alone is not enough; see the reactive-fraction clause.")
+parser.add_argument("--migration-tail-max-reactive-fraction", type=float, default=0.6,
+                    metavar="F",
+                    help="Saturated-tail scoping, CHEMISTRY clause: a molecule is in the tail "
+                         "only if its reactive_heavy_fraction < F (fraction of heavy atoms that "
+                         "are hetero / on / adjacent-to unsaturation). Size alone misfires: "
+                         "cholesterol(28 heavy) and riboflavin(27) are indistinguishable by "
+                         "size, but rf is 0.250 vs 1.000 -- and migration's real wins (glucose, "
+                         "sucrose) sit at rf 1.000. The corpus is sharply bimodal in rf (102 of "
+                         "172 molecules are exactly 1.000, nothing between 0.577 and 0.650), so "
+                         "F=0.6 is robust. F>1.0 disables the chemistry clause.")
+parser.add_argument("--migration-tail-policy", type=str, default="cap",
+                    choices=strategy.MIGRATION_TAIL_POLICIES,
+                    help="What to do with molecules in the saturated tail. 'cap' (default): run "
+                         "migration bounded to --migration-tail-cap charge/radical variants per "
+                         "parent-mass skeleton. That makes the tail buildable at all -- "
+                         "progesterone 67 min, cholesterol 88 min, versus a >9h timeout with NO "
+                         "dump uncapped -- and is a strict SUPERSET of the no-migration result "
+                         "(zero masses lost, +24 masses each, +5.2%%/+4.7%% of NIST intensity). "
+                         "'off': skip migration for them; their TPR gain is not distinguishable "
+                         "from chance (progesterone hit rate 0.810 vs 0.793 random, p=0.56) "
+                         "because a steroid's NIST reference covers ~75%% of the candidate "
+                         "masses, so this is the choice if you would rather not pay ~1.5h a "
+                         "molecule for coverage of unproven value. 'gate': profit gate instead "
+                         "(3h18/5h07, and lossier than the cap). 'full': unguarded migration "
+                         "everywhere -- this is what times out on the tail (A/B use only). "
+                         "Molecules OUTSIDE the tail always get full UNCAPPED migration "
+                         "regardless: the cap is lossy there (piperidine loses 26.5%% of its NIST "
+                         "intensity at cap 3) and there is deliberately no switch to apply it.")
+parser.add_argument("--migration-tail-cap", type=int, default=strategy.DEFAULT_TAIL_CAP,
+                    metavar="N",
+                    help="Variants per parent-mass skeleton under --migration-tail-policy cap "
+                         f"(default {strategy.DEFAULT_TAIL_CAP}). Cap 3 was measured to cost "
+                         "1.20x the species, 1.69x the wall and 1.81x the isomorphism calls of "
+                         "cap 2 for exactly one extra mass (progesterone m/z 86, +0.1%% of NIST "
+                         "intensity), so raising it buys very little.")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--mem-diag", type=str, default=None, metavar="CSV",
                     help="Localise the exploding derivation: log per-derivation peak-RSS growth "
@@ -95,6 +139,46 @@ fragmentation_term_fwd = [
     utils.term_from_rule(r)
     for r in utils.apply_constraints(fragmentation, aoc)
 ]
+# Migration rules are authored directly in term mode (independent element/radical/bond
+# variables the DFS->term_from_rule path cannot express), so they skip apply_constraints
+# and term_from_rule. Restrict the migrating-onto atom to this molecule's occurring heavy
+# atoms so charge/radical never lands on hydrogen.
+heavy_atoms = sorted(aoc - {"H"})
+
+# Per-molecule migration scoping. Migration is ON by default -- it is additive (never removes
+# a peak) and its chance-corrected wins are large and real (glucose NIST TPR 0.096->0.413,
+# p=3.7e-05; limonene 0.356->0.624, p=3.3e-04; sucrose 0.068->0.270, p=0.005) -- but it costs
+# ~25x net compute, scaling as roughly blowup ~ 0.5 * heavy^1.4, so it must be switched off for
+# the saturated tail where that cost is unbounded and the benefit is a metric artifact.
+# `strategy.migration_scope` owns that decision and documents the evidence; it returns the
+# reason string so each run records why it did what it did.
+heavy_count = sum(
+    1 for v in molecule_term.vertices
+    if utils.parse_term_atom(v.stringLabel)[0] != "H"
+)
+reactive_fraction = utils.reactive_heavy_fraction(molecule_term)
+scope = strategy.migration_scope(
+    heavy_count=heavy_count,
+    reactive_fraction=reactive_fraction,
+    min_heavy=args.migration_tail_min_heavy,
+    max_reactive_fraction=args.migration_tail_max_reactive_fraction,
+    policy=args.migration_tail_policy,
+    tail_cap=args.migration_tail_cap,
+)
+if args.no_migration:
+    scope = strategy.MigrationScope(False, False, None, "migration disabled (--no-migration)")
+use_migration, gate_migration, migration_cap, scope_reason = scope
+
+# Migration rules are authored directly in term mode (independent element/radical/bond
+# variables the DFS->term_from_rule path cannot express), so they skip apply_constraints
+# and term_from_rule. Restrict the migrating-onto atom to this molecule's occurring heavy
+# atoms so charge/radical never lands on hydrogen.
+migration_term_fwd = build_migration_rules(heavy_atoms) if use_migration else []
+print(f"migration: {scope_reason}")
+if use_migration:
+    print(f"  {len(migration_term_fwd)} rule(s) over heavy atoms {heavy_atoms}"
+          f"{'; profit gate ACTIVE' if gate_migration else ''}"
+          f"{f'; multiplicity cap {migration_cap}/parent-mass skeleton' if migration_cap else ''}")
 
 ionization_term_bwd=[r.makeInverse() for r in ionization_term_fwd]
 fragmentation_term_bwd=[r.makeInverse() for r in fragmentation_term_fwd]
@@ -109,6 +193,9 @@ strat_fwd = strategy.make_fwd_strategy(
     universe=molecule_term,
     ionization=ionization_term_fwd,
     fragmentation=fragmentation_term_fwd,
+    migration=migration_term_fwd,
+    gate_migration=gate_migration,
+    migration_cap=migration_cap,
     max_mass=molecule.exactMass,
     frag_repeat=args.frag_repeat,
 )
@@ -129,7 +216,7 @@ if not dg_fwd_reused:
 
     utils.dump_derivation_graph(
         dg=dg_fwd,
-        rule_list=ionization_term_fwd + fragmentation_term_fwd,
+        rule_list=ionization_term_fwd + migration_term_fwd + fragmentation_term_fwd,
         name=molecule.name,
         smiles=args.smiles,
         path=fwd_dir

@@ -3,8 +3,14 @@ for and back transformations from term mode to string mode
 """
 
 import collections
+import re
 import weakref
 import mod
+
+# A named term-variable placeholder: an underscore followed by an identifier (``_A``,
+# ``_B``, ``_R1``). ``encode_vertex_label`` preserves these verbatim so distinct names
+# stay INDEPENDENT term variables; only a nameless wildcard collapses to the default.
+_NAMED_PLACEHOLDER_RE = re.compile(r"_\w+")
 
 term_bond_from_bond_type = {
     mod.BondType.Invalid: "__error1",
@@ -78,8 +84,13 @@ def encode_vertex_label(string_label: str) -> "tuple[str, int, int]":
     ``v.atomId.symbol`` (raises ``LogicError`` for non-concrete atoms like
     ``'C..'``, which previously collapsed the symbol to the ``_A`` placeholder).
 
-    A non-element leading token (wildcard ``'*'``, the ``_A`` placeholder, etc.)
-    maps back to ``_A`` to preserve the previous placeholder semantics.
+    A *named* placeholder (``_A``, ``_B``, ...) is preserved verbatim so distinct names
+    in one rule stay INDEPENDENT term variables -- collapsing them all to ``_A`` (the old
+    behaviour) forced every placeholder to unify to the same element, which is exactly why
+    a generalized ester/thioester rule that needs O and C at independent positions could
+    not be written (see the note in ``rules/IMS_bookCover.py``). A *nameless* wildcard
+    (``'*'``, ``'?'``, an empty leading token) has no identity to keep, so it still maps to
+    the default ``_A`` to preserve the previous placeholder semantics.
     """
     i = 0
     while i < len(string_label) and string_label[i] not in "+-.":
@@ -89,7 +100,7 @@ def encode_vertex_label(string_label: str) -> "tuple[str, int, int]":
     charge = deco.count("+") - deco.count("-")
     radical = deco.count(".")
     if not symbol.isalpha():  # wildcard / placeholder / query atom
-        symbol = "_A"
+        symbol = symbol if _NAMED_PLACEHOLDER_RE.fullmatch(symbol) else "_A"
     return symbol, charge, radical
 
 

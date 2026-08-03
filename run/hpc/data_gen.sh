@@ -2,7 +2,7 @@
 #SBATCH --job-name=data_gen_fragment
 #SBATCH --time=7-00:30:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=128G
+#SBATCH --mem=32G
 #SBATCH --output=outputs/logs/data_gen/slurm/%A/%j.out
 
 # Usage:
@@ -37,6 +37,13 @@ if [ -n "${DEFINITION_FILE:-}" ] && [ "${DEFINITION_FILE#/}" = "${DEFINITION_FIL
 fi
 DEFINITION_FILE="${DEFINITION_FILE:-$REPO_ROOT/$CSV_PATH_REL}"
 export DEFINITION_FILE
+
+# Extra arguments appended verbatim to the main.py call. Used to run a localized-charge
+# baseline alongside the (default) fully delocalized rebuild for an A/B comparison:
+#   MAIN_EXTRA_ARGS=--no-migration PROCESSED_DIR_OVERRIDE=data/processed_base \
+#     DEFINITION_FILE=data/migration_subset.csv sbatch run/hpc/data_gen.sh
+# Exported so the array self-resubmit inherits it. Intentionally word-split on use.
+export MAIN_EXTRA_ARGS="${MAIN_EXTRA_ARGS:-}"
 JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID:-}"
 if [ -z "$JOB_GROUP_ID" ]; then
   JOB_GROUP_ID="${SLURM_JOB_ID:-local}"
@@ -110,4 +117,5 @@ apptainer exec \
       --subgroup-diag \
       --avoid-reprocessing \
       --name-by-cas \
+      ${MAIN_EXTRA_ARGS} \
   >"$OUTFILE" 2>&1

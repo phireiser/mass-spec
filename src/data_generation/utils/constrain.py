@@ -15,13 +15,36 @@ occuring_hetero_atoms = set(HETERO_ATOMS)
 occuring_all_atoms = set(ALL_ATOMS)
 
 
+# A named placeholder atom label in a string-mode rule GML: an underscore-led token up to
+# its charge/radical decoration or the closing quote, e.g. `label "_A"`, `label "_B+."`.
+_RULE_PLACEHOLDER_RE = re.compile(r'label "(_\w+)')
+
+
+def _placeholders_in_rule(rule: mod.Rule, default: str) -> List[str]:
+    """Distinct placeholder names (without the leading ``_``) used by ``rule``.
+
+    Falls back to ``[default]`` when the rule has no ``_``-placeholder, preserving the old
+    always-constrain-``_A`` behaviour for rules that do not use one (harmless: mod ignores
+    a ``constrainLabelAny`` naming a label the rule never mentions).
+    """
+    names = {m.group(1)[1:] for m in _RULE_PLACEHOLDER_RE.finditer(rule.getGMLString())}
+    return sorted(names) if names else [default]
+
+
 def apply_constraints(
     rules: List[mod.Rule],
     all_occuring_atoms: List[str],
     placeholder: str = "A"
     ) -> List[mod.Rule]:
     """
-    Splice a constrainLabelAny block with selected labels into each rule.
+    Splice a ``constrainLabelAny`` block with the occurring atoms into each rule, once per
+    distinct placeholder the rule uses.
+
+    A rule may now carry more than one placeholder (``_A``, ``_B``, ...): since
+    ``encode_vertex_label`` keeps distinct names as independent term variables, each must
+    get its own ``constrainLabelAny`` block or an unconstrained ``_B`` would match any
+    element (including hydrogen). Rules that use only ``_A`` -- i.e. every rule authored
+    before this change -- are constrained exactly as before.
     """
     if not all_occuring_atoms:
         # `constrainLabelAny` with an empty `labels [ ]` block is not valid GML
@@ -34,9 +57,12 @@ def apply_constraints(
             "all_occuring() matched none of the element labels -- check that it "
             "is comparing undecorated atom symbols."
         )
-    constraint_string = constrain_label_any(sorted(all_occuring_atoms), placeholder)
+    labels = sorted(all_occuring_atoms)
     constraint_rules = []
     for rule in rules:
+        constraint_string = "".join(
+            constrain_label_any(labels, ph) for ph in _placeholders_in_rule(rule, placeholder)
+        )
         constraint_rules.append(add_constraints(rule, constraint_string))
     return constraint_rules
 
