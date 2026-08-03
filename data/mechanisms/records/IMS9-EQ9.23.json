@@ -1,0 +1,299 @@
+{
+  "mechanism_id": "IMS9-EQ9.23",
+  "species": [
+    {
+      "species_id": "o_cresol_molecular_ion_oxygen_ionized",
+      "mapped_smiles": "[1H:8][CH2:7][C:2]1=[CH:3][CH:4]=[CH:5][CH:6]=[C:1]1[O+:9][1H:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_benzyl_radical_oxonium",
+      "mapped_smiles": "[CH2:7][C:2]1=[CH:3][CH:4]=[CH:5][CH:6]=[C:1]1[O+:9]([1H:8])[1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "benzocyclopropene_radical_cation_90",
+      "mapped_smiles": "[CH2:7]1[C+:1]2[CH:6][CH:5]=[CH:4][CH:3]=[C:2]21",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "water",
+      "mapped_smiles": "[O:9]([1H:8])[1H:10]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "o_cresol_molecular_ion_oxygen_ionized"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_benzyl_radical_oxonium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "benzocyclopropene_radical_cation_90",
+        "water"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rh_benzylic_to_oxygen",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_water_loss",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_benzylic_to_oxygen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.23",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (o-cresol, H2O loss, arrow labelled 'rH')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Transfer of a benzylic hydrogen of the o-cresol molecular ion (m/z 108) to the hydroxyl oxygen radical site, drawn over the arrow labelled 'rH'. Book draws 2 arcs; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page -- the page simply prints the resulting benzylic radical as 'H2C.'). Drawn arc 1 (the long upper arc) starts at the '+.' printed on the hydroxyl oxygen and ends, with a single barb, at the explicitly drawn benzylic H: that is move <1>, the oxygen odd electron entering the forming O-H bond. Drawn arc 2 (the lower arc) starts on the benzylic C-H bond and ends, with a single barb, on the oxygen: that is move <2>, one electron of that C-H bond entering the same forming O-H bond. LOCALIZATION (convention B): the page prints '+.' directly on the hydroxyl oxygen (written as an OH with the charge and dot above it) and leaves the ring drawn as an aromatic circle, so map 9 is written [O+:9] with two bonds, which carries the one unpaired electron; the ring is written in a Kekule form (map1=map6, map2=map3, map4=map5) because RDKit re-perceives it as aromatic anyway and the ring is untouched by this step. The one benzylic hydrogen the page draws explicitly is the one that migrates and is written as an explicit mapped atom [1H:8]; the other two are implicit. The product is exactly the drawn distonic ion: a benzylic radical (map 7) plus a closed-shell aryl-oxonium ArOH2+ (map 9)."
+    },
+    {
+      "evidence_id": "evidence_step_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_water_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.23",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (o-cresol, arrow labelled 'i', m/z 90)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Inductive (charge-site) cleavage of the C-OH2+ bond of the distonic ion, expelling neutral water and closing the benzylic radical onto the ipso carbon to give the benzocyclopropene radical cation printed as m/z 90. Book draws 1 arc; move <1> is drawn, moves <2,3,4> are implicit (not drawn on the page). The drawn arc starts on the ring-C-to-oxygen bond and ends on the oxonium oxygen; measured at 400 dpi its head has two converging barbs, i.e. it is a FULL two-electron arrow, which is exactly what 'i' means in McLafferty's notation and how it is encoded (move <1>, electron_count 2, heterolysis with both electrons retained by oxygen so that water leaves neutral). The implicit moves are forced by electron balance: <2> the benzylic radical (map 7) entering the forming map1-map7 bond, and <3>/<4> the two electrons of one ring pi bond adjacent to the ipso carbon -- one completing that new three-membered-ring bond, the other left as a ring radical. The three-membered ring is DRAWN in the product but no arc shows it forming, so <2>,<3>,<4> are reconstructions. WHY A RING PI BOND MUST OPEN: heterolysis puts the '+' on the ipso carbon and leaves only ONE electron (the benzylic one) available for the new C-C bond, so the second bonding electron can only come from the ring, which is precisely why the product is a ring radical cation and not a neutral. PRODUCT LOCALIZATION (convention C): the page draws m/z 90 as a benzene ring with an INSCRIBED CIRCLE and a delocalized '+.', fused to a CH2 three-membered ring. That skeleton is closed-shell neutral benzocyclopropene, so no SMILES can carry the ion without opening one pi bond. This record opens the map1=map6 bond of the chosen Kekule form, giving an allylic cation at the ipso carbon map 1 (conjugated with the retained map2=map3) and an allylic radical at map 6 (conjugated with the retained map4=map5); connectivity, the CH2 bridge and the fused three-ring are exactly as printed. VALIDATOR NOTE: because the reactant ring is perceived aromatic by RDKit and the product ring is a localized cyclohexadiene, the arrow check reports every ring bond as a (soft) 'aromatic/delocalised' half-order mismatch; all non-ring changes (map1-map9 broken, map1-map7 formed) balance exactly against the arrows. INTENSITY: the page prints 'm/z 90' with no percentage, so relative_intensity is left unset."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.23",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.23",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MØD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and the aliphatic water-loss rules do not reach this substrate. Checked with RDKit substructure tests of SMARTS transcriptions of the rule left-hand sides against this record's own species: IMS_4_38_rH '[C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9' and the generic hTransition_saturated_1 '[H]1[C]2[C]3[C]4[C]5[_A+.]6' both require a FOUR-carbon chain between the donor hydrogen and the ionized oxygen (the 1,5-shift through a six-membered transition state); here the donor is benzylic and the path is H-C(map7)-C(map2)-C(map1)-O(map9), i.e. a 1,4-relationship through a five-membered transition state that only the ortho geometry makes possible -- RDKit-verified 0 matches on the precursor. For the second step, IMS_4_38_ind '[C]1[C]2[C.]3[C]4[C]5[C]6[O+]7([H]8)[H]9>>[C]1[C]2[C.]3[C]4[C]5[C+]6.[O]7([H]8)[H]9' is the closest rule in kind -- it does expel NEUTRAL water from an ArOH2+/ROH2+ type oxonium and keep the charge on carbon -- but it does NOT match here (RDKit-verified 0 matches: it again needs the long aliphatic chain) and, more importantly, it does not close the new C-C bond: it leaves a separated distonic radical/cation, whereas eq 9.23 draws the three-membered ring. The ring-closing rules that DO form a C-C bond while expelling the oxygen, IMS_4_37_rd '...[O+]7([H]8)[H]9>>...[C]6{-}3.[O+.]7([H]8)[H]9' and hTransition_saturated_1_alpha '[C.]1[C]2[C]3[C]4[_A+]5([H]6)>>[C]1[C]2[C]3[C]4{-}1.[_A+.]5([H]6)', put the CHARGE ON THE LEAVING WATER (they produce H2O+. and a neutral hydrocarbon), which is the opposite of the m/z 90 assignment printed on this page, and they need the same four-carbon chain. Nothing is claimed as computationally supported."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 108.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_90",
+      "species_id": "benzocyclopropene_radical_cation_90",
+      "step_id": "step_inductive_water_loss",
+      "observed_mz": 90.0464,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

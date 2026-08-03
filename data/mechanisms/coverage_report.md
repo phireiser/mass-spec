@@ -1,6 +1,6 @@
 # IMS mechanism-record coverage report
 
-Total records: **286**  |  flagging a MØD rule mismatch: **130**  |  marked contradicted/disfavored: **12**
+Total records: **316**  |  flagging a MØD rule mismatch: **147**  |  marked contradicted/disfavored: **13**
 
 Gate status is authoritative from `validate_records.py`, not this script; run it separately to confirm 0 failures.
 
@@ -289,6 +289,45 @@ Gate status is authoritative from `validate_records.py`, not this script; run it
 | 8.123 | IMS8-EQ8.123 | 221 | elimination_rearrangement |  |
 | 8.124 | IMS8-EQ8.124 | 221 | phenyl_migration |  |
 
+## Chapter 9
+
+- rule_index equations: 0; covered by a record: 0
+- **still missing** (in rule_index, no record): none
+- covered beyond rule_index (no MØD rule exists): 9.1, 9.2, 9.3, 9.4, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12, 9.13, 9.14, 9.15, 9.16, 9.17, 9.18, 9.19, 9.20, 9.21, 9.22, 9.23, 9.24
+
+| eq | record | pg | step_class | flags |
+|---|---|---|---|---|
+| 9.1 | IMS9-EQ9.1a | 226 | sigma_dissociation | rule-mismatch |
+| 9.1 | IMS9-EQ9.1b | 226 | hydrogen_rearrangement |  |
+| 9.2 | IMS9-EQ9.2 | 226 | sigma_dissociation | rule-mismatch |
+| 9.3 | IMS9-EQ9.3 | 230 | alpha_cleavage | rule-mismatch |
+| 9.4 | IMS9-EQ9.4a | 230 | alpha_cleavage | contradicted rule-mismatch |
+| 9.4 | IMS9-EQ9.4b | 230 | alpha_cleavage | rule-mismatch |
+| 9.6 | IMS9-EQ9.6a | 231 | hydrogen_rearrangement |  |
+| 9.6 | IMS9-EQ9.6b | 231 | hydrogen_rearrangement |  |
+| 9.7 | IMS9-EQ9.7 | 233 | sigma_ionization | rule-mismatch |
+| 9.8 | IMS9-EQ9.8 | 235 | alpha_cleavage |  |
+| 9.9 | IMS9-EQ9.9 | 235 | alpha_cleavage |  |
+| 9.10 | IMS9-EQ9.10 | 237 | alpha_cleavage | rule-mismatch |
+| 9.11 | IMS9-EQ9.11 | 237 | alpha_cleavage | rule-mismatch |
+| 9.12 | IMS9-EQ9.12 | 237 | retro_diels_alder | rule-mismatch |
+| 9.13 | IMS9-EQ9.13 | 239 | alpha_cleavage |  |
+| 9.14 | IMS9-EQ9.14 | 239 | alpha_cleavage |  |
+| 9.15 | IMS9-EQ9.15 | 239 | hydrogen_rearrangement | rule-mismatch |
+| 9.16 | IMS9-EQ9.16 | 240 | hydrogen_rearrangement | rule-mismatch |
+| 9.17 | IMS9-EQ9.17 | 240 | alpha_cleavage |  |
+| 9.18 | IMS9-EQ9.18a | 241 | alpha_cleavage | rule-mismatch |
+| 9.18 | IMS9-EQ9.18b | 241 | alpha_cleavage | rule-mismatch |
+| 9.18 | IMS9-EQ9.18c | 241 | alpha_cleavage | rule-mismatch |
+| 9.19 | IMS9-EQ9.19a | 243 | alpha_cleavage |  |
+| 9.19 | IMS9-EQ9.19b | 243 | alpha_cleavage |  |
+| 9.20 | IMS9-EQ9.20a | 243 | alpha_cleavage |  |
+| 9.20 | IMS9-EQ9.20b | 243 | alpha_cleavage |  |
+| 9.21 | IMS9-EQ9.21 | 244 | alpha_cleavage | rule-mismatch |
+| 9.22 | IMS9-EQ9.22 | 245 | hydrogen_rearrangement | rule-mismatch |
+| 9.23 | IMS9-EQ9.23 | 245 | hydrogen_rearrangement | rule-mismatch |
+| 9.24 | IMS9-EQ9.24 | 245 | hydrogen_rearrangement |  |
+
 ## Chapter 99
 
 - rule_index equations: 0; covered by a record: 0
@@ -329,6 +368,7 @@ Numbered equations that carry no fragmentation mechanism at all — checked agai
 - **8.28** — p158: static proton-bridged MH+ cage structures (H2N···+H···OH and the norbornene H+-bridged C=C/O-H). No reaction arrows, no products.
 - **8.32** — p161: a TABLE of ionization-energy values for compounds (a)-(g) (amine/sulfide/selenide). No reaction at all.
 - **8.96** — p206 (PDF 218): four STATIC ion structures labelled (a)-(d) -- a D-labelled protonated ester, a protonated/ipso-substituted arene, an aryl-ether arenium and a protonated-ester oxocarbenium -- printed side by side to name the ion types the surrounding text argues about ('the Equation 8.96(b-d) ions'). No reaction arrow, no products, no curved arrows.
+- **9.5** — p231 (PDF 242): a numbered equation that depicts a fragmentation but draws NO mechanism -- two terpenoid polyenes annotated with SQUIGGLE cleavage marks and the neutral-loss labels (M-83) and (M-57), showing how double-bond position changes the allylic cleavage. Zero curved arrows, and the chain is the generic (C5H8)4H. Encoding it would mean inventing the whole electron flow, which conventions (A)/(D)/(F) forbid -- the same policy that excluded Table 8.4. Verified by reading the page directly.
 
 ### Verified non-mechanism PAGES (in range, nothing to extract)
 
@@ -336,6 +376,8 @@ Numbered equations that carry no fragmentation mechanism at all — checked agai
 - **PDF 234** — printed p222: tail of the 8.12 General-references prose plus the first page of Table 8.4 'Examples of other rearrangement reactions' -- a neutral-loss lookup index (columns = eliminated neutral m/z + formula, and molecule class). Zero arcs, zero product structures, zero charge/radical marks; the m/z column is the NEUTRAL's mass, not an ion. Encoding a row would mean inventing both connectivity and electron flow.
 - **PDF 235** — printed p223: Table 8.4 continued -- same listing, same reason.
 - **PDF 236** — printed p225: opening page of Chapter 9 (compound classes), which is out of scope. Prose only; its two inline formulas carry no equation number, arrows or m/z.
+- **PDF 249** — printed p238: running prose only (end of the terpenoid 'Unknowns' note + the opening of 'Aromatic hydrocarbons'). Zero structures, zero arcs, zero equation numbers; it forward-references Equations 9.13/9.14, which are drawn on the following page. Read in full.
+- **PDF 253** — printed p242: running prose only (further decomposition of the C_nH_(2n+1)O+ ions, then the 'Cyclic aliphatic alcohols' lead-in). Zero structures, zero arcs, zero equation numbers; it forward-references Equations 9.19/9.20/9.21, drawn on p243/p244. Read in full.
 
 ## MØD rule-mismatch findings (audit byproduct)
 
@@ -467,6 +509,23 @@ Records whose cross-link note flags the cited MØD rule as mis-encoded or non-ma
 - **8.110** (IMS8-EQ8.110): NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.110' key - its chapter-8 index stops at 8.14 (German-edition numbering) - so nothing was authored for this equation. The nearest family relatives were CHECKED with RDKit substructure matching
 - **8.113** (IMS8-EQ8.113): NO MOD RULE IS CROSS-LINKED. rule_index.json 'by_equation' has no '8.113' key - the chapter-8 rule set stops at equation 8.14 (German-edition numbering), so nothing in src/data_generation/rules/ was authored for this scheme. The three displacement ('rd') rules
 - **8.117** (IMS8-EQ8.117): NO MØD RULE IS CROSS-LINKED, and this was CHECKED, not assumed (convention E). rule_index.json 'by_equation' has no '8.117' key at all -- its chapter-8 index runs 8.1-8.14 only (German-edition numbering), so nothing in src/data_generation/rules/ is authored fo
+- **9.1** (IMS9-EQ9.1a): CROSS-LINK (convention E, checked against the DFS, not assumed). rule_index.json 'by_equation' has NO 9.x key at all (keys stop at 4.46 / 8.14), so no MOD rule is indexed for Equation 9.1 and no equation-keyed cross-link is asserted. Two chapter-4 rules were c
+- **9.2** (IMS9-EQ9.2): CROSS-LINK (convention E, checked against the DFS strings, not assumed). rule_index.json 'by_equation' has NO 9.x key, so no MOD rule is indexed for Equation 9.2. Step 1 (sigma dissociation with charge retention at the branched carbon) is the same rule class a
+- **9.3** (IMS9-EQ9.3): No MOD rule carries equation id 9.3, or any 9.x id - data/mechanisms/rule_index.json 'by_equation' has no chapter-9 key at all - so the cross-link is to the Equation 4.15 allylic-cleavage rules that this very page cites ('Alkene ions exhibit allylic cleavage (
+- **9.4** (IMS9-EQ9.4a): No MOD rule carries equation id 9.4 or any 9.x id (rule_index.json 'by_equation' has no chapter-9 key), so the cross-link is again to the Equation 4.15 allylic-cleavage family that the page cites for this reaction type. Verified against the DFS, not asserted: 
+- **9.4** (IMS9-EQ9.4b): No MOD rule carries equation id 9.4 or any 9.x id (rule_index.json 'by_equation' has no chapter-9 key), so the cross-link is to the Equation 4.15 allylic-cleavage family the page cites for this reaction type. Verified against the DFS, not asserted: IMS_4_15_1_
+- **9.7** (IMS9-EQ9.7): No MØD rule is cross-linked. data/mechanisms/rule_index.json has NO 'by_equation' entry for any 9.x equation (its keys run 4.3-4.46 and 8.1-8.14 only), and no chapter-9 rule module exists under src/data_generation/rules/. The three nearest generic analogues we
+- **9.10** (IMS9-EQ9.10): NO MOD CROSS-LINK for this equation. data/mechanisms/rule_index.json has no chapter-9 entries at all (by_equation covers only 4.x and 8.x, from IMS_chap4_examples.py / IMS_chap8_examples.py / IMS_bookCover.py), so eq 9.10 has no indexed rule. Checked the plaus
+- **9.11** (IMS9-EQ9.11): rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so there is no rule indexed under '9.11'. Cross-linked instead to the rules that VERIFIABLY encode the same two bond changes. (1) wikipedia.py dielsAdler_1 '[C]1[C+]2[C.]3[C]4[C]5[
+- **9.12** (IMS9-EQ9.12): NO MOD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and the indexed retro-Diels-Alder rules do NOT describe this reaction: IMS_4_31_alpha1/IMS_4_31_alpha2 and IMS_4_32_alpha/IMS_4_32_ind (plus IMS_4_30 and wikipedia.py dielsAdler_1/2
+- **9.15** (IMS9-EQ9.15): CROSS-LINK VERIFIED. rule_index.json has no chapter-9 key, but the book itself identifies this scheme with equation 4.36 ('hydrogen rearrangement can produce the characteristic OE+. ion (Equation 4.36, 9.15)'), and by_equation['4.36'] = ['IMS_4_36_', 'IMS_4_36
+- **9.16** (IMS9-EQ9.16): rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so nothing is indexed under '9.16'. CLASS-LEVEL CROSS-LINK: IMS_4_36__rHalpha 'gamma H-migr. to unsaturated group Odd electron Ion 4.36 rH alpha' - '[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7
+- **9.18** (IMS9-EQ9.18a): rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so nothing is indexed under '9.18'. The prose immediately above eq 9.18 refers the alcohol alpha cleavage to Equation 4.17, and by_equation['4.17'] = [IMS_4_17, IMS_4_17_1, IMS_4_1
+- **9.18** (IMS9-EQ9.18b): rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so nothing is indexed under '9.18'. The prose immediately above eq 9.18 refers the alcohol alpha cleavage to Equation 4.17, and by_equation['4.17'] = [IMS_4_17, IMS_4_17_1, IMS_4_1
+- **9.18** (IMS9-EQ9.18c): rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so nothing is indexed under '9.18'. The prose immediately above eq 9.18 refers the alcohol alpha cleavage to Equation 4.17, and by_equation['4.17'] = [IMS_4_17, IMS_4_17_1, IMS_4_1
+- **9.21** (IMS9-EQ9.21): PARTIAL cross-link only; rule_index.json has no chapter-9 entries, so every candidate below was matched by hand against the instantiated substrates with RDKit (SMARTS transcriptions of the DFS reactant patterns, with the formal charge AND radical count of the 
+- **9.22** (IMS9-EQ9.22): NO MØD CROSS-LINK for this equation. rule_index.json contains no chapter-9 entries at all (by_equation covers only 4.x and 8.x), and no indexed rule reproduces any of the three steps. Checked explicitly, with RDKit substructure tests of SMARTS transcriptions o
+- **9.23** (IMS9-EQ9.23): NO MØD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and the aliphatic water-loss rules do not reach this substrate. Checked with RDKit substructure tests of SMARTS transcriptions of the rule left-hand sides against this record's own 
 - **None** (IMS4-FIG4.4a): Cross-linked MØD rule IMS_4_43_ (book eq 4.43, authored as 'displacement reaction' in the German-edition provenance). VERIFIED against this scheme: its DFS left pattern [C]1(H)(H)(H)[C]5(H)(H)[N+.]8(H)[C]10(H)(H)[C]13(H)(H)(H) is atom-for-atom the diethylamine
 - **Table 8.2** (IMS8-EQT8.2d): MØD rule IMS_4_18 (DFS [_A]1[_A+.]2>>[_A+]1.[_A.]2) does NOT match this row (MISMATCH). In this codebase's MØD term-matching, ALL _A placeholders in one rule unify to the SAME element, so [_A]1[_A+.]2 can only cleave a HOMOATOMIC X-X(+.) bond -- not the C-O et
 - **Table 8.2** (IMS8-EQT8.2p): No MØD rule is indexed to 'Table 8.2' in rule_index.json (by_equation has no such key). NEAREST cross-link for step 1, but MIS-ENCODED: IMS_4_14 ([C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]) has the right INTENT -- cleave a C-C bond inciden

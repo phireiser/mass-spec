@@ -1,0 +1,323 @@
+{
+  "mechanism_id": "IMS9-EQ9.14",
+  "species": [
+    {
+      "species_id": "tert_butylbenzene_localized_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2]([CH2:9][1H:11])([CH2:10][1H:12])[C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "dimethylbenzylic_cation_119",
+      "mapped_smiles": "[CH2:9]([1H:11])[C:2](=[C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1)[CH2:10][1H:12]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral_loss",
+      "mapped_smiles": "[CH2:9]=[CH2:10]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methylenecyclohexadienyl_cation_91",
+      "mapped_smiles": "[C:2]([1H:11])([1H:12])=[C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "tert_butylbenzene_localized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_after_alpha",
+      "species_ids": [
+        "dimethylbenzylic_cation_119",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylenecyclohexadienyl_cation_91",
+        "ethylene_neutral_loss",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_benzylic_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_after_alpha",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_olefin_elimination",
+      "from_state": "state_after_alpha",
+      "to_state": "state_products",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              12
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_benzylic_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_benzylic_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 239,
+        "equation": "9.14",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (aromatic hydrocarbons; alpha-branched alkylbenzene, first arrow labelled 'alpha')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Benzylic (alpha) cleavage of an alpha,alpha-dimethyl alkylbenzene molecular ion, expelling R. and giving the tertiary benzylic cation the page labels 'm/z 119'. Book draws 0 arc(s) for this step: the reaction arrow carries only the label 'alpha' and the outcome is written as 'R. + <structure>'; no fishhook whatsoever is printed on the reactant. All THREE moves <1,2,3> are therefore curator-supplied - they are the canonical radical-site alpha-cleavage triple required for electron balance (one sigma electron of the breaking map1-map2 bond into the forming map2=map3 pi bond; the ring odd electron on map 3 into that same pi bond; the second sigma electron onto the departing methyl map 1). Nothing here is claimed to be drawn. INSTANTIATION (convention F): eq 9.14 is generic (R + two CH3 on the alpha carbon). R is instantiated as CH3, i.e. tert-butylbenzene, the smallest member and the classic source of the C9H11+ ion; ms_context.precursor_mz = 134.1090 is CURATOR-COMPUTED from that instantiation and is NOT printed on the page. m/z 119 IS printed under the product structure, and 119.0855 (C9H11+) is R-independent, so that ion is marked detected. No percentage is printed; the running text on printed p.238 only says such ions are 'of significant abundance', so relative_intensity is left unset. LOCALIZATION (conventions B and C): the page draws the reactant ring as an aromatic circle with '+.' inside. As in eq 9.13 the molecular ion is written in the one localized resonance form the alpha-cleavage arrows demand: odd electron on the ipso carbon (map 3), '+' on the para carbon (map 6), ring double bonds map4=map5 and map7=map8. Consequently the m/z 119 product is written in the SAME localized frame (exocyclic map2=map3 quinoid cation), whereas the BOOK PRINTS THE PARTNER RESONANCE FORM, '(CH3)2C(+)-' attached to an aromatic circle. The two are canonical forms of one ion, not different species; the quinoid form is chosen because it is what these arrows actually produce, and because it keeps the alpha carbon (map 2) tetravalent-neutral so the following 're' step needs no charge bookkeeping on it. *** FLAGGED FOR EXPERT REVIEW *** This is the only species in the Ch.9 batch where an EXPLICITLY DRAWN localization was replaced rather than merely chosen: eq 9.13's product is drawn quinoid AND encoded quinoid, whereas here the book prints the charge on the exocyclic carbon, '(CH3)2C(+)-', and the record stores the para-quinoid partner. In a bond-order-sensitive corpus (MOD rules match exact bond orders) the stored graph is therefore not the printed one. A reviewer who prefers drawing-fidelity over intra-page consistency should re-encode the m/z 119 ion as [CH3][C+]([CH3])c1ccccc1 and re-derive the arrows."
+    },
+    {
+      "evidence_id": "evidence_step_olefin_elimination",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_olefin_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 239,
+        "equation": "9.14",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (second arrow, labelled 're', m/z 119 -> C2H4 + C7H7+)"
+      },
+      "confidence": 0.6,
+      "curator_note": "Olefin elimination from the m/z 119 benzylic cation: C9H11+ -> C2H4 + C7H7+. Book draws 0 arc(s) for this step; the second reaction arrow carries only the italic label 're' and the outcome is written purely as the formulas 'C2H4 + C7H7+' - no product structure, no intermediate structure and no fishhook or curved arrow appear. All FOUR moves are curator-supplied, and because the m/z 119 ion is an even-electron cation they are written as full two-electron arrows (electron_count 2), not fishhooks. The encoded set is the minimal balanced one for the net change: move <1> the map9-H(map11) bond into a new map2-H(map11) bond and move <3> the map10-H(map12) bond into a new map2-H(map12) bond (the two hydrogens the alpha carbon must acquire to become a CH2), with move <2> the map2-map9 bond and move <4> the map2-map10 bond closing into the map9=map10 ethylene double bond (a bond that gains two orders and therefore has to receive 4 electrons, i.e. exactly two double-barbed arrows). DRAWN INTERMEDIATE / TEXT-ONLY MECHANISM: the running text on printed p.238 states 'Olefin elimination from the primary benzyl ion product can also give C6H5(CH2)n+ ions of significant abundance (Equation 9.14). (It has been postulated that the m/z 119 ion decomposes through a \"phenylated cyclopropane\" intermediate; in the alpha-13C-labeled analog, 65% of the 13C is lost in forming C7H7+.)'. That protonated-phenylcyclopropane intermediate is described in WORDS ONLY and is not drawn anywhere in eq 9.14, so under the 'add intermediates only if the book draws them' rule the net reaction is encoded as a single formal step and the text-only intermediate is disclosed here rather than invented as a state. The four moves are formal bookkeeping that reproduces the net product, NOT a claim about the true potential surface - the 65% 13C-scrambling result quoted above shows the three carbons lose their identity, so no single concerted arrow set can be literally correct. PRODUCT FORM (convention C): the book writes only the formula 'C7H7+'. It is encoded in the same localized quinoid frame as the eq 9.13 product (exocyclic map2=map3, '+' at the para carbon map 6), which keeps the two records on this page mutually consistent; its aromatic resonance partner is the benzyl cation C6H5-CH2+ that eq 9.13 draws to the right of its double-headed arrow. No m/z is printed for this ion in eq 9.14 (only in eq 9.13), so it is marked detected=false and its peak_assignment carries status 'inferred' with the curator-computed 91.0542."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.14",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.14",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MOD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and no indexed rule describes either drawn step. RDKit-VERIFIED against this record's localized molecular ion (explicit Hs added): IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>...' and IMS_4_10 '[_A+]1[C]2[C.]3>>...' both require ONE atom bearing the charge AND the odd electron, which an aromatic radical cation never has (here '+' sits on map 6 and the odd electron on map 3) - 0 matches each; IMS_4_3_var1/var2 need a [C+.] carbon - 0 matches. For the 're' step, the indexed skeletal-rearrangement rules are all heteroatom- or alkene-anchored (e.g. IMS_4_14 '[C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>...') and none matches the m/z 119 hydrocarbon cation - 0 matches for every pattern tested. Note also that IMS_4_9 and IMS_4_10 are DROPPED at import by the conservation guardrail in src/data_generation/rules/__init__.py ('spin 1->2', verified by running the import inside the container), so they are not live in the forward model in any case. Nothing is claimed as computationally supported here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 134.109,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_119",
+      "species_id": "dimethylbenzylic_cation_119",
+      "step_id": "step_benzylic_alpha_cleavage",
+      "observed_mz": 119.0855,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    },
+    {
+      "peak_id": "peak_91_inferred",
+      "species_id": "methylenecyclohexadienyl_cation_91",
+      "step_id": "step_olefin_elimination",
+      "observed_mz": 91.0542,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

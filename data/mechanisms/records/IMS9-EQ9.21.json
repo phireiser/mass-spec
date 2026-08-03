@@ -1,0 +1,408 @@
+{
+  "mechanism_id": "IMS9-EQ9.21",
+  "species": [
+    {
+      "species_id": "methylcyclohexanol_molecular_ion_O_ionized",
+      "mapped_smiles": "[1H:9][O+:8][CH:1]1[CH:2]([CH3:7])[CH2:3][CH:4]([1H:10])[CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_ring_opened_oxonium_C2_radical",
+      "mapped_smiles": "[1H:9][O+:8]=[CH:1][CH2:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2][CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "heptanal_molecular_ion",
+      "mapped_smiles": "[O+:8]=[CH:1][CH2:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2]([1H:9])[CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_oxonium_mz44",
+      "mapped_smiles": "[1H:10][O+:8]=[CH:1][CH2:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "pent_1_ene_neutral",
+      "mapped_smiles": "[CH2:5]=[CH:4][CH2:3][CH:2]([1H:9])[CH3:7]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylcyclohexanol_molecular_ion_O_ionized"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "distonic_ring_opened_oxonium_C2_radical"
+      ]
+    },
+    {
+      "state_id": "state_heptanal",
+      "species_ids": [
+        "heptanal_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_oxonium_mz44",
+        "pent_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cleavage_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_oxygen_to_carbon",
+      "from_state": "state_ring_opened",
+      "to_state": "state_heptanal",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_mclafferty_pentene_loss",
+      "from_state": "state_heptanal",
+      "to_state": "state_products",
+      "step_class": "mclafferty_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 244,
+        "equation": "9.21",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (2-methylcyclohexanol, first arrow, labelled 'alpha')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Alpha cleavage of the O-ionized 2-methylcyclohexanol molecular ion (C7H14O+., m/z 114; the compound is identified by Figure 9.6, 'Mass spectrum of 2-methylcyclohexanol', on printed page 243 -- the other side of this same leaf (243 recto, 244 verso), not the facing page, which would be 245, and by the text of this page, which contrasts this product with 'the analogously formed 2-methylhexanal' of Equation 9.20). The odd electron on the hydroxyl oxygen drives homolysis of the RING bond between the carbinol carbon (map 1) and the methyl-bearing carbon (map 2), so the ring only OPENS: no mass is lost, and the product is the distonic ion (still m/z 114) with the charge in a C=O(+)H oxonium and the radical on map 2, exactly as the second structure is printed. Book draws 2 arc(s); moves <1,2> are drawn -- arc 1 is the fishhook whose tail sits on the oxygen odd electron printed as '+' on the '+OH' group and whose barb points at the C-O bond (the forming map1=map8 pi bond), arc 2 is the fishhook whose tail sits on the breaking map1-map2 ring bond and whose barb points at that same forming pi bond -- and move <3> is an implicit homolysis hook required for electron balance (NOT drawn on the page: the book simply prints the radical dot on map 2 in the product structure). LOCALIZATION (convention B): the page prints the charge directly on the hydroxyl oxygen, so map 8 is written [O+:8] with two single bonds (to map 1 and to the hydroxyl hydrogen map 9) and therefore carries the unpaired electron; the '+' and the odd electron are not merely JSON fields. The two hydrogens that migrate later in the equation are written as isotope-tagged explicit atoms [1H:9] (hydroxyl H) and [1H:10] (the gamma H consumed by the McLafferty step) because RDKit silently strips plain mapped [H:n] atoms; this is the corpus convention (cf. IMS4-EQ4.37, IMS8-EQ8.5d) and is what makes the O-H and C-H bonds addressable by the arrows."
+    },
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_oxygen_to_carbon",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 244,
+        "equation": "9.21",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (2-methylcyclohexanol, second arrow, labelled 'rH')"
+      },
+      "confidence": 0.8,
+      "curator_note": "The 'rH' arrow as drawn: the HYDROXYL hydrogen (map 9) migrates from the oxonium oxygen BACK to the radical carbon (map 2). On the page this is unmistakable because the second structure no longer writes '+OH' as a unit -- it prints a bare 'O' with '+' and an explicitly drawn O-H bond swung to the right, so that the H sits next to the radical dot -- and because the third structure re-prints the oxygen as '+.' while the second carries only '+'. The product is therefore the LINEAR n-heptanal molecular ion, still m/z 114, an isomer of the precursor (no mass change), which is what the running text calls 'this ... aldehyde' when it says 'this and the analogously formed 2-methylhexanal will also contribute to peaks such as m/z 44 and 58'. Book draws 2 arc(s); moves <1,2> are drawn -- arc 1 is the large fishhook whose tail sits on the O-H bond and whose barb points down at the incipient C-H bond, arc 2 is the small fishhook whose tail sits on the printed radical dot of map 2 and whose barb points up at that same forming C-H bond -- and move <3> is an implicit homolysis hook required for electron balance (NOT drawn on the page: it returns the second O-H electron to the oxygen, which is precisely what restores the '+.' the book prints on the third structure)."
+    },
+    {
+      "evidence_id": "evidence_step_mclafferty",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty_pentene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 244,
+        "equation": "9.21",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (2-methylcyclohexanol, third arrow, labelled '- C5H10' / 'rH')"
+      },
+      "confidence": 0.7,
+      "curator_note": "Third arrow of the equation, labelled '- C5H10' above and 'rH' below: a McLafferty rearrangement of the n-heptanal molecular ion -- gamma-hydrogen (map 10, sitting on map 4) transfer to the carbonyl oxygen with beta cleavage of the map5-map6 bond, expelling 1-pentene (C5H10, 70) and leaving the C2H4O+. ion at m/z 44. Book draws 0 arc(s) for this step: the transformation is written only over the arrow and NO fishhooks are printed on the heptanal structure, so all five encoded moves are curator-supplied; they reproduce the standard radical-site-initiated McLafferty flow and were chosen because they produce exactly the ion structure printed on the page. PRODUCT ISOMER AS DRAWN (convention C): the page draws the DISTONIC form .CH2-CH=O(+)H (a double bond to a three-coordinate O+, the radical dot on the terminal CH2), not the enol CH2=CH-OH+. tautomer/resonance partner that is more usually drawn for a McLafferty product; the encoded arrows give precisely the drawn distonic form, because the second electron of the breaking map5-map6 bond is left on map 6 instead of flowing into a C=C. m/z AND INTENSITY (convention F/G): no label is printed under this ion in the equation itself; the running text of this same page names the peak ('will also contribute to peaks such as m/z 44 and 58'), so the m/z is taken from the prose of page 244 and NO relative intensity is recorded -- none is printed anywhere for m/z 44 (the labelled peaks of Figure 9.6 on page 243 are 15, 29, 41, 57, 68, 81, 85, 96 and 114). PROSE, QUOTED EXACTLY rather than paraphrased: the page says 'this and the analogously formed 2-methylhexanal will also contribute to peaks such as m/z 44 and 58'. It names both aldehydes and both masses WITHOUT partitioning them, so the page itself does not say which aldehyde feeds which peak; the first draft of this note asserted specifically that both feed m/z 44, which over-reads the sentence. The schemes do partition: Equation 9.19 terminates at m/z 44 and Equation 9.20 at m/z 58, and 2-methylhexanal's McLafferty ion (C1 + C2 + the 2-methyl) is C3H6O = 58, not 44."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.21",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.21",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "PARTIAL cross-link only; rule_index.json has no chapter-9 entries, so every candidate below was matched by hand against the instantiated substrates with RDKit (SMARTS transcriptions of the DFS reactant patterns, with the formal charge AND radical count of the key atom enforced). (1) STEP 3 (McLafferty), rH half: IMS_8_7_1 'Hydrogen exchange occuring in a Ion-Molecule-Complex 8.7 row 1 rH', [C]1[C]2[C]3([H]4)[C]5[C]6[C]7([H]8){=}[O+.]9 >> [C]1[C]2[C.]3[C]5[C]6[C]7([H]8){=}[O+]9[H]4, is a genuine match: 2 RDKit matches on the heptanal molecular ion, and they pick out exactly the atoms the book uses -- gamma H (map 10) on map 4 migrating to the aldehyde oxygen map 8, aldehyde C = map 1. It performs only the FIRST half of the drawn arrow (it stops at the gamma-distonic ion, which this page does not draw). CORRECTION: the first draft called it 'the only indexed rule that matches'. It is not -- hTransition_unsaturated (IMS_bookCover.py:40), '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6 >> [C.]2[C]3[C]4[C]5{=}[_A+]6[H]1', is also in rule_index.json and performs the identical gamma-H -> O transfer on the heptanal molecular ion with _A = O. (2) STEP 3, beta-cleavage half: IMS_8_7_2 and IMS_8_7_3 ([C]1[C]2[C.]3[C]4[C]5[C]6([H]7){=}[O+]8[H]9 >> [C]1[C]2[C]3{=}[C]4.[C]5{=}[C]6([H]7)[O+.]8[H]9) DO match that gamma-distonic ion (RDKit-verified, 1 match, cleaving the same map5-map6 bond and forming the same map4=map5 alkene) but they produce the ENOL ion CH2=CH-OH+. with charge and radical on oxygen, whereas this page draws the DISTONIC isomer .CH2-CH=O(+)H; same formula and same m/z 44, different connectivity, so the rules do not reproduce the printed product structure. *** CORRECTED: a rule DOES reproduce the drawn distonic product. *** The first draft claimed IMS_4_33_alpha_1 was the only rule that would give it and that it cannot be used here (true of 4_33 itself: it requires a KETONE carbonyl [C]5([C]6){=}[O+]7[H]8 and gives 0 RDKit matches on this aldehyde-derived intermediate, as does its partner IMS_4_33_rH on n-heptanal). But hTransition_unsaturated_alpha (src/data_generation/rules/IMS_bookCover.py:50), '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6 >> [C]1{=}[C]2 . [C.]3[C]4{=}[_A+]5[H]6', does exactly this reaction with _A = O. VERIFIED HERE, not asserted: its left side embeds on the gamma-distonic intermediate exactly ONCE, as (C.1,C2,C3,C4,A5) = (map4, map5, map6, map1, map8); it breaks the same map5-map6 bond, forms the same map4=map5 alkene, and its ion half '[C.]3[C]4{=}[_A+]5[H]6' is atom-for-atom the DRAWN m/z 44 distonic ion [1H:10][O+:8]=[CH:1][CH2:6], with pent-1-ene as the neutral. It carries no ketone requirement, it conserves charge and spin (so the rules/__init__.py guardrail keeps it), and it is live: IMS_bookCover.py:457 puts it in 'rearrangements' -> IMS_cover_fragmentation (line 493) -> the 'fragmentation' list (__init__.py:45). So the drawn product IS reachable in the forward model; only the GRANULARITY differs, since this single rewrite is the second half of the drawn arrow and presupposes the gamma-distonic ion that the page does not draw. (3) STEP 1 (alpha cleavage): MISMATCH. IMS_4_9 'radical induced (alpha-)clevage for a saturated site 4.9', [C]1[C]2[C]3([C]4)[_A+.]5 >> [C.]1.[C]2[C]3([C]4){=}[_A+.]5, is the only indexed ALPHA-CLEAVAGE rule whose reactant pattern matches the molecular ion (RDKit-verified, 3 matches, e.g. maps (7, 2, 1, 6, 8)) -- narrowed from the first draft's 'the only indexed rule ... at all', which contradicted point (5) of this same note, where IMS_4_37_rH/IMS_4_38_rH are correctly reported as matching the molecular ion too, but it does NOT describe the drawn step: it cleaves the map7-map2 bond while forming the pi bond between map1 and map8, i.e. the cleaved bond is incident to NEITHER atom of the new pi bond (the known IMS_4_9 geometry defect), whereas the book cleaves map1-map2, which IS incident to the pi-forming carbon map1. IMS_4_9 additionally keeps the unpaired electron on the heteroatom while creating a second radical (spin 1 -> 2), so the conservation guardrail in rules/__init__.py drops it from the fragmentation set anyway. The heteroatom-alpha rules that have the RIGHT geometry do not match this substrate: IMS_4_26_1 and IMS_4_13_1 both require a CH2 (two explicit H) on the carbon bearing O+, while 2-methylcyclohexanol's carbinol carbon is a CH (0 RDKit matches each); IMS_4_10 requires a pre-existing carbon radical (0 matches). (4) STEP 2 (rH from O+ back to the carbon radical): NO rule. Every indexed rH rule runs the other way (C-H -> O+., e.g. IMS_4_37_rH/IMS_4_38_rH, hTransition_*), and the reverse-direction rules do not fit. CORRECTION: the first draft called IMS_8_2_bidirectional_up 'the only reverse-direction rule in the index'; three more move an H from O+ back to carbon, each checked in source. IMS_8_7_4 ('...{=}[O+]8[H]9 >> [C]1[C]2([H]9)...') and IMS_8_7_5 ('... >> ...[C]6([H]9){=}[O]8') both need the radical carbon THREE bonds from the carbonyl along the chain, whereas in this ring-opened ion the radical (map 2) is FIVE bonds from the carbonyl carbon (map 1) along C1-C6-C5-C4-C3-C2; IMS_8_2_rH_2_0 needs the methyl-ketone enol skeleton '[C]1([H]2)([H]3){=}[C]4([C]5...){=}[O+.]9([H]10)', and this ion has no C=C at all; and IMS_8_2_bidirectional_up is written for that same methyl-ketone skeleton. So step 2 still has NO rule -- the conclusion is unchanged, only its justification was too broad. (5) NOT PART OF THIS EQUATION, recorded to prevent a false cross-link: IMS_4_38_rH / IMS_4_37_rH ([C]1[C]2[C]3([H]4)[C]5[C]6[C]7[O+.]8[H]9) DO match the molecular ion (2 RDKit matches) -- they encode the H2O-loss route that the prose of this page cites as 'the other major pathway' (Equation 4.38 / 8.26), which is NOT drawn on this page and is not part of Equation 9.21. Nothing here is claimed as computationally supported."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 114.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_44",
+      "species_id": "distonic_oxonium_mz44",
+      "step_id": "step_mclafferty_pentene_loss",
+      "observed_mz": 44.0257,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

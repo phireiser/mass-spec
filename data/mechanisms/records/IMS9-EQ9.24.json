@@ -1,0 +1,316 @@
+{
+  "mechanism_id": "IMS9-EQ9.24",
+  "species": [
+    {
+      "species_id": "methyl_salicylate_molecular_ion",
+      "mapped_smiles": "[1H:12][O:11][C:2]1=[C:1]([C:7](=[O:8])[O+:9][CH3:10])[CH:6]=[CH:5][CH:4]=[CH:3]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_aryloxy_radical_oxonium",
+      "mapped_smiles": "[O:11][C:2]1=[C:1]([C:7](=[O:8])[O+:9]([1H:12])[CH3:10])[CH:6]=[CH:5][CH:4]=[CH:3]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "quinoid_ketene_radical_cation_120",
+      "mapped_smiles": "[O+:8]=[C:7]=[C:1]1[CH:6]=[CH:5][CH:4]=[CH:3][C:2]1=[O:11]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methanol",
+      "mapped_smiles": "[O:9]([1H:12])[CH3:10]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyl_salicylate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_aryloxy_radical_oxonium"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "quinoid_ketene_radical_cation_120",
+        "methanol"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rh_phenol_to_ester_oxygen",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              12
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_methanol_loss",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_phenol_to_ester_oxygen",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.24",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (methyl salicylate ortho effect, arrow labelled 'rH')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Ortho-effect transfer of the phenolic hydrogen of the methyl salicylate molecular ion (m/z 152) to the ionized ester alkoxy oxygen, drawn over the arrow labelled 'rH'. Book draws 2 arcs; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page -- the page simply prints the resulting aryloxy radical as an O with a dot). Drawn arc 1 (the upper arc) runs from the '+.' printed on the methoxy oxygen leftwards and ends, with a single barb, at the drawn phenolic H: that is move <1>, the oxygen odd electron entering the forming O-H bond. Drawn arc 2 (the lower arc) runs from the phenolic O-H bond rightwards and ends, with a single barb, on the methoxy oxygen: that is move <2>, one electron of the O-H bond entering the same forming bond. LOCALIZATION (convention B): the page prints '+.' on the ester ALKOXY oxygen (the '+.OCH3' at the top right), not on the carbonyl oxygen and not on the ring, so map 9 is written [O+:9] with two bonds (to the acyl carbon and to the methyl), which carries the one unpaired electron. The benzene ring is written in the Kekule form map1=map2, map3=map4, map5=map6 -- the same Kekule the MØD rule uses -- and is untouched by this step; RDKit re-perceives it as aromatic, which is harmless here because no ring bond changes. The migrating hydrogen is written as an explicit mapped atom [1H:12]. The product is exactly the drawn distonic ion: a neutral aryloxy radical (map 11) plus a closed-shell protonated-ester oxonium (map 9)."
+    },
+    {
+      "evidence_id": "evidence_step_i",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_methanol_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.24",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (methyl salicylate, arrow labelled 'i', CH3OH loss)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Inductive (charge-site) cleavage of the acyl-C-to-oxonium-O bond of the distonic ion, expelling neutral methanol and collapsing the aryloxy radical / acyl cation pair into the quinoid ketene radical cation the page draws in brackets with an external '+.'. Book draws 1 arc; move <1> is drawn, moves <2,3,4,5> are implicit (not drawn on the page). The drawn arc starts on the bond from the acyl carbon to the protonated methoxy oxygen and curves up and to the left onto that oxygen ('+HOCH3'); it is the two-electron heterolysis that 'i' denotes in McLafferty's notation, encoded as move <1> with electron_count 2 so that methanol leaves NEUTRAL. The implicit moves are the electron shift that turns the aryloxy radical / acylium pair into the drawn quinoid ketene: <2> the aryloxy odd electron entering the forming ring C=O, <3> one electron of the ring map1=map2 bond completing that C=O, <4> the other electron of map1=map2 entering the forming exocyclic map1=map7 ketene bond, and <5> one electron from a lone pair of the carbonyl oxygen (map 8) completing it, which is what leaves map 8 as the site of the charge and the odd electron. PRODUCT LOCALIZATION (convention C): the page draws the product as a neutral quinoid skeleton -- ring C=O, exocyclic C=C=O, ring double bonds at the 3,4 and 5,6 positions -- inside square brackets with the '+.' written OUTSIDE the bracket, i.e. deliberately delocalized. That skeleton is closed-shell, so the hole has to be placed on an atom; this record puts it on the ketene oxygen ([O+:8] with one double bond and one unpaired electron), which reproduces every bond the page draws AND is the localization the MØD rule IMS_4_41_ind2 uses. The alternative localization, drawn nowhere on this page but encoded by the sibling rule IMS_4_41_ind1, is the resonance partner in which the ring stays aromatic, the phenolic oxygen keeps the odd electron and the side chain is an acylium Ar-C≡O+; the two are resonance structures of one and the same ion. VALIDATOR NOTE: RDKit perceives the reactant ring as aromatic and the product ring as a localized cyclohexadienone, so the arrow check reports the ring bonds as (soft) 'aromatic/delocalised' half-order mismatches; all non-ring changes (map7-map9 broken, map2-map11 and map1-map7 raised) balance exactly. NO m/z IS PRINTED for this ion anywhere in the equation, so it is recorded detected=false with peak status 'inferred' and no relative_intensity; the value 120.0206 in peak_assignments is the monoisotopic m/z COMPUTED from this record's own structure (C7H4O2+., = 152 - 32), not a number read off the page."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.24",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "9.24",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.85,
+      "curator_note": "CROSS-LINK VERIFIED (this is the one equation on page 245 that MØD already encodes). rule_index.json has no chapter-9 entries, but equation 9.24 is the same reaction as the German-edition equation 4.41 (Springer p. 80), and the three rules indexed under equation 4.41 describe exactly this substrate: IMS_4_41_rH, IMS_4_41_ind1 and IMS_4_41_ind2, all in src/data_generation/rules/IMS_chap4_examples.py. (1) step_rh_phenol_to_ester_oxygen <-> IMS_4_41_rH '[H]1[_A]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+.]11[C]12>>[_A.]2[C]3[C]4{=}[C]5[C]6{=}[C]7[C]8({=}3)[C]9({=}[O]10)[O+]11([H]1)[C]12'. Bond-by-bond this is the same step: the _A(H) bond is broken, the O+-H bond is made, _A goes radical and the ester oxygen goes from O+. to a closed-shell O+ -- identical to moves <1,2,3>. RDKit-VERIFIED: a SMARTS transcription of the rule's left-hand side, '[OX2H1][c]1[cH][cH][cH][cH][c]1[CX3](=[OX1])[O+X2][CH3]', matches this record's precursor (1 match). The rule's ring Kekule (map3=map8, map4=map5, map6=map7) is the same one this record writes. (2) step_inductive_methanol_loss <-> IMS_4_41_ind2 '[_A.]1[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({=}2)[C]8({=}[O]9)[O+]10([H]11)[C]12>>[_A]1{=}[C]2[C]3{=}[C]4[C]5{=}[C]6[C]7({-}2){=}[C]8{=}[O+]9.[O]10([H]11)[C]12'. Every bond change agrees with moves <1..5>: _A-C single->double (this record's map2-map11), the ring bond bearing the ester double->single (map1-map2), the aryl-to-acyl bond single->double (map1-map7), the C=O kept double while the oxygen becomes O+ (map7-map8), and the C-OCH3 bond broken with neutral methanol expelled (map7-map9). RDKit-VERIFIED: the shared left-hand pattern of ind1/ind2, '[O;D1;v1][c]1[cH][cH][cH][cH][c]1[CX3](=[OX1])[O+X3]([H])[CH3]', matches this record's distonic intermediate (1 match). IMS_4_41_ind1 encodes the SAME step to the resonance-partner product (aryloxy radical retained, side chain written as the acylium [C]8{#}[O+]9); it is an equally valid localization of the one ion, not a different reaction. DEFECT FOUND IN IMS_4_41_ind2: its right-hand side writes the ketene oxygen as '[O+]9' with NO radical dot, so the rule goes spin 1 -> spin 0 and the conservation guardrail in src/data_generation/rules/__init__.py DROPS it from the live fragmentation set -- confirmed by importing the module in the container: 'H-migr to unsat. hetrostructur and clevage of neighb. bond 4.41 ind prod 2 [spin 1->0]' appears in the dropped list (28 rules dropped, 135 kept). The correct DFS label is '{=}[O+.]9', i.e. precisely the localization this record uses; with that one-character fix the rule conserves spin and would become live again. IMS_4_41_rH and IMS_4_41_ind1 both conserve and are live."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 152.0468,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_120_inferred",
+      "species_id": "quinoid_ketene_radical_cation_120",
+      "step_id": "step_inductive_methanol_loss",
+      "observed_mz": 120.0206,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

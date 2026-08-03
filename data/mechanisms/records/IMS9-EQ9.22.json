@@ -1,0 +1,477 @@
+{
+  "mechanism_id": "IMS9-EQ9.22",
+  "species": [
+    {
+      "species_id": "o_cresol_molecular_ion_ring_localized",
+      "mapped_smiles": "[C+:1]1([O:9][1H:10])[C:2]([CH3:7])=[CH:3][CH:4]=[CH:5][CH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylcyclohexadienone_radical_cation",
+      "mapped_smiles": "[O+:9]=[C:1]1[C:2]([CH3:7])=[CH:3][CH:4]=[CH:5][CH:6]1[1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylcyclopentadiene_radical_cation_80",
+      "mapped_smiles": "[C:2]1([CH3:7])[CH+:3][CH:4]=[CH:5][CH:6]1[1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "carbon_monoxide",
+      "mapped_smiles": "[C-:1]#[O+:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methylcyclopentadienyl_cation_79",
+      "mapped_smiles": "[C:2]1([CH3:7])=[CH:6][CH:5]=[CH:4][CH+:3]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "hydrogen_atom",
+      "mapped_smiles": "[1H:10]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "o_cresol_molecular_ion_ring_localized"
+      ]
+    },
+    {
+      "state_id": "state_dienone",
+      "species_ids": [
+        "methylcyclohexadienone_radical_cation"
+      ]
+    },
+    {
+      "state_id": "state_after_co_loss",
+      "species_ids": [
+        "methylcyclopentadiene_radical_cation_80",
+        "carbon_monoxide"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylcyclopentadienyl_cation_79",
+        "carbon_monoxide",
+        "hydrogen_atom"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rh_hydroxyl_to_ortho_radical",
+      "from_state": "state_precursor",
+      "to_state": "state_dienone",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_co_elimination",
+      "from_state": "state_dienone",
+      "to_state": "state_after_co_loss",
+      "step_class": "carbon_monoxide_elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_hydrogen_loss",
+      "from_state": "state_after_co_loss",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_hydroxyl_to_ortho_radical",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.22",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (o-cresol molecular ion, arrow labelled 'rH')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Ortho-effect transfer of the phenolic hydrogen to the ortho ring radical site of the o-cresol molecular ion (m/z 108), drawn over the arrow labelled 'rH'. Book draws 1 arc; move <1> is drawn, moves <2,3,4> are implicit (not drawn on the page): <2> is the ortho-carbon radical hook into the forming C-H bond, <3> is the homolysis hook that leaves the retained O-H electron on oxygen, and <4> is the oxygen lone-pair shift that closes the C=O and moves the formal '+' from the ring carbon (map 1) onto oxygen. The single drawn arc runs from the O-H bond down and to the right and ends on the ortho carbon carrying the printed dot (map 6); its head is a SINGLE-barbed fishhook, consistent with the one-electron (H-atom) transfer it labels, so it is encoded as the fishhook <1>. CORRECTION: the first draft claimed the head was 'drawn with two converging strokes rather than the single barb used for the fishhooks of Equations 9.23/9.24 on the same page'. Re-measured on the native 1760x2560 scan that is wrong: the head at approx. (836,458) consists of the arc body arriving from the upper left plus exactly ONE barb stub running back down-left -- topologically identical to the 9.23/9.24 rH fishhooks, and visibly different from the genuine TWO-barbed heads of the 'i' steps on this page (e.g. 9.23's 'i' head near (925,1170), which has two barbs diverging from the tip in addition to the arc body). The encoding was already right; only the sentence describing the ink was wrong. LOCALIZATION (convention B/C): the page prints TWO structures for the reactant, joined by a double-headed resonance arrow -- the aromatic o-cresol radical cation with a delocalized '+.' inside the ring (left), and the ring-localized resonance form (right) with '+' printed under the C-OH carbon (map 1) and the odd electron printed on the ortho CH (map 6). This record uses the RIGHT-HAND, ring-localized form as the precursor, exactly as drawn: [C+:1] carries the charge, [CH:6] carries the radical, and the two ring double bonds are the ones printed (map2=map3, map4=map5). The aromatic partner form is the same ion and is not encoded separately. PRODUCT LOCALIZATION: the page draws the 6-methylcyclohexa-2,4-dien-1-one product with a full C=O and a delocalized '+.' inside the ring; that skeleton is a closed-shell neutral, so no SMILES can carry the ion without moving the hole somewhere. The n-ionized carbonyl form ([O+:9] doubly bonded, one unpaired electron) is chosen because it is the only localization that preserves EVERY bond the page draws, and it is the form the MØD rule set uses for ionized carbonyls ('{=}[O+.]'). The printed '+.' sits inside the ring, not on oxygen; that difference is a resonance choice, disclosed here."
+    },
+    {
+      "evidence_id": "evidence_step_co",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_co_elimination",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.22",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (CO loss from the methylcyclohexadienone ion, arrow labelled '-CO')"
+      },
+      "confidence": 0.7,
+      "curator_note": "Ring-contracting extrusion of CO from the 6-methylcyclohexa-2,4-dien-1-one radical cation, giving the methylcyclopentadiene radical cation printed as m/z 80. Book draws 2 arcs on the dienone; moves <1,2> are drawn, moves <3,4,5,6,7> are implicit (not drawn on the page). Drawn arc 1 = the fishhook that starts on the map1-map6 ring bond and points at the C=O bond (encoded as move <1>, one electron of that sigma bond entering the C-O bond to make C≡O); drawn arc 2 = the fishhook that starts on the map1-map2 ring bond and curves down into the ring interior toward the printed '+.' (encoded as move <2>, one electron of that sigma bond entering the forming map2-map6 bond that closes the five-membered ring). The implicit moves are forced by electron balance: <3> the oxygen odd electron completing the C≡O triple bond, <4> the second electron of the map1-map6 homolysis completing the new map2-map6 bond, <5> the second electron of the map1-map2 homolysis retained on map1 (this pair is the carbon lone pair of :C≡O:), <6> one electron of the map2=map3 pi bond migrating to map1 to complete that lone pair, and <7> its partner staying on map2. CHARGE RETENTION (the reason moves <6,7> exist): the page puts the charge on the HYDROCARBON (m/z 80) and lets CO leave neutral, and neutral CO is (-)C≡O(+), i.e. its carbon owns one electron MORE than the ring carbonyl carbon did. With the reactant hole localized on oxygen, that electron can only come from the ring pi system, so exactly one drawn ring double bond must open. This is a genuine charge/radical migration, not an artefact of the drawing. PRODUCT LOCALIZATION (convention C): the page draws m/z 80 as 5-methylenecyclopenta-1,3-diene-like skeleton with BOTH ring double bonds printed and '+.' inside the ring -- again a closed-shell neutral skeleton, so one printed pi bond has to be opened to place the hole. This record opens map2=map3, giving a radical on map2 (bearing the methyl) and an allylic cation on map3 (conjugated with the retained map4=map5); the sp3 CH2 (map 6, holding the transferred hydrogen map 10) and the ring connectivity are exactly as printed. INTENSITY: the page prints 'm/z 80' with no percentage, so relative_intensity is left unset."
+    },
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_hydrogen_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 245,
+        "equation": "9.22",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols (m/z 80 -> m/z 79, arrow labelled 'alpha, -H')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Radical-site alpha cleavage of a C-H bond of the ring CH2 of m/z 80, expelling H. and giving the even-electron methylcyclopentadienyl cation printed as m/z 79. Book draws 0 arcs for this step -- it is written only as the arrow label 'alpha / -H' between the m/z 80 and m/z 79 structures -- so ALL THREE moves <1,2,3> are implicit reconstructions of the canonical three-fishhook alpha cleavage: <1> the map2 radical into the forming map2=map6 pi bond, <2> one electron of the breaking map6-H bond into that same pi bond, <3> the other electron of that bond leaving with the hydrogen atom. WHICH HYDROGEN: the two hydrogens on map 6 are equivalent; the record removes the one that was transferred from the hydroxyl in step 1 (map 10) purely so that the atom map stays complete. No isotope-labelling claim is made or implied. PRODUCT LOCALIZATION (convention C): the page draws m/z 79 as a five-membered ring with an inscribed circle and a '+' -- a fully delocalized methylcyclopentadienyl cation. This record writes ONE localized Kekule form of that ion (map2=map6 and map4=map5 double bonds, cation on map3), which is what the arrows of this step actually produce; the inscribed-circle drawing is the delocalized average of that form and its partners. Note that the cyclopentadienyl cation is formally 4-pi antiaromatic, so RDKit does not perceive this ring as aromatic and the bookkeeping stays integer throughout. ALTERNATIVE ORDER DRAWN ON THE PAGE: a second arrow labelled '-H, -CO' runs directly from the methylcyclohexadienone ion to m/z 79, i.e. the same two losses in the opposite order. That branch is drawn but carries no arcs and no separate structure, so it is not encoded as its own step; the products are identical. INTENSITY: the page prints 'm/z 79' with no percentage, so relative_intensity is left unset."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.22",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.22",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MØD CROSS-LINK for this equation. rule_index.json contains no chapter-9 entries at all (by_equation covers only 4.x and 8.x), and no indexed rule reproduces any of the three steps. Checked explicitly, with RDKit substructure tests of SMARTS transcriptions of the rule left-hand sides against this record's own species: (1) the ortho-effect rH has no rule -- the H-transfer rules hTransition_saturated_1 '[H]1[C]2[C]3[C]4[C]5[_A+.]6', hTransition_unsaturated '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6' and IMS_4_38_rH all require a FOUR-carbon chain between the donor hydrogen and the heteroatom (a 1,5-shift through a six-membered transition state), whereas here the path is H-O-C(map1)-C(map6) with the donor and acceptor 1,3 across the ring; RDKit-verified 0 matches on the precursor. (2) The CO extrusion has no rule: IMS_4_27_2 '[_A]1[C]2{#}[O+]3>>[_A+]1.[C]2[O]3' is the only rule that actually expels neutral CO, but it requires a pre-formed ACYLIUM (R-C≡O+) precursor -- RDKit-verified 0 matches on the cyclic dienone ion of this record -- and it is a charge-migration step from an even-electron ion, not a ring contraction of an odd-electron cyclic ketone. MISMATCH FOUND: IMS_4_11 'radical induced (alpha-)clevage for a unsaturated heteroatom 4.11' '[C]1[C]2[C]3{=}[_A+.]4>>[C.]1.[C]2[C]3{#}[_A+]4' DOES match this record's methylcyclohexadienone ion (RDKit-verified, 2 matches on '[C][C][CX3]=[O+]'), but it does NOT describe the drawn reaction: it breaks the map-1/map-2-type C-C bond that is NOT incident to the atom pair whose bond order rises (it forms C≡O+ between the carbonyl carbon and oxygen while cleaving a bond one atom further out -- the known IMS_4_9/4_11/4_12 geometry defect), it leaves the ring OPEN instead of contracting it to the five-membered m/z 80 ion, and it puts the CHARGE on the C≡O+ end while sending the odd electron away with the departing fragment, i.e. it would predict an acylium-type ion rather than the hydrocarbon ion the page labels m/z 80. CORRECTION: the first draft said the rule 'retains BOTH the charge and the odd electron' on the acylium. Read from source (IMS_chap4_examples.py:222) its right-hand side is '[C.]1 . [C]2[C]3{#}[_A+]4' -- the unpaired electron is on the DEPARTING fragment [C.]1 and the acylium carries the charge alone. The mismatch verdict is unaffected. (3) The final alpha H-loss has no rule either: IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5' needs a single bond from a carbon to a charged heteroatom and cleaves C-C, not C-H; RDKit-verified 0 matches here. Nothing is claimed as computationally supported."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 108.057,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_80",
+      "species_id": "methylcyclopentadiene_radical_cation_80",
+      "step_id": "step_co_elimination",
+      "observed_mz": 80.0621,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    },
+    {
+      "peak_id": "peak_79",
+      "species_id": "methylcyclopentadienyl_cation_79",
+      "step_id": "step_alpha_hydrogen_loss",
+      "observed_mz": 79.0542,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

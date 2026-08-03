@@ -1,0 +1,165 @@
+{
+  "mechanism_id": "IMS9-EQ9.1a",
+  "species": [
+    {
+      "species_id": "dimethylbutane_sigma_ionized_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2]([CH3:5])([CH3:6])[CH2:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tert_butyl_cation",
+      "mapped_smiles": "[CH3:1][C+:2]([CH3:5])[CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH2:3][CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethylbutane_sigma_ionized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "tert_butyl_cation",
+        "ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_cleavage_charge_retention",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [3]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [2, 3]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_9_1a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_cleavage_charge_retention",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 226,
+        "equation": "9.1",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (Saturated aliphatic hydrocarbons)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 9.1, UPPER branch (label 'sigma'). The page writes 'CnH2n+1 R2C-CH2R'  --(-e-)-->  CnH2n+1 R2C(+.)CH2R'  --sigma-->  CnH2n+1 R2C(+) + .CH2R''. The drawn molecular ion is SIGMA-IONIZED: the glyph between the two carbons is a '+' over a single dot printed on the C-C bond itself, i.e. a 2-centre/1-electron sigma bond, not an atom-localized radical cation. ARC COUNT (convention D): the book draws 0 curved arrows / fishhooks anywhere in Equation 9.1 - both the '-e-' ionization arrow and the 'sigma' and 'rH' branch arrows are straight, label-annotated reaction arrows, so the scheme is a net reactant->products diagram, not an arrow-pushing diagram. Both encoded electron_moves are therefore IMPLICIT (curator-reconstructed for electron balance, not drawn): move <1> puts one electron of the cleaving C2-C3 bond on C3 (giving the ethyl radical), move <2> routes the other C2-C3 electron to 'external' - the formal bookkeeping device for the EI ionization hole, because in the mapped SMILES the sigma-ionized bond is necessarily written as an ordinary 2-electron single bond while the book's bond actually holds only ONE electron; C2 is left electron-deficient -> tert-butyl cation. LOCALIZATION (convention B): charge and odd electron are carried in the species fields against a neutral C6H14 skeleton rather than on one atom, because the book localizes '+.' on the sigma BOND (2c-1e), which has no valence-correct single-atom SMILES form; this is the same convention used for pure-hydrocarbon sigma dissociation in IMS4-EQ4.3a/b and IMS8-EQ8.37a. INSTANTIATION (convention F): the scheme is generic (n, R, R' undefined) and NO m/z and NO intensity are printed for the equation itself. Instantiated as 2,2-DIMETHYLBUTANE with n=1 (CnH2n+1 = CH3), R = R = CH3, R' = CH3 (so CH2R' = ethyl) - the smallest alkane fitting the printed skeleton in which BOTH drawn branches (this sigma branch and the rH branch of IMS9-EQ9.1b) are structurally realizable with the same precursor. Cleaving C2-C3 loses the LARGEST alkyl group (ethyl), which the citing sentence says is favored, and retains the charge at the branched carbon, giving CnH2n+1R2C+ = (CH3)3C+. observed_mz 57.0699 is the curator-computed monoisotopic value for C4H9+, NOT a measurement from this equation; page 226 does print '(CH3)3C+ (m/z 57)' - the same ion species - but it does so while discussing Figure 9.1, whose spectrum (printed on the facing page 227) is that of 2,2,3,3-tetramethylbutane, a different and more highly branched alkane, so detected=false and status='inferred' here and no relative_intensity is claimed."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_9_1a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.1a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.1",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py (rule_index.json by_equation)"
+      },
+      "confidence": 0.6,
+      "curator_note": "CROSS-LINK (convention E, checked against the DFS, not assumed). rule_index.json 'by_equation' has NO 9.x key at all (keys stop at 4.46 / 8.14), so no MOD rule is indexed for Equation 9.1 and no equation-keyed cross-link is asserted. Two chapter-4 rules were compared bond-for-bond against this scheme: (i) IMS_4_8 (file src/data_generation/rules/IMS_chap4_examples.py, DFS '[C+.]1([C]2(H3)(H4)(H5))([C]6(H7)(H8)(H9))([C]10(H11)(H12)(H13))[C]14(H15)(H16)[C]20(H21)(H22)(H23) >> [C+]1(three methyls) . [C.]14(H15)(H16)[C]17(H18)(H19)(H20)') encodes EXACTLY this net reaction on EXACTLY this substrate: its left side is the 2,2-dimethylbutane radical cation ionized at the quaternary carbon, it cleaves the quaternary-C-to-CH2 bond (the same bond, C2-C3 here), keeps the charge on the quaternary carbon (tert-butyl cation) and puts the radical on the departing ethyl - identical to the encoded step. Caveats, both verified by reading the source: (a) MOD localizes '+.' on an ATOM (the pipeline's ei_molecular_ion rule is '[C]1 >> [C+.]1', fires once per carbon), whereas McLafferty localizes it in the C-C sigma BOND, so the MOD reactant is a different (atom-localized) representation of the same ion; (b) IMS_4_8's DFS has an atom-identity DEFECT - the reactant's terminal methyl carbon is id 20 with hydrogens 21/22/23, while the product writes that methyl as a NEW carbon id 17 with hydrogens 18/19/20, i.e. id 20 changes element C->H, ids 17/18/19 are created and ids 21/22/23 are destroyed. Element counts (C6H14), total charge (+1) and total spin (1) still balance, so the rules/__init__.py conservation guardrail keeps the rule and MOD will still produce the correct product formulas, but the atom map is scrambled and is not usable for atom tracking. (ii) IMS_4_7 ('[C+.]1[C]2[C]3[C]4[C]5 >> [C.]1 . [C+]2[C]3[C]4[C]5') is the generic alkane sigma-dissociation but it is the CHARGE-MIGRATION variant (charge leaves the ionized carbon, radical stays), i.e. the opposite polarization to the branch drawn here, and it additionally demands a four-carbon chain on the leaving side, so it does not describe this step. Neither rule was executed in MOD for this record; the comparison is a source-level DFS reading."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.109,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c4h9",
+      "species_id": "tert_butyl_cation",
+      "step_id": "step_sigma_cleavage_charge_retention",
+      "observed_mz": 57.0699,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

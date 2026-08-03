@@ -1,0 +1,323 @@
+{
+  "mechanism_id": "IMS9-EQ9.18a",
+  "species": [
+    {
+      "species_id": "molecular_ion_130",
+      "mapped_smiles": "[CH3:4][CH2:3][CH2:2][CH2:1][C:5]([CH3:6])([CH2:7][CH2:8][1H:10])[OH+:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "oxonium_73",
+      "mapped_smiles": "[CH3:6][C:5](=[OH+:9])[CH2:7][CH2:8][1H:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "butyl_radical",
+      "mapped_smiles": "[CH2:1][CH2:2][CH2:3][CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "oxonium_45",
+      "mapped_smiles": "[CH3:6][C:5]([1H:10])=[OH+:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethene_loss",
+      "mapped_smiles": "[CH2:7]=[CH2:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "molecular_ion_130"
+      ]
+    },
+    {
+      "state_id": "state_after_alpha",
+      "species_ids": [
+        "oxonium_73",
+        "butyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "oxonium_45",
+        "ethene_loss",
+        "butyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_butyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_after_alpha",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              1
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rh_ethene_loss",
+      "from_state": "state_after_alpha",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_butyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 241,
+        "equation": "9.18",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols"
+      },
+      "confidence": 0.85,
+      "curator_note": "Radical-site (alpha) cleavage of the 3-methyl-3-heptanol molecular ion. Eq 9.18 draws the molecular ion ONCE, C4H9-C(CH3)(C2H5)-OH with '+.' printed over the hydroxyl oxygen, and hangs three labelled branch arrows off it ('- C4H9 / alpha' upper right, '- C2H5. / alpha' straight right, '- CH3. / alpha' lower right); this record encodes the '- C4H9 / alpha' branch. Book draws 1 arc; move <1> is drawn (the single fishhook printed from the '+.' on oxygen, map 9, curving down-left with its barb on the C5-O9 bond = the odd electron into the forming C5=O9 pi bond); moves <2,3> are implicit homolysis hooks required for electron balance (not drawn on the page - the expelled radical is only written as the '- C4H9' label over the branch arrow). LOCALIZATION (convention B): the charge and the odd electron are printed on the intact hydroxyl oxygen, so the precursor SMILES uses [OH+:9] (O+ with two connections carries the one unpaired electron) rather than a neutral alcohol with the charge only in the JSON fields. NO PRINTED INTENSITY (convention F): Figure 9.5 at the top of the same page labels bars '130 M+.', '115 alpha', '101 alpha', '73 alpha', '83', '55', '43', '27', '15' but prints no numeric percentages, and eq 9.18 prints none, so relative_intensity is omitted everywhere in this record; the m/z values themselves ARE printed under every drawn ion, which is why the product ions are flagged detected=true."
+    },
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_ethene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 241,
+        "equation": "9.18",
+        "figure": null,
+        "panel": null,
+        "section": "9.2 Alcohols"
+      },
+      "confidence": 0.8,
+      "curator_note": "Alkene loss with hydrogen rearrangement ('rH' under the reaction arrow) from the m/z 73 even-electron oxonium ion, drawn through the four-centre arrangement the book prints as an open rectangle: the transferring hydrogen (map 10) at the upper left, the two alkyl carbons (maps 8 and 7) at the two lower corners, the carbinol carbon (map 5) at the upper right, and the top edge - the forming C5-H10 bond - left OPEN. Book draws 4 arc(s). Three are unambiguous and are encoded verbatim: move <1> = the fishhook whose tail sits on the C8-H10 bond and whose barb points up-right into the open C5...H10 gap; move <2> = the second fishhook leaving that same C8-H10 bond and pointing down onto the C7-C8 bond (the forming pi bond); move <3> = the fishhook leaving the C5-C7 bond and pointing down onto that same C7-C8 bond (arcs <2> and <3> are the 'W' printed inside the rectangle). The fourth printed arc is the large one that sweeps over the top of the carbinol carbon and ends with its barb in the same C5...H10 gap as arc <1>, i.e. the two barbs bracket the forming C-H bond and deliver its two electrons. AS PRINTED the tail of that fourth arc sits on the C5=O9 bond rather than on the C5-C7 bond - but the C5=O9 pi bond is retained intact in the drawn product (CH3CH=OH+, m/z 45), so a tail on it cannot be balanced (oxygen would end up with two bonds and a +1 charge). The only electron-balanced reading, and the one encoded here as move <4>, is the second electron of the breaking C5-C7 sigma bond routed around the carbon because the direct path is blocked by the 'C' atom label. That is a curator reading of a loosely drawn arc, NOT a verbatim transcription of its printed tail. Formally this is a retro-ene / four-centre elimination; step_class 'hydrogen_rearrangement' follows the book's own 'rH' label and the convention used by the chapter-8 records."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.18a",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "4.17",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.5,
+      "curator_note": "rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so nothing is indexed under '9.18'. The prose immediately above eq 9.18 refers the alcohol alpha cleavage to Equation 4.17, and by_equation['4.17'] = [IMS_4_17, IMS_4_17_1, IMS_4_17_2, IMS_4_17_3] (src/data_generation/rules/IMS_chap4_examples.py). VERIFIED against the DFS: all four share the reactant pattern '[C]1([C]2[C]3[C]4)([C]5[C]6)([C]7)([O+.]8)' = a carbinol carbon carrying a >=3-carbon chain, a >=2-carbon chain, a one-carbon branch and an O+. - RDKit-VERIFIED as SMARTS [#6](-[#6]-[#6]-[#6])(-[#6]-[#6])(-[#6])-[O+;H1]: exactly 1 hit on this record's molecular ion, mapping rule atoms (1,2,3,4,5,6,7,8) -> record maps (5,1,2,3,7,8,6,9). IMS_4_17_1 ('>>[C]5[C]6[C]1([C]7)[O+.]8.[C]2[C]3[C]4', which expels rule atoms 2,3,4) therefore cleaves the C5-C1 bond and expels record maps 1,2,3 together with their unmatched neighbour map 4, i.e. the complete n-C4H9 butyl group (m/z 130 -> 73) - the branch encoded here. PARTIAL MATCH / MIS-ENCODING (convention E): the bond the rule cleaves is the right one (a C-C bond alpha to the carbinol carbon, incident to the carbon that should form the new pi bond), but the rule does NOT form the C5=O9 pi bond and writes the oxygen as [O+.]8 on BOTH sides, i.e. it leaves the odd electron on oxygen instead of producing the even-electron oxonium ion R2C=OH+ that the book draws. The mass/composition of the drawn fragment is reproduced, its electronic structure is not; the same defect applies to all three of IMS_4_17_1/2/3. IMS_4_17 itself is not exported in the fragmentation rule list - its right-hand side drops atoms 2,3,4 altogether, so the conservation guardrail excludes it. SECOND (rH) STEP: NO MOD RULE. No indexed rule cleaves a C-C bond alpha to an even-electron C=O+ carbon and transfers a hydrogen onto that carbon. The nearest indexed candidates are the 'Field rule' rH rules IMS_8_11 ('[C]1([H]2)([H]3)([H]4)[C]5([H]6)([H]7)[O+]8{=}[C]9([H]10)([H]11)>>[C]1([H]2)([H]3)[C]5([H]6)([H]7).[H]4[O+]8{=}[C]9([H]10)([H]11)'), IMS_8_13 and IMS_8_14_2, but those encode the ONIUM case in which the alkyl group sits on the OXYGEN: they cleave an O-C bond and deposit the hydrogen on oxygen, whereas eq 9.18 cleaves a C-C bond and deposits the hydrogen on carbon. RDKit-VERIFIED with SMARTS [#6]-[#6]-[O+]=[#6]: 0 hits on the m/z 73, m/z 101 and m/z 115 oxonium ions of this equation, so they do not apply and are NOT cross-linked."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 130.1352,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_73",
+      "species_id": "oxonium_73",
+      "step_id": "step_alpha_butyl_loss",
+      "observed_mz": 73.0648,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    },
+    {
+      "peak_id": "peak_45",
+      "species_id": "oxonium_45",
+      "step_id": "step_rh_ethene_loss",
+      "observed_mz": 45.0335,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

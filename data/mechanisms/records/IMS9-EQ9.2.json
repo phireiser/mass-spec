@@ -1,0 +1,253 @@
+{
+  "mechanism_id": "IMS9-EQ9.2",
+  "species": [
+    {
+      "species_id": "trimethylpentane_sigma_ionized_molecular_ion",
+      "mapped_smiles": "[CH3:2][C:1]([CH3:3])([CH3:4])[CH2:5][CH:6]([CH3:7])[CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "tertiary_carbenium_m_minus_ch3",
+      "mapped_smiles": "[CH3:2][C+:1]([CH3:3])[CH2:5][CH:6]([CH3:7])[CH3:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isopropyl_cation",
+      "mapped_smiles": "[CH+:6]([CH3:7])[CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "isobutene_neutral",
+      "mapped_smiles": "[CH2:5]=[C:1]([CH3:2])[CH3:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "trimethylpentane_sigma_ionized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_carbenium",
+      "species_ids": [
+        "tertiary_carbenium_m_minus_ch3",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "isopropyl_cation",
+        "isobutene_neutral",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_cleavage_loss_of_methyl",
+      "from_state": "state_precursor",
+      "to_state": "state_carbenium",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              4
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage_olefin_loss",
+      "from_state": "state_carbenium",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              5
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_9_2_sigma",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_cleavage_loss_of_methyl",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 226,
+        "equation": "9.2",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (Saturated aliphatic hydrocarbons)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 9.2, FIRST arrow: 'R-CH2CR'2-R\" (+.)  --sigma, -R\".-->  R-CH2CR'2(+)'. Sigma-bond dissociation of the odd-electron molecular ion at the fully substituted carbon, expelling the alkyl radical R\". and leaving the tertiary carbenium ion the citing sentence names ('the tertiary carbenium ion formed by initial sigma-cleavage at a fully substituted carbon'). ARC COUNT (convention D): the book draws 0 curved arrows / fishhooks in Equation 9.2; both arrows are straight reaction arrows carrying only the labels 'sigma' / '- R\".' and 'alpha'. Both electron_moves of this step are therefore IMPLICIT (curator-reconstructed for electron balance, not drawn): move <1> leaves one electron of the cleaving C1-C4 bond on C4 (the methyl radical), move <2> routes the other to 'external', the formal device for the EI ionization hole, since a mapped SMILES has to write the sigma-ionized bond as an ordinary 2-electron bond; C1 is left electron-deficient -> tertiary carbenium. LOCALIZATION (convention B): the molecular ion is written as a neutral C8H18 skeleton with charge/radical in the species fields, because a sigma-ionized alkane has no valence-correct single-atom SMILES form - the convention of IMS4-EQ4.3a/b and IMS8-EQ8.37a. CORRECTION: the first draft justified this by saying the '+.' 'sits on the C-C BOND (2c-1e)'; that describes Eq 9.1, NOT Eq 9.2. Re-read at native resolution, eq 9.2 prints its precursor as 'R-CH2CR'2-R\" (+.)' with the charge and dot as a TRAILING SUPERSCRIPT after R\", i.e. delocalised over the whole formula with no site indicated -- which makes the field-carried encoding used here arguably MORE faithful for 9.2 than for 9.1. Note also that the printed 'sigma' sits on the reaction ARROW (sigma-cleavage); the species_id 'trimethylpentane_sigma_ionized_molecular_ion' names the channel, not a drawn annotation on the ion. INSTANTIATION (convention F): the scheme is generic (R, R', R\" undefined) and prints NO m/z and NO intensity. Instantiated as 2,2,4-TRIMETHYLPENTANE (isooctane) with CR'2 = the quaternary C2 carbon, R' = R' = CH3, R\" = CH3 and R = isopropyl, i.e. the smallest branched alkane in which the printed skeleton R-CH2CR'2-R\" is present AND the second (alpha) step gives a chemically sensible secondary cation instead of CH3+. The intermediate is then (CH3)2CHCH2C(CH3)2+, C7H15+, curator-computed 99.1168; page 226 does print 'm/z 99' but for the DIFFERENT C7H15+ isomer (CH3)3CC(CH3)2+ of Figure 9.1's 2,2,3,3-tetramethylbutane, so no measurement is claimed here (detected=false, status='inferred', no relative_intensity). The page's own cross-reference for this equation is 'compare Figure 8.8', which was not read for this record."
+    },
+    {
+      "evidence_id": "evidence_step_9_2_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage_olefin_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 226,
+        "equation": "9.2",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (Saturated aliphatic hydrocarbons)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Equation 9.2, SECOND arrow (label 'alpha'): 'R-CH2CR'2(+)  --alpha-->  R(+) + CH2=CR'2', the 'secondary olefin loss of significant specificity' of the citing sentence. The reacting ion is EVEN-ELECTRON, so the flow is a single double-barbed (2-electron) shift: the sigma pair of the R-CH2 bond (C5-C6 here) moves into the C5-C1 bond to make the CH2=CR'2 pi bond, and R departs WITH THE CHARGE and no electrons of that bond (charge migration). Geometry check: the bond that breaks (C5-C6) is incident to C5, the very atom that forms the new pi bond to the charge-bearing C1 - the correct alpha-cleavage topology, one bond removed from the charge site, matching McLafferty's 'alpha' label. ARC COUNT (convention D): the book draws 0 arcs; the single encoded move is IMPLICIT (curator-reconstructed for electron balance, not drawn on the page). One 2-electron arrow is sufficient here - no fishhook is missing - because nothing is homolysed: the cation is closed-shell before and after. INSTANTIATION (convention F): with R = isopropyl (see the sigma-step note) the products are (CH3)2CH+ (C3H7+, curator-computed 43.0542) and isobutene; the page mentions abundant 'C2H5+ and C3H7+' peaks in prose but prints no m/z and no intensity for this equation, so detected=false and status='inferred'. The spectator methyl radical from step 1 is carried into state_products unchanged so that each step is atom-balanced; it is not part of the drawn second step."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_9_2",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.2",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.2",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json by_equation)"
+      },
+      "confidence": 0.5,
+      "curator_note": "CROSS-LINK (convention E, checked against the DFS strings, not assumed). rule_index.json 'by_equation' has NO 9.x key, so no MOD rule is indexed for Equation 9.2. Step 1 (sigma dissociation with charge retention at the branched carbon) is the same rule class as IMS_4_7 ('[C+.]1[C]2[C]3[C]4[C]5 >> [C.]1 . [C+]2[C]3[C]4[C]5') and IMS_4_8, but neither matches this substrate as written: IMS_4_7 is the CHARGE-MIGRATION variant (the charge leaves the ionized carbon) and needs a four-carbon chain on the leaving side, while a methyl leaves here; IMS_4_8 is hard-wired to a quaternary carbon carrying three methyls plus an ETHYL group (its [C]14 must be a CH2 bonded to a CH3) and it cleaves that ethyl bond, whereas isooctane's quaternary carbon carries three methyls plus a CH2 bonded to an isopropyl CH, and the bond cleaved here is one of the methyl bonds - so the pattern does not match. Step 2 (even-electron alkyl cation losing an olefin with charge migration) has NO matching rule either: the closest DFS in the whole rule set is IMS_4_38_ind_2 ('[C]1[C]2[C.]3[C]4[C]5[C+]6 >> [C]1[C]2[C.]3[C+]4 . [C]5{=}[C]6'), which performs exactly this bond change (break the bond one removed from the cation, form the pi bond to it, move the charge outward) but demands an extra radical site [C.] on the chain, i.e. a DISTONIC ion, which the closed-shell carbenium of Equation 9.2 does not have; the even-electron inductive rules IMS_4_20/IMS_4_21 cleave without forming the new pi bond, and IMS_8_2_ind_3_1 splits a butyl cation while writing the departing ethene as a single-bonded CH2-CH2 (no {=}), i.e. with the wrong bond order. Conclusion: the even-electron olefin-loss channel of Equation 9.2 is UNCOVERED by the current rule set. No rule was executed in MOD for this record; the comparison is a source-level DFS reading."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 114.1403,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c7h15",
+      "species_id": "tertiary_carbenium_m_minus_ch3",
+      "step_id": "step_sigma_cleavage_loss_of_methyl",
+      "observed_mz": 99.1168,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    },
+    {
+      "peak_id": "peak_c3h7",
+      "species_id": "isopropyl_cation",
+      "step_id": "step_alpha_cleavage_olefin_loss",
+      "observed_mz": 43.0542,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

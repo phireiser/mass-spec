@@ -1,0 +1,283 @@
+{
+  "mechanism_id": "IMS9-EQ9.15",
+  "species": [
+    {
+      "species_id": "pentylbenzene_localized_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]([1H:4])[CH2:5][CH2:6][C+:7]1[CH:8][CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_H_intermediate",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3][CH2:5][CH2:6][C+:7]1[CH:8]([1H:4])[CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylenecyclohexadiene_radical_cation_92",
+      "mapped_smiles": "[CH2:6][C+:7]1[CH:8]([1H:4])[CH:9]=[CH:10][CH:11]=[CH:12]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "but_1_ene_neutral_loss",
+      "mapped_smiles": "[CH3:1][CH2:2][CH:3]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pentylbenzene_localized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic_intermediate",
+      "species_ids": [
+        "distonic_gamma_H_intermediate"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylenecyclohexadiene_radical_cation_92",
+        "but_1_ene_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_distonic_intermediate",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_distonic_intermediate",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_gamma_h_rearrangement",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 239,
+        "equation": "9.15",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (alkylbenzene gamma-H rearrangement, first arrow labelled 'rH')"
+      },
+      "confidence": 0.9,
+      "curator_note": "gamma-Hydrogen rearrangement of an alkylbenzene molecular ion through the six-membered transition state the page draws as a hexagonal loop: the H on the gamma carbon (map 3) migrates to the ring radical site (the ortho carbon, map 8), giving the distonic ion with a carbon radical on the chain and the charge still on the ring. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the book simply prints the new dot on the gamma carbon of the middle structure). Drawn arc 1 = the long sweeping fishhook whose tail sits on the gamma C-H bond (map3-map4, the short bond running up-right from the chain vertex to the printed 'H') and whose single barb ends in the gap between that H and the ortho ring carbon, i.e. on the FORMING map4-map8 bond; drawn arc 2 = the short fishhook whose tail starts at the radical dot printed next to the ortho carbon (map 8) and whose barb points back up at that same forming bond. Both barbs converge on the new C-H bond; measured on the 1760x2560 native scan they are ~9 px apart, and no third arc is present. LOCALIZATION (conventions B and C): unlike eqs 9.13/9.14, eq 9.15 draws the ring ALREADY LOCALIZED - the page prints an explicit H and a radical dot on the ortho carbon, a '+' on the ipso carbon, and two ring double bonds (upper-right and lower-right edges). The mapped SMILES reproduce that drawing exactly: ipso [C+:7], ortho [CH:8] with three connections and therefore one unpaired electron, ring bonds 7-8 single, 8-9 single, 9=10, 10-11 single, 11=12, 12-7 single. INSTANTIATION (convention F): eq 9.15 is generic (R on the gamma carbon; the running text says the rearrangement needs a side chain 'propyl or larger' and cites 5-, 6- and 7-membered-ring transition states, Wesdemiotis et al. 1977). R is instantiated as ethyl, i.e. pentylbenzene, DELIBERATELY THE SAME instantiation as the existing record IMS4-EQ4.36, because the book itself prints this scheme twice and names both places at once ('can produce the characteristic OE+. ion (Equation 4.36, 9.15)'); keeping the substrate identical makes the two records directly diffable. ms_context.precursor_mz = 148.1247 is CURATOR-COMPUTED from that instantiation and is not printed on the page. NO m/z AND NO PERCENTAGE APPEAR ANYWHERE IN EQ 9.15 - the scheme is drawn entirely with R - so every mass in this record is curator-computed and the product ion is detected=false with peak status 'inferred'. The 5.5% / 0.9% figures in the running text below the scheme are C8H10+. abundances for m-tolyl- and p-tolyl-1-propane (Occolowits 1964), i.e. different compounds and a different ion from this instantiation, so they are deliberately NOT recorded as this record's relative_intensity."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 239,
+        "equation": "9.15",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (second arrow labelled 'alpha'; olefin loss giving the OE+. ion)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Alpha cleavage of the distonic intermediate: the chain radical (gamma carbon, map 3) drives homolysis of the map5-map6 bond, forming the map3=map5 alkene and expelling the alkene as a neutral while the ring fragment keeps the charge and receives the odd electron on map 6. CORPUS CROSS-REFERENCE (read before using either record quantitatively): the book prints this scheme TWICE, and it is also encoded as IMS4-EQ4.36 from printed p73 with identical species SMILES, identical atom maps and identical ms_context (148.1247). The two records make DIFFERENT assertions about the same m/z 92.0621 ion, and both are correct for their own page: p73 prints an abundance, so IMS4-EQ4.36 has detected=true / status 'proposed' / relative_intensity 0.6, whereas p239 prints no m/z and no percentage anywhere in eq 9.15, so this record has detected=false / status 'inferred' / no intensity. Do not treat the pair as a contradiction to be resolved by overwriting one. Book draws 2 arc(s) on the middle structure; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the book prints the resulting dot on the exocyclic CH2 of the right-hand product ion). Drawn arc 1 = the fishhook whose tail starts at the radical dot on map 3 and whose barb points left onto the forming map3-map5 bond; drawn arc 2 = the fishhook whose barb points left onto that SAME forming bond and whose tail runs down-right along the breaking map5-map6 bond. RUPTURED BOND: the running text immediately below the scheme makes the point that 'the same bond is ruptured in Equation 9.15 as in simple benzylic cleavage (Equation 9.13)' - here map5-map6, the bond between the beta and alpha chain carbons, which is indeed the benzylic bond counted from the ring. PRODUCT AS DRAWN: the page draws the ion with the sp3 ortho CH2 (two H's printed), the '+' still on the ipso carbon and a dot on the exocyclic CH2; the mapped SMILES [CH2:6][C+:7]1[CH:8]([1H:4])[CH:9]=[CH:10][CH:11]=[CH:12]1 reproduces that distonic drawing atom for atom rather than collapsing it to an aromatic toluene radical cation. The neutral is drawn only as 'R-CH=CH2'; for R = ethyl that is but-1-ene (56.0626). Computed m/z of the ion, 92.0621 (C7H8+.), is CURATOR-COMPUTED from the chosen instantiation - the page prints no m/z and no percentage for it, so the peak carries status 'inferred' and no relative_intensity, and detected is false."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.15",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "9.15",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.8,
+      "curator_note": "CROSS-LINK VERIFIED. rule_index.json has no chapter-9 key, but the book itself identifies this scheme with equation 4.36 ('hydrogen rearrangement can produce the characteristic OE+. ion (Equation 4.36, 9.15)'), and by_equation['4.36'] = ['IMS_4_36_', 'IMS_4_36__rHalpha']. (1) IMS_4_36__rHalpha 'gamma H-migr. to unsaturated group Odd electron Ion 4.36 rH alpha': '[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7>>[C]1[C]2[C]3{=}[C]5.[C.]6[C+]7[C]8([H]4)[C]9{=}[C]10[C]11{=}[C]12{-}7'. Its reactant term is exactly this record's localized precursor (ipso [C+]7, ortho radical [C.]8, ring double bonds 9=10 and 11=12, pentyl chain C6-C5-C3(H4)-C2-C1) and its product term is exactly this record's product state: H4 has moved from the gamma carbon C3 to the ortho carbon C8, the C3=C5 alkene has formed, the C5-C6 bond has been cut and C6 carries the radical. RDKit-CHECKED: a SMARTS transcription of that left-hand term, '[#6]-[#6]-[#6](-[#1])-[#6]-[#6]-[#6+]1-[#6]-[#6]=[#6]-[#6]=[#6]-1', matches this record's precursor (with explicit Hs) in 2 symmetry-equivalent ways, both with one unpaired electron on the mapped ortho atom, and matches the distonic intermediate 0 times once that radical constraint is applied - i.e. the rule fires precisely on the reactant and not on the intermediate, as it should. CAVEAT - GRANULARITY, NOT A MISMATCH: the MOD rule fuses BOTH drawn arrows into ONE rewrite (rH and alpha together), so it corresponds to the composition of this record's two steps, not to either step alone; the record keeps them separate because the page draws the distonic intermediate explicitly. The rule is live: it survives the conservation guardrail in rules/__init__.py (verified by importing src.data_generation.rules in the container - 135 fragmentation rules survive and this one is among them). (2) IMS_4_36_ 'gamma H-migr. to unsaturated group Odd electron Ion 4.36 charge move': '[C]1[C]2[C]3([H]4)[C]5[C]6[C]7:[C]8:[C]9:[C]10:[C]11:[C]12:7>>[C]1[C]2[C]3([H]4)[C]5[C]6[C+]7[C.]8[C]9{=}[C]10[C]11{=}[C]12{-}7' is the companion rule that performs exactly the aromatic -> localized ipso-cation/ortho-radical assignment this record adopts under convention C (RDKit-checked: its left term matches aromatic pentylbenzene, 2 hits, and matches this record's already-localized precursor 0 times). It is NOT encoded as a step because the page draws no such step - and it is in any case NOT LIVE: the conservation guardrail drops it at import with reason 'charge 0->1, spin 0->1', because its left term is a neutral closed-shell arene while its right term carries a + and an unpaired electron. That is a real defect in the rule (the ionization is smuggled into a fragmentation rule), reported here so it is not mistaken for a working localization step. DUPLICATION NOTE: the record IMS4-EQ4.36 in this corpus already encodes the same scheme from its chapter-4 printing; this record is its chapter-9 twin with locator page 239 / equation 9.15 and the identical substrate, kept separate because equation ids are the corpus key."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 148.1247,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_92_inferred",
+      "species_id": "methylenecyclohexadiene_radical_cation_92",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 92.0621,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

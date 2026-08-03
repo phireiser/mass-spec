@@ -1,0 +1,390 @@
+{
+  "mechanism_id": "IMS9-EQ9.9",
+  "species": [
+    {
+      "species_id": "ring_d_opened_distonic_ion",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C+:13]([CH3:18])[CH:14]3[CH2:15][CH2:16][CH:17][CH2:20][CH3:21]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ion_mz_232",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C+:13]([CH3:18])[CH:14]3[CH2:15]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "but_1_ene_neutral",
+      "mapped_smiles": "[CH2:16]=[CH:17][CH2:20][CH3:21]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "ion_mz_217",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]=[CH:14][CH2:15][C+:13]([CH3:18])[CH2:12][CH2:11][CH:9]=[C:10]12",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical_c19",
+      "mapped_smiles": "[CH3:19]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ring_d_opened_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_after_c4h8_loss",
+      "species_ids": [
+        "ion_mz_232",
+        "but_1_ene_neutral"
+      ]
+    },
+    {
+      "state_id": "state_after_ch3_loss",
+      "species_ids": [
+        "ion_mz_217",
+        "methyl_radical_c19",
+        "but_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_c4h8_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_after_c4h8_loss",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              17
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              16,
+              17
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              15,
+              16
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              16,
+              17
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              15,
+              16
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              15
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_c19_methyl_loss_rearrangement_alpha",
+      "from_state": "state_after_c4h8_loss",
+      "to_state": "state_after_ch3_loss",
+      "step_class": "skeletal_rearrangement_alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              19
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              14
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              14
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              15
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              15
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              15
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              19
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              19
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_c4h8_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_c4h8_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.9",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (arrow labelled '- C4H8, alpha')"
+      },
+      "confidence": 0.85,
+      "curator_note": "Book draws 2 arc(s); moves <1,2> are drawn (a fishhook from the C17 radical into the forming C16=C17 pi bond, and a fishhook from the C15-C16 sigma bond into that same forming pi bond), and move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) -- it carries the second C15-C16 electron to C15, which becomes the radical site of the m/z 232 ion. The precursor structure drawn at the left of eq 9.9 is the ring-D-opened distonic isomer of the molecular ion (identical to the second structure of eq 9.8 but with the C17 side chain drawn out as an ethyl group instead of 'R'), with '+' printed on C13 and '.' on C17; it is NOT the intact steroid, so the ring-D-opening alpha cleavage that produces it is only recorded in IMS9-EQ9.8. Loss is drawn as the label '- C4H8' (1-butene, C16=C17 plus the C20-C21 ethyl); the product ion is labelled m/z 232."
+    },
+    {
+      "evidence_id": "evidence_step_c19_methyl_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_c19_methyl_loss_rearrangement_alpha",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.9",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (arrow labelled '- CH3., r, alpha'; prose: 'base peak at m/z 217 is due to C19 methyl loss from m/z 232')"
+      },
+      "confidence": 0.65,
+      "curator_note": "Book draws 6 arc(s) on the m/z 232 structure, all single-barbed; moves <1,2,3,4,5,6> are the drawn arcs and move <7> is an implicit homolysis hook required for electron balance (not drawn on the page). Reading of the six drawn arcs, with the arc tail/head pixel positions measured on the 1760x2560 page scan: <1> C10-C19 sigma bond -> C9-C10 bond; <2> C8-C9 sigma bond -> C9-C10 bond (these two build the C9=C10 pi bond and expel the C19 methyl); <3> C8-C9 sigma bond -> C8-C14 bond; <4> C13-C14 sigma bond -> C8-C14 bond (these two build the C8=C14 pi bond); <5> C13-C14 sigma bond -> the forming C13-C15 bond; <6> the C15 odd electron -> the forming C13-C15 bond (these two make the new C13-C15 sigma bond, i.e. the 1,2-alkyl / neophyl-type shift that the label 'r' stands for, expanding rings B+C into the 11-membered ring that the m/z 217 structure is drawn as). Move <7> takes the second C10-C19 electron to C19, giving the CH3. written over the arrow. GEOMETRIC CAVEAT, stated because it is a real ambiguity of the scan: C14 lies almost exactly on the straight line from C8 to C15, so the heads of arcs <3> and <4> are individually compatible with either 'the C8-C14 bond' or 'a forming C8-C15 bond'. The reading above is the one that closes the electron budget with no leftover arcs and reproduces the drawn product EXACTLY -- an 11-membered carbocycle (C5-C6-C7-C8=C14-C15-C13-C12-C11-C9=C10) fused to the intact cyclohexane ring A at C5-C10 -- the drawing carries NO stereo marker there (C10 is sp2 in the product and no 5-alpha-H is drawn), so the earlier 'cis-fused' was an embellishment; the mapped SMILES correctly encodes no stereochemistry -- with '+' on the methyl-bearing C13, the first C=C at the ring-fusion carbon C10 and the second C=C two atoms round from C13; the alternative reading requires an extra, undrawn C15->C14 hydrogen migration and was rejected for that reason. The step is drawn as a single net arrow ('r, alpha' = two processes) with no intermediate on the page, so it is encoded as one formal_arrow_step; the confidence is lowered accordingly."
+    },
+    {
+      "evidence_id": "evidence_mechanism_instantiation",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.9",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.9",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons"
+      },
+      "confidence": 0.8,
+      "curator_note": "Substrate is 5-alpha-pregnane (C21H36, M+. m/z 288); the C17 side chain is drawn explicitly as an ethyl group and the printed masses close the books (288 - C4H8 = 232, 232 - CH3. = 217). The page prints m/z 232 and m/z 217 as labels only; NO percentage appears anywhere on the page, so no relative_intensity is stored for either peak -- the prose does call m/z 217 the base peak, which is a 100% statement by definition, but since no numeric intensity is printed the field is left empty rather than filled with a derived number. Reported m/z values are curator-computed monoisotopic values for this instantiation. Stereochemistry (the dashed 5-alpha H that the book draws at C5) is not encoded. Atom map numbers are the standard steroid carbon numbers C1-C21. The precursor of this scheme is an isomer of the molecular ion (same elemental composition, m/z 288), which is why ms_context keeps adduct '[M]+.'; it is not a mass-selected fragment and no CAD/MI experiment is named on the page. The third structure of the eq 9.9 block (m/z 149, drawn with wavy cut lines through the C8-C14/C9-C11 region and '-H'/'-2H' annotations) carries NO electron-pushing arrows and is described in the prose as 'formed in a complex mechanism operating in conjunction with a triple hydrogen transfer'; it is deliberately not encoded as a mechanism record."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.9",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 235,
+        "equation": "9.9",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MØD RULE CROSS-LINK. data/mechanisms/rule_index.json 'by_equation' covers only chapters 4 and 8 and has no entry for 9.9, so no rule variable can be cited. Generic candidates were inspected and REJECTED: 'hTransition_saturated_2_alpha' ([C.]1[C]2([_A+]3)[C]4[C]5>>[C]1{=}[C]2[C]4[C]5.[_A+.]3) is the closest radical-site alpha-cleavage pattern but it cleaves the bond to the CHARGE-bearing atom (the charge leaves with the fragment), whereas the C15-C16 bond cleaved here is three bonds along the chain from C13+ (C13-C14, C14-C15, C15-C16; C15 itself is two bonds from C13) and the charge is retained; 'sigma_lowIE' ([_A+.]1[I]2>>[_A.]1.[I+]2) requires a low-IE heteroatom (iodine) partner. No rule in the set encodes a 1,2-alkyl (neophyl-type) shift with ring expansion on a SATURATED skeleton, so the second step of eq 9.9 has no MØD counterpart. (The one ring expansion in the corpus, benzylAllyl_mz91_91 in benzylAllyl_ringGeneral.py, is the benzyl -> tropylium rearrangement; it requires an aromatic ring and cannot match this substrate -- so the conclusion stands, but 'nothing in the rule set' was too broad.)"
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 288.2812,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_232",
+      "species_id": "ion_mz_232",
+      "step_id": "step_alpha_c4h8_loss",
+      "observed_mz": 232.2186,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    },
+    {
+      "peak_id": "peak_217",
+      "species_id": "ion_mz_217",
+      "step_id": "step_c19_methyl_loss_rearrangement_alpha",
+      "observed_mz": 217.1951,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

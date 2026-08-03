@@ -1,5 +1,157 @@
 # IMS mechanism extraction — resume point
 
+## State (updated 2026-07-30)
+
+> ## CH.9 BATCH 2 — eqs 9.13–9.24 (requested: "the next 10 equations")
+>
+> **CORPUS NOW: 316 records, 316/316 gate-clean** (58 Ch.4 + 228 Ch.8 + **30 Ch.9**). 12/12 agents,
+> 0 errors. All 16 new verdicts `faithful=true`. Nothing pre-existing was touched (300-record backup
+> diffed: additions only). All 16 render clean through `render_latex.py`.
+>
+> **Pages (printed = PDF − 11 still holds):** 9.13/9.14/9.15 → PDF 250, 9.16/9.17 → 251, 9.18 → 252,
+> 9.19/9.20 → 254, 9.21 → 255, 9.22/9.23/9.24 → 256. **No equation-number gaps in 9.13–9.24**, so
+> unlike batch 1 there is nothing to add to `NON_MECHANISM_EQS`. Records exceed the requested ten
+> because the branching cascades split: 9.18 → a/b/c, 9.19 → a/b, 9.20 → a/b, and 9.23/9.24 came free
+> on the 9.22 page.
+>
+> **NEW `NON_MECHANISM_PAGES`: PDF 249 (printed 238) and PDF 253 (printed 242)** — both running prose
+> only, **read in full** (not a gutter check). Each forward-references equations drawn on later pages,
+> which is exactly how a dropped page would look if left unrecorded.
+>
+> **Reconciliation — every verifier claim re-checked at source before editing; 13 notes patched.**
+> This batch the verifiers were RIGHT on every disputed point (batch 1 ran 3-of-7 wrong), but two of
+> their claims still needed narrowing, and I only edited what I re-measured myself:
+> - **9.13 — third fabricated measurement in three batches.** The note said the two barbs are "~70 px
+>   apart" *on the 1760x2560 native scan*. Re-measured: tips at ~(297,441)/(312,449) = **~18 px**; 70 px
+>   is the figure on a **4× upscale**. Same failure mode as IMS8-EQ8.97 and 9.12's "7 hits". **Assume
+>   any quoted pixel number is on an unstated scale until re-measured.**
+> - **9.22 — arrowhead misdescribed.** The note claimed the rH head has "two converging strokes" unlike
+>   the 9.23/9.24 fishhooks. On the native scan it is arc body + **one** barb, i.e. the same fishhook;
+>   the genuine two-barbed heads are the `i` arrows (9.23's at ~(925,1170) has two barbs diverging from
+>   the tip). Encoding was already right; only the prose was wrong.
+> - **9.19a/b — "dashed fishhook pair" → ONE dashed arc.** The molecular ion carries **three** arcs:
+>   two solid (the O-radical hook, which is SHARED by both branches, plus the 9.19 C1–C2 hook) and one
+>   dashed (the 9.20 C1–C6 channel). Both records patched.
+> - **9.21 — the note's central negative claim was FALSE and is now a verified positive.** It said no
+>   rule can produce the drawn distonic m/z 44 ion. `hTransition_unsaturated_alpha`
+>   (`IMS_bookCover.py:50`, `[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6 >> [C]1{=}[C]2 . [C.]3[C]4{=}[_A+]5[H]6`)
+>   does exactly that with _A=O. **RDKit-tested, not asserted**: embeds exactly once as
+>   (C.1,C2,C3,C4,A5) = (map4,map5,map6,map1,map8), breaks the same map5–map6 bond, forms the same
+>   map4=map5 alkene, and its ion half is atom-for-atom the drawn `[1H:10][O+:8]=[CH:1][CH2:6]`. It
+>   conserves (guardrail keeps it) and is LIVE: `IMS_bookCover.py:457` → `rearrangements` →
+>   `IMS_cover_fragmentation` (:493) → `fragmentation` (`__init__.py:45`). Only the granularity differs.
+> - **9.21 — three more note defects, all confirmed in source:** "IMS_8_7_1 is the only indexed rule
+>   that matches" (`hTransition_unsaturated`, :40, does the same γ-H transfer); "the only
+>   reverse-direction rule is IMS_8_2_bidirectional_up" (IMS_8_7_4, IMS_8_7_5, IMS_8_2_rH_2_0 also run
+>   O⁺→C — but each is excluded on skeleton grounds, so the *conclusion* that step 2 has no rule
+>   survives); and a **self-contradiction inside one note** — point (3) called IMS_4_9 the only rule
+>   matching the molecular ion while point (5) reported IMS_4_37_rH/IMS_4_38_rH matching it too.
+> - **9.22 — IMS_4_11 misdescribed:** the note said it "retains BOTH the charge and the odd electron"
+>   on the acylium. Its RHS `[C.]1 . [C]2[C]3{#}[_A+]4` puts the unpaired electron on the **departing**
+>   fragment. Mismatch verdict unaffected.
+> - **Verifier claim NARROWED (not accepted as stated):** it said p244's prose "states no such thing"
+>   about m/z 44 being fed by both aldehydes. The page says *"this and the analogously formed
+>   2-methylhexanal will also contribute to peaks such as m/z 44 and 58"* — it names both aldehydes and
+>   both masses **without partitioning**, so the note over-read it but the verifier's flat denial was
+>   also wrong. Now quoted verbatim.
+> - **9.14 FLAGGED FOR EXPERT REVIEW (not silently changed):** the only species in the batch where an
+>   **explicitly drawn** localization was replaced. The book prints the m/z 119 ion as `(CH3)2C(+)–`
+>   on an aromatic circle; the record stores the para-quinoid partner because that is what its arrows
+>   produce and it keeps the page's two records in one frame. Defensible, but in a bond-order-sensitive
+>   corpus the stored graph is not the printed one. Re-encode as `[CH3][C+]([CH3])c1ccccc1` if a
+>   reviewer prefers drawing-fidelity.
+> - **9.15 is a near-duplicate of the committed IMS4-EQ4.36** (book prints the scheme twice; identical
+>   SMILES/maps/ms_context). The two DISAGREE about m/z 92.0621 — 4.36 (p73) has detected=true/0.6,
+>   9.15 (p239) detected=false/inferred — and **both are right for their own page**. Cross-reference
+>   note added to 9.15 so nobody "resolves" it by overwriting one.
+> - **OPEN, for the FIG4.4 decision:** the Figure 9.7 inset (o-methylphenol, squiggle marks 90/107,
+>   zero arrows) was skipped per the eq-9.5 precedent, but `IMS4-FIG4.4a/b` were ENCODED from an
+>   identical arrow-free squiggle inset (p62, marks 72/58). The corpus is inconsistent on this class —
+>   one more reason the FIG4.4 scope call matters.
+>
+> **NEXT: eqs 9.25+ start at PDF 257** (dumped through 262; 253–256 were dumped this batch).
+
+> ## CHAPTER 9 STARTED (scope extension, requested 2026-07-30)
+>
+> Ch.9 was "explicitly out of scope" in the original plan; the user extended it and asked for the
+> **first 10 equations**. Ch.9 has NO MØD rules to cross-link (`rule_index` covers Ch.4/Ch.8/cover
+> only, 57 equation keys, none starting with "9"), so Ch.9 records carry no rule links by
+> construction, not by oversight.
+>
+> **CORPUS NOW: 298 records, 298/298 gate-clean** (58 Ch.4 + 228 Ch.8 + **12 Ch.9**).
+> Ch.9 batch 1 landed `IMS9-EQ` **9.1a, 9.1b, 9.2, 9.3, 9.4a, 9.4b, 9.7, 9.8, 9.9, 9.10** plus
+> **9.11, 9.12** (page-granularity bonus: they share PDF 248 with 9.10). All 12 verdicted
+> `faithful=true`. Nothing pre-existing was touched (286-record backup diffed byte-for-byte).
+>
+> **Page calibration (printed = PDF - 11 in this region):** 9.1/9.2 -> PDF 237, 9.3/9.4 -> 241,
+> 9.5/9.6 -> 242, 9.7 -> 244, 9.8/9.9 -> 246, 9.10/9.11/9.12 -> 248. `page_map.json` "ch9" lists
+> exactly those pages. Pages 238/239/240/243/245/247 are deliberately NOT registered and NOT claimed
+> non-mechanism: only the right-margin gutter was inspected, which shows no equation numbers but is
+> not enough to rule out schemes. (PDF 245 = printed p234 = Figure 9.3, 5-alpha-pregnane spectrum.)
+>
+> **eq 9.5 = VERIFIED NON-MECHANISM** (added to `NON_MECHANISM_EQS`): printed p231 draws it as two
+> terpenoid polyenes carrying SQUIGGLE cleavage marks with neutral-loss labels (M-83)/(M-57) and a
+> generic (C5H8)4H chain -- a fragmentation depicted with ZERO curved arrows. Encoding it would mean
+> inventing the electron flow. Read and confirmed directly, not delegated.
+>
+> **eq 9.6 DONE, but HAND-CURATED — the corpus's only unverified records.** Its page lost the draft
+> agent twice (API server error, then the monthly spend limit), so `IMS9-EQ9.6a`/`9.6b` were authored
+> directly from the native scan (pypdf `page.images[0]`, 1760x2560, structures cropped at 4x). They
+> carry **no independent adversarial verify pass**, unlike all 298 others; `extraction_method` is
+> **`manual_from_scan`** (every other record says `vision_multiagent`), so this is machine-detectable —
+> `grep -l manual_from_scan records/*.json`. **Re-verify these two when agents are available.**
+> - **Split into a/b because the page draws TWO channels.** The printed arrow reads literally
+>   "alpha *or* i", and structure 3 carries THREE arcs belonging to different routes: two single-barbed
+>   fishhooks (dot on C-gamma -> C-gamma-C-beta bond; one electron of C-beta-C-alpha -> that same
+>   forming pi) = the **alpha** channel, plus one **full-headed** arrow (the C-beta-C-alpha pair ->
+>   the C-alpha-C2 bond) = the **inductive** channel. Same treatment as eq 9.1 -> 9.1a/9.1b.
+> - alpha (9.6a) keeps the charge where it already was: ion = the drawn `.CH2-C+(CH3)R"`, neutral =
+>   the alkene. i (9.6b) MIGRATES the charge: ion = the drawn `R-CH=CH-R'` (+.), neutral = isobutene.
+>   Opposite partitions, which is exactly why the book prints both.
+> - Structure 2's ionized alkene is drawn with the pi as a SINGLE line, `+` on the substituted sp2
+>   carbon and the dot on the terminal CH2 — encoded in that localized form (convention B). The `-e-`
+>   arrow is folded into the precursor's charge/radical fields, as sibling 9.1a does for eq 9.1.
+> - 9.6b's ion is printed `R-CH=CH-R'` with `+.` = McLafferty's one-electron-pi shorthand, which is
+>   not valence-complete read literally; encoded as the localized distonic form per the corpus's own
+>   **eq 9.3 precedent**, and disclosed.
+> - Instantiation R = C2H5, R' = CH3, R" = CH3 -> 2,4-dimethylhept-1-ene, C9H18, M+. 126.1403. R" =
+>   CH3 is the minimum the caption's "R" > H" allows. R is deliberately ONE carbon above minimal:
+>   with R = CH3 both channels would yield mass-degenerate C4H8+. isomers, which reads like a
+>   copy-paste error. Self-audit (RDKit, independent of the authoring script): all three stated masses
+>   are EXACT (126.1403 / 56.0621 / 70.0777) and the mass balance closes to 126.1403 in both records.
+>   Renders and compiles: 10 arrow tails, 0 adrift, median 0.70 pt.
+>
+> **CORPUS NOW 300 records, 300/300 gate-clean.** Of the requested first ten Ch.9 equations, 9.1-9.4
+> and 9.6-9.10 are encoded and 9.5 is a documented non-mechanism, so the batch is complete.
+>
+> **Batch-1 corrections, each verified at source before editing** (all 12 records were faithful; every
+> defect was note-level):
+> - **9.1b** cited page 226 for an "[M-CH4]" discussion. I read p226 in full: it names only m/z 99,
+>   57 and CH3+ and never mentions methane loss -- that argument is on the facing p227. Withdrawn. Its
+>   weaker valence argument was also replaced: 2,2,3,3-tetramethylbutane has NO CH2 group at all, so
+>   the printed skeleton cannot map onto it either way.
+> - **9.1b** justified "no rule covers the rH branch" by claiming `§Y` restricts `_A` to a heteroatom,
+>   then scoped its scan to rules "whose left side contains only C/H" -- which excludes the very
+>   `_A` rules at issue. FALSE, checked in source: `element_sets.py` has `ALL_ATOMS = HETERO_ATOMS +
+>   ["H","C"]` and `constrain.py` splices a `constrainLabelAny` over occurring atoms, so `_A` expands
+>   to CARBON. The coverage question is now marked OPEN rather than answered.
+> - **9.2** imported 9.1's "the '+.' sits on the C-C BOND (2c-1e)" claim. Eq 9.2 actually prints
+>   `R-CH2CR'2-R" (+.)` with the charge as a TRAILING SUPERSCRIPT (verified) -- unlocalised, which
+>   makes the field-carried encoding *more* faithful here, for a different reason than stated.
+> - **9.3 / 9.4a / 9.4b** carried `support_type: computationally_supported` while their own notes
+>   report 0 substructure matches for every cited rule -> `curator_inferred` (matching 9.1a/9.2).
+> - **9.12** claimed "RDKit-VERIFIED, 7 hits" for the IMS_4_9 pattern. My own run: **4 matches**, with
+>   uniquify both True and False. Same fabricated-measurement failure mode as IMS8-EQ8.97.
+> - **9.8** cited "288 M+. and 273" as if printed on p235; verified they belong to **Figure 9.3 on
+>   printed p234 (PDF 245)**, whose C17-ethyl inset does support the 5-alpha-pregnane instantiation.
+> - **9.9** "four bonds away from C13+" -> three along the chain; "cis-fused" -> no stereo is drawn;
+>   "nothing in the rule set encodes a ring expansion" narrowed (benzylAllyl_mz91_91 is one, but
+>   aromatic-only, so the conclusion holds).
+> - **9.12 JUDGEMENT CALL, flagged for review:** `peak_231` keeps `relative_intensity = 1.0` although
+>   no percentage is printed -- the prose says the CH3 loss "gives the base peak", which is 100% by
+>   definition. This deviates from convention F; `status` stays `proposed` (never `observed`) so the
+>   provenance remains machine-readable.
+
 ## State (updated 2026-07-28)
 
 > # ✅ EXTRACTION COMPLETE — Ch.4 + Ch.8 + inside cover, every page in scope.

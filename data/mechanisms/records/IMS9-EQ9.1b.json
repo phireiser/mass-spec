@@ -1,0 +1,211 @@
+{
+  "mechanism_id": "IMS9-EQ9.1b",
+  "species": [
+    {
+      "species_id": "dimethylbutane_sigma_ionized_molecular_ion",
+      "mapped_smiles": "[CH2:1]([1H:7])[C:2]([CH3:5])([CH3:6])[CH2:3][CH3:4]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isobutene_radical_cation",
+      "mapped_smiles": "[CH2:1]=[C:2]([CH3:5])[CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethane_neutral",
+      "mapped_smiles": "[CH2:3]([1H:7])[CH3:4]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dimethylbutane_sigma_ionized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "isobutene_radical_cation",
+        "ethane_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rh_alkane_rearrangement",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_9_1b",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_alkane_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 226,
+        "equation": "9.1",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (Saturated aliphatic hydrocarbons)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Equation 9.1, LOWER branch (label 'rH'): 'CnH2n+1 R2C(+.)CH2R'  --rH-->  CnH2n R2C(+.) + CH3R''. One hydrogen migrates OUT of the CnH2n+1 group (printed as CnH2n+1 -> CnH2n in the ion) ONTO the departing CH2R' group (printed as .CH2R' -> CH3R'), so the ion stays odd-electron (an alkene radical cation) and the neutral leaves closed-shell - the 'random rearrangement' channel of Section 8.9 that the section's opening paragraph blames for the CnH2n+. series. ARC COUNT (convention D): the book draws 0 curved arrows / fishhooks in Equation 9.1; the 'rH' arrow is a straight, label-annotated reaction arrow. All FOUR encoded electron_moves are therefore IMPLICIT (curator-reconstructed for electron balance, not drawn on the page): moves <1,3> split the two electrons of the migrating hydrogen's C1-H7 bond (one into the new C3-H7 bond, one into the forming C1=C2 pi bond) and moves <2,4> split the two electrons written for the cleaving C2-C3 bond (one completing the new C3-H7 bond, one completing the C1=C2 pi bond). CAVEAT on that bookkeeping: the book's sigma-ionized C-C bond really holds only ONE electron (the printed glyph is a '+' over a single dot on the bond) and the product's pi bond of a radical cation really holds only THREE, but a mapped SMILES must write both as ordinary full bonds, so exactly one of the four routed electrons is the formal ionization hole moving from the cleaving sigma bond into the product's pi system. LOCALIZATION (convention B/C): both ions are written as neutral skeletons with charge/radical in the species fields - the precursor because the book localizes '+.' on the sigma BOND (2c-1e, no valence-correct single-atom SMILES), the product because the alkene radical cation's charge and odd electron are delocalized over the C1=C2 pi bond and the book itself writes them as an undifferentiated 'CnH2nR2C+.'; this is the convention of IMS4-EQ4.3a/b and IMS8-EQ8.37a. The migrating hydrogen is written as the isotope-tagged [1H:7] purely so RDKit keeps it as an explicit mapped atom (same device as IMS4-EQ4.35); it is ordinary protium. INSTANTIATION (convention F): the scheme is generic and NO m/z and NO intensity are printed for it. Instantiated as 2,2-DIMETHYLBUTANE, the same precursor as the sigma branch IMS9-EQ9.1a, with n=1 (CnH2n+1 = CH3 -> CnH2n = CH2), R = R = CH3, R' = CH3; the H is taken from the CnH2n+1 methyl (as printed) so the new pi bond forms to the branched carbon, giving CnH2nR2C+. = isobutene radical cation (C4H8+., 56.0621) and CH3R' = ethane. observed_mz 56.0621 is curator-computed from this instantiation, not read from the page: detected=false, status='inferred', no relative_intensity. Note that page 226 prints NO m/z for any rH product; CORRECTION (page re-read in full at native resolution): page 226 does NOT discuss methane loss anywhere -- it names only (CH3)3CC(CH3)2+ (m/z 99), (CH3)3C+ (m/z 57) and CH3+ peaks; the '[M-CH4]' argument attributed to it in the first draft of this note belongs to the FACING page 227, outside this record's locator, and the claim is withdrawn. Figure 9.1's 2,2,3,3-tetramethylbutane is a different substrate, and the plain reason it cannot instantiate this equation is that it contains NO CH2 group at all, so the printed skeleton CnH2n+1R2C-CH2R' does not map onto it for EITHER branch (the earlier valence argument picked one arbitrary mapping). This branch is therefore instantiated on 2,2-dimethylbutane."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_9_1b",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.1b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.1",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/ (rule_index.json by_equation)"
+      },
+      "confidence": 0.5,
+      "curator_note": "CROSS-LINK (convention E): NO MOD rule encodes this branch, and none is indexed for Equation 9.1 (rule_index.json 'by_equation' has no 9.x key). Checked the whole H-transfer family in src/data_generation/rules/: every hTransition_* rule, the esterMcLafferty pair and the h2Transiton_* rules require a CHARGED RECEPTOR SITE '[_A+]' / '[_A+.]' (e.g. hTransition_saturated_1 '[H]1[C]2[C]3[C]4[C]5[_A+.]6 >> [C.]2[C]3[C]4[C]5[_A+]6[H]1'). *** WITHDRAWN JUSTIFICATION *** The first draft of this note claimed the subgroup constraints (§Y...) restrict that receptor to a HETEROATOM, and then scoped its scan to rules 'whose left side contains only C/H' -- which structurally excludes the very _A-placeholder rules at issue. Both moves are wrong, checked in the source: src/data_generation/utils/element_sets.py sets ALL_ATOMS = HETERO_ATOMS + ALK_NES_LABELS with ALK_NES_LABELS = ['H', 'C'], and constrain.py splices a constrainLabelAny over those occurring atoms, so '_A' IS expanded to CARBON (and hydrogen) -- the same fact the ei_molecular_ion / heteroatom_ionization comments in deprotonation.py record. CONSEQUENCE: no cross-link is asserted for this branch and the coverage question is left OPEN rather than answered. Whether any _A-family rule can transfer a hydrogen between two carbons of an ionized alkane was never actually tested on this substrate; do not read the earlier 'UNCOVERED' verdict as measured. The nearest hydrocarbon relatives are IMS_8_1_var1_step1 and IMS_8_1_var3_step1, but both require a pre-existing C=C double bond bearing the charge, not a saturated alkane. No rule was executed in MOD for this record; the comparison is a source-level DFS reading."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 86.109,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c4h8",
+      "species_id": "isobutene_radical_cation",
+      "step_id": "step_rh_alkane_rearrangement",
+      "observed_mz": 56.0621,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

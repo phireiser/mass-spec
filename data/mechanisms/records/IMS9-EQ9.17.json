@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS9-EQ9.17",
+  "species": [
+    {
+      "species_id": "m_tolyl_1_propane_molecular_ion",
+      "mapped_smiles": "[C:1]1([CH2:8][CH2:9][CH3:10])[CH+:2][CH:3]=[CH:4][C:5]([CH3:7])=[CH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylene_cyclohexadienyl_cation_105",
+      "mapped_smiles": "[CH2:8]=[C:1]1[CH+:2][CH:3]=[CH:4][C:5]([CH3:7])=[CH:6]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethyl_radical",
+      "mapped_smiles": "[CH2:9][CH3:10]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "m_tolyl_1_propane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylene_cyclohexadienyl_cation_105",
+        "ethyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_benzylic_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_benzylic_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_benzylic_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 240,
+        "equation": "9.17",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (alkylbenzenes; benzylic cleavage of tolyl-1-propane, competing with eq 9.16)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Benzylic cleavage drawn as a radical-site alpha cleavage: the odd electron printed on the IPSO ring carbon (map 1) drives homolysis of the C-alpha/C-beta bond (map8-map9), forming the exocyclic map1=map8 pi bond and expelling the ethyl radical; '- C2H5' is printed over the arrow (no radical dot is printed with it, but the loss must be C2H5. for 134 -> the even-electron C8H9+ ion the page labels as m/z 105). SUBSTRATE AS DRAWN: propyl chain on the lower-left ring vertex (map 1) and CH3 on the lower-right vertex (map 5), i.e. the 1,3 relationship = m-tolyl-1-propane, M+. m/z 134 - the meta isomer, whereas the competing rearrangement of eq 9.16 immediately above is drawn on the para isomer; both isomers are being contrasted in the running text on p.239. ARROWS: Book draws 1 arc; move <2> is drawn - a fishhook that starts on the C-alpha/C-beta sigma bond (map8-map9) and points at the printed radical dot on map 1, i.e. into the forming map1=map8 pi bond. Move <1> (the ring radical's own odd electron completing that pi bond) and move <3> (the implicit homolysis hook carrying the second sigma electron onto the departing ethyl radical) are NOT drawn on the page; both are required for electron balance, and the book shows their outcome only by printing the exocyclic double bond of the product and writing the loss as '- C2H5'. LOCALIZATION (convention B) / RESONANCE (convention C): the molecular ion is drawn LOCALIZED with '+' on the ortho ring carbon (map 2) and '.' on the ipso carbon (map 1), ring Kekule double bonds map3=map4 and map5=map6; this record uses exactly that printed canonical form. The m/z 105 ion is likewise encoded as printed - the exocyclic-methylene cyclohexadienyl cation (CH2=C(ring), '+' on map 2) - which is one resonance/Kekule form of the benzyl cation; one page earlier (eq 9.13, p.239) the book itself draws the aromatic benzyl cation and its tropylium partner for the same C8H9+/C7H7+ ion type. RDKit keeps both ions non-aromatic (0 aromatic bonds), so all bond-order bookkeeping is integer. INTENSITY: 'm/z 105' is labelled but no percentage is printed on p.240, so relative_intensity is omitted (convention F); the 5.5% / 0.9% figures on p.239 are the abundance of the eq 9.16 rearrangement ion RELATIVE TO THIS benzylic ion, not an intensity of this peak."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.17",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.17",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MOD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and no indexed rule performs a radical-site alpha cleavage of an EXOCYCLIC bond on a localized aromatic radical cation with charge retention in the ring. Candidates checked, all RDKit-VERIFIED against this record's molecular ion: (1) IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' and IMS_4_10 '[_A+]1[C]2[C.]3>>[_A+.]1.[C]2[C.]3' - 0 hits; both require the charge and the odd electron on the same atom ([_A+.]) or three atoms apart, while this ion carries them on ADJACENT but distinct ring atoms (no atom has both), and both are dropped at import by the conservation guardrail (spin 1->2); IMS_4_9 also has the known geometry defect that its cleaved bond is incident to neither atom of the new pi bond. (2) IMS_4_31_alpha1 / IMS_4_32_alpha '[C]1[C]2[C]3[C]4[C+]5[C.]6[C]7{-}2>>[C]1[C.]2[C]3[C]4[C+]5[C]6{=}[C]7' do have the correct alpha-cleavage geometry (radical site 6, new pi 6=7, cleaved bond 7-2 incident to 7) and even find the adjacent C+/C. pair here, but they cleave a RING bond (ring-opening) and require that bond to be single, whereas eq 9.17 cleaves the EXOCYCLIC benzylic bond - RDKit-VERIFIED 0 hits. (3) benzylAllyl_mz92_91 (src/data_generation/rules/benzylAllyl_ringGeneral.py, NOT in rule_index.json, which only scans IMS_chap4/chap8/bookCover) '[_A]1[C]2[C]3:[C]4:[C]5:[C]6:[C]7:[C]8:3 >> [_A+]1.[C+]2[C]3:...:3' is the only rule in the codebase that breaks this benzylic bond to give a C8H9+-type benzyl cation, but it is NOT this reaction: it starts from the NEUTRAL molecule and produces TWO cations (charge 0 -> +2, no radical site, no pi bond formed), it lives in the guardrail-exempt ionization list, and its aromatic ':' ring pattern cannot match this record's drawn precursor at all, whose ring is localized/Kekule (RDKit reports 0 aromatic bonds). Nothing here is claimed as computationally supported."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 134.109,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_105",
+      "species_id": "methylene_cyclohexadienyl_cation_105",
+      "step_id": "step_benzylic_alpha_cleavage",
+      "observed_mz": 105.0699,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

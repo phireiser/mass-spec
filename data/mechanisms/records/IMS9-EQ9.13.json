@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS9-EQ9.13",
+  "species": [
+    {
+      "species_id": "ethylbenzene_localized_molecular_ion",
+      "mapped_smiles": "[CH3:1][CH2:2][C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylenecyclohexadienyl_cation_91",
+      "mapped_smiles": "[CH2:2]=[C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylbenzene_localized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylenecyclohexadienyl_cation_91",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_benzylic_alpha_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_benzylic_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_benzylic_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 239,
+        "equation": "9.13",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (aromatic hydrocarbons; benzylic cleavage of 1-phenylalkanes)"
+      },
+      "confidence": 0.9,
+      "curator_note": "Benzylic (alpha) cleavage of a 1-phenylalkane molecular ion: the ring radical site drives homolysis of the benzylic C-C bond, expelling R. and giving the resonance-stabilized C7H7+ ion the page labels 'm/z 91'. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the departing alkyl is simply written as 'R.' among the products). Drawn arc 1 = the fishhook whose tail sits on the R-CH2 bond (map1-map2, the horizontal line leaving R) and whose single barb lands on the forming CH2=C(ipso) bond (map2-map3); drawn arc 2 = the fishhook whose barb lands on that SAME forming bond and whose tail curls back into the benzene ring, i.e. the odd electron of the ring radical cation, which the page prints as '+.' inside the aromatic circle. Measured on the 1760x2560 native scan both barbs converge on the map2-map3 diagonal, their tips ~18 px apart (approx. (297,441) and (312,449)); no third arc is present. CORRECTION: the first draft of this note gave that separation as '~70 px' while attributing it to the native scan. Re-measured independently, 70 px is the figure on a 4x upscale of the crop; on the native scan it is ~18 px. The qualitative claims are unchanged and confirmed: exactly two fishhooks, both barbs landing on the map2-map3 diagonal, no third arc anywhere in the scheme. INSTANTIATION (convention F): eq 9.13 is generic (R = alkyl; the running text on printed p.238 says '1-phenylalkanes exhibit an abundant C7H7+ ion (Equation 9.13)'). R is instantiated here as CH3, i.e. ethylbenzene, the smallest 1-phenylalkane; the precursor value ms_context.precursor_mz = 106.0777 is therefore CURATOR-COMPUTED from that instantiation and is NOT printed on the page. m/z 91 IS printed on the page beside the product structure and is R-independent, so the product ion is marked detected. No percentage appears anywhere in the scheme, so relative_intensity is left unset; 'abundant' in the running text is a word, not a measurement. LOCALIZATION (conventions B and C): the page draws the REACTANT ring as an aromatic circle with '+.' inside, i.e. fully delocalized. To give the arrows a real origin the molecular ion is written here in the single localized resonance form the drawn arrows demand and that produces exactly the drawn product - odd electron on the ipso carbon (map 3, three sigma bonds and no H), + on the para carbon (map 6), ring double bonds map4=map5 and map7=map8. The product is the para-methylenecyclohexadienyl cation the page actually draws: exocyclic map2=map3, ring single/double pattern unchanged, '+' at the para vertex (map 6). RESONANCE PARTNER DRAWN BY THE BOOK: to the right of a double-headed arrow the page prints the other canonical form, the benzyl cation C6H5-CH2+ (aromatic circle with the '+' on the exocyclic carbon). That double-headed arrow is a delocalization statement, not a reaction, so it is recorded here instead of as a step. Printed p.238 adds that 'in particular cases the similarly stabilized tropylium ion has been shown to be the chief product' - tropylium is a ring-expanded ISOMER, not a resonance form, and is not drawn in eq 9.13, so it is not encoded."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.13",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.13",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MOD CROSS-LINK for this equation. rule_index.json contains no chapter-9 entries at all (by_equation has 0 keys starting '9'), and no indexed rule describes benzylic cleavage of an alkylbenzene radical cation. RDKit-VERIFIED against this record's localized molecular ion [CH3:1][CH2:2][C:3]1[CH:4]=[CH:5][CH+:6][CH:7]=[CH:8]1 (explicit Hs added): the generic radical-site alpha-cleavage rules are all anchored on ONE atom that carries BOTH the charge and the odd electron - IMS_4_9 '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' and IMS_4_10 '[_A+]1[C]2[C.]3>>[_A+.]1.[C]2[C.]3' - whereas an aromatic radical cation necessarily localizes the + and the odd electron on DIFFERENT ring carbons (map 6 and map 3 here). Both patterns therefore give 0 substructure matches, as do IMS_4_3_var1/var2, which need a [C+.] carbon. The only indexed rule that touches an aromatic ring at all is IMS_4_36_ ('4.36 charge move'), and it merely converts an aromatic phenylalkane into the localized ipso-cation/ortho-radical form - it performs no cleavage. Independently of matching, IMS_4_9, IMS_4_10 and IMS_4_36_ are all DROPPED at import by the conservation guardrail in src/data_generation/rules/__init__.py (verified by running the import in the container: 'spin 1->2' for IMS_4_9 and IMS_4_10, 'charge 0->1, spin 0->1' for IMS_4_36_), so none of them is even live in the forward model. Nothing is claimed as computationally supported here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 106.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_91",
+      "species_id": "methylenecyclohexadienyl_cation_91",
+      "step_id": "step_benzylic_alpha_cleavage",
+      "observed_mz": 91.0542,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

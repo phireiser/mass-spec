@@ -1,0 +1,299 @@
+{
+  "mechanism_id": "IMS9-EQ9.6a",
+  "species": [
+    {
+      "species_id": "dimethylheptene_molecular_ion",
+      "mapped_smiles": "[CH2:1][C+:2]([CH3:3])[CH2:4][CH:5]([CH3:6])[CH:7]([1H:8])[CH2:9][CH3:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_gamma_h_shifted_ion",
+      "mapped_smiles": "[CH2:1]([1H:8])[C+:2]([CH3:3])[CH2:4][CH:5]([CH3:6])[CH:7][CH2:9][CH3:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_c4h8_ion",
+      "mapped_smiles": "[CH2:4][C+:2]([CH3:3])[CH2:1][1H:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "pentene_neutral",
+      "mapped_smiles": "[CH3:10][CH2:9][CH:7]=[CH:5][CH3:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_molecular_ion",
+      "species_ids": [
+        "dimethylheptene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_distonic",
+      "species_ids": [
+        "distonic_gamma_h_shifted_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_c4h8_ion",
+        "pentene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_gamma_h_rearrangement",
+      "from_state": "state_molecular_ion",
+      "to_state": "state_distonic",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "reaction_smirks": null,
+      "reversible": false,
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ]
+    },
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_distonic",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "reaction_smirks": null,
+      "reversible": false,
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_gamma_h_rearrangement",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 231,
+        "equation": "9.6",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons"
+      },
+      "confidence": 0.8,
+      "curator_note": "The printed 'rH' arrow: the gamma hydrogen (map 8, isotope-tagged [1H:8] so RDKit keeps it as a mapped atom) migrates from C(gamma) (map 7) to the radical-bearing terminal CH2 (map 1), moving the radical site to C(gamma) and leaving the charge untouched on map 2 -- the distonic ion the book draws as structure 3. The caption's condition 'R'' > H' is why the sp2 carbon carries a methyl here: the running text explains that internal branching at the double bond, i.e. an electron-donating alkyl at R'', stabilizes the charge and makes this gamma-H rearrangement specific. ARC COUNT (convention D). Structure 2 (the ionized alkene) draws 2 arcs, both single-barbed fishhooks: one from the odd-electron dot on the terminal CH2 toward the gamma H, one from the C(gamma)-H bond toward that same forming C-H bond. The third hook (the electron left behind on C(gamma)) is NOT drawn and is marked implicit below. LOCALIZATION (convention B): the page draws the ionized double bond as a SINGLE line with '+' printed at the substituted sp2 carbon (map 2) and the dot at the terminal CH2 (map 1), so the precursor is encoded in exactly that localized form rather than as a delocalised pi radical cation. The -e- ionization arrow (structure 1 -> structure 2) is folded into the precursor's charge/radical fields, which is what sibling IMS9-EQ9.1a does for the same -e- arrow in eq 9.1. MS CONTEXT (convention G): the page prints NO ionization or activation conditions for eq 9.6, so EI / 70 eV is the Chapter-9 house default and is a curator assumption, not a source fact. Caution for anyone re-checking this: the sentence just above eq 9.5 ends '...ionization mass spectra of alkenes show allylic cleavages', but its opening words are on the previous page, so that clause must NOT be read as evidence of EI here. precursor_mz 126.1403 is computed from the curator's instantiation (C9H18, minus the electron mass), never read from the page."
+    },
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 231,
+        "equation": "9.6",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons"
+      },
+      "confidence": 0.75,
+      "curator_note": "The printed arrow is labelled 'alpha or i' and structure 3 carries THREE arcs that belong to two different channels, so eq 9.6 is split into IMS9-EQ9.6a (alpha) and IMS9-EQ9.6b (i) -- the same treatment eq 9.1 gets in IMS9-EQ9.1a / 9.1b. Both drawn products are printed side by side after 'or'. ALPHA CHANNEL (the two fishhooks of structure 3). The radical site drives it: the odd electron on C(gamma) (map 7) pairs with one electron of the C(beta)-C(alpha) bond (maps 5-4) to make the C7=C5 pi bond, and the partner electron is left on C(alpha) (map 4). Book draws 2 arcs; moves <1,2> are drawn, move <3> is the implicit homolysis hook required for electron balance. The charge stays where it already was, on map 2, so the ION is the drawn '.CH2-C+(CH3)R''' fragment and the closed-shell alkene R-CH=CH-R' leaves as the NEUTRAL. Note this is the opposite partition to 9.6b, which is why the page prints both."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.6a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 231,
+        "equation": "9.6",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons"
+      },
+      "confidence": 0.4,
+      "curator_note": "No MØD cross-link exists or can exist: rule_index.json has 57 by_equation keys covering Chapter 4, Chapter 8 and the inside cover, and NONE begins with '9', so nothing in src/data_generation/rules/ is authored for any Chapter 9 equation. This is recorded as curator_inferred rather than as a measured non-match: no rule was executed against this substrate. HAND-CURATED RECORD -- the only route available. This page's extraction agent died twice (an API server error mid-response, then the monthly spend limit), so 9.6a/9.6b were authored directly from the native embedded scan (pypdf page.images[0], 1760x2560, structures cropped and upscaled 4x). They therefore carry NO independent adversarial verify pass, unlike every other record in the corpus; extraction_method is 'manual_from_scan' so this is machine-detectable. Re-verify when agents are available."
+    },
+    {
+      "evidence_id": "evidence_peak",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_56",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 231,
+        "equation": "9.6",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons"
+      },
+      "confidence": 0.5,
+      "curator_note": "NO m/z and NO percentage is printed anywhere in eq 9.6, so status is 'inferred', detected is false and relative_intensity is omitted. observed_mz 56.0621 is computed from the curator's instantiation. The surrounding prose does name a C5H10+. ion (80% of the CnH2n+. abundance) -- but for 3-methyl-2-undecene, a DIFFERENT substrate that does not map onto this drawn skeleton (it is a 2-alkene, whereas the drawing is a 2-substituted 1-alkene), so it is not treated as a measurement of this record's ion even where the formula coincides."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 126.1403,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_56",
+      "species_id": "distonic_c4h8_ion",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 56.0621,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.5
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

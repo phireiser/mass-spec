@@ -1,0 +1,340 @@
+{
+  "mechanism_id": "IMS9-EQ9.10",
+  "species": [
+    {
+      "species_id": "cyclohexene_molecular_ion",
+      "mapped_smiles": "[CH+:1]1[CH:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_allyl_cation",
+      "mapped_smiles": "[CH2:4][CH2:5][CH2:6][CH+:1][CH:2]=[CH2:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "h_shifted_distonic_allyl_cation",
+      "mapped_smiles": "[CH3:4][CH2:5][CH:6][CH+:1][CH:2]=[CH2:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "pentadienyl_cation",
+      "mapped_smiles": "[CH2:5]=[CH:6][CH+:1][CH:2]=[CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclohexene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_distonic_allyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_h_shifted",
+      "species_ids": [
+        "h_shifted_distonic_allyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "pentadienyl_cation",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rh_1_3_hydrogen_shift",
+      "from_state": "state_ring_opened",
+      "to_state": "state_h_shifted",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_methyl_loss",
+      "from_state": "state_h_shifted",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_ring_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.10",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (cyclic alkenes; cyclohexene molecular ion)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Ring-opening alpha cleavage of the cyclohexene molecular ion. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the book simply prints the dot on the ring-opened chain terminus). Drawn arc 1 = the small fishhook that starts at the printed dot on the upper-right ring carbon (map 2) and points into the map2-map3 ring bond; drawn arc 2 = the long arc that sweeps across the top of the ring from the map3-map4 sigma bond into that same forming pi bond. LOCALIZATION (convention B): the pi-ionized alkene is drawn localized as C1(+)-C2(.), the '+' printed beside the lower-right vertex (map 1) and the dot beside the upper-right vertex (map 2); the neutral cyclohexene double bond, drawn as the vertical double line on the right of the neutral structure, sat between maps 1 and 2. The page also prints a '-e-' arrow from neutral cyclohexene to this molecular ion; that ionization event is NOT encoded as a step (it does not conserve total electrons), so the record starts at [M]+. m/z 82."
+    },
+    {
+      "evidence_id": "evidence_step_rh",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rh_1_3_hydrogen_shift",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.10",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (cyclic alkenes; step labelled 'rH')"
+      },
+      "confidence": 0.7,
+      "curator_note": "The step the book labels 'rH': a 1,3-hydrogen-atom shift from map 6 to the radical site map 4 through a four-membered cyclic transition state, converting the primary radical into a secondary one. Book draws 2 arc(s): arc 1 = the fishhook that starts at the dot on map 4 and curls down into the forming map4-H bond; arc 2 = the fishhook that starts at the explicitly printed C-H bond on map 6 (the book draws that one hydrogen explicitly precisely because it is the migrating one) and points at that same forming bond. A third hook - the other electron of the map6-H bond onto map 6, giving the new radical site - is implicit (not drawn on the page). ENCODING LIMITATION, stated explicitly: all three of those hooks act on C-H bonds, and RDKit strips a mapped explicit hydrogen out of a SMILES (verified: '[H:7][CH2:4]...' parses back to '[CH3:4]...' with map 7 gone), so the breaking map6-H and forming map4-H bonds cannot be referenced as bond locations in this schema. The step is therefore encoded as the single NET radical-relocation move map4 -> map6 (1 electron), which is the same convention already used for the gamma-H rearrangement of IMS4-EQ4.33 in this collection; it reproduces the observed radical bookkeeping exactly but is one net move, not the two drawn arcs plus one implicit hook. RESONANCE / DELOCALISATION (convention C): the ring-opened ion is drawn on this line with NO localized double bond, the '+' set at the centroid of the three allyl carbons (maps 1, 2, 3) and a faint, broken thin curve running from the middle of the map2-map3 bond to the middle of the map1-map2 bond - i.e. the book draws the allyl cation DELOCALISED here. This record instead uses the localized form the book itself prints for the very same ion one line lower in eq 9.11 (cation on map 1, pi bond map2=map3) and keeps that localization consistent through the whole sequence. Consequently the product of this step is written CH3-CH2-CH(.)-CH(+)-CH=CH2, whereas the book's next drawn structure is the PARTNER allyl resonance form CH3-CH2-CH(.)-CH=CH-CH2(+) (charge on map 3, pi bond map1=map2); the two are the same species."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_methyl_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.10",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (cyclic alkenes; final alpha cleavage to m/z 67)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Final alpha cleavage: the secondary radical (map 6) drives homolysis of the map4-map5 bond, expelling CH3. and giving the C5H7+ pentadienyl cation, m/z 67. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the book writes the departing 'CH3.' as a product instead). Drawn arc 1 = the fishhook from the printed dot (map 6) up into the map5-map6 bond; drawn arc 2 = the large arc from the H3C-CH2 sigma bond (map4-map5) into that same forming pi bond. RESONANCE (convention C): the m/z 67 ion is printed as CH2=CH-CH=CH-CH2(+) (charge on the terminus that is map 3 here); this record's consistent localization gives the partner pentadienyl resonance form CH2=CH-CH(+)-CH=CH2 (charge on map 1). Same species, same formula C5H7+, same m/z. NO PRINTED INTENSITY: the page prints the label 'm/z 67' but no percentage anywhere in eq 9.10, so relative_intensity is omitted."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.10",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.10",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.6,
+      "curator_note": "NO MOD CROSS-LINK for this equation. data/mechanisms/rule_index.json has no chapter-9 entries at all (by_equation covers only 4.x and 8.x, from IMS_chap4_examples.py / IMS_chap8_examples.py / IMS_bookCover.py), so eq 9.10 has no indexed rule. Checked the plausible generic candidates by DFS: (i) the ring-opening alpha cleavage of step 1 IS encoded, but only outside the index, as wikipedia.py dielsAdler_1 '[C]1[C+]2[C.]3[C]4[C]5[C]6{-}1>>[C.]5[C]6[C]1[C+]2[C]3{=}[C]4' - VERIFIED by RDKit: its reactant pattern (six-membered all-carbon ring, cation adjacent to a trivalent neutral radical carbon) matches this record's cyclohexene molecular ion at maps (1,2,3,4,5,6), it cleaves map3-map4, forms the map2=map3 pi bond and moves the radical to map4, i.e. exactly step_alpha_ring_opening, and the cleaved bond is incident to map3 which forms the new pi bond, so the geometry is right; (ii) NO rule encodes the 'rH' 1,3-hydrogen shift of step 2 - every H-transfer rule in the index (hTransition_saturated_*, hTransition_unsaturated_*, esterMcLafferty_rH, h2Transiton_*) requires a heteroatom or unsaturated receptor site (the '§Y' constraint) and a 5- or 6-membered cyclic transition state, whereas this is a pure-hydrocarbon 1,3-shift onto a carbon radical with a carbon-centred charge; hTransition_saturated_2 '[H]1[C]2[C]3([_A+]4)[C]5[C.]6>>[C.]2[C]3([_A+]4)[C]5[C]6([H]1)' is the closest and does NOT match (it requires the heteroatom cation _A+ and shifts H 1,4 rather than 1,3); (iii) no rule encodes the CH3-losing alpha cleavage of step 3 either. Nothing is claimed as computationally supported here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 82.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_67",
+      "species_id": "pentadienyl_cation",
+      "step_id": "step_alpha_methyl_loss",
+      "observed_mz": 67.0542,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

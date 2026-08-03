@@ -1,0 +1,406 @@
+{
+  "mechanism_id": "IMS9-EQ9.12",
+  "species": [
+    {
+      "species_id": "tetrahydrocannabinol_molecular_ion",
+      "mapped_smiles": "[CH3:22][C:2]1([CH3:23])[CH:3]2[CH2:4][CH:5]=[C:6]([CH3:7])[CH2:8][CH:9]2[C:10]3=[C:11]([O+:1]1)[CH:16]=[C:15]([CH2:17][CH2:18][CH2:19][CH2:20][CH3:21])[CH:14]=[C:12]3[OH:13]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isoprene_neutral_loss",
+      "mapped_smiles": "[CH2:4]=[CH:5][C:6]([CH3:7])=[CH2:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "chromene_oxonium_radical_cation_246",
+      "mapped_smiles": "[CH3:22][C:2]1([CH3:23])[CH:3][CH:9]=[C:10]2[C:11](=[O+:1]1)[CH:16]=[C:15]([CH2:17][CH2:18][CH2:19][CH2:20][CH3:21])[CH:14]=[C:12]2[OH:13]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "chromenylium_231",
+      "mapped_smiles": "[CH3:23][C:2]1=[CH:3][CH:9]=[C:10]2[C:11](=[O+:1]1)[CH:16]=[C:15]([CH2:17][CH2:18][CH2:19][CH2:20][CH3:21])[CH:14]=[C:12]2[OH:13]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:22]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "tetrahydrocannabinol_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_after_rda",
+      "species_ids": [
+        "chromene_oxonium_radical_cation_246",
+        "isoprene_neutral_loss"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "chromenylium_231",
+        "isoprene_neutral_loss",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_retro_diels_alder",
+      "from_state": "state_precursor",
+      "to_state": "state_after_rda",
+      "step_class": "retro_diels_alder",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_methyl_loss",
+      "from_state": "state_after_rda",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              22
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              22
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              22
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rda",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_retro_diels_alder",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.12",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (tetrahydrocannabinol, retro-Diels-Alder, arrow labelled 'alpha2')"
+      },
+      "confidence": 0.75,
+      "curator_note": "Concerted retro-Diels-Alder of the tetrahydrocannabinol molecular ion (m/z 314), drawn as ONE step over the arrow labelled 'alpha2' (two alpha cleavages), expelling C5H8 (isoprene, 68) and giving the ionized monoene m/z 246. The running text calls eq 9.12 'one possible rationalization of the electron shifts involved'. Book draws 8 arc(s); moves <1..8> are all drawn, move <9> is an implicit homolysis hook required for electron balance (not drawn on the page - the book simply prints the dot on map 3 of the m/z 246 product). Drawn arcs, in the order encoded: <1> the fishhook that starts at the printed '+.' under the pyran oxygen (map 1) and points at the O-C(aromatic) bond; <2> and <3> the two fishhooks that empty the drawn map10=map11 pi bond, one into the forming map1=map11 oxocarbenium bond and one into the forming map9=map10 bond; <4> and <5> the two fishhooks that empty the breaking map8-map9 ring bond, one into map9=map10 and one into the forming map6=map8 bond; <6> and <7> the two fishhooks that empty the drawn map5=map6 alkene pi bond, one into map6=map8 and one into the forming map4=map5 bond; <8> the fishhook from the breaking map3-map4 bond into map4=map5. LOCALIZATION (convention B): the molecular ion is drawn n-ionized AT THE PYRAN OXYGEN ('+.' printed directly under the ring O), so map 1 is written [O+:1] with two single bonds, which carries the one unpaired electron; the '+' and the odd electron are not merely JSON fields. KEKULE CHOICE (convention C): the aromatic ring is written in exactly the Kekule form printed on the page (inner lines drawn for map10=map11, map12=map14 and map15=map16); after the step map10=map11 has become single and map1=map11 / map9=map10 are double, i.e. the cross-conjugated quinoid form the book draws for m/z 246. ISOMER AS DRAWN: the printed cyclohexene ring carries its double bond between the methyl-bearing carbon (map 6) and the carbon TWO bonds from the ring-fusion carbon map 9, i.e. the drawn structure is the delta-8 (= old delta-6) tetrahydrocannabinol skeleton; measured on the scan the inner double-bond line is unambiguous (two parallel 3-4 px lines 12-13 px apart between map 5 and map 6, while the map6-map8 bond is a single 4 px line). That geometry is what makes a one-step retro-Diels-Alder expel free C5H8 while leaving the pyran ring intact: for the delta-9 isomer the same retro-Diels-Alder would have to break the C6a-C10a ring-fusion bond and could not release C5H8 in one step. m/z 314 and m/z 246 are labelled on the page; no percentage is printed for either."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_methyl_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.12",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (tetrahydrocannabinol, CH3 loss from the m/z 246 OE+. ion)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Alpha cleavage of the m/z 246 odd-electron ion: the ring radical site (map 3) drives homolysis of one gem-dimethyl C-CH3 bond (map2-map22), expelling CH3. and giving the fully conjugated even-electron chromenylium ion m/z 231 - the aromatic stabilization the running text invokes ('consistent with the aromatic stabilization achieved in this EE+ product ion'). Book draws 2 arc(s) on the m/z 246 structure; moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the loss is written as '- CH3.' over the arrow). Drawn arc 1 = the fishhook from the printed dot (map 3) into the map2-map3 bond; drawn arc 2 = the fishhook from the C-CH3 bond into that same forming pi bond. The drawn m/z 231 structure is reproduced exactly: pyran ring O(+)=map11, map2=map3, map9=map10, with the benzo ring Kekule map12=map14 / map15=map16 as printed. INTENSITY: the page prints no percentage; the running text states in words that this CH3 loss 'gives the base peak', so that statement is recorded HERE IN WORDS ONLY: relative_intensity is left UNSET, per convention F, which reserves that field for a percentage actually printed on the page. An earlier version of this record set it to 1.0 on the reasoning that a base peak is 100% by definition; that was dropped on review so the field means 'printed measurement' everywhere in the corpus without exception. status stays 'proposed'. The text further notes that a substantial part of m/z 231 may instead arise by C5H8 loss from the (M-CH3)+ ion, i.e. by the reverse order of the same two losses; that alternative path is not drawn and is not encoded here. DELOCALISATION CAVEAT: the species are written in the Kekule forms printed on the page, but RDKit re-perceives aromaticity on parsing - the benzo ring of all three ions and, for m/z 231, the whole pyranylium ring (o+ included) come back aromatic, which is precisely the stabilization the text invokes. The validator therefore reports the ring-bond order changes of these two steps as (soft) 'aromatic/delocalised' half-order mismatches; all non-ring bond changes (map1-map11, map9-map10, map8-map9, map6-map8, map5-map6, map4-map5, map3-map4, map2-map22) balance exactly against the arrows."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.12",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.12",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.55,
+      "curator_note": "NO MOD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and the indexed retro-Diels-Alder rules do NOT describe this reaction: IMS_4_31_alpha1/IMS_4_31_alpha2 and IMS_4_32_alpha/IMS_4_32_ind (plus IMS_4_30 and wikipedia.py dielsAdler_1/2a/2b) are all-carbon patterns that are INITIATED at a carbon-centred alkene radical cation and run STEPWISE through a ring-opened distonic ion, whereas eq 9.12 is initiated at an oxygen n-radical-cation two rings away and is drawn as ONE concerted eight-arrow shift; RDKit-VERIFIED: none of those reactant patterns matches this record's molecular ion (0 hits). MISMATCH FOUND for the CH3-loss step: IMS_4_9 'radical induced (alpha-)clevage for a saturated site 4.9' '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5' is the only generic radical-site alpha-cleavage rule whose reactant pattern matches this substrate at all - RDKit-verified, 4 matches on the molecular ion (the first draft said 7; re-run independently, the count is 4 with uniquify both True and False), e.g. (map4, map3, map2, map22, map1) - but it does NOT describe either drawn step: it cleaves the map4-map3 bond while forming a pi bond between map2 and map1, so the cleaved bond is incident to neither atom of the new pi bond (the known IMS_4_9 geometry defect), and it keeps BOTH the charge and the unpaired electron on the heteroatom while creating a second radical, so its DFS goes spin 1 -> spin 2 and the conservation guardrail in rules/__init__.py drops it from the fragmentation set. IMS_4_10 '[_A+]1[C]2[C.]3>>[_A+.]1.[C]2[C.]3' forms no pi bond at all and does not apply either. Nothing is claimed as computationally supported here."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 314.224,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_246",
+      "species_id": "chromene_oxonium_radical_cation_246",
+      "step_id": "step_retro_diels_alder",
+      "observed_mz": 246.1614,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    },
+    {
+      "peak_id": "peak_231",
+      "species_id": "chromenylium_231",
+      "step_id": "step_alpha_methyl_loss",
+      "observed_mz": 231.138,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

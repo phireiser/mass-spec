@@ -1,0 +1,292 @@
+{
+  "mechanism_id": "IMS9-EQ9.7",
+  "species": [
+    {
+      "species_id": "methylcyclohexane_molecular_ion",
+      "mapped_smiles": "[CH3:7][CH:1]1[CH2:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ring_opened_distonic_ion",
+      "mapped_smiles": "[CH2:2][CH2:3][CH2:4][CH2:5][CH2:6][CH+:1][CH3:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethylene",
+      "mapped_smiles": "[CH2:2]=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "c5h10_distonic_ion_mz70",
+      "mapped_smiles": "[CH2:4][CH2:5][CH2:6][CH+:1][CH3:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylcyclohexane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ethylene",
+        "c5h10_distonic_ion_mz70"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma_ionization",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "sigma_ionization",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_cleavage",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_step_sigma_ionization",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma_ionization",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 233,
+        "equation": "9.7",
+        "figure": "9.2",
+        "panel": null,
+        "section": "9.1"
+      },
+      "confidence": 0.85,
+      "curator_note": "Eq 9.7, first arrow. Book draws 0 arc(s) for this step; the straight reaction arrow carries only the labels '-e-' (above) and 'sigma' (below), so both encoded moves <1,2> are the implied one-electron sigma ionization, not drawn fishhooks. The text on this page states the rationalization verbatim: 'The (M - C2H4)+. peak of methylcyclohexane can be rationalized on the basis of initial ionization at the endocyclic branched sigma bond (Equation 9.7)'. The atom the book puts the + on is the methyl-bearing (branched) ring carbon, map 1, and the odd electron ends on the adjacent ring carbon, map 2 - I read the drawn intermediate at native resolution to confirm the ring gap is exactly the C1-C2 bond, the '+' sits immediately left of the methyl-bearing vertex, and the dot sits on the neighbouring top vertex. Encoding convention: the precursor SMILES is the closed, neutral methylcyclohexane skeleton (charge/radical carried in the species fields, as for the delocalized sigma radical cation of eqs 4.3/4.5/4.8), so the ionization hole is booked to an 'external' electron location; this is an accounting device for the electron the neutral-looking SMILES cannot show, not a claim that charge changes during this step."
+    },
+    {
+      "evidence_id": "ev_step_alpha_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 233,
+        "equation": "9.7",
+        "figure": "9.2",
+        "panel": null,
+        "section": "9.1"
+      },
+      "confidence": 0.85,
+      "curator_note": "Eq 9.7, second arrow (labelled 'alpha'). Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). Drawn arc 1 starts at the radical dot on ring carbon 2 and its single barb points onto the C2-C3 bond (the forming pi bond); drawn arc 2 starts on the C3-C4 ring bond and its single barb points onto the same C2-C3 bond. The third electron of that homolysis (C3-C4 -> atom 4) is not drawn: the book simply writes the product with the dot on the new terminal CH2. Product regiochemistry read off the page: the neutral loss is drawn as a bare C=C (ethylene, maps 2 and 3) and the ion is drawn as a five-carbon chain .CH2-CH2-CH2-CH(+)-CH3 carrying BOTH a dot (on the terminal CH2, map 4) and a '+' (on the methyl-bearing carbon, map 1), i.e. an odd-electron distonic ion - consistent with the text calling it the '(M - C2H4)+.' peak. Isotopic labelling is quoted on the page as indicating that 60% of that peak arises from elimination of C2H4 originating in this position; that is a labelling provenance figure, NOT a peak intensity."
+    },
+    {
+      "evidence_id": "ev_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.7",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.7",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MØD rule is cross-linked. data/mechanisms/rule_index.json has NO 'by_equation' entry for any 9.x equation (its keys run 4.3-4.46 and 8.1-8.14 only), and no chapter-9 rule module exists under src/data_generation/rules/. The three nearest generic analogues were CHECKED against their DFS and all three describe different bond changes: (i) IMS_4_7 / sigma_lowIE (DFS '[C+.]1[C]2[C]3[C]4[C]5>>[C.]1.[C+]2[C]3[C]4[C]5' and '[_A+.]1[I]2>>[_A.]1.[I+]2') dissociate a sigma bond straight into two separate fragments and never produce eq 9.7's ring-opened distonic ion, so they cannot express step 1; (ii) IMS_4_9 'radical induced (alpha-)cleavage for a saturated site 4.9' (DFS '[C]1[C]2[C]3([C]4)[_A+.]5>>[C.]1.[C]2[C]3([C]4){=}[_A+.]5') is the generic alpha-cleavage rule one would expect to cover step 2, but it does NOT: it requires charge AND radical on the same atom (_A+.) whereas eq 9.7's radical site (map 2) is a neutral carbon radical of a distonic ion whose charge sits four bonds away, it cleaves bond C1-C2 which is not incident to the pi-forming atom C3, and its product retains the odd electron on _A5 while creating a second radical on C1 (radical count 1 -> 2, non-conserving); (iii) IMS_4_30 'Ring spaltung generell' (DFS '[C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6') is the closest ring-cleavage rule but it migrates the charge from C4 to C2 and forms the new pi bond remote from the radical site, whereas eq 9.7 keeps the charge on the branched carbon (map 1) and forms the pi bond at the radical site itself. Conclusion: eq 9.7 is currently UNCOVERED by the MØD rule set - this record is a specification for a future rule, not a cross-link. MS-context disclosure: this page prints no electron energy; 'EI'/70 eV is the book-wide standard for the Chapter 9 hydrocarbon spectra (Figure 9.2), not a value printed here."
+    },
+    {
+      "evidence_id": "ev_peak_mz70",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "peak_assignment",
+      "target_id": "peak_mz70",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 233,
+        "equation": "9.7",
+        "figure": "9.2",
+        "panel": null,
+        "section": "9.1"
+      },
+      "confidence": 0.8,
+      "curator_note": "m/z 70 is printed on the page: it is the circled label in Figure 9.2 (circled = the peak under discussion) and the text names it the '(M - C2H4)+.' peak. NO percentage is printed for it anywhere on the page (its abundance appears only as a bar in the plot, visually roughly a fifth of the m/z 83 base peak), so relative_intensity is deliberately left null rather than eyeballed off the graphic. observed_mz 70.0777 is the monoisotopic m/z of C5H10+. (electron mass subtracted) computed from the instantiated product, not a value printed by the book. The '60%' and '27%' figures on this page are an isotopic-labelling provenance fraction and a DIFFERENT compound's (cyclohexane's) (M - CH3)+ abundance respectively - neither is the intensity of this peak."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 98.109,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_mz70",
+      "species_id": "c5h10_distonic_ion_mz70",
+      "step_id": "step_alpha_cleavage",
+      "observed_mz": 70.0777,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    },
+    {
+      "peak_id": "peak_mz98_molecular_ion",
+      "species_id": "methylcyclohexane_molecular_ion",
+      "step_id": null,
+      "observed_mz": 98.109,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "mechanism_id": "IMS9-EQ9.11",
+  "species": [
+    {
+      "species_id": "cyclohexene_molecular_ion",
+      "mapped_smiles": "[CH+:1]1[CH:2][CH2:3][CH2:4][CH2:5][CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_opened_distonic_allyl_cation",
+      "mapped_smiles": "[CH2:4][CH2:5][CH2:6][CH+:1][CH:2]=[CH2:3]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_butadiene_radical_cation",
+      "mapped_smiles": "[CH2:6][CH+:1][CH:2]=[CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylene_neutral_loss",
+      "mapped_smiles": "[CH2:4]=[CH2:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "cyclohexene_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_distonic_allyl_cation"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "distonic_butadiene_radical_cation",
+        "ethylene_neutral_loss"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha1_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha2_ethylene_loss",
+      "from_state": "state_ring_opened",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha1",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha1_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.11",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (retro-Diels-Alder of the cyclohexene molecular ion)"
+      },
+      "confidence": 0.8,
+      "curator_note": "First (ring-opening) alpha cleavage of the stepwise retro-Diels-Alder of cyclohexene. Book draws 0 arc(s) for this step inside eq 9.11: eq 9.11 branches off the same neutral cyclohexene structure through a bare arrow labelled only 'alpha', so the arrows for the ionization and this first cleavage are not repeated here. The identical ring-opening alpha cleavage IS drawn with 2 arcs one line above on the same page, on the cyclohexene molecular ion of eq 9.10; moves <1,2> correspond to those two printed arcs (dot on map 2 into the forming map2=map3 pi bond; one electron of the map3-map4 sigma bond into that same pi bond) and move <3> is an implicit homolysis hook required for electron balance (not drawn on the page). LOCALIZATION (convention B): molecular ion written localized as C1(+)-C2(.) exactly as printed. The '-e-' ionization of neutral cyclohexene drawn on the page is not encoded as a step (electron count is not conserved by ionization); the record starts at [M]+. m/z 82."
+    },
+    {
+      "evidence_id": "evidence_step_alpha2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha2_ethylene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 237,
+        "equation": "9.11",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (retro-Diels-Alder, charge retention on C4H6)"
+      },
+      "confidence": 0.85,
+      "curator_note": "Second alpha cleavage, which completes the retro-Diels-Alder: the primary radical (map 4) drives homolysis of the map5-map6 bond, expelling neutral ethylene (drawn on the page as the bare vertical double line) and retaining the charge on the C4H6 fragment, m/z 54. Book draws 2 arc(s); moves <1,2> are drawn, move <3> is an implicit homolysis hook required for electron balance (not drawn on the page - the book prints the dot on the C4H6 product instead). Drawn arc 1 = the fishhook from the printed dot (map 4) into the map4-map5 bond; drawn arc 2 = the fishhook from the map5-map6 bond into that same forming pi bond. LOCALIZATION / RESONANCE (convention C): the intermediate is printed here fully localized - '+' beside the lower-right vertex (map 1) and the double bond drawn on the upper-right diagonal (map2=map3) - and this record uses exactly that form; the m/z 54 product is likewise printed as the DISTONIC form .CH2-CH(+)-CH=CH2 (dot on map 6, '+' on map 1), not as the closed butadiene radical cation CH2=CH-CH=CH2(+.), and this record encodes the drawn distonic form (same species by resonance, C4H6+., m/z 54). NO PRINTED INTENSITY: 'm/z 54' is labelled but no percentage appears anywhere in eq 9.11, so relative_intensity is omitted (the 80% figure for cyclohexene's m/z 54 quoted in chapter 4 is not on this page)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.11",
+      "support_type": "computationally_supported",
+      "locator": {
+        "page": null,
+        "equation": "9.11",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/wikipedia.py, src/data_generation/rules/IMS_chap4_examples.py"
+      },
+      "confidence": 0.8,
+      "curator_note": "rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so there is no rule indexed under '9.11'. Cross-linked instead to the rules that VERIFIABLY encode the same two bond changes. (1) wikipedia.py dielsAdler_1 '[C]1[C+]2[C.]3[C]4[C]5[C]6{-}1>>[C.]5[C]6[C]1[C+]2[C]3{=}[C]4' = step_alpha1_ring_opening: with rule atoms (2,3,4,5,6,1) -> record maps (1,2,3,4,5,6) it cleaves the ring bond map3-map4, forms the map2=map3 pi bond and relocates the radical from map2 to map4; the cleaved bond IS incident to map3, the atom that forms the new pi bond, so the geometry is correct. RDKit-VERIFIED: the reactant pattern matches this record's cyclohexene molecular ion (1 hit, maps 1-2-3-4-5-6). (2) wikipedia.py dielsAdler_2a '[C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C]1{=}[C]2.[C.]3[C+]4[C]5{=}[C]6' = step_alpha2_ethylene_loss: rule atoms (1..6) -> record maps (4,5,6,1,2,3); it cleaves map5-map6, forms the map4=map5 pi bond of the departing NEUTRAL ethylene and keeps the charge on the .CH2-CH(+)-CH=CH2 fragment - exactly the drawn m/z 54 product. RDKit-VERIFIED: matches the ring-opened intermediate (1 hit, maps 4-5-6-1-2-3). Both rules live in wikipedia.py and are therefore NOT in rule_index.json (the index only scans IMS_chap4_examples.py, IMS_chap8_examples.py and IMS_bookCover.py). MISMATCHES FOUND among the indexed candidates: IMS_4_31_alpha1 and IMS_4_31_alpha2 (indexed under eq 4.31, the German-edition retro-Diels-Alder) describe the same two steps but both require a CARBON substituent (rule map 1) on the ring atom that becomes the radical, so they do NOT match plain cyclohexene - RDKit-VERIFIED: 0 hits on this record's molecular ion / intermediate, 1 hit on 4-phenylcyclohexene. IMS_4_30 '[C.]1[C]2[C]3[C+]4[C]5{=}[C]6>>[C.]1[C+]2.[C]3{=}[C]4[C]5{=}[C]6' (and its twin wikipedia.py dielsAdler_2b) DOES match the intermediate but is the CHARGE-MIGRATION channel: it puts the charge on the two-carbon fragment (ionized ethylene, m/z 28) and expels neutral butadiene, i.e. the opposite charge partition to the m/z 54 product drawn in eq 9.11, so it does not support this record."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 82.0777,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_54",
+      "species_id": "distonic_butadiene_radical_cation",
+      "step_id": "step_alpha2_ethylene_loss",
+      "observed_mz": 54.0464,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "mechanism_id": "IMS9-EQ9.8",
+  "species": [
+    {
+      "species_id": "pregnane_molecular_ion",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C:13]4([CH3:18])[CH:14]3[CH2:15][CH2:16][CH:17]4[CH2:20][CH3:21]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ring_d_opened_distonic_ion",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C+:13]([CH3:18])[CH:14]3[CH2:15][CH2:16][CH:17][CH2:20][CH3:21]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "c18_methylene_radical_distonic_ion",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C+:13]([CH2:18])[CH:14]3[CH2:15][CH2:16][CH2:17][CH2:20][CH3:21]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "c16_radical_distonic_ion",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C+:13]([CH3:18])[CH:14]3[CH2:15][CH:16][CH2:17][CH2:20][CH3:21]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ion_mz_218",
+      "mapped_smiles": "[CH2:1]1[CH2:2][CH2:3][CH2:4][CH:5]2[CH2:6][CH2:7][CH:8]3[CH:9]([C:10]12[CH3:19])[CH2:11][CH2:12][C+:13]([CH3:18])[CH:14]3",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "pent_1_ene_neutral",
+      "mapped_smiles": "[CH2:15]=[CH:16][CH2:17][CH2:20][CH3:21]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "pregnane_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ring_d_opened",
+      "species_ids": [
+        "ring_d_opened_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_after_first_rH",
+      "species_ids": [
+        "c18_methylene_radical_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_after_second_rH",
+      "species_ids": [
+        "c16_radical_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "ion_mz_218",
+        "pent_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_d_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_d_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              17
+            ]
+          },
+          "target": {
+            "type": "external",
+            "atom_maps": []
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              13,
+              17
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              17
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_c18_to_c17",
+      "from_state": "state_ring_d_opened",
+      "to_state": "state_after_first_rH",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              17
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              18
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_c16_to_c18",
+      "from_state": "state_after_first_rH",
+      "to_state": "state_after_second_rH",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              18
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              16
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_c14_c15_cleavage",
+      "from_state": "state_after_second_rH",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              16
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              15,
+              16
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              14,
+              15
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              15,
+              16
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              14,
+              15
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              14
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_ring_d_opening",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_d_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.8",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (saturated steroid hydrocarbons)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Book draws 0 arc(s) on the intact steroid: the reaction arrow carries only the label 'alpha' and the starting structure bears no '+' and no '.' at all. Both encoded moves are therefore implicit, and the regiochemistry is read off the DRAWN PRODUCT, which prints '+' on C13 and '.' on C17 -- i.e. the C13-C17 bond of ring D is the ionized sigma bond. Move <1> sends one of its two electrons to 'external' (the EI ionization hole; same convention as the saturated-hydrocarbon M+. records IMS4-EQ4.3a / IMS4-EQ4.7 / IMS4-EQ4.8, where the precursor SMILES is the neutral closed-shell hydrocarbon and charge=1/radical_electrons=1 live in the species fields), move <2> is the implicit homolysis hook that puts the odd electron on C17. Neither is drawn on the page."
+    },
+    {
+      "evidence_id": "evidence_step_rH_c18_to_c17",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_c18_to_c17",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.8",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (rH labelled on the second reaction arrow)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Book draws 1 arc: one curved arrow that starts on the C18-H bond (the angular methyl is spelled out as 'H2C-H' to single out the migrating hydrogen), arches over the top of the structure and points down at the C17 radical site. Move <1> encodes exactly that arc, compressed into the net C17 -> C18 radical migration of the H-ATOM transfer; the hydrogen itself is implicit in the mapped SMILES (same compression as the canonical rH record IMS4-EQ4.33). The remaining hooks of a fully resolved H-atom transfer (the C17 odd electron reaching the H, and the second C18-H electron staying on C18) are NOT drawn on the page."
+    },
+    {
+      "evidence_id": "evidence_step_rH_c16_to_c18",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_c16_to_c18",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.8",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (rH labelled on the third reaction arrow)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Book draws 2 arc(s) on this structure: (i) a short fishhook leaving the C18 radical (printed 'H2C.') and pointing down-left at the hydrogen that is written out explicitly on C16, and (ii) a long fishhook from that C16-H bond back up to C18. Move <1> encodes both arcs as the net C18 -> C16 radical migration of the H-atom transfer, the hydrogen being implicit in the mapped SMILES. The third hook of a fully resolved H-atom transfer (the second C16-H electron remaining on C16) is not drawn on the page."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_c14_c15_cleavage",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_c14_c15_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.8",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons (alpha labelled on the fourth reaction arrow)"
+      },
+      "confidence": 0.8,
+      "curator_note": "Book draws 2 arc(s); moves <1,2> are drawn (a fishhook from the C16 radical into the forming C15=C16 pi bond, and a fishhook from the C14-C15 sigma bond into the same forming pi bond), and move <3> is an implicit homolysis hook required for electron balance (not drawn on the page) -- it carries the second C14-C15 electron to C14, which is where the drawn m/z 218 product prints its '.' next to the '+' on C13. The expelled neutral is drawn as CH2=CHCH2R."
+    },
+    {
+      "evidence_id": "evidence_mechanism_instantiation",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.8",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 235,
+        "equation": "9.8",
+        "figure": null,
+        "panel": null,
+        "section": "9.1 Hydrocarbons"
+      },
+      "confidence": 0.7,
+      "curator_note": "GENERIC SCHEME, CURATOR-INSTANTIATED. Eq 9.8 is drawn with 'R' on C17 and with wavy bonds standing in for rings A/B in the second and later structures; the only number printed anywhere in the scheme is 'm/z 218' under the final ion. The instantiation used here is 5-alpha-pregnane (C21H36, M+. m/z 288, i.e. R = the C20-C21 ethyl side chain), which is forced by the printed numbers: those 288 M+. and 273 labels are NOT on this record's page -- they belong to Figure 9.3 on printed p234 (PDF 245), captioned 'Mass spectrum of 5-alpha-pregnane', whose inset structure draws the C17 ethyl (verified at native resolution); the first draft implied they sat on p235, and 288 - C5H10 (the drawn CH2=CHCH2R with R = C2H5, 70 u) = 218, while eq 9.9 on the same page draws the C17 side chain explicitly as an ethyl group. All m/z values in this record are monoisotopic values computed for that instantiation; the page prints no intensities. Stereochemistry (5-alpha / trans A-B ring fusion, drawn with a dashed H at C5 in eq 9.9) is deliberately NOT encoded in the mapped SMILES. Atom map numbers are the standard steroid carbon numbers C1-C21."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod_rules",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.8",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": 235,
+        "equation": "9.8",
+        "figure": null,
+        "panel": null,
+        "section": null
+      },
+      "confidence": 0.5,
+      "curator_note": "NO MØD RULE CROSS-LINK. data/mechanisms/rule_index.json 'by_equation' covers only chapters 4 and 8 (57 equations) and has no entry for 9.8, so no rule variable can be cited. The nearest generic candidates in the rule set were inspected and REJECTED: 'sigma_lowIE' ([_A+.]1[I]2>>[_A.]1.[I+]2) needs an iodine/low-IE heteroatom partner and cannot describe a C-C sigma ionization; 'hTransition_saturated_1/2/3/4' all require an H...C-C-C-C-[_A+.] (or [_A+]) receptor chain of a fixed length terminating on the charge/radical site, whereas the two rH steps here move a hydrogen between C18 and C17 (and back between C16 and C18) across a ring-opened chain of six atoms whose charge site (C13+) sits in the middle rather than at the receptor terminus; 'hTransition_saturated_2_alpha' ([C.]1[C]2([_A+]3)[C]4[C]5>>[C]1{=}[C]2[C]4[C]5.[_A+.]3) has the right radical-site alpha topology but cleaves the bond to the CHARGE-BEARING atom, so the charge departs with the neutral, while in eq 9.8 the cleaved C14-C15 bond is two bonds from C13+ (the first draft said 'remote', which overstates the separation) and the charge is retained by the ion. Chapter 9 steroid hydrocarbon chemistry is simply not represented in the current rule set."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 288.2812,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_218",
+      "species_id": "ion_mz_218",
+      "step_id": "step_alpha_c14_c15_cleavage",
+      "observed_mz": 218.2029,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.75
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}

@@ -34,6 +34,12 @@ NON_MECHANISM_EQS = {
             "H+-bridged C=C/O-H). No reaction arrows, no products.",
     "8.32": "p161: a TABLE of ionization-energy values for compounds (a)-(g) (amine/sulfide/selenide). "
             "No reaction at all.",
+    "9.5": "p231 (PDF 242): a numbered equation that depicts a fragmentation but draws NO mechanism -- "
+           "two terpenoid polyenes annotated with SQUIGGLE cleavage marks and the neutral-loss labels "
+           "(M-83) and (M-57), showing how double-bond position changes the allylic cleavage. Zero "
+           "curved arrows, and the chain is the generic (C5H8)4H. Encoding it would mean inventing the "
+           "whole electron flow, which conventions (A)/(D)/(F) forbid -- the same policy that excluded "
+           "Table 8.4. Verified by reading the page directly.",
     "8.96": "p206 (PDF 218): four STATIC ion structures labelled (a)-(d) -- a D-labelled protonated "
             "ester, a protonated/ipso-substituted arene, an aryl-ether arenium and a protonated-ester "
             "oxocarbenium -- printed side by side to name the ion types the surrounding text argues "
@@ -54,6 +60,24 @@ NON_MECHANISM_PAGES = {
     235: "printed p223: Table 8.4 continued -- same listing, same reason.",
     236: "printed p225: opening page of Chapter 9 (compound classes), which is out of scope. "
          "Prose only; its two inline formulas carry no equation number, arrows or m/z.",
+    249: "printed p238: running prose only (end of the terpenoid 'Unknowns' note + the opening of "
+         "'Aromatic hydrocarbons'). Zero structures, zero arcs, zero equation numbers; it forward-"
+         "references Equations 9.13/9.14, which are drawn on the following page. Read in full.",
+    253: "printed p242: running prose only (further decomposition of the C_nH_(2n+1)O+ ions, then "
+         "the 'Cyclic aliphatic alcohols' lead-in). Zero structures, zero arcs, zero equation "
+         "numbers; it forward-references Equations 9.19/9.20/9.21, drawn on p243/p244. Read in full.",
+    257: "printed p246: tail of the 9.23/9.24 prose, then the 'Unknown 9.2' exercise (a peak table "
+         "plus its bar spectrum -- an exercise, explicitly out of scope), then the '9.3 Aldehydes "
+         "and ketones' section opening, which only lists where spectra appear. No numbered "
+         "equation, no scheme, no arcs. Read in full.",
+    258: "printed p247: Figures 9.8/9.9/9.10 (bar spectra of 2-ethylhexanal, 6-methyl-2-heptanone "
+         "and 6-methyl-5-heptene-2-one) plus prose. The inset structures carry SQUIGGLE cleavage "
+         "marks with mass labels and ZERO curved arrows -- the same arrow-free class as Figure 9.7 "
+         "and eq 9.5, so nothing to transcribe faithfully. See the FIG4.4a/b scope question: those "
+         "two records WERE encoded from an inset of exactly this kind. Read in full.",
+    264: "printed p253: Figure 9.11 alone, a rotated full-page bar spectrum of methyl "
+         "3,7,11,15-tetramethylhexadecanoate. Its inset structure is again squiggle-marked with "
+         "mass labels (74/101/171/241) and draws no arrows. No equation, no scheme. Read in full.",
 }
 
 

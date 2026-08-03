@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS9-EQ9.4a",
+  "species": [
+    {
+      "species_id": "ocimene_as_drawn_molecular_ion",
+      "mapped_smiles": "[CH2:1]=[CH:2][C:3]([CH3:10])=[CH:4][CH2:5][CH:6][C+:7]([CH3:8])[CH3:9]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "c5h9_allyl_cation",
+      "mapped_smiles": "[CH2:5]=[CH:6][C+:7]([CH3:8])[CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "c5h7_vinyl_radical",
+      "mapped_smiles": "[CH2:1]=[CH:2][C:3]([CH3:10])=[CH:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ocimene_as_drawn_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "c5h9_allyl_cation",
+        "c5h7_vinyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_allylic_alpha_cleavage_retarded",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_9_4a",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_allylic_alpha_cleavage_retarded",
+      "support_type": "contradicted",
+      "locator": {
+        "page": 230,
+        "equation": "9.4",
+        "figure": null,
+        "panel": "upper scheme, labelled 'allo-Ocimene'; the reaction arrow is crossed out with a large X",
+        "section": "Unsaturated aliphatic hydrocarbons (9 / Mass Spectra of Common Compound Classes)"
+      },
+      "confidence": 0.85,
+      "curator_note": "CONTRADICTED CHANNEL: the reaction arrow of this panel is struck through with a large X, and the text says 'allylic cleavage to produce the C5H9+ ion in allo-ocimene is retarded because the cleaved bond is also vinylic'. Book draws 2 arc(s); moves <1,3> are drawn, move <2> is an implicit hook required for electron balance (not drawn on the page): (i) the RIGHT fishhook has its tail under the C(6)=C(7) double bond - the ionized bond, the one the bracket '+.' refers to - and its barb pointing up at the C(5)-C(6) bond = move 1 (odd electron into the forming pi bond); (ii) the LEFT fishhook has its tail on the cleaving C(4)-C(5) bond and its barb pointing left into the C(3)=C(4) region of the departing fragment = move 3 (the homolysis hook). NOT drawn: move 2, the second electron of the cleaving C(4)-C(5) bond entering the forming C(5)=C(6) pi bond. BARB PLACEMENT, stated honestly: the barb of arc (ii) lands on the C(3)=C(4) DOUBLE bond, roughly a third of the way from C(3) to C(4), not on C(4) itself; taken literally that would make a three-electron pi bond, so this record deposits that electron on C(4), the atom the sigma bond breaks from. In this panel C(4) is sp2, so the C5H7. product is a vinyl radical with no allylic delocalization available - precisely the book's reason for crossing the arrow out. STRUCTURE AS DRAWN: the skeleton under the label 'allo-Ocimene' is CH2=CH-C(CH3)=CH-CH2-CH=C(CH3)2 (3,7-dimethylocta-1,3,6-triene, i.e. beta-ocimene): double bonds C(1)=C(2), C(3)=C(4) and C(6)=C(7), a methyl C(10) on C(3), an sp3 CH2 at C(5), two methyls C(8)/C(9) on C(7). allo-Ocimene proper is 2,6-dimethylocta-2,4,6-triene, which is fully conjugated, has no sp3 CH2 and could not give C5H7. + C5H9+ by one cleavage; this record encodes the structure the arrows are actually drawn on and flags the naming discrepancy rather than silently 'correcting' either. LOCALIZATION (convention B): the page draws the intact molecule inside a bracket with '+.' outside it, so this record localizes the ionized C(6)=C(7) pi bond as an odd electron on C(6) (where arc (i) starts) and the positive charge on C(7), which is the tertiary-cation end of the drawn product. RESONANCE (convention C): the book prints the product ion as a delocalized allyl cation - an arc spanning C(5)-C(6)-C(7) with a '+' underneath and no localized double bond; the form written here, CH2=CH-C(+)(CH3)2, is the one the drawn arrows produce, its partner being (+)CH2-CH=C(CH3)2. MEASUREMENTS (convention F): the page prints NO m/z and NO intensity - the products are labelled only 'C5H7.' and a structure carrying '+' - so both products are detected=false, no relative_intensity is recorded, and 69.0699 is the curator-computed monoisotopic m/z of C5H9+; the peak status is 'rejected' because the book crosses this channel out."
+    },
+    {
+      "evidence_id": "evidence_mod_9_4a",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.4a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.4",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/IMS_chap4_examples.py (IMS_4_15_* block)"
+      },
+      "confidence": 0.5,
+      "curator_note": "No MOD rule carries equation id 9.4 or any 9.x id (rule_index.json 'by_equation' has no chapter-9 key), so the cross-link is again to the Equation 4.15 allylic-cleavage family that the page cites for this reaction type. Verified against the DFS, not asserted: IMS_4_15_1_1 '[C]1[C]2[C+.]3[C]4>>[C.]1.[C]2{=}[C]3[C+]4' and IMS_4_15_1_2 '[C]1[C]2[C]3[C+.]4>>[C.]1.[C]2{=}[C]3[C+]4' cleave C1-C2 and raise C2-C3 to a double bond, the cleaved bond being incident to the pi-forming atom C2 - the same two bond changes as the arrows here (cleave C(4)-C(5), form C(5)=C(6)) - and they release the departing fragment as [C.], matching C5H7. IMS_4_15_2_2 encodes the same net reaction in the partner canonical form of the product ion. MISMATCH, RDKit-tested: their left pattern needs ONE carbon bearing both the charge and the odd electron ([C+.]), and this record's localized precursor has none, so a 4-carbon-chain search for that motif returns 0 matches (the motif present here, radical-C(6) followed by cation-C(7), matches at maps (4,5,6,7) - exactly the reacting bond and the forming pi bond). The 8-carbon variants are the wrong tool for a C10 terpene anyway and are themselves defective: importing src/data_generation/rules in the container shows the conservation guardrail dropping IMS_4_15_3_1 and IMS_4_15_2_1 with 'spin 1->0', while IMS_4_15_3_2 survives but forms NO new pi bond ('[C.]1.[C+]2[C]3[C]4[C]5[C]6[C]7[C]8'), so it does not describe this cleavage. Also, no 4.15 DFS requires a C=C anywhere, hence none of them can express the distinction this equation is about (vinylic versus doubly allylic cleaved bond, panel a versus panel b): a MOD rule set that fires on both panels alike cannot reproduce the book's statement that the channel is retarded here and enhanced for myrcene. MS conditions: the page states none; 70 eV EI is the book's standard for these hydrocarbon spectra."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 136.1247,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_c5h9_69_rejected",
+      "species_id": "c5h9_allyl_cation",
+      "step_id": "step_allylic_alpha_cleavage_retarded",
+      "observed_mz": 69.0699,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "rejected",
+      "confidence": 0.3
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "vision_multiagent",
+    "review_status": "unreviewed",
+    "created_at": "2026-07-30T00:00:00Z",
+    "modified_at": "2026-07-30T00:00:00Z"
+  }
+}
