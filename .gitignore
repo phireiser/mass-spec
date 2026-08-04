@@ -15,10 +15,15 @@ data/IMS-Book/
 # (which IS tracked) once the comparison is settled; do not commit both.
 data/processed_reauth/
 
-# remain private until the thesis is published
-# NOTE: "thesis/" not "thesis/**" -- the /** form matches the directory's *contents*,
-# so git still reported the (separately version-controlled) thesis/ tree as untracked.
-thesis/
+# The thesis tree is now merged into this repo under thesis/ (was a separate nested
+# repo, gitignored while it lived here). It carries its own thesis/.gitignore, which
+# git applies normally now that this directory is no longer excluded -- that nested
+# file is what keeps LaTeX build artifacts and the copyrighted thesis/report/literature/
+# PDFs out of the index. Do not re-add a "thesis/" line here: git does not descend into
+# an excluded directory, so it would silently disable the nested rules along with it.
+#
+# EMBARGO: the thesis is unpublished and this repo's origin is PUBLIC. Any branch
+# containing thesis/ must not be pushed to the public remote before publication.
 _minted-main/**
 _minted/
 _minted-*/
