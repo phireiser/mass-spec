@@ -1,0 +1,124 @@
+\begin{tikzpicture}[x=1cm,y=1cm,fig]
+
+% --- small helper: red analyte ion (circle + hatch) ---
+\newcommand{\analyteion}[3]{% x,y,r
+  \begin{scope}[shift={(#1,#2)}]
+    \draw[Maroon,fig line] (0,0) circle (#3);
+    \draw[Maroon,fig thin] (-#3,-#3)--(#3,#3);
+    \draw[Maroon,fig thin] (-#3,#3)--(#3,-#3);
+    \draw[Maroon,fig hair] (-#3,0)--(#3,0);
+    \draw[Maroon,fig hair] (0,-#3)--(0,#3);
+  \end{scope}
+}
+
+% =========================================================
+% SAMPLE STAGE (left block)
+% =========================================================
+\draw[black,fig medium] (0,-2.20) rectangle (0.62,1.55);
+
+% slightly jagged "surface" line at the right edge of the stage
+\draw[black,fig medium]
+  (0.62,1.40) -- (0.69,1.18) -- (0.61,0.98) -- (0.70,0.78) --
+  (0.62,0.58) -- (0.71,0.38) -- (0.60,0.18) -- (0.70,-0.02) --
+  (0.62,-0.22) -- (0.70,-0.44) -- (0.61,-0.64) -- (0.70,-0.84) --
+  (0.62,-1.04) -- (0.69,-1.26) -- (0.61,-1.46) -- (0.69,-1.68) --
+  (0.62,-1.88);
+
+% crystallized matrix bars attached to the surface
+\foreach \x/\y/\rot/\w/\h in {
+  0.86/ 1.30/    2/0.22/0.62,
+  0.82/ 1.02/   12/0.22/0.70,
+  0.90/ 0.70/  - 6/0.22/0.66,
+  0.78/ 0.44/  -14/0.22/0.58,
+  0.92/ 0.18/    4/0.22/0.70,
+  0.80/-0.14/  -13/0.22/0.60,
+  0.90/-0.46/    6/0.22/0.64,
+  0.78/-0.82/    4/0.22/0.70,
+  0.92/-1.18/   -4/0.22/0.62,
+  0.80/-1.56/   12/0.22/0.66,
+  0.92/-1.92/  -12/0.22/0.64
+}{
+  \begin{scope}[shift={(\x,\y)},rotate=\rot]
+    \draw[black,fig line,fill=white] (-\w/2,-\h/2) rectangle (\w/2,\h/2);
+  \end{scope}
+}
+
+% analyte ions embedded in the crystal pile
+\analyteion{0.80}{ 1.46}{0.09}
+\analyteion{0.84}{ 0.92}{0.09}
+\analyteion{0.82}{ 0.36}{0.09}
+\analyteion{0.80}{ 0.02}{0.09}
+\analyteion{0.82}{-0.44}{0.09}
+\analyteion{0.80}{-1.12}{0.09}
+\analyteion{0.82}{-1.78}{0.09}
+
+% =========================================================
+% PLUME: matrix ions + neutrals (white bars), plus red analyte ions
+% =========================================================
+\foreach \x/\y/\rot in {
+  1.30/ -0.90/  -22,
+  1.45/ 0.25/  32,
+  1.55/ -0.52/  10,
+  1.85/ -0.30/  78,
+  2.20/ 0.2/  -24,
+  2.30/ -0.9/  78,
+  2.65/ -0.62/  14,
+  2.85/ 0.35/  -15,
+  3.05/ -0.38/   6,
+  3.70/ 0.70/ -18,
+  3.95/ 0.92/  84,
+  4.05/ -0.42/  74,
+  4.30/ -0.08/  92,
+  4.55/ 0.62/  14,
+  4.75/ 0.30/  78,
+  5.00/ 0.88/   4,
+  5.20/ -0.40/  86,
+  5.45/ 0.10/  92,
+  5.50/ -0.74/  98,
+  5.85/ 0.70/  80,
+  6.10/ 1.22/  14
+}{
+  \begin{scope}[shift={(\x,\y)},rotate=\rot]
+    \draw[black,fig medium,fill=white] (-0.11,-0.35) rectangle (0.11,0.35);
+  \end{scope}
+}
+
+% analyte ions flying in the plume
+\analyteion{3.65}{0.15}{0.09}
+\analyteion{4.55}{-0.70}{0.09}
+\analyteion{5.10}{ 0.78}{0.09}
+\analyteion{5.85}{ 0.30}{0.09}
+\analyteion{6.25}{-0.65}{0.09}
+
+% =========================================================
+% INCOMING UV LASER LIGHT (5 dashed rays)
+% =========================================================
+\foreach \dy in {-0.40,-0.20,0.00,0.20,0.40}{
+  \draw[black,fig medium,dash pattern=on 4pt off 4pt]
+    (1.55,0.20+\dy) -- (6.05,2.55+\dy);
+}
+
+% =========================================================
+% LABELS
+% =========================================================
+\node[anchor=east,align=center] at (-0.35,-0.05) (sam_lab){Sample\\[-10pt]stage};
+\draw[Maroon,->,fig medium] (sam_lab) -- (0.02,-0.55);
+
+\node[align=center] at (2.05,-2.80) (cryst_lab) {Crystallized matrix\\[-10pt]with included analyte};
+\draw[Maroon,->,fig medium] (cryst_lab) -- (0.92,-0.9);
+
+\node[align=center] at (3.75,-1.60) (mat_lab) {Matrix ions and\\[-10pt]neutrals};
+\draw[Maroon,->,fig medium] (mat_lab) -- (3.05,-0.70);
+\draw[Maroon,->,fig medium] (mat_lab) -- (4.15,-0.59);
+
+\node[align=center] at (6.3,-1.6) (a_lab) {Analyte\\[-10pt]ions};
+\draw[Maroon,->,fig medium] (a_lab) -- (5.85, 0.15);
+\draw[Maroon,->,fig medium] (a_lab) -- (6.25,-0.75);
+
+\node[anchor=west,align=left] at (6.5,0.5) {Into mass\\[-10pt]analyzer};
+\draw[Maroon,->,fig medium] (6.10,0.10) -- (7.95,0.10);
+
+\node[align=center] at (2.5,2.5) (uv_lab) {Incoming UV\\[-10pt]laser light};
+\draw[Maroon,->,fig medium] (uv_lab) -- (4.70,2.20);
+
+\end{tikzpicture}

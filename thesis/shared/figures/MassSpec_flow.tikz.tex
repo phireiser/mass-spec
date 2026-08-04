@@ -1,0 +1,17 @@
+\begin{tikzpicture}[
+  >=latex,
+  font=\sffamily\small,
+  block/.style={draw, thick, minimum width=2.4cm, minimum height=0.9cm, align=center},
+  line/.style={->, thick}
+  ]
+      \node[block] (sample)   at (0,0)   {Sample};
+      \node[block] (ion)      at (3,0)   {Ion Source};
+      \node[block] (analyzer) at (6,0)   {Mass Analyzer};
+      \node[block] (det)      at (9,0)   {Detector};
+      \node[block] (elec)     at (9,-1.5){Data Analysis};
+    
+      \draw[line] (sample.east) -- (ion.west);
+      \draw[line] (ion.east) -- (analyzer.west);
+      \draw[line] (analyzer.east) -- (det.west);
+      \draw[line] (det.south) -- (elec.north);
+\end{tikzpicture}%

@@ -1,0 +1,86 @@
+\begin{tikzpicture}[
+    font=\small,
+    box/.style={rectangle, draw, thick, rounded corners, minimum height=1cm, align=center},
+    arrow/.style={-Stealth, very thick},
+    atom/.style={circle, draw, thick, minimum size=0.4cm, fill=blue!20},
+]
+
+% TOP: Molecular Graph to Vector
+\node[font=\bfseries] at (0,5.5) {Graph Representation Challenge};
+
+% Molecular Graph
+\begin{scope}[shift={(0,3.5)}]
+    \node[atom] (a1) at (0,0) {C};
+    \node[atom] (a2) at (0.7,0.5) {C};
+    \node[atom] (a3) at (0.7,-0.5) {N};
+    \node[atom] (a4) at (1.4,0) {O};
+    \draw[thick] (a1) -- (a2);
+    \draw[thick] (a1) -- (a3);
+    \draw[thick] (a2) -- (a4);
+    \draw[thick] (a3) -- (a4);
+    \node[below=0.3cm of a1, font=\scriptsize] {Molecular Graph};
+    \node[below=0.1cm of a1, font=\tiny, text=gray] {(structured)};
+\end{scope}
+
+% Arrow
+\draw[arrow] (2,4) -- (3.5,4);
+\node[above, font=\scriptsize] at (2.75,4) {encode};
+
+% Vector representation
+\begin{scope}[shift={(5,3.5)}]
+    \node[box, fill=green!20, minimum width=0.3cm, minimum height=2cm] (vec) at (0,0) {
+        \tiny
+        \begin{tabular}{c}
+        0.8\\
+        0.3\\
+        0.1\\
+        0.5\\
+        $\vdots$\\
+        0.2
+        \end{tabular}
+    };
+    \node[below=0.3cm of vec, font=\scriptsize] {Vector};
+    \node[below=0.1cm of vec, font=\tiny, text=gray] {(for ML)};
+\end{scope}
+
+% MIDDLE: Two approaches comparison
+\node[font=\bfseries] at (3,2) {Two Approaches:};
+
+% Left: Fingerprints
+\begin{scope}[shift={(0,0)}]
+    \node[box, fill=orange!20, minimum width=2.5cm, minimum height=0.8cm] (fp) {
+        \textbf{Fingerprints}\\
+        {\tiny bits: 10110...}
+    };
+    \node[below=0.2cm of fp, font=\tiny, text width=2.5cm, align=center] {
+        \checkmark Better performance\\
+        $\times$ Not invertible
+    };
+\end{scope}
+
+% Right: Graph Encoding
+\begin{scope}[shift={(4,0)}]
+    \node[box, fill=cyan!20, minimum width=2.5cm, minimum height=0.8cm] (ge) {
+        \textbf{Graph Encoding}\\
+        {\tiny (PyTorch Geometric)}
+    };
+    \node[below=0.2cm of ge, font=\tiny, text width=2.5cm, align=center] {
+        \checkmark Structured info\\
+        \checkmark For fragments too
+    };
+\end{scope}
+
+% BOTTOM: Fragmentation tree example
+\node[font=\bfseries] at (7,-2) {Fragmentation Trees};
+\begin{scope}[shift={(7,-3.5)}]
+    \node[atom, fill=green!30] (root) at (0,0) {M};
+    \node[atom] (f1) at (-0.7,-0.8) {$F_1$};
+    \node[atom] (f2) at (0.7,-0.8) {$F_2$};
+    \node[atom] (f3) at (-0.7,-1.6) {$F_3$};
+    \draw[thick, ->] (root) -- (f1);
+    \draw[thick, ->] (root) -- (f2);
+    \draw[thick, ->] (f1) -- (f3);
+    \node[below=0.1cm of f3, font=\tiny] {Also encodable};
+\end{scope}
+
+\end{tikzpicture}

@@ -1,0 +1,145 @@
+\documentclass[a4paper,11pt]{report}
+
+% Encoding & language
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Fonts & typography
+\usepackage{lmodern}
+\usepackage{fontawesome}
+\usepackage{bm}
+\usepackage{soul}
+
+% Page layout & lists
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,headsep=10pt]{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{arydshln}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Graphics, color & images
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{color}
+\usepackage{epstopdf}
+\usepackage{pdfpages}
+\usepackage{import}                 % robust relative paths for shared snippets
+\graphicspath{{../shared/figures/}}    % search shared figures by bare name
+
+% Math
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% TikZ & plotting
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.geometric, shapes.symbols, shapes.multipart, shapes.misc}
+\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, decorations.markings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{angles}
+\usetikzlibrary{quotes}
+%\usetikzlibrary{quotesm}
+
+% ---- Shared definitions (notation + figure style), see shared/notation.tex
+\input{../shared/notation}
+% --------------------------------------------------------------------------
+
+% Chemistry
+\usepackage{chemfig}
+
+% Code & algorithms
+\usepackage{minted}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Citations & quotes
+\usepackage{csquotes}
+\usepackage[backend=biber, style=ieee]{biblatex}
+
+% Cross-referencing & hyperlinks
+\usepackage[colorlinks,pdfusetitle,urlcolor=blue,citecolor=blue,linkcolor=blue,bookmarksnumbered,plainpages=false]{hyperref}
+\usepackage{cleveref}
+\usepackage{xurl}
+
+
+
+\addbibresource{../shared/refs.bib}
+\DeclareLanguageMapping{american}{american-apa}
+
+
+\renewcommand{\arraystretch}{1.4}
+\newcommand{\linespacing}{1.5}
+\renewcommand{\baselinestretch}{\linespacing}
+
+% Placeholder for comments in red, e.g. \ph{[TODO: ...]}
+\newcommand{\ph}[1]{\textcolor{red}{\textbf{#1}}}
+
+% Include a figure if its file exists, otherwise draw a visible "pending" box so the document still compiles
+\newcommand{\figorpending}[2]{%
+    \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }%
+}
+
+
+\raggedbottom
+\setlength{\emergencystretch}{2em}
+
+\pagestyle{plain}
+
+\begin{document}
+
+\pagenumbering{roman}
+\thispagestyle{empty}
+
+
+\IfFileExists{../shared/figures/Titelblatt.pdf}{%
+	\includepdf[pages=-]{../shared/figures/Titelblatt.pdf}%
+}{%
+	\null
+	\thispagestyle{empty}
+	\newpage
+}
+
+\chapter*{}
+\thispagestyle{empty}
+
+\input{frontmatter}
+
+\newpage
+\pagenumbering{arabic}
+
+% chapters
+\include{ch1}
+\include{ch2}
+\include{ch3}
+\include{ch4}
+\include{ch5}
+
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\sloppy
+\printbibliography
+
+
+
+\appendix
+\include{appendix}
+
+\end{document}

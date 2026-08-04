@@ -1,0 +1,387 @@
+\begin{tikzpicture}[
+    fig,
+    bigarrow/.style={-{Latex[length=3.5mm,width=3.2mm]}, fig heavy},
+    greenA/.style={bigarrow, SeaGreen},
+    blueA/.style={bigarrow, RoyalBlue},
+    grayA/.style={bigarrow, black!55},
+    treearrow/.style={-{Latex[length=1.6mm]}, dashed, black!60, thin},
+    fragnode/.style={circle, draw=SeaGreen!80, fill=SeaGreen!50, minimum size=4mm, inner sep=0pt},
+    fragempty/.style={circle, draw=SeaGreen!70, fill=white, minimum size=4mm, inner sep=0pt},
+    fraglight/.style={circle, draw=SeaGreen!60, fill=SeaGreen!25, minimum size=4mm, inner sep=0pt},
+    fragroot/.style={circle, draw=SeaGreen!80, fill=SeaGreen!70, minimum size=5mm, inner sep=0pt},
+    grayN/.style={circle, draw=black!41, fill=black!22.55, minimum size=2.6mm, inner sep=0pt},
+]
+
+
+% =================== Color palette ===================
+
+
+% =================================================================
+%   STAGE A: Precursor molecule box
+% =================================================================
+\begin{scope}[shift={(6, 18.60)}]
+    \draw[rounded corners=2pt, black, thick]
+        (-5.0,-1.05) rectangle (5.0, 1.05);
+    \node[anchor=south, font=\Large\bfseries] at (0, 1.20) {Precursor molecule};
+
+    % --- Chemical structure ---
+    % Benzene ring centered at (-2.7, 0), R=0.55
+    \def\bcx{-3.2}
+    \def\bcy{0}
+    \def\bR{0.55}
+    \foreach \i in {0,...,5} {
+        \pgfmathsetmacro{\ang}{60*\i}
+        \coordinate (b\i) at ($ (\bcx,\bcy) + (\ang:\bR) $);
+    }
+    % Hexagon edges (alternating double bonds for aromatic look)
+    \draw[thick] (b0)--(b1) (b2)--(b3) (b4)--(b5);
+    \draw[thick, double distance=1.2pt] (b1)--(b2) (b3)--(b4) (b5)--(b0);
+
+    % Backbone zigzag from benzene right vertex to N+
+    \def\zy{0.20}        % up vertex y
+    \def\zd{0.0}         % down vertex y baseline
+    \def\dx{0.55}        % step
+    % Start at b0 (right vertex of benzene at angle 0)
+    \coordinate (bb0) at (b0);
+    \coordinate (bb1) at ($ (b0) + (\dx, \zy) $);          % CH2 (implicit C)
+    \coordinate (bb2) at ($ (bb1) + (\dx,-\zy) $);         % NH
+    \coordinate (bb3) at ($ (bb2) + (\dx, \zy) $);         % C(=O)
+    \coordinate (bb4) at ($ (bb3) + (\dx,-\zy) $);         % NH
+    \coordinate (bb5) at ($ (bb4) + (\dx, \zy) $);         % CH2
+    \coordinate (bb6) at ($ (bb5) + (\dx,-\zy) $);         % CH2
+    \coordinate (bb7) at ($ (bb6) + (\dx, \zy) $);         % N+
+    \coordinate (oxy) at ($ (bb3) + (0, 0.55) $);          % carbonyl O
+
+    % Bonds (skeletal) — leave gaps near labeled atoms
+    \draw[thick] (bb0)--(bb1);
+    \draw[thick] (bb1)--($ (bb2) + (-0.10, 0.04) $);
+    \draw[thick] ($ (bb2) + ( 0.10, 0.04) $)--(bb3);
+    \draw[thick, double distance=1.2pt] (bb3)--($ (oxy) + (0,-0.13) $);
+    \draw[thick] (bb3)--($ (bb4) + (-0.10,-0.04) $);
+    \draw[thick] ($ (bb4) + ( 0.10,-0.04) $)--(bb5);
+    \draw[thick] (bb5)--(bb6);
+    \draw[thick] (bb6)--($ (bb7) + (-0.10,-0.04) $);
+
+    % Atom labels
+    \node[font=\small, Salmon] at (oxy) {O};
+    \node[font=\small] at (bb2) {N};
+    \node[font=\scriptsize] at ($ (bb2) + (0,-0.32) $) {H};
+    \draw[thick] ($ (bb2) + (0,-0.10) $) -- ($ (bb2) + (0,-0.22) $);
+    \node[font=\small] at (bb4) {N};
+    \node[font=\scriptsize] at ($ (bb4) + (0,-0.32) $) {H};
+    \draw[thick] ($ (bb4) + (0,-0.10) $) -- ($ (bb4) + (0,-0.22) $);
+    \node[font=\small] at (bb7) {N};
+    \node[font=\tiny] at ($ (bb7) + (0.20, 0.18) $) {$+$};
+
+    % Three methyl groups on N+
+    \draw[thick] ($ (bb7) + (0.12, 0.04) $) -- ($ (bb7) + (0.55, 0.30) $);   % up-right
+    \draw[thick] ($ (bb7) + (0.10,-0.10) $) -- ($ (bb7) + (0.55,-0.40) $);   % down-right
+    \draw[thick] ($ (bb7) + (0.00,-0.16) $) -- ($ (bb7) + (0.00,-0.55) $);   % down
+\end{scope}
+
+% Arrow from precursor to Generate
+\draw[greenA] (6, 17.45) -- (6, 16.55);
+
+% =================================================================
+%   STAGE B: GENERATE module (green)
+% =================================================================
+\begin{scope}[shift={(6, 12.10)}]
+    % Outer box
+    \draw[rounded corners=3pt, SeaGreen, fig medium, fill=SeaGreen!10]
+        (-4.8,-2.00) rectangle (4.8, 4.45);
+    % Title
+    \node[anchor=north, font=\LARGE\bfseries, text=SeaGreen] at (0, 4.30) {Generate};
+    \node[anchor=north, font=\small\itshape] at (0, 3.65) {(neural fragmentation module)};
+
+    % Cloud icon (top-left of module) — proper cloud silhouette + small graph
+    \begin{scope}[shift={(-3.4, 3.7)}]
+        % Cloud silhouette (TikZ cloud shape)
+        \node[cloud, draw=SeaGreen, fig medium, fill=white,
+              cloud puffs=11, cloud puff arc=135, aspect=1.6,
+              minimum width=1.55cm, minimum height=0.95cm,
+              inner sep=0pt] (cloudbg) at (0,0) {};
+        % Small graph inside (4 nodes, triangle + extra)
+        \node[circle, fill=SeaGreen, minimum size=2mm, inner sep=0pt] (cd1) at (-0.20, -0.05) {};
+        \node[circle, fill=SeaGreen, minimum size=2mm, inner sep=0pt] (cd2) at ( 0.20, -0.05) {};
+        \node[circle, fill=SeaGreen, minimum size=2mm, inner sep=0pt] (cd3) at ( 0.00,  0.18) {};
+        \node[circle, fill=SeaGreen, minimum size=2mm, inner sep=0pt] (cd4) at ( 0.00, -0.20) {};
+        \draw[SeaGreen, fig thin] (cd1)--(cd3) (cd2)--(cd3)
+                                          (cd1)--(cd4) (cd2)--(cd4)
+                                          (cd1)--(cd2);
+    \end{scope}
+
+    % Inner sub-box
+    \draw[rounded corners=2pt, SeaGreen!60, thin]
+        (-4.5,-1.70) rectangle (4.5, 2.55);
+    \node[anchor=north, font=\small, align=center] at (0, 2.40)
+        {Predict fragmentation events and candidate fragments};
+
+    % --- Fragmentation tree ---
+    % Root at top-center
+    \node[fragroot] (rt) at (0.5, 1.25) {};
+    % Level 2 (3 children)
+    \node[fragnode] (a1) at (-1.4, 0.20) {};
+    \node[fragnode] (a2) at ( 0.5, 0.20) {};
+    \node[fragnode] (a3) at ( 2.4, 0.20) {};
+    % Edges
+    \foreach \c in {a1, a2, a3} { \draw[treearrow] (rt) -- (\c); }
+    % Level 3 (children)
+    \node[fraglight] (l1) at (-2.4,-1.10) {};
+    \node[fraglight] (l2) at (-1.5,-1.10) {};
+    \node[fraglight] (l3) at (-0.6,-1.10) {};
+    \node[fraglight] (l4) at ( 0.3,-1.10) {};
+    \node[fraglight] (l5) at ( 1.2,-1.10) {};
+    \node[fragempty] (l6) at ( 2.1,-1.10) {};
+    \node[fragempty] (l7) at ( 3.0,-1.10) {};
+    \node[font=\small] at ( 3.65,-1.10) {$\dots$};
+    % Edges from level 2 to level 3
+    \draw[treearrow] (a1) -- (l1);
+    \draw[treearrow] (a1) -- (l2);
+    \draw[treearrow] (a2) -- (l3);
+    \draw[treearrow] (a2) -- (l4);
+    \draw[treearrow] (a2) -- (l5);
+    \draw[treearrow] (a3) -- (l6);
+    \draw[treearrow] (a3) -- (l7);
+\end{scope}
+
+% =================================================================
+%   STAGE C: MØD pipeline box (left side)
+% =================================================================
+\begin{scope}[shift={(-1.0, 12.10)}]
+    \draw[rounded corners=3pt, black!60, fill=black!12]
+        (-1.5,-2) rectangle (1.5, 2.0);
+    % Mini tree icon at top — same shape as fragmentation DAG/tree but in gray
+    \begin{scope}[shift={(0, 1.10)}]
+        % Root
+        \node[circle, draw=black!41, fill=black!28.7,
+              minimum size=3.4mm, inner sep=0pt] (gr) at (0, 0.40) {};
+        % Children
+        \node[circle, draw=black!41, fill=black!22.55,
+              minimum size=3.0mm, inner sep=0pt] (gc1) at (-0.40, -0.05) {};
+        \node[circle, draw=black!41, fill=black!22.55,
+              minimum size=3.0mm, inner sep=0pt] (gc2) at ( 0.40, -0.05) {};
+        % Grandchildren
+        \node[circle, draw=black!41, fill=black!16.4,
+              minimum size=3.0mm, inner sep=0pt] (gg1) at (-0.55, -0.50) {};
+        \node[circle, draw=black!41, fill=black!16.4,
+              minimum size=3.0mm, inner sep=0pt] (gg2) at (-0.20, -0.50) {};
+        \node[circle, draw=black!41, fill=black!16.4,
+              minimum size=3.0mm, inner sep=0pt] (gg3) at ( 0.55, -0.50) {};
+        % Edges (dashed, like a tree)
+        \draw[treearrow] (gr) -- (gc1);
+        \draw[treearrow] (gr) -- (gc2);
+        \draw[treearrow] (gc1) -- (gg1);
+        \draw[treearrow] (gc1) -- (gg2);
+        \draw[treearrow] (gc2) -- (gg3);
+    \end{scope}
+    \node[anchor=north, align=center, font=\footnotesize] at (0,0)
+        {Rule-based\\ derivation graphs\\ (M\O D pipeline)};
+\end{scope}
+
+% Arrow from MØD to Generate (with label)
+\draw[grayA] (0.5, 12.10) -- (1.20, 12.10);
+
+%% =================================================================
+%%   STAGE D: LEGEND on right side
+%% =================================================================
+%\begin{scope}[shift={(11.5, 14.0)}]
+%    % Bond/substructure proposals icon: small branched substructure
+%    \begin{scope}[shift={(0,0)}]
+%        % Bonds (drawn first, behind nodes)
+%        \draw[SeaGreen, fig medium] (-0.35, 0.00) -- (-0.05, 0.00);
+%        \draw[SeaGreen, fig medium] (-0.05, 0.00) -- ( 0.20, 0.22);
+%        \draw[SeaGreen, fig medium] (-0.05, 0.00) -- ( 0.20,-0.22);
+%        \draw[SeaGreen, fig medium] ( 0.20, 0.22) -- ( 0.20,-0.22);
+%        % Atoms (small filled green dots with outline)
+%        \foreach \x/\y in {-0.35/0.00, -0.05/0.00, 0.20/0.22, 0.20/-0.22} {
+%            \draw[SeaGreen, fig line, fill=SeaGreen!55]
+%                (\x,\y) circle (0.075);
+%        }
+%    \end{scope}
+%    \node[anchor=west, font=\small, align=left] at (0.6, 0)
+%        {bond /\\substructure\\proposals};
+%
+%    % Candidate fragments icon
+%    \begin{scope}[shift={(0,-1.7)}]
+%        \node[circle, fill=SeaGreen!50, draw=SeaGreen, minimum size=3mm, inner sep=0pt] (cf1) at (-0.2, 0.10) {};
+%        \node[circle, fill=SeaGreen!25, draw=SeaGreen!70, minimum size=3mm, inner sep=0pt] (cf2) at ( 0.2, 0.05) {};
+%        \node[circle, fill=SeaGreen!50, draw=SeaGreen, minimum size=3mm, inner sep=0pt] (cf3) at (-0.10,-0.30) {};
+%        \node[circle, fill=white, draw=SeaGreen!70, minimum size=3mm, inner sep=0pt] (cf4) at ( 0.30,-0.30) {};
+%        \draw[dashed, SeaGreen!70, thin] (cf1)--(cf2);
+%        \draw[dashed, SeaGreen!70, thin] (cf3)--(cf4);
+%    \end{scope}
+%    \node[anchor=west, font=\small, align=left] at (0.6, -1.65)
+%        {candidate\\fragments};
+%
+%    % Fragmentation DAG/tree icon
+%    \begin{scope}[shift={(0,-3.4)}]
+%        \node[fragroot, scale=0.8] (dr) at (0,0.30) {};
+%        \node[fragnode, scale=0.8] (dl1) at (-0.30,-0.20) {};
+%        \node[fragnode, scale=0.8] (dl2) at ( 0.30,-0.20) {};
+%        \draw[treearrow] (dr)--(dl1);
+%        \draw[treearrow] (dr)--(dl2);
+%    \end{scope}
+%    \node[anchor=west, font=\small, align=left] at (0.6, -3.30)
+%        {fragmentation\\DAG / tree};
+%\end{scope}
+%
+% =================================================================
+%   STAGE E: Arrow Generate -> Score, plus return arrow (end-to-end)
+% =================================================================
+\draw[greenA] (5.0, 10.10) -- (5.0, 9.20);
+\draw[blueA] (7.0, 9.20) -- (7.0, 10.10);
+\node[font=\itshape\small, align=center] at (8.85, 9.65) {end-to-end\\[-0.7em] training};
+
+% =================================================================
+%   STAGE F: SCORE module (blue)
+% =================================================================
+\begin{scope}[shift={(6, 6.0)}]
+    % Outer box
+    \draw[rounded corners=3pt, RoyalBlue, fig medium, fill=RoyalBlue!10]
+        (-4.8,-2.00) rectangle (4.8, 3.20);
+    % Title
+    \node[anchor=north, font=\LARGE\bfseries, text=RoyalBlue] at (0, 3.05) {Score};
+    \node[anchor=north, font=\small\itshape] at (0, 2.55) {(neural embedding \& scoring module)};
+
+    % Hexagonal graph icon (top-left)
+    \begin{scope}[shift={(-3.4, 2.5)}]
+        \foreach \i in {0,...,5} {
+            \pgfmathsetmacro{\ang}{60*\i+30}
+            \coordinate (h\i) at (\ang:0.32);
+        }
+        \draw[RoyalBlue, thick] (h0)--(h1)--(h2)--(h3)--(h4)--(h5)--cycle;
+        \node[circle, fill=RoyalBlue, minimum size=1.4mm, inner sep=0pt] (m0) at (0,0) {};
+        \foreach \i in {0,...,5} {
+            \node[circle, fill=RoyalBlue, minimum size=1.4mm, inner sep=0pt] at (h\i) {};
+            \draw[RoyalBlue, thin, ->, shorten >=0.6mm, shorten <=0.6mm]
+                (m0) -- (h\i);
+        }
+    \end{scope}
+
+    % Three sub-panels: Fragments, Molecule, Spectrum
+    \draw[rounded corners=2pt, RoyalBlue!50, thin]
+        (-4.5, 0.20) rectangle (4.5, 2.05);
+    % Vertical separators
+    \draw[RoyalBlue!40, thin] (-1.5, 0.20) -- (-1.5, 2.05);
+    \draw[RoyalBlue!40, thin] ( 1.5, 0.20) -- ( 1.5, 2.05);
+
+    \node[anchor=north, font=\small\bfseries] at (-3.0, 2.00) {Fragments};
+    \node[anchor=north, font=\small\bfseries] at ( 0.0, 2.00) {Molecule};
+    \node[anchor=north, font=\small\bfseries] at ( 3.0, 2.00) {Spectrum};
+
+    % Fragments: a few small circles + dots
+    \node[circle, fill=CornflowerBlue!60, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] at (-3.7, 1.05) {};
+    \node[circle, fill=CornflowerBlue!42, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] at (-3.2, 1.10) {};
+    \node[circle, fill=CornflowerBlue!54, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] at (-2.7, 1.05) {};
+    \node[circle, fill=CornflowerBlue!36, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] at (-2.2, 1.10) {};
+    \node[font=\small] at (-1.75, 1.05) {$\dots$};
+
+    % Molecule: small graph
+    \begin{scope}[shift={(0, 1.05)}]
+        \node[circle, fill=NavyBlue, draw=NavyBlue, minimum size=3mm, inner sep=0pt] (mm1) at (-0.40, 0.10) {};
+        \node[circle, fill=CornflowerBlue!60, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] (mm2) at (-0.05, 0.20) {};
+        \node[circle, fill=NavyBlue, draw=NavyBlue, minimum size=3mm, inner sep=0pt] (mm3) at ( 0.30, 0.05) {};
+        \node[circle, fill=CornflowerBlue!60, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] (mm4) at (-0.20,-0.25) {};
+        \node[circle, fill=white, draw=RoyalBlue, minimum size=3mm, inner sep=0pt] (mm5) at ( 0.45,-0.30) {};
+        \draw[thick] (mm1)--(mm2) (mm2)--(mm3) (mm2)--(mm4) (mm3)--(mm5);
+        \draw[thick, dashed] (mm1)--(mm4);
+    \end{scope}
+
+    % Spectrum: vertical bars of varying heights
+    \begin{scope}[shift={(2.0, 0.40)}]
+        \draw[RoyalBlue!70, thin] (0,0) -- (2.2, 0);   % x axis
+        \foreach \x/\h in {0.10/0.45, 0.30/0.20, 0.55/0.85, 0.75/0.55, 0.95/0.30,
+                          1.25/0.95, 1.50/0.30, 1.70/0.65, 1.90/0.20, 2.10/0.10} {
+            \draw[NavyBlue, fig medium] (\x, 0) -- (\x, \h);
+        }
+        \node[font=\small] at (2.4, 0.45) {$\dots$};
+    \end{scope}
+
+    % --- Shared latent space row ---
+    \draw[rounded corners=2pt, RoyalBlue!50, thin, fill=RoyalBlue!6]
+        (-4.5,-1.80) rectangle (4.5, 0.05);
+    \node[anchor=west, font=\small\bfseries] at (-4.30,-0.875) {Shared latent space};
+
+    % Scatter plot (right portion) — vertically centered in the box
+    \begin{scope}[shift={(1.4,-0.90)}]
+        \draw[->, black!70, thin] (-0.15,-0.80) -- (-0.15, 0.80);
+        \draw[->, black!70, thin] (-0.15,-0.80) -- ( 2.65,-0.80);
+        \foreach \px/\py in {
+            -0.05/-0.30, 0.20/-0.10, 0.40/-0.45, 0.50/0.10, 0.65/-0.25,
+            0.80/-0.05, 0.90/0.30, 1.05/0.00, 1.10/0.45, 1.20/-0.20,
+            1.25/0.10, 1.35/-0.35, 1.40/0.20, 1.45/-0.05, 1.55/0.35,
+            1.60/-0.15, 1.65/0.50, 1.75/0.05, 1.80/-0.30, 1.90/0.25,
+            1.95/-0.05, 2.05/0.40, 2.10/-0.20, 2.20/0.15, 2.30/-0.30,
+            0.30/0.55, 0.55/0.40, 1.00/-0.40, 1.50/0.55, 2.00/-0.50} {
+            \node[circle, fill=RoyalBlue!70, draw=RoyalBlue, minimum size=1.4mm, inner sep=0pt] at (\px, \py) {};
+        }
+    \end{scope}
+
+    % Arrow from Molecule to Shared latent space
+    \draw[->, RoyalBlue, thick] (0, 0.50) -- (0, 0.10);
+\end{scope}
+
+% =================================================================
+%   STAGE G: Two output boxes at the bottom
+% =================================================================
+% Spectrum prediction (left)
+\begin{scope}[shift={(2.0, 2.55)}]
+    \draw[rounded corners=3pt, black!60]
+        (-2.4,-0.85) rectangle (2.4, 0.95);
+    \node[anchor=south, font=\small\bfseries] at (0, 0.45) {Spectrum prediction};
+    \begin{scope}[shift={(-2.0, -0.65)}]
+        \draw[RoyalBlue!70, thin] (0,0) -- (4.1, 0);
+        \foreach \x/\h in {0.15/0.55, 0.30/0.20, 0.50/0.40, 0.70/0.85, 0.90/0.30,
+                          1.20/0.95, 1.45/0.45, 1.65/0.65, 1.90/0.30, 2.15/0.80,
+                          2.40/0.50, 2.60/0.25, 2.85/0.70, 3.10/0.40, 3.35/0.85,
+                          3.60/0.30, 3.85/0.55} {
+            \draw[NavyBlue, fig medium] (\x, 0) -- (\x, \h);
+        }
+        \node[font=\small] at (4.30, 0.45) {$\dots$};
+    \end{scope}
+\end{scope}
+
+% Inverse retrieval (right)
+\begin{scope}[shift={(9.4, 2.55)}]
+    \draw[rounded corners=3pt, black!60]
+        (-2.7,-0.85) rectangle (2.7, 0.95);
+    \node[anchor=south, font=\small\bfseries] at (0, 0.45) {Inverse retrieval};
+    % Red spectrum
+    \begin{scope}[shift={(-2.4, -0.65)}]
+        \draw[BrickRed!70, thin] (0,0) -- (1.85, 0);
+        \foreach \x/\h in {0.10/0.45, 0.25/0.85, 0.40/0.30, 0.55/0.65, 0.70/0.95,
+                          0.90/0.40, 1.05/0.55, 1.20/0.20, 1.35/0.70, 1.50/0.30,
+                          1.65/0.50, 1.78/0.25} {
+            \draw[BrickRed, fig medium] (\x, 0) -- (\x, \h);
+        }
+    \end{scope}
+    % Double-ended arrow
+    \draw[<->, fig medium] (-0.30, -0.20) -- (0.30, -0.20);
+    % Two small molecules + dots
+    \begin{scope}[shift={(0.85,-0.30)}]
+        \node[circle, fill=RoyalBlue, minimum size=2mm, inner sep=0pt] (im1) at (0,0.18) {};
+        \node[circle, fill=white, draw=RoyalBlue, minimum size=2mm, inner sep=0pt] (im2) at (-0.20,-0.05) {};
+        \node[circle, fill=CornflowerBlue!60, draw=RoyalBlue, minimum size=2mm, inner sep=0pt] (im3) at (0.20,-0.05) {};
+        \node[circle, fill=NavyBlue, minimum size=2mm, inner sep=0pt] (im4) at (0.05,-0.30) {};
+        \draw[thin] (im1)--(im2) (im1)--(im3) (im3)--(im4) (im2)--(im4);
+    \end{scope}
+    \begin{scope}[shift={(1.65,-0.30)}]
+        \node[circle, fill=CornflowerBlue!60, draw=RoyalBlue, minimum size=2mm, inner sep=0pt] (jm1) at (0,0.18) {};
+        \node[circle, fill=RoyalBlue, minimum size=2mm, inner sep=0pt] (jm2) at (-0.18,-0.10) {};
+        \node[circle, fill=white, draw=RoyalBlue, minimum size=2mm, inner sep=0pt] (jm3) at (0.20,-0.05) {};
+        \node[circle, fill=CornflowerBlue!60, draw=RoyalBlue, minimum size=2mm, inner sep=0pt] (jm4) at (0.05,-0.32) {};
+        \draw[thin] (jm1)--(jm2) (jm1)--(jm3) (jm3)--(jm4);
+    \end{scope}
+    \node[font=\small] at (1.20, -0.50) {$\dots$};
+    \node[font=\small] at (2.05, -0.50) {$\dots$};
+\end{scope}
+
+% Blue arrows from Score box to outputs
+\draw[blueA] (3.0, 4.00) -- (2.5, 3.50);
+\draw[blueA] (8.5, 4.00) -- (9.0, 3.50);
+
+% =================================================================
+%   STAGE H: (goal banner removed)
+% =================================================================
+
+\end{tikzpicture}

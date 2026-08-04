@@ -1,0 +1,100 @@
+
+\begin{tikzpicture}[
+    fig,
+    electrode/.style={draw=black,fig medium,fill=gray!35},
+    beam/.style={draw=purple!75!black,fig medium,densely dashed,-{Latex[length=3.0mm]}},
+    ionbeam/.style={draw=green!55!black,fig medium,densely dashed,-{Latex[length=3.0mm]}},
+    molarrow/.style={draw=black,fig medium,-{Latex[length=2.6mm]}},
+    samplearrow/.style={draw=blue!70!black,fig heavy,-{Latex[length=3mm]}},
+    label/.style={align=center,font=\sffamily\small},
+    biglabel/.style={align=center,font=\sffamily\large},
+    callout/.style={draw=black,fig line},
+    molecule/.style={circle,draw=blue!70!black,fill=blue!20,minimum size=7.6mm,inner sep=0pt,font=\sffamily\small},
+    ion/.style={circle,draw=green!55!black,fill=green!22,minimum size=9.2mm,inner sep=0pt,font=\sffamily\small},
+    spark/.style={star,star points=10,star point ratio=0.55,draw=orange!80!black,fill=yellow!50,minimum size=3.8mm,inner sep=0pt}
+]
+
+% sample label and arrows
+\node[biglabel,anchor=east] at (1.30,4.47) {Sample /};
+\node[biglabel,anchor=east] at (1.30,4.08) {Gaseous};
+\node[biglabel,anchor=east] at (1.30,3.69) {Molecules};
+\node[biglabel,anchor=east] at (1.30,3.30) {(M)};
+\foreach \y in {3.75,4.00,4.25}{\draw[samplearrow] (1.72,\y) -- (2.50,\y);} 
+
+% repeller
+\path[electrode] (3.38,2.42) rectangle (3.52,6.18);
+\node[biglabel] at (2.02,6.68) {Repeller};
+\draw[callout] (2.88,6.42) -- (3.38,6.02);
+
+% filament
+\draw[black,fig medium] (5.55,7.15) -- (5.55,7.45) -- (5.95,7.45) -- (5.95,7.10);
+\draw[black,fig medium] (6.55,7.10) -- (6.55,7.45) -- (6.95,7.45) -- (6.95,7.15);
+\draw[black,fig medium,decorate,decoration={coil,aspect=0.55,segment length=3.2pt,amplitude=3.0pt}] (5.95,7.25) -- (6.55,7.25);
+\node[biglabel,anchor=west] at (7.52,7.88) {Filament};
+\draw[callout] (7.24,7.72) -- (6.60,7.39);
+
+% electron beam
+\draw[beam] (6.25,7.10) -- (6.25,1.95);
+\node[biglabel,text=purple!75!black] at (5.34,6.50) {$\sim 70$ eV};
+\foreach \y in {5.61,4.56,3.37,2.35}{\node[biglabel,text=purple!75!black] at (6.57,\y) {$e^{-}$};}
+\node[biglabel,anchor=west] at (7.10,6.28) {Electron beam};
+\draw[callout] (6.92,6.10) -- (6.38,5.86);
+
+% electron trap
+\path[electrode] (5.55,1.00) -- (5.55,1.70) -- (6.95,1.70) -- (6.95,1.00) -- (6.65,1.00) -- (6.65,1.45) -- (5.85,1.45) -- (5.85,1.00) -- cycle;
+\path[electrode] (6.18,0.55) rectangle (6.32,1.00);
+\draw[black,fig medium] (6.25,0.55) -- (6.25,0.24);
+\draw[black,fig medium] (5.95,0.24) -- (6.55,0.24);
+\draw[black,fig medium] (6.05,0.07) -- (6.45,0.07);
+\draw[black,fig medium] (6.15,-0.10) -- (6.35,-0.10);
+\node[biglabel,anchor=west] at (7.72,0.40) {Electron trap};
+\node[biglabel,anchor=west] at (7.72,0.00) {(anode)};
+\draw[callout] (7.48,0.50) -- (6.78,1.24);
+
+% molecules and ionization events
+\node[molecule] at (4.45,5.05) {M};
+\node[molecule] at (4.00,4.05) {M};
+\node[molecule] at (4.10,2.85) {M};
+\node[molecule] at (5.20,4.80) {M};
+\node[molecule] at (5.25,3.45) {M};
+\node[molecule] at (5.25,2.35) {M};
+
+\node[spark] at (6.25,4.85) {};
+\node[spark] at (6.25,3.60) {};
+\node[spark] at (6.25,2.40) {};
+\node[ion] at (7.45,4.85) {M$^{\bullet +}$};
+\node[ion] at (7.45,3.60) {M$^{\bullet +}$};
+\node[ion] at (7.45,2.40) {M$^{\bullet +}$};
+\foreach \y in {4.85,3.60,2.40}{
+  \draw[molarrow] (5.58,\y) -- (6.02,\y);
+  \draw[molarrow] (6.50,\y) -- (7.03,\y);
+}
+
+% ion beam to analyzer
+\draw[ionbeam] (8.58,3.95) -- (13.62,3.98);
+\node[biglabel,anchor=west] at (13.78,4.22) {Ion beam};
+\node[biglabel,anchor=west] at (13.78,3.84) {to mass};
+\node[biglabel,anchor=west] at (13.78,3.46) {analyzer};
+
+% EXTRACTION LENS -- single remaining lens element
+\path[electrode]
+ (11.09,5.78) -- (11.23,5.78) -- (11.23,5.00) -- (11.11,4.82) -- (11.11,4.40) -- (10.97,4.40) -- (10.97,4.86) -- (11.09,5.04) -- cycle;
+\path[electrode]
+ (11.09,2.12) -- (11.23,2.12) -- (11.23,2.90) -- (11.11,3.08) -- (11.11,3.50) -- (10.97,3.50) -- (10.97,3.04) -- (11.09,2.86) -- cycle;
+% extraction label placed above its lens, clear of the electron-beam label
+\draw[black,fig medium] (11.10,6.04) -- (11.10,6.35);
+\node[label] at (10.82,6.72) {Extraction\\lens};
+
+% ground connection below remaining extraction lens
+\draw[black,fig medium] (11.04,2.12) -- (11.04,1.56);
+\draw[black,fig medium] (10.74,1.56) -- (11.34,1.56);
+\draw[black,fig medium] (10.84,1.39) -- (11.24,1.39);
+\draw[black,fig medium] (10.94,1.22) -- (11.14,1.22);
+
+% FOCUSING LENS -- moved close to extraction lens; label moved right/up
+\path[electrode] (11.74,4.42) rectangle (11.88,5.88);
+\path[electrode] (11.74,2.28) rectangle (11.88,3.74);
+\draw[black,fig medium] (11.88,6.04) -- (12.48,6.34) -- (12.48,6.88);
+\node[label,anchor=west] at (12.55,7.02) {Focusing\\lens};
+
+\end{tikzpicture}

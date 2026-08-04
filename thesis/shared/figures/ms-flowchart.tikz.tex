@@ -1,0 +1,23 @@
+\begin{tikzpicture}[
+    fig,
+    block/.style={draw, thick, minimum width=3cm, minimum height=1.2cm, align=center},
+    line/.style={->, thick}
+    ]
+
+% https://commons.wikimedia.org/wiki/File:Ms_block_schematic.gif
+
+
+% Main horizontal blocks (fixed coordinates)
+\node[block] (sample)    at (0,0)   {Sample};
+\node[block] (ion)   at (4,0)   {Ion Source};
+\node[block] (analyzer) at (8,0)   {Mass Analyzer};
+\node[block] (det)      at (12,0)  {Detector};
+\node[block] (elec) at (12,-2) {Data Analysis};
+
+% Arrows along the ion path
+\draw[line] (sample.east) -- (ion.west);
+\draw[line] (ion.east) -- (analyzer.west);
+\draw[line] (analyzer.east) -- (det.west);
+\draw[line] (det.south)  -- (elec.north);
+
+\end{tikzpicture}

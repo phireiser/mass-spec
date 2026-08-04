@@ -1,0 +1,35 @@
+%% ─── Colours
+
+\begin{tikzpicture}[font=\small]
+\foreach \a/\b in {30/90,90/150,150/210,210/270,270/330,330/30}
+  \draw[Cerulean!70,fig heavy]
+    ({1.7+0.48*cos(\a)},{-16.45+0.48*sin(\a)}) --
+    ({1.7+0.48*cos(\b)},{-16.45+0.48*sin(\b)});
+\foreach \ang in {30,90,150,210,270,330}
+  \filldraw[Cerulean!70] ({1.7+0.48*cos(\ang)},{-16.45+0.48*sin(\ang)}) circle (2.5pt);
+
+\node[font=\scriptsize\bfseries,text=red!68!black] at (3.55,-15.72) {Level 1 (Local):};
+\node[font=\scriptsize,align=left,anchor=west] at (2.65,-16.18)
+  {Encode molecules as graphs to capture};
+\node[font=\scriptsize,align=left,anchor=west] at (2.65,-16.52)
+  {atom- and bond-level chemistry.};
+
+  % big arrow
+\draw[->, fig xbold, RoyalBlue]
+    (8.5,-16.45) -- (9.9,-16.45);
+
+\filldraw[SeaGreen!80] (11.2,-16.45) circle (4.5pt);
+\filldraw[SeaGreen!80] (10.7,-17.05) circle (4.5pt);
+\filldraw[SeaGreen!80] (11.7,-17.05) circle (4.5pt);
+\draw[SeaGreen!80,fig heavy] (11.2,-16.45)--(10.7,-17.05);
+\draw[SeaGreen!80,fig heavy] (11.2,-16.45)--(11.7,-17.05);
+
+\node[font=\scriptsize\bfseries,text=red!68!black] at (12.95,-15.72) {Level 2 (Global):};
+\node[font=\scriptsize,align=left,anchor=west] at (12.05,-16.18)
+  {Embed those molecular states as nodes in a};
+\node[font=\scriptsize,align=left,anchor=west] at (12.05,-16.52)
+  {derivation hypergraph to model};
+\node[font=\scriptsize,align=left,anchor=west] at (12.05,-16.86)
+  {multi-step fragmentation.};
+
+\end{tikzpicture}

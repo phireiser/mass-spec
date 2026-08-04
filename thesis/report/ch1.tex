@@ -1,0 +1,73 @@
+\chapter{Introduction}
+\label{ch:1}
+\noindent
+\section{Motivation}
+Mass spectrometry (MS) is one of the most widely used analytical techniques for molecular characterization across chemistry, metabolomics, environmental sciences, and pharmaceutical research. \cite[p. 1]{Gross2006}
+Its high sensitivity, reproducibility, and throughput have enabled large-scale molecular profiling in both research and industrial settings \cite[p.~1764]{Cramer2020}.
+Modern high-resolution and tandem mass spectrometers generate high-throughput spectral data that can be compared against large repositories of reference spectra such as the NIST Mass Spectral Library to support compound identification and profiling \cite[pp.~7274-7275]{Stein2012}.
+
+Despite these advances in data acquisition, the interpretation of MS data remains a significant bottleneck \cite[p.~1]{Blazenovic2018}.
+Structural elucidation from spectra is still largely expert-driven, relying on chemical intuition and established fragmentation rules \cite[p.~11]{Blazenovic2018}.
+While thousands of spectra can be recorded within a short time frame \cite[p.~1]{Blazenovic2018}, the corresponding structural annotation remains comparatively slow and manual \cite[p.~11]{Blazenovic2018}, with very few untargeted studies identifying more than 20\% of detected compounds \cite[p.~3]{Blazenovic2018}.
+This imbalance creates a fundamental asymmetry between data generation and data analysis.
+
+The intrinsic complexity of molecular fragmentation contributes substantially to this challenge \cite[pp.~30-31]{Gross2006}.
+Fragmentation processes are governed by chemically valid bond cleavages and rearrangements \cite[pp.~30-31]{Gross2006}, leading to multiple competing fragmentation pathways.
+A single molecule may therefore generate numerous fragments through direct cleavages and rearrangement reactions \cite[pp.~30-31]{Gross2006}.
+Because fragmentation pathways depend sensitively on molecular structure and internal energy \cite[p.~26,pp.~30-31]{Gross2006}, structurally distinct molecules may produce partially overlapping spectral signatures, while small structural variations can induce significant spectral differences. \cite[p.~240]{Gross2006}
+Consequently, the inverse problem --- inferring molecular structure from spectral data --- can be regarded as inherently ill-posed.
+
+Recent machine learning approaches aim to address this challenge by learning direct mappings between molecular representations and spectral outputs.
+Graph neural networks \cite{Young2024}, sequence-based models \cite[p.~966]{Goldman2023}, and generative approaches have demonstrated promising performance in forward (molecule-to-spectrum) and inverse (spectrum-to-molecule) prediction tasks.
+However, purely data-driven approaches exhibit several limitations:
+\begin{itemize}
+    \item They often lack mechanistic interpretability. \cite[p.~3\&~6]{Nowatzky2025}
+    \item They do not explicitly model fragmentation pathways. \cite[p.~3]{Nowatzky2025}
+    \item They rely on statistical correlations rather than chemically structured priors. \cite[p.~966]{Goldman2023}
+    \item Their generalization to rare or out-of-distribution molecular scaffolds remains limited. \cite[p.~12]{Russo2024}
+\end{itemize}
+
+In particular, models that treat molecules as flat graphs or string encodings and spectra as unordered peak lists ignore the structured chemical processes underlying fragmentation.
+This omission reduces interpretability and may hinder robust extrapolation beyond the training distribution.
+\cite[p.~3420]{Goldman2024}
+
+Fragmentation in mass spectrometry is not an arbitrary stochastic process; it follows chemically constrained transformation sequences. \cite[ch.~4\&~8]{McLafferty1993}
+Therefore, incorporating structured representations of fragmentation—such as derivation graphs encoding valid transformation rules—offers a principled way to introduce chemical inductive bias into machine learning models.
+By explicitly modeling fragment lineage and transformation pathways, it becomes possible to align molecular substructures with spectral evidence in a mechanistically meaningful manner.
+
+This thesis is motivated by the hypothesis that integrating chemically structured derivation graphs into a machine learning framework can introduce chemical inductive bias and yield an explicit fragmentation layer, while supporting bidirectional structure-spectrum modeling.
+The aim is to bridge the gap between high-throughput spectral acquisition and scalable, chemically grounded interpretation by combining fragment-aware representations with data-driven learning.
+
+\section{Objectives}
+The objective of this thesis is to design, implement, and systematically evaluate a fragment-augmented machine learning framework for improving the bidirectional translation between molecular structures and mass spectra.
+Specifically, the work investigates whether the integration of graph-based reaction and fragment derivation graphs, generated through chemically valid graph transformation rules, can serve as structured intermediate representations, and to what extent they affect predictive performance.
+
+As mentioned in the introduction, elucidating structure from mass spectra is an inherently ill-posed inverse problem.
+This thesis therefore proposes the use of fragment-level intermediates derived from rule-based graph transformations to introduce a chemical basis to the learning process.
+
+Rather than learning a direct mapping between molecular graphs and spectral representations, the proposed framework decomposes the task into a structured pipeline.
+In this pipeline, molecular graphs are first transformed into chemically plausible fragment sets.
+These fragment sets then mediate the relationship to spectral outputs.
+These fragment sets, together with molecular and spectral representations, are embedded into a shared latent space, enabling aligned embeddings across the domains.
+
+Ultimately, this thesis assesses to what extent incorporating chemically valid graph-based fragment derivations into neural learning pipelines affects the predictive power of bidirectional structure-spectrum modeling in mass spectrometry, and outlines how such a framework could enable de novo molecular generation from spectral data.
+
+
+\section{Scope and Limitations}
+
+This thesis is restricted to electron ionization (EI) mass spectrometry, as EI fragmentation reactions are comparatively well understood and mechanistically characterized. \cite[ch.~4\&~8]{McLafferty1993}
+This enables the application of chemically informed, rule-based graph transformations to generate fragment derivation graphs based on consistent assumptions.
+Other ionisation techniques are excluded due to their different fragmentation behaviour and the additional modelling complexity they would introduce.
+
+A major limitation arises from the computational cost of graph-based fragment generation.
+Rule-based graph transformations lead to combinatorial growth in possible fragments, \cite[p.~4]{Andersen2013} especially when multiple reaction rules and recursive fragmentation steps are considered.
+Ensuring chemical validity and avoiding duplicate graph states through isomorphism checking further increases computational demands. \cite[p.~17]{Andersen2013}
+
+Due to this scalability constraint, the experimental evaluation is limited to an order of magnitude of 100 compounds.
+While this is sufficient to demonstrate methodological feasibility, the restricted dataset limits chemical diversity and does not allow for generalisation.
+Consequently, the results should be interpreted as proof of concept rather than as evidence of large-scale applicability.
+
+It is also important to note that the reactions are defined in an ambiguous manner using graph symbols.
+Furthermore, the transformation rules do not cover all possible fragmentation pathways, and some may be incorrect.
+This means that the generated fragment derivation graphs may not capture all relevant chemical transformations, and the model's performance may depend on the specific transformation rules chosen.
+The generated derivations are therefore constrained by the assumptions embedded in the rule set.

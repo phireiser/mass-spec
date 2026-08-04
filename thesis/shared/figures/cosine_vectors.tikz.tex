@@ -1,0 +1,42 @@
+
+\begin{tikzpicture}[x=1.35cm,y=1.35cm,fig,>={Latex[length=3mm]}]
+
+  % coordinates
+  \coordinate (O) at (0,0);
+  \coordinate (A) at (6,1.5);     % vector A
+  \coordinate (B) at (2.5,4);     % vector B
+  \coordinate (F) at (3.294,0.8235); % foot of perpendicular from B onto line OA
+
+  % faint reference axes
+  \draw[black!53,fig hair,-{Latex[length=2mm]}] (-0.3,0) -- (6.6,0);
+  \draw[black!53,fig hair,-{Latex[length=2mm]}] (0,-0.3) -- (0,4.5);
+
+  % projection construction (perpendicular drop, drawn under the vectors)
+  \draw[black!53,dashed,fig thin] (B) -- (F);
+  % right-angle mark at foot F
+  \begin{scope}[shift={(F)}]
+    \draw[black!53,fig thin]
+      ($(0,0)!0.16!(B)$) -- ($($(0,0)!0.16!(B)$)+($(0,0)!0.16!(O)$)$) -- ($(0,0)!0.16!(O)$);
+  \end{scope}
+
+  % vectors
+  \draw[BrickRed,fig bold,->] (O) -- (A) node[above right=-1pt,BrickRed,font=\small] {$A$};
+  \draw[RoyalBlue,fig bold,->] (O) -- (B) node[above=1pt,RoyalBlue,font=\small] {$B$};
+
+  % projection segment, drawn on top of vector A so it stays visible
+  \draw[amber,fig xbold] (O) -- (F)
+        node[midway,below=2pt,amber,font=\small] {$\|B\|\cos\theta$};
+
+  % angle between them
+  \pic[draw=amber,fig medium,angle radius=1.15cm,
+       angle eccentricity=1.28,"$\theta$"{amber,font=\small}]
+       {angle = A--O--B};
+
+  % origin dot
+  \fill (O) circle (1.6pt) node[below left=-1pt,font=\small] {$O$};
+
+  % length labels along the vectors
+  \node[BrickRed,font=\scriptsize] at ($(O)!0.55!(A)+(0,-0.28)$) {$\|A\|$};
+  \node[RoyalBlue,font=\scriptsize] at ($(O)!0.55!(B)+(-0.32,0.05)$) {$\|B\|$};
+
+\end{tikzpicture}

@@ -1,0 +1,13 @@
+! r2SCAN0 def2-SVP TightSCF
+
+%maxcore 2000
+
+%plots
+  Format Cube
+  dim1 100
+  dim2 100
+  dim3 100
+  ElDens("toluene_eldens.cube");
+end
+
+* xyzfile 0 1 toluene.xyz

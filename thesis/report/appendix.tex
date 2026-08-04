@@ -1,0 +1,71 @@
+\chapter{Appendix}
+\label{ch:appendix}
+
+
+%\section{MØD Rule Sets and Strategy Definitions}
+
+\section{Hyperparameter Tables and Configurations}
+
+\Cref{tab:training-hyperparams} lists the hyperparameters used to train the bidirectional model of \Cref{sec:training-procedure}. The tuned values (learning rate, weight decay, batch size, latent dimension, dropout, normalisation, the spectrum-loss and cycle-consistency weights, and the curriculum schedule) are the optimum selected by an Optuna hyperparameter search ($20$ trials); the remaining entries (network widths, epochs, spectrum binning) were fixed a priori.
+
+{\small
+\begin{longtable}{@{}l l p{6cm}@{}}
+    \caption{Training hyperparameters. Tuned entries are the best trial of the Optuna sweep.}
+    \label{tab:training-hyperparams} \\
+        \hline
+        Setting & Symbol & Value \\
+        \hline
+        \endfirsthead
+        \hline
+        Setting & Symbol & Value \\
+        \hline
+        \endhead
+        \multicolumn{3}{l}{\emph{Optimisation}} \\
+        Optimiser                         & ---                              & Adam (one instance per phase) \\
+        Learning rate                     & $\eta$                           & $7.1\times10^{-5}$ \\
+        Weight decay                      & ---                              & $1.4\times10^{-4}$ \\
+        Batch size                        & $N$                              & $64$ \\
+        Epochs (Phase~A $+$ Phase~B)      & ---                              & $10000 + 10000$ \\
+        LR schedule / warmup / grad.\ clip & ---                             & none \\
+        Checkpoint selection              & ---                              & final epoch \\
+        \hline
+        \multicolumn{3}{l}{\emph{Architecture}} \\
+        Shared latent dimension           & $d$                              & $256$ \\
+        GINEConv hidden width             & $d_h$                            & $128$ \\
+        GINEConv layers                   & ---                              & $3$ (each $128\!\to\!128$; input proj.\ $18\!\to\!128$) \\
+        Derivation-graph GCN              & ---                              & $2$ GCNConv, $(d{+}1)\!\to\!64\!\to\!256$, mean pool \\
+        Spectral MLP width                & ---                              & $512$ \\
+        Dropout                           & ---                              & $0.43$ \\
+        Normalisation                     & ---                              & BatchNorm \\
+        \hline
+        \multicolumn{3}{l}{\emph{Spectrum binning}} \\
+        $m/z$ range                       & $[mz_{\min}, mz_{\max})$         & $[1, 1000)$ \\
+        Bin width                         & $w_{\mathrm{bin}}$               & $1.0$\,Da \\
+        Number of bins                    & $B$                              & $999$ \\
+        \hline
+        \multicolumn{3}{l}{\emph{Loss}} \\
+        Cosine weight                     & $\alpha_{\cos}$                  & $1.59$ \\
+        Wasserstein weight                & $\lambda$                        & $1.17$ \\
+        Forward cycle weight              & $\lambda_{\mathrm{cyc}}$         & $0.77$ \\
+        Spectrum cycle weight             & $\lambda_{\text{cyc-spec}}$      & $0.089$ \\
+        Spectrum--molecule align weight   & $\lambda_{\text{align}}$         & $0.30$ \\
+        Contrastive temperature           & $\tau$                           & $0.07$ \\
+        \hline
+        \multicolumn{3}{l}{\emph{Curriculum}} \\
+        Start fraction (easy molecules)   & ---                              & $0.73$ \\
+        Per-epoch increment               & ---                              & $0.17$ \\
+        \hline
+\end{longtable}}
+
+\section{Github Repository}
+The code for this thesis is available at
+\href{https://github.com/phireiser/mass-spec}{https://github.com/phireiser/mass-spec}
+
+\section{AI Use Statement}
+The author used the following AI tools during the writing of this thesis:
+\begin{itemize}
+    \item \textbf{ChatGPT} (various versions) for language refinement and grammar checking throughout the document.
+    \item \textbf{DeepL Write} for improving the style in the document.
+    \item \textbf{Claude} for structuring and organizing.
+    \item \textbf{GitHub Copilot} for code suggestions and auto-completion in the implementation of the codebase.
+\end{itemize}

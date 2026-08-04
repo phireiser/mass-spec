@@ -1,0 +1,345 @@
+\begin{tikzpicture}[
+    fig,
+    aC/.style={circle, draw=black!70, fill=black!11, minimum size=6mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=black!70},
+    aO/.style={circle, draw=BrickRed, fill=BrickRed!15, minimum size=6mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=BrickRed},
+    aN/.style={circle, draw=RoyalBlue, fill=RoyalBlue!15, minimum size=6mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=RoyalBlue},
+    aP/.style={circle, draw=RoyalPurple, fill=RoyalPurple!18, minimum size=4mm,
+               inner sep=0pt, font=\bfseries\tiny, text=RoyalPurple!70!black},
+    bigA/.style={circle, draw=black!70, fill=black!70, minimum size=4.5mm,
+                 inner sep=0pt, font=\bfseries\small, text=white},
+    bigO/.style={circle, draw=BrickRed, fill=BrickRed, minimum size=4.5mm,
+                 inner sep=0pt, font=\bfseries\small, text=white},
+    bigN/.style={circle, draw=RoyalBlue, fill=RoyalBlue, minimum size=4.5mm,
+                 inner sep=0pt, font=\bfseries\small, text=white},
+    stnum/.style={circle, draw=NavyBlue, thick, minimum size=8mm,
+                  inner sep=1pt, font=\bfseries, text=NavyBlue},
+    sttitle/.style={font=\bfseries\small, align=center, text=black!85},
+    fcell/.style={rectangle, draw=black!35, fill=black!6,
+                  minimum width=5mm, minimum height=5.5mm, inner sep=0pt,
+                  font=\tiny},
+    parrow/.style={-{Latex[length=2mm]}, thick, RoyalPurple, dashed},
+    msgar/.style={-{Latex[length=1.4mm]}, semithick, RoyalPurple!80,
+                  dashed, shorten >=1pt, shorten <=1pt},
+    biga/.style={-{Latex[length=6mm, width=5.5mm]}, fig xbold, black!60},
+]
+
+% --- Color palette (atom colours are CPK, defined centrally in main.tex) ---
+
+% =================================================================
+% Molecule helper: places coordinates for a regular hexagonal
+% pyridone-like molecule. Usage: \molcoords{<prefix>}{<Rring>}
+% Generates: <pref>top, <pref>tr, <pref>br, <pref>bot, <pref>N, <pref>tl,
+%            <pref>O (carbonyl), <pref>Nme (N-methyl C)
+% =================================================================
+\newcommand{\molcoords}[2]{%
+  \coordinate (#1top) at ( 90:#2);
+  \coordinate (#1tr)  at ( 30:#2);
+  \coordinate (#1br)  at (-30:#2);
+  \coordinate (#1bot) at (-90:#2);
+  \coordinate (#1N)   at (210:#2);
+  \coordinate (#1tl)  at (150:#2);
+  \coordinate (#1O)   at ($ (#1top) + ( 90:#2) $);
+  \coordinate (#1Nme) at ($ (#1N)   + (210:#2) $);
+}
+
+% =================================================================
+% Column x-positions
+% =================================================================
+\def\xA{0}      % Stage 1
+\def\xB{3.4}    % Stage 2
+\def\xC{7.0}    % Stage 3
+\def\xD{11.0}   % Stage 4
+\def\xE{14.2}   % Stage 5
+\def\xF{17.8}   % Stage 6
+\def\xG{22.0}   % Stage 7
+\def\ytop{10.4}
+\def\ytitle{9.5}
+\def\ybot{-3.4}
+
+% Vertical dashed dividers (at exact midpoints between column centers)
+\foreach \x in {1.7, 5.2, 9.0, 12.6, 16.4, 20.4} {
+    \draw[dashed, gray!45] (\x, \ytop+0.2) -- (\x, \ybot);
+}
+
+% =================================================================
+% STAGE NUMBERS + TITLES
+% =================================================================
+\node[stnum] at (\xA, \ytop) {1};
+\node[sttitle] at (\xA, \ytitle - 0.2) {Molecular graph\\[1pt]\small$G=(V,E)$};
+
+\node[stnum] at (\xB, \ytop) {2};
+\node[sttitle] at (\xB, \ytitle - 0.6) {Initial atom\\features\\[1pt]\small$h_v^{(0)}$};
+
+\node[stnum] at (\xC, \ytop) {3};
+\node[sttitle] at (\xC, \ytitle - 0.2) {Graph convolution\\(message passing)};
+
+\node[stnum] at (\xD, \ytop) {4};
+\node[sttitle] at (\xD, \ytitle - 0.6) {Updated atom\\embeddings\\[1pt]\small$h_1,\dots,h_n$};
+
+\node[stnum] at (\xE, \ytop) {5};
+\node[sttitle] at (\xE, \ytitle) {Pooling};
+
+\node[stnum] at (\xF, \ytop) {6};
+\node[sttitle] at (\xF, \ytitle - 0.2) {Molecular\\vector};
+
+\node[stnum] at (\xG, \ytop) {7};
+\node[sttitle] at (\xG, \ytitle - 0.2) {Role in\\project};
+
+% =================================================================
+% STAGE 1 — Molecular graph (regular hexagon, full size)
+% =================================================================
+\begin{scope}[shift={(\xA, 5.0)}]
+    \molcoords{a}{0.85}
+    % Bonds first (will be partially hidden by atoms drawn on top)
+    \draw[thick] (atop) -- (atr);
+    \draw[thick] (atr)  -- (abr);
+    \draw[thick, double distance=1.2pt] (abr)  -- (abot);
+    \draw[thick] (abot) -- (aN);
+    \draw[thick] (aN)   -- (atl);
+    \draw[thick, double distance=1.2pt] (atl)  -- (atop);
+    \draw[thick, double distance=1.2pt] (atop) -- (aO);
+    \draw[thick] (aN)   -- (aNme);
+    % Atoms on top
+    \node[aC] at (atop) {C};
+    \node[aC] at (atr)  {C};
+    \node[aC] at (abr)  {C};
+    \node[aC] at (abot) {C};
+    \node[aN] at (aN)   {N};
+    \node[aC] at (atl)  {C};
+    \node[aO] at (aO)   {O};
+    \node[aC] at (aNme) {C};
+\end{scope}
+
+% Legend
+\begin{scope}[shift={(\xA-1.30, 0.4)}]
+    \draw[rounded corners=2pt, gray!60] (-0.10,-2.55) rectangle (2.90, 0.65);
+    \node[aC, scale=0.7] at (0.20, 0.30) {C}; \node[anchor=west, font=\scriptsize] at (0.50, 0.30) {Carbon};
+    \node[aO, scale=0.7] at (0.20,-0.25) {O}; \node[anchor=west, font=\scriptsize] at (0.50,-0.25) {Oxygen};
+    \node[aN, scale=0.7] at (0.20,-0.80) {N}; \node[anchor=west, font=\scriptsize] at (0.50,-0.80) {Nitrogen};
+    \draw[thick] (0.05,-1.40) -- (0.45,-1.40); \node[anchor=west, font=\scriptsize] at (0.50,-1.40) {Single bond};
+    \draw[thick, double distance=1.2pt] (0.05,-1.85) -- (0.45,-1.85); \node[anchor=west, font=\scriptsize] at (0.50,-1.85) {Double bond};
+    \draw[thick, dashed] (0.05,-2.30) -- (0.45,-2.30); \node[anchor=west, font=\scriptsize] at (0.50,-2.30) {Aromatic bond};
+\end{scope}
+
+% =================================================================
+% STAGE 2 — Initial atom features table
+% =================================================================
+\begin{scope}[shift={(\xB,0)}]
+    % column header labels (rotated)
+    \foreach \i/\lab in {0/atom type, 1/degree, 2/formal charge, 3/aromaticity} {
+        \node[font=\tiny, rotate=50, anchor=west]
+            at (-0.75 + 0.5*\i, 6.80) {\lab};
+    }
+    \node[font=\tiny] at (-0.75 + 0.5*4 + 0.1, 6.75) {$\dots$};
+
+    % rows: index, atom type, then 4 cells
+    \foreach \i/\atype/\sym/\d/\fc/\ar [count=\r from 0] in {
+        1/aC/C/6/3/0,
+        2/aO/O/8/1/0,
+        3/aC/C/6/3/1,
+        4/aC/C/6/2/1,
+        5/aN/N/7/3/1,
+        6/aC/C/6/1/0
+    } {
+        \pgfmathsetmacro{\yy}{6.4 - 0.85*\r}
+        \node[font=\scriptsize] at (-1.40, \yy) {\i};
+        \node[\atype, scale=0.8] at (-1.05, \yy) {\sym};
+        \node[fcell] at (-0.55, \yy) {\d};
+        \node[fcell] at (-0.05, \yy) {\fc};
+        \node[fcell] at ( 0.45, \yy) {0};
+        \node[fcell] at ( 0.95, \yy) {\ar};
+        \node[font=\tiny] at ( 1.40, \yy) {$\dots$};
+    }
+\end{scope}
+
+% =================================================================
+% STAGE 3 — Three message-passing layers
+% Each layer uses a unique node prefix so node names don't collide.
+% =================================================================
+\newcommand{\msgring}[3]{% #1=xshift, #2=yshift (box center), #3=unique prefix
+\begin{scope}[shift={(#1,#2-0.25)}]
+    \molcoords{#3}{0.55}
+    % Ring + exocyclic bonds (lighter purple, behind atoms)
+    \draw[thick, RoyalPurple!55] (#3top) -- (#3tr);
+    \draw[thick, RoyalPurple!55] (#3tr)  -- (#3br);
+    \draw[thick, RoyalPurple!55] (#3br)  -- (#3bot);
+    \draw[thick, RoyalPurple!55] (#3bot) -- (#3N);
+    \draw[thick, RoyalPurple!55] (#3N)   -- (#3tl);
+    \draw[thick, RoyalPurple!55] (#3tl)  -- (#3top);
+    \draw[thick, RoyalPurple!55] (#3top) -- (#3O);
+    \draw[thick, RoyalPurple!55] (#3N)   -- (#3Nme);
+    % Atoms (named so we can attach message arrows)
+    \node[aP] (#3-top) at (#3top) {C};
+    \node[aP] (#3-tr)  at (#3tr)  {C};
+    \node[aP] (#3-br)  at (#3br)  {C};
+    \node[aP] (#3-bot) at (#3bot) {C};
+    \node[aP] (#3-N)   at (#3N)   {N};
+    \node[aP] (#3-tl)  at (#3tl)  {C};
+    \node[aP] (#3-O)   at (#3O)   {O};
+    \node[aP] (#3-Nme) at (#3Nme) {C};
+    % Bidirectional message-passing arrows along every bond
+    \foreach \a/\b in {top/tr, tr/br, br/bot, bot/N, N/tl, tl/top, top/O, N/Nme} {
+        \draw[msgar] (#3-\a) to[bend left=14] (#3-\b);
+        \draw[msgar] (#3-\b) to[bend left=14] (#3-\a);
+    }
+\end{scope}}
+
+% Layer boxes
+\foreach \i/\yc in {1/7.0, 2/4.4, 3/1.8} {
+    \draw[rounded corners=2pt, gray!55]
+        (\xC-1.55, \yc-1.05) rectangle (\xC+1.55, \yc+1.25);
+    \node[anchor=north west, font=\scriptsize\bfseries, text=RoyalPurple, fill=white, inner sep=1pt]
+        at (\xC-1.45, \yc+1.20) {Layer \i};
+}
+\msgring{\xC}{7.0}{L1}
+\msgring{\xC}{4.4}{L2}
+\msgring{\xC}{1.8}{L3}
+
+% Vertical purple arrows between layers
+\draw[parrow] (\xC, 5.55) -- (\xC, 5.85);
+\draw[parrow] (\xC, 2.95) -- (\xC, 3.25);
+
+% Update equation box
+\begin{scope}[shift={(\xC+0.1,-1.0)}]
+    \draw[rounded corners=2pt, RoyalPurple, thick]
+        (-1.78,-0.95) rectangle (1.78, 0.95);
+    \node[align=center, font=\scriptsize] at (0,0) {%
+        $h_v^{(k+1)} = \sigma\!\Big(W_{\text{self}}\,h_v^{(k)}$\\[3pt]
+        $+\;\textstyle\sum_{u\in\mathcal{N}(v)} W_{\text{neigh}}\,h_u^{(k)}\Big)$};
+\end{scope}
+\node[align=center, font=\scriptsize\itshape, text=RoyalPurple]
+    at (\xC+0.1,-2.6) {each atom incorporates\\information from\\its neighbors};
+
+% =================================================================
+% STAGE 4 — Updated atom embeddings (regular hexagon, smaller atoms)
+% =================================================================
+\begin{scope}[shift={(\xD, 5.2)}]
+    \molcoords{u}{0.72}
+    % Bonds first
+    \draw[thick] (utop) -- (utr);
+    \draw[thick] (utr)  -- (ubr);
+    \draw[thick, double distance=1.2pt] (ubr)  -- (ubot);
+    \draw[thick] (ubot) -- (uN);
+    \draw[thick] (uN)   -- (utl);
+    \draw[thick, double distance=1.2pt] (utl)  -- (utop);
+    \draw[thick, double distance=1.2pt] (utop) -- (uO);
+    \draw[thick] (uN)   -- (uNme);
+    % Atoms (no labels — solid colored)
+    \node[bigA] at (utop) {};
+    \node[bigA] at (utr)  {};
+    \node[bigA] at (ubr)  {};
+    \node[bigA] at (ubot) {};
+    \node[bigN] at (uN)   {};
+    \node[bigA] at (utl)  {};
+    \node[bigO] at (uO)   {};
+    \node[bigA] at (uNme) {};
+\end{scope}
+
+% per-atom embedding vectors below
+\foreach \i/\col [count=\r from 0] in {1/gray, 2/BrickRed, 3/gray, 4/gray, 5/RoyalBlue, 6/gray} {
+    \pgfmathsetmacro{\yy}{2.6 - 0.55*\r}
+    \node[font=\scriptsize] at (\xD-1.6, \yy) {\i};
+    % small atom dot
+    \node[circle, fill=\col, draw=\col!70!black, minimum size=3mm, inner sep=0pt] at (\xD-1.25, \yy) {};
+    % embedding cells (5 cells with varying intensity)
+    \foreach \k/\sh in {0/100, 1/70, 2/85, 3/55, 4/40} {
+        \node[rectangle, fill=\col!\sh, draw=\col!\sh!black!50,
+              minimum width=4mm, minimum height=4.5mm, inner sep=0pt]
+            at (\xD-0.85+0.42*\k, \yy) {};
+    }
+    \node[font=\tiny] at (\xD+1.05, \yy) {$\dots$};
+}
+
+% =================================================================
+% STAGE 5 — Pooling
+% =================================================================
+% small embedding rows feeding into Sigma
+\foreach \i/\col [count=\r from 0] in {1/gray, 2/BrickRed, 3/gray, 4/gray, 5/OliveGreen, 6/gray} {
+    \pgfmathsetmacro{\yy}{5.4 - 0.7*\r}
+    \node[circle, fill=\col, draw=\col!70!black, minimum size=3mm, inner sep=0pt]
+        (sd\i) at (\xE-0.95, \yy) {};
+    \foreach \k/\sh in {0/100, 1/70, 2/85, 3/55} {
+        \node[rectangle, fill=\col!\sh, draw=\col!\sh!black!50,
+              minimum width=3.2mm, minimum height=4mm, inner sep=0pt]
+            at (\xE-0.6+0.34*\k, \yy) {};
+    }
+    % anchor at right edge of the last cell, used as arrow source
+    \coordinate (rend\i) at (\xE+0.62, \yy);
+}
+\node[circle, draw=black, thick, minimum size=8mm, inner sep=0pt, font=\Large]
+    (sigma) at (\xE+1.15, 2.6) {$\Sigma$};
+\foreach \i in {1,...,6} {
+    \draw[->, semithick, black!60, shorten >=1pt] (rend\i) -- (sigma);
+}
+\node[align=center, font=\scriptsize, text=black!75]
+    at (\xE+0.30, 0.6) {sum /\\mean /\\attention\\pooling};
+
+% =================================================================
+% STAGE 6 — MLP / projection -> molecular embedding vector
+% =================================================================
+\begin{scope}[shift={(\xF, 2.6)}]
+    % MLP box (small neural net diagram)
+    \draw[rounded corners=2pt, gray!70] (-0.7,-0.7) rectangle (0.7, 0.7);
+    \foreach \name/\y in {a/0.4, b/0, c/-0.4} {
+        \node[circle, draw=gray!80, fill=white, minimum size=2.6mm, inner sep=0pt] (li\name) at (-0.45,\y) {};
+    }
+    \foreach \name/\y in {a/0.25, b/-0.25} {
+        \node[circle, draw=gray!80, fill=white, minimum size=2.6mm, inner sep=0pt] (lo\name) at (0.45,\y) {};
+    }
+    \foreach \a in {a, b, c} {
+        \foreach \b in {a, b} {
+            \draw[gray!60, thin] (li\a) -- (lo\b);
+        }
+    }
+    \node[font=\scriptsize, align=center] at (0,-1.25) {MLP /\\projection};
+\end{scope}
+
+% molecular embedding vertical vector
+\begin{scope}[shift={(\xF+1.5, 2.6)}]
+    \draw[rounded corners=1pt, OliveGreen!80, thick] (-0.18,-1.5) rectangle (0.18,1.5);
+    \foreach \i/\sh in {0/100, 1/70, 2/55, 3/85, 4/100, 5/65, 6/45, 7/90, 8/100, 9/80} {
+        \pgfmathsetmacro{\yy}{1.35 - 0.3*\i}
+        \node[rectangle, fill=OliveGreen!\sh, draw=OliveGreen!\sh!black!40,
+              minimum width=3mm, minimum height=3.5mm, inner sep=0pt]
+            at (0, \yy) {};
+    }
+    \node[font=\tiny] at (0,-1.75) {$\vdots$};
+    \node[align=center, font=\scriptsize, text=OliveGreen!50!black] at (0,-2.55)
+        {molecular\\embedding\\$z_{\mathrm{mol}}$};
+\end{scope}
+
+% =================================================================
+% STAGE 7 — Latent space scatter
+% =================================================================
+\begin{scope}[shift={(\xG, 3.0)}]
+    \draw[rounded corners=2pt, dashed, OliveGreen!70, thick] (-1.3,-1.5) rectangle (1.3,1.7);
+    % axes
+    \draw[->, gray!80] (-1.0,-1.1) -- (1.0,-1.1);
+    \draw[->, gray!80] (-1.0,-1.1) -- (-1.0, 1.1);
+    % gray points
+    \foreach \px/\py in {-0.6/0.3, -0.3/-0.5, 0.0/0.6, 0.3/-0.2, 0.6/0.4, -0.5/-0.8, 0.5/-0.7, 0.7/0.0} {
+        \node[circle, fill=gray!50, minimum size=2mm, inner sep=0pt] at (\px,\py) {};
+    }
+    % green points (highlighted)
+    \foreach \px/\py in {-0.2/0.2, 0.1/0.0, 0.4/0.5, -0.4/0.7} {
+        \node[circle, fill=OliveGreen, minimum size=2.2mm, inner sep=0pt] at (\px,\py) {};
+    }
+    \node[align=center, font=\scriptsize, text=OliveGreen!50!black, anchor=north]
+        at (0,-1.80)
+        {shared latent\\space for\\comparison\\with spectral\\embeddings};
+\end{scope}
+
+% =================================================================
+% Big horizontal arrows connecting stages
+% =================================================================
+\draw[biga] (1.30, 5.2) -- (2.05, 5.2);
+\draw[biga] (4.50, 5.2) -- (5.25, 5.2);
+\draw[biga] (8.65, 5.2) -- (9.45, 5.2);
+\draw[biga] (12.10,5.2) -- (12.85,5.2);
+\draw[biga] (15.85,2.6) -- (16.95,2.6);
+\draw[biga] (19.60,2.6) -- (20.60,2.6);
+
+\end{tikzpicture}

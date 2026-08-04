@@ -1,0 +1,56 @@
+\begin{tikzpicture}[
+  atom/.style={circle, draw=gray!60, fill=gray!20, minimum size=22pt, inner sep=0pt, font=\small\bfseries},
+  every edge quotes/.style={font=\scriptsize, fill=white, inner sep=1pt}
+]
+
+% ── Benzene ring (flat-left orientation, center at 0,0) ──
+% 6 carbons at 60-degree intervals, starting from left (180 deg)
+% r = 2cm
+% C1 left       (-2, 0)
+% C2 top-left   (-1, 1.732)
+% C3 top-right  ( 1, 1.732)
+% C4 right      ( 2, 0)
+% C5 bot-right  ( 1,-1.732)
+% C6 bot-left   (-1,-1.732)
+
+\node[atom] (C1) at (-2.0,  0.0)   {C};
+\node[atom] (C2) at (-1.0,  1.732) {C};
+\node[atom] (C3) at ( 1.0,  1.732) {C};
+\node[atom] (C4) at ( 2.0,  0.0)   {C};
+\node[atom] (C5) at ( 1.0, -1.732) {C};
+\node[atom] (C6) at (-1.0, -1.732) {C};
+
+% Ring bonds (alternating single/double)
+\draw (C1) edge["$=$"] (C2);
+\draw (C2) edge["$-$"] (C3);
+\draw (C3) edge["$=$"] (C4);
+\draw (C4) edge["$-$"] (C5);
+\draw (C5) edge["$=$"] (C6);
+\draw (C6) edge["$-$"] (C1);
+
+% ── Hydrogens on ring ──
+\node[atom] (H1) at (-3.4,  0.0)  {H};
+\node[atom] (H2) at (-1.6,  2.9)  {H};
+\node[atom] (H3) at ( 1.6,  2.9)  {H};
+\node[atom] (H5) at ( 1.6, -2.9)  {H};
+\node[atom] (H6) at (-1.6, -2.9)  {H};
+
+\draw (C1) edge["$-$"] (H1);
+\draw (C2) edge["$-$"] (H2);
+\draw (C3) edge["$-$"] (H3);
+\draw (C5) edge["$-$"] (H5);
+\draw (C6) edge["$-$"] (H6);
+
+% ── Methyl group on C4 (right side) ──
+\node[atom] (CM) at ( 4.2,  0.0)  {C};
+\draw (C4) edge["$-$"] (CM);
+
+\node[atom] (HM1) at ( 5.4,  1.0) {H};
+\node[atom] (HM2) at ( 5.6,  0.0) {H};
+\node[atom] (HM3) at ( 5.4, -1.0) {H};
+
+\draw (CM) edge["$-$"] (HM1);
+\draw (CM) edge["$-$"] (HM2);
+\draw (CM) edge["$-$"] (HM3);
+
+\end{tikzpicture}

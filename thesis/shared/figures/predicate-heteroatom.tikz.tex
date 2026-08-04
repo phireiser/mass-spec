@@ -1,0 +1,79 @@
+\begin{tikzpicture}[
+    font=\small,
+    atom/.style={circle, draw, thick, minimum size=0.6cm, fill=blue!20},
+    matched/.style={circle, draw, very thick, minimum size=0.6cm, fill=orange!30, fig bold},
+    hatom/.style={circle, draw, thick, minimum size=0.5cm, fill=gray!20},
+    heteroatom/.style={circle, draw, thick, minimum size=0.6cm, fill=red!30},
+    bfs/.style={-Latex, thick, blue!60, dashed},
+]
+
+% LEFT SIDE - VALID (Contains Heteroatom)
+\begin{scope}[shift={(0,0)}]
+    % Matched region
+    \node[matched] (m1) at (1,3.5) {C};
+    \node[above=0.1cm of m1, font=\tiny, text=orange!80!black, align=center] {rule ext. \\ location};
+    
+    % BFS neighbors including heteroatom
+    \node[heteroatom] (n1) at (2.5,3.5) {N};
+    \node[atom] (c1) at (1,2) {C};
+    \node[hatom] (h1) at (2.5,2.2) {H};
+    \node[hatom] (h2) at (3.5,3.2) {H};
+    \node[hatom] (h3) at (0,2) {H};
+    
+    % Bonds
+    \draw[thick] (m1) -- (n1);
+    \draw[thick] (m1) -- (c1);
+    \draw[thick] (n1) -- (h1);
+    \draw[thick] (n1) -- (h2);
+    \draw[thick] (c1) -- (h3);
+    
+    % BFS arrows
+    \draw[bfs] (m1) to[bend left=15] node[above, font=\tiny] {BFS} (n1);
+    \draw[bfs] (m1) to[bend right=15] (c1);
+    
+    % Highlight the heteroatom
+    \node[rectangle, draw, very thick, red, rounded corners, fit=(n1), inner sep=0.15cm] {};
+    \node[above=1.5mm of n1, font=\tiny, text=red] {heteroatom!};
+    
+    % Label box
+    \node[rectangle, draw, thick, fill=green!20, rounded corners, minimum width=4cm, minimum height=0.8cm] at (1.75,0.5) {
+        \textbf{VALID: Heteroatom Group}
+    };
+    \node[font=\scriptsize, text width=4cm, align=center] at (1.75,-0.3) {
+        BFS $\setminus$ \{H, C\} $\neq \varnothing$ \checkmark
+    };
+\end{scope}
+
+% RIGHT SIDE - INVALID (No Heteroatom)
+\begin{scope}[shift={(7,0)}]
+    % Matched region
+    \node[matched] (m2) at (1,3.5) {C};
+    \node[above=0.1cm of m2, font=\tiny, text=orange!80!black, align=center] {rule ext. \\ location};
+    
+    % BFS neighbors - only C and H
+    \node[atom] (c2) at (2.5,3.5) {C};
+    \node[atom] (c3) at (1,2) {C};
+    \node[hatom] (h4) at (2.5,2.2) {H};
+    \node[hatom] (h5) at (3.5,3.2) {H};
+    \node[hatom] (h6) at (0,2) {H};
+    
+    % Bonds
+    \draw[thick] (m2) -- (c2);
+    \draw[thick] (m2) -- (c3);
+    \draw[thick] (c2) -- (h4);
+    \draw[thick] (c2) -- (h5);
+    \draw[thick] (c3) -- (h6);
+    
+    % BFS arrows
+    \draw[bfs] (m2) to[bend left=15] node[above, font=\tiny] {BFS} (c2);
+    \draw[bfs] (m2) to[bend right=15] (c3);
+    
+    % Label box
+    \node[rectangle, draw, thick, fill=red!20, rounded corners, minimum width=4cm, minimum height=0.8cm] at (1.75,0.5) {
+        \textbf{INVALID: No Heteroatom}
+    };
+    \node[font=\scriptsize, text width=4cm, align=center] at (1.75,-0.3) {
+        BFS $\setminus$ \{H, C\} $= \varnothing$ \texttimes
+    };
+\end{scope}
+\end{tikzpicture}

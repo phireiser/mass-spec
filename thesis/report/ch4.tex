@@ -1,0 +1,173 @@
+\chapter{Results and Discussion}
+\label{ch:4}
+\noindent
+
+\section{Computation Times of Fragmentation Expansion}
+
+Computation times present a significant bottleneck for this approach.
+The \texttt{mod} framework, while powerful in generating comprehensive reaction networks, prioritizes flexibility and completeness over computational efficiency.
+Combined with the rapid growth in the number of possible fragments and parent molecules, runtime becomes prohibitive as the number of fragmentation rules increases.
+Since only a subset of known rules were applied in this study, computation times per molecule will rise substantially as additional rules are incorporated, making further optimization necessary to ensure the feasibility of this approach at scale.
+
+\subsection{Visualization of Computation Times}
+
+A regression analysis was performed to model the relationship between molecular complexity and computation time.
+
+Here, molecular complexity refers to Boettcher's complexity measure \cite{Boettcher2016}, which summarizes structural intricacy from the molecular graph.
+This provides a single scalar descriptor that enables molecules of different sizes and connectivities to be compared on a common scale.
+In this analysis, it is used as an indicator of fragmentation difficulty.
+However, runtime is also influenced by factors such as the molecule's specific structure and the available fragmentation pathways.
+
+The analysis assumes:
+\begin{itemize}[noitemsep,topsep=0pt]
+    %\item Linearity of the relationship
+    \item Homoscedasticity of residuals
+    \item Independence of residual observations
+    \item Normality of residual distribution
+\end{itemize}
+
+In Figure \ref{fig:mod-time-regres}, the regression results are visualized, showing a positive correlation between molecular complexity and computation time, but also show a large variance in computation times for molecules of similar complexity.
+Note that the threshold of 40 seconds was chosen arbitrarily to exclude trivial expansions.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{../shared/figures/time_vs_complexity_logy_over40.png}
+    \caption[Fragmentation Computation Times]{
+        Regression of Computation time, excluding molecules that had trivial expansions (time $< 40$s).
+        The plot shows a positive correlation between molecular complexity and computation time, but also a large variance in computation times for molecules of similar complexity.
+        }
+    \label{fig:mod-time-regres}
+\end{figure}
+
+The large variance suggests that other factors, such as specific structural features or the particular fragmentation pathways available, also play a significant role in determining computation time.
+
+\section{Evaluation of Structure--Spectrum Translation}
+
+The evaluation must control for one confound above all others: the precursor (parent) mass.
+Because a candidate whose mass matches the query's implied precursor mass is already a strong match, any retrieval score that is not held against a mass baseline can look successful while doing little more than mass filtering.
+
+A free-form spectrum decoder can collapse onto the dataset-mean spectrum, predicting essentially the same intensity vector regardless of the input molecule, while a reranking stage built on top of it still appears to improve retrieval substantially.
+Such an apparent gain is almost entirely due to a precursor-mass consistency filter: replacing the learned forward spectrum with a constant mean spectrum, or even an all-ones vector, while keeping the mass mask reproduces the same reranking benefit, so the learned spectral shape itself contributes little.
+
+\emph{First}, the fragment-grounded decoder, \Cref{sec:forward-model} makes each predicted spectrum an explicit function of the molecule's fragment set.
+This means that it cannot collapse to an input-independent spectrum, and that its peaks will land at physically realizable fragment masses by construction.
+\emph{Secondly}, retrieval is reported under a \emph{mass-controlled} scheme: within a fixed window around the query's true mass, the learned encoder retrieval $\cos(z_{\mathrm{spec}}, z_{\mathrm{mol}})$ is compared against the analytic random-chance baseline for a pool of that size.
+Only a result that beats chance \emph{inside} the window counts as learned structural signal, because within a narrow mass window the mass is approximately constant and can no longer explain the ranking.
+
+\subsection{The Forward Model Is Molecule-Specific}
+\label{sec:molecule-specific}
+
+With the fragment-based decoder, forward prediction is input-dependent by construction.
+Since each predicted spectrum is explicitly dependent on the molecule's own set of fragments, the predictions vary according to the input rather than reproducing a single average spectrum.
+For a representative molecule such as benzene, the predicted peaks fall at fragment masses $m/z \approx 26, 51, 77, 78$ (the molecular ion at $78$, loss of H at $77$, $\mathrm{C_4H_3^+}$ at $51$, and $\mathrm{C_2H_2^+}$ at $26$) that correspond to genuine fragments of the structure rather than at arbitrary bins.
+The forward branch therefore produces molecule-specific spectra that are chemically meaningful, which is a prerequisite for using the forward model in retrieval.
+
+\subsection{Mass-Controlled Retrieval}
+
+The headline evaluation is spectrum-to-structure retrieval assessed against mass.
+\Cref{fig:mass-controlled} reports, for held-out test molecules, the learned within-window MRR (mean reciprocal rank) next to the analytic random-chance MRR for two mass windows.
+Within $\pm 5$\,Da the learned retrieval reaches an MRR of $0.551$ against a chance level of $0.503$, a margin of $+0.048$; within $\pm 20$\,Da it reaches $0.219$ against $0.206$, a margin of $+0.013$.
+As these molecules were not observed during training or model selection, the positive margins suggest that the model is recovering structural information that generalises beyond the precursor mass.
+
+\begin{figure}[H]
+    \centering
+    \figorpending{width=0.8\linewidth}{../shared/figures/mass_controlled_mrr.pdf}
+    \caption[Mass-controlled retrieval: learned vs.\ chance]{
+        Spectrum-to-structure retrieval on held-out test molecules, with precursor mass taken into account.
+        For each mass window ($\pm 5$ and $\pm 20$\,Da around the query's true mass), the learned encoder retrieval MRR is shown next to the analytic random-chance MRR for a pool of the same size.
+        A bar standing above its chance reference indicates structural signal that mass alone cannot explain, since mass is approximately constant inside the window.
+        This is the decisive test for structural signal: uncontrolled retrieval quality can be explained by mass alone, whereas here the model retains a positive margin over chance once mass is controlled for.
+    }
+    \label{fig:mass-controlled}
+\end{figure}
+
+\subsection{Why Raw Retrieval Scores Are Not the Right Axis}
+\label{sec:raw-scores}
+
+Mass dominates the uncontrolled metrics to such an extent that ranking candidates purely by their agreement with the query's parent mass is already close to a solution in the full retrieval set.
+This is exactly what motivates the mass-controlled scheme.
+An oracle that ranks by the difference between the true mass and the mass implied by the query's heaviest peak reaches an MRR of $0.92$, and a spectrum-only mass baseline reaches $0.46$.
+Against baselines this strong, the raw learned MRR over the full set, $0.11$, does not clear this mass floor and so is not, on its own, evidence of learned chemistry.
+The full-set ablation figures below, which compare the full model against no-fragments, no-derivation-graph, and no-reranking variants are therefore reported as diagnostics of the pipeline's behaviour rather than as the headline result.
+
+\begin{figure}[H]
+    \centering
+    \figorpending{width=0.8\linewidth}{../shared/figures/cosine_mrr.pdf}
+    \caption[Cosine similarity and MRR for ablation variants]{
+        Ablation of three pipeline components (fragments, derivation graph, and reranker) against the full model.
+        Cosine similarity measures how similar the query is to the correct target, averaged over all queries; MRR is the mean reciprocal rank of the ground-truth target.
+        Error bars show $95 \%$ bootstrap confidence intervals (5000 query resamples).
+        Brackets indicate pairwise p-values from paired randomization tests
+        %on per-query differences (10,000 sign flips),
+        computed separately for each metric.
+        For \emph{cosine similarity}, all variants are nearly identical ($\approx 0.43$) and no pairwise difference is statistically significant, so forward reconstruction is insensitive to the ablations.
+        For \emph{MRR}, removing reranking lowers the full-set score from $0.24$ to $0.10$ (Full vs.\ no-reranking, $p \approx$~$0.087$),
+        whereas the fragment and derivation-graph ablations do not differ significantly from the full model.
+        As discussed in the text, this full-set MRR is dominated by precursor mass, so the reranking effect shown here reflects mass-consistency filtering rather than learned spectral shape.
+        }
+    \label{fig:cosine-mrr}
+\end{figure}
+
+On the forward task, all evaluated variants achieve very similar cosine similarity values.
+The full model reaches a mean cosine similarity of $0.43$, while the no-fragments and no-derivation-graph ablations achieve $0.43$ and $0.43$, respectively (\Cref{fig:cosine-mrr}).
+These cosine values reflect genuine reconstructions; their near-equality across ablations suggests that the molecular encoder already captures most of the forward-predictive signal, with the fragment branch adding little on this particular metric.
+
+For the full model, Recall@1 is $0.09$, Recall@5 is $0.32$, Recall@10 is $0.50$, and Recall@20 is $0.86$, with a mean reciprocal rank of $0.24$ (\Cref{fig:recall-at-k}).
+Read on their own, these values resemble a system for narrowing down candidates, but for the reasons established above (\Cref{sec:raw-scores}) they largely reflect agreement on precursor mass.
+\Cref{fig:mass-controlled} isolates the genuinely learned component.
+
+\begin{figure}[H]
+    \centering
+    \figorpending{width=0.8\linewidth}{../shared/figures/recall_at_k.pdf}
+    \caption[Recall@k for ablation variants]{
+        Recall@k for $k = 1, \ldots, 20$ across the full retrieval model and three ablated variants.
+        Shaded bands show 95\% bootstrap confidence intervals over queries.
+        The full model and the \texttt{no fragments}~/~\texttt{no derivation graph} variants cluster together across the full $k$ range, while the \texttt{no reranking} variant trails the others at every $k$, with the largest gap at small $k$ and gradual closure toward $k = 20$.
+    }
+    \label{fig:recall-at-k}
+\end{figure}
+
+On the full set, removing reranking leaves the forward cosine similarity unchanged, as expected, but lowers retrieval quality: Recall@5 drops from $0.32$ to $0.09$,
+Recall@10 from $0.50$ to $0.23$, Recall@20 from $0.86$ to $0.41$, and MRR from $0.24$ to $0.10$.
+Taken at face value, this appears to be a significant advantage of forward-model rescoring.
+However, it is the mass-consistency filtering identified above (\Cref{sec:raw-scores}): the same improvement is achieved by retaining only the precursor-mass mask.
+Therefore, it does not provide evidence that the learned forward spectral shape drives retrieval.
+The fragment-related ablations remain inconclusive in terms of the full-set metrics.
+The differences between the full model and the no-fragments and no-derivation-graph variants are small.
+On query-level paired tests, these differences are not statistically significant.
+Therefore, the full-set view alone does not establish a benefit from the fragment branch.
+What the fragment branch does contribute unambiguously is the forward decoder's molecule-specificity (\Cref{sec:molecule-specific}), the property the mass-controlled retrieval result relies on.
+
+These conclusions should be interpreted with caution.
+The held-out test set contains only 13 queries, so recall values change in coarse increments, and differences between variants often reflect only one or two queries.
+Model selection was performed on the validation split, so the validation margins over chance are optimistic.
+The test set held out in \Cref{fig:mass-controlled} is therefore more reliable.
+The numbers reported here come from a single training run and should be considered proof of concept rather than a benchmarked result.
+
+Overall, the results demonstrate the effectiveness of the proposed bidirectional framework. Once the forward decoder is grounded in fragments, the retrieval of spectra from structures provides structural information beyond precursor masses for molecules that have not been used in training.
+Decisive evidence comes from the mass-controlled comparison rather than any raw retrieval score, since uncontrolled metrics — including the apparent benefit of reranking — are dominated by mass consistency.
+This work's main contributions are twofold: a fragment-augmented bidirectional framework whose forward model is molecule-specific by design, and a mass-controlled evaluation that distinguishes between structural discrimination genuinely learned and mass filtering.
+Together, these provide a concrete basis for future work aimed at improving the informativeness and integration of fragment-level intermediate representations.
+
+
+%\section{Comparison with Baseline Models}
+%CFM-ID,
+%
+%MSNovelist (https://doi.org/10.1038/s41592-022-01486-3),
+%
+%MassGenie (https://doi.org/10.3390/biom11121793) ...
+
+
+\section{Challenges}
+The thesis is shaped by several interconnected challenges.
+
+\emph{First}, fragmentation must be represented in a way that is simultaneously chemically meaningful and useful for machine learning.
+\emph{Second}, explicit fragment generation leads to a \emph{combinatorial explosion} of candidate structures and limits the practical scale of the approach.
+\emph{Third}, the absence of unique \emph{ground-truth fragmentation graphs} makes fragment-level supervision inherently \emph{ambiguous}.
+\emph{Fourth}, bidirectional learning introduces \emph{competing objectives}, since forward spectrum reconstruction and backward structure retrieval do not necessarily favor the same latent representation.
+Finally and \emph{fifth}, the empirical contribution of fragment-aware intermediate representations remains difficult to establish conclusively, especially under \emph{small-sample} conditions and in the presence of strong baseline signals from the molecular encoder alone.
+
+
+%\section{potential improvements}
+%speed up graph transformation, especially predicates
+%trivial, scoping: use one class of molecules, a diverse set of molecules is naturally more difficult to model.

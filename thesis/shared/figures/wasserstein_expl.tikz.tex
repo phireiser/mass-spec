@@ -1,0 +1,66 @@
+\begin{tikzpicture}[x=0.85cm,y=2.6cm,fig]
+
+  % ---- axis range: x value 0..13, y index 0..1.15 ----
+  % gridlines for the i/n levels
+  \foreach \lvl/\lab in {0.25/{$\tfrac14$}, 0.5/{$\tfrac24$}, 0.75/{$\tfrac34$}, 1/{$\tfrac44$}}{
+    \draw[fig grid] (0,\lvl) -- (13,\lvl);
+    \node[left,black,font=\small] at (0,\lvl) {\lab};
+  }
+  \node[left,font=\small] at (0,0) {$0$};
+
+  % ---- hatched gap rectangles (drawn first, behind curves) ----
+  % level 1 (0..0.25): between P=1 and Q=4  -> width 3
+  \fill[pattern=north east lines, pattern color=amber]
+        (1,0.04) rectangle (4,0.21);
+  \draw[amber,fig thin] (1,0.04) rectangle (4,0.21);
+  \node[amber,font=\bfseries] at (2.5,0.125) {3};
+  % level 2 (0.25..0.5): between Q=4 and P=6 -> width 2
+  \fill[pattern=north east lines, pattern color=amber]
+        (4,0.29) rectangle (6,0.46);
+  \draw[amber,fig thin] (4,0.29) rectangle (6,0.46);
+  \node[amber,font=\bfseries] at (5,0.375) {2};
+  % level 3 (0.5..0.75): between P=6 and Q=9 -> width 3
+  \fill[pattern=north east lines, pattern color=amber]
+        (6,0.54) rectangle (9,0.71);
+  \draw[amber,fig thin] (6,0.54) rectangle (9,0.71);
+  \node[amber,font=\bfseries] at (7.5,0.625) {3};
+  % level 4 (0.75..1): between P=10 and Q=12 -> width 2
+  \fill[pattern=north east lines, pattern color=amber]
+        (10,0.79) rectangle (12,0.96);
+  \draw[amber,fig thin] (10,0.79) rectangle (12,0.96);
+  \node[amber,font=\bfseries] at (11,0.875) {2};
+
+  % ---- P staircase (red): sorted P = 1,6,6,10 ----
+  \draw[BrickRed,fig bold]
+        (1,0) -- (1,0.25) -- (6,0.25) -- (6,0.75) -- (10,0.75) -- (10,1) -- (12,1);
+  \foreach \x/\y in {1/0.25, 6/0.75, 10/1}{
+    \fill[BrickRed] (\x,\y) circle (2pt);
+  }
+
+  % ---- Q staircase (blue): sorted Q = 4,4,9,12 ----
+  \draw[RoyalBlue,fig bold]
+        (4,0) -- (4,0.5) -- (9,0.5) -- (9,0.75) -- (12,0.75) -- (12,1);
+  \foreach \x/\y in {4/0.5, 9/0.75, 12/1}{
+    \fill[RoyalBlue] (\x,\y) circle (2pt);
+  }
+
+  % ---- axes ----
+  \draw[-{Latex[length=3mm]},fig thin] (0,0) -- (13,0);
+  \draw[-{Latex[length=3mm]},fig thin] (0,0) -- (0,1.13);
+  \foreach \x in {1,4,6,9,10,12}{
+    \draw[fig thin] (\x,0.012) -- (\x,-0.012);
+    \node[below,font=\small] at (\x,-0.01) {\x};
+  }
+
+  % ---- legend ----
+  \begin{scope}[shift={(0.4,-0.22)}]
+    \draw[BrickRed,fig bold] (0,0) -- (0.8,0);
+    \node[right,font=\small] at (0.8,0) {$P$ staircase};
+    \draw[RoyalBlue,fig bold] (4.2,0) -- (5,0);
+    \node[right,font=\small] at (5,0) {$Q$ staircase};
+    \fill[pattern=north east lines, pattern color=amber] (8.4,-0.03) rectangle (8.9,0.03);
+    \draw[amber,fig thin] (8.4,-0.03) rectangle (8.9,0.03);
+    \node[right,font=\small] at (8.9,0) {$|\,\text{difference}\,|$};
+  \end{scope}
+
+\end{tikzpicture}
