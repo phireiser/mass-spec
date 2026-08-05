@@ -30,6 +30,7 @@
 \usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.multipart,shadows.blur,bending}
 % extra libraries required by the shared thesis figures:
 \usetikzlibrary{backgrounds,patterns,angles,quotes,shapes.geometric,shapes.symbols}
+\usetikzlibrary{shapes.misc}   % 'rounded rectangle' nodes in the ms_architecture_* figures
 \usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,decorations.markings}
 \usepackage{graphicx}
 \usepackage{adjustbox}                                % fit figures within width AND height
@@ -434,11 +435,11 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 %    }
 %\end{frame}
 
-\begin{frame}[fragile]{Architecture Diagram}
+\begin{frame}[fragile]{Architecture -- Training}
     \centering
-    \IfFileExists{../shared/figures/architecture_diagram.tikz.tex}{%
+    \IfFileExists{../shared/figures/ms_architecture_training.tex}{%
         \begin{adjustbox}{max totalsize={\textwidth}{0.86\textheight},center}
-            \input{../shared/figures/architecture_diagram.tikz.tex}
+            \input{../shared/figures/ms_architecture_training.tex}
         \end{adjustbox}%
     }{%
         \framebox[0.8\linewidth]{%
@@ -471,6 +472,20 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     contrastive alignment. So forward prediction and inverse retrieval end
     up constraining the very same latent space.
 }
+
+\begin{frame}[fragile]{Architecture -- Inference}
+    \centering
+    \IfFileExists{../shared/figures/ms_architecture_inference.tex}{%
+        \begin{adjustbox}{max totalsize={\textwidth}{0.86\textheight},center}
+            \input{../shared/figures/ms_architecture_inference.tex}
+        \end{adjustbox}%
+    }{%
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }
+\end{frame}
 
 \section{Results}
 \begin{frame}{Results -- Bidirectional Retrieval}
