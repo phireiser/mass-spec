@@ -10,7 +10,7 @@
 %
 \mode<presentation>
 {
-  \usetheme{Darmstadt}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usetheme{Darmstadt}
   \usecolortheme{beaver} % or try albatross, beaver, crane, ...
   \usefonttheme{serif}  % or try serif, structurebold, ...
   \setbeamertemplate{navigation symbols}{}
@@ -18,10 +18,12 @@
   \setbeamertemplate{footline}{
     \hfill\insertframenumber{} / \inserttotalframenumber\hspace{2em}\vspace{2mm}
   }
-} 
+}
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{lmodern}   % scalable TS1 fonts (as in report/main.tex); LISC has no
+                       % METAFONT, so bitmap tcrm* cannot be generated on demand
 \usepackage{minted}
 \usepackage{tikz}
 \usepackage{tikz-cd}
@@ -34,7 +36,6 @@
 \usepackage{import}                                   % robust relative paths for shared snippets
 \graphicspath{{./}{../shared/figures/}}     % own dir first, then shared figures
 \usepackage{subcaption}
-\usepackage{svg}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -51,9 +52,21 @@
 
 \newcommand{\checkline}[1]{{\footnotesize\color{black!70}#1}}
 
+% ---- Figures: embed the PDF if it exists, else show a red placeholder box.
+% Mirrors report/main.tex; no inkscape on LISC, so svg conversion is not an option.
+\newcommand{\ph}[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand{\figorpending}[2]{%
+    \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }%
+}
+
 
 %\setbeameroption{show notes}
-\setbeameroption{show notes on second screen=right} 
+\setbeameroption{show notes on second screen=right}
 
 
 
@@ -69,7 +82,7 @@
     breaklines=true
     }
 
-\title[MS-Thesis]{Bidirectional Mass Spectrometry Modeling 
+\title[MS-Thesis]{Bidirectional Mass Spectrometry Modeling
 Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 \author{Philipp Reiser}
 \institute{TBI Uni Vienna}
@@ -81,18 +94,21 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
   \titlepage
 \end{frame}
 \note{
-    I will talk about my master's thesis project,
-    which I am doing at the University of Vienna in the TBI group.
+    Hi everyone. I'm Philipp, and today I'd like to show you my master's
+    thesis project. I'm doing it at the University of Vienna, in the TBI
+    group.
 }
 
 \begin{frame}{Outline}
   \tableofcontents
 \end{frame}
 \note{
-    A quick roadmap: I start with the problem and some background on
-    mass spectrometry, then the data and how I generate fragment
-    candidates with M\O D, then the machine-learning model and the
-    results, and I close with the main takeaways.
+    Just a quick roadmap, so you know where we're going.
+
+    I'll start with the problem itself and a bit of background on mass
+    spectrometry. Then the data, and how I generate fragment candidates
+    with M\O D. After that comes the machine-learning model and the
+    results. And at the end I'll say what I take away from all of it.
 }
 
 \section{Problem}
@@ -115,17 +131,20 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     \end{itemize}
 \end{frame}
 \note{
-    What is this project about?
+    So what is this project actually about?
 
-    I formulate MS modeling mathematically as a function mapping a
-    molecular structure to its mass spectrum,
+    The starting point is quite simple. I treat mass-spectrometry
+    modelling as a function: you put in a molecular structure, and you
+    get out a mass spectrum. That's the forward direction.
 
-    and I study the inverse problem of mapping a spectrum back to a
-    structure.
+    What I'm really after, though, is the inverse problem --- you have a
+    spectrum, and you want to get back to the structure.
 
-    The key idea is to bring in the relationships between the fragments,
+    And the idea I'm exploring is to bring the relationships between the
+    fragments into that.
 
-    which I model in M\O D, and use them to enhance the ML models.
+    I model those with M\O D, and then use them to help the
+    machine-learning models along.
 }
 
 \section{Background}
@@ -140,22 +159,22 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     bottleneck.}
 \end{frame}
 \note{
-    Why would we want to do MS modeling? What is the motivation?
+    But why bother modelling this at all?
+    What's the motivation?
 
-    Mass spectrometry is one of the most widely used tools for molecular
-    analysis, but interpreting MS data is still largely expert-driven and
-    time-consuming.
+    Mass spectrometry is one of the most widely used tools we have for
+    analysing molecules. But reading that data is still mostly done by hand, by experts, and it takes time.
 
-    So the high throughput in data acquisition does not carry through to
-    the analysis --- that is the bottleneck.
+    So we can acquire spectra very fast --- and none of that speed
+    carries over into the analysis. That's where the bottleneck sits.
 
-    And by incorporating chemical structure, we can make the ML models
-    more interpretable and help them generalize.
+    And the hope is: if we feed chemical structure into the models, they
+    get more interpretable and they generalise better.
 }
 
 \begin{frame}{Mass Spectrometer}
     \centering
-    
+
     % ================== TOP: Overview diagram ==================
     \resizebox{0.82\textwidth}{!}{
         \input{../shared/figures/MassSpec_flow.tikz.tex}
@@ -173,17 +192,19 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     detect \quad$\Rightarrow$\quad spectrum = fragment fingerprint.}
 \end{frame}
 \note{
-    A quick reminder on how mass spectrometry works.
+    A quick reminder of how a mass spectrometer works.
 
-    We have a sample, which is ionized;
+    We start with a sample, and that sample gets ionised.
 
-    the ions are then separated by their mass-to-charge ratio,
+    The ions are then separated by their mass-to-charge ratio,
 
-    and detected to produce a spectrum.
+    and at the end they hit a detector
+    --- and that's what gives us the spectrum.
 
-    Under electron ionization the molecule breaks into fragments, so the
-    spectrum is essentially a fingerprint of those fragments --- which is
-    exactly what we exploit later.
+    The part that matters for us:
+    under electron ionisation the molecule doesn't stay in one piece, it breaks apart.
+    So the spectrum is really a fingerprint of those fragments.
+    And that's exactly what I exploit later on.
 }
 
 
@@ -193,11 +214,11 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
         \item Mass spectrometry data from NIST $\rightarrow$ SMILES strings \& spectra
         \item Curated EI fragmentation reactions $\rightarrow$ \textbf{M\O D} rules
     \end{itemize}
-    
+
 	\begin{columns}[T,onlytextwidth]
 	  \column{0.5\textwidth}
 	  \centering
-	  \includesvg[width=\linewidth]{../shared/figures/TolueneFragmentation.svg}
+	  \figorpending{width=\linewidth}{../shared/figures/TolueneFragmentation.pdf}
 	  \nocite{src-wiki-toluene-fragmentation}
 
 	  \column{0.5\textwidth}
@@ -207,13 +228,18 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 	\end{columns}
 \end{frame}
 \note{
-    We have two main data sources:
+    I work with two data sources.
 
-    Mass spectrometry data from NIST,
+    The first is mass-spectrometry data from NIST.
 
-    which gives us the molecular structure in the form of SMILES strings and spectra,
+    That gives me the structures, as SMILES strings, together with the
+    measured spectra.
 
-    and curated EI fragmentation reactions, which are modeled as M\O D rules.
+    The second is curated EI fragmentation reactions from the literature,
+    and those I encode as M\O D rules.
+
+    On the left you see toluene falling apart, and on the right the
+    spectrum that comes out of it.
 }
 
 
@@ -224,17 +250,18 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     }
 \end{frame}
 \note{
-    A sample molecule is fragmented using the fragmentation rules in
-    M\O D,
+    This is the whole pipeline in one picture.
 
-    producing a fragmentation graph,
+    I take a molecule and fragment it with the rules in M\O D.
 
-    from which we extract the fragments.
+    That gives me a fragmentation graph,
 
-    These fragments are then combined using the inverse of the reaction
-    rules
+    and from that graph I read off the fragments.
 
-    to produce candidate precursor structures for a given spectrum.
+    Then I go the other way round: I take those fragments and put them
+    back together, using the inverse of the reaction rules.
+
+    And that's how I get candidate structures for a given spectrum.
 }
 
 \begin{frame}[fragile]{Sample Fragmentation Rules}
@@ -265,14 +292,16 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 \end{frame}
 
 \note{
-    At the top we see an example fragmentation rule as stated in the
-    literature --- note that it refers not only to individual atoms but
-    also to whole groups (the R and Y placeholders).
+    At the top you see one of these rules the way it's written in the
+    literature. And the thing to notice is that it doesn't only talk
+    about single atoms --- it also refers to whole groups. Those are the
+    R and Y placeholders.
 
-    At the bottom we see how the same rule is represented in code, using a
-    notation that lets us encode those atom groups explicitly.
+    At the bottom is the same rule in code. I use a notation that lets me
+    write those groups down explicitly.
 
-    We use this extended notation in the graph-transformation step.
+    And that extended notation is what goes into the graph
+    transformation.
 }
 
 
@@ -283,12 +312,12 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     }
 \end{frame}
 \note{
-    In M\O D, predicates act as callbacks during the transformation,
+    M\O D lets you hook in so-called predicates. They're callbacks that
+    get called during the transformation,
 
-    which I use to filter candidates based on the rule extension.
+    and I use them to filter candidates according to the rule extension.
 
-    In the next slides I will show examples of the predicates I
-    implemented for this filtering.
+    On the next few slides I'll walk you through the ones I implemented.
 }
 
 \begin{frame}{M\O D - Predicate - Alkyl Group}
@@ -298,14 +327,15 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     }
 \end{frame}
 \note{
-    A hydrocarbon (alkyl) substituent contains only C and H atoms.
+    The first one is the alkyl group. An alkyl substituent contains
+    nothing but carbon and hydrogen.
 
-    Starting from the rule-extension location, I collect neighbors in a
-    breadth-first manner until I reach atoms that are already in the match
-    of the original rule.
+    So I start where the rule is extended, and collect the neighbours
+    breadth-first, until I run into atoms that are already part of the
+    match of the original rule.
 
-    If every collected atom is a C or H, the group is a valid alkyl group;
-    otherwise it is rejected.
+    And then I simply check: is everything I collected a carbon or a
+    hydrogen? If yes, it's a valid alkyl group. If not, I reject it.
 }
 
 \begin{frame}{M\O D - Predicate - Heteroatom Group}
@@ -315,16 +345,17 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     }
 \end{frame}
 \note{
-    A valid heteroatom group must contain at least one atom that is not C
-    or H.
+    The heteroatom group is basically the mirror image of that. Here I
+    need at least one atom that is \emph{not} a carbon or a hydrogen.
 
-    Again I collect the neighbors breadth-first, those not matched by the
-    original rule,
+    Again I collect the neighbours breadth-first --- the ones the original
+    rule hasn't matched ---
 
-    and I check whether that set contains anything outside \{H, C\}.
+    and then I check whether that set contains anything outside hydrogen
+    and carbon.
 
-    If it does, the group is a valid heteroatom group; if it is a subset
-    of \{H, C\}, it is rejected.
+    If it does, it's a valid heteroatom group. If it's only hydrogen and
+    carbon, it gets rejected.
 }
 
 \begin{frame}{M\O D - Predicate - Saturation}
@@ -335,13 +366,14 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     }
 \end{frame}
 \note{
-    The saturation predicate checks for a chain of carbon atoms connected
-    only by single bonds, where each carbon carries only hydrogen atoms as
-    side branches.
+    And the third one is saturation. Here I'm looking for a chain of
+    carbons that are connected only by single bonds, and where every
+    carbon carries nothing but hydrogens on the side.
 
-    I search from the start atom to the end atom along C--C single bonds:
-    the top example is saturated, the bottom one fails because of the
-    branching carbon and the double bond.
+    So I search from the start atom to the end atom, along carbon--carbon
+    single bonds. The example at the top passes. The one at the bottom
+    fails, and there are two reasons for that: the branching carbon, and
+    the double bond.
 }
 
 
@@ -352,15 +384,16 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     \end{figure}
 \end{frame}
 \note{
-    Here we see the computed output of the fragmentation, drawn as a
-    derivation graph,
+    And this is what actually comes out of the fragmentation. It's drawn
+    as a derivation graph.
 
-    where the nodes are the fragments and the edges are the reactions that
+    The nodes are the fragments, and the edges are the reactions that
     connect them.
 
-    The point is not to read every node --- it is that from a single input
-    molecule M\O D generates a rich, connected space of fragments, and this
-    is what we mine for candidate structures.
+    You're not meant to read every single node here. The point is just
+    this: from one input molecule, M\O D builds up a whole rich, connected
+    space of fragments --- and that's the space I then mine for candidate
+    structures.
 }
 
 
@@ -379,7 +412,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 %    \item Fingerprints perform better than all graph encodings but are not (easily) invertible.
 %    \item PyTorch Geometric provides tools for graph-based representations.
 %    \item Fragmentation-graphs can also be represented using PyTorch Geometric.
-%\end{itemize}    
+%\end{itemize}
 %}
 %
 
@@ -403,33 +436,40 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 
 \begin{frame}[fragile]{Architecture Diagram}
     \centering
-    \begin{adjustbox}{max totalsize={\textwidth}{0.86\textheight},center}
-        \input{../shared/figures/architecture_diagram.tikz.tex}
-    \end{adjustbox}
+    \IfFileExists{../shared/figures/architecture_diagram.tikz.tex}{%
+        \begin{adjustbox}{max totalsize={\textwidth}{0.86\textheight},center}
+            \input{../shared/figures/architecture_diagram.tikz.tex}
+        \end{adjustbox}%
+    }{%
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }
 \end{frame}
 \note{
-    This is the architecture of the model I implemented. It has three
-    inputs: the molecule graph, the derivation (fragmentation) graph, and
-    the mass spectrum.
+    This is the model I implemented. It takes three inputs: the molecule
+    graph, the derivation graph --- so the fragmentation --- and the mass
+    spectrum.
 
-    Each input is mapped into one shared latent space by its own encoder
-    --- a GCN with global pooling for the molecule, a two-level graph
-    encoder over the derivation graph for the fragments, and a residual MLP
-    for the spectrum.
+    Each of them gets its own encoder, and they all map into one shared
+    latent space. For the molecule that's a GCN with global pooling, for
+    the derivation graph a two-level graph encoder, and for the spectrum a
+    residual MLP.
 
-    In the forward direction the molecular and fragment latents are fused
-    and decoded into a predicted spectrum.
+    Going forward, I fuse the molecule and the fragment latents, and
+    decode them into a predicted spectrum.
 
-    Importantly, the backward direction is not a spectrum-to-graph decoder:
-    it is a retrieval path. The spectrum embedding is aligned with the
-    molecular embeddings, so at test time I retrieve the nearest candidate
-    structures by cosine similarity and then rerank them with the forward
-    model.
+    The backward direction deserves a comment, because it is \emph{not} a
+    spectrum-to-graph decoder. It's a retrieval path. I align the spectrum
+    embedding with the molecular embeddings, so at test time I can pull
+    out the nearest candidate structures by cosine similarity, and then
+    rerank them with the forward model.
 
-    The two directions share the task heads and decoder and are tied
-    together by auxiliary losses --- cycle-consistency and InfoNCE
-    contrastive alignment --- so forward prediction and inverse retrieval
-    constrain the same latent space.
+    Both directions share the task heads and the decoder, and they're tied
+    together by two auxiliary losses: cycle consistency, and an InfoNCE
+    contrastive alignment. So forward prediction and inverse retrieval end
+    up constraining the very same latent space.
 }
 
 \section{Results}
@@ -453,36 +493,37 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
         \end{tabular}
       \column{0.58\textwidth}
         \centering
-        \includesvg[width=\linewidth]{../shared/figures/recall_at_k.svg}
+        \figorpending{width=\linewidth}{../shared/figures/recall_at_k.pdf}
     \end{columns}
     \vskip 0.3em
     \centering
     {\footnotesize $\Rightarrow$ candidate narrowing, not single-shot ID}
 \end{frame}
 \note{
-    Now the results. This is a proof of concept on the order of a hundred
-    EI compounds, with 22 held-out test queries.
+    Now to the results. And let me say up front that this is a proof of
+    concept: roughly a hundred EI compounds, with 22 held-out test
+    queries.
 
-    Recall at k is the fraction of queries whose true structure is among
-    the top-k retrieved candidates.
+    Recall at k is the fraction of queries where the true structure shows
+    up among the top k retrieved candidates.
 
-    For the full model, Recall@1 is about 0.09, Recall@5 about 0.32,
-    Recall@10 is 0.50, Recall@20 is 0.86, and the mean reciprocal rank is
-    0.24.
+    For the full model, Recall@1 is about 0.09, Recall@5 about 0.32, at 10
+    we're at 0.50, at 20 at 0.86, and the mean reciprocal rank is 0.24.
 
-    So top-1 identification is limited, but the correct molecule is
-    usually pulled into the top of the ranked list. The system behaves as
-    a candidate-narrowing tool --- which is still useful in a real
-    structure-elucidation workflow --- rather than a single-shot
-    identifier.
+    So getting it right on the first guess is hard. But the correct
+    molecule usually does get pulled up towards the top of the list. In
+    other words, this behaves as a tool that narrows down candidates ---
+    which is still genuinely useful in a structure-elucidation workflow.
+    It's just not a single-shot identifier.
 
-    Note the small test set: 22 queries means recall moves in steps of
-    about 0.045, so I read differences between variants cautiously.
+    One caveat on these numbers: the test set is small. With 22 queries,
+    recall moves in steps of about 0.045 --- so I'm careful about reading
+    too much into the differences between variants.
 }
 
 \begin{frame}{Results -- What Actually Helps? (Ablation)}
     \centering
-    \includesvg[width=0.58\linewidth]{../shared/figures/cosine_mrr.svg}
+    \figorpending{width=0.58\linewidth}{../shared/figures/cosine_mrr.pdf}
     \vskip 0.2em
     {\footnotesize
     \begin{itemize}
@@ -493,27 +534,29 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     \end{itemize}}
 \end{frame}
 \note{
-    To see what actually drives performance, I ran an ablation against the
-    full model: no fragments, no derivation graph, and no reranking.
+    To find out what actually drives that, I ran an ablation against the
+    full model: once without the fragments, once without the derivation
+    graph, and once without reranking.
 
-    First, the forward task: all variants reach almost the same cosine
-    similarity, around 0.43. Forward reconstruction is basically
-    insensitive to the ablations.
+    First the forward task. All the variants land at almost the same
+    cosine similarity, around 0.43. So the forward reconstruction barely
+    notices the ablations at all.
 
-    Second, the one clearly significant effect is reranking. Removing it
-    drops the mean reciprocal rank from 0.24 to 0.10, with a p-value
-    around 0.013. So much of the retrieval benefit comes from combining
-    latent-space retrieval with forward-model rescoring.
+    Second, the one effect that is clearly significant is reranking. If I
+    take it out, the mean reciprocal rank drops from 0.24 down to 0.10,
+    with a p-value of about 0.013. So a good part of the retrieval benefit
+    comes from combining the latent-space retrieval with rescoring by the
+    forward model.
 
-    Third --- and this is the honest part --- the fragment and
-    derivation-graph branches do not give a statistically significant gain
-    yet. In its current form the fragment representation is largely
-    redundant given the molecular encoder.
+    And third --- this is the honest part --- the fragment branch and the
+    derivation graph don't give me a statistically significant gain yet.
+    In the form they're in right now, the fragment representation is
+    largely redundant once you have the molecular encoder.
 
-    So the main contribution here is not a headline performance win from
-    fragment augmentation; it is establishing a fragment-augmented
-    bidirectional framework whose strengths and failure modes can be
-    analysed systematically --- which is exactly what motivates the
+    So the main contribution here isn't a headline number from fragment
+    augmentation. It's that there now \emph{is} a fragment-augmented
+    bidirectional framework whose strengths and failure modes you can
+    analyse systematically. And that's exactly what leads into the
     outlook.
 }
 
@@ -538,19 +581,19 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     \end{itemize}
 \end{frame}
 \note{
-    To conclude, the contributions: to my knowledge this is the first
-    framework to couple M\O D-derived derivation graphs with a two-level
-    molecular representation and to align spectral and structural
-    embeddings in a single bidirectional model, covering both the forward
-    and the inverse direction. Along the way I built a rule-extension DSL
-    with the chemical predicates I showed, and a coupled forward--backward
-    training objective.
+    So, to wrap up. First the contributions: as far as I know, this is the
+    first framework that couples M\O D derivation graphs with a two-level
+    molecular representation, and that aligns spectral and structural
+    embeddings in one single bidirectional model --- so both the forward
+    and the inverse direction. And along the way I built the
+    rule-extension DSL with the chemical predicates I showed you, plus a
+    coupled forward--backward training objective.
 
-    And the honest assessment: the framework is functional and reranking
-    clearly helps, but the fragment branch does not yet give a significant
-    gain over the molecular encoder alone. So the value of this work is a
-    bidirectional framework whose behaviour and failure modes I can analyse
-    systematically --- which sets up the outlook.
+    And then the honest assessment: the framework works, reranking clearly
+    helps, but the fragment branch doesn't beat the molecular encoder on
+    its own yet. So what this work really gives you is a bidirectional
+    framework whose behaviour and failure modes I can actually analyse ---
+    and that's the setup for the outlook.
 }
 
 \begin{frame}{Outlook -- Learn to \emph{Generate} Fragmentation}
@@ -569,27 +612,27 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     end-to-end}
 \end{frame}
 \note{
-    The clearest boundary of the current approach is that it does not learn
-    fragmentation itself: it encodes derivation graphs that the rule-based
-    M\O D pipeline computes upstream. The learning problem only begins
-    after the fragmentation space has been built.
+    The clearest limit of what I've shown you is this: the model doesn't
+    learn fragmentation. It encodes derivation graphs that the rule-based
+    M\O D pipeline has already computed upstream. The learning problem only
+    starts once the fragmentation space is built.
 
-    The natural next step, and my main direction for future work, is to
-    move from encoding fragmentation to generating it. The key inspiration
-    is ICEBERG, by Goldman and colleagues, which splits the task into a
-    Generate module that proposes likely fragmentation events and a Score
-    module that assigns intensities.
+    So the natural next step --- and that's where I'd like to take this ---
+    is to move from encoding fragmentation to generating it. The main
+    inspiration here is ICEBERG, by Goldman and colleagues. They split the
+    task in two: a Generate module that proposes likely fragmentation
+    events, and a Score module that assigns the intensities.
 
-    Seen this way, my model already supplies the Score side: it embeds
-    molecules, fragments, and spectra into a shared space, predicts
-    spectra, and aligns and retrieves. What is missing is the upstream
-    Generate module that decides which fragments enter at all --- and the
-    symbolic M\O D derivation graphs could serve as proxy supervision for
-    training it.
+    And if you look at my model through that lens, I already have the
+    Score side. It embeds molecules, fragments and spectra into a shared
+    space, it predicts spectra, it aligns and retrieves. What's missing is
+    the Generate module upstream --- the part that decides which fragments
+    even enter the picture. And the symbolic M\O D derivation graphs could
+    serve as proxy supervision for training exactly that.
 
-    I see a staged path: first learn to prune or rank derivation steps,
-    then learn to expand fragmentation graphs autoregressively, and finally
-    couple generation and scoring into one end-to-end model.
+    I'd do it in stages: first learn to prune or rank derivation steps,
+    then learn to expand the fragmentation graph autoregressively, and
+    finally couple generation and scoring into one end-to-end model.
 }
 
 \begin{frame}{Outlook -- Toward a Generate--Score Architecture}
@@ -599,29 +642,35 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
     \end{adjustbox}
 \end{frame}
 \note{
-    This figure sketches that target architecture. A learned Generate
-    module, trained with the M\O D derivation graphs as proxy labels,
-    proposes the fragmentation structure; the Score module --- essentially
-    my present model --- embeds molecule, fragments, and spectrum in a
-    shared latent space and produces both the forward spectrum prediction
-    and the inverse retrieval. The two are trained end-to-end, so the model
-    learns not only how to use fragments but which fragmentation structures
-    to construct in the first place.
+    And this is roughly what that would look like.
+
+    A learned Generate module, trained with the M\O D derivation graphs as
+    proxy labels, proposes the fragmentation structure. And the Score
+    module --- that's essentially my current model --- embeds the
+    molecule, the fragments and the spectrum into a shared latent space,
+    and produces both the forward spectrum prediction and the inverse
+    retrieval.
+
+    The two would be trained end-to-end. So the model wouldn't just learn
+    how to \emph{use} fragments --- it would learn which fragmentation
+    structures to build in the first place.
 }
 
 \begin{frame}{References}
 	\scriptsize
     \printbibliography[heading=none]
 \end{frame}
-\note{these are my sources and references}
+\note{
+    And these are the sources and references I used.
+}
 
 \begin{frame}{Discussion}
     \center{Questions?}
 \end{frame}
 \note{
-    thank you for your attention 
-    
-    Do you have questions?
+    That's it from my side --- thank you for your attention.
+
+    I'm happy to take any questions.
 }
 
 
@@ -639,7 +688,7 @@ Aided by Auxiliary Intermediate Steps From Graph Transformation Tools}
 %    >>  charge_bound(
 %            amu_bound(
 %                sub_group(
-%                    mod.repeat[frag_repeat](fragmentation), 
+%                    mod.repeat[frag_repeat](fragmentation),
 %                    derivation_graph
 %                    ),
 %                minimum = min_mass,
