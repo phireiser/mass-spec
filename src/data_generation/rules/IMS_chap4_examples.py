@@ -195,11 +195,24 @@ IMS_4_8 = mod.Rule.fromDFS(
 )
 
 # Interpreation von Massenspektren Springer, Seite 59 Gl. 4.09; oder Seite Einband, Alkene
+
+# Book geometry (R-CR2-Y+. -> R. + CR2=Y+R): the bond that breaks is the
+# leaving group's bond to the alpha-carbon -- the same carbon that forms the new
+# pi bond to Y. So the leaving R (atom 1) hangs directly off that carbon
+# (atom 2), and atoms 3/4 are its two further R substituents, the book's CR2.
+# On the product side Y keeps the charge but NOT the odd electron: one electron
+# of the broken sigma bond leaves with the radical, the other pairs with Y's
+# odd electron to form the pi bond.
+# This was previously encoded with an extra carbon between the leaving group and
+# the alpha-carbon (so the cleaved bond was not incident to the pi-forming atom)
+# and with [_A+.] on the right, which made the rule create a second unpaired
+# electron -- the conservation guardrail dropped it for spin 1 -> 2, i.e. the
+# rule never fired. The §-spec numbering is unchanged by the new skeleton.
 IMS_4_9 = mod.Rule.fromDFS(
 	s =
-	"[C]1[C]2[C]3([C]4)[_A+.]5" #YRY "[C]1[C]2[C]3([C]4)[_A+.]5[_A]6"
+	"[C]1[C]2([C]3)([C]4)[_A+.]5" #YRY "[C]1[C]2([C]3)([C]4)[_A+.]5[_A]6"
 	">>"
-	"[C.]1" "." "[C]2[C]3([C]4){=}[_A+.]5", #YRY "[C.]1.[C]2[C]3([C]4){=}[_A+.]5[_A]6"
+	"[C.]1" "." "[C]2([C]3)([C]4){=}[_A+]5", #YRY "[C.]1.[C]2([C]3)([C]4){=}[_A+]5[_A]6"
 	name =
 	"radical induced (alpha-)clevage for a saturated site"
 	" 4.9"
