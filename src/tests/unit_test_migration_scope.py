@@ -27,7 +27,12 @@ TAIL = [                      # large AND sparsely reactive -> migration capped 
     ("progesterone", 23, 0.478),
     ("stearic_acid", 20, 0.200),
     ("testosterone", 21, 0.429),
-    ("cortisol", 26, 0.577),   # highest rf retained in the tail
+    ("cortisol", 26, 0.577),
+    # Both of these escaped the tail while the cut sat at 0.6, and they were the only two
+    # failures of the full migration-on rebuild (job 5806812): estrone peaked at 7.98 GB
+    # against an 8 GB limit, aldosterone was killed at 12 h30 without writing a dump.
+    ("estrone", 20, 0.650),
+    ("aldosterone", 26, 0.654),   # highest rf retained in the tail
 ]
 NOT_TAIL = [                  # must keep FULL UNCAPPED migration -- the cap is lossy here
     ("glucose", 12, 1.000),        # biggest chance-corrected win, p=3.7e-05
@@ -40,7 +45,7 @@ NOT_TAIL = [                  # must keep FULL UNCAPPED migration -- the cap is 
     ("decalin", 10, 0.000),
     ("cyclohexanol", 7, 0.286),    # capping THIS would cost 5.9% of its NIST intensity
     ("piperidine", 6, 0.500),      # capping THIS would cost 26.5% -- the worst case measured
-    ("estrone", 20, 0.650),        # just above the rf cut -- the boundary case
+    ("beta_carotene", 40, 0.800),  # first tail-eligible molecule above the cut -- must stay out
 ]
 
 
@@ -76,11 +81,83 @@ class TestMigrationScope(unittest.TestCase):
 
     def test_boundary_is_exclusive_on_rf_and_inclusive_on_size(self):
         # rf strictly below the cut is tail; exactly at the cut is not.
-        self.assertIsNotNone(migration_scope(20, 0.599).cap)
-        self.assertIsNone(migration_scope(20, 0.600).cap)
+        self.assertIsNotNone(migration_scope(20, 0.659).cap)
+        self.assertIsNone(migration_scope(20, 0.660).cap)
         # heavy count at the floor counts as large.
         self.assertIsNotNone(migration_scope(18, 0.300).cap)
         self.assertIsNone(migration_scope(17, 0.300).cap)
+
+    def test_estrone_is_inside_the_cut_not_exactly_on_it(self):
+        # Regression guard for an off-by-one that looks harmless. estrone's rf is exactly
+        # 13/20 = 0.65, and the rf test is ``>=``, so a cut of 0.65 leaves it on uncapped
+        # migration -- i.e. changes nothing about the failure it was meant to fix. The cut
+        # must sit strictly above 0.65.
+        self.assertIsNone(migration_scope(20, 0.650, max_reactive_fraction=0.65).cap,
+                          "a 0.65 cut is a no-op for estrone -- this is the trap")
+        self.assertIsNotNone(migration_scope(20, 0.650).cap,
+                             "estrone must be capped at the shipped default")
+        self.assertIsNotNone(migration_scope(26, 17 / 26).cap,
+                             "aldosterone (17/26) must be capped at the shipped default")
+
+    # ---- structure clause: size OR ring count -------------------------------------------
+    # (name, heavy, rf, cyclomatic) -- measured on the neutral parent
+    FUSED_TAIL = [
+        ("decalin", 10, 0.000, 2),        # 79.4 s vs decane's 5.13 s at identical heavy/rf
+        ("camphor", 11, 0.364, 2),        # 45 min uncapped in the corpus build
+        ("tricyclic_C10", 10, 0.000, 3),  # CC1(C)C2CC3C1C3(C)C2 -- 13 h16 uncapped
+        ("terpenoid_decoy", 16, 0.125, 3),  # the 16 h decoys from job 5824027
+    ]
+    MONOCYCLIC_KEEP_FULL = [
+        # The cap is MEASURED LOSSY here, which is why the threshold is 2 and not 1.
+        ("piperidine", 6, 0.500, 1),      # cap 3 costs 26.5% of NIST intensity
+        ("cyclohexanol", 7, 0.286, 1),    # cap 3 costs 5.9%
+    ]
+    ACYCLIC_KEEP_FULL = [
+        ("octane", 8, 0.000, 0),          # 2.38 s -- needs no intervention
+        ("decane", 10, 0.000, 0),         # 5.13 s
+    ]
+
+    def test_fused_rings_enter_the_tail_regardless_of_size(self):
+        for name, heavy, rf, cyc in self.FUSED_TAIL:
+            with self.subTest(molecule=name):
+                scope = migration_scope(heavy, rf, cyclomatic=cyc)
+                self.assertEqual(scope.cap, DEFAULT_TAIL_CAP,
+                                 f"{name}: fused + sparsely reactive is the tail ({scope.reason})")
+                self.assertIn("cyclomatic", scope.reason)
+
+    def test_monocycles_keep_full_migration_because_the_cap_is_lossy_there(self):
+        for name, heavy, rf, cyc in self.MONOCYCLIC_KEEP_FULL:
+            with self.subTest(molecule=name):
+                self.assertIsNone(migration_scope(heavy, rf, cyclomatic=cyc).cap,
+                                  f"{name}: capping a monocycle drops real peaks")
+
+    def test_small_acyclic_chains_keep_full_migration(self):
+        for name, heavy, rf, cyc in self.ACYCLIC_KEEP_FULL:
+            with self.subTest(molecule=name):
+                self.assertIsNone(migration_scope(heavy, rf, cyclomatic=cyc).cap,
+                                  f"{name}: cheap already; lowering min_heavy would sweep it in")
+
+    def test_ring_clause_boundary_is_two(self):
+        self.assertIsNone(migration_scope(10, 0.000, cyclomatic=1).cap)
+        self.assertIsNotNone(migration_scope(10, 0.000, cyclomatic=2).cap)
+
+    def test_ring_clause_still_obeys_the_reactive_fraction_clause(self):
+        # Hetero-dense fused molecules are where migration's chance-corrected wins live
+        # (sucrose p=0.005, riboflavin) -- the ring clause must not drag them in.
+        for name, heavy, rf, cyc in (("sucrose", 23, 1.000, 2), ("riboflavin", 27, 1.000, 3)):
+            with self.subTest(molecule=name):
+                self.assertIsNone(migration_scope(heavy, rf, cyclomatic=cyc).cap,
+                                  f"{name}: dense-reactive must keep full migration")
+
+    def test_ring_clause_can_be_disabled(self):
+        self.assertIsNone(migration_scope(10, 0.000, cyclomatic=3, min_cyclomatic=0).cap,
+                          "min_cyclomatic<=0 reverts to size-only scoping")
+
+    def test_size_clause_still_fires_for_acyclic_long_chains(self):
+        # stearic acid: cyclomatic 0, caught by the size clause alone.
+        scope = migration_scope(20, 0.200, cyclomatic=0)
+        self.assertEqual(scope.cap, DEFAULT_TAIL_CAP)
+        self.assertIn("heavy", scope.reason)
 
     def test_tail_cap_is_configurable(self):
         scope = migration_scope(28, 0.250, tail_cap=4)

@@ -36,16 +36,29 @@ parser.add_argument("--migration-tail-min-heavy", type=int, default=18, metavar=
                          "it has >= N heavy atoms. N<=0 disables tail scoping entirely (full "
                          "migration for every molecule -- the configuration that TIMES OUT on "
                          "steroids). Size alone is not enough; see the reactive-fraction clause.")
-parser.add_argument("--migration-tail-max-reactive-fraction", type=float, default=0.6,
+parser.add_argument("--migration-tail-min-cyclomatic", type=int, default=2, metavar="C",
+                    help="Saturated-tail scoping, STRUCTURE clause (OR'd with --migration-tail-"
+                         "min-heavy): a molecule is structurally expensive if it has >= C "
+                         "independent cycles (|E|-|V|+1). C<=0 disables the ring clause and "
+                         "reverts to size-only. Size alone misses the saturated polycycles: at "
+                         "10 heavy atoms and rf 0.000 alike, decane builds in 5.1 s and the "
+                         "tricyclic CC1(C)C2CC3C1C3(C)C2 in 13 h16. 2 (not 1) because that is "
+                         "where the cap stops being lossless -- monocyclic piperidine loses "
+                         "26.5%% of its NIST intensity when capped, fused decalin/steroids "
+                         "lose nothing.")
+parser.add_argument("--migration-tail-max-reactive-fraction", type=float, default=0.66,
                     metavar="F",
                     help="Saturated-tail scoping, CHEMISTRY clause: a molecule is in the tail "
                          "only if its reactive_heavy_fraction < F (fraction of heavy atoms that "
                          "are hetero / on / adjacent-to unsaturation). Size alone misfires: "
                          "cholesterol(28 heavy) and riboflavin(27) are indistinguishable by "
                          "size, but rf is 0.250 vs 1.000 -- and migration's real wins (glucose, "
-                         "sucrose) sit at rf 1.000. The corpus is sharply bimodal in rf (102 of "
-                         "172 molecules are exactly 1.000, nothing between 0.577 and 0.650), so "
-                         "F=0.6 is robust. F>1.0 disables the chemistry clause.")
+                         "sucrose) sit at rf 1.000. F=0.66 captures all 8 steroids: it was 0.6, "
+                         "which split the steroid cluster and left estrone (exactly 13/20=0.650) "
+                         "and aldosterone (0.654) on uncapped migration -- the only two failures "
+                         "of the full rebuild. The test is >=, so 0.65 would NOT catch estrone; "
+                         "the next tail-eligible molecule up is beta-carotene at 0.800. "
+                         "F>1.0 disables the chemistry clause.")
 parser.add_argument("--migration-tail-policy", type=str, default="cap",
                     choices=strategy.MIGRATION_TAIL_POLICIES,
                     help="What to do with molecules in the saturated tail. 'cap' (default): run "
@@ -157,10 +170,13 @@ heavy_count = sum(
     if utils.parse_term_atom(v.stringLabel)[0] != "H"
 )
 reactive_fraction = utils.reactive_heavy_fraction(molecule_term)
+cyclomatic = utils.cyclomatic_number(molecule_term)
 scope = strategy.migration_scope(
     heavy_count=heavy_count,
     reactive_fraction=reactive_fraction,
+    cyclomatic=cyclomatic,
     min_heavy=args.migration_tail_min_heavy,
+    min_cyclomatic=args.migration_tail_min_cyclomatic,
     max_reactive_fraction=args.migration_tail_max_reactive_fraction,
     policy=args.migration_tail_policy,
     tail_cap=args.migration_tail_cap,

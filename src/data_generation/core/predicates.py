@@ -269,24 +269,6 @@ def sub_group(
     kept for experimentation only and is not the chemically intended behaviour.
     """
 
-    def _positions_signature(alkyl_position, hetro_position, saturated_position):
-        """Order-stable identity of a match's *generalized* positions (R/Y/S).
-
-        Within one derivation the morphism (``match.codomain``) is identical for
-        every match, and neither ``collect_bfs`` (which ignores ``match``) nor
-        ``saturated_path`` (which uses ``match`` only via that constant morphism)
-        depends on anything else, so ``_match_satisfies`` is a pure function of
-        where the rule's generalized positions land in the molecule. mod hands
-        back ~10^3 matches per derivation dominated by symmetry-equivalent
-        embeddings that map those positions to the *same* atoms; deduping on this
-        signature runs the expensive traversal once per distinct assignment.
-        """
-        return (
-            tuple(v.id for v in alkyl_position),
-            tuple(v.id for v in hetro_position),
-            tuple((a.id, b.id) for a, b in saturated_position),
-        )
-
     def _match_satisfies(derivation, match, alkyl_position, hetro_position,
                          saturated_position) -> bool:
         """Evaluate the subgroup definition for a single rule->molecule embedding."""
@@ -385,26 +367,20 @@ def sub_group(
         if not matches:
             return True
 
-        # `right_limit=1` already collapses the symmetry-equivalent embeddings
-        # upstream, so `matches` is now typically one per distinct generalized-
-        # position assignment. The signature dedup below is kept as a cheap
-        # belt-and-suspenders for any residual multiplicity: within this
-        # derivation the morphism is fixed, so the subgroup outcome depends only
-        # on that assignment -- run the (expensive) traversal once per distinct
-        # signature.
-        sig_cache: "dict[tuple, bool]" = {}
-
+        # There used to be a dedup here, caching `_match_satisfies` on a signature of
+        # the match's generalized (R/Y/S) positions. It was worth it when mod handed
+        # back ~10^3 embeddings per derivation that mapped those positions to the same
+        # atoms. `right_limit=1` removed that multiplicity at the source: what survives
+        # are *distinct* left maps, which have distinct signatures, so the cache could
+        # only ever miss. Measured over 2011 derivations across 9 molecules (including
+        # glucose and the symmetric neopentane/p-xylene), 2003 derivations yield a single
+        # match and 8 yield two, and in *zero* of them did two matches share a signature.
+        # Evaluate directly; the cache was pure overhead.
         def evaluate(match) -> bool:
             positions = utils.transfer_positions_of_generalization_extention(
                 generalization_extention, match
             )
-            sig = _positions_signature(*positions)
-            cached = sig_cache.get(sig)
-            if cached is not None:
-                return cached
-            result = _match_satisfies(derivation, match, *positions)
-            sig_cache[sig] = result
-            return result
+            return _match_satisfies(derivation, match, *positions)
 
         # Accept the derivation if any embedding satisfies the definition
         # (logical OR -- the chemically correct, existential semantics; see

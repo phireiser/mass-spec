@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=data_gen_fragment
-#SBATCH --time=7-00:30:00
+#SBATCH --time=0-23:30:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=32G
-#SBATCH --output=outputs/logs/data_gen/slurm/%A/%j.out
+#SBATCH --mem=16G
+#SBATCH --output=data/outputs/logs/data_gen/slurm/%A/%j.out
 
 # Usage:
 # sbatch run/hpc/data_gen.sh
@@ -54,7 +54,7 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$DATADIR/fwd"
 mkdir -p "$DATADIR/bwd"
 # Bind-mount target must exist on host before apptainer mounts it
-# (the Parquet store lives under outputs/, so the $C_OUTPUTS bind covers it)
+# (the Parquet store lives under data/outputs/, so the $C_OUTPUTS bind covers it)
 mkdir -p "$REPO_ROOT/$PARQUET_DIR_REL"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
 
@@ -95,8 +95,16 @@ OUTFILE="${LOG_DIR}/${SLURM_ARRAY_TASK_ID}__${NAME_SLUG}.out"
 # Thread binding
 THREADS="${SLURM_CPUS_PER_TASK:-1}"
 
-/usr/bin/time -v \
+# `time -v` must sit INSIDE srun. Outside it wraps the srun client, whose rusage never
+# sees the work -- the task runs under slurmstepd on the compute node, not as a child of
+# srun -- so every log reported ~10 MB peak RSS and 0% CPU regardless of the molecule.
+# Here it is the task command itself, so getrusage(RUSAGE_CHILDREN) walks apptainer down
+# to python and reports the container's real peak (verified: 400 MB alloc -> 418816 KB).
+# It stays on the host side of apptainer because the image ships no /usr/bin/time; moving
+# it in front of `python` would need the `time` package added to the container build.
+# This is the durable memory record -- sacct purges its accounting after a few days.
 srun --cpu-bind=cores \
+/usr/bin/time -v \
 apptainer exec \
     --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
     --bind "$REPO_ROOT/$PROCESSED_DIR_REL:$C_PROCESSED" \

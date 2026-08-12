@@ -372,6 +372,36 @@ def reactive_heavy_fraction(term_graph: mod.Graph) -> float:
     return sum(1 for i in heavy if i in reactive_ids) / len(heavy)
 
 
+def cyclomatic_number(term_graph: mod.Graph) -> int:
+    """Independent cycles in a molecule: ``|E| - |V| + 1`` (0 acyclic, 1 mono-, >=2 fused).
+
+    The third migration-scope trigger, alongside :func:`reactive_heavy_fraction`. It exists
+    because cost is NOT a function of size and decoration alone: at a fixed
+    ``(heavy_count, reactive_fraction)`` it spans four orders of magnitude with ring count.
+    All of these are rf 0.000, and the last three are 10 heavy atoms apiece --
+    indistinguishable to a size+decoration trigger:
+
+    ======================  ==========  =========
+    molecule                cyclomatic  wall
+    ======================  ==========  =========
+    octane                           0     2.38 s
+    decane                           0     5.13 s
+    decalin                          2    79.4 s
+    ``CC1(C)C2CC3C1C3(C)C2``         3   13 h16 m
+    ======================  ==========  =========
+
+    A fused cage gives the delocalized charge many near-equivalent cyclic paths with no
+    cleavable terminus; an acyclic chain of the same length and decoration gives it one, and
+    it terminates. See ``core/strategy.migration_scope`` for how the threshold is set and why
+    it is 2 rather than 1.
+
+    Hydrogens do not matter: each is a pendant vertex contributing one vertex and one edge,
+    so it cancels out of ``|E| - |V|``. Molecules here are connected, so the connected-
+    component term is 1.
+    """
+    return term_graph.numEdges - term_graph.numVertices + 1
+
+
 def charge_radical_on_reactive_site(term_graph: mod.Graph, want_charge: bool) -> bool:
     """Does the migrated ``+`` (``want_charge``) / radical land on a *reactive* site?
 
@@ -483,6 +513,7 @@ def skeleton_key(term_graph: mod.Graph, rounds: int = 3) -> tuple:
 __all__ = [
     "charge_radical_on_reactive_site",
     "reactive_heavy_fraction",
+    "cyclomatic_number",
     "skeleton_key",
     "vertex_by_id",
     "mol_neighbors",
