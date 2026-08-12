@@ -1,6 +1,6 @@
 """
 Integration test: run the real MØD fragmentation pipeline on toluene and check
-it against the NIST reference spectrum (from the Parquet store, outputs/nist_spectra/,
+it against the NIST reference spectrum (from the Parquet store, data/outputs/nist_spectra/,
 looked up by SMILES).
 
 Unlike the mocked unit tests in test_data_generation_utils.py, this exercises

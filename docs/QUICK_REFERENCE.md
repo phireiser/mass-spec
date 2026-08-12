@@ -11,10 +11,10 @@ Fast lookup guide for common infos.
 | `data/processed/` | Processed data | .pt tensors |
 | `src/data_generation/` | Data pipeline | Processing code |
 | `src/machine_learning/` | ML models | Training code |
-| `outputs/checkpoints/` | Saved models | model_best.pt |
-| `outputs/logs/` | Training logs | .log files |
-| `outputs/metrics/` | Performance data | .json files |
-| `outputs/plots/` | Visualizations | .png files |
+| `data/outputs/checkpoints/` | Saved models | model_best.pt |
+| `data/outputs/logs/` | Training logs | .log files |
+| `data/outputs/metrics/` | Performance data | .json files |
+| `data/outputs/plots/` | Visualizations | .png files |
 
 ## File Format Reference
 
@@ -38,25 +38,23 @@ After first run, your directory structure will look like:
 data/
 ├── compounds.csv                    # Molecule definitions
 ├── compounds_amines.csv            # Amino compounds subset
-├── nist_spectra/                   # Raw NIST mass spectra
-│   ├── acetone-Mass.jdx
-│   ├── benzene-Mass.jdx
-│   └── ... (200+ more .jdx files)
-└── processed/                      # Generated datasets
-    ├── fwd/
-    │   ├── train.pt
-    │   ├── val.pt
-    │   └── test.pt
-    └── bwd/
-        ├── train.pt
-        ├── val.pt
-        └── test.pt
-
-outputs/
-├── checkpoints/                    # Saved models
-├── logs/                          # Training logs
-├── metrics/                       # Performance metrics
-└── plots/                         # Generated visualizations
+├── processed/                      # Generated datasets
+│   ├── fwd/
+│   │   ├── train.pt
+│   │   ├── val.pt
+│   │   └── test.pt
+│   └── bwd/
+│       ├── train.pt
+│       ├── val.pt
+│       └── test.pt
+└── outputs/                        # Everything the pipeline produces
+    ├── nist_spectra/               # Measured NIST spectra (Parquet store)
+    │   ├── spectra.parquet
+    │   └── index.parquet
+    ├── checkpoints/                # Saved models
+    ├── logs/                       # Training logs
+    ├── metrics/                    # Performance metrics
+    └── plots/                      # Generated visualizations
 ```
 ## Environment Variables
 
@@ -80,7 +78,7 @@ run/hpc/data_gen.sh
 run/hpc/ml_train.sh
 
 # Check results
-ls outputs/checkpoints/
+ls data/outputs/checkpoints/
 ```
 
 ### Workflow 3: Hyperparameter Optimization
@@ -92,7 +90,7 @@ run/hpc/data_gen.sh
 run/hpc/ml_optimze.sh
 
 # Best params saved to:
-ls outputs/best_params/
+ls data/outputs/best_params/
 
 # Train with best params
 run/hpc/ml_train.sh
@@ -125,7 +123,7 @@ python -m pytest tests/
 | GPU not found | -- don't forget `--nv`. Verfiy insde container: `nvidia-smi` |
 | Slow training | Verify GPU with `nvidia-smi` inside container |
 | Data not found | Check volumes |
-| Permission denied | `chmod 755 data outputs` |
+| Permission denied | `chmod 755 data data/outputs` |
 | Module not found | Ensure `PYTHONPATH=/app` in environment |
 
 ## Key Files Overview

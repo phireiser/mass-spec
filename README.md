@@ -57,7 +57,7 @@ echo 'export WANDB_API_KEY=<your-key>' > .secrets/wandb.env   # gitignored
 ```
 
 Runs log online when the node has internet, else fall back to offline under
-`outputs/wandb/`. Flush any offline runs from a shell with internet:
+`data/outputs/wandb/`. Flush any offline runs from a shell with internet:
 
 ```bash
 bash run/ci_cd/sync_wand.sh
@@ -71,8 +71,13 @@ Set `USE_WANDB=0` to disable. Requires `wandb` in the image (rebuild after pulli
 .
 ├── data/                      # Data storage
 │   ├── compounds.csv          # Molecule list
-│   ├── nist_spectra/          # Mass spectra (NIST format)
-│   └── processed/             # Processed datasets
+│   ├── processed/             # Processed datasets
+│   └── outputs/               # Results and checkpoints
+│       ├── nist_spectra/      # Measured spectra (Parquet store)
+│       ├── checkpoints/       # Saved models
+│       ├── logs/              # Run logs
+│       ├── metrics/           # Metric CSV/JSON
+│       └── plots/             # Figures
 ├── src/                       # Source code
 │   ├── data_generation/       # Spectrum generation
 │   ├── machine_learning/      # ML models and training
@@ -82,6 +87,5 @@ Set `USE_WANDB=0` to disable. Requires `wandb` in the image (rebuild after pulli
 │   ├── config/                # Config files
 │   ├── data/                  # Data processing scripts
 │   └── analysis/              # Analysis scripts
-├── outputs/                   # Results and checkpoints
 └── docs/                      # Documentation
 ```

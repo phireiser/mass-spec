@@ -1,4 +1,4 @@
-outputs/**
+data/outputs/**
 *.pyc
 **/__pycache__/
 mol-spectro.sif
@@ -34,4 +34,4 @@ data/mechanisms/.staging/
 # Side-by-side rebuild targets for A/B experiments (PROCESSED_DIR_OVERRIDE=...). These are
 # throwaway derivation-graph dumps -- 2.2 GB across the four that exist today -- and only
 # data/processed is the corpus of record.
-data/processed_*/
+data/processed*/

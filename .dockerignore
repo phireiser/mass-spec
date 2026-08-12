@@ -41,11 +41,11 @@ htmlcov/
 # Large data files (mounted as volumes)
 data/nist_spectra/*.jdx
 data/processed/
-outputs/logs/
-outputs/metrics/
-outputs/plots/
-outputs/checkpoints/
-outputs/best_params/
+data/outputs/logs/
+data/outputs/metrics/
+data/outputs/plots/
+data/outputs/checkpoints/
+data/outputs/best_params/
 
 # Documentation build
 docs/_build/

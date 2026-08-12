@@ -164,8 +164,14 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Set Python path for module resolution
 ENV PYTHONPATH=/app:/usr/local/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}
 
-# Create necessary output directories
-RUN mkdir -p /app/outputs/{logs,metrics,plots,checkpoints,best_params}
+# Create necessary output directories. Listed one per path rather than with a brace
+# expansion: RUN uses /bin/sh, which does not expand braces, so the previous
+# `{logs,metrics,...}` form created a single directory with that literal name.
+RUN mkdir -p /app/data/outputs/logs \
+             /app/data/outputs/metrics \
+             /app/data/outputs/plots \
+             /app/data/outputs/checkpoints \
+             /app/data/outputs/best_params
 
 RUN chmod +x /app/src/container/entrypoint.sh
 

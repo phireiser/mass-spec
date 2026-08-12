@@ -66,11 +66,11 @@ DEFINITION_FILE=data/<subset>.csv sbatch run/hpc/data_gen.sh   # a subset
 Dumps land in `data/processed/fwd` (`--name-by-cas`, resolved via the store).
 `--avoid-reprocessing` skips molecules whose dump already exists, so delete the
 stale dumps first to force a rebuild. Each task is wrapped in `/usr/bin/time -v`,
-so the per-task logs under `outputs/logs/data_gen/slurm/` double as per-molecule
+so the per-task logs under `data/outputs/logs/data_gen/slurm/` double as per-molecule
 cost data (fed to `cost_analysis.py`; see the cost section below).
 
 > **Removed 2026-07-22.** The earlier `regen_subset` side-dir workflow (wrote to
-> `outputs/regen_subset/fwd`, read SMILES from the *stale dump pickles*) is gone —
+> `data/outputs/regen_subset/fwd`, read SMILES from the *stale dump pickles*) is gone —
 > it rebuilt whatever structure the old dump held, silently defeating any
 > `compounds.csv` structure fix. Always regenerate via `data_gen.sh`, which reads
 > the corrected `compounds.csv`.
@@ -97,16 +97,16 @@ sacct -j <array_job_id> --format=JobID,State,ElapsedRaw,MaxRSS,ReqMem -P -n > sa
 python3 src/data_generation/analysis/feasibility/cost_analysis.py \
   --sacct-file sacct.txt \
   --manifest manifest.tsv \
-  --log-dir outputs/logs/data_gen/slurm/<array_job_id> \
-  --out-dir outputs/metrics
-# -> outputs/metrics/{cost_per_molecule.csv,cost_summary.json}
+  --log-dir data/outputs/logs/data_gen/slurm/<array_job_id> \
+  --out-dir data/outputs/metrics
+# -> data/outputs/metrics/{cost_per_molecule.csv,cost_summary.json}
 ```
 
-Plots (matplotlib lives in the container; both default to `outputs/plots/`):
+Plots (matplotlib lives in the container; both default to `data/outputs/plots/`):
 
 ```bash
-python src/plot/plot_ceiling.py   # -> outputs/plots/ceiling.png
-python src/plot/plot_cost.py      # -> outputs/plots/cost.png
+python src/plot/plot_ceiling.py   # -> data/outputs/plots/ceiling.png
+python src/plot/plot_cost.py      # -> data/outputs/plots/cost.png
 ```
 
 Unit tests for the pure metrics (run bare, no container):
@@ -121,12 +121,12 @@ python3 src/tests/unit_test_ceiling.py
   (`explained_fraction`, `formula_reachable_masses`, `sample_null`,
   `ceiling_with_ci`, `nitrogen_rule_parity`).
 - `src/data_generation/analysis/feasibility/run_ceiling.py` — corpus runner (the only part
-  needing `mod`); writes the ceiling CSV + summary JSON to `outputs/metrics`.
+  needing `mod`); writes the ceiling CSV + summary JSON to `data/outputs/metrics`.
 - `src/data_generation/analysis/feasibility/cost_analysis.py` — pure, stdlib-only cost / N\*
   analysis from a sacct dump + array logs; writes the cost CSV + summary JSON.
 - `run/analysis/ceiling.sh` — container wrapper for `run_ceiling.py`.
 - `run/hpc/data_gen.sh` — SLURM corpus builder (regenerate forward DGs from `compounds.csv`).
-- `src/plot/plot_ceiling.py`, `src/plot/plot_cost.py` — figures (→ `outputs/plots`).
+- `src/plot/plot_ceiling.py`, `src/plot/plot_cost.py` — figures (→ `data/outputs/plots`).
 
 ## Reading the gate
 

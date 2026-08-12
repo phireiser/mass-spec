@@ -16,7 +16,7 @@ correctly anchored tail sits ON a bond (~0 pt) or on an atom at a bond end.
 No rasteriser is needed, which matters on this machine (no poppler/inkscape/ImageMagick).
 Runs on the HOST (needs pypdf only, not RDKit)::
 
-    python src/mechanisms/check_arrow_geometry.py outputs/mechanisms_tex/all.tex
+    python src/mechanisms/check_arrow_geometry.py data/outputs/mechanisms_tex/all.tex
 """
 
 from __future__ import annotations

@@ -2,7 +2,7 @@
 # Feasibility — MØD explainability ceiling over the corpus.
 #
 # Reads the existing forward DG dumps (data/processed/fwd) and NIST spectra
-# (from the Parquet store, outputs/nist_spectra) and writes outputs/metrics/{ceiling_per_molecule.csv,
+# (from the Parquet store, data/outputs/nist_spectra) and writes data/outputs/metrics/{ceiling_per_molecule.csv,
 # ceiling_summary.json}. Needs `mod`, so it runs inside mol-spectro.sif.
 #
 # Usage:

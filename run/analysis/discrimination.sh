@@ -1,11 +1,11 @@
 #!/bin/bash
 # Phase 1 — true-vs-same-formula-decoy discrimination gate.
 #
-# Uses only measured NIST spectra (the Parquet store, outputs/nist_spectra): for
+# Uses only measured NIST spectra (the Parquet store, data/outputs/nist_spectra): for
 # every target compound with a spectrum and at least one same-formula decoy, it
 # scores each candidate by cosine(observed_true, observed_candidate) and reports
 # the best-decoy cosine -- the bar the MØD forward model must beat to identify
-# that molecule. Writes outputs/metrics/{discrimination_per_target.csv,
+# that molecule. Writes data/outputs/metrics/{discrimination_per_target.csv,
 # discrimination_summary.json}. Needs pyarrow + rdkit (no `mod`), so it runs
 # inside mol-spectro.sif.
 #

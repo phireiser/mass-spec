@@ -2,7 +2,7 @@
 """Plot the Phase-1 true-vs-decoy discrimination results.
 
 Reads ``discrimination_per_target.csv`` (from ``discriminate.py``, under
-``outputs/metrics``) and renders four panels: the best-decoy-cosine
+``data/outputs/metrics``) and renders four panels: the best-decoy-cosine
 distribution (the bar the forward model must beat), best-decoy cosine vs number
 of decoys, the per-target margin, and the count of confusable decoys per target.
 Pure pandas/matplotlib -- no ``mod`` -- but matplotlib lives in the container, so
@@ -22,11 +22,11 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Plot Phase-1 discrimination results")
-    ap.add_argument("--csv", default=str(ROOT / "outputs" / "metrics" / "discrimination_per_target.csv"))
-    ap.add_argument("--out-dir", default=None, help="Default: outputs/plots")
+    ap.add_argument("--csv", default=str(ROOT / "data" / "outputs" / "metrics" / "discrimination_per_target.csv"))
+    ap.add_argument("--out-dir", default=None, help="Default: data/outputs/plots")
     args = ap.parse_args()
 
-    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "outputs" / "plots"
+    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "outputs" / "plots"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(args.csv)

@@ -469,7 +469,7 @@ def main() -> None:
                     help="molecular-weight cutoff (fetch every species up to this MW)")
     ap.add_argument("--mw-start", type=int, default=1,
                     help="lower molecular-weight bound")
-    ap.add_argument("--out-dir", default="outputs/nist_spectra")
+    ap.add_argument("--out-dir", default="data/outputs/nist_spectra")
     ap.add_argument("--delay", type=float, default=1.0,
                     help="seconds between NIST requests; be polite / avoid rate limits")
     args = ap.parse_args()

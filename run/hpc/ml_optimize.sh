@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=256G
 #SBATCH --time=48:00:00
-#SBATCH --output=outputs/logs/optim/%j.out
-#SBATCH --error=outputs/logs/optim/%j.err
+#SBATCH --output=data/outputs/logs/optim/%j.out
+#SBATCH --error=data/outputs/logs/optim/%j.err
 
 # Usage:
 # sbatch run/hpc/ml_optimize.sh

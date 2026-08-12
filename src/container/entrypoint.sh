@@ -94,7 +94,7 @@ case "${COMMAND}" in
             --epochs_fwd "${EPOCHS_FWD}" \
             --epochs_bwd "${EPOCHS_BWD}" \
             --train_script "${REPO_ROOT}/src/machine_learning/main.py" \
-            --output_dir "${REPO_ROOT}/outputs/best_params" \
+            --output_dir "${REPO_ROOT}/data/outputs/best_params" \
             "${@:2}"
         ;;
 

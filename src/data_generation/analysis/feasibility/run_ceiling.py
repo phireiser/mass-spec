@@ -12,7 +12,7 @@ charged-fragment nominal masses, and defers every numeric decision to the pure
 functions in :mod:`ceiling_metrics`. Run it inside ``mol-spectro.sif`` via
 ``run/analysis/ceiling.sh``.
 
-Outputs (under ``--out-dir``, default ``outputs/metrics``):
+Outputs (under ``--out-dir``, default ``data/outputs/metrics``):
   * ``ceiling_per_molecule.csv`` — one row per analyzed molecule
   * ``ceiling_summary.json``     — corpus aggregates + the run configuration
 """

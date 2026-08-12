@@ -493,7 +493,7 @@ def main():
         # Optuna maximizes, so the wandb sweep view and the study agree at a glance.
         wandb.log({f"objective/{k}": v for k, v in objective_metrics.items()})
 
-    # Plots go beside the checkpoints, under outputs/plots.
+    # Plots go beside the checkpoints, under data/outputs/plots.
     plots_dir = args.output_dir.parent / "plots"
 
     # ----------------- Demo: Spectrum noise robustness -----------------

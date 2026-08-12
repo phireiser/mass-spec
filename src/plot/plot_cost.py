@@ -2,7 +2,7 @@
 """Plot the MØD per-molecule cost / budget results (feasibility study).
 
 Reads ``cost_per_molecule.csv`` (from ``cost_analysis.py``, under
-``outputs/metrics``) and renders four
+``data/outputs/metrics``) and renders four
 panels: the wall-time ECDF (log scale, censored tail marked), peak memory vs
 wall time coloured by outcome, wall time vs output graph count (to show they do
 *not* correlate), and the N* budget-crossover curve. Pure pandas/matplotlib --
@@ -30,12 +30,12 @@ _WALL_H = 72.0  # SLURM per-task wall the array ran under
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Plot cost results (feasibility study)")
-    ap.add_argument("--csv", default=str(ROOT / "outputs" / "metrics" / "cost_per_molecule.csv"))
-    ap.add_argument("--out-dir", default=None, help="Default: outputs/plots")
+    ap.add_argument("--csv", default=str(ROOT / "data" / "outputs" / "metrics" / "cost_per_molecule.csv"))
+    ap.add_argument("--out-dir", default=None, help="Default: data/outputs/plots")
     args = ap.parse_args()
 
     csv_path = Path(args.csv)
-    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "outputs" / "plots"
+    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "outputs" / "plots"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(csv_path)

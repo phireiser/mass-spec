@@ -10,7 +10,7 @@ window, the learned within-window retrieval MRR next to the analytic
 random-chance MRR. A learned bar standing above its chance reference is
 structural signal that precursor mass alone cannot explain.
 
-Input CSV (outputs/metrics/mass_controlled.csv), columns:
+Input CSV (data/outputs/metrics/mass_controlled.csv), columns:
     split, window_da, learned_mrr, chance_mrr, delta_mrr, mean_pool, n
 
 Output:
@@ -19,9 +19,9 @@ Output:
 Example
 -------
 python src/plot/plot_mass_controlled.py \
-    --csv outputs/metrics/mass_controlled.csv \
+    --csv data/outputs/metrics/mass_controlled.csv \
     --split test \
-    --output-dir outputs/plots/
+    --output-dir data/outputs/plots/
 """
 
 import argparse
@@ -109,7 +109,7 @@ def main() -> None:
     parser.add_argument(
         "--csv",
         type=Path,
-        default=Path("outputs/metrics/mass_controlled.csv"),
+        default=Path("data/outputs/metrics/mass_controlled.csv"),
         help="Path to the mass-controlled scorecard CSV.",
     )
     parser.add_argument(
@@ -121,7 +121,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("outputs/plots"),
+        default=Path("data/outputs/plots"),
         help="Directory for the output plot.",
     )
     args = parser.parse_args()

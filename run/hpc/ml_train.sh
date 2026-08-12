@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=256G
 #SBATCH --time=48:00:00
-#SBATCH --output=outputs/logs/train/%j.out
-#SBATCH --error=outputs/logs/train/%j.err
+#SBATCH --output=data/outputs/logs/train/%j.out
+#SBATCH --error=data/outputs/logs/train/%j.err
 
 # Usage:
 # sbatch run/hpc/ml_train.sh
@@ -27,7 +27,7 @@ EPOCHS_FWD="${EPOCHS_FWD:-10000}"
 EPOCHS_BWD="${EPOCHS_BWD:-10000}"
 
 # Tuned hyperparameters from the sweep. Check existence on the host path, but
-# pass main.py the in-container path (outputs is bound to $C_OUTPUTS).
+# pass main.py the in-container path (data/outputs is bound to $C_OUTPUTS).
 HPARAMS_HOST="${HPARAMS_HOST:-$REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams_latest.yaml}"
 HPARAMS_CONTAINER="$C_OUTPUTS/best_params/$(basename "$HPARAMS_HOST")"
 HPARAMS_ARGS=()

@@ -4,7 +4,7 @@
 - Reads MolecuelProcessingTimeTableComplexety.csv
 - Derives the x-axis from SMILES using ForliLab bottchscore
 - Computes weighted linear and cubic regressions (weights inversely proportional to data density)
-- Saves scatter plot with fitted lines to outputs/plots/time_vs_complexity.png
+- Saves scatter plot with fitted lines to data/outputs/plots/time_vs_complexity.png
 - Accounts for varying uncertainty in sparse vs dense bond count regions
 """
 from __future__ import annotations
@@ -22,8 +22,8 @@ import numpy as np
 from bottchscore3 import calculate_bottchscore_from_smiles
 
 ROOT = Path(__file__).resolve().parents[2]
-CSV_PATH = ROOT / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
-PLOT_DIR = ROOT / "outputs" / "plots"
+CSV_PATH = ROOT / "data" / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
+PLOT_DIR = ROOT / "data" / "outputs" / "plots"
 PLOT_PATH = PLOT_DIR / "time_vs_complexity.png"
 PLOT_PATH_OVER40 = PLOT_DIR / "time_vs_complexity_over40.png"
 PLOT_PATH_LOGY = PLOT_DIR / "time_vs_complexity_logy.png"

@@ -21,7 +21,7 @@ Runs INSIDE the container (needs RDKit)::
 
     apptainer exec --bind "$PWD:/app" --env PYTHONPATH=/app mol-spectro.sif \\
         python /app/src/mechanisms/render_latex.py --all --mode document \\
-        --out /app/outputs/mechanisms_tex/all.tex
+        --out /app/data/outputs/mechanisms_tex/all.tex
 
 Then ``pdflatex`` it on the host. ``--mode fragment`` instead writes one ``\\input``-able
 .tex per record, for dropping into the thesis (which already loads chemfig).

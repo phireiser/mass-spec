@@ -4,7 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 source "$REPO_ROOT/src/paths.env"
 
-# ensure outputs/mod_post/out exists
+# ensure data/outputs/mod_post/out exists
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL/mod_post/out"
 
 apptainer exec \

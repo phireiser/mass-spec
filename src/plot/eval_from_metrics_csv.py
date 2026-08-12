@@ -6,14 +6,14 @@ Create two evaluation plots from the generated metrics CSVs.
 
 Inputs
 ------
-1. Summary CSV (required), e.g. outputs/metrics/metrics_main.csv
+1. Summary CSV (required), e.g. data/outputs/metrics/metrics_main.csv
    Expected columns:
    - model
    - cosine_similarity
    - recall_at_1 ... recall_at_20
    - mrr
 
-2. Per-query CSV (optional, recommended for confidence intervals), e.g. outputs/metrics/metrics_per_query.csv
+2. Per-query CSV (optional, recommended for confidence intervals), e.g. data/outputs/metrics/metrics_per_query.csv
    Expected columns:
    - query_id
    - query_smiles
@@ -45,9 +45,9 @@ p-value labels for all model pairs (shown separately for cosine and MRR).
 Example
 -------
 python run/plot/eval_from_metrics_csv.py \
-    --summary-csv outputs/metrics/metrics_main.csv \
-    --per-query-csv outputs/metrics/metrics_per_query.csv \
-    --output-dir outputs/plots/ \
+    --summary-csv data/outputs/metrics/metrics_main.csv \
+    --per-query-csv data/outputs/metrics/metrics_per_query.csv \
+    --output-dir data/outputs/plots/ \
     --with-ci \
     --with-significance
 """
@@ -520,19 +520,19 @@ def main() -> None:
     parser.add_argument(
         "--summary-csv",
         type=Path,
-        default=Path("../../outputs/metrics/metrics_main.csv"),
+        default=Path("../../data/outputs/metrics/metrics_main.csv"),
         help="Path to summary metrics CSV.",
     )
     parser.add_argument(
         "--per-query-csv",
         type=Path,
-        default=Path("../../outputs/metrics/metrics_per_query.csv"),
+        default=Path("../../data/outputs/metrics/metrics_per_query.csv"),
         help="Optional path to per-query metrics CSV. Required for confidence intervals.",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("../../outputs/plots"),
+        default=Path("../../data/outputs/plots"),
         help="Directory for output plots.",
     )
     parser.add_argument(

@@ -46,9 +46,9 @@ run/hpc/data_gen.sh --name acetone
 - `CHECKPOINT_PATH` - Path to resume from
 
 **Output:**
-- Trained models in `outputs/checkpoints/`
-- Training logs in `outputs/logs/`
-- Metrics in `outputs/metrics/`
+- Trained models in `data/outputs/checkpoints/`
+- Training logs in `data/outputs/logs/`
+- Metrics in `data/outputs/metrics/`
 
 ### Hyperparameter Optimization
 
@@ -61,7 +61,7 @@ run/hpc/data_gen.sh --name acetone
 - `CUDA_VISIBLE_DEVICES` - GPU to use
 
 **Output:**
-- Best hyperparameters in `outputs/best_params/`
+- Best hyperparameters in `data/outputs/best_params/`
 
 ### Understanding Data Formats
 
@@ -109,20 +109,20 @@ Inside the container shell:
 
 ```bash
 # View training logs
-tail -f /app/outputs/logs/...
+tail -f /app/data/outputs/logs/...
 
 # Monitor GPU usage (if available)
 watch nvidia-smi
 
 # Interactive monitoring with tensorboard
-tensorboard --logdir=/app/outputs/logs
+tensorboard --logdir=/app/data/outputs/logs
 ```
 
 ### Checkpointing
 
 Models are automatically saved during training:
 ```
-outputs/checkpoints/
+data/outputs/checkpoints/
 ├── model_epoch_1000.pt
 ├── model_epoch_2000.pt
 └── model_best.pt
@@ -165,10 +165,10 @@ import torch
 import pandas as pd
 
 # Load metrics
-metrics = torch.load('/app/outputs/metrics/metrics.pt')
+metrics = torch.load('/app/data/outputs/metrics/metrics.pt')
 
 # Load best model
-model = torch.load('/app/outputs/checkpoints/model_best.pt')
+model = torch.load('/app/data/outputs/checkpoints/model_best.pt')
 
 # Use for custom analysis
 predictions = model(test_data)
@@ -192,9 +192,9 @@ Edit `src/paths.env`:
 
 ```env
 DATA_DIR=data
-OUTPUT_DIR=outputs
-CHECKPOINTS_DIR=outputs/checkpoints
-LOGS_DIR=outputs/logs
+OUTPUT_DIR=data/outputs
+CHECKPOINTS_DIR=data/outputs/checkpoints
+LOGS_DIR=data/outputs/logs
 ```
 
 ## Useful Tips
@@ -260,5 +260,5 @@ docker-compose run -e CUDA_VISIBLE_DEVICES=0 training
 docker-compose config | grep -A 5 "volumes"
 
 # Check permissions
-ls -la data/ outputs/
+ls -la data/ data/outputs/
 ``

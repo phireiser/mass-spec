@@ -14,7 +14,7 @@ from src.machine_learning.spectrum import make_parent_mass_mask_vec
 from src.project_paths import shared_path
 
 # Where plot demos land by default. Resolved via shared_path so it points at
-# outputs/plots both locally and inside the /app container bind. Callers
+# data/outputs/plots both locally and inside the /app container bind. Callers
 # (e.g. main.py) may override with an explicit out_dir.
 DEFAULT_PLOTS_DIR = shared_path("PLOTS_DIR_REL")
 

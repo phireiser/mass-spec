@@ -63,10 +63,10 @@ bash run/analysis/discrimination.sh --names limonene,toluene   # smoke
 ```
 
 Needs `pyarrow` + `rdkit` (no `mod`), so it runs inside `mol-spectro.sif`. Writes
-`outputs/metrics/{discrimination_per_target.csv, discrimination_summary.json}`. Plot:
+`data/outputs/metrics/{discrimination_per_target.csv, discrimination_summary.json}`. Plot:
 
 ```bash
-apptainer exec ... python src/plot/plot_discrimination.py   # -> outputs/plots/discrimination.png
+apptainer exec ... python src/plot/plot_discrimination.py   # -> data/outputs/plots/discrimination.png
 ```
 
 The pure preprocessing/cosine lives in

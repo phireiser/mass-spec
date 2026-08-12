@@ -4,7 +4,7 @@ that `mod_post` compiles a summary PDF.
 
 This mirrors what src/data_generation/analyze.py does (print graphs/rules into
 out/, flush the post commands, then invoke `mod_post`), but in a temporary
-working directory so it does not touch outputs/mod_post. The MØD post-command
+working directory so it does not touch data/outputs/mod_post. The MØD post-command
 stream is process-global and rooted in the current working directory, so the
 printing step runs in a subprocess with cwd set to the temp dir instead of
 chdir-ing this test process.

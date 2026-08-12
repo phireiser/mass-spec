@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Fetch NIST EI mass spectra and build the two-tier Parquet store
-# (outputs/nist_spectra/{spectra,index}.parquet).
+# (data/outputs/nist_spectra/{spectra,index}.parquet).
 #
 # Fetches the WHOLE NIST WebBook up to a molecular-weight cutoff. Pass the max MW
 # as the first argument (default 1000, i.e. effectively everything ~<=674):

@@ -6,7 +6,7 @@
 # WITH internet (e.g. a login node) to flush any leftover offline runs to the cloud.
 #
 # Usage:
-#   run/ci_cd/sync_wand.sh        # sync every offline run under outputs/wandb
+#   run/ci_cd/sync_wand.sh        # sync every offline run under data/outputs/wandb
 
 set -euo pipefail
 

@@ -18,7 +18,7 @@ Needs ``pyarrow`` (Parquet) and ``rdkit`` (SMILES -> InChIKey), so it runs insid
 ``mol-spectro.sif`` via ``run/analysis/discrimination.sh``. No ``mod`` needed --
 this half of Phase 1 uses only measured spectra.
 
-Outputs (under ``--out-dir``, default ``outputs/metrics``):
+Outputs (under ``--out-dir``, default ``data/outputs/metrics``):
   * ``discrimination_per_target.csv``  -- one row per scored target
   * ``discrimination_summary.json``    -- corpus aggregates + run configuration
 """
