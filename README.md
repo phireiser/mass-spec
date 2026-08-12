@@ -71,9 +71,9 @@ Set `USE_WANDB=0` to disable. Requires `wandb` in the image (rebuild after pulli
 .
 ├── data/                      # Data storage
 │   ├── compounds.csv          # Molecule list
-│   ├── processed/             # Processed datasets
+│   ├── nist_spectra/          # Measured spectra (Parquet store) -- INPUT
+│   ├── processed/             # Forward DG dumps
 │   └── outputs/               # Results and checkpoints
-│       ├── nist_spectra/      # Measured spectra (Parquet store)
 │       ├── checkpoints/       # Saved models
 │       ├── logs/              # Run logs
 │       ├── metrics/           # Metric CSV/JSON

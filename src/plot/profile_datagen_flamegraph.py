@@ -257,7 +257,7 @@ def main():
                     help="sampling period in seconds (default 0.5 ms)")
     ap.add_argument("--no-warmup", action="store_true",
                     help="skip the import-priming pass (the figure then includes startup)")
-    ap.add_argument("--spectra-folder", default=str(ROOT / "data" / "outputs" / "nist_spectra"))
+    ap.add_argument("--spectra-folder", default=str(ROOT / "data" / "nist_spectra"))
     ap.add_argument("--out", default=str(FIG_DIR / "datagen_flamegraph"))
     ap.add_argument("--skip-cprofile", action="store_true",
                     help="skip the second deterministic pass (halves the runtime)")

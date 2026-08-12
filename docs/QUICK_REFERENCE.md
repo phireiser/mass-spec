@@ -7,7 +7,7 @@ Fast lookup guide for common infos.
 | Path | Purpose | Example |
 |------|---------|---------|
 | `data/compounds.csv` | Molecule list | SMILES + names |
-| `data/nist_spectra/` | Raw spectra | .jdx files |
+| `data/nist_spectra/` | Measured spectra | Parquet store (2 files) |
 | `data/processed/` | Processed data | .pt tensors |
 | `src/data_generation/` | Data pipeline | Processing code |
 | `src/machine_learning/` | ML models | Training code |
@@ -25,10 +25,12 @@ acetone,CC(=O)C,C3H6O
 benzene,c1ccccc1,C6H6
 ```
 
-### Input: NIST Spectra (.jdx)
-- JCAMP-DX format files
-- Location: `data/nist_spectra/`
+### Input: NIST Spectra (Parquet store)
+- Location: `data/nist_spectra/` — `spectra.parquet` + `index.parquet`
 - Content: m/z (mass-to-charge) vs intensity
+- Two tiers: `index` carries structure/identity (CAS, SMILES, formula), `spectra` the peaks.
+  Look up by SMILES via `utils.get_spectra_by_smiles`; the loose `.jdx` files this section
+  used to describe were removed when the store was introduced.
 
 ### File Organization Tips
 
@@ -38,6 +40,9 @@ After first run, your directory structure will look like:
 data/
 ├── compounds.csv                    # Molecule definitions
 ├── compounds_amines.csv            # Amino compounds subset
+├── nist_spectra/                   # Measured NIST spectra (Parquet store) -- INPUT
+│   ├── spectra.parquet
+│   └── index.parquet
 ├── processed/                      # Generated datasets
 │   ├── fwd/
 │   │   ├── train.pt
@@ -48,9 +53,6 @@ data/
 │       ├── val.pt
 │       └── test.pt
 └── outputs/                        # Everything the pipeline produces
-    ├── nist_spectra/               # Measured NIST spectra (Parquet store)
-    │   ├── spectra.parquet
-    │   └── index.parquet
     ├── checkpoints/                # Saved models
     ├── logs/                       # Training logs
     ├── metrics/                    # Performance metrics

@@ -1,4 +1,9 @@
 data/outputs/**
+# The measured-spectrum Parquet store. It is INPUT data, not a generated output, so it sits
+# beside data/processed rather than under data/outputs -- which means the rule above no longer
+# covers it and it needs its own entry. It must stay out of git regardless of size: it is
+# derived from the NIST WebBook and is not redistributable.
+data/nist_spectra/
 *.pyc
 **/__pycache__/
 mol-spectro.sif

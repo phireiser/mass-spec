@@ -77,13 +77,15 @@ acetonitrile,CC#N,C2H3N
 
 ### Working with Spectra
 
-**NIST Format (.jdx files):** Located in `data/nist_spectra/`
-- JDX (JCAMP-DX format) spectroscopy data
+**NIST Parquet store:** Located in `data/nist_spectra/`
+- Two files for the whole corpus, not one per compound: `index.parquet` (identity — CAS,
+  SMILES, formula) and `spectra.parquet` (the peaks), joined on `nist_id`
 - Contains mass-to-charge (m/z) ratios and intensities
-- One file per compound
+- Keyed by CAS, the single project-wide identifier; look up by structure with
+  `utils.get_spectra_by_smiles(smiles, spectra_folder)`
 
 **Processing Pipeline:**
-1. Read NIST spectra (.jdx)
+1. Read NIST spectra from the Parquet store
 2. Parse SMILES strings to get molecular structures
 3. Create feature representations
 4. Split into train/val/test sets
