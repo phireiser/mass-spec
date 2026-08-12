@@ -60,7 +60,7 @@ from src.machine_learning.retrieval import LatentIndex, FaissLatentIndex, infer_
 from src.machine_learning.evaluation import demo_compare_spectrum, demo_retrieval_metrics, mass_controlled_retrieval_metrics, demo_noise_robustness, demo_visualize_reconstructions
 from src.machine_learning.fragments import FragSetEncoderWrapper
 from src.machine_learning.training import train_epoch_phase_a, train_epoch_phase_b
-from src.machine_learning.checkpoint import save_checkpoint
+from src.machine_learning.checkpoint import load_checkpoint, save_checkpoint
 
 
 # Hyperparameters that may be supplied via a sweep YAML (--hparams). Epochs,
@@ -140,6 +140,11 @@ def main():
     p.add_argument("--hparams", type=str, default=None,
                    help="YAML of tuned hyperparameters (from the Optuna sweep) to load as defaults. "
                         "Explicit CLI flags override it; epochs/paths/device are never taken from it.")
+    p.add_argument("--eval_only", action="store_true",
+                   help="Skip both training phases and evaluate a saved checkpoint instead. "
+                        "Model-shape hyperparameters are taken from the checkpoint.")
+    p.add_argument("--resume", type=str, default=None,
+                   help="Checkpoint to evaluate with --eval_only (default: <output_dir>/ml_checkpoint.pt).")
     args = p.parse_args()
     # --output_dir arrives as a str when passed on the CLI (e.g. from the HPC
     # launcher); normalize to Path so downstream "/" joins work.
@@ -150,6 +155,21 @@ def main():
     if args.hparams:
         applied = _apply_hparams_yaml(args, args.hparams)
         print(f"Loaded {len(applied)} hyperparameters from {args.hparams}: {applied}")
+
+    # Evaluate a saved run instead of training one. The modules must be built with
+    # the geometry they were trained with, so the shape-defining hyperparameters
+    # come from the checkpoint's own saved args rather than from the CLI defaults.
+    # Zeroing the epoch counts turns both training loops into no-ops.
+    resume_path: Optional[Path] = None
+    if args.eval_only:
+        resume_path = Path(args.resume) if args.resume else args.output_dir / "ml_checkpoint.pt"
+        saved_args = torch.load(resume_path, map_location="cpu", weights_only=False).get("args", {})
+        for key in ("latent", "dropout", "norm"):
+            if key in saved_args and getattr(args, key) != saved_args[key]:
+                print(f"--eval_only: {key}={saved_args[key]} from checkpoint (CLI had {getattr(args, key)})")
+                setattr(args, key, saved_args[key])
+        args.epochs_fwd = 0
+        args.epochs_bwd = 0
 
     # Experiment tracking. Project/group/mode/run-dir all come from WANDB_* env vars
     # set by the SLURM launch script; on HPC compute nodes use WANDB_MODE=offline and
@@ -189,12 +209,30 @@ def main():
     real_spectra_by_smiles: Dict[str, List[Tuple[float, float]]] = {}
     mol_order: List[str] = []
 
+    # Derivation dumps are named by CAS registry number -- the store's primary
+    # key and the single identifier data-gen writes (`--name-by-cas`). Dumps
+    # written before that rename still carry the human name from compounds.csv,
+    # so try CAS first and fall back, the same order as the analysis tools use
+    # (see feasibility/run_ceiling.py::_dump_stems).
+    fwd_dir = Path(args.load_path) / "fwd"
+    bwd_dir = Path(args.load_path) / "bwd"
+
+    def _dump_stem(name: str, smiles: str) -> Optional[str]:
+        cas = utils.get_cas_by_smiles(smiles, Path(args.spectra_dir))
+        for stem in (cas, name):
+            if stem and (fwd_dir / f"{stem}.dmp").exists():
+                return str(stem)
+        return None
+
+    n_by_cas = 0
     for name, smi in mols_definitions:
-        if (Path(args.load_path) / "fwd" / f"{name}.dmp").exists():
+        stem = _dump_stem(name, smi)
+        if stem is not None:
+            n_by_cas += (stem != name)
             mol = mod.Graph.fromSMILES(smi, name=name)
 
 
-            fwd_dg = utils.load_derivation_graph(name, path=Path(args.load_path) / "fwd")
+            fwd_dg = utils.load_derivation_graph(stem, path=fwd_dir)
 
             fwd_coll = []
             for graph_term in fwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
@@ -215,9 +253,9 @@ def main():
             # if present; otherwise use an empty backward collection so the molecule is
             # NOT dropped for lacking a bwd dump.
             bwd_coll = []
-            bwd_dmp = Path(args.load_path) / "bwd" / f"{name}.dmp"
+            bwd_dmp = bwd_dir / f"{stem}.dmp"
             if bwd_dmp.exists():
-                bwd_dg = utils.load_derivation_graph(name, path=Path(args.load_path) / "bwd")
+                bwd_dg = utils.load_derivation_graph(stem, path=bwd_dir)
                 for graph_term in bwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
                     graph = utils.graph_from_term(graph_term)
                     if graph.isMolecule:
@@ -245,7 +283,7 @@ def main():
         print(f"Warning: dropping {len(dropped_frag)} frag-only and {len(dropped_spec)} spec-only entries to align datasets")
     frag_coll = {s: frag_coll[s] for s in aligned_smiles}
     real_spectra_per_mol: List[List[Tuple[float, float]]] = [real_spectra_by_smiles[s] for s in aligned_smiles]
-    print(f"Loaded {len(aligned_smiles)} molecules with paired fragments and spectra (from {len(mols_definitions)} definitions)")
+    print(f"Loaded {len(aligned_smiles)} molecules with paired fragments and spectra (from {len(mols_definitions)} definitions; {n_by_cas} dumps resolved by CAS)")
 
     train_spect, test_spect = train_test_split(
         data= real_spectra_per_mol,
@@ -315,6 +353,21 @@ def main():
     # expose for helper functions (script-level convenience)
     globals()['heads'] = heads
 
+    # --eval_only: restore the trained weights in place. enc_mol rides along inside
+    # frag_set_enc (see checkpoint.py), and the modules stay in their default train()
+    # mode, which is the mode they were in at the end of a training run -- so the
+    # evaluation below sees the same configuration it would after training.
+    if args.eval_only:
+        load_checkpoint(
+            resume_path,
+            frag_set_enc=frag_set_enc,
+            enc_spec=enc_spec,
+            dec_spec=dec_spec,
+            heads=heads,
+            map_location=device,
+        )
+        print(f"Loaded checkpoint {resume_path} -- skipping both training phases")
+
     # Optimizers (separate per phase keeps it simple)
     opt_a = torch.optim.Adam(list(frag_set_enc.parameters()) +
                              list(dec_spec.parameters()) +
@@ -360,16 +413,17 @@ def main():
     # The mass-controlled TEST scorecard builds a TRAIN+VAL+TEST index and has
     # crashed there before; saving here means such a crash costs the scorecard,
     # not the whole training run.
-    ckpt_path = args.output_dir / "ml_checkpoint.pt"
-    save_checkpoint(
-        ckpt_path,
-        frag_set_enc=frag_set_enc,
-        enc_spec=enc_spec,
-        dec_spec=dec_spec,
-        heads=heads,
-        args=vars(args),
-    )
-    print(f"Saved checkpoint to {ckpt_path}")
+    if not args.eval_only:
+        ckpt_path = args.output_dir / "ml_checkpoint.pt"
+        save_checkpoint(
+            ckpt_path,
+            frag_set_enc=frag_set_enc,
+            enc_spec=enc_spec,
+            dec_spec=dec_spec,
+            heads=heads,
+            args=vars(args),
+        )
+        print(f"Saved checkpoint to {ckpt_path}")
 
     # ----------------- Build retrieval index -----------------
     # CRITICAL: Build index on TRAIN+VAL so evaluation sets have ground truth molecules
