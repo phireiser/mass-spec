@@ -1,0 +1,395 @@
+{
+  "mechanism_id": "IMS9-EQ9.25b",
+  "species": [
+    {
+      "species_id": "ethylhexanal_molecular_ion",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2]([CH2:8][CH3:9])[CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_enol_ion_mz128",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4][CH2:3][CH:2]([CH2:8][CH3:9])[CH:1]=[O+:7][1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "but_1_ene_neutral",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_butanal_enol_mz72",
+      "mapped_smiles": "[CH:2]([CH2:8][CH3:9])[CH:1]=[O+:7][1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "hydroxyallyl_cation_mz57",
+      "mapped_smiles": "[CH2:8]=[CH:2][CH:1]=[O+:7][1H:10]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylhexanal_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_rearranged",
+      "species_ids": [
+        "distonic_enol_ion_mz128"
+      ]
+    },
+    {
+      "state_id": "state_mz72",
+      "species_ids": [
+        "distonic_butanal_enol_mz72",
+        "but_1_ene_neutral"
+      ]
+    },
+    {
+      "state_id": "state_mz57",
+      "species_ids": [
+        "hydroxyallyl_cation_mz57",
+        "methyl_radical",
+        "but_1_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_gamma",
+      "from_state": "state_precursor",
+      "to_state": "state_rearranged",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_butene_loss",
+      "from_state": "state_rearranged",
+      "to_state": "state_mz72",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_methyl_loss",
+      "from_state": "state_mz72",
+      "to_state": "state_mz57",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_gamma",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (second arrow, labelled 'rH')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Substrate as drawn: the 2-ethylhexanal molecular ion, labelled 'm/z 128' under the structure. The skeleton is printed as C2H5-CH(H)-CH2-CH(C2H5)-CHO with the gamma hydrogen on C4 drawn EXPLICITLY, an aldehyde H on C1, and '+.' printed above the carbonyl oxygen. LOCALIZATION (convention B): the charge and odd electron are written on the oxygen exactly where the page prints them, [CH:1]=[O+:7], not carried only in the JSON fields. Second channel, the arrow labelled 'rH'. The gamma hydrogen (map 10, drawn explicitly on C4) migrates to the carbonyl oxygen, giving the distonic ion the page prints next: 'C2H5-[chain]-• ... H-O+' -- still m/z 128, an isomer, no mass lost. Book draws 2 arc(s) on the molecular ion; moves <1,2> are drawn -- arc 1 is the large fishhook whose tail sits on the C4-H bond and sweeps right to the oxygen, arc 2 is the short fishhook from the odd electron printed as '+.' above the O curving back down toward that same hydrogen -- and move <3> is an implicit homolysis hook required for electron balance (NOT drawn: the book simply prints the radical dot on C4 in the product). Both arcs terminate in the forming O-H bond, which is why they are encoded with that bond as target. MS CONTEXT: this page prints no ionisation conditions, so 70 eV EI is the corpus house default and is disclosed here rather than read off the page (the same treatment as IMS9-EQ9.19a/b and IMS8-EQ8.114). Figure 9.8 on printed p247 is the 2-ethylhexanal spectrum and would supply abundances, but it is NOT on this page and the scheme itself prints no percentage, so convention F forbids importing an intensity: every peak_assignment here carries status 'proposed' with no relative_intensity."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_butene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_butene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones ('alpha' arrow to m/z 72)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Third arrow, labelled 'alpha', from the distonic m/z 128 ion. The radical on C4 drives cleavage of the C2-C3 bond and formation of the C3=C4 pi bond, expelling 1-butene (drawn as 'C2H5-' plus a double-bond stroke, C4H8, 56) and leaving the ion the page labels 'm/z 72'. Book draws 0 arc(s) for this step -- the arrow carries only 'alpha' and the arcs visible on the m/z 72 structure belong to the NEXT step, not this one -- so all three moves are curator-supplied. The ion is written as the DISTONIC form drawn on the page (radical on C2, H-O+ = C1), not the closed-shell enol tautomer."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_methyl",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (vertical 'alpha' arrow, '(See Eq 8.79)')"
+      },
+      "confidence": 0.75,
+      "curator_note": "Vertical arrow at the right, labelled 'alpha' and annotated '(See Eq 8.79)', from m/z 72 down to m/z 57. The radical on C2 drives cleavage of the C8-C9 bond with formation of the C2=C8 pi bond, expelling CH3. and giving the resonance-stabilised C3H5O+ ion drawn as H-O+=CH-CH=CH2. Book draws 2 arc(s), both on the m/z 72 structure: a fishhook from the printed radical dot on C2 into the forming C2=C8 bond, and a fishhook from the breaking C8-C9 bond into that same forming bond. Move <3>, the hook that carries the second C8-C9 electron away with the methyl radical, is implicit (not drawn). NOTE: the page labels this product 'm/z 57' and ALSO labels the sigma-channel product 'm/z 57'; they are DIFFERENT ions -- C3H5O+ here (57.0335) versus C4H9+ (57.0699) there -- resolvable only at high resolution. See IMS9-EQ9.25e."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.25b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.75,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries at all (by_equation covers only 4.x and 8.x), so any link is inferred rather than indexed. *** VERIFIED POSITIVE CROSS-LINK for steps 1-2 (RDKit-tested, not asserted). *** (1) The rH step is hTransition_unsaturated (src/data_generation/rules/IMS_bookCover.py:40), '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6 >> [C.]2[C]3[C]4[C]5{=}[_A+]6[H]1' with _A = O. Its left side embeds on this record's molecular ion TWICE, and the two embeddings are exactly the molecule's two gamma-hydrogen donors: maps (4,3,2,1,7) -- the main-chain gamma-H this record uses -- and maps (9,8,2,1,7), the ethyl-branch gamma'-H that feeds the OTHER channel, IMS9-EQ9.25c. (2) The following alpha step is hTransition_unsaturated_alpha (IMS_bookCover.py:50), '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6 >> [C]1{=}[C]2 . [C.]3[C]4{=}[_A+]5[H]6'. It embeds on the distonic m/z 128 ion exactly ONCE, at maps (4,3,2,1,7): it breaks the same C2-C3 bond, forms the same C3=C4 alkene, and its two product halves are atom-for-atom the drawn 1-butene and the drawn m/z 72 distonic ion. Both rules conserve charge and spin, so the rules/__init__.py guardrail keeps them, and both are live via rearrangements -> IMS_cover_fragmentation -> the 'fragmentation' list (__init__.py:45). Step 3 (m/z 72 -> m/z 57) was NOT swept and is untested."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_72",
+      "species_id": "distonic_butanal_enol_mz72",
+      "step_id": "step_alpha_butene_loss",
+      "observed_mz": 72.057,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    },
+    {
+      "peak_id": "peak_57_oxygenated",
+      "species_id": "hydroxyallyl_cation_mz57",
+      "step_id": "step_alpha_methyl_loss",
+      "observed_mz": 57.0335,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

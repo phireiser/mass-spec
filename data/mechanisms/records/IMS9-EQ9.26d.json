@@ -1,0 +1,283 @@
+{
+  "mechanism_id": "IMS9-EQ9.26d",
+  "species": [
+    {
+      "species_id": "methylheptanone_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9])[CH2:3][CH2:4][CH:5]([1H:10])[CH:6]([CH3:7])[CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_enol_ion_mz128",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9][1H:10])[CH2:3][CH2:4][CH:5][CH:6]([CH3:7])[CH3:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylpentene_neutral",
+      "mapped_smiles": "[CH2:4]=[CH:5][CH:6]([CH3:7])[CH3:8]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetone_enol_ion_mz58",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9][1H:10])[CH2:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylheptanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_rearranged",
+      "species_ids": [
+        "distonic_enol_ion_mz128"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "acetone_enol_ion_mz58",
+        "methylpentene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_gamma",
+      "from_state": "state_precursor",
+      "to_state": "state_rearranged",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_alkene_loss",
+      "from_state": "state_rearranged",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_gamma",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 249,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (arrow labelled 'rH')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Substrate as drawn: a 2-alkanone molecular ion printed as C3H7-CH(H)-CH2-CH2-C(=O)-CH3 with the gamma hydrogen on C5 drawn EXPLICITLY and '+.' printed above the carbonyl oxygen. INSTANTIATION of the condensed 'C3H7' label (the page does not draw it out): it is taken as ISOPROPYL, making the compound 6-methyl-2-heptanone. That is not a guess -- the running text introducing this scheme rationalises 'the characteristic peaks in ... 6-methyl-2-heptanone (Figure 9.9)' and names 'a pair of acylium ions (m/z 113 and 43 in Figure 9.9) and a pair of alkyl ions (m/z 85 and 15)', which are exactly this equation's products. n-Propyl would give 2-octanone, an isomer with identical nominal masses at every step, so the drawing alone cannot distinguish them and the text is what settles it. LOCALIZATION (convention B): charge and odd electron are written on the oxygen where the page prints them, [C:2]=[O+:9]. Book draws 0 arc(s) on the molecular ion -- there is no fishhook anywhere on it; every arrow leaving it carries only a label. FOURTH channel, the arrow labelled 'rH': the gamma hydrogen (map 10, drawn explicitly on C5) migrates to the carbonyl oxygen, giving the distonic ion the page draws next -- 'C3H7-[chain]-• ... H-O+' -- still m/z 128, an isomer, no mass lost. Book draws 0 arc(s) for this step: unlike the aldehyde of Equation 9.25, which prints two fishhooks on its molecular ion, THIS molecular ion carries no arcs at all and the transfer is conveyed only by the 'rH' label plus the changed product structure. All three moves are therefore curator-supplied: <1> one electron of the C5-H bond into the forming O-H bond, <2> the oxygen odd electron into that same bond, <3> the second C5-H electron remaining on C5 as the new radical site. MS CONTEXT: the page prints no ionisation conditions, so 70 eV EI is the corpus house default, disclosed rather than read off the page. Figure 9.9 (printed p247) is the 6-methyl-2-heptanone spectrum and does carry abundances, but it is NOT this page and this scheme prints no percentage, so per convention F no relative_intensity is recorded; peaks are status 'proposed'."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_alkene",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_alkene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 249,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones ('alpha' arrow to m/z 58)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Arrow labelled 'alpha' from the distonic m/z 128 ion. The radical on C5 drives cleavage of the C3-C4 bond with formation of the C4=C5 pi bond, expelling the neutral alkene the page draws as 'C3H7-' plus a double-bond stroke (4-methyl-1-pentene, C5H10, 70) and leaving the ion labelled 'm/z 58'. Book draws 0 arc(s); all three moves are curator-supplied. PRODUCT FORM (convention C): the page draws m/z 58 as the DISTONIC ion .CH2-C(=O(+)H)-CH3 -- an explicit radical dot on the terminal CH2 and H-O+ on the carbonyl -- not the closed-shell acetone enol tautomer, and it is encoded exactly as drawn. This is the oxygen-containing member of the classic complementary McLafferty pair; its hydrocarbon partner, m/z 70, is IMS9-EQ9.26e."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.26d",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.75,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** VERIFIED POSITIVE CROSS-LINK (RDKit-tested, not asserted) *** for both steps, the same inside-cover pair that covers the aldehyde McLafferty of IMS9-EQ9.25b: hTransition_unsaturated (IMS_bookCover.py:40, '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6 >> [C.]2[C]3[C]4[C]5{=}[_A+]6[H]1', _A = O) for the rH step, and hTransition_unsaturated_alpha (IMS_bookCover.py:50, '[C.]1[C]2[C]3[C]4{=}[_A+]5[H]6 >> [C]1{=}[C]2 . [C.]3[C]4{=}[_A+]5[H]6') for the alpha step. See the per-record note for the measured embedding counts. Both conserve charge and spin (the rules/__init__.py guardrail keeps them) and both are live via rearrangements -> IMS_cover_fragmentation -> 'fragmentation' (__init__.py:45)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_58",
+      "species_id": "acetone_enol_ion_mz58",
+      "step_id": "step_alpha_alkene_loss",
+      "observed_mz": 58.0413,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "mechanism_id": "IMS9-EQ9.31d",
+  "species": [
+    {
+      "species_id": "methyl_stearate_molecular_ion",
+      "mapped_smiles": "[CH3:18][CH2:17][CH2:16][CH2:15][CH2:14][CH2:13][CH2:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH2:5][CH2:4][CH2:3][CH2:2][C:1](=[O+:19])[O:20][CH3:21]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "methoxycarbonyl_cation_mz59",
+      "mapped_smiles": "[O+:19]#[C:1][O:20][CH3:21]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "heptadecyl_radical",
+      "mapped_smiles": "[CH3:18][CH2:17][CH2:16][CH2:15][CH2:14][CH2:13][CH2:12][CH2:11][CH2:10][CH2:9][CH2:8][CH2:7][CH2:6][CH2:5][CH2:4][CH2:3][CH2:2]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methoxy_cation_mz31",
+      "mapped_smiles": "[O+:20][CH3:21]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 2,
+      "spin_multiplicity": 3,
+      "detected": true
+    },
+    {
+      "species_id": "carbon_monoxide",
+      "mapped_smiles": "[C-:1]#[O+:19]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methyl_stearate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_mz59",
+      "species_ids": [
+        "methoxycarbonyl_cation_mz59",
+        "heptadecyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_mz31",
+      "species_ids": [
+        "methoxy_cation_mz31",
+        "carbon_monoxide",
+        "heptadecyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_alkyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_mz59",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              19
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              19
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              19
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_co_loss",
+      "from_state": "state_mz59",
+      "to_state": "state_mz31",
+      "step_class": "carbon_monoxide_elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              20
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_alkyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 252,
+        "equation": "9.31",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters (lower arrow labelled alpha, to m/z 59)"
+      },
+      "confidence": 0.8,
+      "curator_note": "The lower 'alpha' arrow. Radical-site cleavage of the C1-C2 bond expelling the heptadecyl radical and leaving the methoxycarbonyl cation the page draws as 'O#C+-OCH3' with the '+' printed over the oxygen, labelled m/z 59 -- the '59+' ion of the prose ('alpha-cleavage gives characteristic (M - 31)+ and 59+ ions whose abundances decrease with increasing molecular weight'). Book draws 0 arc(s) on the molecular ion; all three moves are curator-supplied, the canonical triple: the O19 odd electron into the C1-O19 bond (making the drawn triple bond), one electron of the breaking C1-C2 bond into that same bond, and the second leaving on C2 with the alkyl radical. This is the complementary charge partition to IMS9-EQ9.31b, which breaks the same C1-C2 bond and keeps the charge on the alkyl side instead. SUBSTRATE AND ITS INSTANTIATION (convention F): the page draws the condensed formula 'C17H35-C(=O)-OCH3' with '+.' printed above the carbonyl oxygen and labels it 'm/z 298'. That printed mass is what fixes the chain: C17H35COOCH3 = C19H38O2, computed M+. = 298.2866, i.e. METHYL OCTADECANOATE (methyl stearate). The chain is written out atom by atom in this record, so the condensed label is instantiated, not guessed -- and it is cross-checked by the page's other four labels (267, 239, 59, 31), each of which matches the computed exact mass of the structure encoded here. NB the surrounding prose names OTHER examples (Figure 3.13 is methyl n-undecanoate), so the prose alone would give the wrong homolog; the m/z labels govern. ATOM MAPS: 1 = the carbonyl carbon, 2 = the alpha carbon, 3..18 = the rest of the chain (18 = the terminal methyl), 19 = the carbonyl oxygen (the ionised one), 20 = the ester (saturated) oxygen, 21 = the methoxy carbon. The IMS9-EQ9.32 records use the SAME numbering for the SAME compound (plus 22 for the migrating gamma-hydrogen), so the two equations can be read together. ARC COUNT (convention D), measured at 9x on the native 1760x2560 scan: the molecular ion carries ZERO curved arrows, and the whole equation contains only TWO -- one on the m/z 267 acylium and one on the m/z 59 acylium, both full (solid, double-barbed, two-electron) arrows. So all FOUR channels leaving the molecular ion are conveyed by a reaction-type label alone and their moves are entirely curator-supplied."
+    },
+    {
+      "evidence_id": "evidence_step_co_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_co_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 252,
+        "equation": "9.31",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters (unlabelled arrow from m/z 59 to m/z 31)"
+      },
+      "confidence": 0.7,
+      "curator_note": "The equation's SECOND (and last) arc, and the arrow it belongs to is UNLABELLED -- the only unlabelled reaction arrow among the equation's five. Measured at 9x: a full, solid, double-barbed curved arrow whose TAIL descends onto the C1-O20 bond of the m/z 59 ion and whose HEAD points back left at that ion's carbon. Encoded as that single two-electron move, the C1-O20 pair migrating onto C1: it expels neutral CO and leaves the charge on the methoxy oxygen, giving the '(+OCH3)' the page prints at m/z 31 -- which the page therefore reaches by TWO drawn routes, this one and the direct 'i' arrow of IMS9-EQ9.31c. The arc direction matters and was checked: drawn the other way it would deliver an anionic methoxide and a CO cation, which is neither the printed product nor chemically sensible. THE m/z 31 SPECIES NEEDS A DISCLOSURE. The page prints '(+OCH3)', i.e. the methoxy cation CH3-O+ with the charge on oxygen. A singly bonded O+ has an unfilled valence, so the mapped SMILES '[O+:20][CH3:21]' necessarily carries TWO unpaired electrons in RDKit's valence model, and this record declares radical_electrons 2 / spin_multiplicity 3 so that the declared electronic state and the stored graph agree. That is also the chemically real answer -- oxenium ions have triplet ground states -- but it has a consequence worth stating plainly: the drawn heterolysis therefore changes the total spin (1 unpaired electron before, 3 after), so as written this channel is formally spin-forbidden. The book's own signal that it is difficult is that it prints the ion in parentheses and calls it 'very small'. The arrow-check reports the corresponding soft radical line on atom 20. MEASUREMENTS (convention F): the page labels m/z 298, 267, 239, 59 and 31, and every one matches the exact mass computed from the encoded structures (298.2866, 267.2682, 239.2733, 59.0128, 31.0178 -- RDKit ExactMolWt, which already applies the formal charge). Peak assignments store those computed values with status 'proposed', the convention for a book-labelled m/z (IMS9-EQ9.22, IMS9-EQ9.19a). No percentage is printed anywhere in the equation, so no relative_intensity is stored. THE PAGE'S PARENTHESES ARE A JUDGEMENT, AND THEY ARE RECORDED AS ONE: 'm/z 267' and 'm/z 59' are printed bare, while the other two products are printed as '(C17H35+)' and '(+OCH3)' -- in parentheses. The prose says why: 'The (M - 59)+ alkyl ion and the CH3O+ ion are very small except for low-molecular-weight esters.' So the parentheses mark the weak channels. That is not a number, so per convention F no relative_intensity is stored anywhere in this equation; it is reported here."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.31d",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.31",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** THREE CANDIDATE RULES TESTED AND REJECTED (RDKit substructure tests, not assertions): eq 9.31 has NO counterpart in the rule set, and the main negative is STRUCTURAL, not accidental. *** (i) 'alpha' (wikipedia.py:6, '[C]1[C]2({=}[O+.])[C]3[C]4 >> [C]1[C]2{#}[O+].[C.]3[C]4') gives 0 embeddings, because its LHS demands a CARBON on both sides of the ionised carbonyl; an ester has an oxygen on one side, so the rule that covers every ketone alpha-cleavage (it fires twice on the ketone of IMS9-EQ9.30) cannot perform ester alpha-cleavage AT ALL -- neither the C-OCH3 cleavage to m/z 267 nor the C-C cleavage to m/z 59. Esters are a large compound class, so this is a reachability gap, not a detail. (ii) 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5') gives 0: it needs the IONISED oxygen to be the saturated (ether-like) one with carbons on both sides, whereas this page puts the charge and radical on the CARBONYL oxygen. (iii) 'aryl_CO_loss' (aromatic_ring_loss.py:49) gives 0 on the m/z 267 acylium -- it is an aromatic ring-contraction rule and needs a phenol. No rule was found or tested for CO loss from an aliphatic acylium: UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 298.2866,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_298",
+      "species_id": "methyl_stearate_molecular_ion",
+      "step_id": null,
+      "observed_mz": 298.2866,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    },
+    {
+      "peak_id": "peak_59",
+      "species_id": "methoxycarbonyl_cation_mz59",
+      "step_id": "step_alpha_alkyl_loss",
+      "observed_mz": 59.0128,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    },
+    {
+      "peak_id": "peak_31",
+      "species_id": "methoxy_cation_mz31",
+      "step_id": "step_inductive_co_loss",
+      "observed_mz": 31.0178,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-11T00:00:00Z",
+    "modified_at": "2026-08-11T00:00:00Z"
+  }
+}

@@ -1,5 +1,372 @@
 # IMS mechanism extraction — resume point
 
+## State (updated 2026-08-12)
+
+> ## EQ 9.33–9.37 DONE (17 records) — Ch.9 through eq 9.37; sections 9.4/9.5/9.6 opened
+>
+> **CORPUS NOW: 358 records, 358/358 gate-clean** (58 Ch.4 + 228 Ch.8 + **72 Ch.9**, eqs 9.1–9.37 minus
+> non-mechanism 9.5). All 17 new records render clean (79/79 arrows anchored, 0 adrift, median tail
+> 0.71 pt); an independent RDKit re-audit of all 17 reports **0 problems** (every species' declared
+> charge/radical matches its graph, every step balances mass and charge exactly, every
+> peak_assignment.observed_mz equals its species' computed exact mass); `git status` confirms **no
+> pre-existing record was altered**.
+> **`page_map.json` "ch9" now adds 265, 266, 267, 269, 273** — every equation on each is extracted.
+> **New NON_MECHANISM_PAGES: 268, 270, 271, 272** (all read in full — prose, Figure 9.13/9.14 with
+> arrow-free squiggle insets, and the Unknown 9.3 exercise).
+>
+> ### THE BATCH-3 FAILURE MODE RECURRED — AND HAND-AUTHORING FINISHED THE JOB
+> A 20-agent workflow (measure → author → two adversarial verify lenses per equation) **died on the
+> monthly spend limit** after 961k subagent tokens / 387 tool calls, with **2 of 7 agents done and ZERO
+> records written** — the third time this has happened (see the 2026-08-04 block). What was different:
+> **three measurement reports were recoverable from the dead agents' transcripts** by grepping
+> `subagents/workflows/<run>/agent-*.jsonl` for `"StructuredOutput"` and pulling the tool-call `input`
+> (~35 KB each, for 9.33/9.35/9.37). **Do that before concluding a killed run left nothing.** All five
+> equations were then hand-authored from the native scans, and every claim taken from a salvaged report
+> was re-measured at source first.
+> **One salvaged report corrected MY OWN briefing premise** (recorded because it would otherwise have
+> propagated into 4 of 5 records of eq 9.35): I had told the agents that eq 9.35's `alpha(C=O)` /
+> `alpha(C-O)` labels name the bond that breaks. **They do not — the parenthesised group names the
+> INITIATING SITE.** The book says so in words on that page ("Alpha cleavage ... *at* the carbonyl
+> group", "initiated by the saturated oxygen atom", "Charge-site initiation at the saturated oxygen").
+> Which bond breaks is fixed by the printed product, cross-checked by mass and by Figure 9.12's inset.
+>
+> ### Per equation
+> - **9.33 (p254) = 1 record.** A fully GENERIC one-line scheme (R, R'α, OR) with **2 fishhooks**,
+>   measured at 14×, whose heads converge on the forming C=C. Instantiated as OR=OCH3 / R=CH3 / R'α=CH3
+>   with the prose as the constraint ("If an Rα group is ethyl or larger…"), every mass marked
+>   curator-computed, and the alternative (R'α=H, following eq 8.79) written into the note. Its precursor
+>   is a **distonic fragment, not a molecular ion**, so `ms_context.adduct` is **null** (convention G).
+> - **9.34 (p255) = 3 records**, sec-butyl acetate. rH (2 drawn fishhooks) → α → (m/z 60); a
+>   **double-headed arrow** to the charge-on-the-other-oxygen partner (encoded `resonance_interconversion`
+>   + `reversible: true`); then *i* → m/z 56 and a second rH → m/z 61.
+>   **Both m/z 61 products are drawn with explicit DASHED delocalization** — the allyl radical and the
+>   charge-shared protonated acetic acid — so each is stored as one localization and disclosed. The
+>   second H comes from the **terminal** methyl (a 1,4-shift): the dashed allyl is what proves it.
+>   **VERIFIED POSITIVE ×2, and they are the two rule families the page's own prose names:**
+>   `esterMcLafferty_rH` (Gl. 4.45) embeds **5×** and `h2Transiton_1` (Gl. 4.46, the double-H rule)
+>   **4×** — "Rearrangement of one (Equation 4.33) and two (Equation 4.46) hydrogen atoms".
+> - **9.35 (p256) = 5 records**, sec-butyl acetate again, **zero arcs in the whole equation**. The
+>   charge/radical is drawn on a **bracket**, so each record localizes it where its own label says
+>   (carbonyl O for α(C=O), ester O for α(C–O) and i(C–O)) — disclosed. **Two different ions are both
+>   labelled m/z 101** (C5H9O2+ isomers); the prose itself says the peak has two routes.
+> - **9.36 (p258) = 2 records**, DEHP → the famous phthalate ions. The `r2H` step is **7 moves**
+>   (`net_fragmentation`) because the page compresses a 4-bond change into one arrow; `id` is a label
+>   the corpus had not seen — read as intramolecular displacement from the two ends of the arrow and
+>   flagged as inference. m/z 149 is **protonated phthalic anhydride** (bicyclic, read at 5×).
+>   **`h2Transiton_1` gives 0 embeddings on DEHP** for a precise structural reason — the 2-ethylhexyl
+>   **branch** carbon has only one H where the rule needs two — so the rule that does the double-H shift
+>   for sec-butyl acetate cannot do it for the commonest phthalate contaminant.
+> - **9.37 (p262) = 6 records**, isopropyl pentyl ether, **zero arcs**, six printed m/z. m/z 43 is
+>   reached by **three** drawn routes and m/z 71 by two. **m/z 43 is C3H7+ (43.0542), NOT the acetyl
+>   cation** that the same nominal mass means two pages earlier in eq 9.35.
+>   **RULE DEFECT RECORDED:** `inductive_wiki` (wikipedia.py:15) is the only rule matching an ionised
+>   ether and embeds 2×, **but its RHS `[C]4[C+]5` puts the charge one carbon too far from the oxygen**,
+>   so it would give a primary cation where the page draws the isopropyl cation — same class as the
+>   IMS_4_9…4_12 geometry bugs. Read from the DFS, not from running MØD.
+> - Every drawn primary carbocation (m/z 71) is stored **as drawn**, with the book's own caveat quoted
+>   ("probably involves a rearrangement to avoid the energetically unfavorable primary carbocation").
+> - **`alpha` (wikipedia.py:6) now measured at 0 embeddings on THREE different esters** (methyl
+>   stearate, sec-butyl acetate ×2 records-worth of channels): the ester α-cleavage gap is **systematic**,
+>   not per-compound.
+>
+> **NEXT: eq 9.38** (forward-referenced by p262's prose as the 2,6,6-trimethyl-2-vinyltetrahydropyran
+> rationale, Figure 9.15) — expect it on PDF 274.
+
+## State (updated 2026-08-11)
+
+> ## EQ 9.31 + 9.32 DONE — section 9.4 Esters opened; first CROSSED-OUT channel in Ch.9
+>
+> **CORPUS NOW: 341 records, 341/341 gate-clean** (58 Ch.4 + 228 Ch.8 + **55 Ch.9**, eqs 9.1–9.32
+> minus non-mechanism 9.5). All 6 new records render clean (23/23 arrows anchored, 0 adrift, median
+> tail 0.70 pt); `git status` confirms **no pre-existing record was altered**.
+> **`page_map.json` "ch9" now includes 263** (eq 9.31 is the only equation on it). **PDF 265 is
+> deliberately NOT registered — eq 9.33 is still unextracted on that page.**
+>
+> **BOTH EQUATIONS ARE THE SAME COMPOUND, and the records share one atom-map scheme.** The page writes
+> condensed labels (`C17H35`, `C14H29`) but prints `m/z 298`, which fixes the homolog as **methyl
+> octadecanoate (methyl stearate)**, C19H38O2, M+• 298.2866 — cross-checked against all seven other
+> printed labels (267, 239, 59, 31 / 224, 74), each of which matches the encoded structure's computed
+> exact mass. Maps: 1 = carbonyl C, 2 = α, 3 = β, 4 = γ, 5–18 = chain, 19 = carbonyl O, 20 = ester O,
+> 21 = methoxy C, 22 = the migrating γ-H. **NB the prose names a different homolog** (Figure 3.13 is
+> methyl n-undecanoate), so prose alone would give the wrong chain — the m/z labels govern.
+>
+> **EQ 9.31 (printed p252) = 4 records, four channels off one molecular ion.** **a** α→C17H35CO+ (267)
+> →*i*/−CO→C17H35+ (239); **b** the long horizontal *i* → 239 DIRECTLY; **c** *i* → +OCH3 (31);
+> **d** α→ +O≡C–OCH3 (59) →*i*/−CO→ 31. So **two masses are each reached by two drawn routes**
+> (239 and 31) — the IMS9-EQ9.26b/c situation twice over.
+> - **The molecular ion carries ZERO arcs**; the whole equation has only TWO, both full 2-electron
+>   arrows on the m/z 267 and m/z 59 acylium ions (measured at 9×, direction checked — drawn the other
+>   way the m/z 59 arc would give methoxide + a CO cation). All four M+• channels are label-only.
+> - **THE PAGE'S PARENTHESES ARE A JUDGEMENT and are recorded as one:** 267 and 59 are printed bare,
+>   `(C17H35+)` and `(+OCH3)` in parentheses — the prose explains ("very small except for
+>   low-molecular-weight esters"). Not a number, so no `relative_intensity` (convention F).
+> - **`alpha` CANNOT DO ESTERS — a structural reachability gap.** The rule that fires twice on eq 9.30's
+>   ketone (wikipedia.py:6) gives **0 embeddings** here because its LHS demands a carbon on *both* sides
+>   of the ionised carbonyl; an ester has O on one side. Neither ester α-cleavage (→267, →59) is
+>   reachable. `inductive_wiki` 0 (needs the *saturated* O ionised), `aryl_CO_loss` 0 (needs a phenol).
+> - **m/z 31 needs its disclosure read before reuse:** a singly bonded O+ has an unfilled valence, so
+>   `[O+:20][CH3:21]` carries **two unpaired electrons** (RDKit's model, and the real triplet ground
+>   state of oxenium ions). Declared radical_electrons 2 / multiplicity 3 so graph and declared state
+>   agree — with the consequence that the drawn heterolysis **formally changes total spin (1→3)**, i.e.
+>   as written the channel is spin-forbidden. Atoms/charge/total-electrons/radical-PARITY all hold
+>   (verified: 167 e− → 167 e−, parity True both sides); only a radical-*count* check flags it.
+>
+> **EQ 9.32 (printed p254) = 2 records, the ester McLafferty — and the corpus's first Ch.9 NEGATIVE.**
+> **a** rH(γ-H→O)→α → m/z 74 + 1-hexadecene; **b** the same β-cleavage with the charge migrating to the
+> hydrocarbon (m/z 224) — **which the book CROSSES OUT** (a large cross struck through the arrow shaft,
+> unmistakable at 5×). Stored per the IMS8-EQ8.20b precedent: `support_type: contradicted` on the
+> rejected step + a `contradicted` peak-evidence link + peak `status: rejected`. **Do not delete it —
+> a negative channel is evidence.** What is denied is the charge *partition*, not the cleavage: contrast
+> 9.26d/e and 9.28a/b, where the page offers both partitions with "or".
+> - **VERIFIED POSITIVE for both accepted steps:** `hTransition_unsaturated` embeds **twice** on the
+>   molecular ion (both γ-H on C4) and `hTransition_unsaturated_alpha` **once** on the distonic ion; the
+>   latter's RHS is atom-for-atom the drawn m/z 74 ion, and it keeps the charge on the oxygen half —
+>   **so the rule set independently agrees with the book's crossing-out.**
+> - **THE RULE NAMED "ester McLafferty" DOES NOT DO THIS ESTER McLAFFERTY.** `esterMcLafferty_rH`/`_alpha`
+>   (IMS_bookCover.py:336/361, from Gl. 4.45) give **0 embeddings**, structurally: their six-membered
+>   ring runs through the **alkoxy** O, so they need the *alcohol* part to carry the γ-H. A methyl ester
+>   has one carbon there and no γ-H. The generic acyl-side rule covers it instead — worth knowing before
+>   anyone trusts the rule *name*.
+> - m/z 74 is printed as a **resonance pair** (charge drawn on either oxygen, double-headed arrow); the
+>   left/arrow-side form is stored (IMS9-EQ9.26e convention). m/z 224 is stored as the 1,2-distonic
+>   localization for the usual reason (a full-valence C16H32 cannot hold +1 and one unpaired electron).
+> - **NOT ENCODED, recorded so it is not read as a miss:** eq 9.31's terminal arrow to
+>   "CnH2n+1+, CnH2n-1+" is a generic ION-SERIES label — no structures, no n, no arcs (the eq-9.5 /
+>   Table-8.4 exclusion).
+>
+> **NEXT: eq 9.33 (PDF 265, printed p254, bottom of the page — a generic R/R' scheme with one arc),**
+> then 9.34 (PDF 266). PDF 264 is already a recorded NON_MECHANISM_PAGE (Figure 9.11).
+
+## State (updated 2026-08-10, later)
+
+> ## EQ 9.29 + 9.30 DONE — PDF 262 is now FULLY extracted and registered
+>
+> **CORPUS NOW: 335 records, 335/335 gate-clean** (58 Ch.4 + 228 Ch.8 + **49 Ch.9**, eqs 9.1–9.30
+> minus non-mechanism 9.5). All 4 new records render clean (29/29 arrows anchored, 0 adrift, median
+> tail 0.70 pt); `git status` confirms **no pre-existing record was altered**.
+> **`page_map.json` "ch9" now includes 262** — the three equations it carries (9.28/9.29/9.30) are all
+> extracted, so the page is genuinely covered, not partially claimed.
+>
+> **THE BOOK HAS TWO DIFFERENT `r`-LABELS THAT LOOK ALIKE — MEASURED, AND IT SETTLES AN AMBIGUITY.**
+> Cropping eq 9.29's label (PDF 262) beside eq 9.27's (PDF 261) at 8× shows **lowercase `rc`**
+> (x-height = the `r`) vs **uppercase `rC`** (cap height, like `rH`'s H). With the book's other
+> lowercase members — `rd` = displacement (IMS8-EQ8.103/8.110/8.111), `re` = elimination
+> (IMS8-EQ8.117) — **lowercase `rc` = cyclization**, and 9.27's `rC` = carbon-skeleton rearrangement
+> is retro-confirmed. The book's legend for the symbol was NOT found (neither endpaper has it; both
+> carry isotope tables), so both records report the glyph verbatim and class the step from the drawn
+> structures per convention A.
+>
+> **EQ 9.29 (printed p251) = 1 record, β-ionone M+• (192.1509) → base peak (M−CH3)+ = 177.1274.**
+> Two steps: `rc` ring closure then `rd` methyl expulsion.
+> - **The `rc` arrow is printed INSIDE PARENTHESES with no structure between them**, so the cyclized
+>   intermediate is curator-constructed from the one drawn arc + the drawn final product.
+> - **ONE arc on the whole equation**, traced at 14×: tail at the odd-electron dot of the `+•` over the
+>   O, head (a two-stroke barb) in the gap between the O and the methyl-bearing ring carbon = the
+>   forming O–C bond. Only one arc *body* (barbs ~28 native px, body ~70), so it is one fishhook with
+>   a doubled head — worth noting because the generic rd scheme IMS8-EQ8.103 draws **two** converging
+>   fishhooks for the same reaction type, leaving 9.29 one arc short of a full rd bookkeeping.
+> - The O attacks the ring carbon 5 bonds away, closing a **6-membered** ring, and expels **the ring
+>   2-methyl** — verified on the product (no methyl on the fusion carbon next to O; the acetyl methyl
+>   is retained), not assumed.
+> - Product is a **pyrylium**; RDKit perceives all six ring bonds aromatic, so step 2 emits six SOFT
+>   `(aromatic/delocalised)` lines — arrow_check.py's documented behaviour, not a defect.
+> - **BOTH candidate rd rules TESTED AND REJECTED**: `substituion` (IMS_bookCover.py:420) 0 embeddings
+>   — it closes a 3-ring and its `_A` placeholders must unify to one element; `IMS_4_42_rd` 0 — halogen
+>   specific. So the rd family exists in the rule set only as a 3-ring/halonium special case: β-ionone's
+>   base-peak channel is a **reachability gap**.
+>
+> **EQ 9.30 (printed p251) = 3 records, 3,3,5-trimethylcyclohexanone M+• (m/z 140), Figure 8.5's
+> compound.** Each is 3 steps: **a** α(C1–C6) → *i*/−CO → *i* → isobutene + m/z 56; **b** α(C1–C6) →
+> rH(C2→C6) → α → m/z 83 + isobutyl•; **c** α(C1–C2) → rH(C6→C2) → α → m/z 69 + neopentyl•.
+> - **VERIFIED POSITIVE CROSS-LINK (RDKit-tested):** `alpha` (**wikipedia.py:6**, not a book rule)
+>   embeds **exactly twice** on the molecular ion — (C2,C1,O7,C6,C5) and (C6,C1,O7,C2,C3) — i.e. the
+>   two α channels the page draws are the two symmetry-distinct α bonds, found independently of the
+>   drawing. Live via `wiki_fragmentation` → `fragmentation` (rules/__init__.py:48). `aryl_CO_loss` and
+>   `hTransition_unsaturated_alpha` TESTED AND REJECTED (0 embeddings each); the CO-loss and rH steps
+>   are otherwise UNTESTED, not "no rule matches".
+> - **BOND ORDER MEASURED, NOT EYEBALLED:** a dark-run pixel profile shows **all three C–O bonds in eq
+>   9.30 are TRIPLE** (native x 587/598/608, 591/601/611, 1402/1412/1422). At page-render resolution the
+>   upper α product reads as a double bond, which would make its carbon a sextet; it does not. Encoded
+>   `[O+:7]#[C:1]` per IMS9-EQ9.27a. **Re-measure before trusting any bond order read off a render.**
+> - **SOLID vs DASHED marks the competing channel** (the eq-9.19/9.20 convention): the upper α product
+>   carries both branches' arrows — solid = the CO loss (record a), dashed = the rH pair (record b).
+> - The α steps are **ring openings**, not fragmentations: mass stays 140.1196 and the page redraws the
+>   same hexagon minus one bond. The molecular ion carries **0 arcs**, so all α moves are curator-supplied.
+> - **m/z 56 is drawn as a cyclopropane ring with a delocalized `+•`**; stored as the 1,3-distonic open
+>   form the arrows produce (a closed C4H8 ring cannot carry +1 *and* one unpaired electron, and no arrow
+>   forms the ring bond) — the IMS9-EQ9.28b / IMS9-EQ9.26e disclosure again.
+> - Every page-printed m/z (140/112/56/83/69) **matches the computed exact mass** of the encoded
+>   structure. No `relative_intensity`: Figure 8.5 has the abundances but is in Ch.8.
+>
+> **NEXT: eq 9.31 (PDF 263)**, then 9.32/9.33 (PDF 265), 9.34 (PDF 266). PDF 264 is already recorded as
+> a NON_MECHANISM_PAGE (Figure 9.11).
+
+## State (updated 2026-08-10)
+
+> ## EQ 9.28 DONE — the concerted-McLafferty page, and a rule-set selectivity gap
+>
+> **CORPUS NOW: 331 records, 331/331 gate-clean** (58 Ch.4 + 228 Ch.8 + **45 Ch.9**, eqs 9.1–9.28
+> minus non-mechanism 9.5). Both new records render clean (14/14 electron arrows anchored, 0 adrift,
+> median tail 0.54 pt) and `git status` confirms **no pre-existing record was altered**.
+>
+> **EQ 9.28 (PDF 262, printed p251) = 2 records, 6-methyl-5-hepten-2-one M+• (m/z 126.1039), the
+> compound of Figure 9.10.** Both records are 2 steps: an unlabelled double-bond isomerization, then
+> the McLafferty. `a` = charge on the oxygen half → distonic C3H6O+• (58.0413) + neutral isoprene;
+> `b` = the `or` branch, charge on the hydrocarbon → C5H8+• (68.0621) + neutral acetone enol.
+> - **THE PAGE'S POINT IS A SELECTIVITY THE MØD RULE SET CANNOT EXPRESS — RDKit-tested, and it is a
+>   NEGATIVE result.** `hTransition_unsaturated` (IMS_bookCover.py:40) embeds **twice** on the
+>   isomerized ion (H10/H11, the two equivalent sp3 γ-H) and `hTransition_unsaturated_alpha` (:50)
+>   once on the resulting distonic ion — so the pair *does* reproduce eq 9.28's net chemistry. **But
+>   the same rule also embeds once on the UN-isomerized ion, transferring the VINYLIC γ-H** — exactly
+>   the transfer the section says is "drastically" reduced — because the pattern's `[C]` terms
+>   constrain neither bond order nor hybridisation at Cγ. Missing *constraint*, not missing rule.
+> - **eq 9.28 is the corpus's rare CONCERTED McLafferty: ONE step carrying FOUR fishhooks**, traced at
+>   9× on the native scan (O• → H; C5–H → O; C5–H → the forming C4=C5 π; C3–C4 → that same π — the
+>   last two are the stacked pair of barbs on the vertical C4–C5 stroke). The page **never draws the
+>   distonic rH intermediate** that 9.25b/9.26d and the rule pair pass through, so no single rule
+>   corresponds to the drawn step. A 5th move (the C3–C4 electron staying on C3) is encoded, not
+>   drawn — the bookkeeping needs it and the drawn radical dot on the product CH2 confirms it.
+> - **The first arrow is BARE — no label, no arcs.** Encoded as a formal 1,3-H shift (H from C7 to C5,
+>   π sliding 5,6→6,7) purely as bookkeeping for the measured structural difference; disclosed as
+>   *not* a mechanistic claim (a concerted suprafacial 1,3-H shift is not a real elementary step).
+>   Atom maps reuse the IUPAC numbering of 6-methyl-5-hepten-2-one so the mapping is eye-checkable.
+>   `render_latex.py` stamps this arrow "rH" from `step_class` — a corpus label, not the page's.
+> - **`b`'s stored ion is NOT the printed graph, and says so:** the page draws C5H8+• as the intact
+>   diene with one delocalized "+•", so the record stores the 1,2-distonic localization its arrows
+>   produce (same connectivity, one bond order different) — the IMS9-EQ9.26e precedent. `b` also
+>   emits the ONE expected soft line (π pair → lone pair on O9); `a` is warning-free.
+> - **The TOP ROW of eq 9.28 is deliberately NOT encoded**: two static structures, zero arrows, zero
+>   products — 4-methyl-6-hepten-3-one and 4-methyl-4-penten-2-one (both named in the prose), drawn
+>   only to show a vinylic γ-H. Skipped per the eq-9.5 precedent; the FIG4.4 conflict still stands.
+> - eq 9.28 prints **no m/z and no percentage**; all masses curator-computed, ions detected via the
+>   prose ("observed in fair abundance"), no `relative_intensity` (Figure 9.10 has abundances but is
+>   another page — the 9.26d/Figure-9.9 situation). The prose's m/z 69/83 belong to allylic/α channels
+>   eq 9.28 does not draw → no records invented for them.
+>
+> **PDF 262 IS DELIBERATELY NOT ADDED TO `page_map.json`** — it carries three equations (9.28, 9.29,
+> 9.30) and only 9.28 was extracted, so registering the page would hide two unextracted schemes.
+> **NEXT: eq 9.29** (β-ionone displacement giving the (M−CH3)+ base peak, same PDF 262), then 9.30
+> (3,3,5-trimethylcyclohexanone, the big alicyclic-ketone cascade, also on 262), then 9.31 (PDF 263),
+> 9.32/9.33 (265), 9.34 (266).
+
+## State (updated 2026-08-04)
+
+> ## EQ 9.25 + 9.26 + 9.27 HAND-AUTHORED — the spend cap blocked batch 3 entirely
+>
+> **CORPUS NOW: 329 records, 329/329 gate-clean** (58 Ch.4 + 228 Ch.8 + **43 Ch.9**, eqs 9.1–9.27
+> minus non-mechanism 9.5). All 13 new records render clean; `git status` confirms **no committed
+> record was altered** (use git for this check — the scratchpad backup dir does not survive).
+>
+> **EQ 9.27 (PDF 261, printed p250) = 3 records — the metastable 2-hexanone methyl-loss pathway.**
+> `a` = the FAST 70 eV route (α, expelling the C-1 methyl → C4H9CO+); `b` = the SLOW metastable
+> chain S1⇌S2⇌S3⇌S4⇌S5⇌S6 then −CH3•(C4); `c` = the alternative terminal −CH3•(C6) from S6.
+> - **THE EQUILIBRIUM QUESTION IS ANSWERED — the schema already had the field.** `ElementaryStep`
+>   carries a **`reversible`** flag, so the five double-headed arrows are encoded as
+>   `reversible: true` instead of being silently linearised. No schema change was needed; this
+>   removes the open decision flagged after batch 2.
+> - **eq 9.27 draws ZERO curved arrows** — not one on the whole page. It is still a MECHANISM and
+>   not a 9.5-style non-mechanism, because it prints six successive intermediates with individually
+>   localised charge/radical sites, so each consecutive pair differs by exactly one recoverable
+>   change. Every step note says "Book draws 0 arc(s)" and marks all moves curator-supplied.
+> - **The book's own carbon numbers 1–6 are reused as atom maps**, so the mapping is checkable by
+>   eye — and that numbering is the point of the equation: fast route loses C-1, slow route loses
+>   C-4 or C-6 after skeletal scrambling.
+> - **LABEL/DRAWING DISCREPANCY, recorded not resolved:** the third-row equilibrium is labelled
+>   **`rC`** but both structures have the SAME carbon skeleton (verified atom by atom at native
+>   resolution); what actually moves is a HYDROGEN (C3→C5) with a C2=C3 π forming. Encoded as
+>   `hydrogen_rearrangement` per the drawn structures (convention A), the label reported. The
+>   row-two `rC` IS a genuine 1,2-alkyl shift, so the notation is used consistently elsewhere —
+>   which is what makes this one look like a slip in the figure.
+> - **Both routes end at the SAME m/z**: the fast acylium and the slow protonated pentenone are both
+>   C5H9O+ = 85.0648, isomers indistinguishable by mass — which is exactly why the book numbers the
+>   carbons. Audit confirms all six chain intermediates are C6H12O+• = 100.0883, i.e. true isomers.
+> - **ms_context split by route (convention G):** `a` is 70 eV EI (the prose says "at 70 eV..."),
+>   while `b`/`c` are `metastable-ion (MI) decomposition` with `electron_energy_ev: null`.
+> - eq 9.27 prints **no m/z and no percentage anywhere**; all masses are curator-computed, ions
+>   marked detected via the prose per the 8.60/8.81 precedent. The prose "<3%" is an upper bound on
+>   a branching ratio, NOT stored as a relative_intensity.
+>
+> **EQ 9.26 (PDF 260, printed p249) = 5 records, 6-methyl-2-heptanone M+• (also m/z 128).**
+> Channels: **a** α→CH3CO+ (43); **b** α→C6H13CO+ (113) →*i*→ C6H13+ (85) via CO loss; **c** the long
+> horizontal *i* arrow →C6H13+ (85) DIRECTLY (the page reaches m/z 85 by two drawn routes);
+> **d** rH→distonic m/z 128 →α→ 4-methyl-1-pentene + m/z 58; **e** the drawn resonance partner →*i*→
+> m/z 70 + acetone enol.
+> - **INSTANTIATION of the condensed "C3H7" label is settled by TEXT, not the drawing**: isopropyl,
+>   giving 6-methyl-2-heptanone. n-propyl would give 2-octanone — an isomer with IDENTICAL nominal
+>   masses at every step — so the scheme alone cannot distinguish them; the running text ("the
+>   characteristic peaks in ... 6-methyl-2-heptanone (Figure 9.9)", "a pair of acylium ions (m/z 113
+>   and 43)") is what fixes it. Disclosed in every record.
+> - **d + e are the classic complementary McLafferty pair from ONE intermediate** — charge retained on
+>   the oxygen fragment (m/z 58) or migrated to the hydrocarbon (m/z 70). The audit shows the same
+>   C5H10 appearing once as the NEUTRAL loss (70.0783) and once as the detected ION (70.0777), and
+>   C3H6O likewise as ion (58.0413) / neutral (58.0419).
+> - **The page draws exactly ONE curved arrow in the whole equation** (on the (e) structure: tail on
+>   C3–C4, head pointing AT the '+' on C2). Everything else is label-only, so 9.26's molecular ion has
+>   **0 arcs** — unlike eq 9.25's aldehyde, which prints two fishhooks on its M+•. That single arc's
+>   head lands on the cationic ATOM rather than the forming bond; encoded as entering the forming
+>   C2=C3 bond, disclosed, per the IMS9-EQ9.22 precedent.
+> - **(e)'s precursor is the OTHER drawn localization**: the page redraws the (d) intermediate below
+>   it, joined by a double-headed arrow, with a neutral O–H and '+' on C2 (the C(+)–OH ↔ C=O(+)H
+>   resonance pair). The record uses the form the arrow is actually drawn FROM.
+> - **VERIFIED cross-link for (d)**: the same inside-cover pair that covers eq 9.25b —
+>   `hTransition_unsaturated` (rH) + `hTransition_unsaturated_alpha` (α). Channels a/b/c/e marked
+>   **UNTESTED, not "no rule matches"**.
+> - `IMS9-EQ9.26b`'s CO loss is a true 2-electron step from an EVEN-electron acylium (one
+>   double-barbed arrow, no fishhooks); CO is written `[C-:2]#[O+:9]`, the standard RDKit form.
+>
+> **BATCH 3 FAILED TWICE — no partial state, nothing to salvage.** Run 1 (7 pages, 14 agents) and
+> run 2 (4 pages, 8 agents) both died with "You've hit your monthly spend limit"; together they
+> burned **~1.57M subagent tokens and 474 tool calls and produced ZERO records**. The agents die in
+> the *measurement* phase, after pulling native scans and cropping but before writing any draft JSON,
+> so unlike the batch-2 interruption there is no landed record to hand-fix — check
+> `find .staging -name '*.json'` before attempting salvage. 23 MB of dead crops were cleared.
+> **Lesson: split large batches.** Seven pages die as one unit; 3-4 pages at a time bounds the loss.
+>
+> **eq 9.25 was then hand-authored from the native scan** (pypdf `page.images[0]`, 1760x2560, five
+> structures cropped at 4-5x), like eq 9.6 before it. `extraction_method: manual_from_scan`, so
+> **`grep -l manual_from_scan records/*.json` now returns SEVEN records** (9.6a/b + 9.25a-e) — all
+> lacking an adversarial verify pass. Re-verify when agents return.
+>
+> **Structure: 5 records, one per drawn channel** (a chain of drawn arrows = one record with several
+> steps, the 9.21 precedent): **a** α→HCO+ (m/z 29); **b** rH→distonic m/z 128 →α→ 1-butene + m/z 72
+> →α→ m/z 57 (3 steps); **c** the composite "rH, α, −C2H4" →m/z 100 →α→ m/z 57 (2 steps); **d** *i*
+> →C7H15+ (m/z 99); **e** σ→C4H9+ (m/z 57).
+> - **The composite arrow (c) does NOT use the drawn γ-H.** Its printed product is a STRAIGHT
+>   six-carbon chain with the radical α to the carbonyl, which forces the migrating H to be the
+>   **ethyl-branch γ′-H on C9** (γ to C=O via C1-C2-C8-C9), the branch then leaving as ethylene —
+>   i.e. the three labels are one complete McLafferty running on the BRANCH. Mass bookkeeping settles
+>   it: C8H16O (16 H) → C6H12O (12 H) + C2H4 (4 H); taking the O–H from C4 gives C6H11O+, not 100.
+> - **INDEPENDENT CORROBORATION, RDKit-tested:** `hTransition_unsaturated` (IMS_bookCover.py:40)
+>   embeds on the molecular ion **twice**, at maps (4,3,2,1,7) and **(9,8,2,1,7)** — exactly the two
+>   γ-donors the page uses, the second being the branch H that channel (c) needs. The rule set finds
+>   the branch γ-position independently of the mass argument. `hTransition_unsaturated_alpha` (:50)
+>   embeds **once** on (b)'s distonic ion at (4,3,2,1,7), breaking the same bond and forming the same
+>   alkene → its product halves are atom-for-atom the drawn 1-butene + m/z 72. It gives **0** matches
+>   on the m/z 100 ion, correctly, since there the radical is α not γ. Verified positives for (b) and
+>   (c); channels a/d/e are marked **UNTESTED, not "no rule matches"**.
+> - **The page's two "m/z 57" labels are DIFFERENT IONS**: C3H5O+ (57.0335) from the two rearrangement
+>   branches vs C4H9+ (57.0699) from the σ channel — resolvable only at high resolution. Disclosed in
+>   both records.
+> - **The *i* and σ steps are encoded as TWO one-electron moves, not one 2-electron arrow**, because
+>   the precursor is odd-electron with charge AND radical on O while the products are an even-electron
+>   cation + a neutral radical: one electron pairs with the O odd electron, one stays as the radical.
+>   The gate emits a `(soft) ... consistent with a lone pair rather than radicals` line for exactly
+>   this, which is expected, not a defect.
+> - Self-audit (RDKit, independent of the authoring script): every formula/exact mass correct and
+>   **mass balance closes to 128.1196 in all five records**. NB `ExactMolWt` already applies the
+>   formal charge — do not subtract the electron again (the eq-9.6 audit bug).
+>
+> **NEXT: eqs 9.26–9.34 are unextracted** — PDF 260 (9.26), 261 (9.27), 262 (9.28/9.29/9.30),
+> 263 (9.31), 265 (9.32/9.33), 266 (9.34). `page_map.json` "ch9" deliberately lists ONLY 259 from this
+> span, so an unextracted page is never mistaken for a covered one. New NON_MECHANISM_PAGES: PDF 257
+> (Unknown 9.2 exercise), 258 (Figures 9.8–9.10), 264 (Figure 9.11) — all read in full.
+> **9.27 will need a decision**: it is drawn as double-headed EQUILIBRIUM arrows (rH/rC, "fast"/"slow")
+> between metastable 2-hexanone ions, which the step DAG cannot express as drawn.
+>
+> **FIG4.4 PRECEDENT CONFLICT WIDENING:** Figures 9.7, 9.8, 9.9, 9.10 and 9.11 are all arrow-free
+> squiggle-mark insets and were all SKIPPED, while `IMS4-FIG4.4a/b` were ENCODED from exactly that
+> kind of inset. Five skipped vs two encoded.
+
 ## State (updated 2026-07-30)
 
 > ## CH.9 BATCH 2 — eqs 9.13–9.24 (requested: "the next 10 equations")

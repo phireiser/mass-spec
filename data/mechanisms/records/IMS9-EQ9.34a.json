@@ -1,0 +1,295 @@
+{
+  "mechanism_id": "IMS9-EQ9.34a",
+  "species": [
+    {
+      "species_id": "sec_butyl_acetate_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:3])[O:4][CH:5]([CH3:6])[CH:7]([1H:9])[CH2:8][1H:10]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "distonic_ion_charge_on_carbonyl_o",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:3][1H:9])[O:4][CH:5]([CH3:6])[CH:7][CH2:8][1H:10]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "but_2_ene_neutral",
+      "mapped_smiles": "[CH:7]([CH2:8][1H:10])=[CH:5][CH3:6]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "acetic_acid_radical_cation_mz60",
+      "mapped_smiles": "[O:4][C:2]([CH3:1])=[O+:3][1H:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "sec_butyl_acetate_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_rearranged",
+      "species_ids": [
+        "distonic_ion_charge_on_carbonyl_o"
+      ]
+    },
+    {
+      "state_id": "state_mz60",
+      "species_ids": [
+        "acetic_acid_radical_cation_mz60",
+        "but_2_ene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_alkoxy_side",
+      "from_state": "state_precursor",
+      "to_state": "state_rearranged",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_alkene_loss",
+      "from_state": "state_rearranged",
+      "to_state": "state_mz60",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_alkoxy_side",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 255,
+        "equation": "9.34",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters, 'Ethyl and higher esters' (arrow labelled 'rH')"
+      },
+      "confidence": 0.85,
+      "curator_note": "The arrow labelled 'rH'. Book draws 2 arc(s) on the molecular ion, both single-barbed fishhooks, measured at 11x: one has its tail at the odd-electron dot of the '+.' above the carbonyl oxygen and sweeps left with its head on the explicitly drawn hydrogen; the other has its tail on the C7-H9 bond and sweeps right with its head pointing up at the oxygen. Moves <1,2> are those arcs. Move <3> is NOT drawn -- the second C7-H9 electron staying on C7 as the new radical site -- and the page confirms it by printing a radical dot on exactly that carbon in the product. Six-membered McLafferty transition state H9-C7-C5-O4-C2-O3; no mass changes (the distonic product is still 116.0832). *** THE HYDROGEN COMES FROM THE ALCOHOL SIDE, NOT THE ACID SIDE *** -- the transferring H sits on the sec-butyl group's CH2, so the six-ring runs THROUGH THE ESTER OXYGEN. That is what makes this equation the substrate class of the book's own Gl.-4.45 rule pair, and the opposite of IMS9-EQ9.32 (a methyl ester, where the ring runs through the acyl chain instead). SUBSTRATE: sec-butyl acetate, CH3-C(=O)-O-CH(CH3)-CH2-CH3, drawn skeletally and labelled 'm/z 116'. Named on the same page by Figure 9.12 ('Mass spectrum of sec-butyl acetate') and by the prose that introduces the equation: 'The spectrum of sec-butyl acetate (Figure 9.12) illustrates the additional reactions that are possible with such esters. Rearrangement of one (Equation 4.33) and two (Equation 4.46) hydrogen atoms is highly characteristic (Equation 9.34).' Note what that sentence does: it names the two BOOK-COVER rule families this equation instantiates, one-H and two-H rearrangement. ATOM MAPS: 1 = the acetyl methyl, 2 = the acetyl (carbonyl) carbon, 3 = the carbonyl oxygen, 4 = the ester (saturated) oxygen, 5 = the methine carbon, 6 = its methyl, 7 = the CH2 of the ethyl group, 8 = the terminal methyl of the ethyl group, 9 = THE HYDROGEN THE PAGE DRAWS EXPLICITLY ON C7 (the one that migrates in the rH step), 10 = the hydrogen the page draws explicitly on C8 in the lower structure (the SECOND migrating hydrogen). Both are kept explicit as [1H:n] in every species."
+    },
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_alkene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 255,
+        "equation": "9.34",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters (arrow labelled alpha, to '(m/z 60)')"
+      },
+      "confidence": 0.75,
+      "curator_note": "The arrow labelled 'alpha' leaving the distonic ion. Book draws 0 arc(s) on that ion -- I re-cropped it at 5x and it carries only the radical dot and the H-O+ marks -- so all three moves are curator-supplied: the C7 radical into the forming C5=C7 pi bond, one electron of the breaking C5-O4 bond into that same bond, and the second staying on O4. PRODUCTS AS DRAWN: the neutral is but-2-ene (CH3-CH=CH-CH3, C4H8, 56.0626) and the ion, labelled '(m/z 60)', is drawn as the DISTONIC acetic acid radical cation -- an explicit radical dot on one oxygen and 'H-O+' on the other -- which is stored exactly as drawn rather than as the closed-shell acid tautomer. MEASUREMENTS (convention F): the page labels m/z 116, (m/z 60), m/z 56 and m/z 61, and every one matches the exact mass computed from the structure encoded here (116.0832, 60.0206, 56.0621, 61.0284 -- RDKit ExactMolWt, which already applies the formal charge). No percentage is printed in the equation, so no relative_intensity is stored; Figure 9.12 on the same page DOES carry abundances (and prints the circled '56' and boxed '61' marks plus 'M+. at m/z 116 has an abundance of 0.1%'), but it is a figure and not this scheme, so it is quoted rather than stored. THE PARENTHESES AROUND '(m/z 60)' ARE THE BOOK'S OWN JUDGEMENT and are recorded as such: 60 is the only one of the four labels printed in parentheses, and Figure 9.12 shows no peak at 60 while it does show 56 and 61 -- so the parentheses mark a channel that is drawn but not observed in this compound's spectrum."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.34a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.34",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.85,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** TWO VERIFIED POSITIVE CROSS-LINKS, RDKit-tested by me (SMARTS substructure counts against this record's instantiated molecular ion), and they are the two rule families the page's own prose names. *** (i) 'esterMcLafferty_rH' (IMS_bookCover.py:336, '[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7 >> [C.]2[C]3[O]4[C]5({=}[O+]6[H]1)[C]7', transcribed from Gl. 4.45) embeds FIVE times on this molecular ion -- three times on the terminal methyl C8 and twice on the CH2 C7, i.e. every hydrogen on the two carbons that can reach the carbonyl oxygen through the six-membered ring; the page draws the C7 case. This is the rule's INTENDED substrate class: its ring passes through the alkoxy oxygen, so it needs the alcohol part to carry the gamma hydrogen, which a sec-butyl ester does and a methyl ester does not (see the negative recorded in IMS9-EQ9.32a's mechanism note). (ii) 'h2Transiton_1' (IMS_bookCover.py:~380, '[H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8', transcribed from Gl. 4.46 -- the DOUBLE hydrogen rearrangement) embeds FOUR times, which is the rule counterpart of this equation's m/z 61 channel (IMS9-EQ9.34c); the prose names Equation 4.46 for exactly that channel. TESTED AND REJECTED: 'alpha' (wikipedia.py:6) gives 0 embeddings -- its LHS demands a carbon on both sides of the ionised carbonyl and an ester has an oxygen on one side, the same structural gap recorded for IMS9-EQ9.31; and 'inductive_wiki' (wikipedia.py:15) gives 0, because it needs the SATURATED oxygen to be the ionised one whereas this page draws the charge and radical on the carbonyl oxygen. Both esterMcLafferty and h2Transiton are live via rearrangements -> IMS_cover_fragmentation -> 'fragmentation' (rules/__init__.py:45)."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.0832,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_116",
+      "species_id": "sec_butyl_acetate_molecular_ion",
+      "step_id": null,
+      "observed_mz": 116.0832,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    },
+    {
+      "peak_id": "peak_60",
+      "species_id": "acetic_acid_radical_cation_mz60",
+      "step_id": "step_alpha_alkene_loss",
+      "observed_mz": 60.0206,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-12T00:00:00Z",
+    "modified_at": "2026-08-12T00:00:00Z"
+  }
+}

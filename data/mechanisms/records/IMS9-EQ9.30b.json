@@ -1,0 +1,386 @@
+{
+  "mechanism_id": "IMS9-EQ9.30b",
+  "species": [
+    {
+      "species_id": "tmch_molecular_ion",
+      "mapped_smiles": "[O+:7]=[C:1]1[CH:2]([1H:11])[C:3]([CH3:8])([CH3:9])[CH2:4][CH:5]([CH3:10])[CH2:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ring_opened_acylium_c1c6",
+      "mapped_smiles": "[O+:7]#[C:1][CH:2]([1H:11])[C:3]([CH3:8])([CH3:9])[CH2:4][CH:5]([CH3:10])[CH2:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "rearranged_acylium_radical",
+      "mapped_smiles": "[O+:7]#[C:1][CH:2][C:3]([CH3:8])([CH3:9])[CH2:4][CH:5]([CH3:10])[CH2:6][1H:11]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "unsaturated_acylium_mz83",
+      "mapped_smiles": "[O+:7]#[C:1][CH:2]=[C:3]([CH3:8])[CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "isobutyl_radical",
+      "mapped_smiles": "[CH2:4][CH:5]([CH3:10])[CH2:6][1H:11]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "tmch_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_ring_opened",
+      "species_ids": [
+        "ring_opened_acylium_c1c6"
+      ]
+    },
+    {
+      "state_id": "state_rearranged",
+      "species_ids": [
+        "rearranged_acylium_radical"
+      ]
+    },
+    {
+      "state_id": "state_mz83",
+      "species_ids": [
+        "unsaturated_acylium_mz83",
+        "isobutyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_ring_opening",
+      "from_state": "state_precursor",
+      "to_state": "state_ring_opened",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_c2_to_c6",
+      "from_state": "state_ring_opened",
+      "to_state": "state_rearranged",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_isobutyl_loss",
+      "from_state": "state_rearranged",
+      "to_state": "state_mz83",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_ring_opening",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.30",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones, 'Alicyclic ketones' (upper arrow labelled alpha)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Substrate named by the prose ON THIS PAGE: 'Alicyclic ketones. The mass spectrum of 3,3,5-trimethylcyclohexanone (Figure 8.5) illustrates major additional fragmentation pathways found for cyclic ketones (Equation 9.30); these are similar to those discussed for cyclic alcohols and in Section 8.9.' Drawn as a cyclohexanone with '+.' over the oxygen, gem-dimethyl at the lower-left ring carbon and a single methyl at the lower-right one, labelled 'm/z 140'. ATOM MAPS use the ring numbering of that name: 1 = the carbonyl carbon, 2 and 6 = the two alpha CH2 groups, 3 = the gem-dimethyl quaternary carbon, 4 = the remaining ring CH2, 5 = the CH bearing the single methyl, 7 = O, 8/9 = the two 3,3-methyls, 10 = the 5-methyl, 11 = the hydrogen the page draws EXPLICITLY inside the ring-opened product, on C2. This record shares the C1-C6 alpha channel with IMS9-EQ9.30a. *** BOND ORDER MEASURED, NOT EYEBALLED: every C-O bond drawn in equation 9.30 is a TRIPLE bond. *** A dark-run pixel profile across the three C-O bonds on the native 1760x2560 scan returns three parallel strokes in each case (upper alpha product at native x 587/598/608, lower at 591/601/611, m/z 83 ion at 1402/1412/1422). At page-render resolution the upper one reads as a double bond, which would make its carbon a sextet; it is not. The ring-opened species are therefore true acylium ions R-C#O+, encoded '[O+:7]#[C:1]' as in IMS9-EQ9.27a. The alpha arrow: the molecular ion carries ZERO arcs (only '+.' over the oxygen), so all three moves are curator-supplied -- the canonical radical-site triple: <1> the oxygen odd electron into the C1-O bond, raising C=O to the C#O+ of the acylium, <2> one electron of the breaking ring bond into that same bond, <3> the second electron staying on the departing ring carbon as the new radical site. The ring does not fall apart: the 'fragments' stay tied together through the rest of the ring, so this step is a RING OPENING to a distonic ion of unchanged mass (140.1196), which is why the page draws the product with the same hexagonal layout minus one bond. SOLID vs DASHED ARCS (the page's channel-marking convention, the same one recorded for eqs 9.19/9.20): the upper alpha product carries BOTH branches' arrows at once -- the CO-loss arc is SOLID and the hydrogen-rearrangement pair is DASHED. IMS9-EQ9.30a owns the solid arc; IMS9-EQ9.30b owns the dashed pair."
+    },
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_c2_to_c6",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.30",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones, 'Alicyclic ketones' (arrow labelled 'rH')"
+      },
+      "confidence": 0.7,
+      "curator_note": "The arrow labelled 'rH'. Book draws 2 arcs for this step, and they are the DASHED pair on the ring-opened product (see the solid/dashed note): one runs from the explicitly drawn C2-H bond toward the radical, the other from the radical dot on C6 back toward that hydrogen, so the two converge on the forming C6-H bond. Moves <1,2> are those arcs -- one electron of the C2-H bond into the forming C6-H bond, and the C6 odd electron into the same bond. Move <3> is not drawn: the second C2-H electron remaining on C2, which is the radical site the page then prints on the product and which drives the next step. The transfer spans the former ring (C6 reaches back across to C2), which is exactly what the opened chain makes possible; no mass changes, this is an isomerization of the m/z 140 ion. The migrating H is the one the book draws, so no choice was invented; after transfer C6 becomes a methyl group and C5 an isopropyl-type CH, which is how the page redraws that end."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_83",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_isobutyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.30",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones, 'Alicyclic ketones' (arrow labelled alpha, to m/z 83)"
+      },
+      "confidence": 0.75,
+      "curator_note": "The second 'alpha' arrow of this branch. Book draws 2 arcs on the rearranged ion: one from the radical dot on C2 pointing down into the C2-C3 bond, one from the C3-C4 bond pointing left into that same bond. Moves <1,2> are those; move <3> is the undrawn homolysis hook that leaves the second C3-C4 electron on C4, which is what actually produces the neutral radical the page prints. PRODUCTS AS DRAWN: the ion is the conjugated acylium O+#C-CH=C(CH3)2 labelled 'm/z 83' (C5H7O+, 83.0491) and the neutral is drawn as a three-line vertex with a dot at the end of one branch, i.e. the ISOBUTYL radical .CH2-CH(CH3)-CH3 (C4H9., 57.0704). Their masses sum to 140.1195, closing the balance on the precursor. MEASUREMENTS (convention F): the page LABELS m/z 140, 112, 56, 83 and 69 on the scheme itself, and every one of them matches the exact mass computed from the structure encoded here (140.1196, 112.1247, 56.0621, 83.0491, 69.0335 -- RDKit ExactMolWt, which already applies the formal charge). Peak assignments store those computed exact masses with status 'proposed', the corpus convention for a book-labelled m/z (IMS9-EQ9.22, IMS9-EQ9.19a). NO relative_intensity: the scheme prints no percentage, and Figure 8.5 -- the actual 3,3,5-trimethylcyclohexanone spectrum, which does carry abundances -- is in chapter 8, not on this page."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.30b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.30",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.7,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** VERIFIED POSITIVE CROSS-LINK for the alpha step (RDKit-tested, not asserted): 'alpha' (src/data_generation/rules/wikipedia.py:6, '[C]1[C]2({=}[O+.])[C]3[C]4 >> [C]1[C]2{#}[O+].[C.]3[C]4') embeds EXACTLY TWICE on this molecular ion, at (C2,C1,O7,C6,C5) and (C6,C1,O7,C2,C3). *** Those two embeddings are precisely the two alpha channels the page draws -- the upper branch cleaving C1-C6 and the lower one cleaving C1-C2 -- so the rule set finds the branch point independently of the drawing, and its RHS gives the acylium plus carbon radical encoded here, including raising C=O to C#O+. It is live via wiki_fragmentation -> 'fragmentation' (rules/__init__.py:48). TESTED AND REJECTED for the later steps: 'aryl_CO_loss' (aromatic_ring_loss.py:49) gives 0 embeddings on the acylium (it is an aromatic ring-contraction rule, LHS needs a phenol), and 'hTransition_unsaturated_alpha' (IMS_bookCover.py:50) gives 0 on the rH product (its LHS requires the protonated [_A+][H] enol form, not an acylium). No rule was found or tested for the CO loss or the rH steps themselves: UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 140.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_140",
+      "species_id": "tmch_molecular_ion",
+      "step_id": null,
+      "observed_mz": 140.1196,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    },
+    {
+      "peak_id": "peak_83",
+      "species_id": "unsaturated_acylium_mz83",
+      "step_id": "step_alpha_isobutyl_loss",
+      "observed_mz": 83.0491,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-10T00:00:00Z",
+    "modified_at": "2026-08-10T00:00:00Z"
+  }
+}

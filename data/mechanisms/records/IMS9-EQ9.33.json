@@ -1,0 +1,193 @@
+{
+  "mechanism_id": "IMS9-EQ9.33",
+  "species": [
+    {
+      "species_id": "distonic_ester_fragment",
+      "mapped_smiles": "[CH3:4][CH2:3][C:2]([CH3:5])[C:1]([OH:6])=[O+:7][CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "conjugated_ee_ion",
+      "mapped_smiles": "[CH2:3]=[C:2]([CH3:5])[C:1]([OH:6])=[O+:7][CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:4]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_ester_fragment"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "conjugated_ee_ion",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_beta_cleavage",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_beta_cleavage",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 254,
+        "equation": "9.33",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters, 'Aliphatic methyl esters' (the one-line scheme labelled alpha)"
+      },
+      "confidence": 0.6,
+      "curator_note": "ARC COUNT (convention D), measured by me at 14x on the native 1760x2560 scan: the precursor carries EXACTLY TWO arcs, both single-barbed fishhooks, and their heads CONVERGE on the same empty gap between the CH2 and the alpha carbon -- i.e. on the FORMING C=C pi bond. Arc 1 (the long one) has its tail descending onto the R-CH2 sigma bond; arc 2 (the short one) has its tail at the radical dot on the alpha carbon. Moves <1,2> are those two arcs. Move <3> is NOT drawn: the second R-CH2 electron leaving on R, which is what actually produces the 'R.' the page prints as the first product. The reaction arrow itself is a plain labelled 'alpha' arrow with no arc. This is the canonical radical-site beta-scission (the book's 'secondary beta-bond cleavage'), and the product is conjugated -- the new C=C sits next to the C=O+ -- which is exactly the 'conjugated EE+ ion' the prose promises: the ion is EVEN-electron (charge +1, no unpaired electron) while the precursor was odd-electron. GENERIC SCHEME -- THE INSTANTIATION IS THE CURATOR'S AND IS SPELLED OUT. Equation 9.33 is printed as a single condensed line at the bottom of printed p254 carrying THREE generic labels: 'R-CH2C(.)R'a-C(OH)=+OR --alpha--> R. + CH2=CR'a-C(OH)=+OR'. Nothing is named, no m/z is printed and no compound is drawn out. The licensing prose is three lines above it on the SAME page: 'If an R_alpha group is ethyl or larger, secondary beta-bond cleavage can give a conjugated EE+ ion (Equations 9.33, 8.79).' That sentence is what constrains the choice: the group whose bond cleaves, R-CH2-, must be ETHYL OR LARGER, so R = CH3 is the minimum. The subsection is 'Aliphatic methyl esters', so the ester alkyl OR is taken as OCH3, and the second alpha substituent R'a -- printed as a group label, not as an H -- is taken as the smallest alkyl, CH3. INSTANTIATION CHOSEN: precursor CH3CH2-C(.)(CH3)-C(OH)=O(+)CH3, C6H12O2+., curator-computed 116.0832; product ion CH2=C(CH3)-C(OH)=O(+)CH3, C5H9O2+, 101.0597; neutral CH3. (15.0235). EVERY mass in this record follows from that choice, not from the page. A reviewer preferring the cross-referenced Equation 8.79 literally would set R'a = H (precursor C5H10O2+. 102.0675, ion C4H7O2+ 87.0441); the graph would be the same shape. ATOM MAPS: 1 = the carbonyl carbon (bearing OH and the charged ester oxygen), 2 = the alpha carbon (the radical site), 3 = the CH2, 4 = R (the methyl expelled), 5 = R'a, 6 = the hydroxyl oxygen, 7 = the charged ester oxygen, 8 = its methyl. WHAT THE PRECURSOR IS: not a molecular ion. It is an ODD-ELECTRON DISTONIC FRAGMENT -- charge drawn on the ester oxygen as '=+OR', radical drawn as a dot on the alpha carbon -- i.e. the ion that arrives from the delta-/epsilon-hydrogen migration plus 1,4-hydrogen shift described in the prose immediately above (and it is the charge-on-the-ester-oxygen partner of the resonance pair IMS9-EQ9.32a stores for its m/z 74 ion). ms_context.adduct is therefore null, NOT '[M]+.' (convention G)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.33",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.33",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.3,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. UNTESTED, not 'no rule matches': no MOD rule was searched for or tested against this record, because the precursor is a generic curator-instantiated distonic fragment rather than a molecular ion, so any embedding count would describe my instantiation and not the page. The closest family by shape is hTransition_unsaturated_alpha (IMS_bookCover.py:50), which performs the same radical-site beta-scission with alkene formation, but its LHS requires the [_A+][H] protonated form of the carbonyl and this precursor's charge is drawn on the ester oxygen instead; that mismatch was reasoned from the DFS string, not measured, and is recorded as such."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": null,
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.0832,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_ion",
+      "species_id": "conjugated_ee_ion",
+      "step_id": "step_beta_cleavage",
+      "observed_mz": 101.0597,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.4
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-12T00:00:00Z",
+    "modified_at": "2026-08-12T00:00:00Z"
+  }
+}

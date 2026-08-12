@@ -1,0 +1,160 @@
+{
+  "mechanism_id": "IMS9-EQ9.26e",
+  "species": [
+    {
+      "species_id": "distonic_ion_carbocation_form",
+      "mapped_smiles": "[CH3:1][C+:2]([O:9][1H:10])[CH2:3][CH2:4][CH:5][CH:6]([CH3:7])[CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylpentene_radical_cation_mz70",
+      "mapped_smiles": "[CH2+:4][CH:5][CH:6]([CH3:7])[CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetone_enol_neutral",
+      "mapped_smiles": "[CH3:1][C:2]([O:9][1H:10])=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "distonic_ion_carbocation_form"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "methylpentene_radical_cation_mz70",
+        "acetone_enol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive_charge_migration",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_charge_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 249,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (lower structure, arrow labelled 'i')"
+      },
+      "confidence": 0.7,
+      "curator_note": "FIFTH channel. The page draws the distonic rH intermediate of IMS9-EQ9.26d a SECOND time, directly below it and joined to it by a vertical DOUBLE-HEADED arrow, in its other localisation: the O-H is drawn as a plain single bond to a NEUTRAL oxygen and the '+' is printed on the carbonyl carbon (C2), with the radical dot still on C5. The two drawings are the standard C(+)-OH <-> C=O(+)H resonance pair of an oxygen-stabilised cation -- one species, two localisations -- and this record uses the one the page actually draws the arrow FROM, per convention C. PRECURSOR is therefore written [C+:2]([O:9][1H:10]) with charge on carbon and a neutral hydroxyl, NOT the [C:2]=[O+:9][1H:10] form used in IMS9-EQ9.26d; both are m/z 128 and the same ion. Book draws 1 arc, the ONLY curved arrow anywhere in Equation 9.26: its tail sits on the C3-C4 bond and its head points AT the '+' on C2. Move <1> encodes it as that bonding pair entering the FORMING C2=C3 bond -- a disclosed reading, since the drawn head lands on the cationic ATOM rather than on the bond, which is the same idealisation IMS9-EQ9.22 records for its ring-contraction arc and the only reading that produces the drawn enol. It is a full two-electron arrow (the step is labelled 'i' and the precursor's charge site is even-electron), so electron_count is 2 and no fishhook is implied. RESULT -- the complementary McLafferty product: the charge stays with the HYDROCARBON, giving the distonic C5H10+. ion the page labels 'm/z 70' (drawn with both a radical dot AND a '+'), while the oxygen leaves as the neutral acetone enol CH2=C(OH)CH3. Together with IMS9-EQ9.26d this is the classic 58/70 charge-retention pair from one rearranged intermediate. MS CONTEXT: the page prints no ionisation conditions, so 70 eV EI is the corpus house default, disclosed rather than read off the page. Figure 9.9 (printed p247) is the 6-methyl-2-heptanone spectrum and does carry abundances, but it is NOT this page and this scheme prints no percentage, so per convention F no relative_intensity is recorded; peaks are status 'proposed'."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.26e",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so any link would be inferred rather than indexed. NO cross-link is claimed and -- stated so it is not mistaken for a negative result -- NO RDKit rule-matching sweep was run for this channel: these records were hand-authored while the extraction agents were unavailable. Absence of a cited rule here means UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_70",
+      "species_id": "methylpentene_radical_cation_mz70",
+      "step_id": "step_inductive_charge_migration",
+      "observed_mz": 70.0777,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

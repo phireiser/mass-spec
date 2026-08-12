@@ -1,0 +1,338 @@
+{
+  "mechanism_id": "IMS9-EQ9.25c",
+  "species": [
+    {
+      "species_id": "ethylhexanal_molecular_ion",
+      "mapped_smiles": "[CH3:6][CH2:5][CH2:4][CH2:3][CH:2]([CH2:8][CH2:9][1H:11])[CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ethene_neutral",
+      "mapped_smiles": "[CH2:8]=[CH2:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_hexanal_enol_mz100",
+      "mapped_smiles": "[CH3:6][CH2:5][CH2:4][CH2:3][CH:2][CH:1]=[O+:7][1H:11]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "hydroxyallyl_cation_mz57",
+      "mapped_smiles": "[CH2:3]=[CH:2][CH:1]=[O+:7][1H:11]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "propyl_radical",
+      "mapped_smiles": "[CH2:4][CH2:5][CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylhexanal_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_mz100",
+      "species_ids": [
+        "distonic_hexanal_enol_mz100",
+        "ethene_neutral"
+      ]
+    },
+    {
+      "state_id": "state_mz57",
+      "species_ids": [
+        "hydroxyallyl_cation_mz57",
+        "propyl_radical",
+        "ethene_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_mclafferty_ethene_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_mz100",
+      "step_class": "mclafferty_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              8
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_alpha_propyl_loss",
+      "from_state": "state_mz100",
+      "to_state": "state_mz57",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_mclafferty",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty_ethene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (middle arrow: 'rH', 'alpha', '- C2H4')"
+      },
+      "confidence": 0.65,
+      "curator_note": "Substrate as drawn: the 2-ethylhexanal molecular ion, labelled 'm/z 128' under the structure. The skeleton is printed as C2H5-CH(H)-CH2-CH(C2H5)-CHO with the gamma hydrogen on C4 drawn EXPLICITLY, an aldehyde H on C1, and '+.' printed above the carbonyl oxygen. LOCALIZATION (convention B): the charge and odd electron are written on the oxygen exactly where the page prints them, [CH:1]=[O+:7], not carried only in the JSON fields. Middle channel. The book draws ONE arrow carrying THREE labels -- 'rH' above, then 'alpha' and '- C2H4' -- straight to the structure it labels 'm/z 100'; no intermediate is drawn and Book draws 0 arc(s) for it, so all five moves are curator-supplied. WHICH HYDROGEN, and why this is not the C4 gamma-H: the printed m/z 100 product is a STRAIGHT six-carbon chain, C2H5-CH2-CH2-CH(•)-CH= O(+)H, with the radical dot alpha to the carbonyl. That structure forces the reading: the migrating hydrogen is the gamma' H of the ETHYL BRANCH (map 11, on C9, which is gamma to the carbonyl by the path C1-C2-C8-C9), and the branch then leaves as ethylene by beta-cleavage of the C2-C8 bond -- i.e. the three printed labels are one complete McLafferty rearrangement running on the ethyl branch rather than on the main chain. MASS BOOKKEEPING that settles it: C8H16O (16 H) -> C6H12O (12 H) + C2H4 (4 H). Taking the O-H hydrogen from C4 instead would leave C4 with one H and give C6H11O+, which is not 100 and not what is drawn. The C4 gamma-H drawn on the molecular ion belongs to the OTHER channel (IMS9-EQ9.25b) and is therefore left implicit in this record. MS CONTEXT: this page prints no ionisation conditions, so 70 eV EI is the corpus house default and is disclosed here rather than read off the page (the same treatment as IMS9-EQ9.19a/b and IMS8-EQ8.114). Figure 9.8 on printed p247 is the 2-ethylhexanal spectrum and would supply abundances, but it is NOT on this page and the scheme itself prints no percentage, so convention F forbids importing an intensity: every peak_assignment here carries status 'proposed' with no relative_intensity."
+    },
+    {
+      "evidence_id": "evidence_step_alpha_propyl",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_propyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones ('alpha' arrow from m/z 100)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Arrow labelled 'alpha' from m/z 100 to m/z 57. The radical on C2 drives cleavage of the C3-C4 bond with formation of the C2=C3 pi bond, expelling the propyl radical C3H7. (43) and giving the same C3H5O+ ion (m/z 57) that the other branch reaches. Book draws 2 arc(s), both on the m/z 100 structure: a fishhook whose tail is on the C3-C4 bond and whose head points down into the forming C2=C3 region, and a fishhook from the printed radical dot below C2 curving up into that same region. Move <3>, carrying the second C3-C4 electron away with the propyl radical, is implicit (not drawn)."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.25c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.7,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries at all (by_equation covers only 4.x and 8.x), so any link is inferred rather than indexed. *** VERIFIED, and it independently corroborates this record's reading of the composite arrow. *** hTransition_unsaturated (IMS_bookCover.py:40, '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6 >> [C.]2[C]3[C]4[C]5{=}[_A+]6[H]1', _A = O) embeds on the molecular ion TWICE. The second embedding, maps (9,8,2,1,7), is precisely the ethyl-branch gamma'-hydrogen that this record argues the composite 'rH, alpha, -C2H4' arrow must use -- i.e. the rule set finds the branch gamma-position independently of the mass argument given in the step note. (The first embedding, maps (4,3,2,1,7), is the main-chain gamma-H that drives IMS9-EQ9.25b.) By contrast hTransition_unsaturated_alpha gives ZERO matches on this record's m/z 100 ion, which is correct and expected: after the ethylene loss the radical sits ALPHA to the carbonyl (C2), not gamma, so the 1,4-relationship that rule requires no longer exists. Step 2 therefore has no counterpart in that rule."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_100",
+      "species_id": "distonic_hexanal_enol_mz100",
+      "step_id": "step_mclafferty_ethene_loss",
+      "observed_mz": 100.0883,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    },
+    {
+      "peak_id": "peak_57_oxygenated",
+      "species_id": "hydroxyallyl_cation_mz57",
+      "step_id": "step_alpha_propyl_loss",
+      "observed_mz": 57.0335,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

@@ -1,6 +1,6 @@
 # IMS mechanism-record coverage report
 
-Total records: **316**  |  flagging a MØD rule mismatch: **147**  |  marked contradicted/disfavored: **13**
+Total records: **358**  |  flagging a MØD rule mismatch: **158**  |  marked contradicted/disfavored: **14**
 
 Gate status is authoritative from `validate_records.py`, not this script; run it separately to confirm 0 failures.
 
@@ -293,7 +293,7 @@ Gate status is authoritative from `validate_records.py`, not this script; run it
 
 - rule_index equations: 0; covered by a record: 0
 - **still missing** (in rule_index, no record): none
-- covered beyond rule_index (no MØD rule exists): 9.1, 9.2, 9.3, 9.4, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12, 9.13, 9.14, 9.15, 9.16, 9.17, 9.18, 9.19, 9.20, 9.21, 9.22, 9.23, 9.24
+- covered beyond rule_index (no MØD rule exists): 9.1, 9.2, 9.3, 9.4, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12, 9.13, 9.14, 9.15, 9.16, 9.17, 9.18, 9.19, 9.20, 9.21, 9.22, 9.23, 9.24, 9.25, 9.26, 9.27, 9.28, 9.29, 9.30, 9.31, 9.32, 9.33, 9.34, 9.35, 9.36, 9.37
 
 | eq | record | pg | step_class | flags |
 |---|---|---|---|---|
@@ -327,6 +327,48 @@ Gate status is authoritative from `validate_records.py`, not this script; run it
 | 9.22 | IMS9-EQ9.22 | 245 | hydrogen_rearrangement | rule-mismatch |
 | 9.23 | IMS9-EQ9.23 | 245 | hydrogen_rearrangement | rule-mismatch |
 | 9.24 | IMS9-EQ9.24 | 245 | hydrogen_rearrangement |  |
+| 9.25 | IMS9-EQ9.25a | 248 | alpha_cleavage |  |
+| 9.25 | IMS9-EQ9.25b | 248 | hydrogen_rearrangement |  |
+| 9.25 | IMS9-EQ9.25c | 248 | mclafferty_rearrangement |  |
+| 9.25 | IMS9-EQ9.25d | 248 | inductive_cleavage |  |
+| 9.25 | IMS9-EQ9.25e | 248 | sigma_dissociation |  |
+| 9.26 | IMS9-EQ9.26a | 249 | alpha_cleavage |  |
+| 9.26 | IMS9-EQ9.26b | 249 | alpha_cleavage |  |
+| 9.26 | IMS9-EQ9.26c | 249 | inductive_cleavage |  |
+| 9.26 | IMS9-EQ9.26d | 249 | hydrogen_rearrangement |  |
+| 9.26 | IMS9-EQ9.26e | 249 | inductive_cleavage |  |
+| 9.27 | IMS9-EQ9.27a | 250 | alpha_cleavage |  |
+| 9.27 | IMS9-EQ9.27b | 250 | hydrogen_rearrangement |  |
+| 9.27 | IMS9-EQ9.27c | 250 | alpha_cleavage |  |
+| 9.28 | IMS9-EQ9.28a | 251 | hydrogen_rearrangement |  |
+| 9.28 | IMS9-EQ9.28b | 251 | hydrogen_rearrangement |  |
+| 9.29 | IMS9-EQ9.29 | 251 | radical_site_cyclization |  |
+| 9.30 | IMS9-EQ9.30a | 251 | alpha_cleavage |  |
+| 9.30 | IMS9-EQ9.30b | 251 | alpha_cleavage |  |
+| 9.30 | IMS9-EQ9.30c | 251 | alpha_cleavage |  |
+| 9.31 | IMS9-EQ9.31a | 252 | alpha_cleavage |  |
+| 9.31 | IMS9-EQ9.31b | 252 | inductive_cleavage |  |
+| 9.31 | IMS9-EQ9.31c | 252 | inductive_cleavage |  |
+| 9.31 | IMS9-EQ9.31d | 252 | alpha_cleavage |  |
+| 9.32 | IMS9-EQ9.32a | 254 | hydrogen_rearrangement |  |
+| 9.32 | IMS9-EQ9.32b | 254 | hydrogen_rearrangement | contradicted rule-mismatch |
+| 9.33 | IMS9-EQ9.33 | 254 | alpha_cleavage | rule-mismatch |
+| 9.34 | IMS9-EQ9.34a | 255 | hydrogen_rearrangement | rule-mismatch |
+| 9.34 | IMS9-EQ9.34b | 255 | hydrogen_rearrangement | rule-mismatch |
+| 9.34 | IMS9-EQ9.34c | 255 | hydrogen_rearrangement | rule-mismatch |
+| 9.35 | IMS9-EQ9.35a | 256 | alpha_cleavage |  |
+| 9.35 | IMS9-EQ9.35b | 256 | alpha_cleavage |  |
+| 9.35 | IMS9-EQ9.35c | 256 | alpha_cleavage |  |
+| 9.35 | IMS9-EQ9.35d | 256 | alpha_cleavage |  |
+| 9.35 | IMS9-EQ9.35e | 256 | inductive_cleavage |  |
+| 9.36 | IMS9-EQ9.36a | 258 | double_hydrogen_rearrangement |  |
+| 9.36 | IMS9-EQ9.36b | 258 | double_hydrogen_rearrangement |  |
+| 9.37 | IMS9-EQ9.37a | 262 | alpha_cleavage | rule-mismatch |
+| 9.37 | IMS9-EQ9.37b | 262 | alpha_cleavage | rule-mismatch |
+| 9.37 | IMS9-EQ9.37c | 262 | alpha_cleavage | rule-mismatch |
+| 9.37 | IMS9-EQ9.37d | 262 | alpha_cleavage | rule-mismatch |
+| 9.37 | IMS9-EQ9.37e | 262 | inductive_cleavage | rule-mismatch |
+| 9.37 | IMS9-EQ9.37f | 262 | inductive_cleavage | rule-mismatch |
 
 ## Chapter 99
 
@@ -378,6 +420,13 @@ Numbered equations that carry no fragmentation mechanism at all — checked agai
 - **PDF 236** — printed p225: opening page of Chapter 9 (compound classes), which is out of scope. Prose only; its two inline formulas carry no equation number, arrows or m/z.
 - **PDF 249** — printed p238: running prose only (end of the terpenoid 'Unknowns' note + the opening of 'Aromatic hydrocarbons'). Zero structures, zero arcs, zero equation numbers; it forward-references Equations 9.13/9.14, which are drawn on the following page. Read in full.
 - **PDF 253** — printed p242: running prose only (further decomposition of the C_nH_(2n+1)O+ ions, then the 'Cyclic aliphatic alcohols' lead-in). Zero structures, zero arcs, zero equation numbers; it forward-references Equations 9.19/9.20/9.21, drawn on p243/p244. Read in full.
+- **PDF 257** — printed p246: tail of the 9.23/9.24 prose, then the 'Unknown 9.2' exercise (a peak table plus its bar spectrum -- an exercise, explicitly out of scope), then the '9.3 Aldehydes and ketones' section opening, which only lists where spectra appear. No numbered equation, no scheme, no arcs. Read in full.
+- **PDF 258** — printed p247: Figures 9.8/9.9/9.10 (bar spectra of 2-ethylhexanal, 6-methyl-2-heptanone and 6-methyl-5-heptene-2-one) plus prose. The inset structures carry SQUIGGLE cleavage marks with mass labels and ZERO curved arrows -- the same arrow-free class as Figure 9.7 and eq 9.5, so nothing to transcribe faithfully. See the FIG4.4a/b scope question: those two records WERE encoded from an inset of exactly this kind. Read in full.
+- **PDF 264** — printed p253: Figure 9.11 alone, a rotated full-page bar spectrum of methyl 3,7,11,15-tetramethylhexadecanoate. Its inset structure is again squiggle-marked with mass labels (74/101/171/241) and draws no arrows. No equation, no scheme. Read in full.
+- **PDF 268** — printed p257: running prose only (tail of the sec-butyl-acetate discussion, then 'Esters containing other functional groups'). Zero structures, zero arcs, zero equation numbers; it back-references Equations 9.32/9.34 and forward-references 4.41/8.81/8.83, all drawn elsewhere. Read in full.
+- **PDF 270** — printed p259: opening of section '9.5 Acids, anhydrides, and lactones' -- running prose only (Aliphatic acids / Aromatic acids / Anhydrides). Names many losses in words ((M - OH)+, (M - H2O)+., (M - CO2)+.) but draws no structure, no arrow and no equation number. Read in full.
+- **PDF 271** — printed p260: Figure 9.13 (succinic anhydride bar spectrum, squiggle-marked inset with the mass labels 28/56 and zero arrows) plus the 'Unknown 9.3' exercise (a peak table and its bar spectrum). Exercises are explicitly out of scope and the inset is the same arrow-free class as Figure 9.7/9.10. No numbered equation. Read in full.
+- **PDF 272** — printed p261: running prose ('Lactones', then the opening of section '9.6 Ethers') plus Figure 9.14, the isopropyl pentyl ether bar spectrum with a squiggle-marked inset (71/115/73/43, no arrows). It forward-references Equation 9.37, which is drawn on the following page. No numbered equation of its own. Read in full.
 
 ## MØD rule-mismatch findings (audit byproduct)
 
@@ -526,6 +575,17 @@ Records whose cross-link note flags the cited MØD rule as mis-encoded or non-ma
 - **9.21** (IMS9-EQ9.21): PARTIAL cross-link only; rule_index.json has no chapter-9 entries, so every candidate below was matched by hand against the instantiated substrates with RDKit (SMARTS transcriptions of the DFS reactant patterns, with the formal charge AND radical count of the 
 - **9.22** (IMS9-EQ9.22): NO MØD CROSS-LINK for this equation. rule_index.json contains no chapter-9 entries at all (by_equation covers only 4.x and 8.x), and no indexed rule reproduces any of the three steps. Checked explicitly, with RDKit substructure tests of SMARTS transcriptions o
 - **9.23** (IMS9-EQ9.23): NO MØD CROSS-LINK for this equation. rule_index.json has no chapter-9 entries, and the aliphatic water-loss rules do not reach this substrate. Checked with RDKit substructure tests of SMARTS transcriptions of the rule left-hand sides against this record's own 
+- **9.32** (IMS9-EQ9.32b): data/mechanisms/rule_index.json has NO chapter-9 entries. Consistent with the book crossing this branch out, the rule set does NOT produce it either: 'hTransition_unsaturated_alpha' (IMS_bookCover.py:50), which is the rule that reproduces the accepted branch (
+- **9.33** (IMS9-EQ9.33): data/mechanisms/rule_index.json has NO chapter-9 entries. UNTESTED, not 'no rule matches': no MOD rule was searched for or tested against this record, because the precursor is a generic curator-instantiated distonic fragment rather than a molecular ion, so any
+- **9.34** (IMS9-EQ9.34a): data/mechanisms/rule_index.json has NO chapter-9 entries. *** TWO VERIFIED POSITIVE CROSS-LINKS, RDKit-tested by me (SMARTS substructure counts against this record's instantiated molecular ion), and they are the two rule families the page's own prose names. **
+- **9.34** (IMS9-EQ9.34b): data/mechanisms/rule_index.json has NO chapter-9 entries. *** TWO VERIFIED POSITIVE CROSS-LINKS, RDKit-tested by me (SMARTS substructure counts against this record's instantiated molecular ion), and they are the two rule families the page's own prose names. **
+- **9.34** (IMS9-EQ9.34c): data/mechanisms/rule_index.json has NO chapter-9 entries. *** TWO VERIFIED POSITIVE CROSS-LINKS, RDKit-tested by me (SMARTS substructure counts against this record's instantiated molecular ion), and they are the two rule families the page's own prose names. **
+- **9.37** (IMS9-EQ9.37a): data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.
+- **9.37** (IMS9-EQ9.37b): data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.
+- **9.37** (IMS9-EQ9.37c): data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.
+- **9.37** (IMS9-EQ9.37d): data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.
+- **9.37** (IMS9-EQ9.37e): data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.
+- **9.37** (IMS9-EQ9.37f): data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.
 - **None** (IMS4-FIG4.4a): Cross-linked MØD rule IMS_4_43_ (book eq 4.43, authored as 'displacement reaction' in the German-edition provenance). VERIFIED against this scheme: its DFS left pattern [C]1(H)(H)(H)[C]5(H)(H)[N+.]8(H)[C]10(H)(H)[C]13(H)(H)(H) is atom-for-atom the diethylamine
 - **Table 8.2** (IMS8-EQT8.2d): MØD rule IMS_4_18 (DFS [_A]1[_A+.]2>>[_A+]1.[_A.]2) does NOT match this row (MISMATCH). In this codebase's MØD term-matching, ALL _A placeholders in one rule unify to the SAME element, so [_A]1[_A+.]2 can only cleave a HOMOATOMIC X-X(+.) bond -- not the C-O et
 - **Table 8.2** (IMS8-EQT8.2p): No MØD rule is indexed to 'Table 8.2' in rule_index.json (by_equation has no such key). NEAREST cross-link for step 1, but MIS-ENCODED: IMS_4_14 ([C]1([C]2[C]3)([C]4[C]5){=}[O+.]>>[C.]2[C]3.[C]4[C]5[C]1{#}[O+]) has the right INTENT -- cleave a C-C bond inciden

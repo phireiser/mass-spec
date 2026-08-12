@@ -1,0 +1,291 @@
+{
+  "mechanism_id": "IMS9-EQ9.37a",
+  "species": [
+    {
+      "species_id": "isopropyl_pentyl_ether_molecular_ion",
+      "mapped_smiles": "[CH2:1]([O+:6][CH:7]([CH3:8])[CH3:9])[CH:2]([1H:10])[CH2:3][CH2:4][CH3:5]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "pentyl_oxocarbenium_mz115",
+      "mapped_smiles": "[CH2:1]([O+:6]=[CH:7][CH3:8])[CH:2]([1H:10])[CH2:3][CH2:4][CH3:5]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_acetaldehyde_mz45",
+      "mapped_smiles": "[1H:10][O+:6]=[CH:7][CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "pentene_neutral",
+      "mapped_smiles": "[CH2:1]=[CH:2][CH2:3][CH2:4][CH3:5]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "isopropyl_pentyl_ether_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_mz115",
+      "species_ids": [
+        "pentyl_oxocarbenium_mz115",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_mz45",
+      "species_ids": [
+        "protonated_acetaldehyde_mz45",
+        "pentene_neutral",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_methyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_mz115",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_pentene_loss",
+      "from_state": "state_mz115",
+      "to_state": "state_mz45",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              10
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 262,
+        "equation": "9.37",
+        "figure": null,
+        "panel": null,
+        "section": "9.6 Ethers, 'Aliphatic ethers' (upper arrow labelled alpha)"
+      },
+      "confidence": 0.75,
+      "curator_note": "The arrow labelled 'alpha' to 'm/z 115'. Radical-site cleavage at the oxygen expelling ONE ISOPROPYL METHYL, which raises the O-C7 bond to a double bond and gives the oxocarbenium the page draws as pentyl-O(+)=CH-CH3 (C7H15O+, 115.1117 = M - 15). The prose ranks it: 'the loss of methyl from the tertiary carbon yielding m/z 115 is almost as favorable as the loss of the larger butyl group from the secondary carbon' -- the latter being the m/z 73 channel of IMS9-EQ9.37c/d. Encoded as the canonical radical-site triple, all three moves curator-supplied. ARC COUNT (convention D): ZERO curved arrows in the whole of equation 9.37 -- nine reaction arrows, each carrying only a reaction-type label (alpha, i, rH, and one 'i, - C2H4'), and not one fishhook or two-electron arc on any structure. Every electron move in every record of this equation is therefore curator-supplied. Any record of eq 9.37 claiming drawn electron-pushing would be fabricated. SUBSTRATE: isopropyl pentyl ether, C5H11-O-CH(CH3)2, drawn skeletally with '+.' on the oxygen. The equation carries NO label on the substrate; the compound and its molecular ion are named on the FACING page (PDF 272, printed p261): 'The important primary cleavages of isopropyl pentyl ether (Djerassi and Fenselau 1965) are due to these two types of cleavage (Equation 9.37)', with Figure 9.14 there showing '130M+.'. C8H18O, M+. computed 130.1352 -- and 'm/z 130' is therefore NOT printed in this equation; it is stored as the precursor_mz on the authority of the facing page and is not claimed as a printed label. ATOM MAPS: 1-5 = the pentyl carbons (1 = the CH2 bonded to oxygen, 5 = the terminal methyl), 6 = the oxygen, 7 = the isopropyl methine, 8 and 9 = its two methyls; 10, 11, 12 = the migrating hydrogens where a record needs one explicit. 'THESE TWO TYPES OF CLEAVAGE' names the two channel families the equation draws: alpha-cleavage (the book's radical-site reaction, giving m/z 115 and 73) and charge-site cleavage i (giving m/z 43 and 71). The prose adds the abundance ordering: 'the most abundant ions, C3H7+ and C5H11+, are produced by charge-site-initiated reactions', and 'For the competing alpha-cleavages, the loss of methyl from the tertiary carbon yielding m/z 115 is almost as favorable as the loss of the larger butyl group from the secondary carbon.'"
+    },
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_pentene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 262,
+        "equation": "9.37",
+        "figure": null,
+        "panel": null,
+        "section": "9.6 Ethers (arrow labelled 'rH' from m/z 115)"
+      },
+      "confidence": 0.75,
+      "curator_note": "The 'rH' arrow off m/z 115, whose products the page draws out: 'C5H10' as a printed formula plus the ion H-O(+)=CH-CH3 labelled 'm/z 45'. The precursor is EVEN-electron, so this is two-electron chemistry: the explicitly drawn hydrogen on the pentyl chain transfers to the oxygen while the O-C1 bond breaks and the alkene forms -- pentene leaves neutral (C5H10, 70.0783) and the oxygen keeps the charge as protonated acetaldehyde (45.0335). Two curator-supplied moves; no arcs are drawn. THE ONE EXPLICIT HYDROGEN IN THE EQUATION sits on this ion, on the pentyl carbon beta to the oxygen (map 10) -- it is the only H the page spells out anywhere in eq 9.37, which is why it is taken as the donor. MEASUREMENTS (convention F): the page labels SIX m/z values -- 115, 45, 73, 31, 43, 71 -- and every one matches the exact mass computed from the structure encoded here (115.1117, 45.0335, 73.0648, 31.0178, 43.0542, 71.0855; RDKit ExactMolWt, formal charge applied). Only THREE neutral losses are printed ('C5H10' and 'C3H6' as product formulas, and '- C2H4' under one arrow); the others (CH3., C4H9., C5H11O., C3H7O., CH3CHO, CH2O) are curator inferences that close the mass balance exactly and are NOT quoted as printed text. No percentage is printed in the equation; Figure 9.14 on the facing page carries the abundances (43 as base peak, 71 strong, 115 and 130 weak) but it is a figure on another page, so nothing is stored as relative_intensity. *** m/z 43 IS THE ISOPROPYL CATION C3H7+ (43.0542), NOT THE ACETYL CATION C2H3O+ (43.0178). *** The drawn structure contains no oxygen at all -- one central vertex, two methyls, a '+' -- and the prose names C3H7+ explicitly. The same nominal mass means the opposite thing two pages earlier in eq 9.35, where m/z 43 IS the acetyl cation; that contrast is why this is spelled out."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.37a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.37",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED (RDKit substructure counts on this record's instantiated molecular ion), with one genuine rule DEFECT recorded. *** 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5 >> [C]1[C]2[O.]3.[C]4[C+]5') embeds TWICE on this ether -- it is the only rule in the set that matches an ionised dialkyl ether, and its LHS is exactly this equation's charge-site geometry, so the i channels ARE reachable in principle. BUT ITS RIGHT-HAND SIDE PUTS THE CHARGE ON THE WRONG CARBON: '[C]4[C+]5' places the '+' on the atom one bond FURTHER from the oxygen than the bond it cleaves, so applying it to this substrate would give a primary cation on an isopropyl methyl, whereas the page draws (and the prose names) the ISOPROPYL cation, charge on the carbon that lost the oxygen. MISMATCH: the rule's geometry is one atom off for a simple charge-site cleavage. That is read from the DFS string, not from running MOD, and it is the same class of defect as the IMS_4_9/4_10/4_11/4_12 geometry bugs already recorded in RESUME.md. TESTED AND REJECTED for the alpha channels: 'alpha' (wikipedia.py:6) gives 0 embeddings (it requires an ionised CARBONYL, and an ether has none) and 'esterMcLafferty_rH' gives 0 for the same reason -- so the two alpha-cleavages that give m/z 115 and 73, and the alkene-eliminating rH steps, have no counterpart tested here: UNTESTED for any other rule, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 130.1352,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_115",
+      "species_id": "pentyl_oxocarbenium_mz115",
+      "step_id": "step_alpha_methyl_loss",
+      "observed_mz": 115.1117,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    },
+    {
+      "peak_id": "peak_45",
+      "species_id": "protonated_acetaldehyde_mz45",
+      "step_id": "step_rH_pentene_loss",
+      "observed_mz": 45.0335,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.8
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-12T00:00:00Z",
+    "modified_at": "2026-08-12T00:00:00Z"
+  }
+}

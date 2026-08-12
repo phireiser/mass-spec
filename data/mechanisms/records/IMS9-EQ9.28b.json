@@ -1,0 +1,302 @@
+{
+  "mechanism_id": "IMS9-EQ9.28b",
+  "species": [
+    {
+      "species_id": "hepten2one_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9])[CH2:3][CH2:4][C:5]([1H:10])=[C:6]([CH3:8])[CH2:7][1H:11]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isomerized_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9])[CH2:3][CH2:4][C:5]([1H:10])([1H:11])[C:6]([CH3:8])=[CH2:7]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "isoprene_radical_cation_mz68",
+      "mapped_smiles": "[CH2+:4][C:5]([1H:11])[C:6]([CH3:8])=[CH2:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetone_enol_neutral",
+      "mapped_smiles": "[CH3:1][C:2]([O:9][1H:10])=[CH2:3]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hepten2one_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_isomerized",
+      "species_ids": [
+        "isomerized_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "isoprene_radical_cation_mz68",
+        "acetone_enol_neutral"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_double_bond_isomerization",
+      "from_state": "state_precursor",
+      "to_state": "state_isomerized",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              6,
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_mclafferty_charge_migration",
+      "from_state": "state_isomerized",
+      "to_state": "state_products",
+      "step_class": "mclafferty_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_isomerization",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_double_bond_isomerization",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.28",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones, 'Unsaturated ketones' (first, unlabelled arrow)"
+      },
+      "confidence": 0.55,
+      "curator_note": "Substrate as drawn, verified vertex by vertex on the native scan (pypdf page.images[0], 1760x2560, cropped at 4-9x): (CH3)2C=CH-CH2-CH2-C(=O)-CH3 with '+.' printed above the carbonyl oxygen and the VINYLIC hydrogen on C5 drawn EXPLICITLY. That compound is 6-methyl-5-hepten-2-one, named by the prose that introduces the equation (printed p250, PDF 261): 'However, in 6-methyl-5-hepten-2-one (Figure 9.10), isomerization of the double bond to a more favorable position is possible (Equation 9.28), and the C3H6O+. and C5H8+. rearrangement ions are observed in fair abundance, although [C3H6O+.] is less than that in the saturated derivative.' ATOM MAPS reuse the IUPAC numbering of that name -- 1 = the methyl on the carbonyl, 2 = C=O, 3 = alpha CH2, 4 = beta CH2, 5 = gamma CH (vinylic here), 6 = the trisubstituted sp2 carbon, 7/8 = its two methyls, 9 = O -- so the mapping is checkable against the page by eye. THIS STEP IS DRAWN AS A BARE, UNLABELLED REACTION ARROW: no reaction-type label (contrast the rH/rC/alpha labels used everywhere else in section 9.3) and ZERO curved arrows, so all of its electron moves are curator-supplied. What the two structures differ by was measured, not assumed: the product's double bond is TERMINAL (a horizontal '=' ending in free space at upper left, with a separate vertical methyl stroke on the same carbon), i.e. the 5,6-alkene has become the 6,7-alkene, which is the 'more favorable position' of the prose -- it converts the vinylic gamma-H into an ordinary sp3 gamma-H and so unblocks the McLafferty rearrangement that eq 9.28's second arrow then draws. Encoded as the minimal bookkeeping for that difference: a formal 1,3-hydrogen shift, H11 from C7 to C5 with the pi bond sliding C5=C6 -> C6=C7, written as two two-electron arrows. DISCLOSURE: this is bookkeeping, not a mechanistic claim. The page proposes no path for the isomerization, and a concerted suprafacial 1,3-H shift is not a respectable elementary step; the real ion-source route is probably stepwise (H migration through a distonic ion). The migrating H is taken from C7, but C7 and C8 are the two equivalent methyls of an isopropylidene group, so that choice is arbitrary and unobservable. Likewise H10 (the original vinylic H, kept on C5) and H11 (the arriving H) are equivalent on sp3 C5 afterwards; H10 is the one the next step's arrow tail sits on, so it is the one that transfers to oxygen. RENDERING NOTE: render_latex.py derives its arrow label from step_class, so the generated scheme stamps this arrow 'rH' while the book leaves it bare -- that label is the corpus's, not the page's. SCOPE OF EQUATION 9.28, recorded so the unencoded part of the page is not mistaken for a miss: the equation occupies two drawn rows. The TOP row is two STATIC structures with no reaction arrow, no products, no m/z and zero curved arrows -- CH2=CH-CH2-CH(CH3)-C(=O)-CH2CH3 (4-methyl-6-hepten-3-one, C8H14O, M 126.1045) and CH2=C(CH3)-CH2-C(=O)-CH3 (4-methyl-4-penten-2-one, C6H10O, M 98.0732), each drawn with its VINYLIC gamma-hydrogen spelled out. Both are read off the drawing and confirmed by name in the prose ('these OE+. peaks are of very low abundance in 4-methyl-6-hepten-3-one and 4-methyl-4-penten-2-one (Equation 9.28)'). They illustrate the blocked case and are NOT encoded, per the eq-9.5 precedent (a fragmentation drawn with zero arrows cannot be transcribed without inventing the electron flow). Only the BOTTOM row -- the 6-methyl-5-hepten-2-one route -- is a mechanism, and it is what these records hold. NB the corpus is still inconsistent about this class: IMS4-FIG4.4a/b were encoded from an arrow-free inset of exactly this kind."
+    },
+    {
+      "evidence_id": "evidence_step_charge_migration",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_mclafferty_charge_migration",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.28",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones, 'Unsaturated ketones' (product after 'or')"
+      },
+      "confidence": 0.6,
+      "curator_note": "THE 'or' BRANCH. The page draws its two products side by side joined by the italic word 'or': the hydrocarbon radical cation (this record) or the oxygen-containing one (IMS9-EQ9.28a). They are the classic complementary McLafferty pair from ONE intermediate -- same bond broken, same H transferred, the charge kept by one half or the other -- and the corpus splits such a pair into two records, the IMS9-EQ9.26d/e precedent. WHAT IS DRAWN vs WHAT IS ENCODED, stated plainly: the four fishhooks on the intermediate are drawn for the OTHER charge distribution (they leave the '+' on oxygen), so this record shares only their first two moves -- the O odd electron and one C5-H electron forming the O-H bond. Its remaining three moves are CURATOR-SUPPLIED, since the page gives this product no arrows at all: <3> the second C5-H electron staying on C5 as the radical, <4> the C2=O pi pair collapsing onto the oxygen, which is what neutralises it, and <5> the C3-C4 pair migrating into the C2-C3 bond to close the neutral enol's double bond, leaving C4 as the cation. Move <4> makes the arrow-check emit one SOFT line -- 'atom 9: radical change -1 vs arrows +1 (consistent with a lone pair rather than radicals)' -- which is the expected report for a pi pair becoming a lone pair, not a defect (the same line the IMS9-EQ9.25 i/sigma steps produce). LOCALIZATION, DISCLOSED (the one place the stored graph is not the printed one): the page draws the C5H8 ion as the intact diene CH2=C(CH3)-CH=CH2 with a single '+.' parked beside the central carbon, i.e. charge and odd electron DELOCALISED over the butadiene. A mapped SMILES cannot carry that, so the stored graph is the 1,2-distonic localization the encoded arrows produce, CH2(+)-C(.)(H)-C(CH3)=CH2 -- identical connectivity, one bond order different, exactly how IMS9-EQ9.26e stores its m/z 70 partner. Re-encode if a reviewer prefers drawing fidelity over arrow fidelity; note that in a bond-order-sensitive corpus neither choice is free. MASS NOTE: the SAME C5H8 appears in the two records with two masses, 68.0621 as the ion here and 68.0626 as the neutral loss in IMS9-EQ9.28a -- the electron mass, not a discrepancy; C3H6O likewise (58.0413 ion / 58.0419 neutral). The prose also flags an asymmetry worth keeping: '[C3H6O+.] is less than that in the saturated derivative', so the oxygen-charged partner is the weaker of the two relative to the saturated reference, but no number is printed for either. MEASUREMENTS (convention F): equation 9.28 prints NO m/z value and no percentage anywhere -- not on the molecular ion, not on the intermediate, not on either product. Every mass here is CURATOR-COMPUTED from the instantiated structures (RDKit ExactMolWt, which already applies the formal charge -- do not subtract the electron again). Both product ions are marked detected=true with status 'proposed' on the prose alone ('the C3H6O+. and C5H8+. rearrangement ions are observed in fair abundance'), following the IMS8-EQ8.60 / IMS8-EQ8.81 precedent. NO relative_intensity is recorded: Figure 9.10 (printed p247, PDF 258) is the 70 eV spectrum of this very compound and does carry abundances, but it is a different page and this scheme prints no number, exactly the situation IMS9-EQ9.26d faced with Figure 9.9. The prose's other numbers belong to channels eq 9.28 does NOT draw -- 'the m/z 69 ion, which would be the product of allylic cleavage, is more abundant than the alpha-cleavage m/z 83 ion' -- so no records were invented for them; that sentence is also the book's evidence that the isomerization encoded here has NOT occurred in all M+.."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.28b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.28",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.6,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so this record carries no per-equation rule link by construction. *** RDKit-TESTED, NOT ASSERTED -- and the result is a NEGATIVE about the rule set, which is the point of eq 9.28. *** hTransition_unsaturated (IMS_bookCover.py:40, '[H]1[C]2[C]3[C]4[C]5{=}[_A+.]6 >> [C.]2[C]3[C]4[C]5{=}[_A+]6[H]1', _A = O) embeds TWICE on the isomerized ion, at (H10,C5,C4,C3,C2,O9) and (H11,C5,C4,C3,C2,O9) -- the two equivalent sp3 gamma-hydrogens, exactly the donor the page uses -- and hTransition_unsaturated_alpha (IMS_bookCover.py:50) then embeds ONCE on the resulting distonic ion at (C5,C4,C3,C2,O9,H10), so the two rules together do reproduce eq 9.28's net transformation. BUT hTransition_unsaturated ALSO embeds ONCE on the un-isomerized molecular ion, at (H10,C5,C4,C3,C2,O9), where H10 is the VINYLIC hydrogen -- i.e. the rule performs precisely the transfer this section of the book says is 'drastically' suppressed, and the alpha rule then embeds on that vinyl-radical product too. The rule pattern's [C] terms carry no bond-order or hybridisation constraint on the gamma carbon, so THE RULE SET CANNOT EXPRESS THE SELECTIVITY EQUATION 9.28 IS ABOUT: this is a missing-constraint gap, not a missing rule. GRANULARITY: the rules run rH and alpha as two steps through a distonic intermediate that eq 9.28 never draws, whereas the page draws one concerted four-fishhook step, so no single rule corresponds to the drawn step. Both rules conserve charge and spin (the rules/__init__.py guardrail keeps them) and both are live via rearrangements -> IMS_cover_fragmentation (:493) -> 'fragmentation' (__init__.py:45). No rule was found or tested for the double-bond isomerization step itself: UNTESTED, not 'no rule matches'. ADDITIONALLY for this record: the tested rule pair keeps the charge on the OXYGEN half (hTransition_unsaturated_alpha's RHS puts the '+' on the [_A+] fragment), so it reproduces IMS9-EQ9.28a and NOT this charge-migrated partner. Whether any rule in the set delivers the hydrocarbon-charged product of this record was NOT tested: UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 126.1039,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_68",
+      "species_id": "isoprene_radical_cation_mz68",
+      "step_id": "step_mclafferty_charge_migration",
+      "observed_mz": 68.0621,
+      "relative_intensity": null,
+      "hydrogen_shift": -1,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-10T00:00:00Z",
+    "modified_at": "2026-08-10T00:00:00Z"
+  }
+}

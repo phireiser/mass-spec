@@ -1,0 +1,456 @@
+{
+  "mechanism_id": "IMS9-EQ9.36a",
+  "species": [
+    {
+      "species_id": "dehp_molecular_ion",
+      "mapped_smiles": "[c:1]1([C:7](=[O+:8])[O:9][CH:10]([1H:30])[C:11]([1H:29])([CH2:12][CH3:13])[CH2:14][CH2:15][CH2:16][CH3:17])[c:2]([C:18](=[O:19])[O:20][CH2:21][C:22]([1H:31])([CH2:23][CH3:24])[CH2:25][CH2:26][CH2:27][CH3:28])[cH:3][cH:4][cH:5][cH:6]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "ethylhexenyl_radical",
+      "mapped_smiles": "[CH:10]=[C:11]([CH2:12][CH3:13])[CH2:14][CH2:15][CH2:16][CH3:17]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_monoester_mz279",
+      "mapped_smiles": "[c:1]1([C:7](=[O:9])[O:8][1H:29])[c:2]([C:18](=[O:19])[O+:20]([1H:30])[CH2:21][C:22]([1H:31])([CH2:23][CH3:24])[CH2:25][CH2:26][CH2:27][CH3:28])[cH:3][cH:4][cH:5][cH:6]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "ethylhexene_neutral",
+      "mapped_smiles": "[CH2:21]=[C:22]([CH2:23][CH3:24])[CH2:25][CH2:26][CH2:27][CH3:28]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_phthalic_acid_mz167",
+      "mapped_smiles": "[c:1]1([C:7](=[O:9])[O:8][1H:29])[c:2]([C:18](=[O:19])[O+:20]([1H:30])[1H:31])[cH:3][cH:4][cH:5][cH:6]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "water",
+      "mapped_smiles": "[O:20]([1H:30])[1H:31]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_phthalic_anhydride_mz149",
+      "mapped_smiles": "[O:9]=[C:7]1[O+:8]([1H:29])[C:18](=[O:19])[c:2]2[cH:3][cH:4][cH:5][cH:6][c:1]12",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "dehp_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_mz279",
+      "species_ids": [
+        "protonated_monoester_mz279",
+        "ethylhexenyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_mz167",
+      "species_ids": [
+        "protonated_phthalic_acid_mz167",
+        "ethylhexene_neutral",
+        "ethylhexenyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_mz149",
+      "species_ids": [
+        "protonated_phthalic_anhydride_mz149",
+        "water",
+        "ethylhexene_neutral",
+        "ethylhexenyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_r2H_alkyl_radical_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_mz279",
+      "step_class": "double_hydrogen_rearrangement",
+      "semantics": "net_fragmentation",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              29
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              29
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              29
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              11,
+              29
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              30
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              20,
+              30
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              10,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              9,
+              10
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              10
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              9
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rH_alkene_loss",
+      "from_state": "state_mz279",
+      "to_state": "state_mz167",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              22,
+              31
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              20,
+              31
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              20,
+              21
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              21,
+              22
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_water_loss_ring_closure",
+      "from_state": "state_mz167",
+      "to_state": "state_mz149",
+      "step_class": "elimination",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              8
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              8,
+              18
+            ]
+          },
+          "electron_count": 2
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              18,
+              20
+            ]
+          },
+          "target": {
+            "type": "lone_pair",
+            "atom_maps": [
+              20
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_r2H",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_r2H_alkyl_radical_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 258,
+        "equation": "9.36",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters, 'Esters containing other functional groups' (arrow labelled 'r2H, - C8H15')"
+      },
+      "confidence": 0.7,
+      "curator_note": "The first arrow, labelled 'r2H' with '- C8H15' printed underneath. Book draws 0 arc(s) -- there is not one curved arrow anywhere in equation 9.36 -- so every electron move here is curator-supplied. WHAT THE PAGE FIXES AND WHAT IT DOES NOT: it fixes the product (drawn in full: a ring carrying COOH on one position and, on the other, C(=O)-O(+)(H)-CH2-CH(C2H5)C4H9, labelled 'm/z 279'), and it fixes the composition of the loss ('- C8H15'). Those two facts force the bookkeeping: DEHP has no O-H, the product has two (one in the COOH, one on the protonated ester oxygen), so TWO hydrogens move to the ion and the alkyl leaves as a RADICAL of composition C8H15 -- i.e. its own C8H17 minus the two donated hydrogens. Mass check, curator-computed: 390.2765 -> 279.1591 + 111.1174, exact. Note the product is EVEN-electron (the odd electron leaves with the alkyl), which is why the later steps of this equation are two-electron chemistry. WHAT IS INFERRED: which hydrogens move, and hence where the radical sits in the neutral. The page draws no structure for the C8H15 fragment at all. This record takes H29 from C11 (the branch methine) to O8 -- the six-membered ester-McLafferty geometry, which is the one arrangement here that a MOD rule independently reproduces, see the mechanism note -- and H30 from C10 to O20, the ortho ester's oxygen, which is the transfer that only an ORTHO diester can make and is exactly why phthalates give these ions. The neutral is then the vinyl-type radical .CH=C(C2H5)C4H9. A more stable isomer (allylic, or a primary radical with the double bond further along the chain) is EQUALLY CONSISTENT with the printed composition; nothing on the page decides between them. The seven moves are the full bookkeeping for a step the page compresses into one arrow, so semantics is net_fragmentation, not physical_elementary_step. SUBSTRATE: bis-(2-ethylhexyl)phthalate (DEHP), drawn as a benzene ring with two ortho -COO-CH2-CH(C2H5)-C4H9 groups and '+.' printed OUTSIDE A BRACKET at the top right. Named by the prose on the same page: 'phthalates give highly characteristic peaks at m/z 149 and 167 whose abundance ratio depends on the length of the alkyl chain. Their formation is rationalized in Equation 9.36 for bis-(2-ethylhexyl)phthalate (DEHP) which is a common and omnipresent contaminant from plasticized polymers (Ende and Spiteller 1982). The same ions are produced upon collisionally activated dissociation of protonated DEHP (Hunt et al. 1980).' C24H38O4, M+. computed 390.2765. ATOM MAPS: 1,2 = the two substituted (ortho) ring carbons, 3-6 = the ring CH; ester A (the one that loses its alkyl) = C7 carbonyl carbon, O8 carbonyl oxygen, O9 ester oxygen, alkyl C10 (the OCH2), C11 (the branch CH), C12-C13 (its ethyl), C14-C17 (its butyl); ester B = C18, O19, O20, alkyl C21-C28 in the same order; H29 and H30 are THE TWO MIGRATING HYDROGENS of the r2H step (H29 on C11, H30 on C10). LOCALIZATION, DISCLOSED: the page draws the charge and odd electron on a BRACKET, not on any atom, so a site had to be chosen to write a mapped SMILES; they are placed on O8, the carbonyl oxygen of the ester that reacts, because that is the site the drawn hydrogen transfer requires. Curator-supplied."
+    },
+    {
+      "evidence_id": "evidence_step_rH",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_alkene_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 258,
+        "equation": "9.36",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters (left branch, arrow labelled 'rH, - C8H16')"
+      },
+      "confidence": 0.75,
+      "curator_note": "The left branch off m/z 279, labelled 'rH' with '- C8H16' printed beneath. Book draws 0 arc(s); both moves are curator-supplied. The precursor is EVEN-electron (see the r2H note), so this is two-electron chemistry, not fishhooks: the second ester is eliminated as an alkene with hydrogen transfer to its own oxygen -- the C22-H31 pair becomes the new O20-H bond while the O20-C21 pair becomes the C21=C22 double bond -- giving the neutral 2-ethyl-1-hexene the page's label names (C8H16, 112.1252) and leaving the doubly protonated diacid, i.e. protonated phthalic acid. Its structure is drawn out on the page as a ring bearing COOH and C(OH)(+)OH, computed 167.0339, which is the m/z 167 the prose names. The donor hydrogen H31 is placed on C22, the branch methine, the only position that reaches O20 through a six-membered ring; the page draws no hydrogen, so the position is curator-supplied. MEASUREMENTS (convention F): the page prints ONE m/z on the scheme, 'm/z 279', and it matches the computed 279.1591. The two famous product ions are NOT labelled on the drawing -- they are named in the prose ('peaks at m/z 149 and 167') -- and the computed exact masses of the drawn structures are 167.0339 (protonated phthalic acid, C8H7O4+) and 149.0233 (protonated phthalic anhydride, C8H5O3+), matching those nominal values. The neutral losses ARE printed under the arrows (- C8H15, - C8H16, - C8H17OH, - H2O) and every one closes the balance exactly: 390.2765 -> 279.1591 (-111.1174); 279.1591 -> 167.0339 (-112.1252); 279.1591 -> 149.0233 (-130.1358); 167.0339 -> 149.0233 (-18.0106). No percentage is printed anywhere, so no relative_intensity is stored, and the prose's abundance statement is a RATIO whose value depends on chain length rather than a number ('whose abundance ratio depends on the length of the alkyl chain')."
+    },
+    {
+      "evidence_id": "evidence_step_water",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_water_loss_ring_closure",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 258,
+        "equation": "9.36",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters (arrow labelled '- H2O', 167 -> 149)"
+      },
+      "confidence": 0.8,
+      "curator_note": "The '- H2O' arrow joining the two drawn product ions. Book draws 0 arc(s); both moves are curator-supplied. What the drawing forces: the m/z 149 structure is a BICYCLIC ion -- I read its connectivity at 5x -- a benzene ring fused to a FIVE-membered ring whose members are the two ring carbons, two carbonyl carbons and one bridging oxygen that carries an H and the '+'. That is protonated phthalic anhydride (C8H5O3+, computed 149.0233), so the step is a ring closure: the carboxyl oxygen O8 attacks the second carboxyl carbon C18 while the oxonium oxygen O20 leaves with its two hydrogens as water. Encoded as a lone pair forming the O8-C18 bond plus the C18-O20 pair collapsing onto the departing oxygen; the arrow-check reports the two expected soft lone-pair lines (atoms 8 and 20). This is the ion that makes phthalate contamination recognisable in almost any spectrum. MEASUREMENTS (convention F): the page prints ONE m/z on the scheme, 'm/z 279', and it matches the computed 279.1591. The two famous product ions are NOT labelled on the drawing -- they are named in the prose ('peaks at m/z 149 and 167') -- and the computed exact masses of the drawn structures are 167.0339 (protonated phthalic acid, C8H7O4+) and 149.0233 (protonated phthalic anhydride, C8H5O3+), matching those nominal values. The neutral losses ARE printed under the arrows (- C8H15, - C8H16, - C8H17OH, - H2O) and every one closes the balance exactly: 390.2765 -> 279.1591 (-111.1174); 279.1591 -> 167.0339 (-112.1252); 279.1591 -> 149.0233 (-130.1358); 167.0339 -> 149.0233 (-18.0106). No percentage is printed anywhere, so no relative_intensity is stored, and the prose's abundance statement is a RATIO whose value depends on chain length rather than a number ('whose abundance ratio depends on the length of the alkyl chain')."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.36a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.36",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.6,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** MEASURED, RDKit substructure counts against this record's instantiated molecular ion. *** (i) 'esterMcLafferty_rH' (IMS_bookCover.py:336, Gl. 4.45, '[H]1[C]2[C]3[O]4[C]5({=}[O+.]6)[C]7') embeds ONCE, on the branch methine hydrogen -- the six-ring H-C11-C10-O9-C7=O8 -- which is why this record assigns the FIRST transfer there. But it reproduces only ONE of the two hydrogen transfers this step needs, so it is a PARTIAL cross-link, not a counterpart for the drawn step. (ii) 'h2Transiton_1' (Gl. 4.46, the DOUBLE hydrogen rearrangement, '[H]1[C]2([H]3)[C]4[_A]5[C]6([C]7){=}[_A+.]8') gives ZERO embeddings, and for a precise structural reason: it requires the carbon two bonds from the ester oxygen to carry TWO hydrogens ('[C]2([H]3)' plus the migrating '[H]1'), and in a 2-ethylhexyl group that position is the BRANCH methine, which has only one. So the rule that does the two-hydrogen rearrangement for sec-butyl acetate (five embeddings there, see IMS9-EQ9.34) cannot do it for DEHP -- the branching defeats it. That is a real reachability gap for the single most common phthalate contaminant, and it is measured, not asserted. Nothing was tested for the second transfer, the -H2O step or the id step: UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 390.2765,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_279",
+      "species_id": "protonated_monoester_mz279",
+      "step_id": "step_r2H_alkyl_radical_loss",
+      "observed_mz": 279.1591,
+      "relative_intensity": null,
+      "hydrogen_shift": 2,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    },
+    {
+      "peak_id": "peak_167",
+      "species_id": "protonated_phthalic_acid_mz167",
+      "step_id": "step_rH_alkene_loss",
+      "observed_mz": 167.0339,
+      "relative_intensity": null,
+      "hydrogen_shift": 3,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    },
+    {
+      "peak_id": "peak_149",
+      "species_id": "protonated_phthalic_anhydride_mz149",
+      "step_id": "step_water_loss_ring_closure",
+      "observed_mz": 149.0233,
+      "relative_intensity": null,
+      "hydrogen_shift": 1,
+      "isotope_offset": 0,
+      "status": "inferred",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-12T00:00:00Z",
+    "modified_at": "2026-08-12T00:00:00Z"
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS9-EQ9.27c",
+  "species": [
+    {
+      "species_id": "ionized_enol_s6",
+      "mapped_smiles": "[CH3:1][C:2]([O+:7][1H:13])=[CH:3][C:5]([1H:12])([CH2:4][1H:11])[CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_pentenone_mz85",
+      "mapped_smiles": "[CH3:1][C:2]([O:7][1H:13])=[CH:3][C+:5]([1H:12])[CH2:4][1H:11]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical_c6",
+      "mapped_smiles": "[CH3:6]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ionized_enol_s6"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_pentenone_mz85",
+        "methyl_radical_c6"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_c6_methyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              6
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              6
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_c6_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_c6_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (lower '- CH3. (6)' arrow)"
+      },
+      "confidence": 0.6,
+      "curator_note": "The LOWER of the two terminal arrows leaving the ionised enol, labelled '- CH3.' with a '6' above it. Chemically identical to the upper branch (IMS9-EQ9.27b's last step) -- the same bond type broken on the same carbon, giving a product of the same connectivity and the same mass -- and the ONLY thing that distinguishes them is WHICH numbered methyl departs, C6 here versus C4 there. It is recorded as its own record because the book draws it as its own arrow with its own label, and because that distinction is the entire point of the equation: after the skeletal scrambling both original methyls have become equivalent substituents on C5, so a metastable 2-hexanone ion expels C4 or C6 rather than the C1 methyl that the fast route expels. The prose quantifies this: 'The loss of the C-1 methyl from metastable 2-hexanone ions accounts for <3% of the (M-CH3)+ products.' That '<3%' is an upper bound on a branching ratio, not an abundance, so per convention F it is NOT stored as a relative_intensity. PRECURSOR: the ionised enol drawn at the end of row three; this record starts there rather than repeating the five-step isomerisation chain, which is encoded once in IMS9-EQ9.27b. *** Equation 9.27 draws NO CURVED ARROWS AT ALL -- not one, anywhere on the page. *** Every transformation is conveyed by a reaction-type label ('fast', 'slow', rH, rC) plus the changed structure. Book draws 0 arc(s) for this step and ALL of its electron moves are therefore curator-supplied. This is still a mechanism and not a bare result (contrast eq 9.5, which is in NON_MECHANISM_EQS): the page prints six successive INTERMEDIATE structures with explicit, individually localised charge and radical sites, and each consecutive pair differs by exactly one well-defined change, so the flow is recoverable without inventing connectivity. MEASUREMENTS (convention F): this equation prints NO m/z value and no percentage anywhere -- not on the molecular ion, not on any intermediate, not on any product. Every mass in this record is CURATOR-COMPUTED from the instantiated structures. The ions are nevertheless marked detected=true with status 'proposed', following the corpus precedent of IMS8-EQ8.60 / IMS8-EQ8.81a/b, because the running prose reports them as observed species ('the 2-hexanone ion loses predominantly the C-1 methyl to give the stable acyl ion C4H9CO+'; 'protonated pentenone'). No relative_intensity is recorded: the only number on the page is the prose '<3%', which is an UPPER BOUND on a metastable branching ratio, not a 70 eV EI abundance."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.27c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x). NO cross-link is claimed and NO RDKit rule-matching sweep was run for this equation -- these records were hand-authored while the extraction agents were unavailable, so absence of a cited rule means UNTESTED, not 'no rule matches'. Note for whoever does sweep it: the skeletal rC steps are 1,2-alkyl shifts, and the corpus's only indexed ring/alkyl rearrangement (benzylAllyl_mz91_91) is aromatic-only, so a counterpart is unlikely to exist."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "metastable-ion (MI) decomposition",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85_pentenone_alt",
+      "species_id": "protonated_pentenone_mz85",
+      "step_id": "step_c6_methyl_loss",
+      "observed_mz": 85.0648,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

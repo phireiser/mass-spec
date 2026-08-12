@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS9-EQ9.27a",
+  "species": [
+    {
+      "species_id": "hexanone_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:7])[CH:3]([1H:12])[CH2:4][C:5]([1H:11])([1H:13])[CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "pentanoyl_cation_mz85",
+      "mapped_smiles": "[C:2](#[O+:7])[CH:3]([1H:12])[CH2:4][C:5]([1H:11])([1H:13])[CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical_c1",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "hexanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "pentanoyl_cation_mz85",
+        "methyl_radical_c1"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_c1_methyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_fast",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_c1_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (arrow labelled 'fast')"
+      },
+      "confidence": 0.75,
+      "curator_note": "The FAST branch, drawn as a single arrow labelled 'fast' from the 2-hexanone molecular ion (the page numbers its carbons 1-6 and draws '+.' on the carbonyl oxygen) to 'CH3.' -- explicitly labelled '1' -- plus the acylium, drawn as O≡C(+)-CH2CH2CH2CH3. Ordinary radical-site alpha cleavage of the C1-C2 bond. This is the normal 70 eV channel: the prose above the scheme states 'at 70 eV the 2-hexanone ion loses predominantly the C-1 methyl to give the stable acyl ion C4H9CO+', which is why this record alone carries 70 eV EI conditions while the slow route (IMS9-EQ9.27b/c) is metastable. *** Equation 9.27 draws NO CURVED ARROWS AT ALL -- not one, anywhere on the page. *** Every transformation is conveyed by a reaction-type label ('fast', 'slow', rH, rC) plus the changed structure. Book draws 0 arc(s) for this step and ALL of its electron moves are therefore curator-supplied. This is still a mechanism and not a bare result (contrast eq 9.5, which is in NON_MECHANISM_EQS): the page prints six successive INTERMEDIATE structures with explicit, individually localised charge and radical sites, and each consecutive pair differs by exactly one well-defined change, so the flow is recoverable without inventing connectivity. The book prints its OWN carbon numbers 1-6 on every structure, and this record reuses them as atom maps so the mapping can be checked against the page by eye. That numbering is the whole point of the equation: it is what distinguishes the fast route (which expels the C-1 methyl) from the slow one (which expels C-4 or C-6 after skeletal scrambling). The three moves are the canonical radical-site triple: <1> the oxygen odd electron into the forming C-O pi bond, <2> one electron of the breaking C1-C2 sigma bond into that same bond -- raising C2-O7 from double to TRIPLE, the acylium the page draws as O≡C+ -- and <3> the other C1-C2 electron leaving with the methyl radical. MEASUREMENTS (convention F): this equation prints NO m/z value and no percentage anywhere -- not on the molecular ion, not on any intermediate, not on any product. Every mass in this record is CURATOR-COMPUTED from the instantiated structures. The ions are nevertheless marked detected=true with status 'proposed', following the corpus precedent of IMS8-EQ8.60 / IMS8-EQ8.81a/b, because the running prose reports them as observed species ('the 2-hexanone ion loses predominantly the C-1 methyl to give the stable acyl ion C4H9CO+'; 'protonated pentenone'). No relative_intensity is recorded: the only number on the page is the prose '<3%', which is an UPPER BOUND on a metastable branching ratio, not a 70 eV EI abundance."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.27a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x). NO cross-link is claimed and NO RDKit rule-matching sweep was run for this equation -- these records were hand-authored while the extraction agents were unavailable, so absence of a cited rule means UNTESTED, not 'no rule matches'. Note for whoever does sweep it: the skeletal rC steps are 1,2-alkyl shifts, and the corpus's only indexed ring/alkyl rearrangement (benzylAllyl_mz91_91) is aromatic-only, so a counterpart is unlikely to exist."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85_acylium",
+      "species_id": "pentanoyl_cation_mz85",
+      "step_id": "step_alpha_c1_methyl_loss",
+      "observed_mz": 85.0648,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.65
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

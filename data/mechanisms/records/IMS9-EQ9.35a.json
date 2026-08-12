@@ -1,0 +1,204 @@
+{
+  "mechanism_id": "IMS9-EQ9.35a",
+  "species": [
+    {
+      "species_id": "sec_butyl_acetate_molecular_ion_carbonyl_localized",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:3])[O:4][CH:5]([CH3:6])[CH2:7][CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": true
+    },
+    {
+      "species_id": "acetyl_cation_mz43",
+      "mapped_smiles": "[CH3:1][C:2]#[O+:3]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "sec_butoxy_radical",
+      "mapped_smiles": "[O:4][CH:5]([CH3:6])[CH2:7][CH3:8]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "sec_butyl_acetate_molecular_ion_carbonyl_localized"
+      ]
+    },
+    {
+      "state_id": "state_mz43",
+      "species_ids": [
+        "acetyl_cation_mz43",
+        "sec_butoxy_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_carbonyl_initiated",
+      "from_state": "state_precursor",
+      "to_state": "state_mz43",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              3
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_carbonyl_initiated",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 256,
+        "equation": "9.35",
+        "figure": null,
+        "panel": null,
+        "section": "9.4 Esters (row 1, arrow labelled 'alpha(C=O)')"
+      },
+      "confidence": 0.8,
+      "curator_note": "Row 1. Radical-site cleavage initiated at the carbonyl oxygen, breaking the C2-O4 acyl-oxygen bond and expelling the sec-butoxy radical, leaving the acetyl (acylium) cation the page prints as 'CH3CO+' and labels 'm/z 43'. The prose calls it 'the large m/z 43 ion', and Figure 9.12 on the facing page has m/z 43 as the base peak (100%) with the label '43a' -- i.e. the book itself marks that peak as this alpha channel. Encoded as the canonical triple: the O3 odd electron into the C2-O3 bond (raising C=O to the C#O+ the acylium needs), one electron of the breaking C2-O4 bond into that same bond, and the second leaving on O4 with the radical. ARC COUNT (convention D): ZERO curved arrows anywhere in equation 9.35 -- five reaction arrows, each carrying only a reaction-type label, and no fishhook or two-electron arc on any structure. So EVERY electron move in every record of this equation is curator-supplied, and each is the canonical triple for its reaction type. *** THE PARENTHESISED GROUP IN THE LABEL NAMES THE INITIATING SITE, NOT THE BOND THAT BREAKS. *** This is the one thing an author could get badly wrong here, and the book defines it in its own words on this page: 'Alpha cleavage (Equation 9.35) AT the carbonyl group yields the large m/z 43 ion'; 'This latter peak actually can also be produced by an additional alpha-cleavage reaction INITIATED BY the saturated oxygen atom; a similar cleavage with loss of the largest group produces the significant m/z 87 peak'; and 'Charge-site initiation AT the saturated oxygen, RCOO-R'+. -> RCOO. + R'+'. So alpha(C=O) = initiated at the carbonyl, alpha(C-O) = initiated at the saturated oxygen, i(C-O) = charge-site initiation there. Which bond actually breaks is fixed by the PRINTED PRODUCT in each row, and every one of the five is independently confirmed by mass arithmetic (each ion plus its implied neutral sums to 116.0832) and by the squiggle-marked inset of Figure 9.12 on the facing page, which writes 43, 87 and 101 across the corresponding bonds. SUBSTRATE: sec-butyl acetate, CH3-C(=O)-O-CH(CH3)-C2H5, drawn out with a BRACKET carrying '+.' at its top right and labelled 'm/z 116'. Named on the facing page (PDF 266, printed p255): 'Figure 9.12. Mass spectrum of sec-butyl acetate' and 'The spectrum of sec-butyl acetate (Figure 9.12) illustrates the additional reactions that are possible with such esters.' Same compound as IMS9-EQ9.34, and the atom maps are deliberately the same: 1 = the acetyl methyl, 2 = the acetyl carbon, 3 = the carbonyl oxygen, 4 = the ester (saturated) oxygen, 5 = the methine carbon, 6 = its methyl, 7 = the CH2, 8 = the terminal methyl. *** THE CHARGE AND ODD ELECTRON ARE DRAWN DELOCALISED, SO EACH RECORD LOCALISES THEM WHERE ITS OWN LABEL SAYS. *** The page prints '+.' outside a bracket around the whole structure -- it is NOT on any atom -- so a localization has to be chosen to write a mapped SMILES at all. The reaction-type labels are what choose it: the alpha(C=O) channels put the radical site on the CARBONYL oxygen (map 3) and the alpha(C-O) and i(C-O) channels put it on the SATURATED ester oxygen (map 4). That is disclosed here rather than hidden: two records of this equation therefore store two different localizations of the same drawn molecular ion. MEASUREMENTS (convention F): the page labels m/z 116, 43, 101, 73, 87, 101 and 57. Every one matches the exact mass computed from the structure encoded here (116.0832, 43.0178, 101.0597, 73.0648, 87.0441, 101.0597, 57.0699 -- RDKit ExactMolWt, formal charge already applied). No percentage is printed in the equation, so no relative_intensity is stored: the prose's numbers ('the values of [(M - CH3COO)+]/Sigma_ions are 1, 3, and 17%, respectively' for n-, sec- and tert-butyl acetate) are quoted here instead, and note they describe THREE compounds, only one of which is this substrate. *** TWO DIFFERENT IONS ON THIS PAGE ARE BOTH LABELLED m/z 101 *** -- the alkoxycarbonyl acylium +O#C-OC4H9 from the alpha(C=O) row (IMS9-EQ9.35b) and the acetoxy-propylidene oxocarbenium CH3C(=O)O(+)=CH-C2H5 from the alpha(C-O) row (IMS9-EQ9.35d). Both are C5H9O2+, 101.0597: isomers, indistinguishable by mass, and the prose says so explicitly ('This latter peak actually can also be produced by an additional alpha-cleavage reaction'). Disclosed in both records, the same way IMS9-EQ9.25 discloses its two different 'm/z 57' ions."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.35a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.35",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** TESTED AND REJECTED, RDKit substructure counts against this record's instantiated molecular ion: 'alpha' (wikipedia.py:6, '[C]1[C]2({=}[O+.])[C]3[C]4') gives 0 embeddings, and structurally so -- its LHS demands a CARBON on both sides of the ionised carbonyl, and an ester has an oxygen on one side. That is the same reachability gap recorded for IMS9-EQ9.31 (methyl stearate) and IMS9-EQ9.34, so it is systematic for esters, not specific to one compound: NONE of this equation's four alpha channels is reachable by the rule that covers every ketone alpha-cleavage. 'inductive_wiki' (wikipedia.py:15, '[C]1[C]2[O+.]3[C]4[C]5') also gives 0: it needs the ionised oxygen to be the saturated one AND a carbon two deep on both sides, whereas here the acyl side reaches a carbonyl carbon. The i(C-O) channel (IMS9-EQ9.35e) is the closest match in spirit -- the book's own 'RCOO-R'+. -> RCOO. + R'+' -- and its absence from the rule set is worth recording. No other rule was tested: UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 116.0832,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_116",
+      "species_id": "sec_butyl_acetate_molecular_ion_carbonyl_localized",
+      "step_id": null,
+      "observed_mz": 116.0832,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.9
+    },
+    {
+      "peak_id": "peak_43",
+      "species_id": "acetyl_cation_mz43",
+      "step_id": "step_alpha_carbonyl_initiated",
+      "observed_mz": 43.0178,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-12T00:00:00Z",
+    "modified_at": "2026-08-12T00:00:00Z"
+  }
+}

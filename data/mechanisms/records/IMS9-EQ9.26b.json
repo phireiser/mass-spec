@@ -1,0 +1,271 @@
+{
+  "mechanism_id": "IMS9-EQ9.26b",
+  "species": [
+    {
+      "species_id": "methylheptanone_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9])[CH2:3][CH2:4][CH:5]([1H:10])[CH:6]([CH3:7])[CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:1]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hexanoyl_cation_mz113",
+      "mapped_smiles": "[C:2](#[O+:9])[CH2:3][CH2:4][CH:5]([1H:10])[CH:6]([CH3:7])[CH3:8]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "hexyl_cation_mz85",
+      "mapped_smiles": "[CH2+:3][CH2:4][CH:5]([1H:10])[CH:6]([CH3:7])[CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "carbon_monoxide",
+      "mapped_smiles": "[C-:2]#[O+:9]",
+      "role": "neutral_loss",
+      "charge": 0,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylheptanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_mz113",
+      "species_ids": [
+        "hexanoyl_cation_mz113",
+        "methyl_radical"
+      ]
+    },
+    {
+      "state_id": "state_mz85",
+      "species_ids": [
+        "hexyl_cation_mz85",
+        "carbon_monoxide",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_methyl_loss",
+      "from_state": "state_precursor",
+      "to_state": "state_mz113",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              9
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_inductive_co_loss",
+      "from_state": "state_mz113",
+      "to_state": "state_mz85",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_methyl",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 249,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (second 'alpha' arrow)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Substrate as drawn: a 2-alkanone molecular ion printed as C3H7-CH(H)-CH2-CH2-C(=O)-CH3 with the gamma hydrogen on C5 drawn EXPLICITLY and '+.' printed above the carbonyl oxygen. INSTANTIATION of the condensed 'C3H7' label (the page does not draw it out): it is taken as ISOPROPYL, making the compound 6-methyl-2-heptanone. That is not a guess -- the running text introducing this scheme rationalises 'the characteristic peaks in ... 6-methyl-2-heptanone (Figure 9.9)' and names 'a pair of acylium ions (m/z 113 and 43 in Figure 9.9) and a pair of alkyl ions (m/z 85 and 15)', which are exactly this equation's products. n-Propyl would give 2-octanone, an isomer with identical nominal masses at every step, so the drawing alone cannot distinguish them and the text is what settles it. LOCALIZATION (convention B): charge and odd electron are written on the oxygen where the page prints them, [C:2]=[O+:9]. Book draws 0 arc(s) on the molecular ion -- there is no fishhook anywhere on it; every arrow leaving it carries only a label. SECOND channel: an arrow labelled 'alpha' to 'C6H13CO+ / m/z 113'. The complementary alpha cleavage to IMS9-EQ9.26a -- the C1-C2 bond breaks instead, expelling CH3. and keeping the charge on the larger acylium. (The running text calls these 'a pair of acylium ions (m/z 113 and 43)' and notes the more abundant one usually comes from loss of the LARGER alkyl, i.e. m/z 43.) Book draws 0 arc(s); all three moves are curator-supplied, same canonical triple as the other acylium channel. MS CONTEXT: the page prints no ionisation conditions, so 70 eV EI is the corpus house default, disclosed rather than read off the page. Figure 9.9 (printed p247) is the 6-methyl-2-heptanone spectrum and does carry abundances, but it is NOT this page and this scheme prints no percentage, so per convention F no relative_intensity is recorded; peaks are status 'proposed'."
+    },
+    {
+      "evidence_id": "evidence_step_co_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive_co_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 249,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones ('i' arrow from m/z 113)"
+      },
+      "confidence": 0.7,
+      "curator_note": "The short arrow labelled with an italic 'i' running from m/z 113 down to 'C6H13+ / m/z 85': loss of neutral CO from the acylium. Book draws 0 arc(s) and no structure -- only the formulas -- so the single move is curator-supplied. ENCODING: this is a genuinely heterolytic (2-electron) step from an EVEN-ELECTRON acylium, so it is one double-barbed arrow, not fishhooks -- the C2-C3 bonding pair localises on C2, leaving C3 as the hexyl cation and C2 as the carbon lone pair of :C≡O:. Carbon monoxide is written [C-:2]#[O+:9], the standard charge-separated RDKit form; the fragment is neutral overall."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.26b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so any link would be inferred rather than indexed. NO cross-link is claimed and -- stated so it is not mistaken for a negative result -- NO RDKit rule-matching sweep was run for this channel: these records were hand-authored while the extraction agents were unavailable. Absence of a cited rule here means UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_113",
+      "species_id": "hexanoyl_cation_mz113",
+      "step_id": "step_alpha_methyl_loss",
+      "observed_mz": 113.0961,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    },
+    {
+      "peak_id": "peak_85_via_co_loss",
+      "species_id": "hexyl_cation_mz85",
+      "step_id": "step_inductive_co_loss",
+      "observed_mz": 85.1012,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

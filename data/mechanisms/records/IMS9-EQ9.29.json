@@ -1,0 +1,284 @@
+{
+  "mechanism_id": "IMS9-EQ9.29",
+  "species": [
+    {
+      "species_id": "ionone_molecular_ion",
+      "mapped_smiles": "[CH3:11][C:2]1=[C:1]([CH:7]=[CH:8][C:9](=[O+:14])[CH3:10])[C:6]([CH3:12])([CH3:13])[CH2:5][CH2:4][CH2:3]1",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "cyclized_distonic_ion",
+      "mapped_smiles": "[CH2:3]1[C:2]2([CH3:11])[O+:14]=[C:9]([CH3:10])[CH:8]=[CH:7][C:1]2[C:6]([CH3:12])([CH3:13])[CH2:5][CH2:4]1",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "benzopyrylium_mz177",
+      "mapped_smiles": "[CH2:3]1[C:2]2=[C:1]([CH:7]=[CH:8][C:9]([CH3:10])=[O+:14]2)[C:6]([CH3:12])([CH3:13])[CH2:5][CH2:4]1",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical",
+      "mapped_smiles": "[CH3:11]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ionone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_cyclized",
+      "species_ids": [
+        "cyclized_distonic_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "benzopyrylium_mz177",
+        "methyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rc_cyclization",
+      "from_state": "state_precursor",
+      "to_state": "state_cyclized",
+      "step_class": "radical_site_cyclization",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              14
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              14
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    },
+    {
+      "step_id": "step_rd_methyl_loss",
+      "from_state": "state_cyclized",
+      "to_state": "state_products",
+      "step_class": "radical_site_displacement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              1
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              11
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "M\u00d8D Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_rc",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rc_cyclization",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.29",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (parenthesised arrow labelled 'rc')"
+      },
+      "confidence": 0.7,
+      "curator_note": "Substrate read off the drawing and confirmed by the prose on the facing page (printed p250): 'Sometimes displacement reactions (Section 8.11) appear to be possible at the carbonyl group; such a reaction (Equation 9.29) accounts for the base peak corresponding to (M - CH3)+ in the spectrum of beta-ionone (Unknown 4.13).' The drawn structure is beta-ionone, C13H20O, M+. 192.1509: a cyclohexene with gem-dimethyl at the bottom left, the ring double bond on the right edge, a methyl drawn straight up from the upper sp2 ring carbon, and the side chain -CH=CH-C(=O)-CH3 leaving the lower sp2 ring carbon, with '+.' printed above the carbonyl oxygen. ATOM MAPS use the beta-ionone numbering so the mapping is checkable against the page by eye: ring 1 = the sp2 carbon carrying the side chain, 2 = the sp2 carbon carrying the ring methyl, 3/4/5 = the ring CH2 groups, 6 = the gem-dimethyl quaternary carbon; side chain 7 = CH, 8 = CH, 9 = the carbonyl carbon, 10 = its methyl; 11 = THE RING 2-METHYL (the group expelled), 12/13 = the two 6,6-methyls, 14 = O. ARC COUNT (convention D): the page draws exactly ONE arc on the molecular ion and none anywhere else in the equation; measured at 14x on the native 1760x2560 scan. Its TAIL sits at the odd-electron dot of the '+.' above the oxygen; its body sweeps up over the '+' and back down to the left; its HEAD -- a two-stroke barb -- lands in the empty gap between the oxygen and the methyl-bearing ring carbon, i.e. on the FORMING O-C2 bond (the barb region spans the midpoint of that gap and reaches toward the C2-methyl bond). Only one arc BODY is present: the barb strokes are ~28 native px, the arc body ~70, so this is one fishhook with a doubled head, not two converging fishhooks. Worth flagging because the corpus's closest analogue, the generic rd scheme IMS8-EQ8.103, draws TWO converging fishhooks for this same reaction type -- so eq 9.29 is one arc short of a complete displacement bookkeeping and moves <2,3> here are curator-supplied. THE INTERMEDIATE IS NOT DRAWN: the rc arrow is printed inside PARENTHESES, '( ---rc---> )', with no structure between the parentheses, so the cyclized ion encoded as state_cyclized is curator-constructed from the drawn arc plus the drawn final product. The three moves are the canonical radical-site ring closure: <1> the drawn fishhook, the oxygen odd electron into the forming O14-C2 bond; <2> one electron of the C1=C2 pi bond completing that bond; <3> the second pi electron onto C1, which becomes the tertiary radical that drives the next step. The ring closed is SIX-membered (O14-C9-C8-C7-C1-C2), which is what makes the attack geometrically reasonable and is why this channel gives the base peak. *** THE ARROW LABELS WERE MEASURED, NOT GUESSED, AND THEY SETTLE A CORPUS AMBIGUITY. *** The two labels are printed 'rc' and 'rd' in italics. Cropping this page's 'rc' next to equation 9.27's 'rC' labels (PDF 261) at 8x shows two DIFFERENT glyphs: 9.29's second character has the same x-height as the 'r' (lowercase c), while 9.27's rises to cap height like the 'H' of 'rH' (uppercase C). The book therefore runs two distinct symbols two pages apart. With the book's other lowercase members -- 'rd' = displacement (section 8.11, the corpus's IMS8-EQ8.103/8.110/8.111 records) and 're' = elimination (IMS8-EQ8.117) -- lowercase 'rc' reads as CYCLIZATION, which is also what the drawn arc and the drawn product show. The book's own legend for the symbol was NOT located (it is not on either endpaper, which carry the isotope tables), so the label is reported verbatim and the step is classed from the structures per convention A. This also retro-confirms the eq-9.27 reading of rC as a carbon-skeleton rearrangement: the glyphs differ."
+    },
+    {
+      "evidence_id": "evidence_step_rd",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rd_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 251,
+        "equation": "9.29",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (arrow labelled 'rd')"
+      },
+      "confidence": 0.75,
+      "curator_note": "The 'rd' arrow, and the only structure the page draws after the reactant: 'CH3. +' the bicyclic oxygen cation. Book draws ZERO arcs for this step -- it cannot, since its precursor (the parenthesised rc product) is not printed -- so all three moves are curator-supplied: <1> the C1 radical electron into the forming C1=C2 pi bond, <2> one electron of the C2-CH3 bond into that same bond, <3> the second C2-CH3 electron leaving with the methyl radical the page prints. WHICH METHYL LEAVES WAS VERIFIED ON THE PRODUCT, not assumed: the drawn product has NO methyl on the ring-fusion carbon next to the oxygen, while the carbon double-bonded to O+ still carries its methyl -- so the group expelled is the RING 2-methyl (map 11) and the acetyl methyl (map 10) is retained. PRODUCT AS DRAWN: a cyclohexane fused to a six-membered oxygen ring, '+' printed above the ring O, with double bonds drawn at O=C(CH3), at the ring-fusion C1=C2 and at C7=C8 -- i.e. a PYRYLIUM (2-methyl-5,5-dimethyl-5,6,7,8-tetrahydro-1-benzopyrylium), C12H17O+, 177.1274 = (M - CH3)+. RDKit perceives all six of that ring's bonds as aromatic, so the arrow-check reports its bond-order changes as SOFT '(aromatic/delocalised)' lines rather than hard failures -- expected behaviour, documented in arrow_check.py's own docstring ('for bonds RDKit reports as aromatic (order 1.5) integer electron bookkeeping is ill-defined'), not a defect in this record. MEASUREMENTS (convention F): equation 9.29 prints NO m/z and no percentage; 177.1274 is curator-computed. The prose calls this ion 'the base peak', which would be a relative_intensity of 1.0, but that sentence is on the PREVIOUS page (p250) and this scheme prints no number, so per the IMS8-EQ8.103 precedent it is quoted here rather than stored."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.29",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.29",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.5,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries. *** BOTH CANDIDATE rd RULES WERE TESTED AND REJECTED (RDKit substructure tests, not assertions) -- eq 9.29 has NO counterpart in the rule set. *** (i) 'substituion' (IMS_bookCover.py:420, '[_A]1[C]2[C]3[_A+.]4 >> [_A.]1 . [C]2[C]3[_A+]4{-}2'): 0 embeddings on this molecular ion. Two independent reasons -- its LHS closes a THREE-membered ring (radical site two bonds from the attacked carbon), whereas eq 9.29 closes a SIX-membered one (the oxygen is five bonds from the ring carbon it attacks); and all its '_A' placeholders must unify to the same element, so an O attacking a C is outside it anyway (the constraint already recorded in the IMS8-EQ8.103 note). (ii) 'IMS_4_42_rd' (IMS_chap4_examples, '[C]1[C]2[C]3[C]4[C]5[Cl+.]6 >> ...'): 0 embeddings, it is halogen-specific. So the rd family exists in the rule set but only as a 3-ring/halonium special case: the six-membered oxygen displacement that makes beta-ionone's base peak is a REACHABILITY GAP. No rule was sought or tested for the rc cyclization step: UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+\u2022",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 192.1509,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_177",
+      "species_id": "benzopyrylium_mz177",
+      "step_id": "step_rd_methyl_loss",
+      "observed_mz": 177.1274,
+      "relative_intensity": null,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.85
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-10T00:00:00Z",
+    "modified_at": "2026-08-10T00:00:00Z"
+  }
+}

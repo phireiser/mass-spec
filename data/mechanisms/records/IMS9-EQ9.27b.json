@@ -1,0 +1,695 @@
+{
+  "mechanism_id": "IMS9-EQ9.27b",
+  "species": [
+    {
+      "species_id": "hexanone_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:7])[CH:3]([1H:12])[CH2:4][C:5]([1H:11])([1H:13])[CH3:6]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_c5_radical_s2",
+      "mapped_smiles": "[CH3:1][C+:2]([O:7][1H:11])[CH:3]([1H:12])[CH2:4][C:5]([1H:13])[CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_c4_radical_s3",
+      "mapped_smiles": "[CH3:1][C+:2]([O:7][1H:11])[CH:3]([1H:12])[C:5]([1H:13])([CH2:4])[CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "methylpentanone_ion_s4",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:7])[CH:3]([1H:12])[C:5]([1H:13])([CH2:4][1H:11])[CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "distonic_tertiary_radical_s5",
+      "mapped_smiles": "[CH3:1][C+:2]([O:7][1H:13])[CH:3]([1H:12])[C:5]([CH2:4][1H:11])[CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "ionized_enol_s6",
+      "mapped_smiles": "[CH3:1][C:2]([O+:7][1H:13])=[CH:3][C:5]([1H:12])([CH2:4][1H:11])[CH3:6]",
+      "role": "intermediate",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "protonated_pentenone_mz85",
+      "mapped_smiles": "[CH3:1][C:2]([O:7][1H:13])=[CH:3][C+:5]([1H:12])[CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "methyl_radical_c4",
+      "mapped_smiles": "[CH2:4][1H:11]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_s1",
+      "species_ids": [
+        "hexanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_s2",
+      "species_ids": [
+        "distonic_c5_radical_s2"
+      ]
+    },
+    {
+      "state_id": "state_s3",
+      "species_ids": [
+        "distonic_c4_radical_s3"
+      ]
+    },
+    {
+      "state_id": "state_s4",
+      "species_ids": [
+        "methylpentanone_ion_s4"
+      ]
+    },
+    {
+      "state_id": "state_s5",
+      "species_ids": [
+        "distonic_tertiary_radical_s5"
+      ]
+    },
+    {
+      "state_id": "state_s6",
+      "species_ids": [
+        "ionized_enol_s6"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "protonated_pentenone_mz85",
+        "methyl_radical_c4"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_rH_slow_s1_s2",
+      "from_state": "state_s1",
+      "to_state": "state_s2",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_rC_s2_s3",
+      "from_state": "state_s2",
+      "to_state": "state_s3",
+      "step_class": "skeletal_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              4
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_rH_s3_s4",
+      "from_state": "state_s3",
+      "to_state": "state_s4",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              4
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              11
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              11
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_rH_s4_s5",
+      "from_state": "state_s4",
+      "to_state": "state_s5",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              13
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              13
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              7,
+              13
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              13
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              5
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              7
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 2
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_s5_s6",
+      "from_state": "state_s5",
+      "to_state": "state_s6",
+      "step_class": "hydrogen_rearrangement",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              5
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              5,
+              12
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              3,
+              12
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "lone_pair",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": true
+    },
+    {
+      "step_id": "step_c4_methyl_loss",
+      "from_state": "state_s6",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              4
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              4,
+              5
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_s1_s2",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_slow_s1_s2",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (vertical 'rH / slow' arrow)"
+      },
+      "confidence": 0.7,
+      "curator_note": "The SLOW branch: a vertical DOUBLE-HEADED arrow under the molecular ion, labelled 'rH' on one side and 'slow' on the other. It is drawn as an equilibrium and is encoded with reversible=true, as are the four isomerisations that follow -- the schema's `reversible` flag is what lets this scheme be recorded as the book draws it rather than silently linearised into one-way steps. A C5 hydrogen (map 11) moves to the carbonyl oxygen, giving the distonic ion the page draws at the left of the second row: a neutral OH, a '+' printed on C2 and the radical dot on C5. *** Equation 9.27 draws NO CURVED ARROWS AT ALL -- not one, anywhere on the page. *** Every transformation is conveyed by a reaction-type label ('fast', 'slow', rH, rC) plus the changed structure. Book draws 0 arc(s) for this step and ALL of its electron moves are therefore curator-supplied. This is still a mechanism and not a bare result (contrast eq 9.5, which is in NON_MECHANISM_EQS): the page prints six successive INTERMEDIATE structures with explicit, individually localised charge and radical sites, and each consecutive pair differs by exactly one well-defined change, so the flow is recoverable without inventing connectivity. The book prints its OWN carbon numbers 1-6 on every structure, and this record reuses them as atom maps so the mapping can be checked against the page by eye. That numbering is the whole point of the equation: it is what distinguishes the fast route (which expels the C-1 methyl) from the slow one (which expels C-4 or C-6 after skeletal scrambling). Four curator-supplied moves: <1,2> build the new O-H bond from one C5-H electron plus the oxygen's odd electron, <3> leaves the second C5-H electron on C5 as the new radical, and <4> localises the C2=O pi PAIR onto oxygen, which is what neutralises the oxygen and puts the '+' on C2 exactly where the page prints it. MS CONTEXT: this route is metastable, not 70 eV -- the prose introduces it with 'Decompositions of low-energy, particularly metastable, ketone ions follow different pathways than those observed in the normal electron-impact-mass spectra', so activation_method is 'metastable-ion (MI) decomposition' and electron_energy_ev is null. MEASUREMENTS (convention F): this equation prints NO m/z value and no percentage anywhere -- not on the molecular ion, not on any intermediate, not on any product. Every mass in this record is CURATOR-COMPUTED from the instantiated structures. The ions are nevertheless marked detected=true with status 'proposed', following the corpus precedent of IMS8-EQ8.60 / IMS8-EQ8.81a/b, because the running prose reports them as observed species ('the 2-hexanone ion loses predominantly the C-1 methyl to give the stable acyl ion C4H9CO+'; 'protonated pentenone'). No relative_intensity is recorded: the only number on the page is the prose '<3%', which is an UPPER BOUND on a metastable branching ratio, not a 70 eV EI abundance."
+    },
+    {
+      "evidence_id": "evidence_step_s2_s3",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rC_s2_s3",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (second-row 'rC' equilibrium)"
+      },
+      "confidence": 0.65,
+      "curator_note": "Equilibrium arrow labelled 'rC': a genuine CARBON-SKELETON rearrangement, and the structures confirm the label. In the left-hand structure the chain runs C2-C3-C4-C5(.)-C6; in the right-hand one C3 is bonded directly to C5, C4 has become a pendant CH2. on C5, and the radical has moved from C5 to C4. That is a 1,2-alkyl shift. Book draws 0 arc(s); the three curator-supplied moves are the radical-shift triple: <1> one electron of the migrating C3-C4 bond into the forming C3-C5 bond, <2> the C5 radical completing that bond, <3> the other C3-C4 electron staying on C4 as the new radical site."
+    },
+    {
+      "evidence_id": "evidence_step_s3_s4",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_s3_s4",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (second-row 'rH' equilibrium)"
+      },
+      "confidence": 0.65,
+      "curator_note": "Equilibrium arrow labelled 'rH'. The hydroxyl hydrogen (map 11, the one that came off C5 two steps earlier) moves onto the C4 radical, converting it to a methyl and restoring a normal ionised ketone: the page draws the resulting structure with '+.' back on the oxygen, an explicit H on C5, and methyls numbered 4 and 6 -- i.e. the 4-methyl-2-pentanone molecular ion, a SKELETAL ISOMER of the substrate. This is the pivot of the whole equation: the carbon that will eventually be lost is no longer C1. Book draws 0 arc(s); the four moves are the reverse of the S1->S2 set -- <1,2> build the C4-H bond from one O-H electron plus the C4 radical, <3> leaves the other O-H electron on oxygen as its odd electron, and <4> returns an oxygen lone PAIR to the C2-O bond to re-form the C=O double bond and move the '+' back to oxygen."
+    },
+    {
+      "evidence_id": "evidence_step_s4_s5",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_rH_s4_s5",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (second-row far-right 'rH' equilibrium)"
+      },
+      "confidence": 0.65,
+      "curator_note": "Equilibrium arrow labelled 'rH', wrapping from the end of the second row to the start of the third. The remaining C5 hydrogen (map 13) moves to the oxygen, leaving a TERTIARY radical on C5 -- the page draws it with the dot on the carbon carrying both numbered methyls (4 and 6) -- with the '+' again on C2 and a neutral OH. Identical move set to step 1 of this record, with map 13 in place of map 11. Book draws 0 arc(s)."
+    },
+    {
+      "evidence_id": "evidence_step_s5_s6",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_s5_s6",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (third-row 'rC' equilibrium)"
+      },
+      "confidence": 0.55,
+      "curator_note": "*** LABEL / DRAWING DISCREPANCY, recorded rather than resolved. *** The page labels this equilibrium 'rC', but the two structures it connects have the SAME carbon skeleton: both are C1-C2-C3-C5 with methyls 4 and 6 on C5, verified atom by atom at native resolution (left: OH and '+' on C2, explicit H on C3, radical on the C5 bearing both methyls; right: 'HO' with '+.', a C2=C3 double bond, and an H on that same C5). No bond between carbons is made or broken. What actually changes is a HYDROGEN: map 12 moves from C3 to C5, a C2=C3 pi bond forms, and the charge and odd electron end up together on oxygen. The step is therefore encoded as step_class 'hydrogen_rearrangement', following the DRAWN structures per convention A, and the book's 'rC' label is reported here rather than followed. (By contrast the earlier 'rC' at the start of row two IS a skeletal shift, so the notation itself is used consistently elsewhere -- which is what makes this instance look like a slip in the figure.) Book draws 0 arc(s); four curator-supplied moves: <1,2> build the C5-H bond from one C3-H electron plus the C5 radical, <3> puts the other C3-H electron into the forming C2=C3 pi bond, and <4> completes that pi bond with ONE electron from an oxygen lone pair -- which is precisely what leaves the oxygen with both the '+' and the odd electron the page prints on it."
+    },
+    {
+      "evidence_id": "evidence_step_c4_loss",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_c4_methyl_loss",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 250,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (upper '- CH3. (4)' arrow)"
+      },
+      "confidence": 0.6,
+      "curator_note": "Terminal branch, the UPPER of the two arrows leaving the ionised enol, labelled '- CH3.' with a '4' printed above it to say WHICH methyl is lost. The product is drawn as a hydroxy-substituted allylic cation -- an OH, a chain, and a '+' printed over a CURVE spanning three atoms to mark delocalisation -- i.e. protonated pentenone, the ion the prose names. LOCALIZATION (convention C): the delocalised drawing is stored as the single localised form C2=C3 with the '+' on C5, which is what these arrows produce; its partner is the C2(+)-OH / C3=C5 form. Book draws 0 arc(s); two curator-supplied moves, the same pairing pattern the i steps of IMS9-EQ9.25d/e use: one electron of the breaking C4-C5 bond leaves with the methyl radical <1> and the other travels through the conjugated system to the oxygen <2>, pairing with its odd electron so the product is an even-electron cation with a neutral OH. The gate reports '(soft) ... consistent with a lone pair rather than radicals' for exactly that pairing. NOTE: this ion and the fast route's acylium (IMS9-EQ9.27a) are BOTH C5H9O+ and therefore both m/z 85.0648 -- isomers, indistinguishable by mass, which is precisely why the book resorts to numbering the carbons to tell the two pathways apart."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.27b",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.27",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x). NO cross-link is claimed and NO RDKit rule-matching sweep was run for this equation -- these records were hand-authored while the extraction agents were unavailable, so absence of a cited rule means UNTESTED, not 'no rule matches'. Note for whoever does sweep it: the skeletal rC steps are 1,2-alkyl shifts, and the corpus's only indexed ring/alkyl rearrangement (benzylAllyl_mz91_91) is aromatic-only, so a counterpart is unlikely to exist."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "metastable-ion (MI) decomposition",
+    "collision_energy": null,
+    "electron_energy_ev": null,
+    "precursor_mz": 100.0883,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85_pentenone",
+      "species_id": "protonated_pentenone_mz85",
+      "step_id": "step_c4_methyl_loss",
+      "observed_mz": 85.0648,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.6
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

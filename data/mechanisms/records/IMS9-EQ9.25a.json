@@ -1,0 +1,192 @@
+{
+  "mechanism_id": "IMS9-EQ9.25a",
+  "species": [
+    {
+      "species_id": "ethylhexanal_molecular_ion",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2]([CH2:8][CH3:9])[CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "formyl_cation_mz29",
+      "mapped_smiles": "[CH:1]#[O+:7]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "heptyl_radical",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2][CH2:8][CH3:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylhexanal_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "formyl_cation_mz29",
+        "heptyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_alpha_cho",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "alpha_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "radical_orbital",
+            "atom_maps": [
+              7
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_alpha_cho",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_alpha_cho",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (top 'alpha' arrow)"
+      },
+      "confidence": 0.75,
+      "curator_note": "Substrate as drawn: the 2-ethylhexanal molecular ion, labelled 'm/z 128' under the structure. The skeleton is printed as C2H5-CH(H)-CH2-CH(C2H5)-CHO with the gamma hydrogen on C4 drawn EXPLICITLY, an aldehyde H on C1, and '+.' printed above the carbonyl oxygen. LOCALIZATION (convention B): the charge and odd electron are written on the oxygen exactly where the page prints them, [CH:1]=[O+:7], not carried only in the JSON fields. This is the TOP channel: an arrow labelled 'alpha' rising to the right from the molecular ion to 'HC≡O+ / m/z 29'. Radical-site alpha cleavage of the C1-C2 bond, charge retained on the one-carbon fragment. Book draws 0 arc(s) for this step: the arrow carries only the label 'alpha' and the product is written as the formula HC≡O+ with no structure and no fishhook anywhere on this branch. All THREE moves are therefore curator-supplied -- the canonical radical-site triple: <1> the oxygen odd electron into the forming C-O pi bond, <2> one electron of the breaking C1-C2 sigma bond into that same bond (raising C1-O7 from double to TRIPLE, which is what the printed HC≡O+ shows), <3> the other C1-C2 electron departing with the heptyl radical. MS CONTEXT: this page prints no ionisation conditions, so 70 eV EI is the corpus house default and is disclosed here rather than read off the page (the same treatment as IMS9-EQ9.19a/b and IMS8-EQ8.114). Figure 9.8 on printed p247 is the 2-ethylhexanal spectrum and would supply abundances, but it is NOT on this page and the scheme itself prints no percentage, so convention F forbids importing an intensity: every peak_assignment here carries status 'proposed' with no relative_intensity."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.25a",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries at all (by_equation covers only 4.x and 8.x), so any link is inferred rather than indexed. NO cross-link is claimed for this channel, and -- stated so it is not mistaken for a negative result -- NO RDKit rule-matching sweep was run for it. These records were hand-authored while the extraction agents were unavailable, so absence of a cited rule here means UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_29",
+      "species_id": "formyl_cation_mz29",
+      "step_id": "step_alpha_cho",
+      "observed_mz": 29.0022,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

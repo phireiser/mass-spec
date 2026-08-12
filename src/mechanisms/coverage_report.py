@@ -15,10 +15,11 @@ import json
 import re
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[2]
-RECORDS = REPO / "data/mechanisms/records"
-RULE_INDEX = REPO / "data/mechanisms/rule_index.json"
-OUT = REPO / "data/mechanisms/coverage_report.md"
+from src.project_paths import shared_path
+
+RECORDS = shared_path("MECHANISM_RECORDS_DIR_REL")
+RULE_INDEX = shared_path("MECHANISMS_DIR_REL", "rule_index.json")
+OUT = shared_path("MECHANISMS_DIR_REL", "coverage_report.md")
 
 MISMATCH_RE = re.compile(r"MISMATCH|non-conserv|hypervalent|mis-?encoded|does NOT", re.I)
 
@@ -78,6 +79,22 @@ NON_MECHANISM_PAGES = {
     264: "printed p253: Figure 9.11 alone, a rotated full-page bar spectrum of methyl "
          "3,7,11,15-tetramethylhexadecanoate. Its inset structure is again squiggle-marked with "
          "mass labels (74/101/171/241) and draws no arrows. No equation, no scheme. Read in full.",
+    268: "printed p257: running prose only (tail of the sec-butyl-acetate discussion, then 'Esters "
+         "containing other functional groups'). Zero structures, zero arcs, zero equation numbers; "
+         "it back-references Equations 9.32/9.34 and forward-references 4.41/8.81/8.83, all drawn "
+         "elsewhere. Read in full.",
+    270: "printed p259: opening of section '9.5 Acids, anhydrides, and lactones' -- running prose "
+         "only (Aliphatic acids / Aromatic acids / Anhydrides). Names many losses in words "
+         "((M - OH)+, (M - H2O)+., (M - CO2)+.) but draws no structure, no arrow and no equation "
+         "number. Read in full.",
+    271: "printed p260: Figure 9.13 (succinic anhydride bar spectrum, squiggle-marked inset with "
+         "the mass labels 28/56 and zero arrows) plus the 'Unknown 9.3' exercise (a peak table and "
+         "its bar spectrum). Exercises are explicitly out of scope and the inset is the same "
+         "arrow-free class as Figure 9.7/9.10. No numbered equation. Read in full.",
+    272: "printed p261: running prose ('Lactones', then the opening of section '9.6 Ethers') plus "
+         "Figure 9.14, the isopropyl pentyl ether bar spectrum with a squiggle-marked inset "
+         "(71/115/73/43, no arrows). It forward-references Equation 9.37, which is drawn on the "
+         "following page. No numbered equation of its own. Read in full.",
 }
 
 

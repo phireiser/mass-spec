@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS9-EQ9.26c",
+  "species": [
+    {
+      "species_id": "methylheptanone_molecular_ion",
+      "mapped_smiles": "[CH3:1][C:2](=[O+:9])[CH2:3][CH2:4][CH:5]([1H:10])[CH:6]([CH3:7])[CH3:8]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "hexyl_cation_mz85",
+      "mapped_smiles": "[CH2+:3][CH2:4][CH:5]([1H:10])[CH:6]([CH3:7])[CH3:8]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "acetyl_radical",
+      "mapped_smiles": "[CH3:1][C:2]=[O:9]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "methylheptanone_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "hexyl_cation_mz85",
+        "acetyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              9
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 249,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (long horizontal 'i' arrow)"
+      },
+      "confidence": 0.7,
+      "curator_note": "Substrate as drawn: a 2-alkanone molecular ion printed as C3H7-CH(H)-CH2-CH2-C(=O)-CH3 with the gamma hydrogen on C5 drawn EXPLICITLY and '+.' printed above the carbonyl oxygen. INSTANTIATION of the condensed 'C3H7' label (the page does not draw it out): it is taken as ISOPROPYL, making the compound 6-methyl-2-heptanone. That is not a guess -- the running text introducing this scheme rationalises 'the characteristic peaks in ... 6-methyl-2-heptanone (Figure 9.9)' and names 'a pair of acylium ions (m/z 113 and 43 in Figure 9.9) and a pair of alkyl ions (m/z 85 and 15)', which are exactly this equation's products. n-Propyl would give 2-octanone, an isomer with identical nominal masses at every step, so the drawing alone cannot distinguish them and the text is what settles it. LOCALIZATION (convention B): charge and odd electron are written on the oxygen where the page prints them, [C:2]=[O+:9]. Book draws 0 arc(s) on the molecular ion -- there is no fishhook anywhere on it; every arrow leaving it carries only a label. THIRD channel: the long horizontal arrow labelled with an italic 'i' running straight from the molecular ion to 'C6H13+ / m/z 85'. Charge-site-initiated cleavage of the SAME C2-C3 bond that the m/z 43 alpha channel breaks, but with the charge MIGRATING to the alkyl fragment: C6H13+ plus the neutral acetyl radical CH3-C(=O)., the complement of that channel's CH3CO+ / C6H13. pair. Note the page reaches m/z 85 by two different routes -- this one directly, and via CO loss from m/z 113 (IMS9-EQ9.26b) -- and draws both. Book draws 0 arc(s) and no product structure, so both moves are curator-supplied. ENCODING (why two one-electron moves rather than one 2-electron arrow): the precursor is an ODD-electron ion with charge AND radical on oxygen, while the products are an even-electron cation plus a neutral radical, so the oxygen must finish neutral and spin-paired. One electron of the breaking bond pairs with the oxygen's odd electron (move <1>) and the other stays on C2 as the acetyl radical's unpaired electron (move <2>); C3, having lost both, becomes the cation. The gate reports this as '(soft) ... consistent with a lone pair rather than radicals', which is the expected signature of that pairing, not a defect."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.26c",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.26",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries (by_equation covers only 4.x and 8.x), so any link would be inferred rather than indexed. NO cross-link is claimed and -- stated so it is not mistaken for a negative result -- NO RDKit rule-matching sweep was run for this channel: these records were hand-authored while the extraction agents were unavailable. Absence of a cited rule here means UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_85_direct",
+      "species_id": "hexyl_cation_mz85",
+      "step_id": "step_inductive",
+      "observed_mz": 85.1012,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS9-EQ9.25e",
+  "species": [
+    {
+      "species_id": "ethylhexanal_molecular_ion",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2]([CH2:8][CH3:9])[CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "butyl_cation_mz57",
+      "mapped_smiles": "[CH2+:3][CH:4]([1H:10])[CH2:5][CH3:6]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "oxo_butyl_radical",
+      "mapped_smiles": "[CH:2]([CH2:8][CH3:9])[CH:1]=[O:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylhexanal_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "butyl_cation_mz57",
+        "oxo_butyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_sigma",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "sigma_dissociation",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              2,
+              3
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              2
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_sigma",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_sigma",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (arrow labelled 'sigma')"
+      },
+      "confidence": 0.65,
+      "curator_note": "Substrate as drawn: the 2-ethylhexanal molecular ion, labelled 'm/z 128' under the structure. The skeleton is printed as C2H5-CH(H)-CH2-CH(C2H5)-CHO with the gamma hydrogen on C4 drawn EXPLICITLY, an aldehyde H on C1, and '+.' printed above the carbonyl oxygen. LOCALIZATION (convention B): the charge and odd electron are written on the oxygen exactly where the page prints them, [CH:1]=[O+:7], not carried only in the JSON fields. Bottom channel: the arrow labelled with a Greek sigma running down-right to the FORMULA 'C4H9+ / m/z 57'. Book draws 0 arc(s) and no product structure, so both moves are curator-supplied. WHICH BUTYL -- this is forced, not chosen: the only four-carbon alkyl in 2-ethylhexanal is C3-C4-C5-C6 (the ethyl branch plus C2 is three carbons), so the cleaved bond must be C2-C3 and the neutral partner is the C4H7O. radical .CH(C2H5)CH=O (71.0497). ENCODING: as in the 'i' channel the oxygen must finish neutral and spin-paired, so the two electrons of the breaking C2-C3 bond are routed one to the oxygen (pairing with its odd electron, move <1>) and one to C2 (the neutral radical's unpaired electron, move <2>), leaving C3 as the butyl cation. CAVEAT, disclosed: the book's sigma label properly denotes ionisation OF the sigma bond, i.e. a charge that was never localised on oxygen at all; this record instead starts from the O-localised molecular ion the page actually DRAWS, which is the same convention IMS9-EQ9.2 adopted for the sigma channel of an alkane. NOTE: 'm/z 57' here is C4H9+ (57.0699), a DIFFERENT ion from the C3H5O+ (57.0335) that the page also labels m/z 57 in the two rearrangement branches -- see IMS9-EQ9.25b and IMS9-EQ9.25c."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.25e",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries at all (by_equation covers only 4.x and 8.x), so any link is inferred rather than indexed. NO cross-link is claimed for this channel, and -- stated so it is not mistaken for a negative result -- NO RDKit rule-matching sweep was run for it. These records were hand-authored while the extraction agents were unavailable, so absence of a cited rule here means UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_57_hydrocarbon",
+      "species_id": "butyl_cation_mz57",
+      "step_id": "step_sigma",
+      "observed_mz": 57.0699,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}

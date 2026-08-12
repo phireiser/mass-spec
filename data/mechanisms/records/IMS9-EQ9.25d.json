@@ -1,0 +1,175 @@
+{
+  "mechanism_id": "IMS9-EQ9.25d",
+  "species": [
+    {
+      "species_id": "ethylhexanal_molecular_ion",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH:2]([CH2:8][CH3:9])[CH:1]=[O+:7]",
+      "role": "precursor_ion",
+      "charge": 1,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    },
+    {
+      "species_id": "heptyl_cation_mz99",
+      "mapped_smiles": "[CH3:6][CH2:5][CH:4]([1H:10])[CH2:3][CH+:2][CH2:8][CH3:9]",
+      "role": "product_ion",
+      "charge": 1,
+      "radical_electrons": 0,
+      "spin_multiplicity": 1,
+      "detected": true
+    },
+    {
+      "species_id": "formyl_radical",
+      "mapped_smiles": "[CH:1]=[O:7]",
+      "role": "neutral_radical",
+      "charge": 0,
+      "radical_electrons": 1,
+      "spin_multiplicity": 2,
+      "detected": false
+    }
+  ],
+  "states": [
+    {
+      "state_id": "state_precursor",
+      "species_ids": [
+        "ethylhexanal_molecular_ion"
+      ]
+    },
+    {
+      "state_id": "state_products",
+      "species_ids": [
+        "heptyl_cation_mz99",
+        "formyl_radical"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_inductive",
+      "from_state": "state_precursor",
+      "to_state": "state_products",
+      "step_class": "inductive_cleavage",
+      "semantics": "formal_arrow_step",
+      "electron_moves": [
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              7
+            ]
+          },
+          "electron_count": 1
+        },
+        {
+          "source": {
+            "type": "bond",
+            "atom_maps": [
+              1,
+              2
+            ]
+          },
+          "target": {
+            "type": "atom",
+            "atom_maps": [
+              1
+            ]
+          },
+          "electron_count": 1
+        }
+      ],
+      "reaction_smirks": null,
+      "reversible": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "mclafferty_ims_4e",
+      "source_type": "book",
+      "citation": "McLafferty & Turecek, Interpretation of Mass Spectra, 4th ed., University Science Books, 1993",
+      "doi": null,
+      "isbn": "0-935702-25-3",
+      "url": null
+    },
+    {
+      "source_id": "mod_rules",
+      "source_type": "software_output",
+      "citation": "MØD Rule.fromDFS encodings in src/data_generation/rules/ (German-edition provenance)",
+      "doi": null,
+      "isbn": null,
+      "url": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_step_inductive",
+      "source_id": "mclafferty_ims_4e",
+      "target_type": "step",
+      "target_id": "step_inductive",
+      "support_type": "textbook_proposed",
+      "locator": {
+        "page": 248,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "9.3 Aldehydes and ketones (arrow labelled 'i')"
+      },
+      "confidence": 0.7,
+      "curator_note": "Substrate as drawn: the 2-ethylhexanal molecular ion, labelled 'm/z 128' under the structure. The skeleton is printed as C2H5-CH(H)-CH2-CH(C2H5)-CHO with the gamma hydrogen on C4 drawn EXPLICITLY, an aldehyde H on C1, and '+.' printed above the carbonyl oxygen. LOCALIZATION (convention B): the charge and odd electron are written on the oxygen exactly where the page prints them, [CH:1]=[O+:7], not carried only in the JSON fields. Fourth channel: the arrow labelled with an italic 'i' running down-right to the FORMULA 'C4H9(C2H5)CH+ / m/z 99'. Charge-site-initiated (inductive) cleavage of the same C1-C2 bond that the alpha channel breaks, but with the charge MIGRATING to the alkyl fragment: C7H15+ (99.1168) plus the neutral formyl radical HC=O., the complement of the alpha channel's HC≡O+ / C7H15. pair. Book draws 0 arc(s) and NO product structure -- only the condensed formula -- so both moves are curator-supplied. ENCODING (the reason this is two one-electron moves and not one two-electron arrow): the precursor is an ODD-ELECTRON ion whose charge and radical both sit on oxygen, while the products are an even-electron cation and a neutral radical. The oxygen must therefore END neutral and spin-paired, so one electron of the breaking C1-C2 bond pairs with the oxygen's odd electron (move <1>) and the other stays on C1 as the formyl radical's unpaired electron (move <2>); C2, having lost both, becomes the cation. A single 2-electron arrow cannot express that, because it would leave the oxygen charged."
+    },
+    {
+      "evidence_id": "evidence_mechanism_mod",
+      "source_id": "mod_rules",
+      "target_type": "mechanism",
+      "target_id": "IMS9-EQ9.25d",
+      "support_type": "curator_inferred",
+      "locator": {
+        "page": null,
+        "equation": "9.25",
+        "figure": null,
+        "panel": null,
+        "section": "src/data_generation/rules/"
+      },
+      "confidence": 0.4,
+      "curator_note": "data/mechanisms/rule_index.json has NO chapter-9 entries at all (by_equation covers only 4.x and 8.x), so any link is inferred rather than indexed. NO cross-link is claimed for this channel, and -- stated so it is not mistaken for a negative result -- NO RDKit rule-matching sweep was run for it. These records were hand-authored while the extraction agents were unavailable, so absence of a cited rule here means UNTESTED, not 'no rule matches'."
+    }
+  ],
+  "ms_context": {
+    "ionization_method": "EI",
+    "polarity": "positive",
+    "adduct": "[M]+•",
+    "activation_method": "70 eV EI",
+    "collision_energy": null,
+    "electron_energy_ev": 70.0,
+    "precursor_mz": 128.1196,
+    "precursor_charge": 1,
+    "instrument_type": "unspecified"
+  },
+  "peak_assignments": [
+    {
+      "peak_id": "peak_99",
+      "species_id": "heptyl_cation_mz99",
+      "step_id": "step_inductive",
+      "observed_mz": 99.1168,
+      "hydrogen_shift": 0,
+      "isotope_offset": 0,
+      "status": "proposed",
+      "confidence": 0.7
+    }
+  ],
+  "curation": {
+    "schema_version": "1.0.0",
+    "record_version": 1,
+    "extraction_method": "manual_from_scan",
+    "review_status": "unreviewed",
+    "created_at": "2026-08-04T00:00:00Z",
+    "modified_at": "2026-08-04T00:00:00Z"
+  }
+}
