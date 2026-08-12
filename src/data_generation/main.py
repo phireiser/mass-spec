@@ -84,6 +84,15 @@ parser.add_argument("--migration-tail-cap", type=int, default=strategy.DEFAULT_T
                          "1.20x the species, 1.69x the wall and 1.81x the isomorphism calls of "
                          "cap 2 for exactly one extra mass (progesterone m/z 86, +0.1%% of NIST "
                          "intensity), so raising it buys very little.")
+parser.add_argument("--rule-fraction", type=float, default=1.0, metavar="F",
+                    help="COST INSTRUMENT ONLY -- keep a random fraction F of the fragmentation "
+                         "rules. The resulting spectrum is WRONG by construction; this exists "
+                         "solely to measure how build cost scales with library size for the "
+                         "Stage-0 cost model (docs/PHASE2_PLAN.md), since the selective-teacher "
+                         "gate is N*(|R|, guard) and the library is growing. Default 1.0 = all.")
+parser.add_argument("--rule-seed", type=int, default=0, metavar="S",
+                    help="Seed for --rule-fraction, so a cost-model arm is reproducible and "
+                         "different seeds give independent draws of the same fraction.")
 parser.add_argument("--subgroup-diag", action="store_true", help="Enable subgroup diagnostics")
 parser.add_argument("--mem-diag", type=str, default=None, metavar="CSV",
                     help="Localise the exploding derivation: log per-derivation peak-RSS growth "
@@ -152,6 +161,21 @@ fragmentation_term_fwd = [
     utils.term_from_rule(r)
     for r in utils.apply_constraints(fragmentation, aoc)
 ]
+
+# COST-MODEL INSTRUMENT, not a chemistry knob. `docs/PHASE2_PLAN.md` Stage 0 needs cost as a
+# function of rule-library size, because the selective-teacher gate is N*(|R|, guard) and the
+# library is growing (28 rules pending re-authoring, 358 curated records). Subsampling the
+# library obviously produces a WRONG spectrum -- it is only ever valid for measuring how build
+# cost scales with |R|. Deterministic in the seed so an arm is reproducible, and it samples
+# after apply_constraints so the fraction is of the rules that actually apply to THIS molecule.
+if args.rule_fraction < 1.0:
+    import random as _random
+    keep = max(1, round(len(fragmentation_term_fwd) * args.rule_fraction))
+    fragmentation_term_fwd = _random.Random(args.rule_seed).sample(
+        fragmentation_term_fwd, keep)
+    print(f"RULE SUBSAMPLE (cost instrument, spectrum is INVALID): "
+          f"{keep} of {len(fragmentation)} fragmentation rules, "
+          f"fraction {args.rule_fraction}, seed {args.rule_seed}")
 # Migration rules are authored directly in term mode (independent element/radical/bond
 # variables the DFS->term_from_rule path cannot express), so they skip apply_constraints
 # and term_from_rule. Restrict the migrating-onto atom to this molecule's occurring heavy
