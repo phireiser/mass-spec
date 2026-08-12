@@ -22,7 +22,7 @@ available, and ranking metrics are computed over the scored candidates only.
 Needs ``mod`` (loads DGs) + ``pyarrow``/``rdkit`` (store + formula grouping), so it
 runs inside ``mol-spectro.sif`` via ``run/analysis/score_forward.sh``.
 
-Outputs (under ``--out-dir``, default ``outputs/metrics``):
+Outputs (under ``--out-dir``, default ``data/outputs/metrics``):
   * ``forward_discrimination_per_target.csv``
   * ``forward_discrimination_summary.json``
 """
@@ -56,8 +56,14 @@ def predicted_vector(stems: List[str], fwd_dir: Path, *, weighted: bool) -> Opti
         if not stem or not utils.dump_is_complete(stem, path=fwd_dir):
             continue
         try:
-            dg = utils.load_derivation_graph(stem, path=fwd_dir)
-            spectra = utils.get_spectra_from_mod_derivation_graph(dg)
+            # Read the species out of the .pkl rather than loading the DG. Loading registers
+            # every species in mod's process-global graph database, so cost grows with
+            # everything loaded so far: scoring the full decoy set that way reached 14 GB RSS
+            # and decayed from 17 targets/hour to 22 targets/day. Verified to return identical
+            # masses AND occurrences on benzene/toluene/catechol/butyric acid/anthracene, at
+            # 100-300x the speed. The DG is only needed for per-peak rule provenance, which
+            # this function discards anyway.
+            spectra = utils.get_spectra_from_dump(stem, path=fwd_dir)
         except Exception:  # noqa: BLE001 - a truncated/odd dump must not kill the run
             continue
         if not spectra:
@@ -272,7 +278,10 @@ def main() -> None:
     for ss in form2structs.values():
         for s in ss:
             k = s["inchikey"]
-            stems = [s["cas"]]
+            # EVERY registry alias, not just the first store row: a dump is named by the
+            # CAS `get_cas_by_smiles` returns, and for same-structure collisions that is
+            # often a sibling row. Taking stems[0] alone hid 32 decoys that were on disk.
+            stems = list(s.get("cas_all") or [s["cas"]])
             if k in target_key2name:
                 stems.append(target_key2name[k])
             stems.append(f"decoy_{k}")

@@ -41,6 +41,14 @@ def load_structures_with_spectra(parquet_dir: Path):
     recomputed key removes those and the name collisions they cause. Rows with an
     explicit isotope in the SMILES, or whose RDKit formula disagrees with the store
     formula, are dropped as unsuitable same-formula decoys.
+
+    Each entry carries ``cas`` (the first row's) **and** ``cas_all`` (every CAS the store
+    files under that structure). Both are needed: the store has same-structure rows under
+    distinct registry numbers, and a dump is named by whichever CAS
+    ``utils.get_cas_by_smiles`` returns -- not necessarily the first row seen here. Keying
+    dump lookup on ``cas`` alone made the forward scorer miss 32 decoys that were on disk
+    the whole time, which silently inflates top-1 (an unscored decoy cannot outrank the
+    true structure).
     """
     import pyarrow.parquet as pq
     from rdkit import Chem
@@ -50,7 +58,7 @@ def load_structures_with_spectra(parquet_dir: Path):
     spec_ids = set(pq.read_table(parquet_dir / "spectra.parquet").to_pandas()["nist_id"])
 
     form2structs: Dict[str, List[dict]] = defaultdict(list)
-    seen: set = set()
+    seen: Dict[str, dict] = {}
     for r in idx.to_dict("records"):
         if r["nist_id"] not in spec_ids:
             continue
@@ -69,13 +77,17 @@ def load_structures_with_spectra(parquet_dir: Path):
             continue  # CAS is the identifier every dump is named by; no CAS => unusable
         key = Chem.MolToInchiKey(mol)
         if key in seen:
+            aliases = seen[key]["cas_all"]      # same structure, second registry number
+            if cas not in aliases:
+                aliases.append(cas)
             continue
-        seen.add(key)
-        form2structs[rd_formula].append({
-            "inchikey": key, "cas": cas, "smiles": Chem.MolToSmiles(mol),
+        entry = {
+            "inchikey": key, "cas": cas, "cas_all": [cas], "smiles": Chem.MolToSmiles(mol),
             "formula": rd_formula, "name": _str(r.get("name")),
             "nheavy": mol.GetNumHeavyAtoms(),
-        })
+        }
+        seen[key] = entry
+        form2structs[rd_formula].append(entry)
     return dict(form2structs)
 
 
@@ -110,7 +122,7 @@ def main() -> None:
             continue
         s = key2struct.get(Chem.MolToInchiKey(m))
         if s:
-            target_cas.add(s["cas"])
+            target_cas.update(s["cas_all"])
 
     decoys: Dict[str, dict] = {}   # keyed by CAS
     n_targets_with_decoy = 0
@@ -128,8 +140,10 @@ def main() -> None:
         for d in group:
             decoys.setdefault(d["cas"], d)
 
+    # Any registry alias having a dump means the structure is already generated -- checking
+    # only d["cas"] re-queues structures that are on disk under a sibling CAS.
     need = [d for d in decoys.values()
-            if d["cas"] not in target_cas and d["cas"] not in have_dump]
+            if not (set(d["cas_all"]) & target_cas) and not (set(d["cas_all"]) & have_dump)]
     need.sort(key=lambda d: (d["nheavy"] if d["nheavy"] is not None else 99, d["cas"]))
 
     def write(rows: List[dict], path: Path) -> None:
