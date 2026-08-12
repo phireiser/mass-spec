@@ -21,7 +21,7 @@ set -euo pipefail
 
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
 REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
-source "$REPO_ROOT/src/paths.env"
+set -a; source "$REPO_ROOT/src/paths.env"; set +a
 
 EPOCHS_FWD="${EPOCHS_FWD:-500}"
 EPOCHS_BWD="${EPOCHS_BWD:-500}"
@@ -30,10 +30,10 @@ TRIAL_TIMEOUT="${TRIAL_TIMEOUT:-3600}"
 # Optional Weights & Biases tracking: each Optuna trial becomes its own run
 # (online-first, offline fallback), grouped together so the sweep is browsable.
 WANDB_GROUP_PREFIX="optuna"
-source "$REPO_ROOT/run/hpc/wandb_setup.sh"
+source "$REPO_ROOT/$RUN_DIR_REL/hpc/wandb_setup.sh"
 
 mkdir -p "$REPO_ROOT/$BEST_PARAMS_DIR_REL"
-mkdir -p "$REPO_ROOT/$LOGS_DIR_REL/optim"
+mkdir -p "$REPO_ROOT/$OPTIM_LOG_DIR_REL"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
 
 echo "======================================================================"
@@ -42,7 +42,7 @@ echo "======================================================================"
 echo "Epochs (forward): $EPOCHS_FWD"
 echo "Epochs (backward): $EPOCHS_BWD"
 echo "Per-trial timeout: ${TRIAL_TIMEOUT}s"
-echo "SIF: $SIF"
+echo "SIF: $REPO_ROOT/$SIF_REL"
 echo "Started: $(date)"
 echo "======================================================================"
 
@@ -56,13 +56,13 @@ apptainer exec --nv \
     --env EPOCHS_BWD="$EPOCHS_BWD" \
     --env TRIAL_TIMEOUT="$TRIAL_TIMEOUT" \
     "${WANDB_ENV[@]}" \
-    "$SIF" \
+    "$REPO_ROOT/$SIF_REL" \
     python "$C_SRC/machine_learning/optimization/hyperparameter_optimization.py" \
       --epochs_fwd "$EPOCHS_FWD" \
       --epochs_bwd "$EPOCHS_BWD" \
       --trial_timeout "$TRIAL_TIMEOUT" \
       --train_script "$C_SRC/machine_learning/main.py" \
-      --output_dir "$C_OUTPUTS/best_params" \
+      --output_dir "$C_BEST_PARAMS" \
       "${WANDB_ARGS[@]}"
 
 echo "======================================================================"

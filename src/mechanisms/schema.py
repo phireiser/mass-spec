@@ -824,7 +824,10 @@ if __name__ == "__main__":
     for report in mechanism.validate_chemistry():
         print(report.model_dump_json(indent=2))
 
-    mechanism.to_json_file("example_mechanism.json")
+    # Write beside the canonical committed copies rather than into the CWD.
+    from src.project_paths import shared_path
+
+    mechanism.to_json_file(str(shared_path("MECHANISMS_DIR_REL", "example_mechanism.json")))
     MechanismRecord.write_json_schema(
-        "mechanism_schema.json"
+        str(shared_path("MECHANISMS_DIR_REL", "mechanism_schema.json"))
     )

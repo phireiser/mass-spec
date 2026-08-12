@@ -14,7 +14,7 @@ set -euo pipefail
 # Use SLURM_SUBMIT_DIR to find original location (works when SLURM copies script to compute node)
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
 REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
-source "$REPO_ROOT/src/paths.env"
+set -a; source "$REPO_ROOT/src/paths.env"; set +a
 
 # Optional output-dir override, so an experimental ruleset can be rebuilt into a
 # side directory without clobbering the baseline dumps in data/processed. Same
@@ -48,11 +48,12 @@ JOB_GROUP_ID="${SLURM_ARRAY_JOB_ID:-}"
 if [ -z "$JOB_GROUP_ID" ]; then
   JOB_GROUP_ID="${SLURM_JOB_ID:-local}"
 fi
-LOG_DIR="$REPO_ROOT/$LOGS_DIR_REL/data_gen/slurm/${JOB_GROUP_ID}"
+LOG_DIR="$REPO_ROOT/$DATAGEN_LOG_DIR_REL/${JOB_GROUP_ID}"
 
 mkdir -p "$LOG_DIR"
-mkdir -p "$DATADIR/fwd"
-mkdir -p "$DATADIR/bwd"
+# Leaf names from paths.env: $DATADIR may be a PROCESSED_DIR_OVERRIDE side tree.
+mkdir -p "$DATADIR/${FWD_DIR_REL##*/}"
+mkdir -p "$DATADIR/${BWD_DIR_REL##*/}"
 # Bind-mount targets must exist on host before apptainer mounts them. The Parquet store is
 # INPUT data, not a generated output, so it lives at data/nist_spectra and needs its own bind:
 # this script does not mount data/ wholesale (only data/processed via $C_PROCESSED), so it is
@@ -118,7 +119,7 @@ apptainer exec \
     --env MKL_NUM_THREADS="$THREADS" \
     --env OPENBLAS_NUM_THREADS="$THREADS" \
     --env NUMEXPR_NUM_THREADS="$THREADS" \
-    "$SIF" \
+    "$REPO_ROOT/$SIF_REL" \
     python "$C_SRC/data_generation/main.py" \
       --smiles "$SMILES" \
       --name "$NAME" \

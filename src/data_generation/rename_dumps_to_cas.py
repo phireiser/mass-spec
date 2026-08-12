@@ -23,7 +23,7 @@ from typing import Dict, List
 
 from src.data_generation import utils
 from src.data_generation.analysis.discrimination import build_decoy_set as bds
-from src.project_paths import shared_path
+from src.project_paths import shared_name, shared_path
 
 SUFFIXES = (".pkl", ".dmp", ".done")
 CAS_RE = re.compile(r"^\d{2,7}-\d{2}-\d$")
@@ -69,7 +69,7 @@ def build_resolver(compounds_csv: Path, parquet_dir: Path):
 def plan_renames(processed_dir: Path, resolve):
     """Yield (subdir, stem, cas|None) for every dump group that needs renaming."""
     plans = []
-    for sub in ("fwd", "bwd"):
+    for sub in (shared_name("FWD_DIR_REL"), shared_name("BWD_DIR_REL")):
         d = processed_dir / sub
         if not d.is_dir():
             continue

@@ -25,14 +25,15 @@ import json
 import re
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-RULES_DIR = REPO_ROOT / "src/data_generation/rules"
+from src.project_paths import REPO_ROOT, shared_path
+
+RULES_DIR = shared_path("RULES_DIR_REL")
 DEFAULT_FILES = [
     RULES_DIR / "IMS_chap4_examples.py",
     RULES_DIR / "IMS_chap8_examples.py",
     RULES_DIR / "IMS_bookCover.py",
 ]
-DEFAULT_OUT = REPO_ROOT / "data/mechanisms/rule_index.json"
+DEFAULT_OUT = shared_path("MECHANISMS_DIR_REL", "rule_index.json")
 
 _SEITE = re.compile(r"Seite\s+(\d+)")
 _GL = re.compile(r"Gl\.\s*(\d+\.\d+)")

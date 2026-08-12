@@ -10,8 +10,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-ROOT = Path(__file__).resolve().parent
-CSV_PATH = ROOT / "MolecuelProcessingTimeTableComplexety.csv"
+from src.project_paths import shared_path
+
+CSV_PATH = shared_path("METRICS_DIR_REL", "MolecuelProcessingTimeTableComplexety.csv")
 
 # Load data
 xs, ys = [], []

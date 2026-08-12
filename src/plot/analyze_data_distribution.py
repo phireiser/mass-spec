@@ -8,9 +8,10 @@ from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[2]
-CSV_PATH = ROOT / "data" / "outputs" / "metrics" / "MolecuelProcessingTimeTableComplexety.csv"
-PLOT_PATH = ROOT / "data" / "outputs" / "plots" / "data_distribution_analysis.svg"
+from src.project_paths import shared_path
+
+CSV_PATH = shared_path("METRICS_DIR_REL", "MolecuelProcessingTimeTableComplexety.csv")
+PLOT_PATH = shared_path("PLOTS_DIR_REL", "data_distribution_analysis.svg")
 
 # Load data
 xs, ys = [], []

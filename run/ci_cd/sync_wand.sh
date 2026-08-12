@@ -12,9 +12,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$REPO_ROOT/src/paths.env"
+set -a; source "$REPO_ROOT/src/paths.env"; set +a
 
-WANDB_SECRET_FILE="${WANDB_SECRET_FILE:-$REPO_ROOT/.secrets/wandb.env}"
+WANDB_SECRET_FILE="${WANDB_SECRET_FILE:-$REPO_ROOT/$SECRETS_FILE_REL}"
 if [ -f "$WANDB_SECRET_FILE" ]; then
   # shellcheck disable=SC1090
   source "$WANDB_SECRET_FILE"   # must export WANDB_API_KEY
@@ -23,7 +23,7 @@ else
   exit 1
 fi
 
-WANDB_RUNS_DIR="$REPO_ROOT/$OUTPUTS_DIR_REL/wandb"
+WANDB_RUNS_DIR="$REPO_ROOT/$WANDB_DIR_REL"
 if [ ! -d "$WANDB_RUNS_DIR" ]; then
   echo "No wandb directory at $WANDB_RUNS_DIR; nothing to sync."
   exit 0
@@ -45,7 +45,7 @@ apptainer exec \
     --env WANDB_API_KEY="${WANDB_API_KEY:-}" \
     --env WANDB_MODE=online \
     --env WANDB_DIR="$C_OUTPUTS" \
-    "$REPO_ROOT/$SIF" \
-    wandb sync --sync-all "$C_OUTPUTS/wandb"
+    "$REPO_ROOT/$SIF_REL" \
+    wandb sync --sync-all "$C_WANDB"
 
 echo "Sync complete."

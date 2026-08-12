@@ -235,7 +235,7 @@ def write_csv(rows: List[Dict[str, object]], path: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="MØD explainability ceiling (feasibility study)")
-    parser.add_argument("--fwd-dir", type=str, default=str(shared_path("PROCESSED_DIR_REL", "fwd")),
+    parser.add_argument("--fwd-dir", type=str, default=str(shared_path("FWD_DIR_REL")),
                         help="Directory of forward DG dumps (.dmp/.pkl)")
     parser.add_argument("--spectra-folder", type=str, default=str(shared_path("PARQUET_DIR_REL")),
                         help="Directory of the NIST spectra Parquet store")

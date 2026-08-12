@@ -10,7 +10,6 @@ import mod
 from src.data_generation import utils
 from src.data_generation.analysis import describe, printing
 from src.data_generation.rules import fragmentation, ionization
-from src.project_paths import shared_path
 
 
 

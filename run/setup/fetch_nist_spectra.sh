@@ -13,7 +13,7 @@ set -euo pipefail
 MAX_MW="${1:-1000}"
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-source "$REPO_ROOT/src/paths.env"
+set -a; source "$REPO_ROOT/src/paths.env"; set +a
 
 # Bind-mount target must exist on host before apptainer mounts it
 mkdir -p "$REPO_ROOT/$PARQUET_DIR_REL"
@@ -23,7 +23,7 @@ apptainer exec \
   --bind "$REPO_ROOT/$PARQUET_DIR_REL:$C_PARQUET" \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --env PYTHONPATH="$C_APP:$C_SRC" \
-  "$SIF" \
+  "$REPO_ROOT/$SIF_REL" \
   python $C_SRC/data_generation/build_parquet_index.py \
   --max-mw "$MAX_MW" \
   --out-dir "$C_PARQUET" \

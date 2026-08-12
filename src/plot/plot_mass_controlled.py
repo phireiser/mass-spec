@@ -35,6 +35,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from src.project_paths import shared_path
+
 LEARNED_COLOR = "#3b6fb0"
 CHANCE_COLOR = "#b0b0b0"
 
@@ -109,7 +111,7 @@ def main() -> None:
     parser.add_argument(
         "--csv",
         type=Path,
-        default=Path("data/outputs/metrics/mass_controlled.csv"),
+        default=shared_path("METRICS_DIR_REL", "mass_controlled.csv"),
         help="Path to the mass-controlled scorecard CSV.",
     )
     parser.add_argument(
@@ -121,7 +123,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("data/outputs/plots"),
+        default=shared_path("PLOTS_DIR_REL"),
         help="Directory for the output plot.",
     )
     args = parser.parse_args()

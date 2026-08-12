@@ -40,7 +40,7 @@ import sys
 from pathlib import Path
 
 from src.data_generation import utils
-from src.project_paths import shared_path
+from src.project_paths import shared_name, shared_path
 
 
 def mass_profile(stem: str, fwd_dir: Path):
@@ -104,12 +104,18 @@ def compare(name: str, smiles: str, uncapped_dir: Path, capped_dir: Path, parque
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--definition", default="data/cap_validation.csv",
+    ap.add_argument("--definition",
+                    default=str(shared_path("DATA_DIR_REL", "cap_validation.csv")),
                     help="name,smiles,category CSV of the molecules to check")
-    ap.add_argument("--uncapped-dir", default=str(shared_path("PROCESSED_DIR_REL", "fwd")))
-    ap.add_argument("--capped-dir", default="data/processed_capval/fwd")
+    ap.add_argument("--uncapped-dir", default=str(shared_path("FWD_DIR_REL")))
+    # Side rebuild dir for the capped arm; an experiment input, so it stays a CLI
+    # arg -- only the default is anchored to the configured processed root.
+    ap.add_argument("--capped-dir",
+                    default=str(shared_path("DATA_DIR_REL", "processed_capval",
+                                            shared_name("FWD_DIR_REL"))))
     ap.add_argument("--spectra-folder", default=str(shared_path("PARQUET_DIR_REL")))
-    ap.add_argument("--out", default="data/outputs/metrics/cap_validation.json")
+    ap.add_argument("--out",
+                    default=str(shared_path("METRICS_DIR_REL", "cap_validation.json")))
     args = ap.parse_args()
 
     uncapped, capped = Path(args.uncapped_dir), Path(args.capped_dir)

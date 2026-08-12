@@ -62,6 +62,8 @@ from typing import Dict, List
 import matplotlib.pyplot as plt
 import numpy as np
 
+from src.project_paths import shared_path
+
 MAX_K = 20
 
 # The report includes figures as PDF (\includegraphics); LISC has no Inkscape,
@@ -520,19 +522,19 @@ def main() -> None:
     parser.add_argument(
         "--summary-csv",
         type=Path,
-        default=Path("../../data/outputs/metrics/metrics_main.csv"),
+        default=shared_path("METRICS_DIR_REL", "metrics_main.csv"),
         help="Path to summary metrics CSV.",
     )
     parser.add_argument(
         "--per-query-csv",
         type=Path,
-        default=Path("../../data/outputs/metrics/metrics_per_query.csv"),
+        default=shared_path("METRICS_DIR_REL", "metrics_per_query.csv"),
         help="Optional path to per-query metrics CSV. Required for confidence intervals.",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("../../data/outputs/plots"),
+        default=shared_path("PLOTS_DIR_REL"),
         help="Directory for output plots.",
     )
     parser.add_argument(

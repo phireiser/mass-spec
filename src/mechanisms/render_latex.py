@@ -54,6 +54,8 @@ import sys
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem
 
+from src.project_paths import shared_path
+
 RDLogger.DisableLog("rdApp.*")
 
 # chemfig bond glyph per RDKit bond order. Aromatic never appears: we Kekulize first,
@@ -474,7 +476,7 @@ def document(bodies: list[str], title: str) -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--records-dir", default="data/mechanisms/records")
+    ap.add_argument("--records-dir", default=str(shared_path("MECHANISM_RECORDS_DIR_REL")))
     ap.add_argument("--id", action="append", default=[], help="mechanism_id (repeatable)")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--limit", type=int, default=0)

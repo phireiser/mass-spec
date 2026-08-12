@@ -8,13 +8,23 @@ export const meta = {
 }
 
 const REPO = '/lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol'
-const PAGES_DIR = REPO + '/data/IMS-Book/pages'
-const RECORDS_DIR = REPO + '/data/mechanisms/records'
+
+// MIRROR OF src/paths.env -- must be kept in sync by hand.
+// Workflow scripts run without filesystem or Node API access, so this file cannot
+// parse paths.env the way src/project_paths.py does. The values below are instead
+// asserted against paths.env by src/tests/unit_test_project_paths.py, so a drift
+// fails the unit suite rather than silently pointing agents at the wrong directory.
+const BOOK_PAGES_DIR_REL = 'data/IMS-Book/pages'
+const MECHANISMS_DIR_REL = 'data/mechanisms'
+const MECHANISM_RECORDS_DIR_REL = 'data/mechanisms/records'
+
+const PAGES_DIR = REPO + '/' + BOOK_PAGES_DIR_REL
+const RECORDS_DIR = REPO + '/' + MECHANISM_RECORDS_DIR_REL
 // Gitignored scratch root. Records stage here before promotion, and every agent's working
 // files (page crops, measurement scripts) live here too -- see workingFiles() below.
-const STAGING = REPO + '/data/mechanisms/.staging'
-const EXAMPLE = REPO + '/data/mechanisms/example_mechanism.json'
-const RULE_INDEX = REPO + '/data/mechanisms/rule_index.json'
+const STAGING = REPO + '/' + MECHANISMS_DIR_REL + '/.staging'
+const EXAMPLE = REPO + '/' + MECHANISMS_DIR_REL + '/example_mechanism.json'
+const RULE_INDEX = REPO + '/' + MECHANISMS_DIR_REL + '/rule_index.json'
 
 // args: { pages: [70, 72, ...] }  -- PDF page indices already dumped to PAGES_DIR.
 // args may arrive as an object OR as a JSON-encoded string; handle both, and fail loudly

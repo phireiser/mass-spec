@@ -243,7 +243,7 @@ def write_csv(rows: List[Dict[str, object]], path: Path) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Phase-1 forward-discrimination scorer")
-    ap.add_argument("--fwd-dir", default=str(shared_path("PROCESSED_DIR_REL", "fwd")))
+    ap.add_argument("--fwd-dir", default=str(shared_path("FWD_DIR_REL")))
     ap.add_argument("--spectra-folder", default=str(shared_path("PARQUET_DIR_REL")))
     ap.add_argument("--compounds-csv", default=str(shared_path("CSV_PATH_REL")))
     ap.add_argument("--out-dir", default=str(shared_path("METRICS_DIR_REL")))

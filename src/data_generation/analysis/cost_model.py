@@ -38,7 +38,7 @@ import statistics
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from src.project_paths import shared_path
+from src.project_paths import shared_name, shared_path
 
 _WALL = re.compile(r"Elapsed \(wall clock\) time.*?:\s*([0-9:.]+)")
 _RSS = re.compile(r"Maximum resident set size \(kbytes\):\s*(\d+)")
@@ -88,10 +88,11 @@ def arm_rows(log_dir: Path, proc_dir: Path, heavy: Dict[str, int]) -> List[dict]
         if not r:
             continue
         stem = r["name"]
-        pkl = proc_dir / "fwd" / f"{stem}.pkl"
-        dmp = proc_dir / "fwd" / f"{stem}.dmp"
+        fwd = proc_dir / shared_name("FWD_DIR_REL")
+        pkl = fwd / f"{stem}.pkl"
+        dmp = fwd / f"{stem}.dmp"
         r["bytes"] = sum(p.stat().st_size for p in (pkl, dmp) if p.exists())
-        r["done"] = (proc_dir / "fwd" / f"{stem}.done").exists()
+        r["done"] = (fwd / f"{stem}.done").exists()
         r["nheavy"] = heavy.get(stem)
         rows.append(r)
     return rows

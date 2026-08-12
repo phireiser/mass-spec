@@ -44,6 +44,8 @@ from rdkit.Chem import Descriptors, rdMolDescriptors
 from rdkit.Chem import rdFingerprintGenerator
 from rdkit.Chem import rdinchi
 
+from src.project_paths import shared_path
+
 MORGAN_RADIUS = 2
 MORGAN_BITS = 2048
 _MORGAN_GEN = rdFingerprintGenerator.GetMorganGenerator(
@@ -469,7 +471,7 @@ def main() -> None:
                     help="molecular-weight cutoff (fetch every species up to this MW)")
     ap.add_argument("--mw-start", type=int, default=1,
                     help="lower molecular-weight bound")
-    ap.add_argument("--out-dir", default="data/nist_spectra")
+    ap.add_argument("--out-dir", default=str(shared_path("PARQUET_DIR_REL")))
     ap.add_argument("--delay", type=float, default=1.0,
                     help="seconds between NIST requests; be polite / avoid rate limits")
     args = ap.parse_args()

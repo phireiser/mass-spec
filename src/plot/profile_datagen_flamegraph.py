@@ -42,10 +42,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
-ROOT = Path(__file__).resolve().parents[2]
-MAIN = ROOT / "src" / "data_generation" / "main.py"
-FIG_DIR = ROOT / "thesis" / "shared" / "figures"
-FOLDED_PATH = ROOT / "data" / "outputs" / "metrics" / "datagen_flamegraph_folded.txt"
+from src.project_paths import shared_name, shared_path
+
+MAIN = shared_path("SRC_DIR_REL", "data_generation", "main.py")
+FIG_DIR = shared_path("FIGURES_DIR_REL")
+FOLDED_PATH = shared_path("METRICS_DIR_REL", "datagen_flamegraph_folded.txt")
+FWD, BWD = shared_name("FWD_DIR_REL"), shared_name("BWD_DIR_REL")
 
 # Frame categories, in priority order of the test applied in `categorize`.
 CAT_MINE, CAT_MOD, CAT_IMPORT, CAT_STDLIB = (
@@ -257,7 +259,7 @@ def main():
                     help="sampling period in seconds (default 0.5 ms)")
     ap.add_argument("--no-warmup", action="store_true",
                     help="skip the import-priming pass (the figure then includes startup)")
-    ap.add_argument("--spectra-folder", default=str(ROOT / "data" / "nist_spectra"))
+    ap.add_argument("--spectra-folder", default=str(shared_path("PARQUET_DIR_REL")))
     ap.add_argument("--out", default=str(FIG_DIR / "datagen_flamegraph"))
     ap.add_argument("--skip-cprofile", action="store_true",
                     help="skip the second deterministic pass (halves the runtime)")
@@ -265,8 +267,8 @@ def main():
 
     with tempfile.TemporaryDirectory(prefix="flamegraph-") as tmp:
         scratch = Path(tmp)
-        (scratch / "fwd").mkdir()
-        (scratch / "bwd").mkdir()
+        (scratch / FWD).mkdir()
+        (scratch / BWD).mkdir()
         spectra = Path(args.spectra_folder)
 
         # Warm-up pass. main.py is re-executed by runpy each time, but `import mod` and
@@ -275,7 +277,7 @@ def main():
         # importlib: 2-propanol's actual build is now ~1 s, far below the import cost.
         if not args.no_warmup:
             run_workload(args.smiles, args.name, args.threads, scratch, spectra)
-            for sub in ("fwd", "bwd"):
+            for sub in (FWD, BWD):
                 for p in (scratch / sub).glob("*"):
                     p.unlink()
 
@@ -290,7 +292,7 @@ def main():
 
         share = float("nan")
         if not args.skip_cprofile:
-            for sub in ("fwd", "bwd"):          # fresh scratch so it rebuilds, not skips
+            for sub in (FWD, BWD):              # fresh scratch so it rebuilds, not skips
                 for p in (scratch / sub).glob("*"):
                     p.unlink()
             share = native_share(args.smiles, args.name, args.threads, scratch, spectra)

@@ -21,7 +21,7 @@ set -euo pipefail
 
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-.}"
 REPO_ROOT="$(cd "$SUBMIT_DIR" && pwd)"
-source "$REPO_ROOT/src/paths.env"
+set -a; source "$REPO_ROOT/src/paths.env"; set +a
 
 EPOCHS_FWD="${EPOCHS_FWD:-10000}"
 EPOCHS_BWD="${EPOCHS_BWD:-10000}"
@@ -29,7 +29,7 @@ EPOCHS_BWD="${EPOCHS_BWD:-10000}"
 # Tuned hyperparameters from the sweep. Check existence on the host path, but
 # pass main.py the in-container path (data/outputs is bound to $C_OUTPUTS).
 HPARAMS_HOST="${HPARAMS_HOST:-$REPO_ROOT/$BEST_PARAMS_DIR_REL/best_hyperparams_latest.yaml}"
-HPARAMS_CONTAINER="$C_OUTPUTS/best_params/$(basename "$HPARAMS_HOST")"
+HPARAMS_CONTAINER="$C_BEST_PARAMS/$(basename "$HPARAMS_HOST")"
 HPARAMS_ARGS=()
 if [[ -f "$HPARAMS_HOST" ]]; then
     HPARAMS_ARGS=(--hparams "$HPARAMS_CONTAINER")
@@ -37,9 +37,9 @@ fi
 
 # Optional Weights & Biases tracking (online-first, offline fallback).
 WANDB_GROUP_PREFIX="train"
-source "$REPO_ROOT/run/hpc/wandb_setup.sh"
+source "$REPO_ROOT/$RUN_DIR_REL/hpc/wandb_setup.sh"
 
-mkdir -p "$REPO_ROOT/$LOGS_DIR_REL/train"
+mkdir -p "$REPO_ROOT/$TRAIN_LOG_DIR_REL"
 mkdir -p "$REPO_ROOT/$CHECKPOINT_DIR_REL"
 mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL"
 
@@ -53,7 +53,7 @@ if [[ -f "$HPARAMS_HOST" ]]; then
 else
     echo "Hyperparameters: NONE FOUND at $HPARAMS_HOST -> using main.py defaults"
 fi
-echo "SIF: $SIF"
+echo "SIF: $REPO_ROOT/$SIF_REL"
 echo "Node: $(hostname)"
 echo "GPU: $CUDA_VISIBLE_DEVICES"
 echo "Started: $(date)"
@@ -68,11 +68,11 @@ apptainer exec --nv \
     --env EPOCHS_FWD="$EPOCHS_FWD" \
     --env EPOCHS_BWD="$EPOCHS_BWD" \
     "${WANDB_ENV[@]}" \
-    "$SIF" \
+    "$REPO_ROOT/$SIF_REL" \
     python "$C_SRC/machine_learning/main.py" \
       --epochs_fwd "$EPOCHS_FWD" \
       --epochs_bwd "$EPOCHS_BWD" \
-      --output_dir "$C_OUTPUTS/checkpoints" \
+      --output_dir "$C_CHECKPOINTS" \
       "${HPARAMS_ARGS[@]}" \
       "${WANDB_ARGS[@]}"
 

@@ -16,7 +16,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-source "$REPO_ROOT/src/paths.env"
+set -a; source "$REPO_ROOT/src/paths.env"; set +a
 
 mkdir -p "$REPO_ROOT/$METRICS_DIR_REL"
 
@@ -25,5 +25,5 @@ apptainer exec \
   --bind "$REPO_ROOT/$DATA_DIR_REL:$C_DATA" \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --env PYTHONPATH="$C_APP" \
-  "$REPO_ROOT/$SIF" \
+  "$REPO_ROOT/$SIF_REL" \
   python "$C_SRC/data_generation/analysis/discrimination/discriminate.py" "$@"

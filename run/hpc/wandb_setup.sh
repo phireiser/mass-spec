@@ -15,7 +15,7 @@
 #   WANDB_ENV    --env flags for `apptainer exec`
 
 USE_WANDB="${USE_WANDB:-auto}"
-WANDB_SECRET_FILE="${WANDB_SECRET_FILE:-$REPO_ROOT/.secrets/wandb.env}"
+WANDB_SECRET_FILE="${WANDB_SECRET_FILE:-$REPO_ROOT/$SECRETS_FILE_REL}"
 WANDB_GROUP_PREFIX="${WANDB_GROUP_PREFIX:-run}"
 WANDB_ARGS=()
 WANDB_ENV=()
@@ -48,8 +48,8 @@ if [ -z "${WANDB_MODE:-}" ]; then
   fi
 fi
 
-# Runs land in $OUTPUTS_DIR_REL/wandb/ on the host (WANDB_DIR + wandb's own subdir).
-mkdir -p "$REPO_ROOT/$OUTPUTS_DIR_REL/wandb"
+# Runs land in $WANDB_DIR_REL on the host (WANDB_DIR + wandb's own subdir).
+mkdir -p "$REPO_ROOT/$WANDB_DIR_REL"
 WANDB_ARGS=(--wandb)
 WANDB_ENV=(
   --env WANDB_API_KEY="${WANDB_API_KEY:-}"
@@ -57,6 +57,6 @@ WANDB_ENV=(
   --env WANDB_PROJECT="${WANDB_PROJECT:-mol-spectro}"
   --env WANDB_RUN_GROUP="${WANDB_GROUP_PREFIX}-${SLURM_JOB_ID:-local}"
   --env WANDB_DIR="$C_OUTPUTS"
-  --env WANDB_CONFIG_DIR="$C_OUTPUTS/wandb"
-  --env WANDB_CACHE_DIR="$C_OUTPUTS/wandb/.cache"
+  --env WANDB_CONFIG_DIR="$C_WANDB"
+  --env WANDB_CACHE_DIR="$C_WANDB/.cache"
 )

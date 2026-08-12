@@ -57,7 +57,7 @@ def dump_derivation_graph(
         rule_list: List[mod.Rule],
         name: str,
         smiles: str,
-        path: Path | str = Path("./dump/")
+        path: Path | str
         ) -> None:
     store = DefaultDGStore()
     store.dump(dg, rule_list, name, smiles, Path(path))
@@ -65,7 +65,7 @@ def dump_derivation_graph(
 
 def load_derivation_graph(
         name: str,
-        path: Path | str = Path("./dump/")
+        path: Path | str
         ) -> mod.DG:
     store = DefaultDGStore()
     return store.load(name, Path(path))
@@ -73,7 +73,7 @@ def load_derivation_graph(
 
 def dump_is_complete(
         name: str,
-        path: Path | str = Path("./dump/")
+        path: Path | str
         ) -> bool:
     """True iff a completion marker exists for ``name`` (dump finished writing)."""
     return (Path(path) / (name + _DONE_SUFFIX)).exists()
@@ -81,7 +81,7 @@ def dump_is_complete(
 
 def dump_is_loadable(
         name: str,
-        path: Path | str = Path("./dump/")
+        path: Path | str
         ) -> bool:
     """True iff the dump for ``name`` under ``path`` can be fully loaded.
 

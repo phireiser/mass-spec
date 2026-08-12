@@ -97,7 +97,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Build the Phase-1 decoy generation CSV")
     ap.add_argument("--spectra-folder", default=str(shared_path("PARQUET_DIR_REL")))
     ap.add_argument("--compounds-csv", default=str(shared_path("CSV_PATH_REL")))
-    ap.add_argument("--fwd-dir", default=str(shared_path("PROCESSED_DIR_REL", "fwd")))
+    ap.add_argument("--fwd-dir", default=str(shared_path("FWD_DIR_REL")))
     ap.add_argument("--out-dir", default=str(shared_path("DATA_DIR_REL")))
     ap.add_argument("--max-heavy", type=int, default=9,
                     help="Wave-1 cutoff: structures with <= this many heavy atoms")

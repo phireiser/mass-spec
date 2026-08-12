@@ -53,11 +53,11 @@ except Exception:
 import mod
 from src.machine_learning import utils_mod
 from src.data_generation import utils
-from src.project_paths import shared_path
+from src.project_paths import shared_name, shared_path
 from src.machine_learning.models import DecSpecFragment, EncMol, EncSpec, TaskHeads
 from src.machine_learning.data import RealDataset, collate_vlex, build_hardneg_loader, train_test_split
 from src.machine_learning.retrieval import LatentIndex, FaissLatentIndex, infer_mol_to_spec, infer_spec_to_mol
-from src.machine_learning.evaluation import demo_compare_spectrum, demo_retrieval_metrics, mass_controlled_retrieval_metrics, demo_noise_robustness, demo_visualize_reconstructions
+from src.machine_learning.evaluation import DEFAULT_PLOTS_DIR, demo_compare_spectrum, demo_retrieval_metrics, mass_controlled_retrieval_metrics, demo_noise_robustness, demo_visualize_reconstructions
 from src.machine_learning.fragments import FragSetEncoderWrapper
 from src.machine_learning.training import train_epoch_phase_a, train_epoch_phase_b
 from src.machine_learning.checkpoint import load_checkpoint, save_checkpoint
@@ -132,7 +132,7 @@ def main():
     p.add_argument("--contrastive_temp", type=float, default=0.07, help="Temperature for info_nce contrastive loss (Phase B)")
     p.add_argument("--skip_reranking", action="store_true", help="Skip forward-model reranking during retrieval evaluation (faster, tests embedding quality)")
     # paths and data options
-    p.add_argument("--mol_def_path", type=str, default=shared_path("DATA_DIR_REL", "compounds.csv"), help="Path to CSV file with molecule definitions (name, SMILES)")
+    p.add_argument("--mol_def_path", type=str, default=shared_path("CSV_PATH_REL"), help="Path to CSV file with molecule definitions (name, SMILES)")
     p.add_argument("--spectra_dir", type=str, default=shared_path("PARQUET_DIR_REL"), help="Directory containing the NIST spectra Parquet store (spectra.parquet/index.parquet)")
     p.add_argument("--load_path", type=str, default=shared_path("PROCESSED_DIR_REL"), help="Directory containing derivation trees")
     p.add_argument("--output_dir", type=str, default=shared_path("CHECKPOINT_DIR_REL"), help="Directory to save checkpoints and outputs")
@@ -214,8 +214,8 @@ def main():
     # written before that rename still carry the human name from compounds.csv,
     # so try CAS first and fall back, the same order as the analysis tools use
     # (see feasibility/run_ceiling.py::_dump_stems).
-    fwd_dir = Path(args.load_path) / "fwd"
-    bwd_dir = Path(args.load_path) / "bwd"
+    fwd_dir = Path(args.load_path) / shared_name("FWD_DIR_REL")
+    bwd_dir = Path(args.load_path) / shared_name("BWD_DIR_REL")
 
     def _dump_stem(name: str, smiles: str) -> Optional[str]:
         cas = utils.get_cas_by_smiles(smiles, Path(args.spectra_dir))
@@ -547,8 +547,10 @@ def main():
         # Optuna maximizes, so the wandb sweep view and the study agree at a glance.
         wandb.log({f"objective/{k}": v for k, v in objective_metrics.items()})
 
-    # Plots go beside the checkpoints, under data/outputs/plots.
-    plots_dir = args.output_dir.parent / "plots"
+    # Resolved from paths.env rather than derived from --output_dir: the old
+    # `args.output_dir.parent / "plots"` was only correct while --output_dir kept
+    # its default, and silently scattered plots elsewhere when it was overridden.
+    plots_dir = DEFAULT_PLOTS_DIR
 
     # ----------------- Demo: Spectrum noise robustness -----------------
     print("== Spectrum noise robustness (VAL subset) ==")

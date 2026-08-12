@@ -12,7 +12,12 @@ import mod
 from src.data_generation import utils
 from src.data_generation.rules import fragmentation, ionization, build_migration_rules
 from src.data_generation.core import strategy
-from src.project_paths import shared_path
+from src.project_paths import shared_name, shared_path
+
+# Leaf names only: --output-dir is caller-chosen (side rebuild dirs), so the
+# dump subdirectories are joined onto it rather than taken as absolute paths.
+FWD_SUBDIR = shared_name("FWD_DIR_REL")
+BWD_SUBDIR = shared_name("BWD_DIR_REL")
 
 
 parser = argparse.ArgumentParser(description="Using MØD as a MassSpec Fragmenter")
@@ -136,8 +141,8 @@ if args.name_by_cas:
         print(f"  --name-by-cas: no CAS in store for {args.name} ({args.smiles}); "
               f"falling back to --name '{args.name}'")
 
-output_path_fwd = Path(args.output_dir) / "fwd/" / (dump_name + ".dmp")
-output_path_bwd = Path(args.output_dir) / "bwd/" / (dump_name + ".dmp")
+output_path_fwd = Path(args.output_dir) / FWD_SUBDIR / (dump_name + ".dmp")
+output_path_bwd = Path(args.output_dir) / BWD_SUBDIR / (dump_name + ".dmp")
 
 molecule = utils.graph_from_smiles(args.smiles, dump_name)
 molecule_term= utils.term_from_graph(molecule)
@@ -240,7 +245,7 @@ strat_fwd = strategy.make_fwd_strategy(
     frag_repeat=args.frag_repeat,
 )
 
-fwd_dir = Path(args.output_dir) / "fwd/"
+fwd_dir = Path(args.output_dir) / FWD_SUBDIR
 dg_fwd_reused = False
 if args.avoid_reprocessing and utils.dump_is_complete(molecule.name, fwd_dir):
     # Marker says the dump is complete; the load doubles as the integrity check.
@@ -310,7 +315,7 @@ strat_bwd = strategy.make_bwd_strategy(
     frag_repeat=args.frag_repeat,
 )
 
-bwd_dir = Path(args.output_dir) / "bwd/"
+bwd_dir = Path(args.output_dir) / BWD_SUBDIR
 if args.avoid_reprocessing and utils.dump_is_complete(molecule.name, bwd_dir) \
         and utils.dump_is_loadable(molecule.name, bwd_dir):
     print(f"Backward dump {output_path_bwd} complete and loadable, skipping...")

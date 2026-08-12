@@ -17,16 +17,19 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[2]
+from src.project_paths import shared_path
+
+DEFAULT_CSV = shared_path("METRICS_DIR_REL", "discrimination_per_target.csv")
+DEFAULT_PLOTS_DIR = shared_path("PLOTS_DIR_REL")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Plot Phase-1 discrimination results")
-    ap.add_argument("--csv", default=str(ROOT / "data" / "outputs" / "metrics" / "discrimination_per_target.csv"))
-    ap.add_argument("--out-dir", default=None, help="Default: data/outputs/plots")
+    ap.add_argument("--csv", default=str(DEFAULT_CSV))
+    ap.add_argument("--out-dir", default=None, help=f"Default: {DEFAULT_PLOTS_DIR}")
     args = ap.parse_args()
 
-    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "outputs" / "plots"
+    out_dir = Path(args.out_dir) if args.out_dir else DEFAULT_PLOTS_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(args.csv)

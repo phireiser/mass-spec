@@ -29,6 +29,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from arrow_check import check_record_arrows  # noqa: E402
 from schema import MechanismRecord  # noqa: E402
 
+from src.project_paths import shared_path  # noqa: E402
+
 HARD_FLAGS = [
     "atoms_balanced",
     "charge_balanced",
@@ -38,8 +40,7 @@ HARD_FLAGS = [
     "radical_parity_consistent_after",
 ]
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_RECORDS = REPO_ROOT / "data/mechanisms/records"
+DEFAULT_RECORDS = shared_path("MECHANISM_RECORDS_DIR_REL")
 
 
 def check_ms_context(record: MechanismRecord) -> list[str]:

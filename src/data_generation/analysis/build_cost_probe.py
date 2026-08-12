@@ -47,7 +47,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--spectra-folder", default=str(shared_path("PARQUET_DIR_REL")))
-    ap.add_argument("--fwd-dir", default=str(shared_path("PROCESSED_DIR_REL", "fwd")))
+    ap.add_argument("--fwd-dir", default=str(shared_path("FWD_DIR_REL")))
     ap.add_argument("--out-dir", default=str(shared_path("DATA_DIR_REL")))
     ap.add_argument("--metrics-dir", default=str(shared_path("METRICS_DIR_REL")))
     ap.add_argument("--per-bin", type=int, default=22, help="molecules sampled per bin")

@@ -27,12 +27,12 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_PDF = (
-    REPO_ROOT
-    / "data/IMS-Book/McLaferttyInterpretationOfMassSpectral4ThEdition.pdf"
+from src.project_paths import REPO_ROOT, shared_path
+
+DEFAULT_PDF = shared_path(
+    "BOOK_DIR_REL", "McLaferttyInterpretationOfMassSpectral4ThEdition.pdf"
 )
-DEFAULT_OUT = REPO_ROOT / "data/IMS-Book/pages"
+DEFAULT_OUT = shared_path("BOOK_PAGES_DIR_REL")
 MAX_LONG_EDGE = 1600
 
 # Fraction of dark pixels below which a page is treated as an empty leaf.
