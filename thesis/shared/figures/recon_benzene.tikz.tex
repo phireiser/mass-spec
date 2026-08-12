@@ -1,0 +1,65 @@
+% Molecule-specificity of the fragment-grounded forward decoder.
+% Benzene (C1=CC=CC=C1), held-out TEST sample of run 4924313 (2026-07-06),
+% the run behind ml_checkpoint.pt. Peak values transcribed verbatim from that
+% run's log ("Compare predicted vs ground truth (TEST sample)"), cosine 0.758.
+% Measured spectrum plotted upward, prediction mirrored downward.
+\begin{tikzpicture}[
+  fig,
+  x=0.105cm, y=4.4cm,
+  font=\sffamily\scriptsize,
+  meas/.style={RoyalBlue, line width=1.3pt},
+  pred/.style={BrickRed, line width=1.3pt},
+  asg/.style={BrickRed!85!black, font=\sffamily\tiny},
+]
+
+% ---- axes -------------------------------------------------------------
+\draw[fig line, black!55] (0,0) -- (92,0);
+\node[anchor=west, font=\sffamily\scriptsize] at (92.5,0) {$m/z$};
+\foreach \x in {0,20,40,60,80}{
+  \draw[fig thin, black!55] (\x,0) -- (\x,-0.012);
+}
+% m/z ticks sit below the mirrored half so they never collide with the peaks
+\foreach \x in {0,20,40,60,80}{
+  \node[anchor=north, black!55, font=\sffamily\tiny] at (\x,-0.52) {\x};
+}
+\draw[fig thin, black!35] (0,-0.50) -- (92,-0.50);
+
+% intensity scale (absolute value in both directions)
+\foreach \y/\lab in {0.2/0.2, 0.4/0.4, 0.6/0.6}{
+  \draw[fig thin, black!35] (-1.5,\y) -- (0,\y);
+  \node[anchor=east, black!55, font=\sffamily\tiny] at (-1.8,\y) {\lab};
+}
+\foreach \y/\lab in {0.2/0.2, 0.4/0.4}{
+  \draw[fig thin, black!35] (-1.5,-\y) -- (0,-\y);
+  \node[anchor=east, black!55, font=\sffamily\tiny] at (-1.8,-\y) {\lab};
+}
+
+% ---- measured spectrum (NIST), upward ---------------------------------
+\foreach \mz/\int in {38/0.1474, 39/0.2082, 50/0.2839, 51/0.2926, 52/0.2701,
+                      74/0.1552, 76/0.1510, 77/0.3314, 78/0.6222, 79/0.1590}{
+  \draw[meas] (\mz,0) -- (\mz,\int);
+}
+\node[RoyalBlue, anchor=west, font=\sffamily\scriptsize\bfseries] at (2,0.60)
+  {measured (NIST)};
+
+% ---- predicted spectrum, mirrored downward ----------------------------
+% every predicted peak with non-zero intensity is drawn, including the
+% spurious m/z 1 at 0.010 -- nothing is filtered out of the prediction
+\foreach \mz/\int in {1/0.0102, 26/0.1749, 51/0.1811, 77/0.2297, 78/0.4040}{
+  \draw[pred] (\mz,0) -- (\mz,-\int);
+}
+\node[BrickRed, anchor=west, font=\sffamily\scriptsize\bfseries] at (2,-0.455)
+  {predicted (fragment-grounded decoder)};
+
+% ---- fragment assignments, each hung off the left of its own peak so the
+% ---- labels cannot run into one another (78 goes right, it is the deepest)
+\node[asg, anchor=east] at (24.5,-0.170) {$26\;\mathrm{C_2H_2^+}$};
+\node[asg, anchor=east] at (49.5,-0.181) {$51\;\mathrm{C_4H_3^+}$};
+\node[asg, anchor=east] at (75.5,-0.230) {$77\;[\mathrm{M-H}]^{+}$};
+\node[asg, anchor=west] at (80.0,-0.404) {$78\;[\mathrm{M}]^{+\bullet}$};
+
+% cosine of this pair, as reported by the run
+\node[black!70, anchor=east, font=\sffamily\tiny] at (92,0.70)
+  {cosine $=0.758$};
+
+\end{tikzpicture}

@@ -11,13 +11,22 @@
 ]
 
 % ============================================================
-% GEOMETRY : one straight horizontal flight tube (no bend)
+% GEOMETRY : 90 degree magnetic sector.
+% The flight tube bends about the sector centre C = (3,-\Rb); an ion of the
+% selected m/z travels on the nominal radius \Rb and reaches the detector,
+% while heavier (larger radius) and lighter (smaller radius) ions are lost
+% to the outer and inner wall respectively.
 % ============================================================
-\def\h{0.35}        % tube half-width
-\def\Xmag{3.9}      % magnet left edge
-\def\Wmag{1.7}      % magnet width
-\def\Xhit{5.15}     % where the off-mass beams reach the walls
-\def\Xdet{6.8}      % detector mouth
+\def\h{0.35}          % tube half-width
+\def\Rb{2.2}          % nominal (selected m/z) radius
+\def\Le{1.15}         % straight exit section after the bend
+\pgfmathsetmacro{\Rout}{\Rb+\h}       % outer wall radius   (2.55)
+\pgfmathsetmacro{\Rin}{\Rb-\h}        % inner wall radius   (1.85)
+\pgfmathsetmacro{\Rpo}{\Rb+\h+0.35}   % outer pole radius   (2.90)
+\pgfmathsetmacro{\Rpi}{\Rb-\h-0.35}   % inner pole radius   (1.50)
+\pgfmathsetmacro{\Xex}{3+\Rb}         % exit-tube centreline x
+\pgfmathsetmacro{\Yex}{-\Rb-\Le}      % exit-tube mouth y
+\coordinate (C) at (3,-\Rb);          % sector centre
 
 % ---------- ion source / acceleration block ----------
 \draw[arrow] (-2.1,0.0) -- (-0.35,0.0);
@@ -28,50 +37,56 @@
 \foreach \x in {1.10,1.35,1.60}{\draw[wire] (\x,-0.35) -- (\x,0.35);}
 
 % ============================================================
-% ELECTROMAGNET : two straight pole pieces, above and below the tube
+% ELECTROMAGNET : curved pole pieces flanking the bend
 % ============================================================
-\filldraw[fill=Tan, draw=Tan!55!black, thick, rounded corners=2pt]
-  (\Xmag, 0.50) rectangle ($(\Xmag,0.50)+(\Wmag,0.70)$);     % top pole
-\filldraw[fill=Tan, draw=Tan!55!black, thick, rounded corners=2pt]
-  (\Xmag,-0.50) rectangle ($(\Xmag,-0.50)+(\Wmag,-0.70)$);   % bottom pole
+\draw[Tan, line width=9pt, line cap=butt]
+  ([shift={(78:\Rpo cm)}]C) arc[start angle=78, end angle=12, radius=\Rpo cm];
+\draw[Tan, line width=9pt, line cap=butt]
+  ([shift={(78:\Rpi cm)}]C) arc[start angle=78, end angle=12, radius=\Rpi cm];
 
 % ============================================================
-% FLIGHT TUBE : straight horizontal walls
+% FLIGHT TUBE : straight in, 90 degree bend, straight out
 % ============================================================
-\draw[wire] (2.15, \h) -- (\Xdet, \h);
-\draw[wire] (2.15,-\h) -- (\Xdet,-\h);
+\draw[wire] (2.15, \h) -- (3, \h)
+  arc[start angle=90, end angle=0, radius=\Rout cm] -- (\Xex+\h, \Yex);
+\draw[wire] (2.15,-\h) -- (3,-\h)
+  arc[start angle=90, end angle=0, radius=\Rin cm] -- (\Xex-\h, \Yex);
 
 % ============================================================
-% ION STREAMS : correct one runs dead straight; others fan to the walls
+% ION STREAMS : selected m/z stays on the tube axis; the others do not
 % ============================================================
-\draw[beam, green!55!black] (2.15,0) -- (\Xdet,0);                       % correct -> detector
-\draw[beam, blue] (\Xmag,0) .. controls ($(\Xmag,0)+(0.5,0)$) and (\Xhit-0.30, 0.30) .. (\Xhit, \h)
-   coordinate (hitH);                                                    % less deflected -> top wall
-\draw[beam, red]  (\Xmag,0) .. controls ($(\Xmag,0)+(0.5,0)$) and (\Xhit-0.30,-0.30) .. (\Xhit,-\h)
-   coordinate (hitL);                                                    % more deflected -> bottom wall
+% selected m/z -> follows the bend to the detector
+\draw[beam, green!55!black] (2.15,0) -- (3,0)
+  arc[start angle=90, end angle=0, radius=\Rb cm] -- (\Xex, \Yex);
+% heavier ion: radius too large, under-deflected -> outer wall
+\draw[beam, blue] (3,0)
+  arc[start angle=90, end angle=38.63, radius=2.95cm] coordinate (hitH);
+% lighter ion: radius too small, over-deflected -> inner wall
+\draw[beam, red] (3,0)
+  arc[start angle=90, end angle=8.14, radius=1.72cm] coordinate (hitL);
 \fill[hit] (hitH) circle (1.6pt);
 \fill[hit] (hitL) circle (1.6pt);
 
 % ============================================================
 % DETECTOR + ELECTRONICS
 % ============================================================
-\draw[wire] (\Xdet,-0.40) rectangle ($(\Xdet,-0.40)+(0.35,0.80)$);
+\draw[wire] (\Xex-0.48,\Yex) rectangle (\Xex+0.48,\Yex-0.37);
 \node[smalllbl, minimum width=1.5cm, minimum height=0.55cm]
-  (amp) at ($(\Xdet,0)+(1.95,-0.15)$) {amplifier\\ \& other electronics};
-\draw[arrow] ($(\Xdet,0)+(0.37,0)$) -- (amp.west);
+  (amp) at (\Xex+2.35,\Yex-0.18) {amplifier\\ \& other electronics};
+\draw[arrow] (\Xex+0.50,\Yex-0.18) -- (amp.west);
 
 % ============================================================
 % LABELS
 % ============================================================
 \node[lbl] (ionlab) at (0.2,2.05) {IONISATION};
 \draw[arrow] (ionlab.south) -- (0.45,0.38);
-\node[lbl] (acclab) at (2.8,2.15) {ACCELERATION};
+\node[lbl] (acclab) at (2.9,2.05) {ACCELERATION};
 \draw[arrow] (acclab.south west) -- (1.70,0.40);
-\node[lbl] (magn) at (5.6,2.05) {ELECTROMAGNET};
-\draw[arrow] (magn.south) -- ($(\Xmag+\Wmag-0.5,1.20)$);
-\node[lbl] (deflab) at (3.7,-2.05) {DEFLECTION};
-\draw[arrow] (deflab.north) -- (4.55,-0.16);
-\node[lbl] (detlab) at (6.55,-1.55) {DETECTION};
-\draw[arrow] (detlab.north) -- ($(\Xdet,0)+(0.05,-0.32)$);
+\node[lbl] (magn) at (6.75,1.45) {ELECTROMAGNET};
+\draw[arrow] (magn.south west) -- ([shift={(55:\Rpo cm)}]C);
+\node[lbl] (deflab) at (7.45,-1.10) {DEFLECTION};
+\draw[arrow] (deflab.west) -- ($(hitH)+(0.12,0)$);
+\node[lbl] (detlab) at (3.45,\Yex-0.20) {DETECTION};
+\draw[arrow] (detlab.east) -- (\Xex-0.50,\Yex-0.18);
 
 \end{tikzpicture}
