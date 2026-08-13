@@ -6,6 +6,7 @@ import re
 from pathlib import Path
 from typing import Set, List, Tuple
 import mod
+from . import codec
 from .term_transfers import graph_from_term, atom_exact_mass, electron_mass
 
 def get_parent_rules_for_graph(
@@ -116,7 +117,10 @@ def get_spectra_from_dump(
     Species carrying a placeholder (non-element) symbol are skipped, mirroring the
     ``isMolecule`` guard.
     """
-    with open(Path(path) / (name + ".pkl"), "rb") as fh:
+    # Streams straight out of the compressed pickle -- still never touches the .dmp, so
+    # the global-graph-registry blowup described above stays fixed and peak RSS is
+    # unchanged.
+    with codec.open_read(Path(path) / (name + ".pkl")) as fh:
         data = pickle.load(fh)
     graph_list = data[1]
 

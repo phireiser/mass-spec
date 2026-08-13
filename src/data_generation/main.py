@@ -141,8 +141,10 @@ if args.name_by_cas:
         print(f"  --name-by-cas: no CAS in store for {args.name} ({args.smiles}); "
               f"falling back to --name '{args.name}'")
 
-output_path_fwd = Path(args.output_dir) / FWD_SUBDIR / (dump_name + ".dmp")
-output_path_bwd = Path(args.output_dir) / BWD_SUBDIR / (dump_name + ".dmp")
+# Log labels only. Resolved so the message names the file that is really there --
+# dumps are compressed, so the plain ".dmp" name usually does not exist on disk.
+output_path_fwd = utils.dump_file(dump_name, Path(args.output_dir) / FWD_SUBDIR)
+output_path_bwd = utils.dump_file(dump_name, Path(args.output_dir) / BWD_SUBDIR)
 
 molecule = utils.graph_from_smiles(args.smiles, dump_name)
 molecule_term= utils.term_from_graph(molecule)

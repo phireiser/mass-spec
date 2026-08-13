@@ -21,8 +21,10 @@ Three things this must not get wrong:
   precision in the expensive tail; the store's real bin frequencies come from the manifest and
   the corpus extrapolation is ``SUM_bin store_count[bin] * mean_cost[bin]``. Averaging the
   sample directly would badly overstate the mean.
-* **Disk is a first-class cost.** 1426 dumps already occupy 45 GB with a p99 of 375 MB, so
-  bytes are extrapolated alongside core-hours.
+* **Disk is a first-class cost.** 1426 dumps held 45 GB uncompressed, with a p99 of 375 MB,
+  so bytes are extrapolated alongside core-hours. Dumps are compressed on disk now (~25x),
+  so this reports two columns: ``bytes`` stays the uncompressed graph size the extrapolation
+  is about, and ``bytes_on_disk`` is what storage actually costs.
 
     python src/data_generation/analysis/cost_model.py \\
         --arm main=<logdir>,data/processed_cost0 \\
@@ -38,6 +40,10 @@ import statistics
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from src.data_generation.utils.dump_naming import (
+    dump_stored_bytes,
+    dump_uncompressed_bytes,
+)
 from src.project_paths import shared_name, shared_path
 
 _WALL = re.compile(r"Elapsed \(wall clock\) time.*?:\s*([0-9:.]+)")
@@ -89,9 +95,15 @@ def arm_rows(log_dir: Path, proc_dir: Path, heavy: Dict[str, int]) -> List[dict]
             continue
         stem = r["name"]
         fwd = proc_dir / shared_name("FWD_DIR_REL")
-        pkl = fwd / f"{stem}.pkl"
-        dmp = fwd / f"{stem}.dmp"
-        r["bytes"] = sum(p.stat().st_size for p in (pkl, dmp) if p.exists())
+        # ``bytes`` must stay the *logical* dump size -- it proxies how big the
+        # derivation graph is, and that is what N* extrapolates. Once dumps are
+        # compressed, st_size answers a different question, so the uncompressed sizes
+        # come from the .done marker (falling back to st_size, which for an unmigrated
+        # tree is bit-identical to the old behaviour). ``bytes_on_disk`` is the storage
+        # cost, and ``bytes_source`` makes a half-migrated corpus visible rather than
+        # letting the two get silently averaged together.
+        r["bytes"], r["bytes_source"] = dump_uncompressed_bytes(stem, fwd)
+        r["bytes_on_disk"] = dump_stored_bytes(stem, fwd)
         r["done"] = (fwd / f"{stem}.done").exists()
         r["nheavy"] = heavy.get(stem)
         rows.append(r)

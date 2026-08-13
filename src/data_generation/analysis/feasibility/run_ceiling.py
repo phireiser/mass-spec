@@ -157,7 +157,7 @@ def discover_names(fwd_dir: Path, name2smiles: Dict[str, str], parquet_dir: Path
                    only: Optional[List[str]]) -> List[str]:
     """Target names (from the compounds CSV) that have both a Parquet spectrum and a
     forward dump under either their CAS or legacy name; sorted, ``only`` filters."""
-    have_dump = {p.stem for p in fwd_dir.glob("*.pkl")}
+    have_dump = utils.dump_stems(fwd_dir)
     wanted = ([n.strip() for n in only if n.strip()] if only else sorted(name2smiles))
     out: List[str] = []
     for n in wanted:

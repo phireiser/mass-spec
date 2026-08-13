@@ -24,6 +24,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Dict, List
 
+from src.data_generation import utils
 from src.project_paths import shared_path
 
 
@@ -114,7 +115,7 @@ def main() -> None:
 
     # Dumps are named by CAS, so "already generated" is a CAS-stem check, and a
     # decoy that is itself a target is excluded (targets are generated separately).
-    have_dump = {p.stem for p in Path(args.fwd_dir).glob("*.pkl")}
+    have_dump = utils.dump_stems(Path(args.fwd_dir))
     target_cas: set = set()
     for smi in targets.values():
         m = Chem.MolFromSmiles(smi)

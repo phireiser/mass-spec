@@ -246,7 +246,9 @@ def main():
             # if present; otherwise use an empty backward collection so the molecule is
             # NOT dropped for lacking a bwd dump.
             bwd_coll = []
-            bwd_dmp = bwd_dir / f"{stem}.dmp"
+            # Resolved, not f"{stem}.dmp": a compressed bwd dump is stored under a
+            # different filename and a raw existence check would never see it.
+            bwd_dmp = utils.dump_file(stem, bwd_dir)
             if bwd_dmp.exists():
                 bwd_dg = utils.load_derivation_graph(stem, path=bwd_dir)
                 for graph_term in bwd_dg.graphDatabase: # when loading DG len(createdGraphs)=0
