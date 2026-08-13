@@ -15,10 +15,7 @@ mol-spectro.sif
 # src/data_generation/rules/IMS_*.py. Not redistributable, so not committed.
 data/IMS-Book/
 
-# Side-by-side rebuild of the dumps under the re-authored ruleset, kept while the
-# baseline in data/processed/ is still the reference. Promote to data/processed/
-# (which IS tracked) once the comparison is settled; do not commit both.
-data/processed_reauth/
+# (Derivation-graph dumps of every kind are ignored -- see data/processed*/ below.)
 
 # The thesis tree is now merged into this repo under thesis/ (was a separate nested
 # repo, gitignored while it lived here). It carries its own thesis/.gitignore, which
@@ -27,8 +24,8 @@ data/processed_reauth/
 # PDFs out of the index. Do not re-add a "thesis/" line here: git does not descend into
 # an excluded directory, so it would silently disable the nested rules along with it.
 #
-# EMBARGO: the thesis is unpublished and this repo's origin is PUBLIC. Any branch
-# containing thesis/ must not be pushed to the public remote before publication.
+# (The pre-publication embargo on pushing thesis/ to the public origin was lifted in
+# 2026-08; the branch is pushed and tracks normally.)
 _minted-main/**
 _minted/
 _minted-*/
@@ -36,7 +33,10 @@ _minted-*/
 # Per-agent staging area for in-progress mechanism records (validated, then promoted)
 data/mechanisms/.staging/
 
-# Side-by-side rebuild targets for A/B experiments (PROCESSED_DIR_OVERRIDE=...). These are
-# throwaway derivation-graph dumps -- 2.2 GB across the four that exist today -- and only
-# data/processed is the corpus of record.
+# ALL derivation-graph dumps: the corpus of record in data/processed/ and the side-by-side
+# A/B rebuild targets (PROCESSED_DIR_OVERRIDE=...) beside it. data/processed/ used to be
+# tracked; at 2070 files / 1.03 GB it was essentially the entire repository, and the working
+# tree is now 45 GB. Dumps are reproducible from data/compounds.csv plus the rule library, so
+# they are rebuilt, not cloned. Untracked in 2026-08 -- note the 1.03 GB of blobs remain in
+# history and only a filter-repo rewrite would remove them.
 data/processed*/
