@@ -7,7 +7,7 @@ export const meta = {
   ],
 }
 
-const REPO = '/lisc/home/user/reiser/Nextcloud/studium/computationalScience/thesis/mol'
+const REPO = '/lisc/data/work/tbi/reiser/mol'
 
 // MIRROR OF src/paths.env -- must be kept in sync by hand.
 // Workflow scripts run without filesystem or Node API access, so this file cannot
