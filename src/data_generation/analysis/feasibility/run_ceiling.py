@@ -42,12 +42,6 @@ def _mean(values) -> float:
     return statistics.fmean(vals) if vals else float("nan")
 
 
-def _dump_stems(name: str, cas: object) -> List[str]:
-    """Candidate dump names to try, CAS first (the single identifier) then the
-    legacy human name, so scoring works before and after the CAS rename."""
-    return [s for s in [str(cas or ""), name] if s]
-
-
 def _mod_masses(stems: List[str], fwd_dir: Path) -> set:
     """Nominal (round) masses of the charged MØD fragments in a forward dump.
     Tries each candidate stem (CAS first) and uses the first that loads."""
@@ -83,7 +77,7 @@ def analyze_molecule(
     if not record:
         raise FileNotFoundError(f"no spectrum in Parquet store for {name} ({smiles})")
     peaks = record["peaks"]
-    mod_masses = _mod_masses(_dump_stems(name, record.get("cas")), fwd_dir)
+    mod_masses = _mod_masses(utils.dump_stem_candidates(name, record.get("cas")), fwd_dir)
 
     formula = record.get("formula") or ""
     inventory = cm.parse_formula(formula) if formula else {}
@@ -170,7 +164,7 @@ def discover_names(fwd_dir: Path, name2smiles: Dict[str, str], parquet_dir: Path
         smi = name2smiles.get(n)
         if not smi or not utils.get_spectra_by_smiles(smi, parquet_dir):
             continue
-        stems = _dump_stems(n, utils.get_cas_by_smiles(smi, parquet_dir))
+        stems = utils.dump_stem_candidates(n, utils.get_cas_by_smiles(smi, parquet_dir))
         if any(s in have_dump for s in stems):
             out.append(n)
     return out

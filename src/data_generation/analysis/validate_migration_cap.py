@@ -75,7 +75,10 @@ def nist_masses(smiles: str, parquet: Path):
 
 
 def compare(name: str, smiles: str, uncapped_dir: Path, capped_dir: Path, parquet: Path):
-    cas = utils.get_cas_by_smiles(smiles, parquet) or name
+    # Both arms are keyed by the same stem, so resolve once against the uncapped
+    # tree (the control, always present) rather than per-arm.
+    cas = (utils.resolve_dump_stem(name, smiles, uncapped_dir, parquet, suffix=".done")
+           or utils.get_cas_by_smiles(smiles, parquet) or name)
     unc, unc_w = mass_profile(cas, uncapped_dir)
     cap, _ = mass_profile(cas, capped_dir)
     row = {"name": name, "cas": cas, "smiles": smiles}

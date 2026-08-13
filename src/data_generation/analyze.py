@@ -4,12 +4,14 @@ load analyse a derivation graph
 from pprint import pprint
 import subprocess
 import argparse
+import sys
 import pandas as pd
 import mod
 
 from src.data_generation import utils
 from src.data_generation.analysis import describe, printing
 from src.data_generation.rules import fragmentation, ionization
+from src.project_paths import shared_path
 
 
 
@@ -17,6 +19,8 @@ parser = argparse.ArgumentParser(description="Analyzer of MØD dumps generated w
 parser.add_argument("--smiles", type=str, required=True, help="SMILES String of Molecule")
 parser.add_argument("--name", type=str, required=True, help="Molecule Name")
 parser.add_argument("--dir", type=str, required=True, help="Directory of loading files")
+parser.add_argument("--spectra-folder", type=str, default=str(shared_path("PARQUET_DIR_REL")),
+                    help="NIST Parquet store, used to resolve --name to its CAS")
 args = parser.parse_args()
 
 molecule = utils.graph_from_smiles(args.smiles, args.name)
@@ -30,8 +34,18 @@ fragmentation_term = [utils.term_from_rule(rule) \
     for rule in utils.apply_constraints(fragmentation, aoc)]
 
 
+# Dumps are named by CAS (`main.py --name-by-cas`); pre-rename dumps still carry
+# the human name, so resolve rather than assume either one.
+stem = utils.resolve_dump_stem(args.name, args.smiles, args.dir, args.spectra_folder)
+if stem is None:
+    tried = utils.dump_stem_candidates(
+        args.name, utils.get_cas_by_smiles(args.smiles, args.spectra_folder))
+    sys.exit(f"no dump for {args.name!r} in {args.dir} (tried stems: {', '.join(tried)})")
+if stem != args.name:
+    print(f"resolved {args.name!r} -> CAS {stem}")
+
 dg = utils.load_derivation_graph(
-    molecule.name,
+    stem,
     path=args.dir,
     )
 

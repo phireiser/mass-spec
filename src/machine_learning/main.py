@@ -213,20 +213,13 @@ def main():
     # key and the single identifier data-gen writes (`--name-by-cas`). Dumps
     # written before that rename still carry the human name from compounds.csv,
     # so try CAS first and fall back, the same order as the analysis tools use
-    # (see feasibility/run_ceiling.py::_dump_stems).
+    # (see utils.dump_naming).
     fwd_dir = Path(args.load_path) / shared_name("FWD_DIR_REL")
     bwd_dir = Path(args.load_path) / shared_name("BWD_DIR_REL")
 
-    def _dump_stem(name: str, smiles: str) -> Optional[str]:
-        cas = utils.get_cas_by_smiles(smiles, Path(args.spectra_dir))
-        for stem in (cas, name):
-            if stem and (fwd_dir / f"{stem}.dmp").exists():
-                return str(stem)
-        return None
-
     n_by_cas = 0
     for name, smi in mols_definitions:
-        stem = _dump_stem(name, smi)
+        stem = utils.resolve_dump_stem(name, smi, fwd_dir, args.spectra_dir)
         if stem is not None:
             n_by_cas += (stem != name)
             mol = mod.Graph.fromSMILES(smi, name=name)

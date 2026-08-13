@@ -18,6 +18,7 @@ _PUBLIC_SUBMODULES = (
     "constrain",       # Constraint and rule utilities
     "file",            # Persistence
     "spect_jdx",       # Spectrum I/O
+    "dump_naming",     # CAS-first dump stem resolution
     "spect_mol",
     "spect_pubchem",
     "term_transfers",  # Term transfers (mod integration)
