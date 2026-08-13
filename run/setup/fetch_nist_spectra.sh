@@ -22,7 +22,7 @@ apptainer exec \
   --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
   --bind "$REPO_ROOT/$PARQUET_DIR_REL:$C_PARQUET" \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
-  --env PYTHONPATH="$C_APP:$C_SRC" \
+  --env PYTHONPATH="$C_APP" \
   "$REPO_ROOT/$SIF_REL" \
   python $C_SRC/data_generation/build_parquet_index.py \
   --max-mw "$MAX_MW" \

@@ -8,5 +8,6 @@ apptainer exec \
   --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
   --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
   --bind "$REPO_ROOT/$DATA_DIR_REL:$C_DATA" \
+  --env PYTHONPATH="$C_APP" \
 "$REPO_ROOT/$SIF_REL" \
   python $C_SRC/plot/plot_time_complexity.py

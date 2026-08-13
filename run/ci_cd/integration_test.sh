@@ -9,5 +9,6 @@ apptainer exec \
     --env RUN_MOD_INTEGRATION_TESTS=1 \
     --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
     --bind "$REPO_ROOT/$DATA_DIR_REL:$C_DATA" \
+    --env PYTHONPATH="$C_APP" \
     "$REPO_ROOT/$SIF_REL" \
     python3 -m unittest discover -s "$C_TESTS" -p 'integration_test_*.py' -v
