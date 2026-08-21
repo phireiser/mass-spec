@@ -13,6 +13,7 @@ svg-inkscape/
 *.lot
 *.fls
 *.bcf
+*.pyg
 
 *.run.xml
 *.synctex.gz
@@ -25,5 +26,3 @@ main.synctex(busy)
 *.snm
 *.vrb
 *.dvi
-
-notes.tex

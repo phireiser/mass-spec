@@ -1,0 +1,48 @@
+% Data generation, then vs now: per-molecule wall clock on a log axis.
+% Old = the 2026-04 corpus run behind time_vs_complexity (SLURM wall clock,
+% ~7 s task floor); new = the 2026-08-10 re-measure, 1 thread, shipping
+% strategy (src/plot/bench_datagen_strategy.py, docs/DATA_GEN_PERFORMANCE.md).
+% Requires: shared/notation.tex (fig styles, amber).
+% x position from log10(seconds); pgfmath cannot take the raw seconds here
+% (>16384 overflows its fixed-point parser), so the logs are tabulated below.
+\newcommand{\tx}[1]{(#1+1)*1.05}     % 0.1 s .. 1e6 s  ->  0 .. 7.35 cm
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.4mm]}]
+
+  \def\dy{0.86}
+  \def\ybot{-3.45}
+
+  % --- time axis (log), with human tick labels ---
+  \foreach \t/\lab in {-1/{$0.1$\,s}, 0/{$1$\,s}, 1.7782/{$1$\,min},
+                       3.5563/{$1$\,h}, 4.9365/{$1$\,d}, 6/{}}{
+    \draw[black!14,fig hair] ({\tx{\t}},0.45) -- ({\tx{\t}},\ybot);
+    \node[font=\scriptsize,black!55,anchor=north] at ({\tx{\t}},{\ybot-0.06}) {\lab};
+  }
+  \draw[black!45,fig thin,->] (0,\ybot) -- ({\tx{6}},\ybot);
+
+  % --- one dumbbell per molecule: old (BrickRed) -> new (amber) ---
+  \foreach \name/\told/\tnew/\lold/\lnew/\fac [count=\k from 0] in {%
+      catechol/5.3631/-0.1135/{$64$\,h}/{$0.8$\,s}/{3\times10^{5}},
+      anthracene/4.2603/0.6893/{$5.1$\,h}/{$4.9$\,s}/{3700},
+      acetone/1.2639/0.1847/{$18$\,s}/{$1.5$\,s}/{12},
+      {butyric acid}/0.9058/-0.4202/{$8$\,s}/{$0.4$\,s}/{21}}{
+    \pgfmathsetmacro{\y}{-\k*\dy}
+    \node[font=\small,anchor=east,black!75] at (-0.22,\y) {\name};
+    \draw[black!30,fig line,->] ({\tx{\told}},\y) -- ({\tx{\tnew}+0.16},\y);
+    \fill[BrickRed!75] ({\tx{\told}},\y) circle (3.4pt);
+    \fill[amber!90!black] ({\tx{\tnew}},\y) circle (3.4pt);
+    \node[font=\scriptsize,BrickRed!70!black,anchor=west] at ({\tx{\told}+0.16},\y) {\lold};
+    \node[font=\scriptsize,amber!30!black,anchor=east]    at ({\tx{\tnew}-0.16},\y) {\lnew};
+    \node[font=\scriptsize,black!60,anchor=south]
+         at ({0.5*(\tx{\told}+\tx{\tnew})},{\y+0.10}) {$\times\,\fac$};
+  }
+
+  % --- legend ---
+  \fill[BrickRed!75] (0.15,0.72) circle (3.0pt);
+  \node[font=\scriptsize,black!65,anchor=west] at (0.32,0.72) {2026-04 (old)};
+  \fill[amber!90!black] (2.55,0.72) circle (3.0pt);
+  \node[font=\scriptsize,black!65,anchor=west] at (2.72,0.72) {2026-08 (current)};
+
+  \node[font=\scriptsize,black!45,anchor=west] at (0,{\ybot-0.78})
+       {old: full SLURM run ($\approx$\,$7$\,s task floor) \quad new: DG build, $1$ thread};
+
+\end{tikzpicture}

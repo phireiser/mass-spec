@@ -1,0 +1,147 @@
+% ---------------------------------------------------------------------------
+% One graph-convolution (GCN) layer, in the same visual language as
+% gineconv.tikz.tex, so the two can be read side by side.
+% Left  : the 1-hop neighbourhood of atom v, self-loop included, bonds greyed
+%         out -- a GCN never looks at them.
+% Middle: degree-normalised neighbour features, summed, one shared weight
+%         matrix W, then a non-linearity.
+% Right : stacking K layers grows the receptive field to K hops.
+% Needs: tikz libraries arrows.meta, calc; \input{shared/notation} for `fig`.
+% ---------------------------------------------------------------------------
+\begin{tikzpicture}[
+    fig,
+    aC/.style={circle, draw=black!70, fill=black!11, minimum size=6.5mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=black!70},
+    aO/.style={circle, draw=BrickRed, fill=BrickRed!15, minimum size=6.5mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=BrickRed},
+    aV/.style={circle, draw=RoyalPurple, fill=RoyalPurple!18, minimum size=7.5mm,
+               inner sep=0pt, font=\bfseries\footnotesize, text=RoyalPurple!70!black},
+    aS/.style={circle, draw=black!45, fill=black!7, minimum size=4.4mm,
+               inner sep=0pt},
+    hcell/.style={rectangle, minimum width=2.8mm, minimum height=4mm, inner sep=0pt},
+    bondlab/.style={font=\tiny, fill=white, inner sep=1pt, text=black!35},
+    msgar/.style={-{Latex[length=1.6mm]}, semithick, RoyalPurple!80, dashed,
+                  shorten >=1.5pt, shorten <=1.5pt},
+    biga/.style={-{Latex[length=3.2mm, width=2.6mm]}, fig heavy, black!55},
+    boxd/.style={rounded corners=2pt, draw=gray!55},
+    figcap/.style={font=\scriptsize, align=center, text=black!75},
+    ttl/.style={font=\bfseries\scriptsize, text=RoyalPurple},
+    coef/.style={rectangle, rounded corners=1pt, draw=NavyBlue!60,
+                 fill=NavyBlue!12, inner sep=1.5pt, font=\tiny, text=NavyBlue},
+]
+
+% Feature strip: #1 x, #2 y, #3 colour, #4 label to the right
+\newcommand{\hvec}[4]{%
+  \begin{scope}[shift={(#1,#2)}]
+    \foreach \k/\sh in {0/100, 1/62, 2/88, 3/45} {
+      \node[hcell, fill=#3!\sh, draw=#3!\sh!black!45] at (0.3*\k, 0) {};
+    }
+    \node[font=\tiny, anchor=west, text=black!70] at (1.16, 0) {#4};
+  \end{scope}}
+
+% =====================================================================
+% PANEL 1 -- neighbourhood of v, bonds greyed out
+% =====================================================================
+\node[ttl, anchor=south] at (0, 2.35) {1 -- neighbourhood of $v$};
+\draw[boxd] (-2.0, -1.9) rectangle (2.0, 2.2);
+
+\node[aV] (v)  at (0, 0)        {C};
+\node[aC] (u1) at (-1.25, 1.15) {C};
+\node[aC] (u2) at (-1.25,-1.15) {C};
+\node[aO] (u3) at ( 1.30, 0.95) {O};
+
+\draw[fig medium, black!30, dashed] (v) -- (u1)
+      node[bondlab, midway, xshift=-2.0mm, yshift=-2.0mm] {$1.5$};
+\draw[fig medium, black!30] (v) -- (u2)
+      node[bondlab, midway, xshift=-1.0mm, yshift=-2.6mm] {$1.0$};
+\draw[fig medium, black!30, double distance=1.1pt] (v) -- (u3)
+      node[bondlab, midway, xshift=-1.6mm, yshift=2.2mm] {$2.0$};
+\foreach \u in {u1, u2, u3} { \draw[msgar] (\u) to[bend left=26] (v); }
+
+% self-loop: v is its own neighbour
+\draw[msgar] (v) to[out=-60, in=-120, looseness=9] (v);
+\node[font=\tiny, text=RoyalPurple!80, anchor=north] at (0.05, -0.78) {self};
+
+\node[figcap, anchor=north] at (0, -1.95)
+    {only the atom features $h_u$ travel\\
+     {\color{BrickRed}bond orders are dropped}};
+
+% =====================================================================
+% PANEL 2 -- degree-normalised sum, shared W, non-linearity
+% =====================================================================
+\def\xB{6.3}
+\node[ttl, anchor=south] at (\xB, 2.35) {2 -- normalise, sum, transform};
+\draw[boxd] (\xB-2.6, -1.9) rectangle (\xB+2.7, 2.2);
+
+\foreach \i/\yy/\col/\c in {%
+    1/1.55/gray/{$c_{vu_1}$}, 2/0.75/gray/{$c_{vu_2}$},
+    3/-0.05/BrickRed/{$c_{vu_3}$}, 4/-0.85/RoyalPurple/{$c_{vv}$}} {
+    \node[coef] at (\xB-2.20, \yy) {\c};
+    \node[font=\scriptsize] at (\xB-1.78, \yy) {$\cdot$};
+    \hvec{\xB-1.60}{\yy}{\col}{}
+}
+\node[circle, draw=RoyalPurple, thick, minimum size=7.5mm, inner sep=0pt,
+      font=\small, text=RoyalPurple] (sig) at (\xB+0.30, 0.35) {$\Sigma$};
+\foreach \yy in {1.55, 0.75, -0.05, -0.85} { \draw[msgar] (\xB-0.35, \yy) -- (sig); }
+
+% shared weight matrix W
+\begin{scope}[shift={(\xB+1.35, 0.35)}]
+    \draw[boxd, draw=gray!70] (-0.40,-0.40) rectangle (0.40, 0.40);
+    \foreach \r in {-0.22, 0, 0.22} { \foreach \c in {-0.22, 0, 0.22} {
+        \node[hcell, minimum width=1.7mm, minimum height=1.7mm,
+              fill=gray!35, draw=gray!55] at (\c, \r) {}; } }
+    \node[font=\scriptsize, anchor=north, text=black!70] at (0,-0.48) {$W$};
+\end{scope}
+\draw[biga] (\xB+0.72, 0.35) -- (\xB+0.90, 0.35);
+\node[circle, draw=OliveGreen!70, fill=OliveGreen!10, minimum size=5.5mm,
+      inner sep=0pt, font=\scriptsize, text=OliveGreen!40!black] (nl) at (\xB+2.30, 0.35) {$\sigma$};
+\draw[biga] (\xB+1.80, 0.35) -- (\xB+2.02, 0.35);
+
+\node[figcap, anchor=north] at (\xB, -1.95)
+    {$c_{vu}$ depends only on the degrees;\\
+     one $W$ shared by every atom};
+
+% =====================================================================
+% PANEL 3 -- stacking layers grows the receptive field
+% =====================================================================
+\def\xC{12.6}
+\node[ttl, anchor=south] at (\xC, 2.35) {3 -- $K$ layers, $K$ hops};
+\draw[boxd] (\xC-2.4, -1.9) rectangle (\xC+2.4, 2.2);
+
+\begin{scope}[shift={(\xC, 0.25)}]
+    \draw[fig thin, RoyalPurple!55, dashed] (0,0) circle (1.05);
+    \draw[fig thin, OliveGreen!60, dashed] (0,0) circle (1.95);
+    \node[font=\tiny, text=RoyalPurple!80, fill=white, inner sep=1pt] at (147:1.05) {$K{=}1$};
+    \node[font=\tiny, text=OliveGreen!45!black, fill=white, inner sep=1pt] at (147:1.95) {$K{=}2$};
+
+    \node[aV, minimum size=6mm] (c) at (0,0) {};
+    \foreach \a in {90, 210, 330} {
+        \node[aS, fill=RoyalPurple!25, draw=RoyalPurple!60] (s1\a) at (\a:0.72) {};
+        \draw[fig thin, black!45] (c) -- (s1\a);
+    }
+    \foreach \a/\b in {90/55, 90/125, 210/175, 210/245, 330/295, 330/5} {
+        \node[aS, fill=OliveGreen!22, draw=OliveGreen!60] (s2\b) at (\b:1.60) {};
+        \draw[fig thin, black!30] (s1\a) -- (s2\b);
+    }
+\end{scope}
+
+\node[figcap, anchor=north] at (\xC, -1.95)
+    {information reaches $v$ from\\$K$ bonds away};
+
+\draw[biga] (2.15, 0.3) -- (\xB-2.75, 0.3);
+\draw[biga] (\xB+2.85, 0.3) -- (\xC-2.55, 0.3);
+
+% =====================================================================
+% The layer equation
+% =====================================================================
+\node[draw=RoyalPurple, thick, rounded corners=2pt, inner sep=5pt,
+      font=\small, fill=RoyalPurple!4] (eq) at (6.3, -3.75)
+    {$\displaystyle h_v^{(k+1)} = \sigma\!\Big(W^{(k)}\!\!
+      \sum_{u\in\mathcal{N}(v)\cup\{v\}}\!\! c_{vu}\, h_u^{(k)}\Big),
+      \qquad c_{vu} = \frac{1}{\sqrt{\hat d_v \hat d_u}}$};
+
+\node[font=\scriptsize, text=BrickRed, anchor=north] at (6.3, -4.55)
+    {no $e_{uv}$ in the sum $\Rightarrow$ single, double and aromatic bonds
+     send the same message};
+
+\end{tikzpicture}

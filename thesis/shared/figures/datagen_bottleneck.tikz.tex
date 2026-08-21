@@ -1,0 +1,43 @@
+% Data generation, then vs now: where the per-molecule cost sits.
+% June 2026 -- the sub_group rightPredicate was 100 % of runtime; today it is
+% unmeasurable and the charge-migration model (added 2026-08-03) is the cost:
+% anthracene 4.89 s -> 0.26 s and folic acid 105 s -> 7.7 s with migration off.
+% Source: docs/DATA_GEN_PERFORMANCE.md (re-measured 2026-08-10).
+% Requires: shared/notation.tex (fig styles, amber), amssymb (\checkmark).
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.4mm]}]
+
+  \def\W{10.0}  % bar length = 100 % of per-molecule runtime
+  \def\H{0.86}  % bar height
+
+  % --- then: all of it was the predicate ---
+  \node[font=\small,anchor=east,black!70] at (-0.25,{-0.5*\H}) {then};
+  \fill[BrickRed!35,draw=BrickRed!60!black,line width=0.5pt]
+       (0,0) rectangle ({\W},{-\H});
+  \node[font=\small,BrickRed!35!black] at ({0.5*\W},{-0.5*\H})
+       {\texttt{sub\_group} predicate --- $100\%$};
+
+  % --- what moved it ---
+  \node[font=\scriptsize,black!60,anchor=west] at (0,{-\H-0.62})
+       {charge/mass from term labels \quad$\cdot$\quad dedupe matches
+        \quad$\cdot$\quad \texttt{rightLimit}$\,=1$};
+  \draw[amber!80!black,fig heavy,->] ({\W+0.5},{-\H-0.30}) -- ({\W+0.5},{-\H-1.05});
+
+  % --- now: the delocalized charge model carries it ---
+  \node[font=\small,anchor=east,black!70] at (-0.25,{-\H-1.62}) {now};
+  \fill[RoyalBlue!22,draw=RoyalBlue!55!black,line width=0.5pt]
+       (0,{-\H-1.20}) rectangle ({0.95*\W},{-2*\H-1.20});
+  \fill[gray!14,draw=black!45,line width=0.5pt]
+       ({0.95*\W},{-\H-1.20}) rectangle ({\W},{-2*\H-1.20});
+  \node[font=\small,RoyalBlue!45!black] at ({0.47*\W},{-\H-1.62})
+       {charge-migration model --- ${\approx}95\%$};
+  \node[font=\scriptsize,BrickRed!60!black,anchor=north] at ({0.975*\W},{-2*\H-1.32})
+       {predicate ${\approx}0$};
+  \draw[BrickRed!60!black,fig hair,->] ({0.975*\W},{-2*\H-1.30}) -- ({0.975*\W},{-2*\H-1.24});
+
+  % --- and the guarantee that this is not skipped work ---
+  \node[draw=SeaGreen!55!black,fill=SeaGreen!8,rounded corners=2pt,anchor=north west,
+        line width=0.5pt,font=\scriptsize,inner sep=4pt] at (0,{-2*\H-1.95})
+       {$\checkmark$ identical species and derivation counts --- acetone $11$\,sp,
+        cyclohexanol $2330$\,sp\,/\,$3553$\,der};
+
+\end{tikzpicture}

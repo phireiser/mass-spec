@@ -1,0 +1,53 @@
+% InfoNCE alignment, panel (a): the geometry on the unit sphere.
+% Spectrum latent z_bwd (amber) is pulled onto its own molecule latent z_mol
+% (RoyalBlue) and pushed away from the other molecules in the batch.
+% Requires: shared/notation.tex (fig styles, amber), tikz libs arrows.meta,
+% calc, angles/quotes are NOT needed here.
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.6mm]}]
+
+  \def\R{3.0}
+  \coordinate (O) at (0,0);
+
+  % unit sphere: every latent is L2-normalised, so only direction matters
+  \draw[black!45,fig thin,dashed] (O) circle (\R);
+  \draw[black!25,fig hair] (O) ellipse ({\R} and {0.34*\R});
+  \node[black!55,font=\small] at (124:{1.17*\R}) {$\|z\|=1$};
+
+  % latents on the sphere
+  \coordinate (Q)  at (68:\R);   % spectrum query
+  \coordinate (P)  at (44:\R);   % positive molecule
+  \coordinate (N1) at (150:\R);
+  \coordinate (N2) at (205:\R);
+  \coordinate (N3) at (272:\R);
+  \coordinate (N4) at (335:\R);
+
+  % rays from the origin (direction is the whole content of a normalised latent)
+  \foreach \p in {Q,P,N1,N2,N3,N4}
+    \draw[black!30,fig hair] (O) -- (\p);
+
+  % push: the other molecules of the batch are driven away from the query
+  \foreach \p/\a in {N1/150,N2/205,N3/272,N4/335}{
+    \fill[RoyalBlue!45] (\p) circle (3.2pt);
+    \draw[BrickRed!75,fig line,->] ($(\p)+(\a:0.28)$) -- ++(\a:0.9);
+  }
+  \node[BrickRed!85!black,font=\small] at (232:{1.32*\R}) {push};
+
+  % pull: query onto its own molecule
+  \draw[SeaGreen!55!black,fig heavy,<->]
+        ($(Q)+(0.30,0.16)$) to[bend left=22] ($(P)+(0.34,-0.02)$);
+  \node[SeaGreen!45!black,font=\small,anchor=west]
+        at ($(P)!0.5!(Q)+(0.66,0.06)$) {pull};
+
+  % the pair itself
+  \fill[amber!85!black] (Q) circle (3.6pt);
+  \fill[RoyalBlue!75!black] (P) circle (3.6pt);
+  \node[amber!75!black,font=\small,anchor=south east]    at ($(Q)+(-0.06,0.14)$) {$z_{\mathrm{bwd}}$};
+  \node[RoyalBlue!70!black,font=\small,anchor=north west] at ($(P)+(0.16,-0.10)$) {$z_{\mathrm{mol}}^{+}$};
+
+  % the angle that the cosine actually measures
+  \draw[amber!80!black,fig medium] (44:0.78) arc (44:68:0.78);
+  \node[amber!70!black,font=\scriptsize] at (56:1.18) {$\cos$};
+
+  \fill (O) circle (1.6pt);
+
+\end{tikzpicture}

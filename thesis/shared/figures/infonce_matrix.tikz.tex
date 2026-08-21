@@ -1,0 +1,53 @@
+% InfoNCE alignment, panel (b): the batch similarity matrix.
+% Rows are spectrum latents, columns the molecule latents of the same batch;
+% the diagonal is the only positive, every other cell is a negative, and the
+% loss is the row-wise cross-entropy of softmax(z_bwd z_mol^T / T).
+% Requires: shared/notation.tex (fig styles, amber).
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.6mm]}]
+
+  \def\c{1.05}   % cell size
+  \def\n{4}      % batch size shown
+
+  % cells
+  \foreach \i in {1,...,\n}{
+    \foreach \j in {1,...,\n}{
+      \ifnum\i=\j
+        \fill[amber!45,draw=amber!70!black,line width=0.5pt]
+          ({(\j-1)*\c},{-(\i-1)*\c}) rectangle ++({\c},{-\c});
+        \node[font=\small,amber!30!black] at ({(\j-0.5)*\c},{-(\i-0.5)*\c}) {$+$};
+      \else
+        \fill[RoyalBlue!10,draw=black!35,line width=0.4pt]
+          ({(\j-1)*\c},{-(\i-1)*\c}) rectangle ++({\c},{-\c});
+        \node[font=\scriptsize,black!45] at ({(\j-0.5)*\c},{-(\i-0.5)*\c}) {$-$};
+      \fi
+    }
+  }
+
+  % axis labels
+  \node[font=\small,RoyalBlue!70!black] at ({0.5*\n*\c},{0.62}) {molecules $z_{\mathrm{mol}}$};
+  \node[font=\small,amber!70!black,rotate=90] at ({-0.72},{-0.5*\n*\c}) {spectra $z_{\mathrm{bwd}}$};
+  \foreach \k in {1,...,\n}{
+    \node[font=\scriptsize,black!60] at ({(\k-0.5)*\c},{0.20}) {\k};
+    \node[font=\scriptsize,black!60] at ({-0.24},{-(\k-0.5)*\c}) {\k};
+  }
+
+  % a row is one softmax classification problem
+  \draw[SeaGreen!55!black,fig medium,rounded corners=2pt]
+        (-0.10,{-1*\c+0.10}) rectangle ({\n*\c+0.10},{-2*\c-0.10});
+  \draw[SeaGreen!55!black,fig line,->]
+        ({\n*\c+0.18},{-1.5*\c}) -- ++(0.9,0)
+        node[anchor=west,font=\scriptsize,SeaGreen!45!black,align=left]
+        {row-wise\\ softmax};
+
+  % the objective
+  \node[anchor=north west,font=\small,align=left] at (0,{-\n*\c-0.55})
+    {$\displaystyle
+      \mathcal{L}_{\mathrm{NCE}}=-\frac{1}{B}\sum_{i=1}^{B}
+      \log\frac{\exp(z^{i}_{\mathrm{bwd}}\!\cdot z^{i}_{\mathrm{mol}}/T)}
+               {\sum_{j=1}^{B}\exp(z^{i}_{\mathrm{bwd}}\!\cdot z^{j}_{\mathrm{mol}}/T)}$};
+
+  \node[anchor=north west,font=\scriptsize,black!60,align=left] at (0,{-\n*\c-1.95})
+    {$T=0.07$ \quad batches sorted by parent mass\\
+     $\Rightarrow$ the negatives are near-isobaric};
+
+\end{tikzpicture}

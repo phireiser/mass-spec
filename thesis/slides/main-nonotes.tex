@@ -1,0 +1,11 @@
+% ===========================================================================
+% Projector deck: exactly the content of main.tex, with the speaker notes
+% suppressed.  Defining \nonotes before main.tex is read switches the beamer
+% option from "show notes on second screen=right" (320x90mm rehearsal page)
+% to "hide notes" (clean 160x90mm slide), see the \ifdefined\nonotes block
+% in main.tex.
+%
+% Build:  latexmk -pdf -shell-escape main-nonotes.tex
+% ===========================================================================
+\def\nonotes{}
+\input{main.tex}

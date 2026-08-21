@@ -2,8 +2,7 @@
     box/.style={rectangle, draw, thick, minimum height=1cm, text width=3cm, align=center},
     arrow/.style={-Stealth, very thick},
     wide/.style={rectangle, draw, thick, fill=blue!20, minimum height=1.2cm, minimum width=5cm, align=center},
-    narrow/.style={rectangle, draw, thick, fill=red!30, minimum height=1.2cm, minimum width=1.5cm, align=center},
-    mlbox/.style={rectangle, draw, thick, minimum height=1.5cm, minimum width=2.2cm, align=center, rounded corners}
+    narrow/.style={rectangle, draw, thick, fill=red!30, minimum height=1.2cm, minimum width=1.5cm, align=center}
 ]
 
 % Top: High-throughput acquisition → Bottleneck in analysis
@@ -11,40 +10,29 @@
 \node[narrow] (anal) at (6,4) {\textbf{Slow}\\Analysis};
 \draw[arrow] (acq.east) -- (anal.west) node[midway, above, font=\small] {bottleneck};
 
-% Expert symbol - draw hourglass in TikZ
-\begin{scope}[shift={(8.5,4)}]
+% Expert symbol, stacked above the bottleneck arrow - hourglass drawn in TikZ.
+% x = midpoint of acq.east (2.5) and anal.west (5.25).
+\begin{scope}[shift={(3.875,5.4)}]
   \node[circle, draw, thick, fill=gray!30, minimum size=1.5cm] {};
-  % Top bulb - filled with sand
-  \draw[thick] (-0.22, 0.28) -- (-0.22, 0.18) arc(180:0:0.22) -- (0.22, 0.18);
-  \fill[brown!40, opacity=0.6] (-0.22, 0.18) arc(180:0:0.22) -- (0.22, 0.18) -- (0.22, 0.28) arc(0:180:0.22) -- cycle;
-  % Narrow middle channel
-  \draw[thick] (-0.08, 0.18) -- (-0.05, -0.05) -- (0.05, -0.05) -- (0.08, 0.18);
-  \draw[thick] (-0.08, 0.18) -- (0.08, 0.18);
-  % Bottom bulb - partially filled
-  \draw[thick] (-0.22, -0.18) arc(180:0:0.22) -- (0.22, -0.18) -- (0.22, -0.28) arc(0:180:0.22) -- cycle;
-  \fill[brown!40, opacity=0.6] (-0.22, -0.28) arc(180:0:0.22) -- (0.22, -0.15) -- (-0.22, -0.15) -- cycle;
-  % Falling sand particles
-  \fill[brown!70] (-0.02, 0.05) circle (0.015);
-  \fill[brown!70] (0.03, 0.00) circle (0.015);
-  \fill[brown!70] (-0.01, -0.02) circle (0.015);
-  \fill[brown!60] (0.02, -0.03) circle (0.012);
+  % Two cones meeting at the neck (0,0); half-width 0.28 at the caps, half-height 0.42.
+  % Sand first, so the glass outline is drawn on top of it.
+  % Upper bulb: what has not yet run through, a cone tapering to the neck.
+  % Its width at height y is 0.28*y/0.42, hence 0.147 at y = 0.22.
+  \fill[brown!45] (-0.147, 0.22) -- (0.147, 0.22) -- (0, 0) -- cycle;
+  % Lower bulb: the collected sand, heaped into a cone under the neck.
+  % Same width rule: 0.187 at y = -0.28.
+  \fill[brown!45] (-0.28, -0.42) -- (0.28, -0.42) -- (0.187, -0.28)
+                  -- (0, -0.16) -- (-0.187, -0.28) -- cycle;
+  % Glass outline: across the top, down to the neck, out to the bottom, back up.
+  \draw[thick] (-0.28, 0.42) -- (0.28, 0.42) -- (0, 0)
+               -- (0.28, -0.42) -- (-0.28, -0.42) -- (0, 0) -- cycle;
+  % Cap bars, slightly wider than the bulbs
+  \draw[thick, line cap=round] (-0.34, 0.42) -- (0.34, 0.42);
+  \draw[thick, line cap=round] (-0.34, -0.42) -- (0.34, -0.42);
+  % Sand falling through the neck onto the heap
+  \draw[brown!70, line width=0.5pt] (0, -0.02) -- (0, -0.12);
+  \fill[brown!70] (0, -0.155) circle (0.013);
 \end{scope}
-\node[below, font=\scriptsize, text width=3cm, align=center] at (8.5,2.85) {Expert-driven \& Time-consuming};
-
-% Bottom: ML comparison
-\node[mlbox, fill=red!20] (ml1) at (0,0.5) {\textbf{Pure ML}\\
-    {\scriptsize No structure}\\
-    {\tiny $\times$ interpretability}\\
-    {\tiny $\times$ generalization}};
-
-\node[font=\LARGE] (vs) at (2.5,0.5) {vs};
-
-\node[mlbox, fill=green!20] (ml2) at (5.5,0.5) {\textbf{ML + Structure}\\
-    {\scriptsize Chemical rules}\\
-    {\tiny $\checkmark$ interpretable}\\
-    {\tiny $\checkmark$ generalizable}};
-
-% Title annotations
-\node[above, font=\Large, text width=15cm, align=center] at (3,5.2) {MS is widely used, but analysis is the challenge};
+\node[above, font=\scriptsize, text width=3cm, align=center] at (3.875,6.2) {Expert-driven \& Time-consuming};
 
 \end{tikzpicture}

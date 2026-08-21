@@ -1,0 +1,1097 @@
+% ===========================================================================
+% Appendix / backup slides, split out of main.tex to keep the talk proper
+% readable.
+%
+% \graphicspath and the relative ../shared/figures/ paths below resolve against
+% the directory latexmk is run from -- thesis/slides -- for both main.tex and
+% main-nonotes.tex, since the latter only \input{main.tex}.
+%
+% \appendix keeps the backup slides out of the navigation outline.
+% ===========================================================================
+
+\recordmainframetotal          % the talk proper ends here -> "n / N"
+\appendix
+\setcounter{framenumber}{0}    % backup slides restart at i
+\supplementarytrue
+
+% Shorthand for a full-slide backup figure: TikZ snippet scaled to fit
+% both width and height, so a wide figure is never blown up past the frame.
+\newcommand{\suppfig}[2][0.72\textheight]{%
+    \begin{adjustbox}{max totalsize={\textwidth}{#1},center}
+        \reportmetrics\input{#2}%
+    \end{adjustbox}%
+}
+
+
+\begin{frame}{Supplementary Figures}
+    \begin{itemize}
+        \item Instrumentation \& ionization methods
+        \item Molecular representation
+        \item Model architecture --- training \& inference
+        \item The residual MLP block
+        \item Latent-space alignment (InfoNCE)
+        \item Decoder conditioning
+        \item Spectral comparison measures
+        \item Data-generation cost
+        \item What the speedup enabled
+        \item Train / validation / test split
+    \end{itemize}
+\end{frame}
+\note{
+    These are backup slides --- figures from the thesis that did not enter
+    the talk itself. I will go to whichever one is relevant to your
+    question.
+}
+
+\section[Ionization]{Instrumentation \& Ionization}
+
+\begin{frame}{Mass Spectrometer -- Block Diagram}
+    \centering
+    \suppfig{../shared/figures/ms-flowchart.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Inlet $\rightarrow$ ion source $\rightarrow$ mass analyzer
+    $\rightarrow$ detector $\rightarrow$ data analysis.}
+\end{frame}
+\note{
+    The instrument as a block diagram: sample in, ionization, separation by
+    $m/z$, detection, data analysis.
+}
+
+
+
+\begin{frame}{Electron Ionization (EI)}
+    \centering
+    \suppfig{../shared/figures/ei-schematic.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize ${\sim}70$\,eV electrons eject one electron
+    $\Rightarrow$ radical cation $[M]^{+\bullet}$, which then fragments.}
+\end{frame}
+\note{
+    This is the ionization method the entire thesis is concerned with. A
+    70-electron-volt beam ejects one electron, producing a radical cation
+    whose excess internal energy is what drives the fragmentation.
+}
+
+\begin{frame}{Electrospray Ionization (ESI)}
+    \centering
+    \suppfig{../shared/figures/esi-schematic.tex}
+    \vskip 0.3em
+    {\footnotesize Soft ionization: charged droplets $\rightarrow$ gas-phase
+    ions, typically $[\mathrm{M+H}]^{+}$.}
+\end{frame}
+\note{
+    ESI for contrast: a soft method, which largely preserves the intact
+    molecule and produces very little fragmentation --- which is precisely
+    the information my approach relies on.
+}
+
+\begin{frame}{Atmospheric Pressure Chemical Ionization (APCI)}
+    \centering
+    \suppfig{../shared/figures/apci-schematic.tex}
+    \vskip 0.3em
+    {\footnotesize Corona discharge makes reagent ions; proton transfer gives
+    $[\mathrm{M+H}]^{+}$.}
+\end{frame}
+\note{
+    APCI: the solvent is ionized first by a corona discharge, and the
+    resulting reagent ions then transfer a proton to the analyte.
+}
+
+\begin{frame}{Matrix-Assisted Laser Desorption/Ionization (MALDI)}
+    \centering
+    \suppfig{../shared/figures/maldi-schematic.tex}
+    \vskip 0.3em
+    {\footnotesize Laser desorption from a matrix; predominantly singly
+    charged ions, suited to large biomolecules.}
+\end{frame}
+\note{
+    MALDI: the analyte is embedded in a matrix, a laser pulse desorbs both,
+    and the matrix ions effect the ionization. The ions produced are
+    predominantly singly charged, and the method scales to large biomolecules.
+}
+
+\begin{frame}{Electron Multiplier Detector}
+    \centering
+    \suppfig{../shared/figures/em-schematic.tex}
+    \vskip 0.3em
+    {\footnotesize Cascading secondary electrons across dynodes amplify a
+    single ion into a measurable current pulse.}
+\end{frame}
+\note{
+    And the detection side: a single ion strikes the first dynode, each
+    stage multiplies the electrons, and after several stages the result is
+    a current pulse that can be digitized.
+}
+
+\section[Representation]{Molecular Representation}
+
+\begin{frame}{Molecule as a Graph}
+    \centering
+    \begin{adjustbox}{max totalsize={\textwidth}{0.72\textheight},center}
+        \begin{tikzpicture}
+          \node (qm)
+                {\includegraphics[width=.45\textwidth]{../shared/figures/toluene-qm.png}};
+          \node [right = of qm] (gg)
+                {\resizebox{0.35\textwidth}{!}{%
+                    \input{../shared/figures/qm-graph-abstraction.tikz.tex}}};
+          \draw[->,>=stealth,thick] (qm) to (gg);
+        \end{tikzpicture}
+    \end{adjustbox}
+    \vskip 0.3em
+    {\footnotesize Geometry and electron density are abstracted away;
+    connectivity is kept.}
+\end{frame}
+\note{
+    The abstraction on which everything rests: toluene as a quantum-mechanical
+    object on the left, as a graph on the right. Atoms become vertices, bonds
+    become edges, while geometry and electron density are discarded.
+}
+
+\begin{frame}{Graph-Convolutional Molecular Encoding}
+    \centering
+    \suppfig{../shared/figures/gnn_pipeline.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Atom features $\rightarrow$ message passing $\rightarrow$
+    pooling $\rightarrow$ $z_{\mathrm{mol}}$ in the shared latent space.}
+\end{frame}
+\note{
+    The molecule encoder in detail. Each atom is initialized with a feature
+    vector, message passing renders those embeddings context-aware, pooling
+    collapses them into one fixed-length vector, and a projection maps it into
+    the shared latent space.
+}
+
+\begin{frame}{What a Graph Convolution Does}
+    \centering
+    \suppfig{../shared/figures/gcn_layer.tikz.tex}
+    \vskip 0.1em
+    {\footnotesize Each atom is replaced by a degree-weighted average of its
+    neighbours; $K$ layers $\Rightarrow$ $K$-hop context.}
+\end{frame}
+\note{
+    \scriptsize
+    The baseline convolution, for completeness --- this is the Kipf--Welling
+    GCN, and it is what the very first version of my encoder used.
+
+    One layer does three things. Every atom collects the feature vectors of its
+    neighbours, itself included via a self-loop. The contributions are weighted
+    by a coefficient that depends only on the two degrees, so a highly connected
+    atom does not dominate. The weighted sum is passed through one weight matrix
+    shared by all atoms and a non-linearity. Stacking $K$ layers means every
+    atom has seen everything within $K$ bonds.
+
+    The point of the middle panel is the coefficient: it is fixed by the graph
+    structure, not learned, and it is a normalized average. An average cannot
+    count --- it cannot tell one neighbour of a kind from three.
+
+    And the point of the first panel is what is missing. The bond never enters
+    the sum. Only atom features travel along the edges, so a single, a double
+    and an aromatic bond deliver exactly the same message. After pooling, what
+    is left is essentially which atoms are present --- the composition, and
+    therefore the mass. That is the confound the results chapter is about, and
+    it is why the next slide moves to GINE.
+}
+
+\begin{frame}{Why GINEConv -- Bond Orders Enter the Message}
+    \centering
+    \suppfig[0.60\textheight]{../shared/figures/gineconv.tikz.tex}
+    \vskip 0.1em
+    {\footnotesize A GCN averages neighbours and \emph{drops} the bond, so what
+    survives is composition --- i.e.\ mass. GINE adds the bond embedding to
+    every message and \emph{sums} ($1$-WL expressive)
+    $\Rightarrow$ constitutional isomers stay distinguishable.\\[0.15em]
+    Here: $3\times128$ layers, LayerNorm $+$ residual, mean\,$\|$\,max readout
+    $\rightarrow z_{\mathrm{mol}}\in\mathbb{R}^{256}$.}
+\end{frame}
+\note{
+    \scriptsize
+    A closer look at the convolution itself, since the choice is not incidental.
+
+    A plain graph convolution averages the neighbouring atom features. The bond
+    never enters the update, so what survives pooling is essentially which
+    atoms are present --- the composition, and with it the mass. That is
+    exactly the confound the results chapter is fighting.
+
+    GINE differs in two ways. First, the bond order is lifted to the same width
+    as the atom features and \emph{added} into each message, so a double bond
+    and a single bond produce different messages. Second, the aggregation is a
+    sum followed by an MLP rather than a mean, which is what makes the
+    architecture as expressive as the one-dimensional Weisfeiler--Leman test.
+    A mean cannot see multiplicity; a sum can.
+
+    Concretely: eighteen atom channels --- element one-hot, charge, radical,
+    degree, aromatic flag, incident bond order --- and one bond channel, both
+    projected to 128. Three layers, each with LayerNorm, ReLU and a residual
+    connection. Readout is mean concatenated with max, because the max keeps
+    the few atom environments that separate isomers, which a mean over all
+    atoms dilutes.
+
+    The practical consequence: my first encoder was a two-layer GCN over atom
+    identity alone, and it collapsed to composition. This one does not.
+}
+
+\begin{frame}{Pooling -- $n$ Atom Vectors $\rightarrow$ One Molecule Vector}
+    \centering
+    \suppfig{../shared/figures/pooling.tikz.tex}
+\end{frame}
+\note{
+    \scriptsize
+    ``Pooling'' on the training slide is this step, and it is the only place
+    where the size of the molecule disappears.
+
+    Message passing gives one vector per atom, so a molecule with eight atoms
+    leaves eight vectors and one with forty-seven leaves forty-seven. Everything
+    downstream --- the latent space, the contrastive loss --- needs a single
+    vector of fixed width. Pooling is the operator that collapses the set.
+
+    The constraint is that it must not depend on the order of the rows. Atom
+    numbering is an artefact of the file, not chemistry, so the readout has to
+    be a symmetric function: sum, mean, or max.
+
+    The middle panel is why the choice among them matters. The mean of that
+    column is 0.3 --- the single atom carrying 0.9 is averaged away by the
+    three that carry almost nothing --- while the max returns 0.9. The
+    dilution goes as one over the atom count, and the environments that
+    distinguish constitutional isomers are exactly the rare ones.
+
+    So the encoder concatenates both: 128 channels of mean, 128 of max, and one
+    linear layer projects the 256 down to the 128-dimensional latent. The mean
+    carries the bulk composition, the max carries the outliers. The
+    fragmentation-graph encoder uses a plain mean pool --- there the vertices
+    are fragments, and there is no isomer distinction to preserve at that
+    level.
+}
+
+\begin{frame}{Two-Level Representation -- Overview}
+    \centering
+    \suppfig{../shared/figures/level2.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Local graph encoders for atom/bond chemistry, global
+    hypergraph encoders for multi-step fragmentation.}
+\end{frame}
+\note{
+    The two-level construction in one figure: the lower level encodes the
+    chemistry within each molecular state, the upper level encodes how those
+    states are related by fragmentation.
+}
+
+\begin{frame}{Two-Level Molecular Latent Representation}
+    \centering
+    \suppfig{../shared/figures/mol_latent.tex}
+    \vskip 0.3em
+    {\footnotesize Stage 1: state $\rightarrow$ embedding. Stage 2:
+    embeddings become vertex features of the fragmentation hypergraph.}
+\end{frame}
+\note{
+    And the same construction stated concretely. Each molecular state is
+    first encoded individually. Those embeddings then enter as vertex features
+    of the fragmentation hypergraph, whose hyperedges carry the multi-step
+    structure on top.
+}
+
+\begin{frame}{The Graph Representation Challenge}
+    \centering
+    \suppfig{../shared/figures/representation-visual.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Fingerprints score well but are not (easily) invertible ---
+    which matters for the inverse direction.}
+\end{frame}
+\note{
+    Why the representation question is not settled: fingerprints perform very
+    well, but they cannot readily be inverted back to a structure --- and the
+    inverse direction is exactly what is required here.
+}
+
+\section[Architecture]{Model Architecture}
+
+\begin{frame}[fragile]{Architecture -- Training}
+    \centering
+    \IfFileExists{../shared/figures/ms_architecture_training.tex}{%
+        \begin{adjustbox}{max totalsize={\textwidth}{0.86\textheight},center}
+            \input{../shared/figures/ms_architecture_training.tex}
+        \end{adjustbox}%
+    }{
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }
+\end{frame}
+\note{
+    \scriptsize
+    Now to the machine-learning model.
+    This is the architecture, trained in two phases --- Phase A and Phase B.
+
+    Three things go in: the measured spectrum, the molecule graph and the fragmentation graph.
+    Each has its own encoder, and each produces a vector of the same dimension.
+    A GINEConv network with pooling encodes the molecule.
+    A two-level encoder handles the fragmentation graph: first each fragment, then a GCN over the whole graph.
+    A residual MLP encodes the spectrum.
+
+    Phase A trains the forward direction, molecule to spectrum.
+    The molecule and fragment latents are averaged, passed through the forward head, and used to condition the decoder.
+
+    The decoder is the part worth highlighting.
+    It does not emit a free-form spectrum.
+    It predicts one intensity per fragment and scatters it onto that fragment's m/z bin --- which is why the per-fragment embeddings and masses come in from the right.
+    The result is masked by the parent mass, then scored with cosine plus Wasserstein: the dotted line down the left margin.
+
+    Phase B trains the backward direction, spectrum to molecule. InfoNCE pulls each spectrum latent onto its own molecule and away from the others — and this is where the molecule encoder is actually trained. The same decoder must then rebuild the spectrum from that backward latent.
+}
+
+\begin{frame}[fragile]{Architecture -- Inference}
+    \centering
+    \IfFileExists{../shared/figures/ms_architecture_inference.tex}{%
+        \begin{adjustbox}{max totalsize={\textwidth}{0.86\textheight},center}
+            \input{../shared/figures/ms_architecture_inference.tex}
+        \end{adjustbox}%
+    }{%
+        \framebox[0.8\linewidth]{%
+            \rule{0pt}{0.3\textheight}%
+            \ph{[figure pending]}%
+        }%
+    }
+\end{frame}
+\note{
+    \scriptsize
+    We have a spectrum and want the structure, so nothing on the molecule side is available as input any more.
+
+    The spectrum takes the same backward path as in training --- binned spectrum, residual MLP, backward head --- and gives one vector in the shared latent space.
+
+    The molecule latents for the whole candidate library are precomputed and normalized in advance.
+    A query is then a nearest-neighbour lookup that returns the top-$k$ molecules.
+
+    The second stage is the rerank: for each candidate we run the forward model, predict its spectrum, and score it against the spectrum we measured --- the dotted line back to the input.
+    Imagine it like this: Retrieval proposes, the forward model checks.
+
+    The rerank also carries a parent-mass mask, and that mask turns out to do most of the work.
+}
+
+\section[Internals]{Model Internals}
+
+\begin{frame}{The Residual MLP Block}
+    \centering
+    \suppfig{../shared/figures/residual_mlp.tikz.tex}
+    \vskip 0.1em
+    {\footnotesize $x' = x + F_\theta(x)$ --- the block learns a
+    \emph{correction}, not the whole map.}
+\end{frame}
+\note{
+    \scriptsize
+    The block that shows up everywhere in the architecture as ``residual MLP'':
+    the spectrum encoder, the forward and backward heads, and the spectrum
+    decoder are all built from it.
+
+    Unrolled, on the left: a linear layer, LayerNorm, ReLU, dropout, a second
+    linear layer, another LayerNorm --- and then the input is added back on.
+    The skip is only taken when the input and output widths agree; where the
+    block changes width, it is a plain MLP.
+
+    Why bother, in the middle. Without the skip, the signal --- and on the way
+    back the gradient --- has to pass through every weight matrix in the stack,
+    and it attenuates. With it there is an unobstructed path from the loss to
+    every layer. The consequence for what the layer has to learn is the more
+    useful way to see it: the identity is already there for free, so each block
+    only has to represent the deviation from it. Small weights mean the block
+    is close to a no-op rather than close to destroying its input, which is
+    why deeper stacks stay trainable.
+
+    Concretely on the right, the spectrum encoder: the binned spectrum, 999
+    bins over one to a thousand Dalton, goes into a residual block of width
+    512, then a second block projects to the 128-dimensional latent. Only the
+    first block is residual --- the second changes width, so there is nothing
+    to add.
+
+    Normalization inside is LayerNorm rather than BatchNorm throughout, because
+    several of these blocks are applied per fragment, where the leading
+    dimension is a variable fragment count rather than a batch.
+}
+
+\begin{frame}{Phase B -- InfoNCE Alignment}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.46\textwidth}
+            \centering
+            \begin{adjustbox}{max totalsize={\linewidth}{0.68\textheight},center}
+                \reportmetrics\input{../shared/figures/infonce_geometry.tikz.tex}
+            \end{adjustbox}
+        \end{column}
+        \begin{column}{0.52\textwidth}
+            \centering
+            \begin{adjustbox}{max totalsize={\linewidth}{0.72\textheight},center}
+                \reportmetrics\input{../shared/figures/infonce_matrix.tikz.tex}
+            \end{adjustbox}
+        \end{column}
+    \end{columns}
+    \vskip 0.4em
+    \centering
+    {\footnotesize One shared space \enspace$\cdot$\enspace
+    diagonal $=$ positive, rest of the batch $=$ negatives}
+\end{frame}
+\note{
+    \scriptsize
+    A closer look at the alignment term, because it is what makes retrieval
+    possible at all.
+
+    Spectrum and molecule are encoded by completely different networks, so
+    nothing forces their outputs into the same space. InfoNCE does. Both
+    latents are L2-normalised --- left panel --- so only the direction carries
+    information, and the similarity is a cosine. The loss pulls a spectrum onto
+    the molecule it was actually measured from, and pushes it away from every
+    other molecule in the batch.
+
+    Concretely --- right panel: within a batch of size $B$ I form the full
+    $B\times B$ matrix of cosine similarities, divide by a temperature of
+    $0.07$, and read each row as a $B$-way classification problem whose correct
+    answer is the diagonal. The loss is the row-wise cross-entropy; the other
+    members of the batch are the negatives, so no sampling machinery is needed.
+
+    Two things are worth stressing. First, this is the term that actually
+    trains the molecule encoder --- in Phase B the gradient reaches it through
+    nothing else. Second, the batches are not random: they are sorted by parent
+    mass and cut into contiguous chunks, so the negatives a spectrum must reject
+    are its mass-nearest neighbours. Mass can no longer separate the positive
+    from the negatives --- exactly the confound the results section is about.
+
+    And this is the space the retrieval lookup runs in: the candidate library is
+    encoded once, and a query spectrum is a cosine search.
+}
+
+\begin{frame}{Conditioning the Decoder}
+    \centering
+    \suppfig{../shared/figures/decoder_conditioning.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize One decoder, one slot: Phase A puts $z_{\mathrm{fwd}}$
+    in it, Phase B $z_{\mathrm{bwd}}$.}
+\end{frame}
+\note{
+    \scriptsize
+    What ``conditioning'' means concretely in the architecture diagram.
+
+    The decoder never sees a molecule. It sees the fragment set, and one
+    global vector --- $z_{\mathrm{cond}}$. That vector is the only opening
+    through which anything about the input reaches it.
+
+    Mechanically: the latent is broadcast, unchanged, to every fragment of the
+    molecule and concatenated onto that fragment's own embedding and its mass.
+    One shared MLP scores each row, and a softmax over the fragments turns the
+    scores into intensity shares. Each share is then added into the m/z bin
+    given by that fragment's mass --- so the peaks are placed by chemistry, and
+    the conditioning latent only decides how the intensity is distributed over
+    them. This is also why the decoder cannot collapse to the dataset-mean
+    spectrum: its output is a function of the actual fragment set.
+
+    The point of the slide is the slot itself. In Phase A the forward head's
+    output goes in, in Phase B the spectrum's backward latent goes in --- same
+    weights, same decoder, no switch inside. So the same reconstruction loss
+    grades both latents through one shared function, and a $z_{\mathrm{bwd}}$
+    that does not sit where $z_{\mathrm{fwd}}$ sits cannot score well. The
+    shared decoder pushes the two directions into one space; InfoNCE does the
+    rest.
+}
+
+\section[Cos / Wass.]{Spectral Comparison Measures}
+
+\begin{frame}{Cosine Similarity -- Geometry}
+    \centering
+    \suppfig{../shared/figures/cosine_vectors.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize $\cos\theta = (A\cdot B)/(\|A\|\|B\|)$ --- direction only,
+    hence scale-invariant.}
+\end{frame}
+\note{
+    Cosine similarity is the angle between the two intensity vectors. It
+    depends on direction alone, so rescaling a spectrum leaves it unchanged.
+}
+
+\begin{frame}{Wasserstein Distance -- Illustration}
+    \centering
+    \suppfig{../shared/figures/wasserstein_expl.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Sorted vectors as cumulative staircases; the distance is
+    the shaded transport area, normalized by $n$.}
+\end{frame}
+\note{
+    The Wasserstein distance as a transport cost: both sorted vectors are
+    drawn as cumulative staircases, and the shaded area between them ---
+    divided by the number of elements --- is the distance.
+}
+
+\begin{frame}{Wasserstein Distance -- Upsampling}
+    \centering
+    \suppfig{../shared/figures/wasserstein_upsampling.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Unequal peak counts are brought to a common length
+    $\mathrm{LCM}(n,m)$ by repetition, preserving each value's share.}
+\end{frame}
+\note{
+    The matched-pair form requires both vectors to be of equal length, which
+    real spectra never are. Each is therefore repeated up to the least common
+    multiple, which preserves every value's relative share of the total mass.
+}
+
+\begin{frame}{Cosine vs.\ Wasserstein -- (a) Aligned Spectra}
+    \centering
+    \suppfig{../shared/figures/cosine_vs_wasserstein_a.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Every B peak meets its A counterpart: cosine $=1$
+    ($\theta=0$), Wasserstein $=0$ (no mass to move).}
+\end{frame}
+\note{
+    The reference case: spectrum A plotted upward, spectrum B mirrored
+    downward, peaks aligned. Both measures agree that these are identical.
+}
+
+\begin{frame}{Cosine vs.\ Wasserstein -- (b) B Shifted $+8$\,Da}
+    \centering
+    \suppfig{../shared/figures/cosine_vs_wasserstein_b.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Cosine counts only \emph{shared} positions $\Rightarrow$
+    collapses to $0$; Wasserstein transports the mass back and stays finite
+    ($21.1$).}
+\end{frame}
+\note{
+    Now shift B by 8 Dalton. Cosine registers intensity only at shared
+    positions, so its dot product vanishes and it drops straight to zero ---
+    although the spectra are evidently still related. Wasserstein measures the
+    work required to transport B's mass back onto A, and returns a finite
+    value.
+}
+
+\begin{frame}{Cosine vs.\ Wasserstein -- (c) Response vs.\ Shift}
+    \centering
+    \suppfig{../shared/figures/cosine_vs_wasserstein_c.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Cosine drops to zero at once, with spurious spikes at
+    ${\sim}14$ and $17$\,Da; Wasserstein rises linearly with displacement.}
+\end{frame}
+\note{
+    Sweeping the shift makes this systematic. Cosine falls off abruptly and
+    even exhibits spurious spikes, where a displaced peak coincides with a
+    different peak. Wasserstein degrades gracefully, in proportion to the
+    displacement.
+}
+
+\begin{frame}{Cosine vs.\ Wasserstein -- (d) Response vs.\ Scaling}
+    \centering
+    \suppfig{../shared/figures/cosine_vs_wasserstein_d.tikz.tex}
+    \vskip 0.3em
+    {\footnotesize Cosine unchanged at $1.00$ (direction, not magnitude);
+    un-normalized Wasserstein grows with the added intensity.}
+\end{frame}
+\note{
+    And the complementary axis: B's intensities are scaled with the positions
+    held fixed. Cosine is unaffected, as it compares direction, not magnitude,
+    whereas the un-normalized Wasserstein distance grows with the added mass.
+
+    The two measures therefore capture different properties --- pattern at
+    fixed coordinates versus position along the axis --- which is why the loss
+    employs both.
+}
+
+\section[Data-Gen Cost]{Data-Generation Cost}
+
+\begin{frame}{Fragmentation Computation Times}
+    \centering
+    \figorpending{width=0.70\linewidth}{../shared/figures/time_vs_complexity_logy_over40.png}
+    \vskip 0.3em
+    {\footnotesize Time vs.\ molecular complexity (trivial expansions
+    $<40$\,s excluded): positive trend, but huge variance at equal
+    complexity.}
+\end{frame}
+\note{
+    Cost against molecular complexity, on a logarithmic scale, with the
+    trivial expansions excluded. The trend is clearly positive, but the spread
+    at any given complexity is very large --- complexity alone therefore does
+    not predict runtime; the available fragmentation pathways matter just as
+    much.
+}
+
+\begin{frame}{Fragmentation Computation Times -- Re-measured}
+    \centering
+    \figorpending{width=0.92\linewidth}{../shared/figures/time_vs_complexity_current.pdf}
+    \vskip 0.2em
+    {\footnotesize Same molecules, current code \enspace$\cdot$\enspace
+    the trend survives, the level drops}
+\end{frame}
+\note{
+    \scriptsize
+    The same experiment as the previous slide, re-run with today's pipeline ---
+    identical molecule list, identical SMILES, identical complexity axis.
+
+    Grey is the old measurement, amber the current one. The whole cloud drops by
+    two to four orders of magnitude: the median molecule goes from eight seconds
+    to a quarter of a second, and all hundred-odd molecules together now cost
+    three and a half minutes of compute rather than the better part of a
+    fortnight.
+
+    What does not change is the shape. The trend with complexity is still
+    positive, and the spread at fixed complexity is still wide --- the fit
+    explains under half the variance. So the conclusion from the old slide
+    stands: complexity alone does not predict runtime, the available
+    fragmentation pathways do. Only the level moved.
+
+    On comparability: the old numbers are full cluster runs, which is why they
+    pile up on a floor around seven to ten seconds --- that floor is container
+    start-up, not chemistry. The new numbers are the DG build alone, one thread,
+    through the same strategy \texttt{main.py} uses. And the tail has not
+    vanished: the open triangle is scopolamine, which did not finish inside the
+    one-hour limit I gave each task, so it is censored rather than dropped. One
+    further molecule is absent because its SMILES in the old table does not
+    parse.
+}
+
+\begin{frame}{Fragmentation Cost -- Then vs Now}
+    \centering
+    \begin{adjustbox}{max totalsize={0.86\textwidth}{0.44\textheight},center}
+        \reportmetrics\input{../shared/figures/datagen_speedup.tikz.tex}
+    \end{adjustbox}
+    \vskip 0.2em
+    \begin{adjustbox}{max totalsize={0.86\textwidth}{0.30\textheight},center}
+        \reportmetrics\input{../shared/figures/datagen_bottleneck.tikz.tex}
+    \end{adjustbox}
+    \vskip 0.2em
+    {\footnotesize Same fragments, more chemistry \enspace$\cdot$\enspace
+    the bottleneck moved}
+\end{frame}
+\note{
+    \scriptsize
+    The previous slide is the old world --- those timings were measured in
+    April. This is where the same pipeline stands today.
+
+    Upper panel: catechol went from sixty-four hours to under a second,
+    anthracene from five hours to five seconds. Small molecules move much less,
+    because they are dominated by start-up rather than by fragmentation. The
+    comparison is not perfectly controlled --- old numbers are full cluster
+    runs with a seven-second task floor, new ones in-process builds --- but
+    three to five orders of magnitude are not a measurement artefact.
+
+    Lower panel, why. In June the \texttt{sub\_group} predicate was the entire
+    per-molecule runtime. Three commits landed on it: charge and mass are read
+    off the term labels, matches are deduplicated by a generalized-position
+    signature, and the vertex mapper is capped at one right-side comatch, so
+    MØD no longer enumerates every mapping to service a Python callback.
+
+    Two points. This is optimisation, not skipped work: acetone returns the
+    same eleven species it returned at two minutes. And the cost that remains
+    is the delocalized charge-migration model, which did not exist in the old
+    measurement --- the pipeline is orders of magnitude faster while doing
+    strictly more chemistry.
+}
+
+\begin{frame}{Fragmentation Cost -- What Moved}
+    \centering
+    \begin{adjustbox}{max totalsize={\textwidth}{0.82\textheight},center}
+        \input{../shared/figures/datagen_hotpath.tikz.tex}
+    \end{adjustbox}
+\end{frame}
+\note{
+    \scriptsize
+    The previous slide says the cost fell by three to five orders of
+    magnitude. This is where it went.
+
+    Top row is the June hot path. For every derivation, M\O D enumerated the
+    full product of left matches and right comatches --- up to ten thousand on a
+    symmetric molecule --- and every one of them called back into Python and ran
+    the saturated path and BFS traversal: half a million traversals on
+    2-propanol. That whole stretch was a hundred percent of the runtime.
+
+    Three commits, in the middle row. First: charge and mass are read off the
+    term vertex labels instead of rebuilding a molecule per fragment. Second:
+    the verdict only depends on where the rule's alkyl, heteroatom and saturated
+    positions land, so the traversal is memoised on that signature and
+    symmetry-equivalent embeddings collapse --- half a million calls down to
+    four hundred and twenty. Third, and the largest: the outcome depends on the
+    left map alone, so right-side comatch multiplicity is pure redundancy and
+    the mapper is capped at one. 2-propanol goes from twenty seconds to one and
+    a half.
+
+    The green band is the part I want to insist on, because a filter that got
+    cheap by filtering less would be cheap for the wrong reason. The dumps are
+    byte-identical. Cyclohexanol gives the same species and derivation counts
+    capped or uncapped --- and is one point seven times slower uncapped, for
+    exactly the same graph. The predicate still rejects fifteen point six
+    percent of its species, and acetone returns the same eleven species it
+    returned at two minutes.
+}
+
+\begin{frame}{Where the Data-Generation Time Goes}
+    \centering
+    \figorpending{width=\linewidth}{../shared/figures/datagen_flamegraph.pdf}
+    \vskip 0.3em
+    {\footnotesize Sampled call tree (folic acid, forward-only, 1 thread):
+    $86\%$ of samples sit inside M\O D's C++ matching loop.}
+\end{frame}
+\note{
+    And a profile of where that time is actually spent. The overwhelming
+    majority of samples lie within M\O D's C++ matching loop, with no Python
+    frame below --- the Python-side predicates are therefore not the
+    bottleneck, and accelerating this is not a matter of optimizing my own
+    code.
+}
+
+\begin{frame}{What the Speedup Bought}
+    \centering
+    \begin{adjustbox}{max totalsize={\textwidth}{0.72\textheight},center}
+        \reportmetrics\input{../shared/figures/speedup_enabled.tikz.tex}
+    \end{adjustbox}
+    \vskip 0.2em
+    {\footnotesize Faster is not the point \enspace$\cdot$\enspace
+    what the compute was spent on is}
+\end{frame}
+\note{
+    \scriptsize
+    The previous two slides are about cost. This one is about what the cost
+    bought. Three things.
+
+    First, chemistry I could not previously afford. The delocalized
+    charge-migration model is now about ninety-five percent of the runtime, and
+    it multiplies the species count by twenty on anthracene. In the old regime,
+    where a single predicate cost two minutes on acetone, it could not have
+    been switched on at all. It is not cosmetic either: on glucose, limonene
+    and sucrose the gains survive chance correction.
+
+    Second, the hard molecules stopped disappearing. One that exceeds its wall
+    limit writes no dump and silently drops out of the corpus --- which biases
+    the data against exactly the difficult cases. Aldosterone was killed at
+    twelve and a half hours; capped it finishes in an hour and a quarter, and
+    on the two steroids where the cap was validated the result is a strict
+    superset, twenty-four extra masses each.
+
+    Third, scale. The Phase-1 gate needed fragmentation graphs for one thousand
+    three hundred and forty same-formula decoys, and it is what says the
+    forward direction carries structural information at all: top-one of one
+    half against a chance level of point two-three, p of five times ten to the
+    minus fourteen. At sixty-four hours for catechol alone, that experiment
+    would not have been attempted.
+}
+
+\section[Evaluation]{Evaluation Details}
+
+\begin{frame}{Train / Validation / Test -- Two-Stage Split}
+    \centering
+    \begin{adjustbox}{max totalsize={\textwidth}{0.76\textheight},center}
+        \reportmetrics\input{../shared/figures/data_splits.tikz.tex}
+    \end{adjustbox}
+    \vskip 0.2em
+    {\footnotesize $56$ / $24$ / $20\,\%$ $\Rightarrow$ $38$ / $15$ / $13$
+    molecules}
+\end{frame}
+\note{
+    \scriptsize
+    How the data are partitioned, since every reported number depends on it.
+
+    The split is made in two stages. First the full set of molecule--spectrum
+    pairs is cut eighty--twenty, and that twenty percent is the test set --- it
+    is sealed at this point and is not looked at again until the final
+    evaluation. Then the remaining development portion is cut seventy--thirty
+    into training and validation. Note that the second ratio is relative to the
+    development portion, not to the whole dataset, so what comes out overall is
+    fifty-six, twenty-four and twenty percent.
+
+    On the paired subset --- the sixty-six molecules that have both a
+    fragmentation graph and a measured spectrum --- that is thirty-eight,
+    fifteen and thirteen.
+
+    The roles are strictly separated, and this is the point of the slide.
+    Training data drive the gradient updates. The validation split does model
+    selection: which checkpoint is kept, and the hyperparameters. The test
+    split does neither; it is used post hoc for the retrieval evaluation only.
+    So nothing from the evaluation data can leak back into the fit.
+
+    One detail worth naming: the partition is made with \texttt{shuffle=False},
+    so the data are cut in their original order rather than permuted first. The
+    split is therefore deterministic and reproducible by construction --- the
+    random state has no effect in this configuration.
+
+    The obvious caveat: with thirteen test molecules, the test estimate is
+    noisy. That is a consequence of how few molecules have both a derivation
+    dump and a measured spectrum, and it is part of why I call this a proof of
+    concept.
+}
+
+\begin{frame}{Splits, Gallery and Provenance}
+    \centering
+    \begin{tabular}{ l r }
+      \hline
+      Molecules with paired dumps $+$ spectra & $66$ \\
+      \quad train / validation / test         & $38$ / $15$ / $13$ \\
+      Retrieval gallery (train $+$ val $+$ test) & $66$ \\
+      Mass-controlled queries (test)          & $13$ \\
+      \hline
+      Training runs behind the numbers        & $1$ \\
+      Spectrum bins ($1$--$1000$\,Da, $1$\,Da) & $999$ \\
+      \hline
+    \end{tabular}
+    \vskip 0.5em
+    {\footnotesize All reported numbers come from one training run
+    (\texttt{ml\_checkpoint.pt}, 2026-07-06) --- no seed averaging, no
+    model selection on the test split.}
+\end{frame}
+\note{
+    The figures underlying the results slides. 66 molecules had both a
+    fragmentation graph and a measured spectrum, which splits 38 / 15 / 13.
+    Retrieval is closed-library: the gallery comprises all 66, which is the
+    structure-elucidation setting, and the 13 test molecules were seen neither
+    in training nor in model selection.
+
+    All results come from a single training run, without seed averaging. That
+    is the principal reason I describe the work as a proof of concept.
+}
+
+\begin{frame}{Mean Reciprocal Rank (MRR)}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.56\textwidth}
+            \centering
+            \begin{adjustbox}{max totalsize={\linewidth}{0.74\textheight},center}
+                \reportmetrics\input{../shared/figures/mrr_ranking.tikz.tex}
+            \end{adjustbox}
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \centering
+            \begin{adjustbox}{max totalsize={\linewidth}{0.66\textheight},center}
+                \input{../shared/figures/mrr_curve.tikz.tex}
+            \end{adjustbox}
+        \end{column}
+    \end{columns}
+    \vskip 0.3em
+    \centering
+    {\footnotesize Only the rank of the \emph{true} molecule counts
+    \enspace$\cdot$\enspace the top of the list dominates}
+\end{frame}
+\note{
+    \scriptsize
+    The retrieval metric, since every result slide is stated in it.
+
+    For one query I rank the whole gallery by cosine similarity to the query
+    spectrum and look up where the true molecule landed. The score for that
+    query is one over its rank: rank one gives $1$, rank three gives a third.
+    MRR is that reciprocal rank averaged over the queries --- left panel.
+
+    Two properties matter for reading the results. It only cares about the
+    position of the correct answer; everything above it is wrong by
+    construction and nothing below it is looked at. And the weighting is
+    strongly top-heavy --- right panel: moving a hit from rank ten to rank one
+    is worth ten times as much as moving it from rank twenty to rank ten. That
+    matches how retrieval is actually used --- a chemist inspects the first few
+    candidates, not the first hundred.
+
+    Two cautions. With a gallery of only $66$ molecules an MRR is easy to
+    over-read, which is why I always show it against a chance level rather than
+    on its own --- that is the next slide. And a single bad query moves the
+    average much less than a single good one, because the score is bounded
+    above by one and floors near zero; MRR is therefore optimistic in the tail.
+}
+
+\begin{frame}{Analytic Chance Level in a Mass Window}
+    A query restricted to $\pm W$\,Da leaves a pool of $m$ candidates,
+    exactly one of which is correct. Ranking that pool at random puts the
+    correct molecule at rank $r$ with probability $1/m$, so
+    {\small\[
+      \mathrm{MRR}_{\text{chance}}(m)
+      = \mathbb{E}\!\left[\tfrac{1}{r}\right]
+      = \frac{1}{m}\sum_{r=1}^{m}\frac{1}{r}
+      = \frac{H_m}{m},
+      \quad
+      \text{chance} = \frac{1}{N}\sum_{i=1}^{N}\frac{H_{m_i}}{m_i}
+    \]}
+    \noindent{\small $H_m$: the $m$-th harmonic number; $m_i$: pool size of query $i$.}
+    \vskip 0.6em
+    \centering
+    {\footnotesize
+    \begin{tabular}{ r r r r r r r }
+      \hline
+      $m$ & $1$ & $2$ & $3$ & $5$ & $10$ & $20$ \\
+      $H_m/m$ & $1.000$ & $0.750$ & $0.611$ & $0.457$ & $0.293$ & $0.180$ \\
+      \hline
+    \end{tabular}}
+    \vskip 0.6em
+    \raggedright
+    {\footnotesize The average is taken \emph{per query}, not at the mean pool
+    size: $H_m/m$ is convex, so plugging in $\bar m = 5.4$ would give
+    ${\approx}0.44$ instead of $0.503$ --- the per-query bar is the
+    \textbf{harder} one.}
+\end{frame}
+\note{
+    \scriptsize
+    Where the chance numbers on the mass-controlled slide come from.
+
+    Inside a window the query has a pool of $m$ candidates, and exactly one of
+    them is right. If I rank that pool at random, the correct molecule is
+    equally likely to land at any rank, so each rank has probability one over
+    $m$. The expected reciprocal rank is then the average of one over $r$ over
+    all $m$ ranks --- that is the $m$-th harmonic number divided by $m$.
+
+    Every query has its own pool size, so I evaluate that expression per query
+    and average afterwards. Small pools are easy: with three candidates,
+    chance alone gives 0.61.
+
+    One detail worth stating. Because the function is convex, averaging per
+    query gives a higher value than plugging in the mean pool size --- 0.503
+    rather than about 0.44. So the bar I report is the stricter of the two,
+    and the margin I quote is the conservative one.
+}
+
+\begin{frame}{Honest assessment}
+    \begin{itemize}
+        \item Beyond-mass margin is \emph{small}: ${+}0.048$ / ${+}0.013$ MRR
+              on $13$ queries, single run
+        \item Uncontrolled metrics --- reranking included --- are mass
+              filtering, not evidence
+        \item Fragment branch buys molecule-specificity, not a retrieval win
+    \end{itemize}
+\end{frame}
+\note{
+    Now the honest assessment.
+    What survives the control is small.
+    Roughly five and one percentage points of MRR, on thirteen queries and a single run.
+    The uncontrolled metrics, reranking included, reflect mass consistency.
+    I do not present them as evidence.
+    The fragment branch earns its place through molecule-specificity, not through a retrieval gain.
+    Which leads directly to the outlook.
+}
+
+\begin{frame}{Training Hyperparameters}
+    \centering
+    {\footnotesize
+    \begin{tabular}{ l r }
+      \hline
+      Optimizer & Adam (one per phase) \\
+      Learning rate / weight decay & $7.1\times10^{-5}$ / $1.4\times10^{-4}$ \\
+      Batch size & $64$ \\
+      Epochs (Phase A $+$ Phase B) & $10\,000 + 10\,000$ \\
+      \hline
+      Shared latent dimension $d$ & $256$ \\
+      GINEConv layers / width & $3$ / $128$ \\
+      Fragmentation-graph GCN & $2\times$ GCNConv, mean pool \\
+      Dropout / normalization & $0.43$ / BatchNorm \\
+      \hline
+      Cosine / Wasserstein weight & $1.59$ / $1.17$ \\
+      Cycle (fwd / spec) weight & $0.77$ / $0.089$ \\
+      Align weight / temperature $\tau$ & $0.30$ / $0.07$ \\
+      Curriculum start / increment & $0.73$ / $0.17$ \\
+      \hline
+    \end{tabular}}
+    \vskip 0.4em
+    {\footnotesize Tuned entries: best of a $20$-trial Optuna sweep;
+    checkpoint selection = final epoch.}
+\end{frame}
+\note{
+    And the hyperparameters, for reference. The tuned entries are the best
+    trial of a twenty-trial Optuna search --- learning rate, weight decay,
+    batch size, latent dimension, dropout, normalization, the loss weights and
+    the curriculum. The remainder were fixed a priori.
+}
+
+\begin{frame}{Training Loss -- Both Phases}
+    \centering
+    \figorpending[0.74\textheight]{width=\linewidth}{../shared/figures/learning_curve_slides.pdf}
+    \vskip 0.2em
+    {\footnotesize Training loss only \enspace$\cdot$\enspace no per-epoch
+    validation logged \enspace$\cdot$\enspace checkpoint $=$ final epoch}
+\end{frame}
+\note{
+    \scriptsize
+    The training curve, since the epoch count on the previous slide usually
+    prompts the question.
+
+    Two panels, because the two phases optimize different objectives --- the
+    forward loss and the alignment-plus-reconstruction loss are not comparable
+    numbers, and I do not want them read as one curve. Phase A falls from
+    7.9 to 4.3, Phase B from 4.5 to 2.4. Ten thousand epochs each, about six
+    hours on one GPU.
+
+    The rise at the very start is not instability, it is the curriculum. The
+    hard-negative fraction is 0.73 in the first epoch and reaches one by the
+    third --- the two numbers on the hyperparameter slide. The task gets harder
+    while the model is learning it, so the loss climbs before it falls. That is
+    what the inset shows.
+
+    The occasional one-epoch spikes in Phase A are the hard-negative loader
+    being rebuilt every epoch: a batch composition that happens to be hard, and
+    gone again by the next epoch.
+
+    Two things I would rather state than be asked. First, both curves are still
+    descending at the end --- the last tenth of the run is worth another 0.09
+    and 0.02 --- so training ended on budget, not on convergence, and the
+    checkpoint is simply the final epoch. There is no early stopping and no
+    model selection here.
+
+    Second, and this is the real limitation: it is training loss only. I did
+    not log validation per epoch, so this figure cannot tell you whether the
+    model overfits, and I do not claim that it does not. What speaks to
+    generalization is the mass-controlled result on the held-out test split,
+    not this slide.
+}
+
+\begin{frame}{Model Size -- Where the Parameters Are}
+    \centering
+    {\footnotesize
+    \begin{tabular}{ l r r }
+      \hline
+      Module & Parameters & Share \\
+      \hline
+      Molecule encoder \textsc{EncMol} ($3\times$ GINEConv, $w{=}128$) & $168\,320$ & $9.9\%$ \\
+      Fragmentation-graph GCN ($2\times$ GCNConv) & $33\,152$ & $1.9\%$ \\
+      Spectrum encoder \textsc{EncSpec} ($999{\to}512{\to}512{\to}256$) & $1\,170\,688$ & $68.8\%$ \\
+      Fragment-grounded decoder \textsc{DecSpecFragment} & $198\,657$ & $11.7\%$ \\
+      Task heads (fwd / bwd $+$ loss $\log\sigma^2$) & $131\,586$ & $7.7\%$ \\
+      \hline
+      \textbf{Total (trainable)} & $\mathbf{1\,702\,403}$ & \\
+      \hline
+    \end{tabular}}
+    \vskip 0.4em
+    {\footnotesize The single $999\times512$ input matrix of the spectrum
+    encoder is $30\%$ of the whole model.}
+\end{frame}
+\note{
+    \scriptsize
+    The size of the thing, since it is usually the next question. About one
+    point seven million trainable parameters --- small by current standards,
+    and deliberately so: the training set is a few thousand molecule--spectrum
+    pairs, so there is no room for a large model.
+
+    The distribution is lopsided. Roughly seventy percent sits in the spectrum
+    encoder, and that is almost entirely the first weight matrix: nine hundred
+    ninety-nine bins into five hundred twelve units is half a million
+    parameters on its own, thirty percent of the model, before any learning
+    happens. It is the price of treating the spectrum as a dense vector over
+    m/z.
+
+    The graph side --- the molecule encoder and the fragmentation-graph
+    convolutions together --- is under twelve percent. The part of the
+    architecture that carries the structural claim is the cheap part; the
+    expensive part is the spectrum interface.
+
+    Counts are for the checkpoint on the previous slide: latent dimension two
+    hundred fifty-six, BatchNorm. BatchNorm running statistics are buffers, not
+    parameters, and are not counted here.
+}
+
+
+%\section{Acknowledgments}
+%\begin{frame}{Acknowledgements}
+%\begin{itemize}
+%  \item .
+%\end{itemize}
+%\end{frame}
+
+%\begin{frame}[fragile]{M\O D - Strategy}
+%    \begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+%strategy = (
+%    mod.addSubset(universe)
+%    >>  charge_bound(
+%            amu_bound(
+%                sub_group(
+%                    mod.repeat[frag_repeat](fragmentation),
+%                    derivation_graph
+%                    ),
+%                minimum = min_mass,
+%                maximum = max_mass,
+%            )
+%        )
+%)
+%    \end{lstlisting}
+%\end{frame}
+
+
+\recordsuppframetotal          % number of backup slides -> "i / xxii"

@@ -9,5 +9,66 @@
   "python.analysis.diagnosticSeverityOverrides": {
     "reportMissingImports": "none",
     "reportMissingModuleSource": "none"
-  }
+  },
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk (shell-escape)",
+      "command": "latexmk",
+      "args": [
+        "-cd",
+        "-pdf",
+        "-shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "slides: noted deck",
+      "command": "latexmk",
+      "args": [
+        "-cd",
+        "-pdf",
+        "-shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%WORKSPACE_FOLDER%/thesis/slides/main.tex"
+      ],
+      "env": {}
+    },
+    {
+      "name": "slides: projector deck (no notes)",
+      "command": "latexmk",
+      "args": [
+        "-cd",
+        "-pdf",
+        "-shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%WORKSPACE_FOLDER%/thesis/slides/main-nonotes.tex"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (shell-escape)",
+      "tools": [
+        "latexmk (shell-escape)"
+      ]
+    },
+    {
+      "name": "slides: both decks",
+      "tools": [
+        "slides: noted deck",
+        "slides: projector deck (no notes)"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "lastUsed",
+  "latex-workshop.latex.autoBuild.run": "never"
 }

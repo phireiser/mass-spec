@@ -37,7 +37,7 @@
 
 % --- Phase A branch (centre / right) ---
 \node[mod] (smiles) at (5.6,-0.4)  {\textbf{Molecule}\\ SMILES $\to$ MOD graph};
-\node[mod] (dtree)  at (11.2,-0.4) {\textbf{Derivation tree}\\ per-fragment graphs $+$ masses};
+\node[mod] (dtree)  at (11.2,-0.4) {\textbf{Fragmentation graph}\\ per-fragment graphs $+$ masses};
 \node[mod] (encmol) at (5.6,-2.6)  {\textbf{EncMol}\\ GINEConv GNN $+$ pool};
 \node[mod] (fse)    at (11.2,-2.6) {\textbf{FragSetEncoder}\\ EncMol/frag $\to$ GCN $\to$ pool};
 \node[ten] (zm)     at (5.6,-4.8)  {$z_{\mathrm{mol}}\ [B,d]$};

@@ -1,0 +1,47 @@
+% MRR, panel (a): what the reciprocal rank of a single query is, and how the
+% mean over queries is formed. Each column is one query spectrum; the gallery
+% is ranked by cosine similarity and the amber cell is the true molecule.
+% Requires: shared/notation.tex (fig styles, amber), amssymb (\checkmark).
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.6mm]}]
+
+  \def\w{1.7}    % column width
+  \def\h{0.62}   % cell height
+  \def\gap{2.25} % column pitch
+  \def\n{6}      % candidates shown
+
+  % rank axis (shared by all three columns)
+  \foreach \i in {1,...,\n}
+    \node[font=\scriptsize,black!55,anchor=east] at (-0.18,{-(\i-0.5)*\h}) {\i};
+  \node[font=\scriptsize,black!55,rotate=90,anchor=south]
+       at (-0.62,{-0.5*\n*\h}) {rank};
+  \draw[black!40,fig thin,->] (-0.95,-0.12) -- (-0.95,{-\n*\h+0.12});
+
+  % three example queries, with the true molecule at a different rank each
+  \foreach \q/\hit/\rr [count=\k from 0] in {1/1/1, 2/3/{\tfrac{1}{3}}, 3/2/{\tfrac{1}{2}}}{
+    \pgfmathsetmacro{\x}{\k*\gap}
+    \node[font=\scriptsize,amber!30!black,anchor=south] at ({\x+0.5*\w},0.52) {query \q};
+    \draw[amber!70!black,fig line,->] ({\x+0.5*\w},0.44) -- ({\x+0.5*\w},0.08);
+    \foreach \i in {1,...,\n}{
+      \ifnum\i=\hit
+        \fill[amber!45,draw=amber!70!black,line width=0.5pt]
+             ({\x},{-(\i-1)*\h}) rectangle ++({\w},{-\h});
+        \node[font=\scriptsize,amber!25!black] at ({\x+0.5*\w},{-(\i-0.5)*\h}) {$\checkmark$ true};
+      \else
+        \fill[RoyalBlue!10,draw=black!35,line width=0.4pt]
+             ({\x},{-(\i-1)*\h}) rectangle ++({\w},{-\h});
+      \fi
+    }
+    \node[font=\small,anchor=north] at ({\x+0.5*\w},{-\n*\h-0.20})
+         {$\mathrm{RR}=\rr$};
+  }
+
+  % candidate-library caption
+  \node[font=\scriptsize,black!55,anchor=south west] at (-0.95,1.12)
+       {gallery ranked by cosine similarity};
+
+  % the mean over queries
+  \node[font=\small,anchor=north] at ({\gap+0.5*\w},{-\n*\h-1.05})
+       {$\displaystyle\mathrm{MRR}=\frac{1}{N}\sum_{i=1}^{N}\frac{1}{r_i}
+         =\frac{1+\tfrac{1}{3}+\tfrac{1}{2}}{3}=0.61$};
+
+\end{tikzpicture}

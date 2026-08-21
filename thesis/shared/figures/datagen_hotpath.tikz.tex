@@ -1,0 +1,119 @@
+% Why data generation got fast: the June hot path, the three fixes that moved
+% it, and the evidence that nothing was skipped.
+%
+% Sources: docs/DATA_GEN_PERFORMANCE.md (re-measured 2026-08-10) and the three
+% commits it names --
+%   bcfd88c 2026-06-22  derive fragment charge/mass from term labels
+%   ab4e079 2026-07-05  dedupe sub_group matches by generalized-position signature
+%   53872ee 2026-07-10  cap DGVertexMapper rightLimit=1 in the sub_group predicate
+% Every number below is quoted from one of those four documents; the per-fix
+% speedups are the forward-only, single-thread figures in the commit bodies.
+%
+% Requires: shared/notation.tex (fig styles, amber), amssymb (\checkmark),
+%           tikz library arrows.meta.
+% Drawn ~15.2 x 7.1 cm so that, scaled to a beamer \textwidth, \tiny still
+% reads; keep additions short rather than growing the box.  Do NOT wrap this
+% one in \reportmetrics -- it is authored at beamer metrics, and the 1.5
+% linespread collapses the boxed node text.
+% Bare colour keys (e.g. `black!60`) set fill as well as text, so every filled
+% node below states `text=` explicitly.
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.0mm]},
+    pathbox/.style={draw=black!45,fill=white,line width=0.5pt,rounded corners=2pt,
+                 text width=2.40cm,align=center,font=\scriptsize,inner sep=3pt,
+                 minimum height=0.95cm,text=black!80},
+    endbox/.style={pathbox,text width=1.50cm,draw=black!35},
+    minibox/.style={draw=black!30,fill=black!4,rounded corners=1.5pt,inner sep=2.5pt,
+                 font=\tiny,text=black!58},
+    chip/.style={circle,draw=black!45,fill=white,line width=0.5pt,inner sep=0pt,
+                 minimum size=4.4mm,font=\scriptsize,text=black!60},
+    tag/.style={font=\tiny,text=black!45,anchor=north west},
+    body/.style={text width=4.55cm,align=left,font=\tiny,text=black!58,
+                 anchor=north west,inner sep=0pt}]
+
+  \def\Wd{15.20}   % total drawing width
+  \def\PA{0.00}    % card origins
+  \def\PB{5.15}
+  \def\PC{10.30}
+
+  % =========================================================================
+  % Band 1 -- the 2026 hot path: one derivation, and what it cost
+  % =========================================================================
+  \node[panel title,font=\small,anchor=west] at (0,0.66)
+       {The hot path, 2026};
+
+
+  \node[endbox]  (d1) at (1.05,-0.35)  {derivation};
+  \node[pathbox] (d2) at (4.30,-0.35)  {\MOD\ enumerates\\ left match $\times$\\ right comatch};
+  \node[pathbox] (d3) at (7.65,-0.35)  {per match:\\ transfer positions,\\ R/Y/S signature};
+  \node[pathbox] (d4) at (11.00,-0.35) {\texttt{\_match\_satisfies}:\\ saturated path\\ + BFS};
+  \node[endbox]  (d5) at (14.30,-0.35) {accept /\\ reject};
+
+  \foreach \a/\b in {d1/d2, d2/d3, d3/d4, d4/d5}
+    \draw[black!45,fig line,->] (\a) -- (\b);
+
+  \node[font=\tiny,text=BrickRed!60!black,anchor=north] at (4.30,-0.98)
+       {up to $10^{4}$ per derivation};
+  \node[font=\tiny,text=BrickRed!60!black,anchor=north] at (11.00,-0.98)
+       {$551\,433$ calls on 2-propanol};
+
+  \draw[black!14,fig hair] (0,-1.55) -- ({\Wd},-1.55);
+
+  % =========================================================================
+  % Band 2 -- the three commits that moved it
+  % =========================================================================
+  \node[panel title,font=\small,anchor=west] at (0,-1.85) {What moved it};
+
+  \foreach \x/\n/\ttl/\sub in {%
+      0.00/1/{Read, don't rebuild},
+      5.15/2/{Memoise the traversal},
+      10.30/3/{Cap the comatch fan}}{
+    \node[chip] at ({\x+0.15},-2.35) {\n};
+    \node[panel title,font=\scriptsize,anchor=west] at ({\x+0.45},-2.35) {\ttl};
+    %\node[tag] at ({\x-0.02},-2.58) {\sub};
+  }
+  \draw[black!14,fig hair] (4.85,-1.72) -- (4.85,-5.10);
+  \draw[black!14,fig hair] (10.00,-1.72) -- (10.00,-5.10);
+
+
+  \node[minibox,anchor=west] (t1) at ({\PA},-3.30)
+       {term $\rightarrow$ SMILES $\rightarrow$ molecule $\rightarrow q,m$};
+  \draw[BrickRed!70,fig line] ({\PA},-3.14) -- ({\PA+4.25},-3.46);
+
+  \node[minibox,draw=amber!60!black,fill=amber!12,text=black!72,anchor=west]
+       (n1) at ({\PA},-4.00) {term label};
+  \draw[amber!80!black,fig line,->] (n1) -- ({\PA+2.0},-4.00);
+  \node[font=\tiny,text=amber!25!black,anchor=west] at ({\PA+2.0},-4.00) {$q,m$};
+
+  % --- 2: one traversal per distinct R/Y/S signature ------------------------
+  \node[font=\tiny,text=black!48,anchor=west] at ({\PB+0.10},-3.04)
+       {${\sim}10^{3}$ matches};
+  \foreach \i in {0,...,3}{
+    \foreach \j in {0,...,2}{
+      \fill[black!22] ({\PB+0.30+\i*0.28},{-3.32-\j*0.24}) circle (2.0pt);
+      \draw[black!16,fig hair] ({\PB+0.42+\i*0.28},{-3.32-\j*0.24})
+            -- ({\PB+1.68},-3.56);
+    }
+  }
+  \node[minibox,draw=amber!60!black,fill=amber!12,text=black!72,
+        text width=1.15cm,align=center] (sig) at ({\PB+2.40},-3.56)
+       {R/Y/S\\ signature};
+  \draw[amber!80!black,fig line,->] (sig) -- ({\PB+3.62},-3.56);
+  \node[font=\tiny,text=amber!25!black,anchor=west] at ({\PB+3.68},-3.56)
+       {$1\times$};
+
+  % --- 3: rightLimit = 1 ----------------------------------------------------
+  \node[minibox,draw=black!45,fill=white,text=black!68] (lm) at ({\PC+0.75},-3.40)
+       {left map};
+  \foreach \j in {0,...,4}{
+    \draw[black!20,fig hair] (lm.east) -- ({\PC+2.20},{-2.98-\j*0.21});
+    \fill[black!18] ({\PC+2.26},{-2.98-\j*0.21}) circle (1.9pt);
+  }
+  \draw[BrickRed!70,fig thin] ({\PC+1.95},-2.84) -- ({\PC+2.55},-3.94);
+  \node[font=\tiny,text=black!45,anchor=west] at ({\PC+2.62},-3.08)
+       {$\times\,10\,368$};
+  \draw[amber!80!black,fig line,->] (lm.south east) -- ({\PC+2.18},-4.08);
+  \fill[amber!90!black] ({\PC+2.26},-4.08) circle (2.4pt);
+  \node[font=\tiny,text=amber!25!black,anchor=west] at ({\PC+2.42},-4.08)
+       {$1$ comatch};
+
+\end{tikzpicture}

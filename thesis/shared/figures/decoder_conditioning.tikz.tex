@@ -1,0 +1,93 @@
+% How the decoder is conditioned (DecSpecFragment).
+% One decoder, two conditioning latents: z_fwd in Phase A (blue) and z_bwd in
+% Phase B (amber) enter the *same* slot. The chosen latent is broadcast to
+% every fragment row, concatenated with the fragment embedding and its mass,
+% scored by one shared MLP, softmaxed over the fragments of that molecule, and
+% scattered onto the m/z bin given by the fragment's own mass.
+% Requires: shared/notation.tex (fig styles, amber), dvipsnames colours,
+% tikz libraries arrows.meta, calc, decorations.pathreplacing (brace).
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.4mm]},font=\small]
+
+  \tikzset{
+    lat/.style={draw, rounded corners=2pt, fig line, minimum height=7.5mm,
+                minimum width=17mm, align=center, font=\small},
+    cell/.style={draw=black!45, fig thin, minimum height=7.5mm, anchor=west,
+                 inner sep=0pt, font=\small},
+    unit/.style={draw, rounded corners=2pt, fig line, fill=black!4,
+                 draw=black!55, align=center, font=\small},
+    tag/.style={font=\scriptsize, black!60},
+  }
+  \def\fA{RoyalBlue!70!black}
+  \def\fB{SeaGreen!55!black}
+  \def\fC{BrickRed!70!black}
+
+  % ---------------- the two latents entering one slot --------------------
+  \node[lat, fill=RoyalBlue!12, draw=RoyalBlue!60!black] (zf) at (1.5,8.8)
+       {$z_{\mathrm{fwd}}$};
+  \node[lat, fill=amber!35,     draw=amber!70!black]     (zb) at (4.6,8.8)
+       {$z_{\mathrm{bwd}}$};
+  \node[tag, anchor=south] at (zf.north) {Phase A};
+  \node[tag, anchor=south] at (zb.north) {Phase B};
+
+  \node[lat, fill=black!8, draw=black!60, minimum width=20mm] (zc) at (3.0,7.2)
+       {$z_{\mathrm{cond}}$};
+  \draw[fig line, ->, RoyalBlue!60!black] (zf.south) to[out=-90,in=155] (zc.north west);
+  \draw[fig line, ->, amber!75!black]     (zb.south) to[out=-90,in=25]  (zc.north east);
+  \node[tag, anchor=west, align=left] at (6.3,8.0) {one slot,\\one decoder};
+
+  % ---------------- per-fragment feature rows ----------------------------
+  % row layout: [ z_cond | h_i | m_i ]
+  \def\xc{1.90} \def\xh{3.90} \def\xm{5.90} \def\xe{6.60}
+  \foreach \i/\y/\c in {1/5.75/\fA, 2/4.75/\fB, 3/3.75/\fC}{
+    \node[cell, minimum width={(\xh-\xc)*1cm}, fill=black!8]
+         (c\i) at (\xc,\y) {$z_{\mathrm{cond}}$};
+    \node[cell, minimum width={(\xm-\xh)*1cm}, fill=RoyalBlue!8]
+         (h\i) at (\xh,\y) {$h_{\i}$};
+    \node[cell, minimum width={(\xe-\xm)*1cm}, fill=SeaGreen!10]
+         (m\i) at (\xm,\y) {$m_{\i}$};
+  }
+  \node[black!45, font=\small] at ({(\xc+\xe)/2},3.15) {$\vdots$};
+  \node[tag, anchor=west, black!55] at ({(\xc+\xe)/2+0.45},3.15) {one row per fragment};
+
+  % column captions
+  \node[tag, anchor=south east] at (5.85,6.20) {fragment embedding};
+  \node[tag, anchor=south west] at (5.95,6.20) {mass};
+
+  % broadcast bus: the same vector into every row
+  \draw[fig thin, black!55, dashed]
+       (zc.south) to[out=-90,in=90] (1.30,6.55) -- (1.30,3.75);
+  \foreach \i in {1,2,3}
+    \draw[fig thin, ->, black!55, dashed] (1.30,{5.75-(\i-1)}) -- (c\i.west);
+  \node[tag, anchor=east, black!55, align=right] at (1.15,6.9) {broadcast};
+
+  % ---------------- shared scoring MLP -> softmax ------------------------
+  \node[unit, minimum height=27mm, minimum width=12mm, text width=10mm]
+       (mlp) at (7.9,4.75) {score\\MLP};
+  \foreach \i/\c in {1/\fA, 2/\fB, 3/\fC}
+    \draw[fig line, ->, \c] (m\i.east) -- (mlp.west |- m\i.east);
+
+  \foreach \i/\y/\c in {1/5.75/\fA, 2/4.75/\fB, 3/3.75/\fC}
+    \node[font=\small, \c, anchor=west] (w\i) at (9.70,\y) {$w_{\i}$};
+  \foreach \i/\c in {1/\fA, 2/\fB, 3/\fC}
+    \draw[fig line, ->, \c] (mlp.east |- w\i.west) -- (w\i.west);
+  \draw[decorate, decoration={brace, amplitude=4pt}, fig thin, black!55]
+       (10.45,6.15) -- (10.45,3.35);
+  \node[tag, anchor=west, align=left, black!60] at (10.75,4.75)
+       {softmax over\\the fragments\\of this molecule};
+
+  % ---------------- scatter onto the m/z bins ----------------------------
+  \draw[fig thin, ->, black!55] (9.95,3.30) to[out=-90,in=60] (9.60,2.15);
+  \node[tag, anchor=west, black!60] at (10.05,2.60) {scatter};
+
+  \draw[fig line, black!60, ->] (1.30,1.40) -- (10.30,1.40)
+        node[tag, anchor=north east, black!60, yshift=-1.2mm] {$m/z$};
+  \foreach \x/\hgt/\c/\i in {2.7/1.55/\fA/1, 5.3/0.80/\fB/2, 8.6/1.15/\fC/3}{
+    \draw[\c, fig heavy] (\x,1.40) -- (\x,{1.40+\hgt});
+    \fill[\c] (\x,{1.40+\hgt}) circle (1.5pt);
+    \node[tag, anchor=north, \c] at (\x,1.35) {$m_{\i}$};
+    \node[tag, anchor=south, \c] at (\x,{1.46+\hgt}) {$w_{\i}$};
+  }
+  \node[tag, anchor=west, align=left, black!60] at (1.30,0.55)
+       {every peak sits at a fragment mass by construction};
+
+\end{tikzpicture}

@@ -1,0 +1,191 @@
+% The bidirectional framework as one closed ring: the two spaces of the problem
+% slide (M on the left, S on the right) with the shared latent space Z wedged in
+% between, so that "bidirectional" is a loop and not two parallel columns.
+%   forward  (blue, over the top):   Enc_mol/Enc_frag into Z, fragment-grounded
+%                                    decoder out to a predicted spectrum
+%   backward (amber/red, underneath): Enc_spec into Z, nearest-neighbour
+%                                    retrieval back out to a ranked candidate set
+% InfoNCE is the tie inside Z; the dashed red return arc keeps the inverse
+% honest -- it yields a ranked set, not a generated molecule.
+%
+% Five overlay stages via `visible on` / `dim on` (shared/notation.tex); outside
+% beamer those styles are no-ops and the whole picture is shown at once:
+%   1 the two spaces                 2 latent space, both encoders
+%   3 forward / Phase A              4 backward / Phase B
+%   5 inference traversal (1..5 chips, rerank, InfoNCE dimmed)
+% Requires: shared/notation.tex (fig styles, amber, visible on), dvipsnames
+% colours, tikz libraries arrows.meta and shapes.geometric (diamond).
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.6mm,width=1.9mm]},font=\small,
+  % --- glyphs, declared picture-locally so re-\input stays safe -------------
+  molecule/.pic={
+    \foreach \a/\b in {30/90,90/150,150/210,210/270,270/330,330/30}
+      \draw[fig heavy] ({0.30*cos(\a)},{0.30*sin(\a)}) -- ({0.30*cos(\b)},{0.30*sin(\b)});
+    \foreach \ang in {30,90,150,210,270,330}
+      \filldraw ({0.30*cos(\ang)},{0.30*sin(\ang)}) circle (1.7pt);
+  },
+  minimol/.pic={
+    \foreach \a/\b in {30/90,90/150,150/210,210/270,270/330,330/30}
+      \draw[fig line] ({0.20*cos(\a)},{0.20*sin(\a)}) -- ({0.20*cos(\b)},{0.20*sin(\b)});
+    \foreach \ang in {30,90,150,210,270,330}
+      \filldraw ({0.20*cos(\ang)},{0.20*sin(\ang)}) circle (1.1pt);
+  },
+  % derivation graph: a precursor and the fragments it gives rise to
+  fragtree/.pic={
+    \draw[fig thin] (0,0.34) -- (-0.34,0.02) (0,0.34) -- (0.34,0.02)
+                    (-0.34,0.02) -- (-0.54,-0.34) (-0.34,0.02) -- (-0.14,-0.34)
+                    (0.34,0.02) -- (0.46,-0.34);
+    \foreach \p in {(0,0.34),(-0.34,0.02),(0.34,0.02),(-0.54,-0.34),(-0.14,-0.34),(0.46,-0.34)}
+      \filldraw \p circle (1.7pt);
+  },
+  % #1 = six bar heights
+  spec/.pic={
+    \draw[fig thin,black!55] (-0.88,-0.46) -- (0.88,-0.46);
+    \foreach \h [count=\i from 0] in {#1}
+      \draw[fig line] ({-0.70+0.28*\i},-0.46) -- ({-0.70+0.28*\i},{-0.46+\h});
+  },
+]
+
+  \tikzset{
+    panel/.style={draw=black!40, fig thin, fill=black!3, rounded corners=12pt},
+    fwd/.style={RoyalBlue!75!black, fig medium, ->},
+    bwd/.style={amber!75!black, fig medium, ->},
+    ret/.style={BrickRed!62!black, fig medium, ->, dashed,
+                dash pattern=on 3pt off 2pt},
+    arclbl/.style={font=\scriptsize, align=center, inner sep=1.5pt},
+    note/.style={font=\scriptsize, align=center, text=black!60, inner sep=1pt},
+    glyphlbl/.style={font=\scriptsize, align=left, text=black!65, inner sep=1pt},
+    idx/.style={circle, fill=RoyalBlue!40, draw=RoyalBlue!70!black, fig hair,
+                inner sep=0pt, minimum size=4.4pt},
+    chip/.style={circle, draw=black!55, fill=white, fig thin, inner sep=0.4pt,
+                 minimum size=3.8mm, font=\tiny\bfseries, text=black!70},
+  }
+
+  % =====================================================================
+  %  the two spaces of the problem slide                        stage 1
+  % =====================================================================
+  \draw[panel, visible on=<1->] (0,-3.2)    rectangle (4.2,3.2);
+  \draw[panel, visible on=<1->] (12.4,-3.2) rectangle (17.2,3.2);
+
+  \node[panel title, anchor=south, visible on=<1->] at (2.1,3.30)
+       {$\mathcal{M}$ {\normalfont\scriptsize\color{black!60}molecular structures}};
+  \node[panel title, anchor=south, visible on=<1->] at (14.8,3.30)
+       {$\mathcal{S}$ {\normalfont\scriptsize\color{black!60}mass spectra}};
+  \node[panel title, anchor=south, visible on=<2->] at (8.3,3.30)
+       {$\mathcal{Z}$ {\normalfont\scriptsize\color{black!60}shared latent space}};
+
+  % ---- M: the two structural views of one molecule ---------------------
+  \pic[Cerulean!75, visible on=<1->] at (1.15,2.30) {molecule};
+  \node[glyphlbl, anchor=west, visible on=<1->] at (1.72,2.30) {molecule graph};
+  \pic[SeaGreen!65!black, visible on=<1->] at (1.15,1.00) {fragtree};
+  \node[glyphlbl, anchor=west, visible on=<1->] at (1.82,1.00)
+       {fragmentation\\graph};
+  \draw[fig hair, black!25, dashed, visible on=<4->] (0.35,-0.10) -- (3.85,-0.10);
+
+  % ---- S: the measured spectrum ---------------------------------------
+  \pic[amber!85!black, visible on=<1->] at (14.35,-1.20)
+       {spec={0.34,0.62,0.20,0.48,0.28,0.55}};
+  \node[note, anchor=north, visible on=<1->] at (14.35,-1.80)
+       {$s$\; measured spectrum};
+
+  % =====================================================================
+  %  the shared latent space                                    stage 2
+  % =====================================================================
+  \coordinate (Zc) at (8.3,0);
+  \def\R{2.15}
+  \path (Zc) ++(135:\R) coordinate (Zin);   % <- from the molecule side
+  \path (Zc) ++( 45:\R) coordinate (Zout);  % -> to the spectrum side
+  \path (Zc) ++(225:\R) coordinate (Zret);  % -> back to the molecule side
+  \path (Zc) ++(315:\R) coordinate (Zspec); % <- from the spectrum side
+
+  \draw[black!45, fig thin, dashed, fill=black!3, visible on=<2->] (Zc) circle (\R);
+  \draw[black!22, fig hair, visible on=<2->] (Zc) ellipse ({\R} and {0.34*\R});
+
+  % the index: every known molecule already lives here
+  \foreach \p in {(7.00,0.15),(9.30,0.10),(8.25,-0.45),(7.45,-1.15),(8.95,-1.20)}
+    \node[idx, visible on=<2->] at \p {};
+
+  % the matched pair: one molecule latent, and the latent of its own spectrum
+  \node[circle, fill=RoyalBlue!70!black, inner sep=0pt, minimum size=6pt,
+        visible on=<2->] (P) at (7.75,1.15) {};
+  \node[diamond, fill=amber!85!black, inner sep=0pt, minimum size=6.5pt,
+        visible on=<2->] (Q) at (8.85,1.10) {};
+  \node[font=\scriptsize, text=RoyalBlue!70!black, anchor=east, visible on=<2->]
+       at (7.57,1.15) {$z_{\mathrm{mol}}$};
+  \node[font=\scriptsize, text=amber!55!black, anchor=west, visible on=<2->]
+       at (9.03,1.10) {$z_{\mathrm{bwd}}$};
+  \node[note, anchor=north, visible on=<2->] at (8.3,-1.60) {$\|z\|=1$};
+
+  % InfoNCE: the tie that makes the two directions share one space
+  \draw[SeaGreen!55!black, fig medium,
+        {Latex[length=2.0mm]}-{Latex[length=2.0mm]},
+        visible on=<4->, dim on=<5>] (P) -- (Q);
+  \node[arclbl, text=SeaGreen!45!black, anchor=south,
+        visible on=<4->, dim on=<5>] at (8.3,1.72) {InfoNCE};
+
+  % =====================================================================
+  %  forward: structure -> spectrum                       stages 2 and 3
+  % =====================================================================
+  \draw[fwd, visible on=<2->] (4.2,1.55) to[out=22,in=170] (Zin);
+  \node[arclbl, text=RoyalBlue!70!black, anchor=south, visible on=<2->] at (5.40,2.05)
+       {$\mathrm{Enc}_{\mathrm{mol}}$, $\mathrm{Enc}_{\mathrm{frag}}$};
+
+  \draw[fwd, visible on=<3->] (Zout) to[out=10,in=158] (12.4,1.55);
+  \node[arclbl, text=RoyalBlue!70!black, anchor=south, visible on=<3->] at (11.05,2.05)
+       {$\mathrm{Dec}_{\mathrm{spec}}$\\fragment-grounded};
+
+  \pic[RoyalBlue!70!black, visible on=<3->] at (14.35,2.05)
+       {spec={0.30,0.58,0.24,0.44,0.31,0.50}};
+  \node[note, anchor=north, visible on=<3->] at (14.35,1.45)
+       {$\hat{s}$\; predicted spectrum};
+  \draw[fig hair, black!25, dashed, visible on=<3->] (12.75,0.55) -- (16.35,0.55);
+
+  \node[note, visible on=<3->] at (11.45,0.30)
+       {one decoder,\\$z_{\mathrm{fwd}}$ (A) or\\$z_{\mathrm{bwd}}$ (B)};
+
+  % =====================================================================
+  %  backward: spectrum -> structure                      stages 2 and 4
+  % =====================================================================
+  \draw[bwd, visible on=<2->] (12.4,-1.55) to[out=190,in=-25] (Zspec);
+  \node[arclbl, text=amber!55!black, anchor=north, visible on=<2->] at (11.20,-2.05)
+       {$\mathrm{Enc}_{\mathrm{spec}}$};
+
+  \draw[ret, visible on=<4->] (Zret) to[out=205,in=-8] (4.2,-1.55);
+  \node[arclbl, text=BrickRed!55!black, anchor=north, visible on=<4->] at (5.40,-2.05)
+       {nearest neighbour over\\the $z_{\mathrm{mol}}$ index};
+
+  % the retrieved set, back inside M
+  \pic[RoyalBlue!80!black, visible on=<4->] at (1.15,-1.75) {minimol};
+  \pic[black!35, visible on=<4->]           at (2.05,-1.75) {minimol};
+  \pic[black!35, visible on=<4->]           at (2.95,-1.75) {minimol};
+  \foreach \x/\r in {1.15/1, 2.05/2, 2.95/3}
+    \node[font=\tiny, text=black!55, visible on=<4->] at (\x,-2.18) {\r};
+  \node[note, anchor=north, visible on=<4->] at (2.05,-2.35) {top-$k$ candidates};
+
+  \node[note, text=BrickRed!55!black, visible on=<4->] at (5.15,-0.45)
+       {a ranked set,\\not a generated\\molecule};
+
+  % =====================================================================
+  %  what actually runs at query time                           stage 5
+  % =====================================================================
+  \node[chip, visible on=<5>] at (11.20,-1.25) {1};
+  \node[chip, visible on=<5>] at ( 5.40,-1.25) {2};
+  \node[chip, visible on=<5>] at ( 5.40, 1.25) {3};
+  \node[chip, visible on=<5>] at (11.20, 1.25) {4};
+
+  \draw[BrickRed!62!black, fig thin, dotted,
+        {Latex[length=2.0mm]}-{Latex[length=2.0mm]}, visible on=<5>]
+       (15.85,-0.65) -- (15.85,1.60);
+  \node[chip, visible on=<5>] at (15.85,0.48) {5};
+  \node[arclbl, text=BrickRed!55!black, anchor=west, visible on=<5>]
+       at (16.10,0.48) {rerank:\\$\hat{s}$ vs $s$};
+
+  % =====================================================================
+  %  legend
+  % =====================================================================
+  \node[note, anchor=north, visible on=<2->] at (8.3,-3.35)
+       {\textcolor{RoyalBlue!75!black}{\rule[1pt]{7pt}{1.6pt}}\; Phase A, forward:
+        structure $\to$ spectrum \qquad
+        \textcolor{amber!75!black}{\rule[1pt]{7pt}{1.6pt}}\; Phase B, backward:
+        spectrum $\to$ structure};
+
+\end{tikzpicture}

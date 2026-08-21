@@ -1,0 +1,141 @@
+% ---------------------------------------------------------------------------
+% The residual MLP block used throughout the model (EncSpec, heads, decoders).
+% Left  : one block unrolled -- Linear/Norm/ReLU/Dropout/Linear/Norm + skip.
+% Middle: why the skip -- the gradient keeps an unobstructed path.
+% Right : EncSpec as two stacked blocks, 999 bins -> z_bwd.
+% Needs: tikz libraries arrows.meta, calc, positioning;
+%        \input{shared/notation} for `fig` styles and `amber`.
+% ---------------------------------------------------------------------------
+\begin{tikzpicture}[
+    fig,
+    lay/.style={rounded corners=2pt, draw=gray!65, fill=white,
+                minimum width=25mm, minimum height=6.0mm, inner sep=2pt,
+                font=\scriptsize, text=black!80},
+    lin/.style={lay, draw=RoyalPurple!70, fill=RoyalPurple!8,
+                text=RoyalPurple!65!black},
+    nrm/.style={lay, draw=NavyBlue!60, fill=NavyBlue!7, text=NavyBlue!70!black},
+    act/.style={lay, draw=OliveGreen!60, fill=OliveGreen!8,
+                text=OliveGreen!40!black},
+    drp/.style={lay, draw=gray!55, fill=black!4, text=black!60},
+    vec/.style={font=\small, text=black!80},
+    flow/.style={-{Latex[length=2.0mm]}, fig line, black!55},
+    skip/.style={-{Latex[length=2.4mm]}, fig heavy, amber!85!black},
+    plus/.style={circle, draw=amber!85!black, fill=amber!12, minimum size=5.5mm,
+                 inner sep=0pt, font=\small, text=amber!60!black},
+    ttl/.style={font=\bfseries\scriptsize, text=RoyalPurple},
+    figcap/.style={font=\scriptsize, align=center, text=black!75},
+    boxd/.style={rounded corners=2pt, draw=gray!50},
+    blk/.style={rounded corners=2.5pt, draw=RoyalPurple!70, fill=RoyalPurple!7,
+                minimum width=30mm, minimum height=11mm, inner sep=2pt,
+                font=\scriptsize, align=center, text=black!80},
+]
+
+% =====================================================================
+% PANEL 1 -- one block, unrolled
+% =====================================================================
+\node[ttl, anchor=south] at (0, 4.35) {1 -- one residual block};
+\draw[boxd] (-2.5, -4.55) rectangle (2.5, 4.2);
+
+\node[vec] (x) at (0, 3.75) {$x \in \mathbb{R}^{d_{\mathrm{in}}}$};
+\node[lin] (l1) at (0,  2.95) {Linear $d_{\mathrm{in}} \!\to\! d_h$};
+\node[nrm] (n1) at (0,  2.10) {LayerNorm};
+\node[act] (r1) at (0,  1.25) {ReLU};
+\node[drp] (dp) at (0,  0.40) {Dropout $0.1$};
+\node[lin] (l2) at (0, -0.45) {Linear $d_h \!\to\! d_{\mathrm{out}}$};
+\node[nrm] (n2) at (0, -1.30) {LayerNorm};
+\node[plus] (sum) at (0, -2.35) {$+$};
+\node[vec] (out) at (0, -3.15) {$x'$};
+
+\foreach \a/\b in {x/l1, l1/n1, n1/r1, r1/dp, dp/l2, l2/n2, n2/sum, sum/out}
+    \draw[flow] (\a) -- (\b);
+
+% the identity path.  Absolute x for the riser, not an offset from x.east --
+% the offset put it at 2.75, outside the panel frame at 2.5.
+\draw[skip] (x.east) -- (2.28, 3.75) |- (sum.east);
+\node[font=\scriptsize, text=amber!55!black, rotate=90, anchor=south]
+      at (2.14, 0.70) {identity};
+
+\node[figcap, anchor=north] at (0, -3.34)
+    {$x' = x + F_\theta(x)$\\[0.1em]
+     skip only when $d_{\mathrm{in}} \!=\! d_{\mathrm{out}}$};
+
+% =====================================================================
+% PANEL 2 -- what the skip buys
+% =====================================================================
+\def\xB{6.6}
+\node[ttl, anchor=south] at (\xB, 4.35) {2 -- why the skip};
+\draw[boxd] (\xB-3.0, -4.55) rectangle (\xB+3.0, 4.2);
+
+% -- without: signal has to survive every layer
+\node[font=\scriptsize, text=black!70, anchor=south] at (\xB-1.55, 2.85) {plain};
+\node[font=\scriptsize, text=black!70, anchor=south] at (\xB+1.55, 2.85) {residual};
+
+\foreach \k in {0,1,2,3} {
+    \node[lay, minimum width=13mm, minimum height=5mm]
+          (p\k) at (\xB-1.55, {2.35-1.0*\k}) {};
+    \node[lay, minimum width=13mm, minimum height=5mm]
+          (q\k) at (\xB+1.55, {2.35-1.0*\k}) {};
+}
+\foreach \k/\l in {0/1, 1/2, 2/3} \draw[flow] (p\k) -- (p\l);
+\foreach \k/\l in {0/1, 1/2, 2/3} \draw[flow] (q\k) -- (q\l);
+
+% attenuating gradient on the plain stack
+\foreach \k/\op in {0/22, 1/40, 2/62, 3/90}
+    \draw[-{Latex[length=1.8mm]}, fig medium, BrickRed!\op!white]
+          ($(p\k.west)+(-0.30,0.16)$) -- ($(p\k.west)+(-0.30,-0.16)$);
+\node[font=\scriptsize, text=BrickRed!75, anchor=north, align=center]
+      at (\xB-1.55, -0.75) {gradient\\fades};
+
+% unobstructed highway on the residual stack
+\draw[skip] ($(q0.east)+(0.34,0.22)$) -- ($(q3.east)+(0.34,-0.22)$);
+\foreach \k in {0,1,2}
+    \draw[skip, shorten >=0pt] ($(q\k.east)+(0.10,0)$) -- ++(0.24,0);
+\node[font=\scriptsize, text=amber!55!black, anchor=north, align=center]
+      at (\xB+1.75, -0.75) {gradient\\highway};
+
+\node[figcap, anchor=north] at (\xB, -2.35)
+    {each block learns a \emph{correction}\\[0.15em]
+     depth stops costing signal};
+
+% =====================================================================
+% PANEL 3 -- EncSpec: two blocks
+% =====================================================================
+\def\xC{13.7}
+\node[ttl, anchor=south] at (\xC, 4.35) {3 -- \textbf{EncSpec}};
+\draw[boxd] (\xC-2.8, -4.55) rectangle (\xC+2.8, 4.2);
+
+% binned spectrum
+\begin{scope}[shift={(\xC-1.35, 3.05)}]
+    \draw[fig thin, black!45] (-0.05,0) -- (2.8,0);
+    \foreach \x/\h in {0.15/0.62, 0.45/0.24, 0.75/0.86, 1.05/0.15,
+                       1.35/0.44, 1.65/0.30, 1.95/0.70, 2.25/0.18, 2.55/0.38}
+        \draw[fig medium, NavyBlue!70] (\x,0) -- (\x,\h);
+\end{scope}
+\node[font=\scriptsize, text=black!70, anchor=north] at (\xC, 2.85)
+     {binned spectrum, $999$ bins};
+
+\node[blk] (b1) at (\xC, 1.30)
+     {residual block\\$999 \to 512 \to 512$};
+\node[font=\scriptsize, text=amber!55!black, anchor=west] at (\xC+1.60, 1.30)
+     {$+$ skip};
+\node[blk] (b2) at (\xC, -0.75)
+     {block\\$512 \to 512 \to 128$};
+\node[font=\scriptsize, text=black!50, anchor=west] at (\xC+1.60, -0.75)
+     {no skip};
+
+\node[vec, text=amber!60!black] (z) at (\xC, -2.30) {$z_{\mathrm{bwd}} \in \mathbb{R}^{128}$};
+
+\draw[flow] (\xC, 2.45) -- (b1);
+\draw[flow] (b1) -- (b2);
+\draw[flow] (b2) -- (z);
+
+\node[figcap, anchor=north] at (\xC, -3.05)
+    {also used in the heads\\and the spectrum decoder};
+
+% panel-to-panel arrows
+\draw[-{Latex[length=3.2mm, width=2.6mm]}, fig heavy, black!45]
+      (2.65, 0.0) -- (\xB-3.15, 0.0);
+\draw[-{Latex[length=3.2mm, width=2.6mm]}, fig heavy, black!45]
+      (\xB+3.15, 0.0) -- (\xC-2.95, 0.0);
+
+\end{tikzpicture}

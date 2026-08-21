@@ -1,0 +1,121 @@
+% What the data-generation speedup bought.  Three panels, one per consequence:
+% chemistry that was previously unaffordable, molecules that previously timed
+% out of the corpus, and a decoy study that needed 1340 fresh builds.
+% Sources: docs/DATA_GEN_PERFORMANCE.md (re-measured 2026-08-10),
+%          src/data_generation/core/strategy.py:migration_scope (cap evidence),
+%          docs/PHASE2_PLAN.md (Phase-1 gate, closed 2026-08-12).
+% Requires: shared/notation.tex (fig styles, amber), amssymb (\checkmark).
+% Drawn ~15 cm wide so that, scaled to a beamer \textwidth, \scriptsize still
+% reads; keep new text short rather than widening the panels.
+\begin{tikzpicture}[x=1cm,y=1cm,fig,>={Latex[length=2.2mm]}]
+
+  \def\PW{4.60}    % panel content width
+  \def\PBx{5.35}   % panel 2 origin
+  \def\PCx{10.70}  % panel 3 origin
+  \def\PB{-4.15}   % baseline of the panel body
+
+  % --- panel chrome: number chip + title + hairline separators -------------
+  \foreach \x/\n/\ttl/\sub in {%
+      0.00/1/{New chemistry}/{charge migration: off $\rightarrow$ on},
+      5.35/2/{The hard tail}/{molecules that used to time out},
+      10.70/3/{$1340$ decoys}/{same-formula discrimination}}{
+    \node[circle,draw=black!45,fill=white,line width=0.5pt,inner sep=0pt,
+          minimum size=4.4mm,font=\scriptsize,text=black!60] at ({\x+0.15},0) {\n};
+    \node[panel title,font=\small,anchor=west] at ({\x+0.45},0) {\ttl};
+    \node[font=\scriptsize,black!52,anchor=north west] at ({\x-0.02},-0.34) {\sub};
+  }
+  \draw[black!14,fig hair] (5.00,0.36) -- (5.00,{\PB-1.05});
+  \draw[black!14,fig hair] (10.35,0.36) -- (10.35,{\PB-1.05});
+
+  % =========================================================================
+  % 1 -- the migration model: species per molecule, log axis, off -> on
+  % =========================================================================
+  \pgfmathsetmacro{\sx}{1.42}                    % cm per decade
+  \newcommand{\lx}[1]{(#1-1.95)*\sx}             % log10(species) -> cm
+  \foreach \d in {2,3,4}{
+    \draw[black!12,fig hair] ({\lx{\d}},-1.05) -- ({\lx{\d}},{\PB+0.34});
+    \node[font=\tiny,black!45,anchor=north] at ({\lx{\d}},{\PB+0.30}) {$10^{\d}$};
+  }
+  \draw[black!40,fig thin,->] (0,{\PB+0.34}) -- ({\PW-0.10},{\PB+0.34});
+  \node[font=\tiny,black!48,anchor=south east] at ({\PW-0.10},{\PB+0.40})
+       {species built};
+
+  \foreach \name/\lo/\hi/\llab/\hlab/\ttime [count=\k from 0] in {%
+      anthracene/2.021/3.328/{$105$}/{$2126$}/{$0.26$\,s $\rightarrow$ $4.9$\,s},
+      {folic acid}/3.088/4.003/{$1225$}/{$10070$}/{$7.7$\,s $\rightarrow$ $105$\,s}}{
+    \pgfmathsetmacro{\y}{-1.55-\k*1.35}
+    \node[font=\scriptsize,black!72,anchor=west] at (-0.02,{\y+0.60}) {\name};
+    \draw[black!28,fig line,->] ({\lx{\lo}},\y) -- ({\lx{\hi}-0.14},\y);
+    \fill[black!30] ({\lx{\lo}},\y) circle (2.8pt);
+    \fill[amber!90!black] ({\lx{\hi}},\y) circle (2.8pt);
+    \node[font=\tiny,black!55,anchor=south] at ({\lx{\lo}},{\y+0.09}) {\llab};
+    \node[font=\tiny,amber!25!black,anchor=south] at ({\lx{\hi}},{\y+0.09}) {\hlab};
+    \node[font=\tiny,black!45,anchor=north west] at (-0.02,{\y-0.14}) {\ttime};
+  }
+
+  \node[text width=4.6cm,align=left,font=\scriptsize,black!60,
+        anchor=north west,inner sep=0pt] at (0,{\PB-0.20})
+       {$95\%$ of runtime today --- and it buys glucose
+        $p{=}3.7{\times}10^{-5}$.};
+
+  % =========================================================================
+  % 2 -- the tail: NIST intensity explained, no-migration base + capped gain
+  % =========================================================================
+  \def\bs{0.0370}     % cm per percent
+  \foreach \name/\base/\gain/\tot/\masses [count=\k from 0] in {%
+      progesterone/66.5/5.2/{$71.7$}/{$124\rightarrow148$},
+      cholesterol/46.9/4.7/{$51.6$}/{$164\rightarrow188$}}{
+    \pgfmathsetmacro{\y}{-1.55-\k*1.35}
+    \node[font=\scriptsize,black!72,anchor=west] at ({\PBx-0.02},{\y+0.60}) {\name};
+    \node[font=\tiny,black!45,anchor=east] at ({\PBx+\PW},{\y+0.60})
+         {\masses\ masses};
+    \fill[black!14,draw=black!40,line width=0.4pt]
+         ({\PBx},{\y-0.20}) rectangle ({\PBx+\base*\bs},{\y+0.20});
+    \fill[amber!75,draw=amber!60!black,line width=0.4pt]
+         ({\PBx+\base*\bs},{\y-0.20}) rectangle ({\PBx+(\base+\gain)*\bs},{\y+0.20});
+    \node[font=\tiny,black!55] at ({\PBx+0.5*\base*\bs},\y) {$\base\%$};
+    \node[font=\tiny,amber!20!black,anchor=west]
+         at ({\PBx+(\base+\gain)*\bs+0.10},\y) {$\rightarrow$ \tot\,\%};
+  }
+  \draw[black!40,fig thin,->] ({\PBx},{\PB+0.34}) -- ({\PBx+\PW-0.10},{\PB+0.34});
+  \node[font=\tiny,black!48,anchor=south east] at ({\PBx+\PW-0.10},{\PB+0.40})
+       {\% of NIST intensity explained};
+
+  \node[draw=SeaGreen!55!black,fill=SeaGreen!8,rounded corners=2pt,line width=0.4pt,
+        anchor=north west,font=\scriptsize,inner sep=3.5pt,text width=4.2cm,align=left]
+       at ({\PBx},{\PB-0.20})
+       {$\checkmark$ aldosterone: killed at $12$\,h$30$ $\rightarrow$ $1$\,h$14$.
+        A timeout writes no dump.};
+
+  % =========================================================================
+  % 3 -- Phase-1 gate: top-1 against the same-formula chance level
+  % =========================================================================
+  \def\by{-3.85}      % bar baseline
+  \def\bh{4.30}       % cm per unit of top-1 accuracy
+  \draw[black!45,fig grid] ({\PCx+0.20},{\by+0.229*\bh}) -- ({\PCx+3.20},{\by+0.229*\bh});
+  \draw[black!40,fig thin] ({\PCx+0.20},\by) -- ({\PCx+3.30},\by);
+  \foreach \x/\v/\lab/\col in {%
+      1.00/0.229/{chance}/{black!22},
+      2.40/0.500/{M\O D forward}/{amber!80}}{
+    \fill[\col,draw=black!45,line width=0.4pt]
+         ({\PCx+\x-0.40},\by) rectangle ({\PCx+\x+0.40},{\by+\v*\bh});
+    \node[font=\scriptsize,black!70,anchor=south] at ({\PCx+\x},{\by+\v*\bh+0.04}) {$\v$};
+    \node[font=\tiny,black!55,anchor=north] at ({\PCx+\x},{\by-0.06}) {\lab};
+  }
+  \draw[amber!70!black,fig line,<->]
+       ({\PCx+3.10},{\by+0.229*\bh}) -- ({\PCx+3.10},{\by+0.500*\bh});
+  \node[font=\tiny,amber!25!black,anchor=west]
+       at ({\PCx+3.18},{\by+0.365*\bh}) {$2.18{\times}$};
+  \node[font=\tiny,black!48,anchor=north west] at ({\PCx-0.02},-1.05)
+       {top-$1$ accuracy};
+  \node[font=\tiny,black!48,anchor=north west] at ({\PCx-0.02},-1.40)
+       {$132$ targets};
+  \node[font=\tiny,black!48,anchor=north west] at ({\PCx-0.02},-1.75)
+       {$p{=}5.7{\times}10^{-14}$};
+
+  \node[text width=4.6cm,align=left,font=\scriptsize,black!60,
+        anchor=north west,inner sep=0pt] at ({\PCx},{\PB-0.20})
+       {$1155$ decoy molecules, ${\approx}25$ core-h --- out of reach at
+        $64$\,h per molecule.};
+
+\end{tikzpicture}

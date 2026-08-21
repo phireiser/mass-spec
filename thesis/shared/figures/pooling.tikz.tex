@@ -1,0 +1,132 @@
+% ---------------------------------------------------------------------------
+% Pooling (graph readout): variable-size set of atom embeddings -> one vector.
+% Left  : n atom embeddings, n differs per molecule.
+% Middle: the operators, on a worked 4x3 example; row order is irrelevant.
+% Right : what this project uses -- mean || max, then a linear projection.
+% Needs: tikz libraries arrows.meta, calc; \input{shared/notation} for `fig`.
+% ---------------------------------------------------------------------------
+\begin{tikzpicture}[
+    fig,
+    aC/.style={circle, draw=black!70, fill=black!11, minimum size=5.5mm,
+               inner sep=0pt, font=\bfseries\tiny, text=black!70},
+    aO/.style={circle, draw=BrickRed, fill=BrickRed!15, minimum size=5.5mm,
+               inner sep=0pt, font=\bfseries\tiny, text=BrickRed},
+    aN/.style={circle, draw=RoyalBlue, fill=RoyalBlue!15, minimum size=5.5mm,
+               inner sep=0pt, font=\bfseries\tiny, text=RoyalBlue},
+    num/.style={rectangle, minimum width=6.2mm, minimum height=4.4mm,
+                inner sep=0pt, font=\tiny, text=black!80},
+    boxd/.style={rounded corners=2pt, draw=gray!55},
+    figcap/.style={font=\scriptsize, align=center, text=black!75},
+    ttl/.style={font=\bfseries\scriptsize, text=RoyalPurple},
+    biga/.style={-{Latex[length=3.2mm, width=2.6mm]}, fig heavy, black!55},
+    thina/.style={-{Latex[length=1.8mm]}, semithick, black!55},
+]
+
+% one row of three numbers: #1 x (first cell centre), #2 y, #3 colour, #4..#6 values
+\newcommand{\hrow}[6]{%
+  \begin{scope}[shift={(#1,#2)}]
+    \foreach \k/\val/\sh in {0/#4/100, 1/#5/62, 2/#6/88} {
+      \node[num, fill=#3!\sh!white!35, draw=#3!55] at (0.66*\k, 0) {\val};
+    }
+  \end{scope}}
+
+\def\ytop{3.35}   % panel top
+\def\ybot{-3.35}  % panel bottom
+
+% =====================================================================
+% PANEL 1 -- n atom embeddings
+% =====================================================================
+\node[ttl, anchor=south] at (0, \ytop+0.12) {1 -- one vector per atom};
+\draw[boxd] (-2.15, \ybot) rectangle (2.15, \ytop);
+
+\node[aO] at (-1.45, 2.45) {O};
+\node[aC] at (-1.45, 1.65) {C};
+\node[aN] at (-1.45, 0.85) {N};
+\node[aC] at (-1.45, 0.05) {C};
+\foreach \i/\y/\col in {1/2.45/BrickRed, 2/1.65/black, 3/0.85/RoyalBlue, 4/0.05/black} {
+  \foreach \k/\sh in {0/100, 1/60, 2/85, 3/45} {
+    \node[rectangle, minimum width=3.4mm, minimum height=4.2mm, inner sep=0pt,
+          fill=\col!\sh!white!30, draw=\col!30] at (-0.75+0.37*\k, \y) {};}
+  \node[font=\tiny, text=black!65, anchor=west] at (0.65, \y) {$h_\i$};}
+\node[font=\small, text=black!55] at (-0.05, -0.60) {$\vdots$};
+
+\node[figcap, anchor=north] at (0, -1.15)
+    {message passing leaves\\one embedding per atom};
+\node[figcap, anchor=north, text=black!70] at (0, -2.15)
+    {$n$ differs per molecule\\($8$, $21$, $47$, \dots\ atoms)};
+
+% =====================================================================
+% PANEL 2 -- the operators on a worked example
+% =====================================================================
+\def\xB{5.15}
+\node[ttl, anchor=south] at (\xB, \ytop+0.12) {2 -- collapse the rows};
+\draw[boxd] (\xB-2.20, \ybot) rectangle (\xB+2.20, \ytop);
+
+\hrow{\xB-0.55}{2.70}{black}{0.2}{0.9}{0.1}
+\hrow{\xB-0.55}{2.15}{black}{0.4}{0.1}{0.0}
+\hrow{\xB-0.55}{1.60}{black}{0.1}{0.2}{0.3}
+\hrow{\xB-0.55}{1.05}{black}{0.5}{0.0}{0.2}
+\draw[boxd, draw=black!45] (\xB-0.92, 0.79) rectangle (\xB+1.30, 2.96);
+\node[font=\tiny, text=black!60, anchor=east, align=right] at (\xB-1.05, 1.88)
+    {$n$ rows,\\any order};
+
+\node[font=\tiny, text=OliveGreen!45!black, anchor=east] at (\xB-0.95, 0.20) {mean};
+\hrow{\xB-0.55}{0.20}{OliveGreen}{0.3}{0.3}{0.15}
+\node[font=\tiny, text=BrickRed, anchor=east] at (\xB-0.95, -0.45) {max};
+\hrow{\xB-0.55}{-0.45}{BrickRed}{0.5}{\textbf{0.9}}{0.3}
+\draw[thina] (\xB+0.19, 0.72) -- (\xB+0.19, 0.45);
+
+\node[figcap, anchor=north, text=black!70] at (\xB, -0.95)
+    {the mean dilutes the lone $0.9$;\\the max keeps it};
+\node[figcap, anchor=north] at (\xB, -2.00)
+    {row order irrelevant $\Rightarrow$\\atom numbering cannot leak in};
+
+% =====================================================================
+% PANEL 3 -- what this project uses
+% =====================================================================
+\def\xC{10.30}
+\node[ttl, anchor=south] at (\xC, \ytop+0.12) {3 -- readout used here};
+\draw[boxd] (\xC-2.20, \ybot) rectangle (\xC+2.20, \ytop);
+
+\node[rectangle, boxd, draw=OliveGreen!70, fill=OliveGreen!12, minimum width=14mm,
+      minimum height=5mm, font=\tiny, text=OliveGreen!40!black] (mn) at (\xC-0.90, 2.55) {mean $128$};
+\node[rectangle, boxd, draw=BrickRed!70, fill=BrickRed!12, minimum width=14mm,
+      minimum height=5mm, font=\tiny, text=BrickRed] (mx) at (\xC+0.90, 2.55) {max $128$};
+\node[circle, draw=RoyalPurple, thick, minimum size=6.5mm, inner sep=0pt,
+      font=\scriptsize, text=RoyalPurple] (cc) at (\xC, 1.65) {$\|$};
+\draw[thina] (mn) -- (cc);
+\draw[thina] (mx) -- (cc);
+\node[font=\tiny, text=black!60, anchor=west] at (\xC+0.30, 1.15) {$256$};
+\node[rectangle, boxd, draw=gray!70, minimum width=14mm, minimum height=5mm,
+      font=\tiny, text=black!75] (li) at (\xC, 0.75) {Linear};
+\draw[biga] (cc) -- (li);
+
+\begin{scope}[shift={(\xC, -0.15)}]
+  \foreach \k/\sh in {0/100, 1/65, 2/85, 3/50, 4/95, 5/70} {
+    \node[rectangle, minimum width=3.6mm, minimum height=4.4mm, inner sep=0pt,
+          fill=RoyalPurple!\sh!white!30, draw=RoyalPurple!35] at (-0.92+0.37*\k, 0) {};}
+  \node[font=\tiny, text=black!55, anchor=west] at (1.00, 0) {$\dots$};
+\end{scope}
+\draw[biga] (li) -- (\xC, 0.13);
+\node[font=\scriptsize, text=RoyalPurple!70!black, anchor=north] at (\xC, -0.48)
+      {$z_{\mathrm{mol}}\in\mathbb{R}^{128}$};
+
+\node[figcap, anchor=north] at (\xC, -1.15)
+    {mean: the bulk composition\\max: the rare environments\\that separate isomers};
+\node[figcap, anchor=north, text=black!60] at (\xC, -2.55)
+    {(fragmentation graph: mean pool)};
+
+\draw[biga] (2.30, 1.6) -- (\xB-2.35, 1.6);
+\draw[biga] (\xB+2.35, 1.6) -- (\xC-2.35, 1.6);
+
+% =====================================================================
+% The readout, in one line
+% =====================================================================
+\node[draw=RoyalPurple, thick, rounded corners=2pt, inner sep=5pt,
+      font=\small, fill=RoyalPurple!4, align=center]
+    at (5.08, \ybot-0.95)
+    {$\displaystyle z_{\mathrm{mol}} = W\big[\;\operatorname{mean}_{v\in V} h_v
+      \;\big\|\; \max_{v\in V} h_v\;\big] \in \mathbb{R}^{128}$,
+      \quad unchanged by any permutation of $V$};
+
+\end{tikzpicture}

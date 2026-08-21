@@ -1,0 +1,108 @@
+% ---------------------------------------------------------------------------
+% Data splits: the two-stage partition into train / validation / test.
+% Top left  : stage 1 -- 80 / 20; the test portion is sealed and never touched.
+% Top right : stage 2 -- the development portion is cut 70 / 30.
+% Bottom    : the resulting shares, the concrete counts, and what each split
+%             is allowed to influence.
+% Needs: tikz libraries arrows.meta, calc; \input{shared/notation} for `fig`.
+% ---------------------------------------------------------------------------
+\begin{tikzpicture}[
+    fig,
+    ttl/.style={font=\bfseries\small, text=RoyalPurple},
+    figcap/.style={font=\small, align=center, text=black!75},
+    seg/.style={draw=black!45, line width=0.5pt},
+    lbl/.style={font=\footnotesize, text=black!80, align=center},
+    biga/.style={-{Latex[length=3.4mm, width=2.8mm]}, fig heavy, black!55},
+    boxd/.style={rounded corners=2pt, draw=gray!55},
+]
+
+\def\barh{0.66}
+
+% a bar segment with the label inside: #1 x0, #2 x1, #3 y, #4 colour,
+% #5 shade, #6 label
+\newcommand{\seg}[6]{%
+  \fill[#4!#5!white] (#1, #3-\barh/2) rectangle (#2, #3+\barh/2);
+  \draw[seg] (#1, #3-\barh/2) rectangle (#2, #3+\barh/2);
+  \node[lbl, text=#4!60!black] at ({(#1+#2)/2}, #3) {#6};}
+
+% same, but the label goes underneath -- for segments too narrow to hold it
+\newcommand{\segb}[6]{%
+  \fill[#4!#5!white] (#1, #3-\barh/2) rectangle (#2, #3+\barh/2);
+  \draw[seg] (#1, #3-\barh/2) rectangle (#2, #3+\barh/2);
+  \node[lbl, text=#4!60!black, anchor=north]
+       at ({(#1+#2)/2}, #3-\barh/2-0.14) {#6};}
+
+% =====================================================================
+% PANEL 1 -- stage 1: hold out the test set
+% =====================================================================
+\node[ttl, anchor=south] at (0, 2.45) {1 -- hold out the test set};
+\draw[boxd] (-2.8, -2.35) rectangle (2.8, 2.35);
+
+\node[figcap, anchor=south] at (0, 1.08) {all molecule--spectrum pairs};
+\draw[seg, fill=black!8] (-2.4, 0.34) rectangle (2.4, 1.0);
+\node[lbl] at (0, 0.67) {$100\,\%$};
+
+\draw[-{Latex[length=2.4mm]}, black!55] (0, 0.22) -- (0, -0.20);
+
+\seg{-2.4}{1.44}{-0.55}{RoyalBlue}{18}{development \quad $80\,\%$}
+\segb{1.44}{2.4}{-0.55}{BrickRed}{28}{test $20\,\%$}
+\node[figcap, anchor=north, font=\footnotesize, text=BrickRed!70!black]
+     at (1.92, -1.42) {sealed here};
+
+% =====================================================================
+% PANEL 2 -- stage 2: split the development portion
+% =====================================================================
+\def\xB{6.6}
+\node[ttl, anchor=south] at (\xB, 2.45) {2 -- split the rest};
+\draw[boxd] (\xB-2.8, -2.35) rectangle (\xB+2.8, 2.35);
+
+\node[figcap, anchor=south, text=RoyalBlue!60!black] at (\xB, 1.08)
+    {development portion};
+\draw[seg, fill=RoyalBlue!18] (\xB-2.4, 0.34) rectangle (\xB+2.4, 1.0);
+\node[lbl, text=RoyalBlue!60!black] at (\xB, 0.67) {$80\,\%$};
+
+\draw[-{Latex[length=2.4mm]}, black!55] (\xB, 0.22) -- (\xB, -0.20);
+
+\seg{\xB-2.4}{\xB+0.96}{-0.55}{RoyalBlue}{35}{train \quad $70\,\%$}
+\segb{\xB+0.96}{\xB+2.4}{-0.55}{OliveGreen}{32}{validation $30\,\%$}
+\node[figcap, anchor=north, font=\footnotesize] at (\xB, -1.78)
+    {\emph{of} the development portion};
+
+\draw[biga] (2.95, -0.55) -- (\xB-2.95, -0.55);
+
+% =====================================================================
+% PANEL 3 -- resulting shares, counts, and role
+% =====================================================================
+\def\yC{-4.75}
+\node[ttl, anchor=south west] at (-2.8, -2.95) {3 -- what each split does};
+\draw[boxd] (-2.8, -6.45) rectangle (\xB+2.8, -3.05);
+
+\draw[biga] (\xB/2, -2.45) -- (\xB/2, -3.05);
+
+% resulting shares of the full dataset
+\seg{-2.4}{0.29}{\yC}{RoyalBlue}{35}{$56\,\%$}
+\seg{0.29}{1.44}{\yC}{OliveGreen}{32}{$24\,\%$}
+\seg{1.44}{2.4}{\yC}{BrickRed}{28}{$20\,\%$}
+\node[figcap, anchor=south] at (0, \yC+0.48) {of the full dataset};
+\node[figcap, anchor=north, font=\footnotesize, text=black!60]
+      at (0, \yC-0.50) {on the $66$ paired molecules};
+
+% roles
+\foreach \y/\col/\sh/\nm/\cnt/\use in {%
+    -3.75/RoyalBlue/35/train/38/{gradient updates},
+    -4.75/OliveGreen/32/validation/15/{checkpoint \& model selection},
+    -5.75/BrickRed/28/test/13/{final retrieval only, \emph{post hoc}}} {
+  \fill[\col!\sh!white] (2.50, \y-0.19) rectangle (2.88, \y+0.19);
+  \draw[seg] (2.50, \y-0.19) rectangle (2.88, \y+0.19);
+  \node[lbl, anchor=west, text=\col!60!black] at (3.06, \y) {\nm};
+  \node[lbl, anchor=west, text=black!60] at (4.82, \y) {$\cnt$};
+  % One size down, so the two long roles stay on one line and still end well
+  % inside panel 3's frame (right edge 9.4).
+  \node[lbl, anchor=west, font=\scriptsize] at (5.35, \y) {\use};}
+
+% footer
+\node[figcap, anchor=north, font=\footnotesize, text=black!60]
+      at (\xB/2, -6.60)
+      {\texttt{shuffle=False} --- deterministic, reproducible by construction};
+
+\end{tikzpicture}
