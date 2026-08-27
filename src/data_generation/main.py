@@ -10,7 +10,7 @@ from pathlib import Path
 import mod
 
 from src.data_generation import utils
-from src.data_generation.rules import fragmentation, ionization, build_migration_rules
+from src.data_generation.rules import build_migration_rules
 from src.data_generation.core import strategy
 from src.project_paths import shared_name, shared_path
 
@@ -116,7 +116,34 @@ parser.add_argument("--name-by-cas", action="store_true",
                     help="Name the dump by the CAS registry number resolved from the store "
                          "(the project-wide single identifier) instead of --name; falls back "
                          "to --name if the molecule is not in the store")
+parser.add_argument("--rule-source", type=str, default="legacy", choices=["legacy", "mechanisms"],
+                    help="Which FRAGMENTATION rule library to use. 'legacy' (default): the "
+                         "hand-authored, generalized-template rules in src/data_generation/rules "
+                         "(uses '_A'-style placeholders, matches broadly across molecules). "
+                         "'mechanisms': rules compiled from the curated data/mechanisms corpus "
+                         "(src/data_generation/mechanisms) via a SMIRKS->DFS converter -- each "
+                         "rule is the full, CONCRETE graph from one curated book example rather "
+                         "than a generalized template, so it only fires on a host molecule that "
+                         "contains that exact substructure (mod matches by subgraph embedding, "
+                         "so it is not limited to only the literal example molecule, but it will "
+                         "not generalize the way a placeholder hand rule does). Ionization rules "
+                         "always come from the legacy library either way: the mechanism corpus "
+                         "documents already-ionized (post-M+*) steps only, so there is no generic "
+                         "neutral-to-radical-cation rule to compile from it. Requires "
+                         "src/data_generation/mechanisms/generated_rules.py to exist -- generate/"
+                         "refresh it first, inside the container, with "
+                         "'python -m src.data_generation.mechanisms.write_generated_rules', which "
+                         "also reports how many curated steps converted vs. were skipped (and why).")
 args = parser.parse_args()
+
+if args.rule_source == "mechanisms":
+    from src.data_generation.mechanisms import fragmentation
+    from src.data_generation.rules import ionization
+    print(f"[rules] --rule-source mechanisms: {len(fragmentation)} mechanism-derived "
+          "fragmentation rule(s) (legacy ionization kept -- see "
+          "src/data_generation/mechanisms/__init__.py)")
+else:
+    from src.data_generation.rules import fragmentation, ionization
 
 # Enable subgroup diagnostics
 if args.subgroup_diag:
