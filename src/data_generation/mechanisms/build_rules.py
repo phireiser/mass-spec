@@ -83,7 +83,7 @@ class ConvertedStep:
     n_core_atoms: int = 0         # atoms the rewrite touches (see generalize.reacting_core)
     n_written_atoms: int = 0      # atoms the emitted rule actually constrains
     n_pruned_atoms: int = 0       # spectator atoms generalization dropped (0 when concrete)
-    n_placeholder_atoms: int = 0  # shell atoms written as [_A] rather than their element
+    n_shell_atoms: int = 0        # context-shell positions the generality levers acted on
 
 
 def _step_chemistry_defect(record: MechanismRecord, step_id: str) -> "str | None":
@@ -184,6 +184,7 @@ def iter_conversions(
     context_radius: "int | None" = None,
     spectator_hydrogens: bool = True,
     placeholder_context: bool = False,
+    bare_context_hydrogens: bool = False,
 ) -> "Iterator[ConvertedStep | SkippedStep]":
     """Walk every JSON record in ``records_dir`` and, per step, yield either a
     :class:`ConvertedStep` (converted, mod-validated, conservation-checked) or
@@ -199,9 +200,14 @@ def iter_conversions(
     (``None``/``True``) reproduce the fully concrete rules byte for byte;
     ``context_radius=0`` keeps only the reacting core and its connectors, and a
     larger radius keeps a wider shell of spectator context around it.
-    ``placeholder_context`` additionally stops naming the ELEMENT at those shell
-    positions, writing them as ``[_A]`` the way the hand-authored libraries do;
-    it needs a radius to have a shell to act on, and is a no-op at radius 0.
+    Two further, independent levers act on the shell those radii create (both
+    need a radius to have a shell at all, so both are no-ops at radius 0):
+    ``placeholder_context`` stops naming the shell's ELEMENT, writing it as
+    ``[_A]``, and ``bare_context_hydrogens`` stops writing the shell's unchanged
+    HYDROGENS, so the position no longer pins a substitution pattern. The
+    hand-authored libraries' idiom is both at once -- a bare ``[_A]`` -- but
+    they are separable because they cost very differently; see
+    docs/MECHANISM_RULES.md.
     """
     for path in sorted(records_dir.glob("*.json")):
         try:
@@ -295,18 +301,18 @@ def iter_conversions(
                     continue
                 # Both before pruning: context_atoms walks the FULL adjacency to
                 # work out which atoms only the shell put in the keep set.
-                shell = (
-                    context_atoms(core, left_graph, right_graph, context_radius)
-                    if placeholder_context else set()
-                )
+                if placeholder_context or bare_context_hydrogens:
+                    shell = context_atoms(
+                        core, left_graph, right_graph, context_radius)
                 prune_graph(left_graph, keep)
                 prune_graph(right_graph, keep)
                 left_h = {k: v for k, v in left_h.items() if k in keep}
                 right_h = {k: v for k, v in right_h.items() if k in keep}
                 # Same ids on both sides, so the conservation guard's per-symbol
                 # tally stays balanced (see placeholder_atoms).
-                placeholder_atoms(left_graph, shell)
-                placeholder_atoms(right_graph, shell)
+                if placeholder_context:
+                    placeholder_atoms(left_graph, shell)
+                    placeholder_atoms(right_graph, shell)
 
             # Count now: compile_parsed_state expands the surviving implicit
             # hydrogens INTO these graphs, so afterwards left_graph.atoms is
@@ -317,10 +323,11 @@ def iter_conversions(
                 dfs, n_moves = compile_parsed_state(
                     left_graph, left_h, right_graph, right_h,
                     keep_spectator_hydrogens=spectator_hydrogens,
-                    # A placeholder position asserts "some heavy atom hangs here";
-                    # writing its hydrogens back would re-pin it to the exact
-                    # substitution the book drew and waste the placeholder.
-                    bare_atoms=shell,
+                    # A shell position asserts only "something hangs here";
+                    # writing its hydrogens back re-pins it to the exact
+                    # substitution the book drew. Paired with
+                    # placeholder_context this is the hand-rule idiom.
+                    bare_atoms=shell if bare_context_hydrogens else None,
                 )
             except MechanismConversionError as exc:
                 yield SkippedStep(record.mechanism_id, step.step_id, str(exc))
@@ -354,7 +361,7 @@ def iter_conversions(
                 n_core_atoms=len(core),
                 n_written_atoms=len(left_graph.atoms),
                 n_pruned_atoms=n_before - n_after_prune,
-                n_placeholder_atoms=len(shell),
+                n_shell_atoms=len(shell),
             )
 
 

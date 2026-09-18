@@ -90,6 +90,7 @@ def write_generated_rules_file(
     spectator_hydrogens: bool = True,
     deduplicate: bool = True,
     placeholder_context: bool = False,
+    bare_context_hydrogens: bool = False,
 ) -> "tuple[list[ConvertedStep], list[SkippedStep]]":
     """Write ``out_path``; return (converted steps, skipped steps).
 
@@ -107,6 +108,7 @@ def write_generated_rules_file(
         context_radius=context_radius,
         spectator_hydrogens=spectator_hydrogens,
         placeholder_context=placeholder_context,
+        bare_context_hydrogens=bare_context_hydrogens,
     ):
         if isinstance(item, SkippedStep):
             skipped.append(item)
@@ -132,6 +134,8 @@ def write_generated_rules_file(
         flags.append("        --no-deduplicate")
     if placeholder_context:
         flags.append("        --placeholder-context")
+    if bare_context_hydrogens:
+        flags.append("        --bare-context-hydrogens")
 
     if context_radius is None:
         scope = [
@@ -156,6 +160,11 @@ def write_generated_rules_file(
                 "Unchanged spectator hydrogens are not written, so a step drawn on a"
             )
             scope.append("methyl also matches a methylene.")
+        if bare_context_hydrogens:
+            scope.append(
+                "Shell positions carry no unchanged hydrogens, so they no longer"
+            )
+            scope.append("pin the substitution pattern the book example drew.")
         if placeholder_context:
             scope.append(
                 "Shell positions are written as the placeholder '[_A]' rather than"
@@ -248,6 +257,13 @@ def main() -> None:
              "Needs --context-radius (a radius of 0 has no shell, so no effect).",
     )
     ap.add_argument(
+        "--bare-context-hydrogens", action="store_true",
+        help="Drop the unchanged hydrogens on shell positions only, so such a "
+             "position stops pinning an exact substitution. The per-atom form of "
+             "--no-spectator-hydrogens; paired with --placeholder-context it is "
+             "the hand-authored rules' bare '[_A]' idiom. Needs --context-radius.",
+    )
+    ap.add_argument(
         "--no-deduplicate", dest="deduplicate", action="store_false",
         help="Keep every converted step even when generalization made several of "
              "them the same rule (only meaningful with --context-radius).",
@@ -260,6 +276,7 @@ def main() -> None:
         spectator_hydrogens=args.spectator_hydrogens,
         deduplicate=args.deduplicate,
         placeholder_context=args.placeholder_context,
+        bare_context_hydrogens=args.bare_context_hydrogens,
     )
     n_auto = sum(1 for c in converted if c.auto_localized)
     n_moves = sum(1 for c in converted if c.inferred_h_moves)
@@ -273,10 +290,14 @@ def main() -> None:
         print(f"  generality: mean {mean_core:.1f} reacting atom(s) per rule, "
               f"{mean_written:.1f} atom(s) written, {mean_pruned:.1f} spectator "
               f"atom(s) pruned")
-        if args.placeholder_context:
-            mean_ph = sum(c.n_placeholder_atoms for c in converted) / len(converted)
-            print(f"  {mean_ph:.1f} context position(s) per rule written as "
-                  f"'[_A]' rather than a named element")
+        if args.placeholder_context or args.bare_context_hydrogens:
+            mean_shell = sum(c.n_shell_atoms for c in converted) / len(converted)
+            acted = " and ".join(
+                w for w, on in (("element-free", args.placeholder_context),
+                                ("hydrogen-free", args.bare_context_hydrogens)) if on
+            )
+            print(f"  {mean_shell:.1f} context position(s) per rule written "
+                  f"{acted}")
     for skip in skipped:
         print(f"  SKIP {skip}")
 
