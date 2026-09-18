@@ -186,7 +186,7 @@ def check_mapped_atom_sets(left: "_Graph", right: "_Graph") -> None:
 
 
 def plan_implicit_hydrogens(
-    left_h: Dict[int, int], right_h: Dict[int, int],
+    left_h: Dict[int, int], right_h: Dict[int, int], keep_unchanged: bool = True,
 ) -> Tuple[Dict[int, List[int]], Dict[int, List[int]], int]:
     """Decide which synthetic hydrogen-vertex ids attach to which heavy atom
     on each side, reconciling any atom whose implicit-H count changes.
@@ -209,6 +209,15 @@ def plan_implicit_hydrogens(
     reagent/proton not captured as a mapped species), and inventing a
     reconciliation would silently paper over that.
 
+    With ``keep_unchanged=False`` the shared spectators are NOT emitted: only
+    hydrogens that actually move get a vertex. An unwritten hydrogen is simply
+    not part of the rule's match condition, so the rule stops insisting on an
+    exact substitution pattern (a step drawn on a methyl then also matches a
+    methylene) -- this is the main lever behind ``--context-radius``'s
+    generalization, and it is symmetric across the two sides, so the atom tally
+    the conservation guard checks is unaffected. See
+    :mod:`src.data_generation.mechanisms.generalize`.
+
     Returns ``(left_plan, right_plan, n_inferred_moves)``, each plan mapping
     ``heavy_atom_id -> [hydrogen_vertex_id, ...]`` for :func:`expand_implicit_hydrogens`.
     """
@@ -222,7 +231,7 @@ def plan_implicit_hydrogens(
         left_count = left_h.get(atom_id, 0)
         right_count = right_h.get(atom_id, 0)
         shared = min(left_count, right_count)
-        if shared:
+        if shared and keep_unchanged:
             ids = list(range(next_id, next_id + shared))
             next_id += shared
             left_plan[atom_id] = list(ids)
@@ -444,14 +453,21 @@ def _dfs_string_for_graph(graph: _Graph) -> str:
 
 def compile_parsed_state(
     left: _Graph, left_h: Dict[int, int], right: _Graph, right_h: Dict[int, int],
+    keep_spectator_hydrogens: bool = True,
 ) -> Tuple[str, int]:
     """Shared final assembly, once both sides are parsed (and, if needed,
-    charge/radical-patched via :func:`apply_localization`): validate atom
-    identity, reconcile implicit hydrogens, expand them into both graphs, and
-    emit the DFS string. Returns ``(dfs_string, n_inferred_h_moves)``.
+    charge/radical-patched via :func:`apply_localization`, or pruned to a
+    reacting core via :mod:`src.data_generation.mechanisms.generalize`):
+    validate atom identity, reconcile implicit hydrogens, expand them into both
+    graphs, and emit the DFS string. Returns ``(dfs_string, n_inferred_h_moves)``.
+
+    ``keep_spectator_hydrogens=False`` writes only the hydrogens that move --
+    see :func:`plan_implicit_hydrogens`.
     """
     check_mapped_atom_sets(left, right)
-    left_plan, right_plan, n_moves = plan_implicit_hydrogens(left_h, right_h)
+    left_plan, right_plan, n_moves = plan_implicit_hydrogens(
+        left_h, right_h, keep_unchanged=keep_spectator_hydrogens
+    )
     expand_implicit_hydrogens(left, left_plan)
     expand_implicit_hydrogens(right, right_plan)
     return f"{dfs_string_for_state(left)}>>{dfs_string_for_state(right)}", n_moves

@@ -52,6 +52,7 @@ from .dfs_writer import (
     mapped_smiles_charge_and_radical,
     parse_mapped_smiles,
 )
+from .generalize import keep_set, prune_graph, reacting_core
 
 RECORDS_DIR = shared_path("MECHANISM_RECORDS_DIR_REL")
 
@@ -73,6 +74,9 @@ class ConvertedStep:
     rule: "mod.Rule"
     auto_localized: bool = False  # reactant charge/radical reconstructed from the product
     inferred_h_moves: int = 0     # unmapped H relocations reconciled (see plan_implicit_hydrogens)
+    n_core_atoms: int = 0         # atoms the rewrite touches (see generalize.reacting_core)
+    n_written_atoms: int = 0      # atoms the emitted rule actually constrains
+    n_pruned_atoms: int = 0       # spectator atoms generalization dropped (0 when concrete)
 
 
 def _step_chemistry_defect(record: MechanismRecord, step_id: str) -> "str | None":
@@ -170,6 +174,8 @@ def _fully_unlocalized(species_in_state: list) -> bool:
 
 def iter_conversions(
     records_dir: Path = RECORDS_DIR,
+    context_radius: "int | None" = None,
+    spectator_hydrogens: bool = True,
 ) -> "Iterator[ConvertedStep | SkippedStep]":
     """Walk every JSON record in ``records_dir`` and, per step, yield either a
     :class:`ConvertedStep` (converted, mod-validated, conservation-checked) or
@@ -178,6 +184,13 @@ def iter_conversions(
     ``mechanisms/__init__.py``) and ``write_generated_rules.py`` (the
     ``generated_rules.py`` static-file writer), so the two can never drift
     apart on which steps are considered convertible.
+
+    ``context_radius`` and ``spectator_hydrogens`` control how far each rule is
+    generalized away from the single book molecule it was drawn on -- see
+    :mod:`src.data_generation.mechanisms.generalize`. The defaults
+    (``None``/``True``) reproduce the fully concrete rules byte for byte;
+    ``context_radius=0`` keeps only the reacting core and its connectors, and a
+    larger radius keeps a wider shell of spectator context around it.
     """
     for path in sorted(records_dir.glob("*.json")):
         try:
@@ -239,8 +252,50 @@ def iter_conversions(
                     continue
                 auto_localized = True
 
+            arrow_maps = {
+                atom_map
+                for move in step.electron_moves
+                for atom_map in (*move.source.atom_maps, *move.target.atom_maps)
+            }
+            core = reacting_core(left_graph, left_h, right_graph, right_h, arrow_maps)
+            n_before = len(left_graph.atoms)
+
+            if context_radius is not None:
+                keep = keep_set(core, left_graph, right_graph, context_radius)
+                # A hydrogen that MOVES is reconciled by plan_implicit_hydrogens
+                # against both sides' counts, so pruning its donor or acceptor
+                # would silently unbalance the step. Every such atom is in the
+                # graph diff and therefore in the core, so this cannot fire --
+                # it is here to make that an assertion rather than an assumption.
+                dropped_movers = {
+                    atom_id
+                    for atom_id in (set(left_h) | set(right_h)) - keep
+                    if left_h.get(atom_id, 0) != right_h.get(atom_id, 0)
+                }
+                if dropped_movers:
+                    yield SkippedStep(
+                        record.mechanism_id, step.step_id,
+                        "generalization would prune atom(s) whose implicit "
+                        f"hydrogen count changes ({sorted(dropped_movers)}) -- "
+                        "a reacting_core/keep_set bug, since a changed H count "
+                        "puts an atom in the graph diff by construction",
+                    )
+                    continue
+                prune_graph(left_graph, keep)
+                prune_graph(right_graph, keep)
+                left_h = {k: v for k, v in left_h.items() if k in keep}
+                right_h = {k: v for k, v in right_h.items() if k in keep}
+
+            # Count now: compile_parsed_state expands the surviving implicit
+            # hydrogens INTO these graphs, so afterwards left_graph.atoms is
+            # "heavy + written H", which is the other statistic we want.
+            n_after_prune = len(left_graph.atoms)
+
             try:
-                dfs, n_moves = compile_parsed_state(left_graph, left_h, right_graph, right_h)
+                dfs, n_moves = compile_parsed_state(
+                    left_graph, left_h, right_graph, right_h,
+                    keep_spectator_hydrogens=spectator_hydrogens,
+                )
             except MechanismConversionError as exc:
                 yield SkippedStep(record.mechanism_id, step.step_id, str(exc))
                 continue
@@ -270,6 +325,9 @@ def iter_conversions(
             yield ConvertedStep(
                 name=name, dfs=dfs, rule=rule,
                 auto_localized=auto_localized, inferred_h_moves=n_moves,
+                n_core_atoms=len(core),
+                n_written_atoms=len(left_graph.atoms),
+                n_pruned_atoms=n_before - n_after_prune,
             )
 
 
