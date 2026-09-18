@@ -246,12 +246,32 @@ def keep_set(
     return keep
 
 
-#: Atom symbol written for a context position whose element the rule does not
-#: constrain. Matches the hand-authored libraries' idiom (``[_A]1[C]2[C]3:...``
-#: in ``rules/benzylAllyl_ringGeneral.py``); ``utils.constrain.apply_constraints``
-#: splices a ``constrainLabelAny`` block per distinct placeholder name, so the
-#: caller decides which elements it may actually bind.
+#: Prefix of the atom symbols written for context positions whose element the
+#: rule does not constrain. Matches the hand-authored libraries' idiom
+#: (``[_A]1[C]2[C]3:...`` in ``rules/benzylAllyl_ringGeneral.py``);
+#: ``utils.constrain.apply_constraints`` splices a ``constrainLabelAny`` block
+#: per distinct placeholder name, so the caller decides what each may bind.
 PLACEHOLDER_SYMBOL = "_A"
+
+
+def _placeholder_name(index: int) -> str:
+    """0 -> ``_A``, 1 -> ``_B``, ... 25 -> ``_Z``, 26 -> ``_AA``, ...
+
+    Distinct names are REQUIRED, not cosmetic. ``term_transfers`` turns each
+    name into a term variable and keeps distinct names independent, so reusing
+    one name across two positions makes mod unify them: the rule would then
+    demand that both context atoms be the SAME element -- a constraint the
+    concrete rule never had. Where a book example drew, say, a carbon and an
+    oxygen in its shell, such a rule stops matching even the example it came
+    from. Measured: one shared ``_A`` across all shell positions LOWERED the
+    corpus ceiling (0.254 -> 0.235) despite being nominally more general.
+    """
+    name = ""
+    index += 1
+    while index:
+        index, rem = divmod(index - 1, 26)
+        name = chr(ord("A") + rem) + name
+    return "_" + name
 
 
 def context_atoms(
@@ -276,18 +296,23 @@ def context_atoms(
 
 
 def placeholder_atoms(graph: _Graph, atom_ids: Set[int]) -> None:
-    """Rewrite ``atom_ids``' element to :data:`PLACEHOLDER_SYMBOL`, in place.
+    """Rewrite each of ``atom_ids`` to its OWN placeholder name, in place.
 
-    Apply the SAME ids to both sides of a step: the conservation guard in
-    ``rules/__init__.py`` tallies atoms by symbol, so a placeholder introduced on
-    one side only would read as one element destroyed and another created.
-    Charge and radical decoration are left alone -- they are part of what the
-    rewrite asserts, not part of the element it declines to name.
+    Names are assigned by sorted atom id, so passing the same ``atom_ids`` to
+    both sides of a step gives each atom the same name on both -- which is
+    required twice over: the conservation guard in ``rules/__init__.py`` tallies
+    atoms by symbol, and a term variable only carries a binding across the
+    rewrite if both sides name it identically.
+
+    One name per position, never one shared name -- see :func:`_placeholder_name`
+    for what sharing costs. Charge and radical decoration are left alone; they
+    are part of what the rewrite asserts, not part of the element it declines
+    to name.
     """
-    for atom_id in atom_ids:
+    for index, atom_id in enumerate(sorted(atom_ids)):
         atom = graph.atoms.get(atom_id)
         if atom is not None:
-            atom.symbol = PLACEHOLDER_SYMBOL
+            atom.symbol = _placeholder_name(index)
 
 
 def prune_graph(graph: _Graph, keep: Set[int]) -> None:

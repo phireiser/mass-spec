@@ -165,8 +165,32 @@ class TestPlaceholderAtoms(unittest.TestCase):
 
         self.assertEqual(left.atoms[1].label(), "[_A]")
         # Charge is part of what the rewrite asserts, so it survives.
-        self.assertEqual(left.atoms[5].label(), "[_A+]")
+        self.assertEqual(left.atoms[5].label(), "[_B+]")
         self.assertEqual(left.atoms[2].label(), "[C]")
+
+    def test_each_position_gets_its_own_variable(self):
+        # A shared name would make mod unify the positions, forcing them to the
+        # same element -- a constraint the concrete rule never had, and one that
+        # measurably LOWERED the corpus ceiling when it was there.
+        left, _, _, _ = _sides(REMOTE_CHARGE)
+
+        placeholder_atoms(left, {1, 3, 6})
+
+        names = [left.atoms[i].symbol for i in (1, 3, 6)]
+        self.assertEqual(len(set(names)), 3, names)
+
+    def test_both_sides_get_the_same_name_for_the_same_atom(self):
+        # The name is the term variable: a binding only carries across the
+        # rewrite if the two sides agree on it, and the conservation guard
+        # tallies atoms by symbol.
+        left, _, right, _ = _sides(ETHER_ALPHA)
+        shell = {1, 4}
+
+        placeholder_atoms(left, shell)
+        placeholder_atoms(right, shell)
+
+        for atom_id in shell:
+            self.assertEqual(left.atoms[atom_id].symbol, right.atoms[atom_id].symbol)
 
     def test_ids_absent_from_this_side_are_ignored(self):
         # The same shell is applied to both sides, and a fragmenting step's
