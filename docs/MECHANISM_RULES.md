@@ -185,5 +185,131 @@ The open question this leaves is *what kind* of generality the hand-authored
 rules have that pruning cannot recover. Their `_A`-style placeholders match an
 atom by role rather than by element, which no amount of pruning a concrete
 example reproduces: a pruned rule still names carbon where the hand rule says
-"any heavy atom". That, rather than a wider or narrower shell, is the next
-thing to test.
+"any heavy atom". Section 8 tests that.
+
+## 8. Role placeholders on the context shell
+
+A pruned rule still names the element the book example drew at every surviving
+position. The hand-authored rules do not: `rules/benzylAllyl_ringGeneral.py`
+writes `[_A]1[C]2[C]3:[C]4:...`, where `[_A]` is a placeholder bound per
+molecule to the occurring elements by `utils.constrain.apply_constraints`.
+Note it also carries **no hydrogens at all**.
+
+Two independent flags reproduce each half of that idiom, both acting only on the
+context shell (`keep_set(radius) - keep_set(0)`, ~1.9 positions per rule, which
+by construction excludes the reacting core, the Steiner connectors and the ion
+anchor — everything radius 0 keeps is load-bearing and keeps its element):
+
+- `--placeholder-context` — write the shell as `[_A]` instead of its element.
+- `--bare-context-hydrogens` — drop the shell's unchanged hydrogens, so the
+  position stops pinning a substitution pattern. The per-atom form of
+  `--no-spectator-hydrogens`.
+
+Cost, measured as in §5, all on top of `--context-radius 1`:
+
+| shell treatment | rules | acetone | diethyl ether | 2-heptanone |
+|---|---:|---|---|---|
+| none (the §7 library) | 429 | 3 s / 11 | 3 s / 16 | 7 s / 165 |
+| `--placeholder-context` | 442 | 2 s / 11 | 3 s / 19 | **9 s / 219** |
+| `--bare-context-hydrogens` | 390 | 3 s / 11 | 2 s / 16 | TIMEOUT (1050) |
+| both (the hand-rule idiom) | 389 | 3 s / 11 | 4 s / 59 | TIMEOUT (1326) |
+
+**The hydrogen half is again the whole cost, and this time at only ~1.9
+positions per rule.** That is the same finding as §5, now isolated: it is not
+the *number* of unconstrained positions that matters but that they are
+unconstrained in hydrogen. Relaxing the element is close to free — 433 rules
+cost what 429 did — while relaxing the hydrogens at a couple of peripheral
+positions is enough to stop 2-heptanone finishing in 600 s.
+
+The two levers are also clearly multiplicative rather than additive: alone, the
+element placeholder adds ~18% more graphs and the hydrogen drop adds enough to
+time out; together they produce 59 graphs on diethyl ether where either alone
+produces 16-19.
+
+So only `--placeholder-context` is affordable, and it is a limited effect: a
+placeholder that still carries three explicit hydrogens means "any heavy atom
+with exactly three hydrogens", which is a methyl by another name. That is
+precisely why the hand rules write the position bare — and why this lever
+cannot, on its own, recover what they have.
+
+### One variable per position, not one per rule
+
+The first implementation gave every shell position in a rule the same name,
+`[_A]`. That is wrong, and the corpus is what caught it: the nominally *more*
+general library scored **worse** than plain radius 1 — ceiling 0.235 against
+0.254, 6.3 distinct masses per molecule against 7.5, and fewer masses on 28
+molecules against more on 12, the losses concentrated in long-chain fatty
+acids (stearic acid 66 → 8 masses).
+
+`term_transfers.encode_vertex_label` keeps distinct placeholder names as
+independent term *variables*, which means a shared name is not shorthand — it
+is an equality constraint. Every position labelled `_A` in one rule must bind
+the same element:
+
+```
+[_A]1(...)[O+]3([_A]2(...))...     # both shells forced to one element
+[_A]1(...)[O+]3([_B]2(...))...     # independent, what the rule actually means
+```
+
+245 of 433 rules carried two or more shell positions, so most of the library
+was affected. Where a book example drew different elements in its own shell,
+the rule stopped matching the very example it was compiled from — a constraint
+strictly tighter than the concrete rule it replaced, which is how a
+generalization can lose ground. Naming positions `_A`, `_B`, `_C`, ... by
+sorted atom id fixes it, and `apply_constraints` already splices one
+`constrainLabelAny` block per distinct name.
+
+The general lesson: in term mode a placeholder name is a variable, so reusing
+one silently couples the positions that share it. The hand-authored
+`rules/migration.py` documents the same trap from the other direction — it is
+authored in GML precisely *because* it needs two independent variables.
+
+### Corpus A/B
+
+Full corpus, `--context-radius 1 --placeholder-context` (442 rules), all 172
+SLURM tasks completed with no failures. `data/processed_mech_r1hpv`, scored
+into `data/outputs/metrics/ceiling_mech_r1hpv`. The shared-`_A` arm is kept in
+the table because a generalization scoring *below* its own baseline is the
+signal that found the bug:
+
+| | legacy | concrete | `-r 1` | `-r 1` + shared `_A` | `-r 1` + `_A`/`_B` |
+|---|---|---|---|---|---|
+| raw intensity explained | 0.583 | 0.272 | 0.349 | 0.324 | **0.380** |
+| ceiling, mean | 0.360 | 0.200 | 0.254 | 0.235 | **0.277** |
+| ceiling, median | 0.390 | 0.115 | 0.194 | 0.166 | **0.229** |
+| formula null, mean | 0.223 | 0.072 | 0.095 | 0.090 | 0.103 |
+| masses/molecule, mean | 30.8 | 4.4 | 7.5 | 6.3 | **8.3** |
+| molecules with ≤ 3 masses | 16% | 72% | 47% | 50% | **44%** |
+
+With independent variables the improvement is monotone again — more masses on
+49 molecules, the same on 123, fewer on **none** — which is the property a
+pure relaxation must have, and which the shared-`_A` arm visibly violated.
+
+Cumulatively the compiled library has gone 0.200 → 0.254 → 0.277 against the
+hand-authored 0.360, i.e. **about half the original gap is now closed**, at a
+cost still within ~2x of the concrete library.
+
+## 9. Where this leaves the compiled library
+
+Three generality levers have now been measured, and they rank cleanly by
+cost-effectiveness:
+
+| lever | ceiling | cost |
+|---|---|---|
+| prune spectator context to a 1-bond shell | 0.200 → 0.254 | ~2x |
+| stop naming the shell's element (`[_A]`/`[_B]`) | 0.254 → 0.277 | ~free |
+| stop writing the shell's hydrogens | untested at corpus scale | unaffordable |
+
+The unifying finding across §5 and §8 is that **hydrogen constraints are what
+keep MØD's enumeration tractable.** Relaxing them explodes the derivation graph
+whether it is done library-wide (§5) or at ~1.9 peripheral positions per rule
+(§8); relaxing element identity is close to free. That is the practical budget
+for this rule library, and it is also why the remaining gap to the
+hand-authored rules is not simply a matter of turning more levers on: those
+rules are a few dozen very general templates, while this library is ~440, and
+cost scales with generality × rule count.
+
+The next thing worth testing is therefore not another generality lever but
+whether the compiled library can be made *smaller* — collapsing the ~440 rules
+onto the reaction classes they are drawn from would buy the budget to write
+the remaining positions bare, the way the hand rules do.
