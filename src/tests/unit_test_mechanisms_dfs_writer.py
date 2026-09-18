@@ -17,6 +17,7 @@ from src.data_generation.mechanisms.dfs_writer import (
     MechanismConversionError,
     apply_localization,
     parse_mapped_smiles,
+    plan_implicit_hydrogens,
     reaction_dfs_string,
 )
 
@@ -242,6 +243,37 @@ class TestDfsWriterRoundTrip(unittest.TestCase):
         # SAME state, so this must be reconciled rather than rejected.
         dfs = self._assert_round_trips("[CH2:1][CH3:2]", "[CH3:1][CH2:2]")
         self.assertIn(">>", dfs)
+
+    def test_bare_atoms_suppresses_only_the_listed_atoms(self):
+        # Generalization writes a placeholder position as a bare "[_A]"; every
+        # other atom must keep the hydrogens that pin its substitution.
+        left_h, right_h = {1: 3, 2: 2}, {1: 3, 2: 2}
+
+        left_plan, right_plan, n_moves = plan_implicit_hydrogens(left_h, right_h)
+        self.assertEqual(len(left_plan[1]), 3)
+        self.assertEqual(len(left_plan[2]), 2)
+
+        left_plan, right_plan, n_moves = plan_implicit_hydrogens(
+            left_h, right_h, bare_atoms={1})
+        self.assertNotIn(1, left_plan)
+        self.assertNotIn(1, right_plan)
+        self.assertEqual(len(left_plan[2]), 2)
+        self.assertEqual(n_moves, 0)
+
+    def test_bare_atoms_still_reconciles_a_moving_hydrogen(self):
+        # Suppression applies to the UNCHANGED shared hydrogens only, so an atom
+        # that both is listed and loses an H still has that relocation tracked
+        # (shell atoms never move hydrogens -- a changed H count puts an atom in
+        # the core -- but the tally must not silently unbalance if one did).
+        left_h, right_h = {1: 3, 2: 2}, {1: 2, 2: 3}
+
+        left_plan, right_plan, n_moves = plan_implicit_hydrogens(
+            left_h, right_h, bare_atoms={1})
+
+        self.assertEqual(n_moves, 1)
+        # The moved H is written on both sides, on its donor and its acceptor.
+        self.assertEqual(len(left_plan[1]), 1)
+        self.assertEqual(len(right_plan[2]), 3)
 
     def test_apply_localization_transplants_charge_and_radical(self):
         # A precursor recorded with no per-atom localization at all (the

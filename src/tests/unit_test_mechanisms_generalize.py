@@ -11,7 +11,9 @@ import unittest
 
 from src.data_generation.mechanisms.dfs_writer import parse_mapped_smiles
 from src.data_generation.mechanisms.generalize import (
+    context_atoms,
     keep_set,
+    placeholder_atoms,
     prune_graph,
     reacting_core,
 )
@@ -119,6 +121,59 @@ class TestKeepSet(unittest.TestCase):
             self.assertLessEqual(
                 keep_set(core, left, right, radius), set(left.atoms)
             )
+
+
+class TestContextAtoms(unittest.TestCase):
+    def test_shell_is_what_the_radius_added(self):
+        left, left_h, right, right_h = _sides(ETHER_ALPHA)
+        core = reacting_core(left, left_h, right, right_h)
+        self.assertEqual(context_atoms(core, left, right, 1), {4})
+        self.assertEqual(context_atoms(core, left, right, 2), {4, 5})
+
+    def test_radius_zero_has_no_shell(self):
+        for step in (ETHER_ALPHA, MCLAFFERTY, REMOTE_CHARGE):
+            left, left_h, right, right_h = _sides(step)
+            core = reacting_core(left, left_h, right, right_h)
+            self.assertEqual(context_atoms(core, left, right, 0), set())
+
+    def test_load_bearing_atoms_are_never_shell(self):
+        # The core, the Steiner connectors that keep it connected and the ion
+        # anchor's path are all what radius 0 keeps, so placeholdering the shell
+        # can never reach them -- that is the property that makes it safe.
+        for step in (ETHER_ALPHA, MCLAFFERTY, REMOTE_CHARGE):
+            left, left_h, right, right_h = _sides(step)
+            core = reacting_core(left, left_h, right, right_h)
+            for radius in (1, 2, 9):
+                shell = context_atoms(core, left, right, radius)
+                self.assertFalse(shell & keep_set(core, left, right, 0))
+                self.assertFalse(shell & core)
+
+    def test_mclafferty_connector_is_not_placeholdered(self):
+        # Atom 2 is kept at radius 0 as a Steiner connector, so it keeps its
+        # element even though it is not itself part of the graph diff.
+        left, left_h, right, right_h = _sides(MCLAFFERTY)
+        core = reacting_core(left, left_h, right, right_h)
+        self.assertNotIn(2, context_atoms(core, left, right, 1))
+
+
+class TestPlaceholderAtoms(unittest.TestCase):
+    def test_element_is_replaced_and_decoration_kept(self):
+        left, _, _, _ = _sides(REMOTE_CHARGE)
+        self.assertEqual(left.atoms[5].label(), "[O+]")
+
+        placeholder_atoms(left, {1, 5})
+
+        self.assertEqual(left.atoms[1].label(), "[_A]")
+        # Charge is part of what the rewrite asserts, so it survives.
+        self.assertEqual(left.atoms[5].label(), "[_A+]")
+        self.assertEqual(left.atoms[2].label(), "[C]")
+
+    def test_ids_absent_from_this_side_are_ignored(self):
+        # The same shell is applied to both sides, and a fragmenting step's
+        # sides need not carry identical id sets after pruning.
+        left, _, _, _ = _sides(ETHER_ALPHA)
+        placeholder_atoms(left, {4, 999})
+        self.assertEqual(left.atoms[4].label(), "[_A]")
 
 
 class TestPruneGraph(unittest.TestCase):

@@ -191,9 +191,18 @@ ionization_term_fwd = [
     utils.term_from_rule(r)
     for r in utils.apply_constraints(ionization, aoc)
 ]
+# Mechanism rules only ever place a '_A' placeholder on a HEAVY context position
+# (write_generated_rules.py --placeholder-context; the reacting core always keeps
+# its real elements), so their wildcard is constrained to occurring heavy atoms.
+# Binding it to `aoc` instead would let a shell position match a hydrogen -- for a
+# terminal, H-free shell atom such as a halogen that is a real embedding, and a
+# chemically spurious one that only inflates the DG. The legacy library keeps
+# `aoc`: its '_A' rules are authored expecting hydrogen to be included (see the
+# note in rules/deprotonation.py on why ionization is one rule per heteroatom).
+fragmentation_aoc = (aoc - {"H"}) if args.rule_source == "mechanisms" else aoc
 fragmentation_term_fwd = [
     utils.term_from_rule(r)
-    for r in utils.apply_constraints(fragmentation, aoc)
+    for r in utils.apply_constraints(fragmentation, fragmentation_aoc)
 ]
 
 # COST-MODEL INSTRUMENT, not a chemistry knob. `docs/PHASE2_PLAN.md` Stage 0 needs cost as a

@@ -89,11 +89,12 @@ def write_generated_rules_file(
     context_radius: "int | None" = None,
     spectator_hydrogens: bool = True,
     deduplicate: bool = True,
+    placeholder_context: bool = False,
 ) -> "tuple[list[ConvertedStep], list[SkippedStep]]":
     """Write ``out_path``; return (converted steps, skipped steps).
 
-    ``context_radius``/``spectator_hydrogens`` are passed straight through to
-    :func:`~.build_rules.iter_conversions` -- see
+    ``context_radius``/``spectator_hydrogens``/``placeholder_context`` are
+    passed straight through to :func:`~.build_rules.iter_conversions` -- see
     :mod:`src.data_generation.mechanisms.generalize`.
     """
     converted: "list[ConvertedStep]" = []
@@ -105,6 +106,7 @@ def write_generated_rules_file(
         records_dir,
         context_radius=context_radius,
         spectator_hydrogens=spectator_hydrogens,
+        placeholder_context=placeholder_context,
     ):
         if isinstance(item, SkippedStep):
             skipped.append(item)
@@ -128,6 +130,8 @@ def write_generated_rules_file(
         flags.append("        --no-spectator-hydrogens")
     if context_radius is not None and not deduplicate:
         flags.append("        --no-deduplicate")
+    if placeholder_context:
+        flags.append("        --placeholder-context")
 
     if context_radius is None:
         scope = [
@@ -152,6 +156,19 @@ def write_generated_rules_file(
                 "Unchanged spectator hydrogens are not written, so a step drawn on a"
             )
             scope.append("methyl also matches a methylene.")
+        if placeholder_context:
+            scope.append(
+                "Shell positions are written as the placeholder '[_A]' rather than"
+            )
+            scope.append(
+                "the element the book example happened to draw there, the way the"
+            )
+            scope.append(
+                "hand-authored rules do. utils.constrain.apply_constraints binds"
+            )
+            scope.append(
+                "'_A' to the elements occurring in the molecule under attack."
+            )
         if duplicates:
             scope.append("")
             scope.append(
@@ -225,6 +242,12 @@ def main() -> None:
              "matches a methylene. The single largest generality gain.",
     )
     ap.add_argument(
+        "--placeholder-context", action="store_true",
+        help="Write shell positions as '[_A]' instead of naming their element, so "
+             "a rule stops insisting the neighbour was the atom the book drew. "
+             "Needs --context-radius (a radius of 0 has no shell, so no effect).",
+    )
+    ap.add_argument(
         "--no-deduplicate", dest="deduplicate", action="store_false",
         help="Keep every converted step even when generalization made several of "
              "them the same rule (only meaningful with --context-radius).",
@@ -236,6 +259,7 @@ def main() -> None:
         context_radius=args.context_radius,
         spectator_hydrogens=args.spectator_hydrogens,
         deduplicate=args.deduplicate,
+        placeholder_context=args.placeholder_context,
     )
     n_auto = sum(1 for c in converted if c.auto_localized)
     n_moves = sum(1 for c in converted if c.inferred_h_moves)
@@ -249,6 +273,10 @@ def main() -> None:
         print(f"  generality: mean {mean_core:.1f} reacting atom(s) per rule, "
               f"{mean_written:.1f} atom(s) written, {mean_pruned:.1f} spectator "
               f"atom(s) pruned")
+        if args.placeholder_context:
+            mean_ph = sum(c.n_placeholder_atoms for c in converted) / len(converted)
+            print(f"  {mean_ph:.1f} context position(s) per rule written as "
+                  f"'[_A]' rather than a named element")
     for skip in skipped:
         print(f"  SKIP {skip}")
 

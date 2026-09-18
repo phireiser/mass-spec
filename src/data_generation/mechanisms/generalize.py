@@ -60,6 +60,24 @@ nearest such atom is retained along with the path connecting it to the core.
 The rule then still asserts "this substructure belongs to an ion", which is the
 weakest form of the original constraint rather than none of it.
 
+Role placeholders
+-----------------
+Pruning decides WHICH atoms a rule mentions; it does not stop the survivors
+naming the element the book happened to draw. A shell position kept for context
+still says "carbon" where the hand-authored libraries say ``[_A]`` -- any
+occurring element, bound per molecule by ``utils.constrain.apply_constraints``.
+:func:`context_atoms` names the positions where that substitution is safe (the
+shell, i.e. everything radius 0 does NOT keep, so never the core, never a
+Steiner connector, never the ion anchor), and :func:`placeholder_atoms` applies
+it.
+
+A placeholder only pays off if its hydrogens go too: ``[_A]`` carrying three
+explicit hydrogens still only matches a methyl, which is why the hand rules
+write the position bare. ``dfs_writer.plan_implicit_hydrogens``' ``bare_atoms``
+does that for these positions ALONE -- suppressing unchanged hydrogens
+everywhere is what makes enumeration explode (see below), while doing it at a
+couple of peripheral positions per rule does not.
+
 Spectator hydrogens
 -------------------
 Handled separately, in ``dfs_writer.plan_implicit_hydrogens``: that function
@@ -70,6 +88,13 @@ single largest generality gain available -- mean atoms written per rule falls
 from 22.5 to 9.1 -- and is safe: an unwritten hydrogen is simply not part of the
 match, and removing it from both sides symmetrically leaves the conservation
 guard's tally unchanged. See that function's ``keep_unchanged`` argument.
+
+It is also, measured, the single largest COST: applied library-wide it makes
+MOD enumerate far more than pruning heavy spectators ever does, and 2-heptanone
+stops finishing (docs/MECHANISM_RULES.md section 5). The generality it buys is
+real but is not affordable in that form -- which is why it is exposed as its own
+flag, defaulted off, and why the placeholder path above applies it per-atom
+instead.
 """
 from __future__ import annotations
 
@@ -221,6 +246,50 @@ def keep_set(
     return keep
 
 
+#: Atom symbol written for a context position whose element the rule does not
+#: constrain. Matches the hand-authored libraries' idiom (``[_A]1[C]2[C]3:...``
+#: in ``rules/benzylAllyl_ringGeneral.py``); ``utils.constrain.apply_constraints``
+#: splices a ``constrainLabelAny`` block per distinct placeholder name, so the
+#: caller decides which elements it may actually bind.
+PLACEHOLDER_SYMBOL = "_A"
+
+
+def context_atoms(
+    core: Set[int], left: _Graph, right: _Graph, radius: int,
+    anchor_ion: bool = True,
+) -> Set[int]:
+    """The kept atoms that are PURE context: present only because ``radius``
+    grew a shell, not because the chemistry needs them.
+
+    Defined as ``keep_set(radius) - keep_set(0)``, which is exactly the shell:
+    everything radius 0 keeps -- the reacting core, the Steiner connectors that
+    hold it together, and the ion anchor with its path -- is load-bearing, and
+    is therefore never in the result. Empty at ``radius == 0``.
+
+    These are the positions whose ELEMENT a rule can stop naming without
+    changing what reaction it describes. The book drew its example on a methyl;
+    the reaction it illustrates does not care that the neighbour was carbon.
+    """
+    return keep_set(core, left, right, radius, anchor_ion) - keep_set(
+        core, left, right, 0, anchor_ion
+    )
+
+
+def placeholder_atoms(graph: _Graph, atom_ids: Set[int]) -> None:
+    """Rewrite ``atom_ids``' element to :data:`PLACEHOLDER_SYMBOL`, in place.
+
+    Apply the SAME ids to both sides of a step: the conservation guard in
+    ``rules/__init__.py`` tallies atoms by symbol, so a placeholder introduced on
+    one side only would read as one element destroyed and another created.
+    Charge and radical decoration are left alone -- they are part of what the
+    rewrite asserts, not part of the element it declines to name.
+    """
+    for atom_id in atom_ids:
+        atom = graph.atoms.get(atom_id)
+        if atom is not None:
+            atom.symbol = PLACEHOLDER_SYMBOL
+
+
 def prune_graph(graph: _Graph, keep: Set[int]) -> None:
     """Drop every atom outside ``keep``, and every bond touching a dropped atom.
 
@@ -235,4 +304,11 @@ def prune_graph(graph: _Graph, keep: Set[int]) -> None:
         graph.adjacency[atom_id] = [(o, t) for o, t in neighbours if o in keep]
 
 
-__all__ = ["reacting_core", "keep_set", "prune_graph"]
+__all__ = [
+    "reacting_core",
+    "keep_set",
+    "context_atoms",
+    "placeholder_atoms",
+    "prune_graph",
+    "PLACEHOLDER_SYMBOL",
+]

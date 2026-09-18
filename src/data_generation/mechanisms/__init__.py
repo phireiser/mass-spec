@@ -24,8 +24,10 @@ SCOPE AND LIMITATIONS -- read before using ``--rule-source mechanisms``
   --context-radius N`` prunes each rule to the atoms its rewrite actually
   touches plus an ``N``-bond shell of context, and
   ``--no-spectator-hydrogens`` stops pinning every matched atom to an exact
-  substitution pattern. Together they turn one book example into the reaction
-  class it illustrates -- at the cost of matching (and so enumerating) far
+  substitution pattern, while ``--placeholder-context`` stops the surviving
+  shell positions naming the element the book drew there, writing them as
+  ``[_A]`` like the hand-authored rules. Together they turn one book example
+  into the reaction class it illustrates -- at the cost of matching (and so enumerating) far
   more, which is the trade-off ``generalize.py`` documents. Whichever way
   ``generated_rules.py`` was written, its module docstring records the flags
   that produced it.

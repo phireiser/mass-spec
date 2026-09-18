@@ -65,7 +65,7 @@ own docstring for exactly when it applies and why it's safe:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
 
 from rdkit import Chem
 
@@ -187,6 +187,7 @@ def check_mapped_atom_sets(left: "_Graph", right: "_Graph") -> None:
 
 def plan_implicit_hydrogens(
     left_h: Dict[int, int], right_h: Dict[int, int], keep_unchanged: bool = True,
+    bare_atoms: "Set[int] | None" = None,
 ) -> Tuple[Dict[int, List[int]], Dict[int, List[int]], int]:
     """Decide which synthetic hydrogen-vertex ids attach to which heavy atom
     on each side, reconciling any atom whose implicit-H count changes.
@@ -218,6 +219,15 @@ def plan_implicit_hydrogens(
     the conservation guard checks is unaffected. See
     :mod:`src.data_generation.mechanisms.generalize`.
 
+    ``bare_atoms`` applies that same suppression to LISTED ATOMS ONLY, leaving
+    every other atom's hydrogens written. Generalization uses it for placeholder
+    positions, where "any heavy atom with exactly three hydrogens" would still
+    only match a methyl and so would waste the placeholder; the hand-authored
+    rules write those positions as a bare ``[_A]`` for the same reason. Doing it
+    per-atom rather than library-wide matters: ``keep_unchanged=False``
+    everywhere makes enumeration explode, while a handful of peripheral
+    positions does not.
+
     Returns ``(left_plan, right_plan, n_inferred_moves)``, each plan mapping
     ``heavy_atom_id -> [hydrogen_vertex_id, ...]`` for :func:`expand_implicit_hydrogens`.
     """
@@ -231,7 +241,8 @@ def plan_implicit_hydrogens(
         left_count = left_h.get(atom_id, 0)
         right_count = right_h.get(atom_id, 0)
         shared = min(left_count, right_count)
-        if shared and keep_unchanged:
+        keep_here = keep_unchanged and not (bare_atoms and atom_id in bare_atoms)
+        if shared and keep_here:
             ids = list(range(next_id, next_id + shared))
             next_id += shared
             left_plan[atom_id] = list(ids)
@@ -454,6 +465,7 @@ def _dfs_string_for_graph(graph: _Graph) -> str:
 def compile_parsed_state(
     left: _Graph, left_h: Dict[int, int], right: _Graph, right_h: Dict[int, int],
     keep_spectator_hydrogens: bool = True,
+    bare_atoms: "Set[int] | None" = None,
 ) -> Tuple[str, int]:
     """Shared final assembly, once both sides are parsed (and, if needed,
     charge/radical-patched via :func:`apply_localization`, or pruned to a
@@ -461,12 +473,14 @@ def compile_parsed_state(
     validate atom identity, reconcile implicit hydrogens, expand them into both
     graphs, and emit the DFS string. Returns ``(dfs_string, n_inferred_h_moves)``.
 
-    ``keep_spectator_hydrogens=False`` writes only the hydrogens that move --
-    see :func:`plan_implicit_hydrogens`.
+    ``keep_spectator_hydrogens=False`` writes only the hydrogens that move, and
+    ``bare_atoms`` does the same for listed atoms only -- see
+    :func:`plan_implicit_hydrogens`.
     """
     check_mapped_atom_sets(left, right)
     left_plan, right_plan, n_moves = plan_implicit_hydrogens(
-        left_h, right_h, keep_unchanged=keep_spectator_hydrogens
+        left_h, right_h, keep_unchanged=keep_spectator_hydrogens,
+        bare_atoms=bare_atoms,
     )
     expand_implicit_hydrogens(left, left_plan)
     expand_implicit_hydrogens(right, right_plan)
