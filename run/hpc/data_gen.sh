@@ -38,6 +38,28 @@ fi
 DEFINITION_FILE="${DEFINITION_FILE:-$REPO_ROOT/$CSV_PATH_REL}"
 export DEFINITION_FILE
 
+# Optional alternate mechanism rule library, bind-mounted over the one the
+# container would otherwise import. Lets an A/B arm run a differently-generated
+# library (see run/setup/write_generated_rules.sh --context-radius) WITHOUT
+# rewriting the committed src/data_generation/mechanisms/generated_rules.py,
+# which every other job on the cluster is reading at the same time. Only
+# meaningful together with --rule-source=mechanisms; see data_gen_mechanisms.sh.
+#   GENERATED_RULES_FILE=data/outputs/mech_libs/gen_r1h.py \
+#     PROCESSED_DIR_OVERRIDE=data/processed_mech_r1h bash run/hpc/data_gen_mechanisms.sh
+RULES_BIND=()
+if [ -n "${GENERATED_RULES_FILE:-}" ]; then
+  export GENERATED_RULES_FILE
+  RULES_FILE_ABS="$GENERATED_RULES_FILE"
+  if [ "${RULES_FILE_ABS#/}" = "$RULES_FILE_ABS" ]; then
+    RULES_FILE_ABS="$REPO_ROOT/$RULES_FILE_ABS"
+  fi
+  if [ ! -f "$RULES_FILE_ABS" ]; then
+    echo "GENERATED_RULES_FILE not found: $RULES_FILE_ABS" >&2
+    exit 1
+  fi
+  RULES_BIND=(--bind "$RULES_FILE_ABS:$C_SRC/data_generation/mechanisms/generated_rules.py:ro")
+fi
+
 # Extra arguments appended verbatim to the main.py call. Used to run a localized-charge
 # baseline alongside the (default) fully delocalized rebuild for an A/B comparison:
 #   MAIN_EXTRA_ARGS=--no-migration PROCESSED_DIR_OVERRIDE=data/processed_base \
@@ -110,6 +132,7 @@ srun --cpu-bind=cores \
 /usr/bin/time -v \
 apptainer exec \
     --bind "$REPO_ROOT/$SRC_DIR_REL:$C_SRC" \
+    "${RULES_BIND[@]}" \
     --bind "$REPO_ROOT/$PROCESSED_DIR_REL:$C_PROCESSED" \
     --bind "$REPO_ROOT/$PARQUET_DIR_REL:$C_PARQUET" \
     --bind "$REPO_ROOT/$OUTPUTS_DIR_REL:$C_OUTPUTS" \
