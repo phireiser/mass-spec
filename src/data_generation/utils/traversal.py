@@ -77,8 +77,7 @@ def build_traversal_index_cached(graphs: Iterable[mod.Graph]) -> tuple[dict, dic
     if hit is not None:
         _traversal_index_cache.move_to_end(key)
         return hit[0]
-    built = [graph_from_term(g) for g in graphs_list]
-    idx = _build_traversal_index(built, graphs_list)
+    idx = _build_traversal_index(graphs_list)
     _traversal_index_cache[key] = (idx, graphs_list)
     if len(_traversal_index_cache) > _TRAVERSAL_INDEX_CACHE_CAP:
         _traversal_index_cache.popitem(last=False)
@@ -126,7 +125,14 @@ def collect_bfs(
     # hold mod vertices. The second returned value (previously the raw vertices) is
     # not consumed by any caller; it is returned as the visited keys for parity.
     start_keys = [_vk(v) for v in start_vertices]
-    visited = set(start_keys)
+    # Stop at the rest of the rule's own match, so the labels collected describe
+    # the SUBSTITUENT hanging off ``start_vertices`` rather than the whole
+    # connected component. The matched region is the IMAGE of the match's domain:
+    # ``match.domain.vertices`` are rule-side vertices (seeding the visited-set
+    # from those, as this once did, excludes nothing -- they never appear among
+    # host neighbours) and ``match.codomain.vertices`` is the entire host graph
+    # (seeding from those would block the walk completely).
+    visited = {_vk(match[v]) for v in match.domain.vertices} | set(start_keys)
     queue = collections.deque(start_keys)
     labels = [_key_label(k) for k in start_keys]
     keys_out = list(start_keys)
@@ -166,15 +172,14 @@ def get_edge_between(
 
 
 def _build_traversal_index(
-        built_graphs: List[mod.Graph],
         term_graphs: Iterable[mod.Graph]
         ) -> tuple[dict, dict]:
     """Precompute, once per call, what the DFS would otherwise recompute per step.
 
-    ``neighbor_adj`` maps each vertex to its molecular neighbours (taken from the
-    built graphs) and ``single_bond_map`` records, per vertex pair, whether the
-    connecting bond is single (decoded from the raw term graphs, first edge
-    winning). An indexed traversal therefore yields the same result as a per-step
+    ``neighbor_adj`` maps each vertex to its molecular neighbours and
+    ``single_bond_map`` records, per vertex pair, whether the connecting bond is
+    single (first edge winning). Both are keyed off the term graphs, which is the
+    key space the callers' vertices arrive in. An indexed traversal therefore yields the same result as a per-step
     neighbour/bond scan -- without rebuilding the graphs and rescanning every edge
     on each step, which is what made large molecules (e.g. fused steroid rings)
     churn until the job was killed.
@@ -185,8 +190,19 @@ def _build_traversal_index(
     # identity (ComparableVertex hashes/compares on exactly these attrs) and the
     # same cleaned label (derivable from the stringLabel), so the traversal result
     # is unchanged while the string graphs become collectable once this returns.
+    # Keyed off the TERM graphs, not their string-mode conversions. The vertices
+    # callers hand in come from ``match[...]``, i.e. the derivation's term-mode
+    # graphs, so a ``(id, stringLabel)`` key built from a string-mode copy --
+    # ``(0, 'C')`` against the caller's ``(0, 'a(C, 0, 0)')`` -- never matched,
+    # and every adjacency lookup missed: ``collect_bfs`` returned only its start
+    # vertex's own label and ``saturated_path`` reported no path between even
+    # two bonded atoms. ``single_bond_map`` below was always term-keyed, so this
+    # also puts both halves of the index in ONE key space. Adjacency is identical
+    # in either representation (``graph_from_term`` relabels, it does not rewire),
+    # so nothing else changes -- and the string conversion is no longer needed.
+    term_graphs = list(term_graphs)
     neighbor_adj: dict = {}
-    for gg in built_graphs:
+    for gg in term_graphs:
         for e in gg.edges:
             s = _vk(e.source)
             t = _vk(e.target)
@@ -231,7 +247,9 @@ def saturated_path(
         branch_ok_label: Optional[Iterable[str]] = ("H",),
         max_expansions: Optional[int] = None
         ) -> bool:
-    morphism_keys = {_vk(x) for x in match.codomain.vertices}
+    # Image of the match, not ``match.codomain.vertices`` -- the codomain is the
+    # WHOLE host graph, so the two guards below could never fire.
+    morphism_keys = {_vk(match[x]) for x in match.domain.vertices}
     start_key = _vk(start_vertex)
     end_key = _vk(end_vertex)
     if start_key not in morphism_keys:
