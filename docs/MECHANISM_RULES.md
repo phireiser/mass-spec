@@ -12,6 +12,17 @@ The measurements here are the reason the document exists: they live in
 `data/outputs/metrics/**` and `data/processed*/`, both gitignored, so they do not
 survive a fresh clone. Cite these tables, not the directories.
 
+> **Correction (2026-09-25).** Every "legacy 0.360" in §§1, 7, 8 and 9 below was
+> measured while the `§` rule-extension machinery was silently dead (see §10).
+> The hand-authored arm was firing ionization indiscriminately, which inflated
+> both its explained intensity and its null. Re-measured on the same 172
+> molecules with `§` working, **legacy's ceiling is 0.268, not 0.360**. The
+> mechanism-arm numbers in those sections are unaffected *relative to each
+> other* — they were all produced under the same broken `§` — but the compiled
+> library's ionization rules also carry `§`, so its absolute figures move too
+> (0.277 → 0.256). §10 carries the first clean pair; treat it, not §1, as the
+> current standing comparison.
+
 ## 1. The result that motivated everything below
 
 Measured 2026-08-23/25 on the same 172 molecules, same config and seed, scored
@@ -313,3 +324,108 @@ The next thing worth testing is therefore not another generality lever but
 whether the compiled library can be made *smaller* — collapsing the ~440 rules
 onto the reaction classes they are drawn from would buy the budget to write
 the remaining positions bare, the way the hand rules do.
+
+## 10. The `§` extension was dead, and the first clean A/B
+
+Every comparison above was run against a hand-authored library whose
+`§`-extensions did nothing. Two independent defects, both fixed on
+`structure-elucidation`:
+
+1. **The traversals never left their start vertex** (`87109f4`). `collect_bfs`
+   and `saturated_path` in `utils/traversal.py` built their neighbour adjacency
+   from the *built* graphs while keying visited-sets off the *term* graphs. The
+   two key spaces never intersected, so `collect_bfs` returned only its own
+   start label and `saturated_path` returned `False` even for directly bonded
+   atoms. Both predicates had therefore been inert for the entire history of
+   the repository, and every `§R`/`§Y`/`§S` annotation with them.
+2. **`§Y` tested the wrong atoms** (`3024d22`). Once the traversal worked, `§Y`
+   evaluated the whole BFS-collected subgroup rather than the annotated
+   position. On a one-atom rule like `broad_ionization` the "substituent" is the
+   entire molecule, so a single carbon anywhere vetoed the derivation. `§Y` now
+   constrains only the atom it names. The same commit fixed three mis-indexed
+   annotations (`IMS_bookCover.py` ×2, `IMS_chap4_examples.py` ×1) that pointed
+   at the wrong DFS position.
+
+`§` indices are **1-based positions of appearance** in the rule's DFS string
+(`utils/rule_extention.py` subtracts one and looks the vertex up in
+`match.domain`), *not* the numeric labels written in the DFS. `mod.Rule.fromDFS`
+renumbers vertices by order of appearance and ignores those labels, which is
+what made the three mis-indexed annotations easy to write and invisible to read.
+
+### What the fix cost the legacy arm
+
+| | legacy, `§` dead | + traversal fix | + `§Y` per-atom |
+|---|---|---|---|
+| null-subtracted ceiling, mean | 0.360 | 0.292 | **0.268** |
+
+The drop is the point: with `§` inert, `broad_ionization` ionized carbon and
+hydrogen as readily as heteroatoms, so legacy's 0.360 included spurious mass.
+The M+• recovery rate is unchanged at 0.977, because `ei_molecular_ion` carries
+no `§`.
+
+### The clean pair
+
+Both arms regenerated and scored under the same fixed code, same 172 molecules,
+same seed. `data/processed_legacy_sgY` / `data/processed_mech_sgY`, scored into
+`data/outputs/metrics/ceiling_{legacy,mech}_sgY`. All 344 SLURM tasks completed.
+
+| | legacy | mechanisms (`-r 1` + `_A`/`_B`) |
+|---|---|---|
+| raw intensity explained (τ = 0.01) | 0.395 | 0.336 |
+| null-subtracted ceiling, mean | **0.268** | **0.256** |
+| null-subtracted ceiling, median | 0.221 | 0.204 |
+| formula null, mean | 0.127 | 0.080 |
+| distinct MØD masses/molecule | 16.4 mean, 8 median | 6.7 mean, 4 median |
+| molecules with ≤ 3 masses | 32% | 49% |
+| M+• recovered | 0.977 | 0.977 |
+
+Paired over the 172 molecules, legacy − mechanisms is **+0.011 mean, +0.000
+median**; legacy scores higher on 81, the compiled library on 51, with 40 ties
+(two-sided sign test p = 0.011). So the hand-authored library still wins, but
+the margin is now roughly one part in twenty of the ceiling rather than the
+0.160 of §1.
+
+Read this honestly: **most of the closure came from legacy falling, not from the
+compiled library rising.** The compiled library moved 0.200 → 0.277 by
+generalization and then back to 0.256 when its own ionization rules started
+obeying `§`; legacy moved 0.360 → 0.268 by having its rules finally enforced.
+The two libraries are now close because the hand-authored one is being measured
+correctly for the first time.
+
+Note also how the arms differ in *shape*: legacy explains more raw intensity
+(0.395 vs 0.336) but carries a much larger formula null (0.127 vs 0.080),
+because it produces 2.4× as many distinct masses. After null subtraction those
+two effects nearly cancel. A comparison on raw explained intensity alone would
+overstate legacy's advantage by a factor of five.
+
+### `§` coverage audit
+
+Scanning all 173 `fromDFS` rules structurally, and cross-referencing
+`data/mechanisms/rule_index.json` against the curated equations:
+
+- **Two `§` annotations are currently defeated by an unannotated duplicate.**
+  `IMS_4_12_1`/`IMS_4_12_2` carry `§R1`; `IMS_4_15_1_2`/`IMS_4_15_1_1` are
+  byte-identical DFS strings with no annotation, and all four are live in the
+  136-rule fragmentation set. MØD applies the unconstrained twin wherever the
+  annotated one is blocked, so `§R1` on 4.12 has no effect. Independently
+  corroborated by `data/mechanisms/coverage_report.md`, whose 4.12 and 4.15a
+  entries quote the same two strings under different equations.
+- **Twelve rules leave a spectator stub unconstrained** where a sibling in the
+  same book section constrains the analogous position — most clearly
+  `IMS_4_19_1` (`§R1R3Y4`, branch at position 2 open, while its twin
+  `IMS_4_19_2` covers it with `R2`) and `IMS_4_22` (no `§` at all, while 4.18,
+  4.20 and 4.21 all carry `§R1Y2`).
+- **Some over-specificity `§` cannot fix**: `IMS_4_37_rH/_rd` and `IMS_4_38_*`
+  hard-code `[O+]` where the book section is "hydrogen rearrangement to a
+  saturated *heteroatom*"; the fix is `[_A]` + `§Y`, not an annotation alone.
+
+Not covered by that audit: the 27 rules dropped by the conservation guard, the
+GML-authored rules in `migration.py` and `wikipedia.py`, and the 78 rules whose
+equation carries no curator note — for those the only source of truth is the
+page scan in `data/IMS-Book/pages/`.
+
+The compiled library carries **zero** `§` annotations
+(`mechanisms/generated_rules.py`), and cannot carry any today: the record schema
+has no per-atom annotation slot and `StrictModel` sets `extra="forbid"`, so
+expressing generic positions needs an additive `generic_positions` field on
+`MechanismRecord` keyed by atom map, plus a curator pass over 358 records.
