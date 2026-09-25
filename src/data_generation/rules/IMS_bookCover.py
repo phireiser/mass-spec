@@ -396,7 +396,12 @@ h2Transiton_2 = mod.Rule.fromDFS(# 2 H-migr. charge 4.46
 	"[C.]2([H]3)[C]4[_A+]5{=}[C]6([C]7)[_A]8[H]1",
 	name =
 	"2 H transition charge"
-	" §Y5Y8"
+	# INDEX FIX: § numbers are DFS LABELS, but sub_group resolves them as positions
+	# in order of appearance. This rule writes [H]1 LAST, so §Y5Y8 landed on the 5th
+	# and 8th atoms written ('C' and 'H') instead of the two [_A] placeholders it
+	# names. Re-indexed to where those placeholders actually sit. (h2Transiton_1
+	# above keeps §Y5Y8: its DFS IS in label order, so there the two agree.)
+	" §Y4Y7"
 )
 
 h2Transiton_3 = mod.Rule.fromDFS( # 2 H-migr. split 4.46
@@ -412,7 +417,12 @@ h2Transiton_3 = mod.Rule.fromDFS( # 2 H-migr. split 4.46
 	"[H]3[_A+.]5{=}[C]6([C]7)[_A]8[H]1",
 	name =
 	"2 H transition rH2 split"
-	" §Y5Y8"
+	# INDEX FIX: § numbers are DFS LABELS, but sub_group resolves them as positions
+	# in order of appearance. This rule writes [H]1 LAST, so §Y5Y8 landed on the 5th
+	# and 8th atoms written ('C' and 'H') instead of the two [_A] placeholders it
+	# names. Re-indexed to where those placeholders actually sit. (h2Transiton_1
+	# above keeps §Y5Y8: its DFS IS in label order, so there the two agree.)
+	" §Y4Y7"
 )
 
 ####### substituion

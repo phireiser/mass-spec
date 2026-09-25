@@ -498,7 +498,7 @@ IMS_4_19_2 = mod.Rule.fromDFS(# Y on left side has unpaired electron
 	name =
 	"inductive cleavage odd electron 3"
 	" 4.19"
-	" §R1R3Y2"
+	" §R1R2Y4"
 )
 
 # Interpreation von Massenspektren Springer, Seite 66, Gl. 4.20

@@ -305,19 +305,22 @@ def sub_group(
 
 
         if hetro_position:
-            hetro_bool = False
-            neighbor_labels, _ = utils.collect_bfs(
-                graphs = derivation.left,
-                start_vertices = hetro_position,
-                match = match,
-                max_visits = 5000
+            # "§Y<n>" constrains the ANNOTATED ATOM: the position must be a
+            # heteroatom, which is what the rules carrying it say they are for
+            # ("ionization of hetroatoms", "deprotonation"). It deliberately
+            # does NOT describe the branch hanging off that atom -- several of
+            # these rules match only one or two atoms (broad_ionization is the
+            # single vertex "[_A]1 >> [_A+.]1"), so there is no bracketing match
+            # to bound a branch walk and "the substituent" would be the whole
+            # molecule. Scoped that way, §Y1 blocked heteroatom ionization on
+            # every molecule carrying two different heteroatom species -- N and
+            # O together, say -- costing 10.6 distinct masses per affected
+            # molecule and 0.068 of corpus ceiling, which is not the chemistry
+            # any of these rules describe.
+            hetro_bool = all(
+                utils.mol_cleaned_label(v) not in utils.ALK_NES_LABELS
+                for v in hetro_position
             )
-            diff = set(neighbor_labels) - set(utils.ALK_NES_LABELS)
-            if len(diff) <= 1:
-                # not only hetro atoms strictly
-                # as the defnition says but, also carbon atoms
-                # as McLafferty book is using them as well
-                hetro_bool = True
 
 
         return sat_bool & alkyl_bool & hetro_bool
